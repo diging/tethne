@@ -6,10 +6,15 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXFileReference section */
+		15DABFC916C4676A00D02606 /* tethne.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = tethne.py; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
 /* Begin PBXGroup section */
 		15DABFBD16C4670E00D02606 = {
 			isa = PBXGroup;
 			children = (
+				15DABFC916C4676A00D02606 /* tethne.py */,
 			);
 			sourceTree = "<group>";
 		};
