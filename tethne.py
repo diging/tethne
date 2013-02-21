@@ -53,7 +53,8 @@ class triple:   # ------------------------------------------------------------ #
 
 
 class wos_library:   # ------------------------------------------------------- #
-    def __init__(self, inputFile):
+    def __init__(self, identifier, inputFile):
+        self.identifier = identifier    #   So that we can track data
         self.data = inputFile
         self.library = []   #   This is the dictionary into which all    
                             #   wos_objects will be deposited
@@ -260,10 +261,6 @@ class wos_library:   # ------------------------------------------------------- #
     
     
     def compareAbsolute(self, start, end, threshold, path): #   path is output directory
-    
-#        path = "/Users/erickpeirson/Desktop/bibliographic_output/je/je_"
-    
-
         histogram = {}
         sif = open(path+"relations.sif", "w")
         eda = open(path+"edges.eda", "w")
@@ -433,13 +430,14 @@ parser.add_option("-d", "--data-path", dest="data_path")                        
 parser.add_option("-n", "--network-type", dest="network_type")                  # String: Type of network: 'bc' or 'dc'
 parser.add_option("-t", "--overlap-threshold", dest="overlap_threshold", type="int")        # Int: Overlap threshold for bibliographic coupling
 parser.add_option("-o", "--output-path", dest="output_path")                    # String: Path to output directory
+parser.add_option("-i", "--identifier", dest="identifier")
 
 (options, args) = parser.parse_args()
 
 if (options.data_path != ""):
     if (options.output_path != "" ):
         # Initialize WoS Library
-        library = wos_library(options.data_path)                                    #"./data/jecology/download_jEcol_1930-1979.txt"
+        library = wos_library(options.identifier, options.data_path)
         library.buildLibrary()
         library.dump(options.output_path + "cache.pickle")          # !! Need to go back and make sure a following slash is present
         
