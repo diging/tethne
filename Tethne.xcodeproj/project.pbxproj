@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		15681B8316D87693001C334E /* tethne_cl.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = tethne_cl.py; sourceTree = "<group>"; };
 		15DABFC916C4676A00D02606 /* tethne.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = tethne.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -15,6 +16,7 @@
 			isa = PBXGroup;
 			children = (
 				15DABFC916C4676A00D02606 /* tethne.py */,
+				15681B8316D87693001C334E /* tethne_cl.py */,
 			);
 			sourceTree = "<group>";
 		};

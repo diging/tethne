@@ -50,6 +50,24 @@ class triple:   # ------------------------------------------------------------ #
         # --------------------- END METHOD __init__ --------------------- #
 # ----------------------------- END CLASS triple ----------------------------- #
 
+class wos_paper:
+    def __init__ (self, wosid, doi, journal, year, volume, page, doc_type, title, citations, authors):
+        self.wosid = wosid          #   String
+        self.doi = doi              #   String
+        self.journal = journal      #   String
+        self.year = year            #   Year
+        self.volume = volume        #   String
+        self.page = page            #   String
+        self.doc_type = doc_type    #   From WoS DT field
+        self.title = title          #   String
+        self.citations = citations  #   List of citations
+        self.authors = authors      #   List of authors
+        
+class wos_author:
+    def __init__ (self, short_name, full_name, address):
+        self.short_name = short_name
+        self.full_name = full_name
+        self.address = address
 
 
 class wos_library:   # ------------------------------------------------------- #
@@ -69,6 +87,13 @@ class wos_library:   # ------------------------------------------------------- #
             if filter(x):
                 return x
         return False
+    
+    def getAll(self, filter):
+        results = []
+        for x in self.library:
+            if filter(x):
+                results.append(x)
+        return results
         
     def buildLibrary(self):   # ---------------------------------------------- #
     #   Reads self.data file, and builds self.library. self.library is a list of
@@ -76,14 +101,12 @@ class wos_library:   # ------------------------------------------------------- #
     #   identifier for each record, 
     
         f = open(self.data, 'r')
-        
         x = 0                       #   Index for self.library
         
         cache = {}                  #   Will re-use for each record
         
         has_citations = 'false'     #   So that we don't get an index error
                                     #   when building new wos_object
-        
         for line in f:
             line = line.replace("\n","").replace("\r","")     
             
@@ -92,10 +115,8 @@ class wos_library:   # ------------------------------------------------------- #
                                     #   Two-letter field id from WoS
             else:
                 prefix = 'XX'
-            
             if prefix == 'EF':      #   End of file
                 break
-            
             if prefix == 'ER':      #   End of record (paper)
                 x += 1              #   Get ready for new record (paper)
                 
@@ -260,7 +281,7 @@ class wos_library:   # ------------------------------------------------------- #
         return list(set(libObjA.citations) & set(libObjB.citations))
     
     
-    def compareAbsolute(self, start, end, threshold, path): #   path is output directory
+    def compareAbsolute(self, threshold, path, start_year, end_year): #   path is output directory
         histogram = {}
         sif = open(path+"relations.sif", "w")
         eda = open(path+"edges.eda", "w")
@@ -281,14 +302,15 @@ class wos_library:   # ------------------------------------------------------- #
         noa_rp = open(path+"nodes_rp.noa", "w")
         noa_rp.write("reprintAuthor\n")        
 
-        x = start
-        while x < end:
+        subset = self.getAll(lambda x: start_year < int(x.pub_year) < end_year)
+
+        x = 0
+        while x < len(subset):
             include = "no"
-            i = x
-            while i < end:
+            i = 0
+            while i < len(subset):
                 if (i != x):    # don't compare to self
-                    overlap = self.overlap(self.library[x], self.library[i])     # This isn't quite right...
-                    
+                    overlap = self.overlap(subset[x], subset[i])     # This isn't quite right...
                     
                     if str(len(overlap)) in histogram:
                         histogram[str(len(overlap))] += 1
@@ -298,30 +320,26 @@ class wos_library:   # ------------------------------------------------------- #
                         include = "yes" # flag to write node attributes to disk
                         
                         # Write edge and edge attributes to disk
-                        sif.write(self.library[x].identifier.replace(" ","_") + " ovp " + self.library[i].identifier.replace(" ","_") + "\n")
-                        eda.write(self.library[x].identifier.replace(" ","_") + " (ovp) " + self.library[i].identifier.replace(" ","_") + " = " + str(len(overlap)) + "\n")
+                        sif.write(subset[x].identifier.replace(" ","_") + " ovp " + subset[i].identifier.replace(" ","_") + "\n")
+                        eda.write(subset[x].identifier.replace(" ","_") + " (ovp) " + subset[i].identifier.replace(" ","_") + " = " + str(len(overlap)) + "\n")
                 
                 i = i + 1
                 
             if include == "yes":
                 # Write node attributes to disk
-                noa.write(self.library[x].identifier.replace(" ","_") + " = " + self.library[x].pub_year + "\n")
+                noa.write(subset[x].identifier.replace(" ","_") + " = " + subset[x].pub_year + "\n")
                 
                 authors = ""
-                for key in self.library[x].authors:
-                    authors += self.library[x].authors[key] + "; "
+                for key in subset[x].authors:
+                    authors += subset[x].authors[key] + "; "
                 
-                noa_authors.write(self.library[x].identifier.replace(" ","_") + " = " + authors + "\n")
-                noa_title.write(self.library[x].identifier.replace(" ","_") + " = " + self.library[x].meta['TI'][0] + "\n")
-                if self.library[x].meta.get('DI') != None:             # To avoid key error
-                    noa_doi.write(self.library[x].identifier.replace(" ","_") + " = " + self.library[x].meta['DI'][0] + "\n")
-                if self.library[x].meta.get('RP') != None:             # To avoid key error
-                    noa_rp.write(self.library[x].identifier.replace(" ","_") + " = " + self.library[x].meta['RP'][0] + "\n")
+                noa_authors.write(subset[x].identifier.replace(" ","_") + " = " + authors + "\n")
+                noa_title.write(subset[x].identifier.replace(" ","_") + " = " + subset[x].meta['TI'][0] + "\n")
+                if subset[x].meta.get('DI') != None:             # To avoid key error
+                    noa_doi.write(subset[x].identifier.replace(" ","_") + " = " + subset[x].meta['DI'][0] + "\n")
+                if subset[x].meta.get('RP') != None:             # To avoid key error
+                    noa_rp.write(subset[x].identifier.replace(" ","_") + " = " + subset[x].meta['RP'][0] + "\n")
             x = x + 1
-        #n = 0
-        #while n < (len(histogram) - 2):
-        #    print str(n) + "    " + str(histogram[str(n)])
-        #    n += 1
 
 
     def export(self, file, format, delim):
@@ -375,6 +393,17 @@ class wos_library:   # ------------------------------------------------------- #
         f.close()
         return True
 
+    
+    #   This should generate a list of triples that describe authorship & co-authorship relationships.
+    #   By default, authors are just strings from the WoS data file. The next step will be to resolve
+    #   these into ConceptPower URIs
+    def author_network (self):
+        self.authorNetwork = []    
+        for entry in self.library:
+            for author in entry.authors:
+                print author
+            
+
 
     def authors_per_publication (self, file, start = 1900, end = datetime.datetime.now().year, slice = 1):
         print "Calculating authors per publication..."
@@ -389,7 +418,7 @@ class wos_library:   # ------------------------------------------------------- #
         
         #   Add num_authors values to list for each year
         for entry in self.library:
-            if start < int(entry.pub_year) < end:
+            if start <= int(entry.pub_year) <= end:
                 data[int(entry.pub_year)]['values'].append(entry.meta['num_authors'])
 
         #   Calculate average, min, max, variance
@@ -422,48 +451,3 @@ class wos_library:   # ------------------------------------------------------- #
 
 # -------------------------- END CLASS wos_library --------------------------- #
 
-
-# ---------------------------------- SANDBOX --------------------------------- #
-
-parser = OptionParser()
-parser.add_option("-d", "--data-path", dest="data_path")                        # String: Path to WoS data file
-parser.add_option("-n", "--network-type", dest="network_type")                  # String: Type of network: 'bc' or 'dc'
-parser.add_option("-t", "--overlap-threshold", dest="overlap_threshold", type="int")        # Int: Overlap threshold for bibliographic coupling
-parser.add_option("-o", "--output-path", dest="output_path")                    # String: Path to output directory
-parser.add_option("-i", "--identifier", dest="identifier")
-
-(options, args) = parser.parse_args()
-
-if (options.data_path != ""):
-    if (options.output_path != "" ):
-        # Initialize WoS Library
-        library = wos_library(options.identifier, options.data_path)
-        library.buildLibrary()
-        library.dump(options.output_path + "cache.pickle")          # !! Need to go back and make sure a following slash is present
-        
-        if (options.output_path[-1] != "/"):
-            options.output_path += "/"
-        
-        if (options.network_type == 'bc'):
-            print "Generating bibliographic coupling network, with overlap threshold of " + str(options.overlap_threshold) + "."
-            library.compareAbsolute(0, len(library.library),options.overlap_threshold,options.output_path)
-            print "Bibliographic coupling network and attributes saved to " + options.output_path
-        elif (options.network_type == 'dc'):
-            print "Generating direct-citation network..."
-            library.citationNetwork()
-            library.internalNetwork({'startPY':0, 'endPY':2012})                        # This should be an option at some point
-            library.generateSIF(options.output_path + "dc_internal.sif", "internal")    #"/Users/erickpeirson/Desktop/bibliographic_output/je/output_internal_0-2012.sif"
-            library.generateSIFNodes(options.output_path + "dc_internal-pub_year.noa")
-            print "Direct-citation network saved to " + options.output_path
-        elif (options.network_type == 'csv'):
-            library.export("./out.csv", "csv", "\t")
-            print "Library exported to ./out.csv"
-        elif (options.network_type == 'authors_per_publication'):
-            library.export(options.output_path + "records.csv", "csv", "\t")
-            library.authors_per_publication(options.output_path + "data.csv",1900,2013,1)
-        else:
-            print "No network type specified. Use --network-type option."
-    else:
-        print "No output directory specified. Use --output-path option."
-else:
-    print "No data file specified. Use --data-path option."
