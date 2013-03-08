@@ -193,50 +193,6 @@ class wos_library:
                 for b in range(a, len(entry.meta['AU'])):
                     if a is not b:
                         self.coauthor_graph.append((str(self.authors.index(entry.meta['AU'][a])), str(self.authors.index(entry.meta['AU'][b])), entry.year))
-                
-    #   Author-paper XGMML dynamic network; assigned to self.author_paper_xgmml
-        xgmml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-        xgmml += '\n<graph label="Davidson Authors Papers" directed="1" id="5" start="1950" end="2013">'
-        for author in self.authors:
-            start_year = 2013
-            for p in self.author_papers[self.authors.index(author)]:
-                if int(p[1]) < int(start_year):
-                    start_year = int(p[1])
-            xgmml += '\n\t<node label="{0}" id="a_{1}" start="{2}">'.format(author, self.authors.index(author), start_year)
-            xgmml += '\n\t\t<att name="type" type="string" value="author" />'
-            xgmml += '\n\t\t<graphics fill="#800000" />'
-            xgmml += '\n\t</node>'
-        for paper in self.papers:
-            xgmml += '\n\t<node label="{0}" id="p_{1}" start="{2}">'.format(paper, self.papers.index(paper), self.papers_data[paper].year)
-            xgmml += '\n\t\t<graphics fill="#003366" />'
-            xgmml += '\n\t\t<att name="type" type="string" value="paper" />'
-            xgmml += '\n\t\t<att name="year" type="integer" value="{0}" />'.format(self.papers_data[paper].year)
-            xgmml += '\n\t\t<att name="journal" type="string" value="{0}" />'.format(self.papers_data[paper].journal)
-            xgmml += '\n\t\t<att name="doc_type" type="string" value="{0}" />'.format(self.papers_data[paper].doc_type)
-            xgmml += '\n\t\t<att name="title" type="string" value="{0}" />'.format(self.papers_data[paper].title.replace('"', '\''))
-            xgmml += '\n\t</node>'
-        for edge in self.author_graph:
-            xgmml += '\n\t<edge source="a_{0}" target="p_{1}" />'.format(edge[0], edge[1])
-        xgmml += '\n</graph>'
-        self.author_paper_xgmml = xgmml
-    
-    #   Coathor XGMML dynamic network; assigned to self.coauthor_xgmml
-        xgmml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-        xgmml += '\n<graph label="Davidson Co-Authors" directed="1" id="5" start="1950" end="2013">'
-        for author in self.authors:
-            start_year = 2013
-            for p in self.author_papers[self.authors.index(author)]:
-                if int(p[1]) < int(start_year):
-                    start_year = int(p[1])
-            xgmml += '\n\t<node label="{0}" id="a_{1}" start="{2}">'.format(author, self.authors.index(author), start_year)
-            xgmml += '\n\t\t<att name="type" type="string" value="author" />'
-            xgmml += '\n\t\t<graphics fill="#800000" />'
-            xgmml += '\n\t</node>'
-        for edge in self.coauthor_graph:
-            xgmml += '\n\t<edge source="a_{0}" target="a_{1}" />'.format(edge[0], edge[1])
-        xgmml += '\n</graph>'            
-        self.coauthor_xgmml = xgmml
-
         return None
 
     def internalNetwork(self, parameters = None):
@@ -284,8 +240,9 @@ class wos_library:
 #   Return number of shared objects between libObjA and libObjB; (e.g. references shared by two papers)
     def overlap(self,libObjA, libObjB):
         return list(set(libObjA.citations) & set(libObjB.citations))
-        
-    def compareAbsolute(self, threshold, path, start_year, end_year): #   path is output directory
+
+#   Was compareAbsolute()
+    def bibliographicCoupling(self, threshold, path, start_year, end_year): #   path is output directory
         histogram = {}
         out = open(path+"couplings.xgmml", "w")
         
@@ -304,29 +261,77 @@ class wos_library:
                         if node_added is 0:
                             nodes.append (subset[x])
                             node_added = 1
-                        couplings.append(triple(subset[x].wosid, "bc", subset[i].wosid, {'overlap': str(len(overlap)), 'start': max(subset[i].year,subset[x].year)}))
-        
-    #   XGMML dynamic network
-        xgmml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-        xgmml += '\n<graph label="asdf" directed="0" id="5" start="0" end="1.5">'
-        for node in nodes:
-            start = (float(node.year) - float(start_year))/(float(end_year) - float(start_year))
-            xgmml += '\n\t<node label="{0}" id="{1}" start="{2}">'.format(node.identifier.replace("&","&amp;"), node.wosid, start)
-            xgmml += '\n\t\t<att name="pub_year" type="integer" value="{0}" />'.format(node.year)
-            xgmml += '\n\t\t<att name="journal" type="string" value="{0}" />'.format(node.journal.replace("&","&amp;"))
-            xgmml += '\n\t\t<att name="num_authors" type="integer" value="{0}" />'.format(len(node.authors))
-            xgmml += '\n\t</node>'
-        
-        for coupling in couplings:
-            start = (float(coupling.attributes['start']) - float(start_year))/(float(end_year) - float(start_year))
-            xgmml += '\n\t<edge label="coupling_{0}_{1}" source="{0}" target="{1}">'.format(coupling.subject, coupling.object)
-            xgmml += '\n\t\t<att name="overlap" type="real" value="{0}" />'.format(str(1/float(coupling.attributes['overlap'])))
-            xgmml += '\n\t</edge>'
-        
-        xgmml += '\n</graph>'
-        
-        out.write(xgmml)
-        out.close()
+                        couplings.append(triple(subset[x].wosid, "bc", subset[i].wosid, {'overlap': str(len(overlap)), 'start': max(subset[i].year,subset[x].year), 'shared': overlap}))
+        self.couplings = couplings
+        self.nodes = nodes
+
+#   returns xgmml dynamic networks of various types
+    def xgmml (self, network_type):
+    #   Bibliographic coupling
+        if network_type is 'coupling':
+            nodes = self.nodes
+            xgmml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            xgmml += '\n<graph label="asdf" directed="0" id="5" start="0" end="1.5">'
+            for node in nodes:
+                start = (float(node.year) - float(start_year))/(float(end_year) - float(start_year))
+                xgmml += '\n\t<node label="{0}" id="{1}" start="{2}">'.format(node.identifier.replace("&","&amp;"), node.wosid, start)
+                xgmml += '\n\t\t<att name="pub_year" type="integer" value="{0}" />'.format(node.year)
+                xgmml += '\n\t\t<att name="journal" type="string" value="{0}" />'.format(node.journal.replace("&","&amp;"))
+                xgmml += '\n\t\t<att name="num_authors" type="integer" value="{0}" />'.format(len(node.authors))
+                xgmml += '\n\t</node>'
+            for coupling in couplings:
+                start = (float(coupling.attributes['start']) - float(start_year))/(float(end_year) - float(start_year))
+                xgmml += '\n\t<edge label="coupling_{0}_{1}" source="{0}" target="{1}">'.format(coupling.subject, coupling.object)
+                xgmml += '\n\t\t<att name="overlap" type="real" value="{0}" />'.format(str(1/float(coupling.attributes['overlap'])))
+                xgmml += '\n\t</edge>'
+            xgmml += '\n</graph>'
+            return xgmml
+            
+    #   Author-paper
+        elif network_type is 'author-paper':
+            xgmml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            xgmml += '\n<graph label="Davidson Authors Papers" directed="1" id="5" start="1950" end="2013">'
+            for author in self.authors:
+                start_year = 2013   #   TODO: WTF?
+                for p in self.author_papers[self.authors.index(author)]:
+                    if int(p[1]) < int(start_year):
+                        start_year = int(p[1])
+                xgmml += '\n\t<node label="{0}" id="a_{1}" start="{2}">'.format(author, self.authors.index(author), start_year)
+                xgmml += '\n\t\t<att name="type" type="string" value="author" />'
+                xgmml += '\n\t\t<graphics fill="#800000" />'
+                xgmml += '\n\t</node>'
+            for paper in self.papers:
+                xgmml += '\n\t<node label="{0}" id="p_{1}" start="{2}">'.format(paper, self.papers.index(paper), self.papers_data[paper].year)
+                xgmml += '\n\t\t<graphics fill="#003366" />'
+                xgmml += '\n\t\t<att name="type" type="string" value="paper" />'
+                xgmml += '\n\t\t<att name="year" type="integer" value="{0}" />'.format(self.papers_data[paper].year)
+                xgmml += '\n\t\t<att name="journal" type="string" value="{0}" />'.format(self.papers_data[paper].journal)
+                xgmml += '\n\t\t<att name="doc_type" type="string" value="{0}" />'.format(self.papers_data[paper].doc_type)
+                xgmml += '\n\t\t<att name="title" type="string" value="{0}" />'.format(self.papers_data[paper].title.replace('"', '\''))
+                xgmml += '\n\t</node>'
+            for edge in self.author_graph:
+                xgmml += '\n\t<edge source="a_{0}" target="p_{1}" />'.format(edge[0], edge[1])
+            xgmml += '\n</graph>'
+            return xgmml
+
+    #   Coauthorship network
+        elif network_type is 'coauthor':
+            xgmml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            xgmml += '\n<graph label="Davidson Co-Authors" directed="1" id="5" start="1950" end="2013">'
+            for author in self.authors:
+                start_year = 2013   #   TODO: WTF?
+                for p in self.author_papers[self.authors.index(author)]:
+                    if int(p[1]) < int(start_year):
+                        start_year = int(p[1])
+                xgmml += '\n\t<node label="{0}" id="a_{1}" start="{2}">'.format(author, self.authors.index(author), start_year)
+                xgmml += '\n\t\t<att name="type" type="string" value="author" />'
+                xgmml += '\n\t\t<graphics fill="#800000" />'
+                xgmml += '\n\t</node>'
+            for edge in self.coauthor_graph:
+                xgmml += '\n\t<edge source="a_{0}" target="a_{1}" />'.format(edge[0], edge[1])
+            xgmml += '\n</graph>'            
+            return xgmml
+        return None
 
     def export(self, file, format, delim):
         f = open(file, "w")
