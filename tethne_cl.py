@@ -30,11 +30,14 @@ if (options.data_path != ""):
         
         if (options.output_path[-1] != "/"):
             options.output_path += "/"
-        
+    
+        #   Bibliographic coupling network; output is dynamic XGMML
         if (options.network_type == 'bc'):
             print "Generating bibliographic coupling network, with overlap threshold of " + str(options.overlap_threshold) + "."
-            library.compareAbsolute(options.overlap_threshold,options.output_path, 1940, 1950)
+            library.compareAbsolute(options.overlap_threshold,options.output_path, 1992, 1995)
             print "Bibliographic coupling network and attributes saved to " + options.output_path
+    
+        #   Direct-citation network (Garfield-style)
         elif (options.network_type == 'dc'):
             print "Generating direct-citation network..."
             library.citationNetwork()
