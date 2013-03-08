@@ -11,6 +11,7 @@
 		156E076516E6BFA0002A0343 /* sandbox.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = sandbox.py; sourceTree = "<group>"; };
 		156E076616E6D10D002A0343 /* extra.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = extra.py; sourceTree = "<group>"; };
 		156E076716E7B753002A0343 /* sandbox2.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = sandbox2.py; sourceTree = "<group>"; };
+		156E076816E9BA04002A0343 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		15DABFC916C4676A00D02606 /* tethne.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = tethne.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -19,6 +20,7 @@
 			isa = PBXGroup;
 			children = (
 				15DABFC916C4676A00D02606 /* tethne.py */,
+				156E076816E9BA04002A0343 /* README.md */,
 				156E076616E6D10D002A0343 /* extra.py */,
 				15681B8316D87693001C334E /* tethne_cl.py */,
 				156E076516E6BFA0002A0343 /* sandbox.py */,
