@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		15681B8316D87693001C334E /* tethne_cl.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = tethne_cl.py; sourceTree = "<group>"; };
+		154D79A5170AA8C000991011 /* hailmary.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = hailmary.py; sourceTree = "<group>"; };
+		15546072170CCD1400723A9A /* export.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = export.py; sourceTree = "<group>"; };
 		156E076516E6BFA0002A0343 /* sandbox.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = sandbox.py; sourceTree = "<group>"; };
 		156E076616E6D10D002A0343 /* extra.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = extra.py; sourceTree = "<group>"; };
 		156E076716E7B753002A0343 /* sandbox2.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = sandbox2.py; sourceTree = "<group>"; };
 		156E076816E9BA04002A0343 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		15841DA31721F334004DD58B /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		15DABFC916C4676A00D02606 /* tethne.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = tethne.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -19,12 +21,14 @@
 		15DABFBD16C4670E00D02606 = {
 			isa = PBXGroup;
 			children = (
+				15841DA31721F334004DD58B /* .gitignore */,
 				15DABFC916C4676A00D02606 /* tethne.py */,
 				156E076816E9BA04002A0343 /* README.md */,
 				156E076616E6D10D002A0343 /* extra.py */,
-				15681B8316D87693001C334E /* tethne_cl.py */,
 				156E076516E6BFA0002A0343 /* sandbox.py */,
 				156E076716E7B753002A0343 /* sandbox2.py */,
+				154D79A5170AA8C000991011 /* hailmary.py */,
+				15546072170CCD1400723A9A /* export.py */,
 			);
 			sourceTree = "<group>";
 		};
