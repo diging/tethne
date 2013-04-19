@@ -5,12 +5,9 @@ Tethne is a script for analyzing citation data. Right now it just works on data 
 This code is hacked together in a short amount of time to serve my own (academic) purposes. I'm not a software developer, and the code is far from polished. If you have ideas about how to make this better, go right ahead and contribute some code.
 
 ## Requirements
-[Python] [1]
-[NetworkX] [2]
-    
-    [1]: http://www.python.org/         "Python"
-    [2]: http://networkx.github.io/     "NetworkX"
-    
+* [Python](http://www.python.org/)
+* [NetworkX](http://networkx.github.io/)
+
 I think that's it...
 
 ## Questions?
