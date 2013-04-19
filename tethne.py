@@ -146,7 +146,13 @@ class wos_library:
         """Generates an author-paper networka NetworkX directed graph."""
         self.author_paper = nx.DiGraph()
         for entry in self.library:
+            self.author_paper.add_node(entry.identifier,
+                                                year=entry.year,
+                                                type="paper")
             for author in entry.authors:
+                self.author_paper.add_node(author,
+                                            type="person")
+
                 self.author_paper.add_edge(author, entry.identifier,
                                                 rel="isAuthor",
                                                 year=entry.year)
@@ -156,10 +162,10 @@ class wos_library:
         """Generates a co-author network, stored in self.coauthor_graph. Nodes are author names."""
         self.coauthor_graph = nx.Graph()
         for entry in self.library:
-            for a in range(0, len(entry.authors)):       # Now all authors are indexed
-                for b in range(a, len(entry.authors)):
+            for a in range(0, len(entry.meta['AU'])):       # Now all authors are indexed
+                for b in range(a, len(entry.meta['AU'])):
                     if a is not b:
-                        self.coauthor_graph.add_edge(a, b,
+                        self.coauthor_graph.add_edge(entry.meta['AU'][a], entry.meta['AU'][b],
                                                         rel="coauthor",
                                                         year=entry.year,
                                                         paper=entry.identifier)
@@ -222,7 +228,12 @@ output_path should be both path and a file prefix. E.g. if output_path = "./data
                 att_files[key].write(str(edge[0]).replace(" ","_") + " (" + edge[2]['rel'] + ") " + str(edge[1]).replace(" ","_") + " = " + str(value) + "\n")
         for node in nodes:
             for key, value in node[1].iteritems():
-                natt_files[key].write(str(node[0]).replace(" ","_") + " = " + str(value) + "\n")
+                try:
+                    natt_files[key].write(str(node[0]).replace(" ","_") + " = " + str(value) + "\n")
+                except KeyError:
+                    natt_files[key] = open(output_path + "_" + key + ".noa", "w")
+                    natt_files[key].write(key + "\n")
+                    natt_files[key].write(str(node[0]).replace(" ","_") + " = " + str(value) + "\n")
 
         f.close()
         for key, value in att_files.iteritems():    # Close all of the edge attribute files.
@@ -246,6 +257,8 @@ output_path should be both path and a file prefix. E.g. if output_path = "./data
                 
             if 'year' in node_attributes:
                 start = node_attributes['year']
+            else:
+                start = 1900
             
             f.write('\t<node id="{id}" label="{label}" start="{start}">\n'.format(id=id, label=label, start=start).replace('&','&amp;'))
             for key, value in node_attributes.iteritems():
@@ -396,7 +409,7 @@ def main():
             if (options.format == "sif"):
                 l.to_sif(graph, options.output_path + options.identifier)
             elif (options.format == "xgmml"):
-                l.to_xgmml(graph, identifier, options.output_path + options.identifier)
+                l.to_xgmml(graph, options.identifier, options.output_path + options.identifier)
             elif (options.format == "gexf"):
                 l.to_gexf(graph, options.output_path + options.identifier)
             elif (options.format == "graphml"):

@@ -9,13 +9,23 @@
 /* Begin PBXFileReference section */
 		156E076816E9BA04002A0343 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		15841DA31721F334004DD58B /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		15841DA4172203A9004DD58B /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = __init__.py; path = Resources/__init__.py; sourceTree = "<group>"; };
 		15DABFC916C4676A00D02606 /* tethne.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = tethne.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		15841DA5172203AF004DD58B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				15841DA4172203A9004DD58B /* __init__.py */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		15DABFBD16C4670E00D02606 = {
 			isa = PBXGroup;
 			children = (
+				15841DA5172203AF004DD58B /* Resources */,
 				15841DA31721F334004DD58B /* .gitignore */,
 				15DABFC916C4676A00D02606 /* tethne.py */,
 				156E076816E9BA04002A0343 /* README.md */,
