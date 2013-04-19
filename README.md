@@ -1,11 +1,13 @@
 # Tethne
-This project is an attempt to make it easier to work with ISI Web of Science data in python. Specifically, the idea is to pull out different kinds of networks that can be generated from the data, e.g. direct-citation, co-citation, and bibliographic coupling networks. When coupled with the java wrapper in the "master" fork of this repository, the script can run as a web service.
+Tethne is a script for analyzing citation data. Right now it just works on data from the Web of Science, but hopefully it will be expanded to work on data from other sources as well. It generates a variety of networks, such as bibliographic coupling, citation, author-paper, and co-author networks, using networkx. 
 
 ## Warning
-This code is hacked together in a short amount of time to serve my own (academic) purposes. I'm not a software developer, and the code is far from polished. If you have ideas about how to make this better, go right ahead and contribute some code! There are some Java/Eclipse apps out there that do many of the things that this module does, so if you're looking for a push-button solution I suggest that you look elsewhere. Otherwise, enjoy.
+This code is hacked together in a short amount of time to serve my own (academic) purposes. I'm not a software developer, and the code is far from polished. If you have ideas about how to make this better, go right ahead and contribute some code.
 
 ## Requirements
-Python. I think that's it...
+[Python][http://www.python.org/]
+[NetworkX][http://networkx.github.io/]
+I think that's it...
 
 ## Questions?
 erick [dot] peirson [at] asu [dot] edu
