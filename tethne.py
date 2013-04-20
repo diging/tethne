@@ -171,22 +171,21 @@ class wos_library:
                                                         paper=entry.identifier)
         return self.coauthor_graph
 
-    def overlap(self,libObjA, libObjB):
-        """Return number of shared objects between libObjA and libObjB; (e.g. references shared by two papers)."""
-        if (libObjA.citations is None) or (libObjB.citations is None):
+    def overlap(self,listA, listB):
+        """Return number of shared objects between listA, listB; (e.g. references shared by two papers)."""
+        if (listA is None) or (listB is None):
             return []
         else:
-            return list(set(libObjA.citations) & set(libObjB.citations))
+            return list(set(listA) & set(listB))
 
     def bibliographicCoupling(self, threshold):
         """Generates a bibliographic coupling network. Only couplings where the overlap is greater than or equal to the threshold will be included."""
-        #subset = self.getAll(lambda x: start_year < int(x.year) < end_year)
 
         self.couplings = nx.Graph()
         for x in range(0, len(self.library)):
             for i in range(x, len(self.library)):
                 if i != x:
-                    overlap = self.overlap(self.library[x], self.library[i])
+                    overlap = self.overlap(self.library[x].citations, self.library[i].citations)
                     if len(overlap) >= threshold:
                         self.couplings.add_node(self.library[x].identifier,
                                                     wosid=self.library[x].wosid,
@@ -199,6 +198,28 @@ class wos_library:
                                                     overlap=len(overlap),
                                                     i_overlap=1/len(overlap))
         return self.couplings
+
+    def authorCoupling(self, threshold):
+        """Generates a network of papers, where edges indicate a shared author between them."""
+
+        self.author_couplings = nx.Graph()
+        for x in range(0, len(self.library)):
+            for i in range(x, len(self.library)):
+                if i != x:
+                    overlap = overlap(self.library[x].meta['AU'], self.library[i].meta['AU'])
+                    if len(overlap) > threshold:
+                        self.author_couplings.add_node(self.library[x].identifier,
+                                                    wosid=self.library[x].wosid,
+                                                    year=self.library[x].year)
+                        self.author_couplings.add_node(self.library[i].identifier,
+                                                    wosid=self.library[i].wosid,
+                                                    year=self.library[i].year)
+                        self.author_couplings.add_edge(self.library[x].identifier, self.library[i].identifier,
+                                                    rel="shareAuthor",
+                                                    overlap=len(overlap),
+                                                    i_overlap=1/len(overlap))
+        return self.author_couplings
+
 
     def to_sif(self, graph, output_path):
         """Generates SIF output file from provided graph. 
@@ -403,6 +424,8 @@ def main():
                 graph = l.authorPapers()
             elif (options.network_type == "ca"):
                 graph = l.coauthors()
+            elif (options.network_type == "ac"):
+                graph = l.authorCoupling(options.overlap_threshold)
             else:
                 print "No network type specified. Use --network-type option."
 
