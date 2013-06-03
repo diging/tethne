@@ -7,11 +7,11 @@ This code is hacked together in a short amount of time to serve my own (academic
 ## Collecting Web of Science data
 To use Tethne you need a Web of Science data file to work with. One such file is docs/savedrecs.txt. This file was generated from the Web of Science by first following the Web of Science's recommended search "oil spill\* mediterranean" on the Web of Science tab of the Web of Knowledge service.  
 
-![alt-text](https://github.com/ap0h/tethne/tree/mybranch/docs/WebOfScienceSearch.png "Web of Science Search")  
+![alt text](https://github.com/ap0h/tethne/tree/mybranch/docs/WebOfScienceSearch.png "Web of Science Search")  
 
 If you scroll down to the bottom of the search results page, you will see a set of options to save your search results.  
 
-![alt-text](https://github.com/ap0h/tethne/tree/mybranch/docs/WebOfScienceResults.png "Web of Science Results")  
+![alt text](https://github.com/ap0h/tethne/tree/mybranch/docs/WebOfScienceResults.png "Web of Science Results")  
 
 Select a set of "Records" (we could have specified 1 to 156, the number of "Results" for this query), select "Full Record" and "Cited References" if you would like to utilize the full extent of Tethne's power, and finally "Save to Plain Text" your results, by default named "savedrecs.txt". An example savedrecs.txt for this tutorial is also provided in tethne/docs/.
 
