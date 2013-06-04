@@ -21,5 +21,7 @@ Select a set of "Records" (we could have specified 1 to 156, the number of "Resu
 
 I think that's it...
 
-## Questions?
-erick [dot] peirson [at] asu [dot] edu
+## Contributors
+* [ap0h](https://github.com/ap0h)
+* [erickpeirson](https://github.com/erickpeirson)
+* [scohmer](https://github.com/scohmer)
