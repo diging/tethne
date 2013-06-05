@@ -1,3 +1,11 @@
+def read_wos(filepath):
+    """
+    A file reader for Web of Science plain text data
+    Input:
+        filepath - a filepath to the Web of Science plain text file
+    Output:
+    """
+
 class wos_object:
     """
     Each entry in the WoS data file becomes a wos_object
@@ -24,7 +32,6 @@ class wos_object:
         self.title = title
         self.citations = citations
  
-
 def build(filename):
     """
     Reads Web of Science data file (see docs/savedrecs.txt for sample), and 
