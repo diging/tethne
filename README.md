@@ -1,8 +1,8 @@
 # Tethne
 
-![alt text](https://github.com/erickpeirson/tethne/blob/python/docs/logo.jpeg?raw=true "Logo")
-
 Tethne is a script for analyzing citation data. Right now it just works on data from the Web of Science, but hopefully it will be expanded to work on data from other sources as well. It generates a variety of networks, such as bibliographic coupling, citation, author-paper, and co-author networks, using networkx. 
+
+![alt text](https://github.com/erickpeirson/tethne/blob/python/docs/logo.jpeg?raw=true "Logo")
 
 ## Collecting Web of Science data
 To use Tethne you need a Web of Science data file to work with. One such file is docs/savedrecs.txt. This file was generated from the Web of Science by first following the Web of Science's recommended search "oil spill\* mediterranean" on the Web of Science tab of the Web of Knowledge service.  
