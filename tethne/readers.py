@@ -4,7 +4,85 @@ def read_wos(filepath):
     Input:
         filepath - a filepath to the Web of Science plain text file
     Output:
+        wos_data - a list of dictionaries each associated with a paper
+            from the Web of Science
+    Notes:
+        keys may be found in the docs folder
+        C1=Address may need some kind of address parser
+        RP=Reprint address as well
+        main identifier will be the DOI number not WOS number,
+            DOI found on CR and as key DI for primary record
+        Unknown keys:
+            RI, OI, Z9
+        If DOI is on reference sheet, may be confident that the reference
+            also exists in the Web of Science; the inverse is not true:
+            for example, the El-Fadel paper in savedrecs.txt cites
+            a paper by Al-Rabeh titled A Stochastic Simulation...
+            the latter has a DOI, but not on the reference list, it exists
+            in the Web of Science, but it is not acknowledged as cited by
+            the El-Fadel paper
     """
+    wos_data = []
+
+    #define special key handling
+    file_start_key = 'FN'
+    file_end_key = 'EF'
+    paper_start_key = 'PT'
+    paper_end_key = 'ER'
+
+    #try to read filepath
+    line_list = []
+    with open(filepath,'r') as f:
+        line_list = f.read().splitlines()
+    if len(line_list) is 0:
+        raise IOError("Unable to read filepath or filepath is empty")
+
+    #convert the data in the file to a usable list of dictionaries
+    #note: first two lines of file are not related to any paper therein
+    paper_dict = {}
+    last_field_tag = paper_start_key #initialize to something
+    for line in line_list[2:]:
+        field_tag = line[:2]
+        if field_tag == paper_start_key:
+            if paper_dict:
+                #is not empty; add paper data to our list
+                wos_data.append(paper_dict)
+            #regardless, prepare for next paper
+            paper_dict = {}
+
+        #handle keys like AU,AF,CR that continue over many lines
+        if field_tag == '  ':
+            field_tag = last_field_tag
+
+        #add value for the key to the paper_dict: the rest of the line
+        try:
+            paper_dict[field_tag] += str(line[3:]) + '\n'
+        except KeyError:
+            #key didn't exist already, can't append but must create
+            paper_dict[field_tag] = str(line[3:]) + '\n'
+
+        last_field_tag = field_tag
+
+    #define keys that should be lists instead of default string
+    list_keys = ['AU','AF','DE','ID','CR']
+    delims = {'AU':'\n',
+              'AF':'\n',
+              'DE':';',
+              'ID':';',
+              'CR':'\n'
+             }
+
+    #and convert the data at those keys into lists
+    for paper_dict in wos_data:
+        for key in list_keys:
+            delim = delims[key]
+            key_contents = paper_dict[key]
+            if delim != '\n':
+                #we dont want the newline characters
+                key_contents = key_contents.strip('\n')
+            paper_dict[key] = key_contents.split(delim)
+
+    return wos_data
 
 class wos_object:
     """
