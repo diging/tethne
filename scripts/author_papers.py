@@ -1,6 +1,6 @@
 import tethne.readers as rd
 filepath = "/home/apoh/Repository/tethne/docs/savedrecs.txt"
-records = reader.build(filepath)
+records = rd.build(filepath)
 
 import tethne.networks as nt
 author_papers = nt.nx_author_papers(records) 

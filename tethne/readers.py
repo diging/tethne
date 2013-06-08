@@ -76,40 +76,30 @@ def read_wos(filepath):
     for paper_dict in wos_data:
         for key in list_keys:
             delim = delims[key]
-            key_contents = paper_dict[key]
-            if delim != '\n':
-                #we dont want the newline characters
-                key_contents = key_contents.strip('\n')
-            paper_dict[key] = key_contents.split(delim)
+            try:
+                key_contents = paper_dict[key]
+                if delim != '\n':
+                    #we dont want the newline characters
+                    key_contents = key_contents.strip('\n')
+                paper_dict[key] = key_contents.split(delim)
+            except KeyError:
+                #one of the keys to be converted to a list didn't exist
+                pass
+
+    #similarly convert some data from string to int
+    int_keys = ['PY']
+
+    for paper_dict in wos_data:
+        for key in int_keys:
+            try:
+                paper_dict[key] = int(paper_dict[key])
+            except KeyError:
+                #one of the keys to be converted to an int didn't exist
+                pass
+
 
     return wos_data
 
-class wos_object:
-    """
-    Each entry in the WoS data file becomes a wos_object
-    Arguments:
-        authors - A dictionary that maps CR-like to AF-like.
-        pub_year -
-        identifier -- A CR-like string, e.g. "Last FM, 2012, J EXP BIOL, V210".
-        wosid -
-        journal - 
-        doc_type -
-        meta -- A dictionary, containing anything.
-        title -
-        citations -- A list of identifiers
-    """
-
-    def __init__(self, authors, pub_year, identifier, wosid, journal, doc_type,                     meta, title, citations):
-        self.authors = authors
-        self.year = pub_year
-        self.identifier = identifier
-        self.wosid = wosid
-        self.journal = journal
-        self.doc_type = doc_type
-        self.meta = meta
-        self.title = title
-        self.citations = citations
- 
 def build(filename):
     """
     Reads Web of Science data file (see docs/savedrecs.txt for sample), and 
@@ -163,7 +153,22 @@ def build(filename):
                 for row in cache['TI']:             # Some titles bleed over into multiple rows
                     title += row
         
-                wos_list.append(wos_object(authors, int(cache['PY'][0]), identifier, cache['UT'][0], cache['SO'][0], cache['DT'][0], cache, title, cache['CR']))
+                #rather than making an object make a dict
+                #DO NOT continue changing these key names as authors was
+                #changed from 'authors' to 'AU'; as more sources are
+                #incorporated they will have various input formats to deal
+                #with. we should move towards a mneumonic system
+                #rather than base everything on the (poor) WoS key system
+                wos_dict = {'AU':authors,
+                            'year':int(cache['PY'][0]),
+                            'identifier':identifier,
+                            'wosid':cache['UT'][0],
+                            'journal':cache['SO'][0],
+                            'doc_type':cache['DT'][0],
+                            'meta':cache,
+                            'title':title,
+                            'citations':cache['CR']}
+                wos_list.append(wos_dict)
         
                 cache = {}              # Dump for next record
                 cache['CR'] = None      # Prevents a KeyError if the record has no references.
