@@ -373,13 +373,13 @@ class wos_library:
    
             # fill the edge attribute files
             for edge in edges:
-                # write n1_ relation _n2 to .sif file for each (n1,n2) \in E(G)
+                # write n1 relation n2 to .sif file for each (n1,n2) \in E(G)
                 f.write(str(edge[0]).replace(" ","_") + " " +
                         edge[2]['rel'] + " " + 
                         str(edge[1]).replace(" ","_") + "\n")
 
                 for key, value in edge[2].iteritems():
-                    # write n1_(relation)_n2 = value for each (n1,n2) \in E(G)
+                    # write n1 (relation) n2 = value for each (n1,n2) \in E(G)
                     # into each attribute file
                     edge_att_files[key].write(
                         str(edge[0]).replace(" ","_") + 
