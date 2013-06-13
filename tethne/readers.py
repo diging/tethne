@@ -1,6 +1,21 @@
+def cr_parse(ref_list):
+    """
+    Support the Web of Science reader by converting the strings found
+    at the CR field tag of a record into a dictionary with the following keys
+        doi         - the Digital Object Identifier
+        authors     - authors of the paper 
+        year        - publication year
+        identifier  - CR-like string
+        wosid       - Web of Science Accession Number
+        journal     - journal name
+        title       - article title
+    actually should we convert keys to the article metadata (plus others)
+    from crossref?
+    """
+
 def read_wos(filepath):
     """
-    A file reader for Web of Science plain text data
+    Read Web of Science plain text data
     Input:
         filepath - a filepath to the Web of Science plain text file
     Output:
@@ -25,10 +40,7 @@ def read_wos(filepath):
     wos_data = []
 
     #define special key handling
-    file_start_key = 'FN'
-    file_end_key = 'EF'
     paper_start_key = 'PT'
-    paper_end_key = 'ER'
 
     #try to read filepath
     line_list = []
@@ -88,7 +100,6 @@ def read_wos(filepath):
 
     #similarly convert some data from string to int
     int_keys = ['PY']
-
     for paper_dict in wos_data:
         for key in int_keys:
             try:
@@ -97,8 +108,8 @@ def read_wos(filepath):
                 #one of the keys to be converted to an int didn't exist
                 pass
 
-
     return wos_data
+
 
 def build(filename):
     """
@@ -107,7 +118,14 @@ def build(filename):
     Input: 
         filename - A WoS data file filepath string
     Output:
-        wos_list - A list of wos_objects containing data in the file
+        wos_list - A list of dictionaries with the following keys:
+        AU          - authors of the paper 
+        year        - publication year
+        identifier  - CR-like string
+        wosid       - Web of Science Accession Number
+        journal     - journal name
+        title       - article title
+        citations   - a list of citations in 'CR' format
     """
     wos_list = []
 
@@ -164,8 +182,6 @@ def build(filename):
                             'identifier':identifier,
                             'wosid':cache['UT'][0],
                             'journal':cache['SO'][0],
-                            'doc_type':cache['DT'][0],
-                            'meta':cache,
                             'title':title,
                             'citations':cache['CR']}
                 wos_list.append(wos_dict)
