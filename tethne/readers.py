@@ -1,41 +1,41 @@
-def cr_parse(ref_list):
-    """
-    Support the Web of Science reader by converting the strings found
-    at the CR field tag of a record into a dictionary with the following keys
-        doi         - the Digital Object Identifier
-        authors     - authors of the paper 
-        year        - publication year
-        identifier  - CR-like string
-        wosid       - Web of Science Accession Number
-        journal     - journal name
-        title       - article title
-    actually should we convert keys to the article metadata (plus others)
-    from crossref?
-    """
+"""
+Each file reader takes an input file from an academic knowledge database
+such as the Web of Science or PubMed and parses the input file into a
+list of "meta_dict" dictionaries for each paper with as many as possible of 
+the following "minimum" keys
+    doi     - the Digital Object Identifier
+    aulast  - first author's last name
+    auinit  - first author's first initial
+    atitle  - article title
+    jtitle  - journal title or abbreviated title
+    volume  - journal volume number
+    issue   - journal issue number
+    spage   - starting page of article in journal
+    epage   - ending page of article in journal
+    date    - article date of publication
+These keys are associated with the meta data entries in the databases of 
+organizations such as the International DOI Foundation and its Registration
+Agencies such as CrossRef and DataCite
 
-def read_wos(filepath):
+In addition, meta_dict dictionaries will contain keys with information 
+relevant to the networks of interest for Tethne including
+    citations - a list of minimum meta_dict dictionaries for cited references
+"""
+def parse_wos(filepath):
     """
     Read Web of Science plain text data
     Input:
         filepath - a filepath to the Web of Science plain text file
     Output:
-        wos_data - a list of dictionaries each associated with a paper
-            from the Web of Science
+        wos_data
+            a list of dictionaries each associated with a paper from 
+            the Web of Science with keys from docs/fieldtags.txt
+            as encountered in the file; most values associated with
+            keys are strings with special exceptions defined by
+            the list_keys and int_keys variables
     Notes:
-        keys may be found in the docs folder
-        C1=Address may need some kind of address parser
-        RP=Reprint address as well
-        main identifier will be the DOI number not WOS number,
-            DOI found on CR and as key DI for primary record
-        Unknown keys:
-            RI, OI, Z9
-        If DOI is on reference sheet, may be confident that the reference
-            also exists in the Web of Science; the inverse is not true:
-            for example, the El-Fadel paper in savedrecs.txt cites
-            a paper by Al-Rabeh titled A Stochastic Simulation...
-            the latter has a DOI, but not on the reference list, it exists
-            in the Web of Science, but it is not acknowledged as cited by
-            the El-Fadel paper
+        Unknown keys: RI, OI, Z9
+        :copyright: (c) 2013 Aaron Baker
     """
     wos_data = []
 
@@ -109,6 +109,88 @@ def read_wos(filepath):
                 pass
 
     return wos_data
+
+
+def parse_cr(ref):
+    """
+    Support the Web of Science reader by converting the strings found
+    at the CR field tag of a record into a minimum meta_dict dictionary 
+    Input   - CR field tag data from a plain text Web of Science file
+    Output  - meta_dict dictionary
+    Notes
+        Needs a sophisticated name parser, would like to use an open source
+        resource for this
+        :copyright: (c) 2013 Aaron Baker
+    """
+    meta_dict = {}
+    #tokens of form: aulast auinit, date, jtitle, volume, spage, doi
+    tokens = ref.split(',')
+    try:
+        #strip initial characters based on the field (spaces, 'V', 'DOI')
+        meta_dict['aulast'] = tokens[0]
+        meta_dict['date'] = int(tokens[1][1:])
+        meta_dict['jtitle'] = tokens[2][1:]
+        meta_dict['volume'] = tokens[3][2:]
+        meta_dict['spage'] = tokens[4][2:]
+        meta_dict['doi'] = tokens[5][5:]
+    except IndexError:
+        #ref did not have enough data
+        pass
+
+    return meta_dict
+
+
+def wos_meta(wos_data):
+    """
+    Convert a dictionary or list of dictionaries with keys from the
+    Web of Science field tags into a meta_dict dictionary or list of
+    dictionaries, the standard for Tethne
+    """
+    #create a meta_dict for each paper_dict and append to this list
+    wos_meta = []
+
+    #handle dict inputs by converting to a 1-item list
+    if type(wos_data) is dict:
+        wos_data = [wos_data]
+
+    #perform key convertions
+    for paper_dict in wos_data:
+        meta_dict = {}
+
+        try:
+            #aulast FIXME: not robust to all names, organziation authors, etc.
+            name_list = []
+            for name in paper_dict['AU']:
+                name_tokens = name.split(',')
+                aulast = name_tokens[0]
+                name_list.append(aulast)
+            meta_dict['aulast'] = name_list
+            #auinit TODO
+    
+            #simple fields
+            meta_dict['doi'] = paper_dict['DI']
+            meta_dict['atitle'] = paper_dict['TI']
+            meta_dict['jtitle'] = paper_dict['SO']
+            meta_dict['volume'] = paper_dict['VL']
+            meta_dict['issue'] = paper_dict['IS']
+            meta_dict['spage'] = paper_dict['BP']
+            meta_dict['epage'] = paper_dict['EP']
+            meta_dict['date'] = paper_dict['PY']
+    
+            #additional fields
+            #convert CR references into meta_dict format
+            meta_cr_list = []
+            for ref in paper_dict['CR']:
+                meta_cr_list.append(parse_cr(ref))
+            meta_dict['citations'] = meta_cr_list
+        except KeyError:
+            #missing Web of Science key
+            pass
+
+        wos_meta.append(meta_dict)
+    #end paper_dict for loop
+
+    return wos_meta
 
 
 def build(filename):
@@ -222,5 +304,3 @@ def build(filename):
         #end line loop
     #end file read
     return wos_list
- 
-

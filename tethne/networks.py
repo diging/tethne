@@ -1,7 +1,7 @@
 import networkx as nx
 import utilities as util
 
-def nx_citations(wos_list):
+def nx_citations(doc_list):
     """
     Create a NetworkX directed graph based on citation records
     Nodes       - 
@@ -9,24 +9,23 @@ def nx_citations(wos_list):
     Edges       -
     Edge attr   -
 
-    Input:
-        a list of wos_dicts
+    Input:  doc_list, a list of meta_dicts
     Output:
         a tuple t with
         t(0): global citation network (all citations), and an 
-        t(1): internal citation network where only the papers in the data 
-            library are nodes in the network
+        t(1): internal citation network where only the papers in the
+            list are nodes in the network
     """
     citation_network = nx.DiGraph()
     citation_network_internal = nx.DiGraph()
-    for entry in wos_list:
+    for entry in doc_list:
         if entry['citations'] is not None:
             for citation in entry['citations']:
                 citation_network.add_edge(entry['identifier'], 
-                                               citation,
-                                               rel="citation",
-                                               year=entry['year'])
-                if (util.contains (wos_list, 
+                                          citation,
+                                          rel="citation",
+                                          year=entry['year'])
+                if (util.contains (doc_list, 
                                    lambda wos_obj: 
                                        wos_obj['identifier'] == citation)):
                     citation_network_internal.add_edge(
@@ -39,28 +38,29 @@ def nx_citations(wos_list):
 
 
 def nx_author_papers(wos_list):
-        """
-        Generate an author_papers network NetworkX directed graph.
-        Nodes - two kinds of nodes with distinguishing "type" attributes
-            type = paper    - a paper in wos_list
-            type = person   - a person in wos_list
-        Edges - directed Author -> her Paper 
-            year    - date of publication
+    """
+    Generate an author_papers network NetworkX directed graph.
+    Nodes - two kinds of nodes with distinguishing "type" attributes
+        type = paper    - a paper in wos_list
+        type = person   - a person in wos_list
+    Edges - directed Author -> her Paper 
+        year    - date of publication
 
-        Input: wos_list list of wos_objects
-        Output: author_papers DiGraph 
-        """
-        author_papers = nx.DiGraph()
-        for entry in wos_list:
-            author_papers.add_node(entry['identifier'], year=entry['year'],
-                                   type="paper")
-            for author in entry['AU']:
-                author_papers.add_node(author,
-                                       type="person")
+    Input: wos_list list of wos_objects
+    Output: author_papers DiGraph 
+    """
+    author_papers = nx.DiGraph()
+    for entry in wos_list:
+        author_papers.add_node(entry['identifier'], year=entry['year'],
+                               type="paper")
+        for author in entry['AU']:
+            author_papers.add_node(author,
+                                   type="person")
 
-                author_papers.add_edge(author, entry['identifier'],
-                                       year=entry['year'])
-        return author_papers
+            author_papers.add_edge(author, entry['identifier'],
+                                   year=entry['year'])
+    return author_papers
+
 
 def nx_coauthors(wos_list):
     """
