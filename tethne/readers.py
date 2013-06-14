@@ -2,10 +2,9 @@
 Each file reader takes an input file from an academic knowledge database
 such as the Web of Science or PubMed and parses the input file into a
 list of "meta_dict" dictionaries for each paper with as many as possible of 
-the following "minimum" keys
-    doi     - the Digital Object Identifier
-    aulast  - first author's last name
-    auinit  - first author's first initial
+the following keys; missing values are set to None
+    aulast  - authors' last name as a list
+    auinit  - authors' first initial as a list
     atitle  - article title
     jtitle  - journal title or abbreviated title
     volume  - journal volume number
@@ -19,8 +18,15 @@ Agencies such as CrossRef and DataCite
 
 In addition, meta_dict dictionaries will contain keys with information 
 relevant to the networks of interest for Tethne including
-    citations - a list of minimum meta_dict dictionaries for cited references
+    citations   - a list of minimum meta_dict dictionaries for cited references
+    ayid        - First author's last name and the publication year
+    doi         - Digital Object Identifier 
+    pmid        - PubMed ID
+    wosid       - Web of Science UT fieldtag
+Missing data here also results in the above keys being set to None
 """
+import data_struct as ds
+
 def parse_wos(filepath):
     """
     Read Web of Science plain text data
@@ -193,6 +199,58 @@ def wos_meta(wos_data):
     return wos_meta
 
 
+def parse_bib(filename):
+    import tethne.bib as bb
+
+    #load file into bib.py readable format
+    data = ""
+    with open(filename,'r') as f:
+        for line in f:
+            line = line.rstrip()
+            data += line + "\n"
+
+    #parse the bibtex file into a dict (article) of dicts (article meta)
+    data = bb.clear_comments(data)
+    bib = bb.Bibparser(data)
+    bib.parse()
+
+    #convert data into a list of tethne meta_dict
+    translator = {'doi':'doi',
+                  'author':'aulast',
+                  'title':'atitle',
+                  'journal':'jtitle',
+                  'volume':'volume',
+                  'year':'date'}
+    bib_list = []
+    for record in bib.records.itervalues():
+        meta_dict = ds.new_meta_dict()
+        meta_dict['file'] = filename
+        for key, value in record.iteritems():
+            translator_keys = translator.keys()
+            if key in translator_keys:
+                meta_key = translator[key]
+                meta_dict[meta_key] = value
+        bib_list.append(meta_dict)
+
+    #perform the non-simple convertions
+    for meta_dict in bib_list:
+        if meta_dict['aulast'] is not None:
+            aulast = []
+            auinit = []
+            for name_dict in meta_dict['aulast']:
+                aulast.append(name_dict['family'])
+                if 'given' in name_dict.keys():
+                    auinit.append(name_dict['given'][0].upper())
+                else:
+                    auinit.append('')
+            meta_dict['aulast'] = aulast
+            meta_dict['auinit'] = auinit
+        else:
+            print 'Parser failed at', meta_dict
+
+    return bib_list
+
+
 def build(filename):
     """
     Reads Web of Science data file (see docs/savedrecs.txt for sample), and 
@@ -259,12 +317,12 @@ def build(filename):
                 #incorporated they will have various input formats to deal
                 #with. we should move towards a mneumonic system
                 #rather than base everything on the (poor) WoS key system
-                wos_dict = {'AU':authors,
-                            'year':int(cache['PY'][0]),
+                wos_dict = {'aulast':authors,
+                            'date':int(cache['PY'][0]),
                             'identifier':identifier,
                             'wosid':cache['UT'][0],
-                            'journal':cache['SO'][0],
-                            'title':title,
+                            'jtitle':cache['SO'][0],
+                            'atitle':title,
                             'citations':cache['CR']}
                 wos_list.append(wos_dict)
         

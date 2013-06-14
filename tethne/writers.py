@@ -131,10 +131,7 @@ def to_xgmml(graph, name, output_path):
     for edge in graph.edges(data=True):
         f.write ('\t<edge source="{}" target="{}">\n'.format(edge[0], edge[1]).replace('&','&amp;'))
         for key, value in edge[2].iteritems():
-            if (type (value).__name__ == "str"):
-                v_type = "string"
-            elif (type (value).__name__ == "int"):
-                v_type = "integer"
+            v_type = type(value).__name__
 
             f.write('\t\t<att name="{}" value="{}" type="{}" />\n'.format(key, value, v_type).replace('&','&amp;'))
         f.write('\t</edge>')
