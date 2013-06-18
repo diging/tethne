@@ -122,23 +122,20 @@ def nx_coauthors(doc_list, *args):
     #args that are keys in the meta_dict structure are valid
     valid_args = []
     meta_keys = ds.new_meta_dict().keys()
-    print 'args', args
-    print 'meta_keys', meta_keys
     for arg in args:
         if arg in meta_keys:
             valid_args.append(arg)
-    print 'valid_args', valid_args
 
     for entry in doc_list:
         if entry['aulast'] is not None:
+            #index the authors twice
             for a in xrange(len(entry['aulast'])):
-                # index all authors in author list 
                 for b in xrange(a+1, len(entry['aulast'])):
+                    coauthors.add_edge(entry['aulast'][a], entry['aulast'][b])
+
                     #add edges with specified edge attributes
                     for arg in valid_args:
-                        coauthors.add_edge(entry['aulast'][a], 
-                                           entry['aulast'][b],
-                                           arg=entry[arg])
+                        coauthors[entry['aulast'][a]][entry['aulast'][b]][arg] = entry[arg]
 
     return coauthors
 
