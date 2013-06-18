@@ -19,7 +19,8 @@ Agencies such as CrossRef and DataCite
 In addition, meta_dict dictionaries will contain keys with information 
 relevant to the networks of interest for Tethne including
     citations   - a list of minimum meta_dict dictionaries for cited references
-    ayid        - First author's last name and the publication year
+    ayjid       - First author's last name, initial the publication year and
+                  the journal published in
     doi         - Digital Object Identifier 
     pmid        - PubMed ID
     wosid       - Web of Science UT fieldtag
@@ -33,7 +34,7 @@ def parse_wos(filepath):
     Input:
         filepath - a filepath to the Web of Science plain text file
     Output:
-        wos_data
+        wos_list
             a list of dictionaries each associated with a paper from 
             the Web of Science with keys from docs/fieldtags.txt
             as encountered in the file; most values associated with
@@ -43,10 +44,11 @@ def parse_wos(filepath):
         Unknown keys: RI, OI, Z9
         :copyright: (c) 2013 Aaron Baker
     """
-    wos_data = []
+    wos_list = []
 
     #define special key handling
     paper_start_key = 'PT'
+    paper_end_key = 'ER'
 
     #try to read filepath
     line_list = []
@@ -57,29 +59,35 @@ def parse_wos(filepath):
 
     #convert the data in the file to a usable list of dictionaries
     #note: first two lines of file are not related to any paper therein
-    paper_dict = {}
     last_field_tag = paper_start_key #initialize to something
     for line in line_list[2:]:
         field_tag = line[:2]
         if field_tag == paper_start_key:
-            if paper_dict:
-                #is not empty; add paper data to our list
-                wos_data.append(paper_dict)
-            #regardless, prepare for next paper
-            paper_dict = {}
+            #then prepare for next paper
+            wos_dict = ds.new_wos_dict()
+
+        if field_tag == paper_end_key:
+            #then add paper to our list
+            wos_list.append(wos_dict)
 
         #handle keys like AU,AF,CR that continue over many lines
         if field_tag == '  ':
             field_tag = last_field_tag
 
-        #add value for the key to the paper_dict: the rest of the line
+        #add value for the key to the wos_dict: the rest of the line
         try:
-            paper_dict[field_tag] += str(line[3:]) + '\n'
-        except KeyError:
+            if field_tag in ['AU', 'AF', 'CR']:
+                #these unique fields use the new line delimiter to distinguish
+                #their list elements below
+                wos_dict[field_tag] += '\n' + str(line[3:])
+            else:
+                wos_dict[field_tag] += ' ' + str(line[3:])
+        except (KeyError, TypeError):
             #key didn't exist already, can't append but must create
-            paper_dict[field_tag] = str(line[3:]) + '\n'
+            wos_dict[field_tag] = str(line[3:])
 
         last_field_tag = field_tag
+    #end line loop
 
     #define keys that should be lists instead of default string
     list_keys = ['AU','AF','DE','ID','CR']
@@ -87,34 +95,41 @@ def parse_wos(filepath):
               'AF':'\n',
               'DE':';',
               'ID':';',
-              'CR':'\n'
-             }
+              'CR':'\n'}
 
     #and convert the data at those keys into lists
-    for paper_dict in wos_data:
+    for wos_dict in wos_list:
         for key in list_keys:
             delim = delims[key]
             try:
-                key_contents = paper_dict[key]
+                key_contents = wos_dict[key]
                 if delim != '\n':
-                    #we dont want the newline characters
-                    key_contents = key_contents.strip('\n')
-                paper_dict[key] = key_contents.split(delim)
+                    wos_dict[key] = key_contents.split(delim)
+                else:
+                    wos_dict[key] = key_contents.splitlines()
             except KeyError:
                 #one of the keys to be converted to a list didn't exist
+                pass
+            except AttributeError:
+                #again a key didn't exist but it belonged to the wos
+                #data_struct set of keys; can't split a None
                 pass
 
     #similarly convert some data from string to int
     int_keys = ['PY']
-    for paper_dict in wos_data:
+    for wos_dict in wos_list:
         for key in int_keys:
             try:
-                paper_dict[key] = int(paper_dict[key])
+                wos_dict[key] = int(wos_dict[key])
             except KeyError:
                 #one of the keys to be converted to an int didn't exist
                 pass
+            except TypeError:
+                #again a key didn't exist but it belonged to the wos
+                #data_struct set of keys; can't convert None to an int
+                pass
 
-    return wos_data
+    return wos_list
 
 
 def parse_cr(ref):
@@ -126,80 +141,138 @@ def parse_cr(ref):
     Notes
         Needs a sophisticated name parser, would like to use an open source
         resource for this
+        If WoS is missing a field in the middle of the list there are NOT
+        commas indicating that; the following example does NOT occur
+            Doe J, ,, Some Journal
+        instead
+            Doe J, Some Journal
+        this threatens the integrity of WoS data; should we address it?
+        Another threat: if WoS is unsure of the DOI number there will be
+        multiple DOI numbers in a list of form [doi1, doi2, ...], address this?
         :copyright: (c) 2013 Aaron Baker
     """
-    meta_dict = {}
+    meta_dict = ds.new_meta_dict()
     #tokens of form: aulast auinit, date, jtitle, volume, spage, doi
     tokens = ref.split(',')
     try:
+        #FIXME: needs better name parser
+        name = tokens[0]
+        name_tokens = name.split(' ')
+        meta_dict['aulast'] = name_tokens[0]
+        meta_dict['auinit'] = name_tokens[1]
+
         #strip initial characters based on the field (spaces, 'V', 'DOI')
-        meta_dict['aulast'] = tokens[0]
         meta_dict['date'] = int(tokens[1][1:])
         meta_dict['jtitle'] = tokens[2][1:]
         meta_dict['volume'] = tokens[3][2:]
         meta_dict['spage'] = tokens[4][2:]
         meta_dict['doi'] = tokens[5][5:]
     except IndexError:
-        #ref did not have enough data
+        #ref did not have the full set of tokens
+        pass
+    except ValueError:
+        #this occurs when the program expects a date but gets a string with
+        #no numbers, we leave the field incomplete because chances are
+        #the CR string is too sparse to use anyway
         pass
 
+    ayjid = create_ayjid(meta_dict['aulast'], meta_dict['auinit'], 
+                         meta_dict['date'], meta_dict['jtitle'])
+    meta_dict['ayjid'] = ayjid
+ 
     return meta_dict
 
+def create_ayjid(aulast='', auinit='', date='', jtitle='', **kwargs):
+    """
+    Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid
+    Returns 'Unknown paper' if all id components are missing (None)
+    """
+    if aulast is None:
+        aulast = ''
+    elif isinstance(aulast,list):
+        aulast = aulast[0]
 
-def wos_meta(wos_data):
+    if auinit is None:
+        auinit = ''
+    elif isinstance(auinit,list):
+        auinit = auinit[0]
+
+    if date is None:
+        date = ''
+
+    if jtitle is None:
+        jtitle = ''
+
+    ayj = aulast + ' ' + auinit + ' ' + str(date) + ' ' + jtitle
+
+    if ayj == '   ':
+        ayj = 'Unknown paper'
+
+    return ayj
+
+
+def wos2meta(wos_data):
     """
     Convert a dictionary or list of dictionaries with keys from the
     Web of Science field tags into a meta_dict dictionary or list of
     dictionaries, the standard for Tethne
     """
-    #create a meta_dict for each paper_dict and append to this list
+    #create a meta_dict for each wos_dict and append to this list
     wos_meta = []
 
     #handle dict inputs by converting to a 1-item list
     if type(wos_data) is dict:
         wos_data = [wos_data]
 
-    #perform key convertions
-    for paper_dict in wos_data:
-        meta_dict = {}
+    #define the direct relationships between WoS fieldtags and meta_dict keys
+    translator = ds.wos2meta_map()
+    
+    #perform the key convertions
+    for wos_dict in wos_data:
+        meta_dict = ds.new_meta_dict()
 
-        try:
-            #aulast FIXME: not robust to all names, organziation authors, etc.
-            name_list = []
-            for name in paper_dict['AU']:
+        #direct translations
+        for key in translator.iterkeys():
+            meta_dict[translator[key]] = wos_dict[key]
+
+        #more complicated translations
+        #FIXME: not robust to all names, organziation authors, etc.
+        if wos_dict['AU'] is not None:
+            aulast_list = []
+            auinit_list = []
+            for name in wos_dict['AU']:
                 name_tokens = name.split(',')
                 aulast = name_tokens[0]
-                name_list.append(aulast)
-            meta_dict['aulast'] = name_list
-            #auinit TODO
-    
-            #simple fields
-            meta_dict['doi'] = paper_dict['DI']
-            meta_dict['atitle'] = paper_dict['TI']
-            meta_dict['jtitle'] = paper_dict['SO']
-            meta_dict['volume'] = paper_dict['VL']
-            meta_dict['issue'] = paper_dict['IS']
-            meta_dict['spage'] = paper_dict['BP']
-            meta_dict['epage'] = paper_dict['EP']
-            meta_dict['date'] = paper_dict['PY']
-    
-            #additional fields
-            #convert CR references into meta_dict format
+                auinit = name_tokens[1][1] #1 b/c of 'aulast, aufirst'
+                aulast_list.append(aulast)
+                auinit_list.append(auinit)
+            meta_dict['aulast'] = aulast_list
+            meta_dict['auinit'] = auinit_list
+
+        #construct ayjid
+        ayjid = create_ayjid(meta_dict['aulast'], meta_dict['auinit'], 
+                             meta_dict['date'], meta_dict['jtitle'])
+        meta_dict['ayjid'] = ayjid
+
+        #convert CR references into meta_dict format
+        if wos_dict['CR'] is not None:
             meta_cr_list = []
-            for ref in paper_dict['CR']:
+            for ref in wos_dict['CR']:
                 meta_cr_list.append(parse_cr(ref))
             meta_dict['citations'] = meta_cr_list
-        except KeyError:
-            #missing Web of Science key
-            pass
 
         wos_meta.append(meta_dict)
-    #end paper_dict for loop
+    #end wos_dict for loop
 
     return wos_meta
 
 
 def parse_bib(filename):
+    """
+    Warning: tethne.bib has been known to make errors in parsing bib files
+    FIXME: structure the bibtex translator in the data_struct folder
+    along with the others
+    """
     import tethne.bib as bb
 
     #load file into bib.py readable format
