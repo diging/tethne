@@ -34,6 +34,7 @@ def new_meta_dict():
 
     return meta_dict
     
+
 def new_wos_dict():
     """
     Defines the set of field tags that will try to be converted into

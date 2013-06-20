@@ -20,7 +20,7 @@ import networkx as nx
 import utilities as util
 import data_struct as ds
 
-def nx_citations(doc_list, node_id):
+def nx_citations(doc_list, node_id, *node_attribs):
     """
     Create a NetworkX directed graph based on citation records
     Nodes       - documents represented by the value of meta_dict[node_id]
@@ -45,23 +45,38 @@ def nx_citations(doc_list, node_id):
     citation_network_internal = nx.DiGraph()
 
     #check general node_id validity
-    dummy_dict = ds.new_meta_dict()
-    if node_id not in dummy_dict.iterkeys():
+    meta_keys = ds.new_meta_dict().keys()
+    if node_id not in meta_keys:
         raise KeyError('node_id:' + node_id + 'is not in the set of' +
-                       'expected key names')
+                       'meta_keys')
 
     for entry in doc_list:
         #check the head
         head_has_id = True
         if entry[node_id] is None:
             head_has_id = False
-        if entry['citations'] is not None:
 
+        if head_has_id:
+            #then create node to both global and internal networks
+            node_attrib_dict = util.subdict(entry, node_attribs)
+            node_attrib_dict['type'] = 'paper'
+            citation_network.add_node(entry[node_id], node_attrib_dict)
+            citation_network_internal.add_node(entry[node_id], 
+                                               node_attrib_dict) 
+
+        if entry['citations'] is not None:
             for citation in entry['citations']:
                 #check the tail
                 tail_has_id = True
                 if citation[node_id] is None:
                     tail_has_id = False
+
+                if tail_has_id:
+                    #then create node to global but not internal network
+                    node_attrib_dict = util.subdict(citation, node_attribs)
+                    node_attrib_dict['type'] = 'citation'
+                    citation_network.add_node(citation[node_id], 
+                                              node_attrib_dict)
 
                 if head_has_id and tail_has_id:
                     #then draw an edge in the network
@@ -96,31 +111,30 @@ def nx_author_papers(doc_list, paper_id, *paper_attribs):
     """
     author_papers = nx.DiGraph()
 
-    #validate paper attributes
-    dummy_dict = ds.new_meta_dict()
-    meta_keys = dummy_dict.keys()
-    valid_attribs = []
-    for attrib in paper_attribs:
-        if attrib in meta_keys:
-            valid_attribs.append(attrib)
+    #validate paper_id
+    meta_keys = ds.new_meta_dict().keys()
+    meta_keys.remove('citations')
+    if paper_id not in meta_keys:
+        raise KeyError('paper_id' + paper_id + ' cannot be used to identify' +
+                       ' papers.')
 
     for entry in doc_list:
-        #define node_attribute dictionary
-        node_attrib_dict = {}
-        for attrib in valid_attribs:
-            node_attrib_dict[attrib] = entry[attrib]
-        node_attrib_dict['type'] = 'paper'
-        print node_attrib_dict
+        #define paper_attribute dictionary
+        paper_attrib_dict = util.subdict(entry, paper_attribs)
+        paper_attrib_dict['type'] = 'paper'
 
         #add paper node with attributes
-        author_papers.add_node(entry[paper_id], node_attrib_dict)
+        author_papers.add_node(entry[paper_id], paper_attrib_dict)
                                
-        for i in xrange(len(entry['aulast'])):
-            author = entry['aulast'][i] + ' ' + entry['auinit'][i]
-            author_papers.add_node(author, type="person")
+        authors = util.concat_list(entry['aulast'], entry['auinit'], ' ')
+        for i in xrange(len(authors)):
+            #add person node
+            author_papers.add_node(authors[i], type="person")
 
-            author_papers.add_edge(author, entry[paper_id],
+            #draw edges
+            author_papers.add_edge(authors[i], entry[paper_id],
                                    year=entry['date'])
+
     return author_papers
 
 
@@ -130,30 +144,36 @@ def nx_coauthors(doc_list, *edge_attribs):
     Nodes        - author names
     Node attribs - none
     Edges        - (a,b) \in E(G) if a and b are coauthors on the same paper
-    Edge attribs - user provided tuple specifying which meta_dict keys
+    Edge attribs - user provided edge_attribs specifying which meta_dict keys
                    (for the paper they coauthored on) to use as edge attributes
     Input a doc_list list of wos_objects
     Return a simple coauthor network
     """
     coauthors = nx.Graph()
 
-    #edge_attribs that are keys in the meta_dict structure are valid
-    valid_edge_attribs = []
-    meta_keys = ds.new_meta_dict().keys()
-    for attrib in edge_attribs:
-        if attrib in meta_keys:
-            valid_edge_attribs.append(attrib)
-
     for entry in doc_list:
         if entry['aulast'] is not None:
+            #edge_attrib_dict for any edges that get added
+            edge_attrib_dict = util.subdict(entry, edge_attribs)
+
+            #make a new list of aulast, auinit names
+            full_names = util.concat_list(entry['aulast'], 
+                                          entry['auinit'], 
+                                          ' ')
+
             #index the authors twice
-            for a in xrange(len(entry['aulast'])):
+            for a in xrange(len(full_names)):
+                #create node for author a
+                coauthors.add_node(full_names[a])
+
                 for b in xrange(a+1, len(entry['aulast'])):
-                    coauthors.add_edge(entry['aulast'][a], entry['aulast'][b])
+                    #create node for author b
+                    coauthors.add_node(full_names[b])
 
                     #add edges with specified edge attributes
-                    for attrib in valid_edge_attribs:
-                        coauthors[entry['aulast'][a]][entry['aulast'][b]][attrib] = entry[arg]
+                    coauthors.add_edge(full_names[a], 
+                                       full_names[b],
+                                       edge_attrib_dict)
 
     return coauthors
 
@@ -163,28 +183,23 @@ def nx_biblio_coupling(doc_list, citation_id, threshold, node_id,
     """
     Generate a simple bibliographic coupling network 
     Nodes - papers represented by node_id and node attributes defined by
-            all arguments (in meta_dict keys) after the 4th argument provided
+            node_attribs (in meta_dict keys) 
     Edges - (a,b) \in E(G) if a and b share x citations where 
             x >= threshold
     Edge attributes - 
         overlap - the number of citations shared
-    Input - doc_list of meta_dicts; citation_id is how citation overlap
-            is identified
+    Input - doc_list of meta_dicts 
+            citation_id is how citation overlap is identified
     Return a bibliographic coupling network
     Notes
         lists cannot be attributes? causing errors for both gexf and graphml
         also nodes cannot be none
+        copyright (c) 2013 Erick Pierson and Aaron Baker
     """
     bcoupling = nx.Graph()
 
-    #validate citation_id, node_id, and node attribs
-    dummy_dict = ds.new_meta_dict()
-    meta_keys = dummy_dict.keys()
-    valid_attribs = []
-    for attrib in node_attribs:
-        if attrib in meta_keys:
-            valid_attribs.append(attrib)
-
+    #validate identifiers
+    meta_keys = ds.new_meta_dict().keys()
     if node_id not in meta_keys:
         raise KeyError('node_id' + node_id + ' is not a meta_dict key.')
 
@@ -202,11 +217,8 @@ def nx_biblio_coupling(doc_list, citation_id, threshold, node_id,
             i_list.append(citation[citation_id])
 
         #and construct that document's node
-        i_attribs = {}
-        for attrib in valid_attribs:
-            if doc_list[i][attrib] is not None:
-                i_attribs[attrib] = doc_list[i][attrib]
-        bcoupling.add_node(doc_list[i][node_id], i_attribs)
+        node_i_attribs = util.subdict(doc_list[i], node_attribs)
+        bcoupling.add_node(doc_list[i][node_id], node_i_attribs)
 
         for j in xrange(i+1, len(doc_list)):
             #make a list of citation_id's for each document
@@ -215,11 +227,8 @@ def nx_biblio_coupling(doc_list, citation_id, threshold, node_id,
                 j_list.append(citation[citation_id])
 
             #and construct that document's node
-            j_attribs = {}
-            for attrib in valid_attribs:
-                if doc_list[j][attrib] is not None:
-                    j_attribs[attrib] = doc_list[i][attrib]
-            bcoupling.add_node(doc_list[i][node_id], j_attribs)
+            node_j_attribs = util.subdict(doc_list[j], node_attribs)
+            bcoupling.add_node(doc_list[i][node_id], node_j_attribs)
 
             #add an edge if the citation overlap is sufficiently high
             overlap = util.overlap(i_list, j_list)
@@ -229,30 +238,46 @@ def nx_biblio_coupling(doc_list, citation_id, threshold, node_id,
                                    overlap=len(overlap))
     return bcoupling
 
-def nx_author_coupling(doc_list, threshold):
+def nx_author_coupling(doc_list, threshold, node_id, *node_attribs):
     """
     Generate a simple author coupling network
-    Nodes - papers represented by CR-like strings
-    Node attributes -
-        wosid - web of science paper identification number
-        year - date of publication
-    Edges - (a,b) \in E(G) if a and b share x authors and x >= threshold
-    Edge attributes - 
-        rel - description of edge relation
-        overlap - number of shared authors
-    Input - wos_library.library list  
-    Output - simple author coupling network
+    Nodes        - papers
+    Node attribs - specified by node_attribs
+    Edges        - (a,b) \in E(G) if a and b share x authors and x >= threshold
+    Edge attribs - overlap, the value of x above
+    Return a simple author coupling network
+    Notes
+        copyright (c) 2013 Erick Pierson and Aaron Baker
     """
     acoupling = nx.Graph()
+
     for i in xrange(len(doc_list)):
+        #define last name first initial name lists for each document
+        name_list_i = util.concat_list(doc_list[i]['aulast'],
+                                       doc_list[i]['auinit'], 
+                                       ' ')
+
+        #create nodes
+        node_attrib_dict = util.subdict(doc_list[i], node_attribs)
+        acoupling.add_node(doc_list[i][node_id], node_attrib_dict)
+
         for j in xrange(i+1, len(doc_list)):
-            overlap = util.overlap(doc_list[i]['aulast'],
-                                   doc_list[j]['aulast'])
+            #define last name first initial name lists for each document
+            name_list_j = util.concat_list(doc_list[j]['aulast'],
+                                           doc_list[j]['auinit'], 
+                                           ' ')
+
+            #create nodes
+            node_attrib_dict = util.subdict(doc_list[j], node_attribs)
+            acoupling.add_node(doc_list[j][node_id], node_attrib_dict)
+
+            #draw edges as appropriate
+            overlap = util.overlap(name_list_i, name_list_j)
             if len(overlap) >= threshold:
-                acoupling.add_edge(doc_list[i]['ayjid'], 
-                                   doc_list[j]['ayjid'],
-                                   rel="shareAuthor",
+                acoupling.add_edge(doc_list[i][node_id], 
+                                   doc_list[j][node_id],
                                    overlap=len(overlap))
+
     return acoupling 
 
 
