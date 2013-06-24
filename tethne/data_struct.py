@@ -1,3 +1,4 @@
+
 def new_meta_dict():
     """
     aulast  - authors' last name as a list
@@ -33,7 +34,25 @@ def new_meta_dict():
                  'wosid':None}
 
     return meta_dict
-    
+
+
+def new_query_dict():
+    """
+    Declares only those keys of meta_dict that are query-able through
+    CrossRef
+    """
+    q_dict = {'aulast':None,
+              'auinit':None,
+              'atitle':None,
+              'jtitle':None,
+              'volume':None,
+              'issue':None,
+              'spage':None,
+              'epage':None,
+              'date':None} 
+
+    return q_dict
+
 
 def new_wos_dict():
     """

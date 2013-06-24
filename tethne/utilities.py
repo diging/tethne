@@ -34,6 +34,22 @@ def subdict(super_dict, keys):
     return sub_dict
 
 
+def handle_attribs(super_dict, keys):
+    """
+    A more specific version of the subdict utility aimed at handling
+    node and edge attribute dictionaries for NetworkX file formats such as
+    gexf (which does not allow attributes to have a list type) by making
+    them writable in those formats
+    """
+    sub_dict = subdict(super_dict, keys)
+    for key, value in sub_dict.iteritems(): 
+        if (isinstance(value, list) or isinstance(value, dict) or
+            isinstance(value, tuple)):
+            sub_dict[key] = str(value)
+
+    return sub_dict
+
+
 def concat_list(listA, listB, delim=' '):
     """
     Concatenate list elements pair-wise with the delim character
