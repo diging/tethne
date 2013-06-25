@@ -21,3 +21,50 @@ def overlap(listA, listB):
         return list(set(listA) & set(listB))
 
 
+def subdict(super_dict, keys):
+    """
+    Returns a subset of the super_dict with the specified keys
+    """
+    sub_dict = {}
+    valid_keys = super_dict.keys()
+    for key in keys:
+        if key in valid_keys:
+            sub_dict[key] = super_dict[key]
+
+    return sub_dict
+
+
+def handle_attribs(super_dict, keys):
+    """
+    A more specific version of the subdict utility aimed at handling
+    node and edge attribute dictionaries for NetworkX file formats such as
+    gexf (which does not allow attributes to have a list type) by making
+    them writable in those formats
+    """
+    sub_dict = subdict(super_dict, keys)
+    for key, value in sub_dict.iteritems(): 
+        if (isinstance(value, list) or isinstance(value, dict) or
+            isinstance(value, tuple)):
+            sub_dict[key] = str(value)
+
+    return sub_dict
+
+
+def concat_list(listA, listB, delim=' '):
+    """
+    Concatenate list elements pair-wise with the delim character
+    Returns the concatenated list
+    Raises index error if lists are not parallel
+    """
+    #validate input
+    if len(listA) != len(listB):
+        raise IndexError('Input lists are not parallel.')
+
+    #concatenate lists
+    listC = []
+    for i in xrange(len(listA)):
+        listC.append(listA[i] + delim + listB[i])
+
+    return listC
+
+
