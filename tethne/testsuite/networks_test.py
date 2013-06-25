@@ -82,9 +82,8 @@ class TestAuthorPapersGraph(unittest.TestCase):
     """
     Test the author_papers network
     Assumes reader is functioning
-    Look at ORCid for DOI-like author identifiers
 
-    The test file ./testin/authors.txt contains two papers in WoS field tag
+    The test file ./testin/wos_authors.txt contains two papers in WoS field tag
     format that are from the same author. One is fully capitalized and the
     other is not.
 
@@ -100,6 +99,8 @@ class TestAuthorPapersGraph(unittest.TestCase):
         Fails if case sensitivity of author names matters
         This is particularly relevant for author_papers network because
         a string identifier is all we have to identify authors
+
+        more of a reader test case
         """
         person_count = 0
         for node in self.author_papers:
@@ -120,19 +121,28 @@ class TestAuthorPapersGraph(unittest.TestCase):
 
 class TestCoauthorsGraph(unittest.TestCase):
     """
-    Test the coauthors network
-    Assumes reader is functioning
-    Doesn't perform that rigorous of a test: should we pickle a
-        sample graph and check the result against that graph?
+    Test the coauthors network, assumes reader is functioning
     """
 
     def setUp(self):
         #read data from docs folder
-        self.wos_data = rd.build('../../docs/savedrecs.txt')
+        wos_data = rd.parse_wos('./testin/wos_coauthors.txt')
+        meta_list = rd.wos2meta(wos_data)
+        self.coauthors = nt.nx_coauthors(meta_list)
 
-    def test_citations(self):
-        self.G1  = nt.nx_coauthors(self.wos_data)
-        self.assertIsNotNone(self.G1)
+    def test_no_shared_authors(self):
+        pass
+
+    def test_shared_author(self):
+        # viewing the input file we see 2 papers, one with 6 authors and
+        # another with 4 but Cajaraville is a common author
+        self.assertEqual(nx.number_of_nodes(self.coauthors), 9)
+
+        # 6 choose 2 + 4 choose 2 = 21 edges
+        self.assertEqual(nx.number_of_edges(self.coauthors), 21)
+
+    def test_edge_attribs(self):
+        pass
 
     def tearDown(self):
         pass
@@ -140,19 +150,80 @@ class TestCoauthorsGraph(unittest.TestCase):
 
 class TestBiblioGraph(unittest.TestCase):
     """
-    Test the bibliographic_coupling network
-    Assumes reader is functioning
-    Doesn't perform that rigorous of a test: should we pickle a
-        sample graph and check the result against that graph?
+    Test the bibliographic_coupling network; assumes reader is functioning
+
+    The viewer will note that the input file has 4 papers trimmed down
+    and modified from the sample //docs/savedrecs.txt. The references
+    were constructed so that the first paper shares two citations with the
+    second paper, one (of the two shared between first and second) citation 
+    with the third paper, and zero citations with the fourth paper.
     """
 
     def setUp(self):
-        #read data from docs folder
-        self.wos_data = rd.build('../../docs/savedrecs.txt')
+        wos_data = rd.parse_wos('./testin/wos_biblio.txt')
+        wos_meta = rd.wos2meta(wos_data)
+        self.ayjid_zero = nt.nx_biblio_coupling(wos_meta, 
+                                                 'ayjid',
+                                                 0,
+                                                 'ayjid')
+        self.ayjid_one = nt.nx_biblio_coupling(wos_meta, 
+                                               'ayjid',
+                                               1,
+                                               'ayjid')
+        self.ayjid_two = nt.nx_biblio_coupling(wos_meta, 
+                                               'ayjid',
+                                               2,
+                                               'ayjid')
+        self.ayjid_attribs = nt.nx_biblio_coupling(wos_meta,
+                                                   'ayjid',
+                                                   1,
+                                                   'ayjid',
+                                                   'atitle',
+                                                   'aulast',
+                                                   'date',
+                                                   'citations')
 
-    def test_citations(self):
-        self.G1  = nt.nx_biblio_coupling(self.wos_data,1)
-        self.assertIsNotNone(self.G1)
+    def test_ayjid_zero(self):
+        """
+        Every paper shares at least 0 references with every other
+        paper. This makes a complete graph.
+        """
+        # 4 papers
+        self.assertEqual(nx.number_of_nodes(self.ayjid_zero), 4)
+        # 4 choose 2 = 6 edges 
+        self.assertEqual(nx.number_of_edges(self.ayjid_zero), 6)
+
+    def test_ayjid_one(self):
+        """
+        With threshold greater than 0, two papers must share at least 1
+        reference in common. Test this when threshold is 1.
+        """
+        # 4 papers
+        self.assertEqual(nx.number_of_nodes(self.ayjid_one), 4)
+        # first paper shares 2 >= 1 references with second, 1 >= 1 references
+        # with third, and the second and third share 1 >= 1 references
+        self.assertEqual(nx.number_of_edges(self.ayjid_one), 3)
+
+    def test_ayjid_two(self):
+        """
+        With threshold greater than 0, two papers must share at least 1
+        reference in common. Test this when threshold is 2.
+        """
+        self.assertEqual(nx.number_of_nodes(self.ayjid_two), 4)
+        # first paper shares 2 >= 2 references with second
+        self.assertEqual(nx.number_of_edges(self.ayjid_two), 1)
+
+    def test_attribs(self):
+        """
+        Test the addition of four node attributes of different types:
+            atitle - a string
+            date - an int
+            aulast - a list
+            citations - a dictionary
+        Presumably a double may be added to a network just as easily as an
+        int, but we have no doubles to test in our standard meta_dict
+        """
+        pass
 
     def tearDown(self):
         pass
@@ -168,11 +239,24 @@ class TestAuthorCouplingGraph(unittest.TestCase):
 
     def setUp(self):
         #read data from docs folder
-        self.wos_data = rd.build('../../docs/savedrecs.txt')
+        wos_data = rd.parse_wos('../../docs/savedrecs.txt')
+        meta_list = rd.wos2meta(wos_data)
+        self.ayjid_one = nt.nx_author_coupling(meta_list,
+                                               1,
+                                               'ayjid')
+        self.ayjid_attribs = nt.nx_author_coupling(meta_list,
+                                                   1,
+                                                   'ayjid',
+                                                   'atitle',
+                                                   'citations',
+                                                   'date',
+                                                   'aulast')
 
-    def test_citations(self):
-        self.G1  = nt.nx_author_coupling(self.wos_data,1)
-        self.assertIsNotNone(self.G1)
+    def test_ayjid_one(self):
+        self.assertIsNotNone(self.ayjid_one)
+
+    def test_ayjid_attribs(self):
+        pass
 
     def tearDown(self):
         pass

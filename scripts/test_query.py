@@ -21,3 +21,4 @@ for doc in meta_list:
             doi = cr.query(**citation)
             if doi is not None:
                 citation['doi'] = doi
+            print citation

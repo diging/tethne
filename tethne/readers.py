@@ -216,6 +216,11 @@ def wos2meta(wos_data):
     Convert a dictionary or list of dictionaries with keys from the
     Web of Science field tags into a meta_dict dictionary or list of
     dictionaries, the standard for Tethne
+
+    Notes:
+        need to handle author name anomolies (case, blank spaces, etc.)
+        that may make the same author appear to be two different authors
+        in Networkx; this is important for any graph with authors as nodes
     """
     #create a meta_dict for each wos_dict and append to this list
     wos_meta = []
@@ -235,15 +240,21 @@ def wos2meta(wos_data):
         for key in translator.iterkeys():
             meta_dict[translator[key]] = wos_dict[key]
 
-        #more complicated translations
-        #FIXME: not robust to all names, organziation authors, etc.
+        # more complicated translations
+        # FIXME: not robust to all names, organziation authors, etc.
         if wos_dict['AU'] is not None:
             aulast_list = []
             auinit_list = []
             for name in wos_dict['AU']:
                 name_tokens = name.split(',')
-                aulast = name_tokens[0]
-                auinit = name_tokens[1][1] #1 b/c of 'aulast, aufirst'
+                aulast = name_tokens[0].upper().strip()
+                try:
+                    # 1 for 'aulast, aufirst'
+                    auinit = name_tokens[1][1].upper().strip() 
+                except IndexError:
+                    # then no first initial character
+                    # preserve parallel name lists with empty string
+                    auinit = ''
                 aulast_list.append(aulast)
                 auinit_list.append(auinit)
             meta_dict['aulast'] = aulast_list
