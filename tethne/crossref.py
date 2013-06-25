@@ -1,5 +1,7 @@
-def query(aulast=None, auinit=None, atitle=None, jtitle=None, volume=None, 
-          issue=None, spage=None, epage=None, date=None):
+import tethne.utilities as util
+import tethne.data_struct as ds
+
+def query(**kwargs):
     """
     Query CrossRef with article metadata with the hope to find a DOI number 
     for that metadata in their system. 
@@ -25,7 +27,13 @@ def query(aulast=None, auinit=None, atitle=None, jtitle=None, volume=None,
 
     :copyright: (c) 2013 Aaron Baker
     """
-    args = locals()
+    valid_keys = ds.new_query_dict().keys()
+    q_dict = util.subdict(kwargs, valid_keys)
+    #handle keys in meta_dict that are lists...
+    if q_dict['aulast'] is not None:
+        q_dict['aulast'] = q_dict['aulast'][0]
+    if q_dict['auinit'] is not None:
+        q_dict['auinit'] = q_dict['auinit'][0]
 
     #user account information and query type information at crossref
     pid = 'git.tethne@gmail.com'
@@ -46,7 +54,7 @@ def query(aulast=None, auinit=None, atitle=None, jtitle=None, volume=None,
         ' ':'%20'}
  
     #build remaining url based on inputs
-    for key, value in args.iteritems():
+    for key, value in q_dict.iteritems():
         if value is not None:
             value = str(value)
 
@@ -71,6 +79,10 @@ def query(aulast=None, auinit=None, atitle=None, jtitle=None, volume=None,
     import xml.etree.ElementTree as ET 
     root = ET.fromstring(xml_string)
     query = root.find('.//{http://www.crossref.org/qrschema/2.0}query')
-    doi = query.find('{http://www.crossref.org/qrschema/2.0}doi')
+    try:
+        doi = query.find('{http://www.crossref.org/qrschema/2.0}doi').text
+    except AttributeError:
+        #then doi not found
+        doi = None
 
-    return doi.text
+    return doi
