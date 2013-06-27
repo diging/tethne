@@ -38,3 +38,7 @@ I think that's it...
 
 ## Questions?
 erick [dot] peirson [at] asu [dot] edu
+
+## Contributing // To Do
+* Complete test cases for the other networks in the form of those for the citations network.
+* Add PubMed data sources: function skeletons provided in readers.py module
