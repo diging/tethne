@@ -1,7 +1,24 @@
+import urllib
 import tethne.utilities as util
 import tethne.data_struct as ds
 
-def query(**kwargs):
+def pubmed_pmid(pmid):
+    """
+    Return XML from a query of PubMed's EFetch database for the pmid
+    """
+    url_string = ('http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?' +
+                  'db=pubmed&' +
+                  'id=' + str(pmid) + '&' + 
+                  'retmode=xml')
+
+    f = urllib.urlopen(url_string)
+    xml_string = f.read()
+    f.close()
+
+    return xml_string
+
+
+def crossref_meta(**kwargs):
     """
     Query CrossRef with article metadata with the hope to find a DOI number 
     for that metadata in their system. 
