@@ -79,7 +79,7 @@ def to_sif(graph, output_path):
                         # not first, append file
                          with open(output_path + "_" + key + 
                                   ".eda","a") as f:
-                            f.write(node1 + " " +  key + " " + node2 + 
+                            f.write(node1 + " (" +  'rel' + ") " + node2 + 
                                     " = " + str(value) + "\n")
 
                     # generate the .sif file
