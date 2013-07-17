@@ -27,7 +27,39 @@ relevant to the networks of interest for Tethne including
 Missing data here also results in the above keys being set to None
 """
 import data_struct as ds
+import xml.etree.ElementTree as ET
 
+# general functions
+def create_ayjid(aulast='', auinit='', date='', jtitle='', **kwargs):
+    """
+    Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid
+    Returns 'Unknown paper' if all id components are missing (None)
+    """
+    if aulast is None:
+        aulast = ''
+    elif isinstance(aulast,list):
+        aulast = aulast[0]
+
+    if auinit is None:
+        auinit = ''
+    elif isinstance(auinit,list):
+        auinit = auinit[0]
+
+    if date is None:
+        date = ''
+
+    if jtitle is None:
+        jtitle = ''
+
+    ayj = aulast + ' ' + auinit + ' ' + str(date) + ' ' + jtitle
+
+    if ayj == '   ':
+        ayj = 'Unknown paper'
+
+    return ayj
+
+
+# Web of Science functions
 def parse_wos(filepath):
     """
     Read Web of Science plain text data
@@ -182,35 +214,6 @@ def parse_cr(ref):
  
     return meta_dict
 
-def create_ayjid(aulast='', auinit='', date='', jtitle='', **kwargs):
-    """
-    Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid
-    Returns 'Unknown paper' if all id components are missing (None)
-    """
-    if aulast is None:
-        aulast = ''
-    elif isinstance(aulast,list):
-        aulast = aulast[0]
-
-    if auinit is None:
-        auinit = ''
-    elif isinstance(auinit,list):
-        auinit = auinit[0]
-
-    if date is None:
-        date = ''
-
-    if jtitle is None:
-        jtitle = ''
-
-    ayj = aulast + ' ' + auinit + ' ' + str(date) + ' ' + jtitle
-
-    if ayj == '   ':
-        ayj = 'Unknown paper'
-
-    return ayj
-
-
 def wos2meta(wos_data):
     """
     Convert a dictionary or list of dictionaries with keys from the
@@ -278,6 +281,212 @@ def wos2meta(wos_data):
     return wos_meta
 
 
+# PubMed functions
+def pubmed_file_id(filename):
+    """
+    Given a filename (presumed to contain PubMed compatible IDs)
+    return an xml string for each article associated with that ID
+    """
+
+    return None
+
+def pubmed_file_xml(filename):
+    """
+    Given a filename (presumed to contain PubMed XML schemas)
+    return an xml string for each article in the file
+    """
+
+    return None
+
+def parse_pubmed_xml(filepath):
+    """
+    Given a file with PubMed XML, return a list of meta_dicts
+
+    See the following hyperlinks regarding possible structures of XML:
+        http://www.ncbi.nlm.nih.gov/pmc/pmcdoc/tagging-guidelines/citations/v2/citationtags.html#2Articlewithmorethan10authors%28listthefirst10andaddetal%29
+        http://dtd.nlm.nih.gov/publishing/
+"""
+    tree = ET.parse(filepath)
+    root = tree.getroot()
+    
+    # define location of simple article meta data relative to xml tree rooted 
+    # at 'article'
+    meta_loc = {'atitle':'./front/article-meta/title-group/article-title',
+                'jtitle':('./front/journal-meta/journal-title-group/' +
+                          'journal-title'),
+                'volume':'./front/article-meta/volume',
+                'issue':'./front/article-meta/issue',
+                'spage':'./front/article-meta/fpage',
+                'epage':'./front/article-meta/lpage'}
+    
+    # location relative to element-citation element
+    cit_meta_loc = {'atitle':'./article-title',
+                    'jtitle':'./source',
+                    'date':'./year',
+                    'volume':'./volume',
+                    'spage':'./fpage',
+                    'epage':'./epage'}
+    
+    meta_list = []
+    for article in root.iter('article'):
+        meta_dict = ds.new_meta_dict()
+    
+        # collect information from the 'front' section of the article
+        # collect the simple data
+        for key in meta_loc.iterkeys():
+            key_data = article.find(meta_loc[key]) 
+            if key_data is not None:
+                meta_dict[key] = key_data.text
+            else:
+                meta_dict[key] = None
+    
+        # collect doi and pmid 
+        id_list = article.findall('./front/article-meta/article-id')
+        for identifier in id_list:
+            id_type = identifier.get('pub-id-type')
+            if id_type == 'doi':
+                meta_dict['doi'] = identifier.text 
+            elif id_type == 'pmid':
+                meta_dict['pmid'] = identifier.text
+            else:
+                # if never found, remain at None from initialization
+                pass
+    
+        # collect aulast and auinint
+        aulast = []
+        auinit = []
+        contribs = article.findall('./front/article-meta/contrib-group/contrib')
+        # if contrib is not found then loop is skipped
+        for contrib in contribs:
+            contrib_type = contrib.get('contrib-type')
+            if contrib_type == 'author':
+                surname = contrib.find('./name/surname')
+                if surname is not None:
+                    # then it was found
+                    aulast.append(surname.text)
+                else:
+                    aulast.append(None)
+    
+                # multiple given names? this takes first one
+                given_name = contrib.find('./name/given-names')
+                if given_name is not None:
+                    # then it was found
+                    auinit.append(given_name.text[0])
+                else:
+                    auinit.append(None)
+        meta_dict['aulast'] = aulast
+        meta_dict['auinit'] = auinit
+    
+        # collect date
+        pub_dates = article.findall('./front/article-meta/pub-date')
+        # if pub-date is not found then loop is skipped
+        for pub_date in pub_dates:
+           pub_type = pub_date.get('pub-type') 
+           print pub_type
+           if pub_type == 'collection':
+                year = pub_date.find('./year')
+                if year is not None:
+                    # then it was found
+                    meta_dict['date'] = year.text
+                else:
+                    meta_dict['date'] = None
+    
+        meta_list.append(meta_dict)
+    
+        # construct ayjid
+        meta_dict['ayjid'] = rd.create_ayjid(**meta_dict)
+    
+        # citations
+        citations_list = []
+    
+        # element-citation handling different from mixed-citation handling
+        citations = article.findall('./back/ref-list/ref/element-citation')
+        for cite in citations:
+            cite_dict = ds.new_meta_dict()
+            
+            # simple meta data
+            for key in cit_meta_loc.iterkeys():
+                key_data = cite.find(cit_meta_loc[key]) 
+                if key_data is not None:
+                    meta_dict[key] = key_data.text
+                else:
+                    meta_dict[key] = None
+    
+            # doi and pmid
+            pub_id = cite.find('./pub-id')
+            if pub_id is not None:
+                pub_id_type = pub_id.get('pub-id-type')
+                if pub_id_type == 'doi':
+                    cite_dict['doi'] = pub_id.text
+                elif pub_id_type == 'pmid':
+                    cite_dict['pmid'] = pub_id.text
+    
+            # aulast and auinit
+            cite_aulast = []
+            cite_auinit = []
+            
+            # determine if person group is authors
+            person_group = cite.find('./person-group')
+            if person_group is not None:
+                group_type = person_group.get('person-group-type')
+            else:
+                group_type = None
+    
+            # then add the authors to the cite_dict
+            if group_type == 'author':
+                names = person_group.findall('./name')
+                for name in names:
+                    # add surname
+                    surname = name.find('./surname')
+                    if surname is not None:
+                        # then it was found
+                        cite_aulast.append(surname.text)
+                    else:
+                        cite_aulast.append(None)
+    
+                    # add given names
+                    given_names = name.find('./given-names')
+                    if given_names is not None:
+                        # then it was found
+                        cite_auinit.append(given_names.text[0])
+                    else:
+                        cite_auinit.append(None)
+    
+            if not cite_aulast:
+                # then empty
+                cite_aulast = None
+            if not cite_auinit:
+                # then empty
+                cite_auinit = None
+    
+            cite_dict['aulast'] = cite_aulast
+            cite_dict['auinit'] = cite_auinit
+    
+            citations_list.append(cite_dict)
+        # end cite loop
+    
+        meta_dict['citations'] = citations_list
+    
+        meta_list.append(meta_dict)
+    # end article loop
+    
+    return meta_list
+    return None
+
+def expand_pubmed(meta_list):
+    """
+    Given a list of first-level meta dicts and their second-level meta dicts,
+    first['citations'], expand the network by adding the second-level meta
+    dicts to the first level. That is, for the second-level meta dicts with
+    sufficient information (either a DOI, PubMed ID, enough metadata to
+    query for a DOI, etc.), query PubMed for their more expansive set 
+    of meta data, most notably their citation data, parse the associated xml, 
+    and append their meta_dicts to the meta_list
+
+    (and do something about the redundent information about them stored
+    still in the first level?)
+    """
+
 def parse_bib(filename):
     """
     Warning: tethne.bib has been known to make errors in parsing bib files
@@ -335,114 +544,3 @@ def parse_bib(filename):
     return bib_list
 
 
-def build(filename):
-    """
-    Reads Web of Science data file (see docs/savedrecs.txt for sample), and 
-    builds a list of wos_objects.
-    Input: 
-        filename - A WoS data file filepath string
-    Output:
-        wos_list - A list of dictionaries with the following keys:
-        AU          - authors of the paper 
-        year        - publication year
-        identifier  - CR-like string
-        wosid       - Web of Science Accession Number
-        journal     - journal name
-        title       - article title
-        citations   - a list of citations in 'CR' format
-    """
-    wos_list = []
-
-    with open(filename, 'r') as f:
-        cache = {}
-        for line in f:
-            # AJB consider using f.splitlines() instead of this for loop
-            line = line.replace("\n","").replace("\r","")
-
-            # extract line's 2-letter prefix for information about the 
-            # record and handle "bad" prefixes
-            if len(line) > 1:
-                # has a prefix
-                prefix = line[0:2]      
-            else:
-                # doesn't have a prefix; make special one to ignore
-                prefix = 'XX'           
-            if prefix == 'EF':          
-                # At the end of the data file 
-                break
-            if prefix == 'ER':          
-                # At the end of a record (paper), create CR-like identifier
-                identifier = cache['AU'][0].replace(",","") + ", " + cache['PY'][0] + ", " + cache['J9'][0] 
-                identifier = identifier.upper()
-                 
-                # TODO: Need to figure out why I did this....
-                num_authors = 0
-                authors = {}
-                for au in cache['AU']:
-                    num_authors += 1
-                    found = 'false'
-                    au_last = au.split(',')[0]
-                    for af in cache['AF']:
-                        af_last = af.split(',')[0]
-                        if au_last.upper() == af_last.upper():
-                            authors[au] = af
-                            found = 'true'
-                    if found != 'true':             # Maybe there is no AF entry
-                        authors[au] = au
-                cache['num_authors'] = num_authors
-        
-                title = ''
-                for row in cache['TI']:             # Some titles bleed over into multiple rows
-                    title += row
-        
-                #rather than making an object make a dict
-                #DO NOT continue changing these key names as authors was
-                #changed from 'authors' to 'AU'; as more sources are
-                #incorporated they will have various input formats to deal
-                #with. we should move towards a mneumonic system
-                #rather than base everything on the (poor) WoS key system
-                wos_dict = {'aulast':authors,
-                            'date':int(cache['PY'][0]),
-                            'identifier':identifier,
-                            'wosid':cache['UT'][0],
-                            'jtitle':cache['SO'][0],
-                            'atitle':title,
-                            'citations':cache['CR']}
-                wos_list.append(wos_dict)
-        
-                cache = {}              # Dump for next record
-                cache['CR'] = None      # Prevents a KeyError if the record has no references.
-
-            else:
-                # We're still in the middle of a record...
-                if (prefix != 'XX') and (prefix != ''):
-                    if prefix == '  ':
-                        # there is no prefix, the line is part of the field
-                        # to which the previous line belonged.
-                        prefix = last_prefix
-                    else:
-                        # there is a prefix, and the line starts the next 
-                        # field in the record
-                        cache[prefix] = []
-
-                    if prefix != 'XX':
-                        # the line was probably blank
-                        line_cache = line[3:].replace(".", "").upper()
-                        
-                        if prefix == 'CR':
-                            # store the citation record (CR) in a list 
-                            line_split = line_cache.split(",")
-                            if len(line_split) > 3:    
-                                # extract the first three fields:
-                                # author, year, and journal/title
-                                line_cache = (line_split[0] + "," + 
-                                              line_split[1] + "," + 
-                                              line_split[2])
-
-                        cache[prefix].append(line_cache)
-                    # end "not XX" if
-            # end "middle of record" else
-            last_prefix = prefix
-        #end line loop
-    #end file read
-    return wos_list

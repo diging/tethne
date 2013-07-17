@@ -24,7 +24,7 @@ def nx_citations(doc_list, node_id, *node_attribs):
     """
     Create a NetworkX directed graph based on citation records
     Nodes       - documents represented by the value of meta_dict[node_id]
-    Node attr   - none 
+    Node attr   - specified meta data for a paper in node_attribs
     Edges       - from one document to its citation
     Edge attr   - date (year) of citation
 
@@ -59,7 +59,6 @@ def nx_citations(doc_list, node_id, *node_attribs):
         if head_has_id:
             #then create node to both global and internal networks
             node_attrib_dict = util.handle_attribs(entry, node_attribs)
-            node_attrib_dict['type'] = 'paper'
             citation_network.add_node(entry[node_id], node_attrib_dict)
             citation_network_internal.add_node(entry[node_id], 
                                                node_attrib_dict) 
@@ -74,7 +73,6 @@ def nx_citations(doc_list, node_id, *node_attribs):
                 if tail_has_id:
                     #then create node to global but not internal network
                     node_attrib_dict = util.handle_attribs(citation, node_attribs)
-                    node_attrib_dict['type'] = 'citation'
                     citation_network.add_node(citation[node_id], 
                                               node_attrib_dict)
 
@@ -82,7 +80,7 @@ def nx_citations(doc_list, node_id, *node_attribs):
                     #then draw an edge in the network
                     citation_network.add_edge(entry[node_id], 
                                               citation[node_id],
-                                              year=entry['date'])
+                                              date=entry['date'])
 
                     #and check if it can be added to the internal network too
                     if (util.contains (doc_list, 
@@ -91,7 +89,7 @@ def nx_citations(doc_list, node_id, *node_attribs):
                         citation_network_internal.add_edge(
                             entry[node_id], 
                             citation[node_id],
-                            year=entry['date'])
+                            date=entry['date'])
 
     return citation_network, citation_network_internal
 
@@ -104,7 +102,7 @@ def nx_author_papers(doc_list, paper_id, *paper_attribs):
         type = person   - a person in doc_list
         papers also have node attributes defined by paper_attribs
     Edges - directed Author -> her Paper 
-        year    - date of publication
+        date    - date of publication
 
     Input: doc_list list of wos_objects
     Output: author_papers DiGraph 
@@ -133,7 +131,7 @@ def nx_author_papers(doc_list, paper_id, *paper_attribs):
 
             #draw edges
             author_papers.add_edge(authors[i], entry[paper_id],
-                                   year=entry['date'])
+                                   date=entry['date'])
 
     return author_papers
 

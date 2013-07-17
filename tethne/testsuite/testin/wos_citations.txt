@@ -23,4 +23,25 @@ DI 10.1577/1548-8659(1993)122<0063:AQHAIF>2.3.CO;2
 UT WOS:A1993LG89300004
 ER
 
+PT J
+AU Pinedo, S
+   Jordana, E
+   Salas, F
+   Subida, MD
+   Adiego, EG
+   Torres, J
+AF Pinedo, S.
+   Jordana, E.
+   Salas, F.
+   Subida, M. D.
+   Garcia Adiego, E.
+   Torres, J.
+TI Testing MEDOCC and BOPA indices in shallow soft-bottom communities in
+   the Spanish Mediterranean coastal waters
+SO ECOLOGICAL INDICATORS
+CR Afli A, 2008, ESTUAR COAST SHELF S, V80, P269, DOI 10.1016/j.ecss.2008.08.010
+DI 10.1016/j.ecolind.2011.07.024
+UT WOS:000302891100011
+ER
+
 EF

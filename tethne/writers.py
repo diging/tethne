@@ -10,6 +10,9 @@ def to_sif(graph, output_path):
     Edge attribute files appended with .eda contain the values of any edge
         attributes even though the .sif file does not (edge "weights" are
         not supported by .sif)
+
+    Currently does not support multiple interaction types, only one
+    interaction type named 'rel' as in x is 'related to' y
     """
     if output_path[-4:] == ".sif":
         output_path = output_path[:-4]
@@ -32,6 +35,7 @@ def to_sif(graph, output_path):
                     # first node, overwrite file
                     with open(output_path + "_" + key + ".noa",
                               "w") as f:
+                        f.write(str(key) + '\n')
                         f.write(str(node_name).replace(" ","_") + " = " + 
                                 str(value) + "\n")
                 else:
@@ -68,13 +72,14 @@ def to_sif(graph, output_path):
                         # first edge, overwrite file
                         with open(output_path + "_" + key + 
                                   ".eda","w") as f:
-                            f.write(node1 + " " +  key + " " + node2 + 
+                            f.write(str(key) + '\n')
+                            f.write(node1 + " (" +  'rel' + ") " + node2 + 
                                     " = " + str(value) + "\n")
                     else:
                         # not first, append file
                          with open(output_path + "_" + key + 
                                   ".eda","a") as f:
-                            f.write(node1 + " " +  key + " " + node2 + 
+                            f.write(node1 + " (" +  'rel' + ") " + node2 + 
                                     " = " + str(value) + "\n")
 
                     # generate the .sif file
