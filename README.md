@@ -11,7 +11,7 @@ To use Tethne you need a Web of Science data file to work with. One such file is
 
 If you scroll down to the bottom of the search results page, you will see a set of options to save your search results.  
 
-![alt text](https://github.com/ap0h/tethne/tree/mybranch/docs/WebOfScienceResults.png "Web of Science Results")  
+![alt text](https://github.com/erickpeirson/tethne/blob/python/docs/WebOfScienceResults.png "Web of Science Results")  
 
 Select a set of "Records" (we could have specified 1 to 156, the number of "Results" for this query), select "Full Record" and "Cited References" if you would like to utilize the full extent of Tethne's power, and finally "Save to Plain Text" your results, by default named "savedrecs.txt". An example savedrecs.txt for this tutorial is also provided in tethne/docs/.
 
