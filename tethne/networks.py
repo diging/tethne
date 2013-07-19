@@ -58,7 +58,7 @@ def nx_citations(doc_list, node_id, *node_attribs):
 
         if head_has_id:
             #then create node to both global and internal networks
-            node_attrib_dict = util.handle_attribs(entry, node_attribs)
+            node_attrib_dict = util.subdict(entry, node_attribs)
             citation_network.add_node(entry[node_id], node_attrib_dict)
             citation_network_internal.add_node(entry[node_id], 
                                                node_attrib_dict) 
@@ -72,7 +72,7 @@ def nx_citations(doc_list, node_id, *node_attribs):
 
                 if tail_has_id:
                     #then create node to global but not internal network
-                    node_attrib_dict = util.handle_attribs(citation, node_attribs)
+                    node_attrib_dict = util.subdict(citation, node_attribs)
                     citation_network.add_node(citation[node_id], 
                                               node_attrib_dict)
 
@@ -118,7 +118,7 @@ def nx_author_papers(doc_list, paper_id, *paper_attribs):
 
     for entry in doc_list:
         #define paper_attribute dictionary
-        paper_attrib_dict = util.handle_attribs(entry, paper_attribs)
+        paper_attrib_dict = util.subdict(entry, paper_attribs)
         paper_attrib_dict['type'] = 'paper'
 
         #add paper node with attributes
@@ -152,7 +152,7 @@ def nx_coauthors(doc_list, *edge_attribs):
     for entry in doc_list:
         if entry['aulast'] is not None:
             #edge_attrib_dict for any edges that get added
-            edge_attrib_dict = util.handle_attribs(entry, edge_attribs)
+            edge_attrib_dict = util.subdict(entry, edge_attribs)
 
             #make a new list of aulast, auinit names
             full_names = util.concat_list(entry['aulast'], 
@@ -211,22 +211,24 @@ def nx_biblio_coupling(doc_list, citation_id, threshold, node_id,
     for i in xrange(len(doc_list)):
         #make a list of citation_id's for each document
         i_list = []
-        for citation in doc_list[i]['citations']:
-            i_list.append(citation[citation_id])
+        if doc_list[i]['citations'] is not None:
+            for citation in doc_list[i]['citations']:
+                i_list.append(citation[citation_id])
 
         #and construct that document's node
-        node_i_attribs = util.handle_attribs(doc_list[i], node_attribs)
+        node_i_attribs = util.subdict(doc_list[i], node_attribs)
         bcoupling.add_node(doc_list[i][node_id], node_i_attribs)
 
         for j in xrange(i+1, len(doc_list)):
             #make a list of citation_id's for each document
             j_list = []
-            for citation in doc_list[j]['citations']:
-                j_list.append(citation[citation_id])
+            if doc_list[j]['citations'] is not None:
+                for citation in doc_list[j]['citations']:
+                    j_list.append(citation[citation_id])
 
             #and construct that document's node
-            node_j_attribs = util.handle_attribs(doc_list[j], node_attribs)
-            bcoupling.add_node(doc_list[i][node_id], node_j_attribs)
+            node_j_attribs = util.subdict(doc_list[j], node_attribs)
+            bcoupling.add_node(doc_list[j][node_id], node_j_attribs)
 
             #add an edge if the citation overlap is sufficiently high
             overlap = util.overlap(i_list, j_list)
@@ -256,7 +258,7 @@ def nx_author_coupling(doc_list, threshold, node_id, *node_attribs):
                                        ' ')
 
         #create nodes
-        node_attrib_dict = util.handle_attribs(doc_list[i], node_attribs)
+        node_attrib_dict = util.subdict(doc_list[i], node_attribs)
         acoupling.add_node(doc_list[i][node_id], node_attrib_dict)
 
         for j in xrange(i+1, len(doc_list)):
@@ -266,7 +268,7 @@ def nx_author_coupling(doc_list, threshold, node_id, *node_attribs):
                                            ' ')
 
             #create nodes
-            node_attrib_dict = util.handle_attribs(doc_list[j], node_attribs)
+            node_attrib_dict = util.subdict(doc_list[j], node_attribs)
             acoupling.add_node(doc_list[j][node_id], node_attrib_dict)
 
             #draw edges as appropriate
@@ -279,3 +281,33 @@ def nx_author_coupling(doc_list, threshold, node_id, *node_attribs):
     return acoupling 
 
 
+def nx_author_cocitation(meta_list, threshold):
+    """
+    Create an author cocitation (analysis) network
+    Nodes           - Authors
+    Node attributes - None
+    Edges           - (a, b) if a and b are referenced by the same paper in 
+                      the meta_list
+    Edge attributes - 'weight' the count of papers that would cause an
+                      edge to be drawn between a and b
+    Copyright 2013 Aaron Baker
+    """
+    cocitation = nx.Graph()
+
+    for paper in meta_list:
+        for citation in paper['citations']:
+            author_list = util.concat_list(citation['aulast'],
+                                           citation['auinit'],
+                                           ' ')
+            num_authors = len(author_list)
+            for i in xrange(num_authors):
+                cocitation.add_node(author_list[i])
+                for j in xrange(i+1, num_authors):
+                    try:
+                        cocitation[author_list[i]][author_list[j]]['weight'] += 1
+                    except KeyError:
+                        # then edge doesnt yet exist
+                        cocitation.add_edge(author_list[i], author_list[j],
+                                            {'weight':1})
+
+    return cocitation 
