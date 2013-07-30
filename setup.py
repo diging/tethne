@@ -7,7 +7,7 @@ DESCRIPTION = ('A set of Python modules for constructing graphs from the Web ' +
                 'of Science')
 LICENSE = 'new BSD' 
 URL = 'https://github.com/erickpeirson/tethne' 
-VERSION = '0.0.1' 
+VERSION = '0.0.5' 
 LONG_DESCRIPTION = open('README.md').read()
 PACKAGES = ['tethne','tethne.testsuite']
 
