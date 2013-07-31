@@ -5,7 +5,6 @@ import tethne.utilities as util
 import unittest
 import networkx as nx
 import os
-import os.path
 
 class TestSifWriter(unittest.TestCase):
     def setUp(self):
@@ -29,7 +28,8 @@ class TestSifWriter(unittest.TestCase):
         self.multi_attribs.add_path(range(5), **self.attribs)
 
     def test_simple_graph(self):
-        filepath = './testout/simple_graph'
+        filepath = os.path.join(os.path.dirname(__file__), 'testout',
+                                'simple_graph')
         wr.to_sif(self.simple_graph, filepath)
         expected = ('0 rel 1\n' +
                     '1 rel 2\n' +
@@ -40,7 +40,8 @@ class TestSifWriter(unittest.TestCase):
         os.remove(filepath + '.sif')
 
     def test_multi_graph(self):
-        filepath = './testout/multi_graph'
+        filepath = os.path.join(os.path.dirname(__file__), 'testout',
+                                'multi_graph')
         wr.to_sif(self.multi_graph, filepath)
         expected = ('0 0 1\n' +
                     '0 1 1\n' +
@@ -55,7 +56,8 @@ class TestSifWriter(unittest.TestCase):
         os.remove(filepath + '.sif')
 
     def test_simple_attribs(self):
-        filepath = './testout/simple_attribs'
+        filepath = os.path.join(os.path.dirname(__file__), 'testout',
+                                'simple_attribs')
         wr.to_sif(self.simple_attribs, filepath)
 
         # test sif
@@ -79,7 +81,8 @@ class TestSifWriter(unittest.TestCase):
             os.remove(filepath + '_' + key + '.eda')
 
     def test_multi_attribs(self):
-        filepath = './testout/multi_attribs'
+        filepath = os.path.join(os.path.dirname(__file__), 'testout',
+                                'multi_attribs')
         wr.to_sif(self.multi_attribs, filepath)
 
         # test sif
@@ -108,7 +111,7 @@ class TestSifWriter(unittest.TestCase):
                         '3 (1) 4 = ' + str(value) + '\n')
             obtained = open(filepath + '_' + key + '.eda', 'r').read()
             self.assertEqual(expected, obtained)
-            #os.remove(filepath + '_' + key + '.eda')
+            os.remove(filepath + '_' + key + '.eda')
 
     def tearDown(self):
         pass
