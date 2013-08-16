@@ -1,0 +1,66 @@
+FN Thomson Reuters Web of Knowledge
+VR 1.0
+PT J
+AU Marigomez, I
+   Garmendia, L
+   Soto, M
+   Orbea, A
+   Izagirre, U
+   Cajaraville, MP
+TI Marine ecosystem health status assessment through integrative biomarker
+   indices: a comparative study after the Prestige oil spill "Mussel Watch"
+SO ECOTOXICOLOGY
+LA English
+CR ADAMS SM, 1993, T AM FISH SOC, V122, P63, DOI 10.1577/1548-8659(1993)122<0063:AQHAIF>2.3.CO;2
+   Beliaeff B, 2002, ENVIRON TOXICOL CHEM, V21, P1316, DOI 10.1897/1551-5028(2002)021<1316:IBRAUT>2.0.CO;2
+PY 2013
+DI 10.1007/s10646-013-1042-4
+ER
+
+PT J
+AU Han, DM
+   Tong, XX
+   Jin, MG
+   Hepburn, E
+   Izagirre, U
+   Cajaraville, MP
+TI Evaluation of organic contamination in urban groundwater surrounding a
+   municipal landfill, Zhoukou, China
+SO ENVIRONMENTAL MONITORING AND ASSESSMENT
+CR ADAMS SM, 1993, T AM FISH SOC, V122, P63, DOI 10.1577/1548-8659(1993)122<0063:AQHAIF>2.3.CO;2
+   Beliaeff B, 2002, ENVIRON TOXICOL CHEM, V21, P1316, DOI 10.1897/1551-5028(2002)021<1316:IBRAUT>2.0.CO;2
+PY 2013
+DI 10.1007/s10661-012-2801-z
+ER
+
+PT J
+AU Mulazzani, L
+   Curtin, R
+   Andres, M
+   Cajaraville, MP
+TI Multilevel governance and management of shared stocks with integrated
+   markets: The European anchovy case
+SO MARINE POLICY
+CR AdriaMed, GEN OUTL MAR CAPT FI
+   Beliaeff B, 2002, ENVIRON TOXICOL CHEM, V21, P1316, DOI 10.1897/1551-5028(2002)021<1316:IBRAUT>2.0.CO;2
+PY 2013
+DI 10.1016/j.marpol.2012.06.020
+ER
+
+PT J
+AU Liu, LY
+   Wang, JZ
+   Wong, CS
+   Qiu, JW
+   Zeng, EY
+TI Application of multiple geochemical markers to investigate organic
+   pollution in a dynamic coastal zone
+SO ENVIRONMENTAL TOXICOLOGY AND CHEMISTRY
+CR AIZENSHT.Z, 1973, GEOCHIM COSMOCHIM AC, V37, P559, DOI 10.1016/0016-7037(73)90218-4
+   BLUMER M, 1971, MAR BIOL, V8, P183, DOI 10.1007/BF00355214
+   Cachot J, 2007, ENVIRON SCI TECHNOL, V41, P7830, DOI 10.1021/es071082v
+PY 2013
+DI 10.1002/etc.2062
+ER
+
+EF

@@ -41,8 +41,8 @@ def nx_citations(doc_list, node_id, *node_attribs):
             an edge_attribute value is in order, similar to the bibliographic
             coupling networks
     """
-    citation_network = nx.DiGraph()
-    citation_network_internal = nx.DiGraph()
+    citation_network = nx.DiGraph(type='citations')
+    citation_network_internal = nx.DiGraph(type='citations')
 
     #check general node_id validity
     meta_keys = ds.new_meta_dict().keys()
@@ -107,7 +107,7 @@ def nx_author_papers(doc_list, paper_id, *paper_attribs):
     Input: doc_list list of wos_objects
     Output: author_papers DiGraph 
     """
-    author_papers = nx.DiGraph()
+    author_papers = nx.DiGraph(type='author_papers')
 
     #validate paper_id
     meta_keys = ds.new_meta_dict().keys()
@@ -147,7 +147,7 @@ def nx_coauthors(doc_list, *edge_attribs):
     Input a doc_list list of wos_objects
     Return a simple coauthor network
     """
-    coauthors = nx.Graph()
+    coauthors = nx.Graph(type='coauthors')
 
     for entry in doc_list:
         if entry['aulast'] is not None:
@@ -194,7 +194,7 @@ def nx_biblio_coupling(doc_list, citation_id, threshold, node_id,
         also nodes cannot be none
         copyright (c) 2013 Erick Pierson and Aaron Baker
     """
-    bcoupling = nx.Graph()
+    bcoupling = nx.Graph(type='biblio_coupling')
 
     #validate identifiers
     meta_keys = ds.new_meta_dict().keys()
@@ -249,7 +249,7 @@ def nx_author_coupling(doc_list, threshold, node_id, *node_attribs):
     Notes
         copyright (c) 2013 Erick Pierson and Aaron Baker
     """
-    acoupling = nx.Graph()
+    acoupling = nx.Graph(type='author_coupling')
 
     for i in xrange(len(doc_list)):
         #define last name first initial name lists for each document
@@ -292,7 +292,7 @@ def nx_author_cocitation(meta_list, threshold):
                       edge to be drawn between a and b
     Copyright 2013 Aaron Baker
     """
-    cocitation = nx.Graph()
+    cocitation = nx.Graph(type='author_cocitation')
 
     for paper in meta_list:
         for citation in paper['citations']:

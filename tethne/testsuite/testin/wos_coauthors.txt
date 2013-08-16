@@ -7,107 +7,18 @@ AU Marigomez, I
    Orbea, A
    Izagirre, U
    Cajaraville, MP
-AF Marigomez, Ionan
-   Garmendia, Larraitz
-   Soto, Manu
-   Orbea, Amaia
-   Izagirre, Urtzi
-   Cajaraville, Miren P.
 TI Marine ecosystem health status assessment through integrative biomarker
    indices: a comparative study after the Prestige oil spill "Mussel Watch"
 SO ECOTOXICOLOGY
-LA English
-DT Article
-DE Ecosystem health assessment; Mussels; Prestige oil spill; Integrative
-   indices; Biomarkers
-ID TISSUE-LEVEL BIOMARKERS; ENVIRONMENTAL-POLLUTION; MYTILUS-EDULIS;
-   MEDITERRANEAN SEA; STRESS SYNDROME; USEFUL TOOL; BALTIC SEA; NORTH-SEA;
-   GALLOPROVINCIALIS; ORGANISMS
-AB Five integrative biomarker indices are compared: Bioeffects Assessment Index (BAI), Health Status Index (HSI), integrated biological response (IBR), ecosystem health condition chart (EHCC) and Integrative Biomarker Index (IBI). They were calculated on the basis of selected biomarker data collected in the framework of the Prestige oil spill (POS) Mussel Watch monitoring (2003-2006) carried out in Galicia and the Bay of Biscay. According to the BAI, the health status of mussels was severely affected by POS and signals of recovery were evidenced in Galicia after April-04 and in Biscay Bay after April-05. The HSI (computed by an expert system) revealed high levels of environmental stress in 2003 and a recovery trend from April-04 to April-05. In July-05, the health status of mussels worsened but in October-05 and April-06 healthy condition was again recorded in almost all localities. IBR/n and IBI indicated that mussel health was severely affected in 2003 and improved from 2004 onwards. EHCC reflected a deleterious environmental condition in 2003 and a recovery trend after April-04, although a healthy ecosystem condition was not achieved in April-06 yet. Whereas BAI and HSI provide a basic indication of the ecosystem health status, star plots accompanying IBR/n and IBI provide complementary information concerning the mechanisms of biological response to environmental insult. Overall, although the integrative indices based on biomarkers show different sensitivity, resolution and informative output, all of them provide coherent information, useful to simplify the interpretation of biological effects of pollution in marine pollution monitoring. Each others' advantages, disadvantages and applicability for ecosystem health assessment are discussed.
-C1 Univ Pais Vasco Euskal Herriko Unibertsitatea, Areatza ZG, CBET Ikerketa Taldea, Zool & Biol Zelularra Saila,PIE, Plentzia Bizkaia 48620, Basque Country, Spain.
-RP Marigomez, I (reprint author), Univ Pais Vasco Euskal Herriko Unibertsitatea, Areatza ZG, CBET Ikerketa Taldea, Zool & Biol Zelularra Saila,PIE, Plentzia Bizkaia 48620, Basque Country, Spain.
-EM ionan.marigomez@ehu.es
-RI Liu, Xiaobing/C-6216-2013; Testes, Olga/E-8912-2013
-OI Liu, Xiaobing/0000-0002-5347-5566; 
-FU Spanish Ministry of Science and Technology through 'Urgent Action-
-   Coastal areas'; Basque Government (ETORTEK actions- IMPRES); University
-   of the Basque Country [GIC07/26-IT-393-07]; project PRESTEPSE
-   [VEM2003-20082-CO6-01]
-FX This work was supported by the Spanish Ministry of Science and
-   Technology through 'Urgent Action- Coastal areas' and project PRESTEPSE
-   (VEM2003-20082-CO6-01), by the Basque Government (ETORTEK actions-
-   IMPRES) and by the University of the Basque Country through a Grant to
-   Consolidated Research Groups (GIC07/26-IT-393-07). The authors declare
-   that they have no conflict of interest. The technical assistance of the
-   personnel of the Cell Biology and Histology Lab (Faculty of Science and
-   Technology, University of the Basque Country) in samplings and sample
-   processing is gratefully acknowledged. Thanks also to Dr. F. Javier
-   Cristobo and Prof. V. Urgorri (Univ Santiago de Compostela) for
-   collaboration during sampling in Galicia.
 CR ADAMS SM, 1993, T AM FISH SOC, V122, P63, DOI 10.1577/1548-8659(1993)122<0063:AQHAIF>2.3.CO;2
    Beliaeff B, 2002, ENVIRON TOXICOL CHEM, V21, P1316, DOI 10.1897/1551-5028(2002)021<1316:IBRAUT>2.0.CO;2
-   Bocquene G, 2004, AQUAT LIVING RESOUR, V17, P309, DOI 10.1051/alr:2004033
-   Bodin N, 2004, COMP BIOCHEM PHYS C, V138, P411, DOI 10.1016/j.cca.2004.04.009
-   Broeg K, 2005, MAR POLLUT BULL, V50, P495, DOI 10.1016/j.marpolbul.2005.02.042
-   Broeg K, 2006, MAR POLLUT BULL, V53, P508, DOI 10.1016/j.marpolbul.2006.02.004
-   Brooks S, 2011, MAR POLLUT BULL, V62, P327, DOI 10.1016/j.marpolbul.2010.10.007
-   Cajaraville MP, 2006, MAR ENVIRON RES, V62, pS337, DOI 10.1016/j.marenvres.2006.04.048
-   CAJARAVILLE MP, 1991, ARCH ENVIRON CON TOX, V21, P395
-   Cajaraville MP, 1993, SCI TOTAL ENVIRON, V134, P1353, DOI 10.1016/S0048-9697(05)80142-1
-   Lekube X, 2000, SCI TOTAL ENVIRON, V247, P201, DOI 10.1016/S0048-9697(99)00491-X
-   Chapman PM, 2007, ENVIRON INT, V33, P492, DOI 10.1016/j.envint.2006.09.001
-   Dagnino A, 2007, BIOMARKERS, V12, P155, DOI 10.1080/13547500601037171
-   Damiens G, 2007, CHEMOSPHERE, V66, P574, DOI 10.1016/j.chemosphere.2006.05.032
-   den Besten PJ, 1998, MAR ENVIRON RES, V46, P253, DOI 10.1016/S0141-1136(97)00049-4
-   Diez G, 1996, THESIS U BASQUE COUN
-   Dondero F, 2006, AQUAT TOXICOL, V78, pS13, DOI 10.1016/j.aquatox.2006.02.025
-   Environmental Agency, 2002, WAT FRAM DIR GUID PR
-   Garmendia L, 2011, J ENVIRON MONITOR, V13, P901, DOI 10.1039/c0em00409j
-   Garmendia L, 2011, J ENVIRON MONITOR, V13, P933, DOI 10.1039/c0em00704h
-   Garmendia L, 2010, AQUAT BIOL, V9, P203, DOI 10.3354/ab00245
-   Garmendia L, 2011, J ENVIRON MONITOR, V13, P915, DOI 10.1039/c0em00410c
-   Hagger JA, 2008, MAR POLLUT BULL, V56, P1111, DOI 10.1016/j.marpolbul.2008.03.040
-   Hylland K, 2008, MAR POLLUT BULL, V56, P414, DOI 10.1016/j.marpolbul.2007.11.004
-   Izagirre U, 2008, MAR ECOL PROG SER, V372, P105, DOI 10.3354/meps07656
-   Izagirre U, 2009, ENVIRON POLLUT, V157, P1544, DOI 10.1016/j.envpol.2009.01.011
-   Knap A, 2002, ENVIRON HEALTH PERSP, V110, P839
-   Leinio S, 2005, COMP BIOCHEM PHYS C, V140, P408, DOI 10.1016/j.cca.2005.04.005
-   Marigomez I, 2006, MAR POLLUT BULL, V53, P287, DOI 10.1016/j.marpolbul.2005.09.026
-   Marigomez I, 2004, ELSEV OCEANOGR SERIE, V70, P335
-   Marigomez I, 1996, COMP BIOCHEM PHYS C, V113, P291, DOI 10.1016/0742-8413(95)02100-0
-   McCarthy J. F., 1990, BIOMARKERS ENV CONTA, P3
-   Mendez PA, 1993, THESIS U BASQUE COUN
-   Orbea A, 2006, MAR ECOL PROG SER, V306, P177, DOI 10.3354/meps306177
-   Ortiz-Zarragoitia M, 2011, J ENVIRON MONITOR, V13, P84, DOI 10.1039/c0em00102c
-   Pytharopoulou S, 2008, AQUAT TOXICOL, V89, P18, DOI 10.1016/j.aquatox.2008.05.013
-   RBU-Rep, 1994, SEG EC RIA RES BIOSF
-   Viarengo A, 2000, MAR ENVIRON RES, V49, P1, DOI 10.1016/S0141-1136(99)00045-8
-   VIARENGO A, 1995, MAR ENVIRON RES, V39, P245, DOI 10.1016/0141-1136(94)00075-Z
-   Viarengo A, 2007, ARCH ENVIRON CON TOX, V53, P607, DOI 10.1007/s00244-005-0209-2
-   Weibel ER, 1979, STEREOLOGICAL METHOD, P415
-   Wu RSS, 2005, MAR POLLUT BULL, V51, P623, DOI 10.1016/j.marpolbul.2005.04.016
-   Zorita I, 2007, ENVIRON POLLUT, V148, P236, DOI 10.1016/j.envpol.2006.10.022
-NR 43
-TC 0
-Z9 1
 PU SPRINGER
-PI DORDRECHT
-PA VAN GODEWIJCKSTRAAT 30, 3311 GZ DORDRECHT, NETHERLANDS
-SN 0963-9292
 J9 ECOTOXICOLOGY
 JI Ecotoxicology
-PD APR
 PY 2013
-VL 22
-IS 3
 BP 486
 EP 505
 DI 10.1007/s10646-013-1042-4
-PG 20
-WC Ecology; Environmental Sciences; Toxicology
-SC Environmental Sciences & Ecology; Toxicology
-GA 108GW
-UT WOS:000316281300006
 ER
 
 PT J
@@ -122,136 +33,14 @@ AF Han, D. M.
 TI Evaluation of organic contamination in urban groundwater surrounding a
    municipal landfill, Zhoukou, China
 SO ENVIRONMENTAL MONITORING AND ASSESSMENT
-LA English
-DT Article
-DE Landfill; Organic contamination; Hydrogeology; PAHs; Conceptual model
-ID POLYCYCLIC AROMATIC-HYDROCARBONS; LA-PLATA ESTUARY; MEDITERRANEAN-SEA;
-   OIL-SPILL; NATURAL ATTENUATION; SURFACE-WATER; IN-SITU; PAHS; SEDIMENTS;
-   RIVER
-AB This paper investigates the organic pollution status of shallow aquifer sediments and groundwater around Zhoukou landfill. Chlorinated aliphatic hydrocarbons, monocylic aromatic hydrocarbons, halogenated aromatic hydrocarbons, organochlorine pesticides and other pesticides, and polycyclic aromatic hydrocarbons (PAHs) have been detected in some water samples. Among the detected eleven PAHs, phenanthrene, fluorine, and fluoranthene are the three dominant in most of the groundwater samples. Analysis of groundwater samples around the landfill revealed concentrations of PAHs ranging from not detected to 2.19 mu g/L. The results show that sediments below the waste dump were low in pollution, and the shallow aquifer, at a depth of 18-30 m, was heavily contaminated, particularly during the wet season. An oval-shaped pollution halo has formed, spanning 3 km from west to east and 2 km from south to north, and mainly occurs in groundwater depths of 2-4 m. For PAH source identification, both diagnostic ratios of selected PAHs and principal component analysis were studied, suggesting mixed sources of pyro- and petrogenic derived PAHs in the Zhoukou landfill. Groundwater table fluctuations play an important role in the distribution of organic pollutants within the shallow aquifer. A conceptual model of leachate migration in the Quaternary aquifers surrounding the Zhoukou landfill has been developed to describe the contamination processes based on the major contaminant (PAHs). The groundwater zone contaminated by leachate has been identified surrounding the landfill.
-C1 Chinese Acad Sci, Key Lab Water Cycle & Related Land Surface Proc, Inst Geog Sci & Nat Resources Res, Beijing 100101, Peoples R China.
-   China Univ Geosci, Sch Water Resources & Environm, Beijing 100083, Peoples R China.
-   China Univ Geosci, Sch Environm Studies, Wuhan 430074, Peoples R China.
-   Univ Melbourne, Sch Earth Sci, Parkville, Vic 3010, Australia.
-RP Tong, XX (reprint author), China Univ Geosci, Sch Water Resources & Environm, Beijing 100083, Peoples R China.
-EM dmeihan@gmail.com; tongxx2012@gmail.com
-RI Liu, Xiaobing/C-6216-2013; Testes, Olga/E-8912-2013
-OI Liu, Xiaobing/0000-0002-5347-5566; 
-FU Institute of Geographic Sciences and Natural Resources Research, Chinese
-   Academy of Sciences [2012QY007];  [1212010634505]
-FX This research was financially supported by the Exploratory Forefront
-   Project (no. 2012QY007) for the Strategic Science Plan in the Institute
-   of Geographic Sciences and Natural Resources Research, Chinese Academy
-   of Sciences, and was undertaken as part of a groundwater survey project
-   titled "Investigation and evaluation of typical contaminated sites in
-   Zhoukou region of Huaihe River Plain" (no. 1212010634505). The authors
-   are grateful to Mr. Xie Shiyong and Qu Zewei from School of
-   Environmental Studies, China University of Geosciences, for their help
-   and support during water sampling in the field and data collection.
 CR Akyuz M, 2010, SCI TOTAL ENVIRON, V408, P5550, DOI 10.1016/j.scitotenv.2010.07.063
    APHA, 1992, STAND METH EX WAT WA
    Basberg L, 1998, AQUAT GEOCHEM, V4, P253, DOI 10.1023/A:1009623205558
-   Baudouin C, 2002, CELL BIOL TOXICOL, V18, P341, DOI 10.1023/A:1019540316060
-   Baumard P, 1998, ESTUAR COAST SHELF S, V47, P77, DOI 10.1006/ecss.1998.0337
-   Baumard P, 1998, ENVIRON TOXICOL CHEM, V17, P765, DOI 10.1897/1551-5028(1998)017<0765:PAHISA>2.3.CO;2
-   BORDEN RC, 1995, GROUND WATER, V33, P180, DOI 10.1111/j.1745-6584.1995.tb00272.x
-   Bosma T. N. P., 2001, HDB ENV CHEM, V63
-   Brigmon R. L., 2002, BIOTRANSFORMATIONS B, P1
-   Budzinski H, 1997, MAR CHEM, V58, P85, DOI 10.1016/S0304-4203(97)00028-5
-   Cao ZH, 2005, J HAZARD MATER, V122, P51, DOI 10.1016/j.jhazmat.2005.04.003
-   Chapman D., 1992, GUIDE USE BIOTA SEDI, P371
-   Christensen T. H., 1992, Landfilling of waste: leachate., P441
-   Christensen TH, 2001, APPL GEOCHEM, V16, P659, DOI 10.1016/S0883-2927(00)00082-2
-   Colombo JC, 2005, ENVIRON POLLUT, V134, P277, DOI 10.1016/j.envpol.2004.02.032
-   Colombo JC, 2005, ENVIRON POLLUT, V134, P267, DOI 10.1016/j.envpol.2004.07.028
-   Cui Y. C., 1998, URBAN ENV URBAN ECOL, V11, P23
-   Daniel R.A., 1997, SITU ONSITE BIOREMED, V1, P29
-   Davis GB, 1999, J CONTAM HYDROL, V36, P265, DOI 10.1016/S0169-7722(98)00148-X
-   De La Torre-Roche RJ, 2009, J HAZARD MATER, V163, P946, DOI 10.1016/j.jhazmat.2008.07.089
-   De Luca G, 2004, MAR CHEM, V86, P15, DOI 10.1016/j.marchem.2003.11.001
-   Doong RA, 2004, WATER RES, V38, P1733, DOI 10.1016/j.watres.2003.12.042
-   DYREBORG S, 1995, WATER RES, V29, P1603, DOI 10.1016/0043-1354(94)00247-5
-   Eggen T, 2010, SCI TOTAL ENVIRON, V408, P5147, DOI 10.1016/j.scitotenv.2010.07.049
-   Eichelberg J.W., 1989, 5242 EPA
-   Essaid HI, 1995, WATER RESOUR RES, V31, P3309, DOI 10.1029/95WR02567
-   Fernandes MB, 1997, MAR POLLUT BULL, V34, P857, DOI 10.1016/S0025-326X(97)00063-5
-   Geik K.H., 2009, LANDFILL LEACHATE SO
-   Gogou AI, 1998, J CHROMATOGR A, V799, P215, DOI 10.1016/S0021-9673(97)01106-0
-   Golfinopoulos SK, 2001, CHEMOSPHERE, V45, P275, DOI 10.1016/S0045-6535(00)00553-1
-   Gotz R, 1998, CHEMOSPHERE, V36, P2103, DOI 10.1016/S0045-6535(98)00009-5
-   GRBICGALIC D, 1987, APPL ENVIRON MICROB, V53, P254
-   GSCHWEND PM, 1981, GEOCHIM COSMOCHIM AC, V45, P2359, DOI 10.1016/0016-7037(81)90089-2
-   Haritash AK, 2009, J HAZARD MATER, V169, P1, DOI 10.1016/j.jhazmat.2009.03.137
-   Hinga KR, 2003, MAR POLLUT BULL, V46, P466, DOI 10.1016/S0025-326X(02)00459-9
-   Iturbe R, 2005, CHEMOSPHERE, V61, P1618, DOI 10.1016/j.chemosphere.2005.04.047
-   KEENER WK, 1994, APPL ENVIRON MICROB, V60, P1914
-   Lee BK, 2004, ATMOS ENVIRON, V38, P863, DOI 10.1016/j.atmosenv.2003.10.047
-   Lee JY, 2001, J ENVIRON QUAL, V30, P1548
-   Li GC, 2006, ENVIRON POLLUT, V144, P985, DOI 10.1016/j.envpol.2006.01.047
-   Lu GP, 1999, GROUND WATER, V37, P707, DOI 10.1111/j.1745-6584.1999.tb01163.x
-   LYNGKILDE J, 1992, J CONTAM HYDROL, V10, P273, DOI 10.1016/0169-7722(92)90011-3
-   Magi E, 2002, ENVIRON POLLUT, V119, P91, DOI 10.1016/S0269-7491(01)00321-9
-   MaliszewskaKordybach B, 1996, APPL GEOCHEM, V11, P121, DOI 10.1016/0883-2927(95)00076-3
-   McNally DL, 1999, CHEMOSPHERE, V38, P1313, DOI 10.1016/S0045-6535(98)00532-3
-   Meuller J. G., 1989, APPL ENVIRON MICROB, V55, P3085
-   Mitra S, 2003, MAR CHEM, V82, P273, DOI 10.1016/S0304-4203(03)00074-4
-   Neilson A. H., 1998, HDB ENV CHEM 1, V3, P2
-   NIELSEN PH, 1995, J CONTAM HYDROL, V20, P51, DOI 10.1016/0169-7722(95)00026-R
-   Nikolaou AD, 2002, WATER RES, V36, P2883, DOI 10.1016/S0043-1354(01)00497-3
-   Persson L, 2006, CHEMOSPHERE, V64, P1093, DOI 10.1016/j.chemosphere.2005.11.070
-   Pies C, 2008, CHEMOSPHERE, V72, P1594, DOI 10.1016/j.chemosphere.2008.04.021
-   POSTMA D, 1991, WATER RESOUR RES, V27, P2027, DOI 10.1029/91WR00989
-   Qu Z.W., 2010, THESIS CHINA U GEOSC, P12
-   RAINWATER K, 1993, WATER ENVIRON RES, V65, P717
-   Ravindra K, 2008, SCI TOTAL ENVIRON, V396, P100, DOI 10.1016/j.scitotenv.2008.02.018
-   Ravindra K, 2008, ATMOS ENVIRON, V42, P2895, DOI 10.1016/j.atmosenv.2007.12.010
-   Rothermich MM, 2002, ENVIRON SCI TECHNOL, V36, P4811, DOI 10.1021/es0200241
-   RUGGE K, 1995, ENVIRON SCI TECHNOL, V29, P1395
-   Sahu SK, 2004, SCI TOTAL ENVIRON, V318, P245, DOI 10.1016/S0048-9697(03)00370-X
-   Shaw M, 2004, CHEMOSPHERE, V56, P237, DOI 10.1016/j.chemosphere.2004.03.003
-   SICRE MA, 1987, ATMOS ENVIRON, V21, P2247, DOI 10.1016/0004-6981(87)90356-8
-   Sinke AJC, 1998, J CONTAM HYDROL, V33, P231, DOI 10.1016/S0169-7722(98)00072-2
-   Soclo HH, 2000, MAR POLLUT BULL, V40, P387, DOI 10.1016/S0025-326X(99)00200-3
-   Song Xue-ying, 2007, Shengtaixue Zazhi, V26, P2057
-   STAFFORD DA, 1974, J APPL BACTERIOL, V37, P75, DOI 10.1111/j.1365-2672.1974.tb00416.x
-   Shi Z, 2005, ENVIRON POLLUT, V134, P97, DOI 10.1016/j.envpol.2004.07.014
-   Taylor R., 2006, P C DIST ABS 2006, P1
-   Tobiszewski M, 2012, ENVIRON POLLUT, V162, P110, DOI 10.1016/j.envpol.2011.10.025
-   Tong C. S., 2012, THESIS CHINA U GEOSC, P22
-   van Breukelen B.M., 2003, THESIS VRIJE U AMSTE, P105
-   van Brummelen T. C., 1998, PHAS RELATED COMPOUN, P175
-   Wan XL, 2006, ATMOS ENVIRON, V40, P6666, DOI 10.1016/j.atmosenv.2006.05.049
-   Wang Y, 2010, ATMOS RES, V95, P1, DOI 10.1016/j.atmosres.2009.07.011
-   Wiedemeier T., 1995, TECHNICAL PROTOCOL I, VII
-   Wiedemeier T., 1995, TECHNICAL PROTOCOL I, VI
-   Wilson RD, 2004, BIODEGRADATION, V15, P359, DOI 10.1023/B:BIOD.0000044591.45542.a9
-   WORLD HEALTH ORGANISATION, 2006, GUID DRINK WAT QUAL, V1
-   Yunker MB, 2002, ORG GEOCHEM, V33, P489, DOI 10.1016/S0146-6380(02)00002-5
-   Zaidi BR, 1999, MAR POLLUT BULL, V38, P737, DOI 10.1016/S0025-326X(99)00037-5
-   Zakaria MP, 2002, ENVIRON SCI TECHNOL, V36, P1907, DOI 10.1021/es011278+
-   Zhang W, 2008, ENVIRON POLLUT, V153, P594, DOI 10.1016/j.envpol.2007.09.004
-   Zhang ZL, 2004, ENVIRON POLLUT, V130, P249, DOI 10.1016/j.envpol.2003.12.002
-   Zhou JL, 2003, ENVIRON POLLUT, V121, P269, DOI 10.1016/S0269-7491(02)00215-4
-NR 84
-TC 0
-Z9 0
 PU SPRINGER
-PI DORDRECHT
-PA VAN GODEWIJCKSTRAAT 30, 3311 GZ DORDRECHT, NETHERLANDS
-SN 0167-6369
 J9 ENVIRON MONIT ASSESS
 JI Environ. Monit. Assess.
-PD APR
 PY 2013
-VL 185
-IS 4
 BP 3413
 EP 3444
 DI 10.1007/s10661-012-2801-z
-PG 32
-WC Environmental Sciences
-SC Environmental Sciences & Ecology
-GA 100WV
-UT WOS:000315736500043
 ER
-
