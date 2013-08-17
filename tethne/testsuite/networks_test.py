@@ -201,7 +201,7 @@ class TestAuthorPapersGraph(unittest.TestCase):
         # paper 1 node attributes
         atitle1 = None
         aulast1 = ['ADAMS']
-        date1 = '1993'
+        date1 = 1993
         cr1_list = ['Adams S. M., 1990, AM FISHERIES SOC S',
                     ('ADAMS SM, 1985, J FISH BIOL, V26, P111,' + 
                         'DOI 10.1111/j.1095-8649.1985.tb04248.x'),
@@ -219,7 +219,7 @@ class TestAuthorPapersGraph(unittest.TestCase):
                                    'citations':citations1,
                                    'type':'paper'}
         paper1_expected_keys = paper1_expected_attribs.keys()
-        paper1_expected_attribs = util.handle_attribs(paper1_expected_attribs, 
+        paper1_expected_attribs = util.subdict(paper1_expected_attribs, 
                                                       paper1_expected_keys)
 
         # and for paper 2 nodes (note ADAMS S is an author for both papers)
@@ -228,7 +228,7 @@ class TestAuthorPapersGraph(unittest.TestCase):
         # and paper 2 node attributes
         atitle2 = None
         aulast2 = ['Adams', 'MCLEAN']
-        date2 = '1985'
+        date2 = 1985
         cr2_list = [('CR ADAMS SM, 1982, CAN J FISH AQUAT SCI, V39,' + 
                         'P1175, DOI 10.1139/f82-155'),
                     ('ADAMS SM, 1982, T AM FISH SOC, V111, P549,' + 
@@ -247,7 +247,7 @@ class TestAuthorPapersGraph(unittest.TestCase):
                                    'citations':citations2,
                                    'type':'paper'}
         paper2_expected_keys = paper2_expected_attribs.keys()
-        paper2_expected_attribs = util.handle_attribs(paper2_expected_attribs, 
+        paper2_expected_attribs = util.subdict(paper2_expected_attribs, 
                                                       paper2_expected_keys)
 
 
@@ -314,7 +314,7 @@ class TestCoauthorsGraph(unittest.TestCase):
                          'through integrative biomarker indices: a' + 
                          'comparative study after the Prestige oil' + 
                          'spill "Mussel Watch"')
-        paper1_date = '2013'
+        paper1_date = 2013
         paper1_aulast = ['Marigomez', 'Garmendia', 'Soto', 'Orbea'] 
         for i in xrange(len(paper1_aulast)):
             paper1_aulast[i] = paper1_aulast[i].upper().strip()
@@ -333,7 +333,7 @@ class TestCoauthorsGraph(unittest.TestCase):
                                    'date':paper1_date,
                                    'aulast':paper1_aulast,
                                    'citations':paper1_citations}
-        paper1_expected_attribs = util.handle_attribs(paper1_expected_attribs,
+        paper1_expected_attribs = util.subdict(paper1_expected_attribs,
                                                       self.attribs)
 
         # do the same for the second paper in the document
@@ -343,7 +343,7 @@ class TestCoauthorsGraph(unittest.TestCase):
         paper2_atitle = ('Evaluation of organic contamination in urban' + 
                          'groundwater surrounding a municipal landfill,' + 
                          'Zhoukou, China')
-        paper2_date = '2013'
+        paper2_date = 2013
         paper2_aulast = ['Han', 'Tong', 'Jin', 'Cajaraville']
         for i in xrange(len(paper2_aulast)):
             paper2_aulast[i] = paper2_aulast[i].upper().strip()
@@ -361,7 +361,7 @@ class TestCoauthorsGraph(unittest.TestCase):
                                    'date':paper2_date,
                                    'aulast':paper2_aulast,
                                    'citations':paper2_citations}
-        paper2_expected_attribs = util.handle_attribs(paper2_expected_attribs,
+        paper2_expected_attribs = util.subdict(paper2_expected_attribs,
                                                       self.attribs)
 
         # test the actual edge attributes in the graph
@@ -423,6 +423,21 @@ class TestBiblioGraph(unittest.TestCase):
                                                    'date',
                                                    'citations')
 
+        # define a separate file for the missing citations test case
+        # with the same data as the other test file with the exception
+        # that the fourth paper is missing its citation record
+        wos_cite = rd.parse_wos('./testin/wos_biblio_cite.txt')
+        doc_list_cite = rd.wos2meta(wos_cite)
+        self.missing_citations_zero =  nt.nx_biblio_coupling(doc_list_cite,
+                                                             'ayjid',
+                                                             0,
+                                                             'ayjid')
+
+        self.missing_citations_one =  nt.nx_biblio_coupling(doc_list_cite,
+                                                            'ayjid',
+                                                            1,
+                                                            'ayjid')
+
     def test_ayjid_zero(self):
         """
         Every paper shares at least 0 references with every other
@@ -465,17 +480,17 @@ class TestBiblioGraph(unittest.TestCase):
         """
         # paper 1 meta data
         node1_atitle = ('Marine ecosystem health status assessment' + 
-                        'through integrative biomarker indices:' + 
-                        'a comparative study after the Prestige oil' + 
-                        'spill "Mussel Watch"')
-        node1_date = '2013'
+                        ' through integrative biomarker indices:' + 
+                        ' a comparative study after the Prestige oil' + 
+                        ' spill "Mussel Watch"')
+        node1_date = 2013
         node1_aulast = ['Marigomez', 'Garmendia', 'Soto', 'Orbea', 
                         'Izagirre', 'Cajaraville']
         for i in xrange(len(node1_aulast)):
             node1_aulast[i] = node1_aulast[i].upper().strip()
         node1_cr_list = [('ADAMS SM, 1993, T AM FISH SOC, V122, P63, DOI' + 
-                          '10.1577/1548-8659(1993)122<0063:AQHAIF>2.3.CO;2'),
-                         ('Beliaeff B, 2002, ENVIRON TOXICOL CHEM, V21,' + 
+                          ' 10.1577/1548-8659(1993)122<0063:AQHAIF>2.3.CO;2'),
+                         ('Beliaeff B, 2002, ENVIRON TOXICOL CHEM, V21, ' + 
                           'P1316, DOI 10.1897/1551-5028(2002)021<1316:' +
                           'IBRAUT>2.0.CO;2')]
         node1_citations = []
@@ -488,17 +503,17 @@ class TestBiblioGraph(unittest.TestCase):
         node1_ayjid = 'MARIGOMEZ I 2013 ECOTOXICOLOGY' 
 
         # paper 2 meta data
-        node2_atitle = ('Evaluation of organic contamination in urban' + 
-                        'groundwater surrounding a municipal landfill,' + 
+        node2_atitle = ('Evaluation of organic contamination in urban ' + 
+                        'groundwater surrounding a municipal landfill, ' + 
                         'Zhoukou, China')
-        node2_date = '2013'
+        node2_date = 2013
         node2_aulast = ['Han', 'Tong', 'Jin', 'Hepburn', 'Tong', 'Song']
         for i in xrange(len(node2_aulast)):
             node2_aulast[i] = node2_aulast[i].upper().strip()
-        node2_cr_list = [('ADAMS SM, 1993, T AM FISH SOC, V122, P63,' + 
+        node2_cr_list = [('ADAMS SM, 1993, T AM FISH SOC, V122, P63, ' + 
                           'DOI 10.1577/1548-8659(1993)122<0063:AQHAIF>' +
                           '2.3.CO;2'),
-                         ('Beliaeff B, 2002, ENVIRON TOXICOL CHEM, V21,' + 
+                         ('Beliaeff B, 2002, ENVIRON TOXICOL CHEM, V21, ' + 
                           'P1316, DOI 10.1897/1551-5028(2002)021<1316:' + 
                           'IBRAUT>2.0.CO;2')]
         node2_citations = []
@@ -511,15 +526,15 @@ class TestBiblioGraph(unittest.TestCase):
         node2_ayjid = 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'
 
         # paper 3 meta data
-        node3_atitle = ('Multilevel governance and management of shared' + 
-                        'stocks with integrated markets: The European' + 
+        node3_atitle = ('Multilevel governance and management of shared ' + 
+                        'stocks with integrated markets: The European ' + 
                         'anchovy case')
-        node3_date = '2013'
+        node3_date = 2013
         node3_aulast = ['Mulazzani', 'Curtin', 'Andres', 'Malorgio']
         for i in xrange(len(node3_aulast)):
             node3_aulast[i] = node3_aulast[i].upper().strip()
         node3_cr_list = [('AdriaMed, GEN OUTL MAR CAPT FI'),
-                         ('Beliaeff B, 2002, ENVIRON TOXICOL CHEM, V21,' +
+                         ('Beliaeff B, 2002, ENVIRON TOXICOL CHEM, V21, ' +
                           'P1316, DOI 10.1897/1551-5028(2002)021' + 
                           '<1316:IBRAUT>2.0.CO;2')]
         node3_citations = []
@@ -532,18 +547,18 @@ class TestBiblioGraph(unittest.TestCase):
         node3_ayjid = 'MULAZZANI L 2013 MARINE POLICY'
 
         # paper 4 meta data
-        node4_atitle = ('Application of multiple geochemical markers to' + 
-                        'investigate organic pollution in a dynamic coastal' + 
+        node4_atitle = ('Application of multiple geochemical markers to ' + 
+                        'investigate organic pollution in a dynamic coastal ' + 
                         'zone')
-        node4_date = '2013'
+        node4_date = 2013
         node4_aulast = ['Liu', 'Wang', 'Wong', 'Qiu', 'Zeng']
         for i in xrange(len(node4_aulast)):
             node4_aulast[i] = node4_aulast[i].upper().strip()
-        node4_cr_list = [('AIZENSHT.Z, 1973, GEOCHIM COSMOCHIM AC, V37,' + 
+        node4_cr_list = [('AIZENSHT.Z, 1973, GEOCHIM COSMOCHIM AC, V37, ' + 
                           'P559, DOI 10.1016/0016-7037(73)90218-4'),
-                         ('BLUMER M, 1971, MAR BIOL, V8, P183, DOI' + 
+                         ('BLUMER M, 1971, MAR BIOL, V8, P183, DOI ' + 
                           '10.1007/BF00355214'),
-                         ('Cachot J, 2007, ENVIRON SCI TECHNOL, V41,' + 
+                         ('Cachot J, 2007, ENVIRON SCI TECHNOL, V41, ' + 
                           'P7830, DOI 10.1021/es071082v')]
         node4_citations = []
         for cite in node4_cr_list:
@@ -560,8 +575,32 @@ class TestBiblioGraph(unittest.TestCase):
                        node3_expected_attribs, node4_expected_attribs]
         for i in xrange(len(node_list)):
             node = node_list[i]
+            expected_attribs = attrib_list[i]
             obtained_attribs = self.ayjid_attribs.node[node]
-            self.assertItemsEqual(attrib_list[i], obtained_attribs)
+            self.assertEqual(expected_attribs, obtained_attribs)
+
+    def test_missing_citations_zero(self):
+        """
+        if fails network is not robust to papers missing citation data
+        test for threshold = 0
+        """
+        # 4 papers
+        self.assertEqual(nx.number_of_nodes(self.missing_citations_zero), 4)
+        # 4 choose 2 = 6 edges 
+        self.assertEqual(nx.number_of_edges(self.missing_citations_zero), 6)
+
+
+    def test_missing_citations_one(self):
+        """
+        if fails network is not robust to papers missing citation data
+        test for threshold = 1
+        """
+        # 4 papers
+        self.assertEqual(nx.number_of_nodes(self.missing_citations_one), 4)
+        # first paper shares 2 >= 1 references with second, 1 >= 1 references
+        # with third, and the second and third share 1 >= 1 references and
+        # fourth constructed to have no citations
+        self.assertEqual(nx.number_of_edges(self.missing_citations_one), 3)
 
     def tearDown(self):
         pass
@@ -630,7 +669,7 @@ class TestAuthorCouplingGraph(unittest.TestCase):
                         'through integrative biomarker indices: a' + 
                         'comparative study after the Prestige oil' + 
                         'spill "Mussel Watch"')
-        node1_date = '2013'
+        node1_date = 2013
         node1_expected_attribs = {'atitle':node1_atitle,
                                   'date':node1_date}
         node1_ayjid = 'MARIGOMEZ I 2013 ECOTOXICOLOGY'
@@ -639,7 +678,7 @@ class TestAuthorCouplingGraph(unittest.TestCase):
         node2_atitle = ('Evaluation of organic contamination in urban' + 
                         'groundwater surrounding a municipal landfill,' + 
                         'Zhoukou, China')
-        node2_date = '2013'
+        node2_date = 2013
         node2_expected_attribs = {'atitle':node2_atitle,
                                   'date':node2_date}
         node2_ayjid = 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'
@@ -648,7 +687,7 @@ class TestAuthorCouplingGraph(unittest.TestCase):
         node3_atitle = ('Multilevel governance and management of shared' + 
                         'stocks with integrated markets: The European' + 
                         'anchovy case')
-        node3_date = '2013'
+        node3_date = 2013
         node3_expected_attribs = {'atitle':node3_atitle,
                                   'date':node3_date}
         node3_ayjid = 'MULAZZANI L 2013 MARINE POLICY'
@@ -657,7 +696,7 @@ class TestAuthorCouplingGraph(unittest.TestCase):
         node4_atitle = ('Application of multiple geochemical markers to' + 
                         'investigate organic pollution in a dynamic coastal' + 
                         'zone')
-        node4_date = '2013'
+        node4_date = 2013
         node4_expected_attribs = {'atitle':node4_atitle,
                                   'date':node4_date}
         node4_ayjid = 'LIU L 2013 ENVIRONMENTAL TOXICOLOGY AND CHEMISTRY'
