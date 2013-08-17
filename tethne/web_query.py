@@ -5,6 +5,11 @@ import tethne.data_struct as ds
 def pubmed_pmid(pmid):
     """
     Return XML from a query of PubMed's EFetch database for the pmid
+
+    Notes
+    -----
+    Update this to query db = pmc instead: pmc contains citation data while
+    pubmed does not
     """
     url_string = ('http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?' +
                   'db=pubmed&' +

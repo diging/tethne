@@ -11,8 +11,15 @@ def to_sif(graph, output_path):
         attributes even though the .sif file does not (edge "weights" are
         not supported by .sif)
 
-    Currently does not support multiple interaction types, only one
-    interaction type named 'rel' as in x is 'related to' y
+    Interaction types in the .sif format allow for edge attributes
+    that belong to that interaction type. Simple graphs in 
+    networkx do not support this kind of edge nesting, but multigraphs do.
+
+    If the graph is a simple graph, it is assumed to have only one interaction
+    type named 'rel' short for 'related to' or 'relation'. If the graph is a
+    multigraph, each edge has a key which is used as the interaction type
+    and has an attribute dictionary associated to that key which is used
+    as the interaction type's edge attributes.
     """
     if output_path[-4:] == ".sif":
         output_path = output_path[:-4]
@@ -61,37 +68,67 @@ def to_sif(graph, output_path):
         else:
             # write the graph to a .sif file as well as other edge 
             # attribute files
-            edges = graph.edges(data=True)
-            for edge in edges:
-                node1 = str(edge[0]).replace(" ","_")
-                node2 = str(edge[1]).replace(" ","_")
-                edge_attribs = edge[2]
-                for key, value in edge_attribs.iteritems():
-                    # generate an edge attribute file for each edge attribute
-                    if edge == edges[0]:
-                        # first edge, overwrite file
-                        with open(output_path + "_" + key + 
-                                  ".eda","w") as f:
-                            f.write(str(key) + '\n')
-                            f.write(node1 + " (" +  'rel' + ") " + node2 + 
-                                    " = " + str(value) + "\n")
-                    else:
-                        # not first, append file
-                         with open(output_path + "_" + key + 
-                                  ".eda","a") as f:
-                            f.write(node1 + " (" +  'rel' + ") " + node2 + 
-                                    " = " + str(value) + "\n")
 
-                    # generate the .sif file
-                    if edge == edges[0]:
-                        # first edge, overwrite file
-                        with open(output_path + ".sif","w") as f:
-                            f.write(node1 + " " + key + " " + node2 + "\n")
-                    else:
-                        # not first, append file
-                        with open(output_path + ".sif","a") as f:
-                            f.write(node1 + " " + key + " " + node2 + "\n")
- 
+            if graph.is_multigraph():
+                # then the NetworkX graph supports multiple interaction
+                # types just like the .sif format
+                edges = graph.edges(data=True, keys=True)
+                edge_attribs = set()
+                for edge in edges:
+                    for key in edge[3].iterkeys():
+                        edge_attribs.add(key)
+
+                # create edge attribute files
+                for attrib in edge_attribs:
+                    str_attrib = str(attrib)
+                    with open(output_path + '_' + str_attrib + ".eda","w") as f:
+                        f.write(str(attrib) + "\n")
+
+                # add data to eda files and write sif file
+                with open(output_path + '.sif', 'w') as f:
+                    for edge in edges:
+                        node1 = str(edge[0]).replace(" ", "_")
+                        node2 = str(edge[1]).replace(" ", "_")
+                        intr_type = str(edge[2]).replace(" ", "_")
+                        sif_line = node1 + ' ' + intr_type + ' ' + node2 + '\n'
+                        f.write(sif_line)
+
+                        for attrib, value in edge[3].iteritems():
+                            eda_line = (node1 + ' (' + intr_type + ') ' +
+                                        node2 + ' = ' + str(value) + '\n')
+                            with open(output_path + '_' + str(attrib) + '.eda', 
+                                      'a') as g:
+                                g.write(eda_line)
+
+            else:
+                # then we support only one interaction type 'rel'
+                edges = graph.edges(data=True)
+                edge_attribs = set()
+                for edge in edges:
+                    for key in edge[2].iterkeys():
+                        edge_attribs.add(key)
+
+                # create edge attribute files
+                for attrib in edge_attribs:
+                    str_attrib = str(attrib)
+                    with open(output_path + '_' + str_attrib + ".eda","w") as f:
+                        f.write(str(attrib) + "\n")
+
+                # add data to eda files and write sif file
+                with open(output_path + '.sif', 'w') as f:
+                    for edge in edges:
+                        node1 = str(edge[0]).replace(" ", "_")
+                        node2 = str(edge[1]).replace(" ", "_")
+                        intr_type = 'rel'
+                        sif_line = node1 + ' ' + intr_type + ' ' + node2 + '\n'
+                        f.write(sif_line)
+
+                        for attrib, value in edge[2].iteritems():
+                            eda_line = (node1 + ' (' + intr_type + ') ' +
+                                        node2 + ' = ' + str(value) + '\n')
+                            with open(output_path + '_' + str(attrib) +
+                                      '.eda', 'a') as g:
+                                g.write(eda_line)
 
 def to_gexf(graph, output_path):
     """Writes the provided graph to a GEXF-format network file."""
