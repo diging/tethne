@@ -183,6 +183,9 @@ def to_xgmml(graph, name, output_path):
 
 
 def to_csv(file, format, delim):
+    '''
+    TODO: should operate on a (provided) graph. Still uses old library approach.
+    '''
     f = open(file, "w")
     if format is "csv":
         # Headers
