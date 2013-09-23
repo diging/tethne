@@ -1,39 +1,57 @@
 """
+.. module:: readers
+    :synopsis: Methods for parsing bibliographic data.
+    
 Each file reader takes an input file from an academic knowledge database
 such as the Web of Science or PubMed and parses the input file into a
 list of "meta_dict" dictionaries for each paper with as many as possible of 
-the following keys; missing values are set to None
-    aulast  - authors' last name as a list
-    auinit  - authors' first initial as a list
-    atitle  - article title
-    jtitle  - journal title or abbreviated title
-    volume  - journal volume number
-    issue   - journal issue number
-    spage   - starting page of article in journal
-    epage   - ending page of article in journal
-    date    - article date of publication
-These keys are associated with the meta data entries in the databases of 
+the following keys; missing values are set to None:
+
+    * aulast  - authors' last name as a list
+    * auinit  - authors' first initial as a list
+    * atitle  - article title
+    * jtitle  - journal title or abbreviated title
+    * volume  - journal volume number
+    * issue   - journal issue number
+    * spage   - starting page of article in journal
+    * epage   - ending page of article in journal
+    * date    - article date of publication
+    
+These keys are associated with the meta data entries in the databases of
 organizations such as the International DOI Foundation and its Registration
-Agencies such as CrossRef and DataCite
+Agencies such as CrossRef and DataCite.
 
 In addition, meta_dict dictionaries will contain keys with information 
-relevant to the networks of interest for Tethne including
-    citations   - a list of minimum meta_dict dictionaries for cited references
-    ayjid       - First author's last name, initial the publication year and
+relevant to the networks of interest for Tethne including:
+
+    * citations   - a list of minimum meta_dict dictionaries for cited references
+    * ayjid       - First author's last name, initial the publication year and
                   the journal published in
-    doi         - Digital Object Identifier 
-    pmid        - PubMed ID
-    wosid       - Web of Science UT fieldtag
-Missing data here also results in the above keys being set to None
+    * doi         - Digital Object Identifier
+    * pmid        - PubMed ID
+    * wosid       - Web of Science UT fieldtag
+    
+Missing data here also results in the above keys being set to None.
 """
 import data_struct as ds
 import xml.etree.ElementTree as ET
 
 # general functions
-def create_ayjid(aulast='', auinit='', date='', jtitle='', **kwargs):
+def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     """
+    .. function:: create_ayjid(aulast='', auinit='', date='', jtitle='', **kwargs)
+    
     Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid
-    Returns 'Unknown paper' if all id components are missing (None)
+    Returns 'Unknown paper' if all id components are missing (None).
+    
+    Kwargs:
+        aulast (str): Author surname.
+        auinit (str): Author initial(s).
+        date (str): Four-digit year.
+        jtitle (str): Title of the journal.
+        
+    Returns:
+        str. Fuzzy identifier ayjid, or 'Unknown paper' if all id components are missing (None).
     """
     if aulast is None:
         aulast = ''
@@ -61,20 +79,16 @@ def create_ayjid(aulast='', auinit='', date='', jtitle='', **kwargs):
 
 # Web of Science functions
 def parse_wos(filepath):
-    """
-    Read Web of Science plain text data
-    Input:
-        filepath - a filepath to the Web of Science plain text file
-    Output:
-        wos_list
-            a list of dictionaries each associated with a paper from 
-            the Web of Science with keys from docs/fieldtags.txt
-            as encountered in the file; most values associated with
-            keys are strings with special exceptions defined by
-            the list_keys and int_keys variables
+    """Read Web of Science plain text data.
+    
+    Args:
+        filepath (str): Filepath to the Web of Science plain text file.
+        
+    Returns:
+        list.  A list of dictionaries each associated with a paper from the Web of Science with keys from docs/fieldtags.txt as encountered in the file; most values associated with keys are strings with special exceptions defined by the list_keys and int_keys variables.
+            
     Notes:
-        Unknown keys: RI, OI, Z9
-        :copyright: (c) 2013 Aaron Baker
+       Unknown keys: RI, OI, Z9
     """
     wos_list = []
 
@@ -166,22 +180,31 @@ def parse_wos(filepath):
 
 def parse_cr(ref):
     """
-    Support the Web of Science reader by converting the strings found
+    Supports the Web of Science reader by converting the strings found
     at the CR field tag of a record into a minimum meta_dict dictionary 
-    Input   - CR field tag data from a plain text Web of Science file
-    Output  - meta_dict dictionary
-    Notes
+
+    Args:
+        ref (str): CR field tag data from a plain text Web of Science file.
+
+    Returns:
+        dict.  meta_dict dictionary.
+    
+    Notes:
         Needs a sophisticated name parser, would like to use an open source
-        resource for this
+        resource for this.
+        
         If WoS is missing a field in the middle of the list there are NOT
         commas indicating that; the following example does NOT occur
+        
             Doe J, ,, Some Journal
+
         instead
+
             Doe J, Some Journal
+
         this threatens the integrity of WoS data; should we address it?
         Another threat: if WoS is unsure of the DOI number there will be
         multiple DOI numbers in a list of form [doi1, doi2, ...], address this?
-        :copyright: (c) 2013 Aaron Baker
     """
     meta_dict = ds.new_meta_dict()
     #tokens of form: aulast auinit, date, jtitle, volume, spage, doi
@@ -218,12 +241,18 @@ def wos2meta(wos_data):
     """
     Convert a dictionary or list of dictionaries with keys from the
     Web of Science field tags into a meta_dict dictionary or list of
-    dictionaries, the standard for Tethne
+    dictionaries, the standard for Tethne.
+
+    Args:
+        wos_data (dict): A list of dictionaries with keys from the WoS field tags.
+
+    Returns:
+        dict. a meta_dict dictionary.
 
     Notes:
         need to handle author name anomolies (case, blank spaces, etc.)
         that may make the same author appear to be two different authors
-        in Networkx; this is important for any graph with authors as nodes
+        in Networkx; this is important for any graph with authors as nodes.
     """
     #create a meta_dict for each wos_dict and append to this list
     wos_meta = []
@@ -285,7 +314,13 @@ def wos2meta(wos_data):
 def pubmed_file_id(filename):
     """
     Given a filename (presumed to contain PubMed compatible IDs)
-    return an xml string for each article associated with that ID
+    return an xml string for each article associated with that ID.
+    
+    Args:
+        filename (str): Path to a file containing PubMed-compatible IDs.
+    
+    Returns:
+        list.  A list of XML strings.
     """
 
     return None
@@ -293,7 +328,13 @@ def pubmed_file_id(filename):
 def pubmed_file_xml(filename):
     """
     Given a filename (presumed to contain PubMed XML schemas)
-    return an xml string for each article in the file
+    return an xml string for each article in the file.
+    
+    Args:
+        filename (str): Path to a file containing PubMed XML schemas.
+    
+    Returns:
+        list.  A list of meta_dict dicts.
     """
 
     return None
@@ -305,7 +346,13 @@ def parse_pubmed_xml(filepath):
     See the following hyperlinks regarding possible structures of XML:
         http://www.ncbi.nlm.nih.gov/pmc/pmcdoc/tagging-guidelines/citations/v2/citationtags.html#2Articlewithmorethan10authors%28listthefirst10andaddetal%29
         http://dtd.nlm.nih.gov/publishing/
-"""
+        
+    Args:
+        filepath (str): Path to PubMed XML file.
+    
+    Returns:
+        list.  A list of meta_dict dictionaries.
+    """
     tree = ET.parse(filepath)
     root = tree.getroot()
     
@@ -481,17 +528,30 @@ def expand_pubmed(meta_list):
     sufficient information (either a DOI, PubMed ID, enough metadata to
     query for a DOI, etc.), query PubMed for their more expansive set 
     of meta data, most notably their citation data, parse the associated xml, 
-    and append their meta_dicts to the meta_list
+    and append their meta_dicts to the meta_list.
 
-    (and do something about the redundent information about them stored
-    still in the first level?)
+    Args:
+        meta_list (list): A list of meta_dict dictionaries.
+    
+    Returns:
+        list.  A list of meta_dict dictionaries.
+
+    Notes:
+        (and do something about the redundent information about them stored
+        still in the first level?)
     """
 
 def parse_bib(filename):
     """
+    Args:
+        filename (str): Path to BibTex file.
+    
+    Returns:
+        list. A list of meta_dict dictionaries.
+    
     Warning: tethne.bib has been known to make errors in parsing bib files
     FIXME: structure the bibtex translator in the data_struct folder
-    along with the others
+    along with the others.
     """
     import tethne.bib as bb
 

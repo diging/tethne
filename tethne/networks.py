@@ -138,7 +138,7 @@ def nx_author_papers(doc_list, paper_id, *paper_attribs):
 
 def nx_coauthors(doc_list, *edge_attribs):
     """
-    Generate a co-author network 
+    Generate a co-author network. 
     Nodes        - author names
     Node attribs - none
     Edges        - (a,b) \in E(G) if a and b are coauthors on the same paper
@@ -147,7 +147,7 @@ def nx_coauthors(doc_list, *edge_attribs):
     Input a doc_list list of wos_objects
     Return a simple coauthor network
     """
-    coauthors = nx.Graph(type='coauthors')
+    coauthors = nx.MultiGraph(type='coauthors')
 
     for entry in doc_list:
         if entry['aulast'] is not None:
@@ -171,7 +171,7 @@ def nx_coauthors(doc_list, *edge_attribs):
                     #add edges with specified edge attributes
                     coauthors.add_edge(full_names[a], 
                                        full_names[b],
-                                       edge_attrib_dict)
+                                       attr_dict=edge_attrib_dict)
 
     return coauthors
 
