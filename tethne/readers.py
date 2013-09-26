@@ -312,7 +312,7 @@ def wos2meta(wos_data):
 
 # PubMed functions
 def pubmed_file_id(filename):
-    """
+    """Future (not implemented).
     Given a filename (presumed to contain PubMed compatible IDs)
     return an xml string for each article associated with that ID.
     
@@ -321,20 +321,6 @@ def pubmed_file_id(filename):
     
     Returns:
         list.  A list of XML strings.
-    """
-
-    return None
-
-def pubmed_file_xml(filename):
-    """
-    Given a filename (presumed to contain PubMed XML schemas)
-    return an xml string for each article in the file.
-    
-    Args:
-        filename (str): Path to a file containing PubMed XML schemas.
-    
-    Returns:
-        list.  A list of meta_dict dicts.
     """
 
     return None
@@ -521,7 +507,7 @@ def parse_pubmed_xml(filepath):
     return None
 
 def expand_pubmed(meta_list):
-    """
+    """Future (not implemented).
     Given a list of first-level meta dicts and their second-level meta dicts,
     first['citations'], expand the network by adding the second-level meta
     dicts to the first level. That is, for the second-level meta dicts with
@@ -602,5 +588,3 @@ def parse_bib(filename):
             print 'Parser failed at', meta_dict
 
     return bib_list
-
-

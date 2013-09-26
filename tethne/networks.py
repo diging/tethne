@@ -192,7 +192,6 @@ def nx_biblio_coupling(doc_list, citation_id, threshold, node_id,
     Notes
         lists cannot be attributes? causing errors for both gexf and graphml
         also nodes cannot be none
-        copyright (c) 2013 Erick Pierson and Aaron Baker
     """
     bcoupling = nx.Graph(type='biblio_coupling')
 
@@ -240,14 +239,16 @@ def nx_biblio_coupling(doc_list, citation_id, threshold, node_id,
 
 def nx_author_coupling(doc_list, threshold, node_id, *node_attribs):
     """
-    Generate a simple author coupling network
+    Generate a simple author coupling network, where vertices are papers and
+    an edge indicates that two papers share a common author.
+    
     Nodes        - papers
     Node attribs - specified by node_attribs
     Edges        - (a,b) \in E(G) if a and b share x authors and x >= threshold
     Edge attribs - overlap, the value of x above
+
     Return a simple author coupling network
     Notes
-        copyright (c) 2013 Erick Pierson and Aaron Baker
     """
     acoupling = nx.Graph(type='author_coupling')
 
@@ -283,14 +284,19 @@ def nx_author_coupling(doc_list, threshold, node_id, *node_attribs):
 
 def nx_author_cocitation(meta_list, threshold):
     """
-    Create an author cocitation (analysis) network
+    Create an author cocitation network. Vertices are authors, and an edge
+    implies that two authors have been cited (via their publications) by in at
+    least one paper in the dataset.
+    
     Nodes           - Authors
     Node attributes - None
     Edges           - (a, b) if a and b are referenced by the same paper in 
                       the meta_list
     Edge attributes - 'weight' the count of papers that would cause an
                       edge to be drawn between a and b
-    Copyright 2013 Aaron Baker
+                      
+    TODO: should be able to specify a threshold -- number of co-citations
+    required to draw an edge.
     """
     cocitation = nx.Graph(type='author_cocitation')
 
@@ -310,4 +316,33 @@ def nx_author_cocitation(meta_list, threshold):
                         cocitation.add_edge(author_list[i], author_list[j],
                                             {'weight':1})
 
-    return cocitation 
+    return cocitation
+
+def nx_author_institution(meta_list):
+    """
+    Create a bi-partite graph with people and institutions as vertices, and
+    edges indicating affiliation. This may be slightly ambiguous for WoS data
+    where num authors != num institutions.
+    """
+
+    pass
+
+def nx_author_coinstitution(meta_list):
+    """
+    Create a graph with people as vertices, and edges indicating affiliation
+    with the same institution. This may be slightly ambiguous for WoS data
+    where num authors != num institutions.
+    """
+
+    pass
+
+def nx_cocitation(meta_list, timeslice, threshold):
+    """
+    A cocitation network is a network in which vertices are papers, and edges
+    indicate that two papers were cited by the same third paper. Should slice
+    the dataset into timeslices (as indicated) based on the publication date of
+    the citing papers in the dataset. Each time-slice should result in a
+    separate networkx Graph in which vertices are the _cited_ papers. Separate
+    graphs allows to analyze each timeslice separately."""
+
+    pass
