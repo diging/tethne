@@ -22,24 +22,30 @@ import data_struct as ds
 
 def nx_citations(doc_list, node_id, *node_attribs):
     """
-    Create a NetworkX directed graph based on citation records
-    Nodes       - documents represented by the value of meta_dict[node_id]
-    Node attr   - specified meta data for a paper in node_attribs
-    Edges       - from one document to its citation
+    Create a NetworkX directed graph based on citation records.
+    Nodes       - documents represented by the value of meta_dict[node_id].
+    Edges       - from one document to its citation.
     Edge attr   - date (year) of citation
 
-    Input  
-        doc_list - a list of meta_dicts
-        node_id  - a key from meta_dict to identify the nodes
-    Return a tuple t with
-        t(0): global citation network (all citations), and an 
-        t(1): internal citation network where only the papers in the
+    Args:
+        doc_list : a list of meta_dicts.
+        node_id  : a key from meta_dict to identify the nodes.
+        *node_attribs : List of user provided optional arguments apart from the provided positional arguments. 
+        
+    Returns: 
+        A tuple t with,
+        t(0):global citation network (all citations), and an 
+        t(1):internal citation network where only the papers in the
             list are nodes in the network
-    Notes
+    
+    Raises:
+        KeyError : If node_id is not present in the meta_list.
+    
+    Notes:
         Should we allow for node attribute definition?
         Perhaps a function that makes use of the meta_dict keys and produces
-            an edge_attribute value is in order, similar to the bibliographic
-            coupling networks
+        an edge_attribute value is in order, similar to the bibliographic
+        coupling networks.
     """
     citation_network = nx.DiGraph(type='citations')
     citation_network_internal = nx.DiGraph(type='citations')
@@ -102,10 +108,19 @@ def nx_author_papers(doc_list, paper_id, *paper_attribs):
         type = person   - a person in doc_list
         papers also have node attributes defined by paper_attribs
     Edges - directed Author -> her Paper 
-        date    - date of publication
-
-    Input: doc_list list of wos_objects
-    Output: author_papers DiGraph 
+            date    - date of publication
+    
+    Args:
+        doc_list : a list of wos_objects.
+        paper_id  : a key from meta_dict to identify the nodes.
+        *paper_attribs : List if user provided optional arguments apart from the provided positional arguments. 
+        
+    Returns: 
+           A DiGraph 'author_papers'.
+    
+    Raises:
+        KeyError : If paper_id is not present in the meta_list.
+    
     """
     author_papers = nx.DiGraph(type='author_papers')
 
@@ -142,10 +157,19 @@ def nx_coauthors(doc_list, *edge_attribs):
     Nodes        - author names
     Node attribs - none
     Edges        - (a,b) \in E(G) if a and b are coauthors on the same paper
-    Edge attribs - user provided edge_attribs specifying which meta_dict keys
-                   (for the paper they coauthored on) to use as edge attributes
-    Input a doc_list list of wos_objects
-    Return a simple coauthor network
+       
+    
+    Args:
+        doc_list : a list of wos_objects.
+        *edge_attribs - List of user provided optional arguments apart from the provided positional arguments. 
+                        user provided edge_attribs specifying which meta_dict keys
+                       (for the paper they coauthored on) to use as edge attributes    
+    Returns: 
+        A simple 'coauthor network'.
+    
+    Raises:
+        None.
+    
     """
     coauthors = nx.MultiGraph(type='coauthors')
 
@@ -186,10 +210,25 @@ def nx_biblio_coupling(doc_list, citation_id, threshold, node_id,
             x >= threshold
     Edge attributes - 
         overlap - the number of citations shared
-    Input - doc_list of meta_dicts 
-            citation_id is how citation overlap is identified
-    Return a bibliographic coupling network
-    Notes
+        
+   
+    Args:
+        doc_list : a list of wos_objects.
+        citation_id : a key from meta_dict to identify the citation overlaps.
+        threshold : A random value provided by the user. If its greater than zero two nodes 
+                    should share something common.
+        node_id  : a key from meta_dict to identify the nodes.            
+        *node_attribs : list of user-provided optional arguments apart from 
+                        the provided positional arguments. 
+        
+    Returns: 
+        A bibliographic coupling network.
+    
+    Raises:
+        KeyError : If citation_id is not present in the meta_list.         
+       
+   
+    Notes:
         lists cannot be attributes? causing errors for both gexf and graphml
         also nodes cannot be none
     """
@@ -243,12 +282,23 @@ def nx_author_coupling(doc_list, threshold, node_id, *node_attribs):
     an edge indicates that two papers share a common author.
     
     Nodes        - papers
-    Node attribs - specified by node_attribs
     Edges        - (a,b) \in E(G) if a and b share x authors and x >= threshold
     Edge attribs - overlap, the value of x above
 
-    Return a simple author coupling network
-    Notes
+    Args:
+        doc_list : a list of wos_objects.
+        threshold : A random value provided by the user. If its greater than zero two nodes 
+                    should share something common.
+        node_id  : a key from meta_dict to identify the nodes.            
+        *node_attribs : list of user-provided optional arguments apart from 
+                        the provided positional arguments. 
+        
+    Returns: 
+        A simple author coupling network.
+    
+    Raises:
+        None.
+       
     """
     acoupling = nx.Graph(type='author_coupling')
 
@@ -283,6 +333,7 @@ def nx_author_coupling(doc_list, threshold, node_id, *node_attribs):
 
 
 def nx_author_cocitation(meta_list, threshold):
+    
     """
     Create an author cocitation network. Vertices are authors, and an edge
     implies that two authors have been cited (via their publications) by in at
@@ -295,8 +346,22 @@ def nx_author_cocitation(meta_list, threshold):
     Edge attributes - 'weight' the count of papers that would cause an
                       edge to be drawn between a and b
                       
-    TODO: should be able to specify a threshold -- number of co-citations
+    Args:
+        meta_list : a list of wos_objects.
+        threshold : A random value provided by the user. If its greater than zero two nodes 
+                    should share something common.
+        
+    Returns: 
+        A cocitation network.
+    
+    Raises:
+        None.                     
+                      
+    Notes: 
+    
+    should be able to specify a threshold -- number of co-citations
     required to draw an edge.
+    
     """
     cocitation = nx.Graph(type='author_cocitation')
 
@@ -319,30 +384,37 @@ def nx_author_cocitation(meta_list, threshold):
     return cocitation
 
 def nx_author_institution(meta_list):
+    
     """
     Create a bi-partite graph with people and institutions as vertices, and
     edges indicating affiliation. This may be slightly ambiguous for WoS data
     where num authors != num institutions.
+    
     """
 
     pass
 
 def nx_author_coinstitution(meta_list):
+    
     """
     Create a graph with people as vertices, and edges indicating affiliation
     with the same institution. This may be slightly ambiguous for WoS data
     where num authors != num institutions.
+    
     """
 
     pass
 
 def nx_cocitation(meta_list, timeslice, threshold):
+    
     """
     A cocitation network is a network in which vertices are papers, and edges
     indicate that two papers were cited by the same third paper. Should slice
     the dataset into timeslices (as indicated) based on the publication date of
     the citing papers in the dataset. Each time-slice should result in a
     separate networkx Graph in which vertices are the _cited_ papers. Separate
-    graphs allows to analyze each timeslice separately."""
-
+    graphs allows to analyze each timeslice separately.
+    
+    """
+    
     pass
