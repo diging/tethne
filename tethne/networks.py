@@ -402,7 +402,13 @@ def nx_author_coinstitution(meta_list):
     where num authors != num institutions.
     
     """
+    coinstitution = nx.Graph(type='author_coinstitution')
 
+    #The Field in meta_list which corresponds to the affiliation is "FU" - Funding Agency
+    for paper in meta_list:
+        for affiliation in paper['fund_agency']: # needs to be added in data_struct.py
+        #to be continued. 
+            
     pass
 
 def nx_cocitation(meta_list, timeslice, threshold):

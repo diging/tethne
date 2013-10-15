@@ -44,7 +44,8 @@ def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid
     Returns 'Unknown paper' if all id components are missing (None).
     
-    Kwargs:
+    Args:
+        Kwargs: A dictionary of keyword arguments. 
         aulast (str): Author surname.
         auinit (str): Author initial(s).
         date (str): Four-digit year.
@@ -52,6 +53,9 @@ def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
         
     Returns:
         str. Fuzzy identifier ayjid, or 'Unknown paper' if all id components are missing (None).
+        
+    Raises:    
+        None.
     """
     if aulast is None:
         aulast = ''
@@ -87,6 +91,9 @@ def parse_wos(filepath):
     Returns:
         list.  A list of dictionaries each associated with a paper from the Web of Science with keys from docs/fieldtags.txt as encountered in the file; most values associated with keys are strings with special exceptions defined by the list_keys and int_keys variables.
             
+    Raises: 
+        KeyError : One key value which needs to be converted to an 'int' is not present
+        AttributeError : similar type of error as given above.
     Notes:
        Unknown keys: RI, OI, Z9
     """
@@ -188,6 +195,10 @@ def parse_cr(ref):
 
     Returns:
         dict.  meta_dict dictionary.
+        
+    Raises:
+        IndexError: When input 'ref' has less number of tokens than necessary ones
+        ValueError: gets input with mismacthed inputtype. Ex: getting no numbers for a date field.
     
     Notes:
         Needs a sophisticated name parser, would like to use an open source
@@ -248,7 +259,8 @@ def wos2meta(wos_data):
 
     Returns:
         dict. a meta_dict dictionary.
-
+    Raises:
+        None.
     Notes:
         need to handle author name anomolies (case, blank spaces, etc.)
         that may make the same author appear to be two different authors
@@ -321,6 +333,9 @@ def pubmed_file_id(filename):
     
     Returns:
         list.  A list of XML strings.
+        
+    Raises:    
+        None.
     """
 
     return None
@@ -328,7 +343,7 @@ def pubmed_file_id(filename):
 def parse_pubmed_xml(filepath):
     """
     Given a file with PubMed XML, return a list of meta_dicts
-
+    
     See the following hyperlinks regarding possible structures of XML:
         http://www.ncbi.nlm.nih.gov/pmc/pmcdoc/tagging-guidelines/citations/v2/citationtags.html#2Articlewithmorethan10authors%28listthefirst10andaddetal%29
         http://dtd.nlm.nih.gov/publishing/
@@ -338,6 +353,10 @@ def parse_pubmed_xml(filepath):
     
     Returns:
         list.  A list of meta_dict dictionaries.
+    
+    Raises:
+        None.           
+        
     """
     tree = ET.parse(filepath)
     root = tree.getroot()
@@ -508,6 +527,7 @@ def parse_pubmed_xml(filepath):
 
 def expand_pubmed(meta_list):
     """Future (not implemented).
+    
     Given a list of first-level meta dicts and their second-level meta dicts,
     first['citations'], expand the network by adding the second-level meta
     dicts to the first level. That is, for the second-level meta dicts with
@@ -522,6 +542,9 @@ def expand_pubmed(meta_list):
     Returns:
         list.  A list of meta_dict dictionaries.
 
+    Raises:
+        None.
+        
     Notes:
         (and do something about the redundent information about them stored
         still in the first level?)
@@ -535,7 +558,11 @@ def parse_bib(filename):
     Returns:
         list. A list of meta_dict dictionaries.
     
-    Warning: tethne.bib has been known to make errors in parsing bib files
+    Raises:
+        None.
+    
+    Notes:
+    tethne.bib has been known to make errors in parsing bib files
     FIXME: structure the bibtex translator in the data_struct folder
     along with the others.
     """

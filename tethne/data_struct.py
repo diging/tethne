@@ -45,7 +45,7 @@ def new_meta_dict():
                  'doi':None,
                  'pmid':None,
                  'wosid':None}
-
+    #To Do : Add new fields for co-instituitions after discussing
     return meta_dict
 
 
