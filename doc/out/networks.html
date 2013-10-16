@@ -1,0 +1,238 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Building and Analyzing Networks &mdash; tethne 0.0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="tethne 0.0.2 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">tethne 0.0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-tethne">
+<span id="building-and-analyzing-networks"></span><h1>Building and Analyzing Networks<a class="headerlink" href="#module-tethne" title="Permalink to this headline">¶</a></h1>
+<p>Tethne is a package for analyzing citation data from the Web of Science. 
+Modules within Tethne can generate a variety of networks, such as 
+bibliographic coupling, citation, author-paper, and co-author networks, 
+using networkx.</p>
+<div class="section" id="module-tethne.networks">
+<span id="network-types"></span><h2>Network Types<a class="headerlink" href="#module-tethne.networks" title="Permalink to this headline">¶</a></h2>
+<p>Each network relies on certain meta data in the meta_dict associated with
+each document. Often we wish to construct a network with nodes representing
+these documents and edges representing relationships between those documents,
+but this is not always the case.</p>
+<p>Where it is the case, it is recommended but not required that nodes are 
+represented by an identifier from {ayjid, wosid, pmid, doi}. Each has certain
+benefits. If the documents to be networked come from a single database source
+such as the Web of Science, wosid is most appropriate. If not, using doi
+will result in a more accurate, but also more sparse network; while ayjid 
+will result in a less accurate, but more complete network.</p>
+<p>Any type of meta data from the meta_dict may be used as an identifier, however.</p>
+<p>We use &#8220;head&#8221; and &#8220;tail&#8221; nomenclature to refer to the members of a directed
+edge (x,y), x -&gt; y, xy, etc. by calling x the &#8220;tail&#8221; and y the &#8220;head&#8221;</p>
+<dl class="function">
+<dt id="tethne.networks.nx_author_cocitation">
+<tt class="descclassname">tethne.networks.</tt><tt class="descname">nx_author_cocitation</tt><big>(</big><em>meta_list</em>, <em>threshold</em><big>)</big><a class="headerlink" href="#tethne.networks.nx_author_cocitation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an author cocitation (analysis) network
+Nodes           - Authors
+Node attributes - None
+Edges           - (a, b) if a and b are referenced by the same paper in</p>
+<blockquote>
+<div>the meta_list</div></blockquote>
+<dl class="docutils">
+<dt>Edge attributes - &#8216;weight&#8217; the count of papers that would cause an</dt>
+<dd>edge to be drawn between a and b</dd>
+</dl>
+<p>Copyright 2013 Aaron Baker</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.networks.nx_author_coupling">
+<tt class="descclassname">tethne.networks.</tt><tt class="descname">nx_author_coupling</tt><big>(</big><em>doc_list</em>, <em>threshold</em>, <em>node_id</em>, <em>*node_attribs</em><big>)</big><a class="headerlink" href="#tethne.networks.nx_author_coupling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a simple author coupling network
+Nodes        - papers
+Node attribs - specified by node_attribs
+Edges        - (a,b) in E(G) if a and b share x authors and x &gt;= threshold
+Edge attribs - overlap, the value of x above
+Return a simple author coupling network
+Notes</p>
+<blockquote>
+<div>copyright (c) 2013 Erick Pierson and Aaron Baker</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.networks.nx_author_papers">
+<tt class="descclassname">tethne.networks.</tt><tt class="descname">nx_author_papers</tt><big>(</big><em>doc_list</em>, <em>paper_id</em>, <em>*paper_attribs</em><big>)</big><a class="headerlink" href="#tethne.networks.nx_author_papers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate an author_papers network NetworkX directed graph.
+Nodes - two kinds of nodes with distinguishing &#8220;type&#8221; attributes</p>
+<blockquote>
+<div>type = paper    - a paper in doc_list
+type = person   - a person in doc_list
+papers also have node attributes defined by paper_attribs</div></blockquote>
+<dl class="docutils">
+<dt>Edges - directed Author -&gt; her Paper </dt>
+<dd>date    - date of publication</dd>
+</dl>
+<p>Input: doc_list list of wos_objects
+Output: author_papers DiGraph</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.networks.nx_biblio_coupling">
+<tt class="descclassname">tethne.networks.</tt><tt class="descname">nx_biblio_coupling</tt><big>(</big><em>doc_list</em>, <em>citation_id</em>, <em>threshold</em>, <em>node_id</em>, <em>*node_attribs</em><big>)</big><a class="headerlink" href="#tethne.networks.nx_biblio_coupling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a simple bibliographic coupling network 
+Nodes - papers represented by node_id and node attributes defined by</p>
+<blockquote>
+<div>node_attribs (in meta_dict keys)</div></blockquote>
+<dl class="docutils">
+<dt>Edges - (a,b) in E(G) if a and b share x citations where </dt>
+<dd>x &gt;= threshold</dd>
+<dt>Edge attributes - </dt>
+<dd>overlap - the number of citations shared</dd>
+<dt>Input - doc_list of meta_dicts </dt>
+<dd>citation_id is how citation overlap is identified</dd>
+</dl>
+<p>Return a bibliographic coupling network
+Notes</p>
+<blockquote>
+<div>lists cannot be attributes? causing errors for both gexf and graphml
+also nodes cannot be none
+copyright (c) 2013 Erick Pierson and Aaron Baker</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.networks.nx_citations">
+<tt class="descclassname">tethne.networks.</tt><tt class="descname">nx_citations</tt><big>(</big><em>doc_list</em>, <em>node_id</em>, <em>*node_attribs</em><big>)</big><a class="headerlink" href="#tethne.networks.nx_citations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a NetworkX directed graph based on citation records
+Nodes       - documents represented by the value of meta_dict[node_id]
+Node attr   - specified meta data for a paper in node_attribs
+Edges       - from one document to its citation
+Edge attr   - date (year) of citation</p>
+<dl class="docutils">
+<dt>Input  </dt>
+<dd>doc_list - a list of meta_dicts
+node_id  - a key from meta_dict to identify the nodes</dd>
+<dt>Return a tuple t with</dt>
+<dd><p class="first">t(0): global citation network (all citations), and an 
+t(1): internal citation network where only the papers in the</p>
+<blockquote class="last">
+<div>list are nodes in the network</div></blockquote>
+</dd>
+<dt>Notes</dt>
+<dd><p class="first">Should we allow for node attribute definition?
+Perhaps a function that makes use of the meta_dict keys and produces</p>
+<blockquote class="last">
+<div>an edge_attribute value is in order, similar to the bibliographic
+coupling networks</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.networks.nx_coauthors">
+<tt class="descclassname">tethne.networks.</tt><tt class="descname">nx_coauthors</tt><big>(</big><em>doc_list</em>, <em>*edge_attribs</em><big>)</big><a class="headerlink" href="#tethne.networks.nx_coauthors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a co-author network. 
+Nodes        - author names
+Node attribs - none
+Edges        - (a,b) in E(G) if a and b are coauthors on the same paper
+Edge attribs - user provided edge_attribs specifying which meta_dict keys</p>
+<blockquote>
+<div>(for the paper they coauthored on) to use as edge attributes</div></blockquote>
+<p>Input a doc_list list of wos_objects
+Return a simple coauthor network</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Building and Analyzing Networks</a><ul>
+<li><a class="reference internal" href="#module-tethne.networks">Network Types</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/networks.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">tethne 0.0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Erick Peirson, Aaron Baker, ASU Digital Innovation Group.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
