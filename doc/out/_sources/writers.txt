@@ -4,8 +4,8 @@ Documentation for the Code
 .. automodule:: tethne
 
 
-Readers
+Writers
 =========================
 
-.. automodule:: tethne.readers
+.. automodule:: tethne.writers
    :members:
