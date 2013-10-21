@@ -33,6 +33,7 @@ def new_meta_dict():
     """
     meta_dict = {'aulast':None,
                  'auinit':None,
+                 'address':None, 
                  'atitle':None,
                  'jtitle':None,
                  'volume':None,
@@ -45,7 +46,7 @@ def new_meta_dict():
                  'doi':None,
                  'pmid':None,
                  'wosid':None}
-    #To Do : Add new fields for co-instituitions after discussing
+    
     return meta_dict
 
 
@@ -57,6 +58,7 @@ def new_query_dict():
     q_dict = {'aulast':None,
               'auinit':None,
               'atitle':None,
+              'address':None, 
               'jtitle':None,
               'volume':None,
               'issue':None,
@@ -87,6 +89,7 @@ def new_wos_dict():
     """
     wos_dict = {'DI':None,
                 'AU':None,
+                'C1':None, 
                 'TI':None,
                 'SO':None,
                 'VL':None,
@@ -116,6 +119,7 @@ def wos2meta_map():
     translator = {'DI':'doi',
                   'TI':'atitle',
                   'SO':'jtitle',
+                  'C1':'address',
                   'VL':'volume',
                   'IS':'issue',
                   'BP':'spage',
