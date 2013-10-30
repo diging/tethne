@@ -102,7 +102,7 @@ def parse_wos(filepath):
     #define special key handling
     paper_start_key = 'PT'
     paper_end_key = 'ER'
-
+    print 'comes in readers.parsewos - V2'
     #try to read filepath
     line_list = []
     with open(filepath,'r') as f:
@@ -129,9 +129,10 @@ def parse_wos(filepath):
 
         #add value for the key to the wos_dict: the rest of the line
         try:
-            if field_tag in ['AU', 'AF', 'CR']:
+            if field_tag in ['AU', 'AF', 'CR','C1']: 
                 #these unique fields use the new line delimiter to distinguish
                 #their list elements below
+                #the field C1 can be either in multiple lines or in a single line- It is the address/institutions of the author.
                 wos_dict[field_tag] += '\n' + str(line[3:])
             else:
                 wos_dict[field_tag] += ' ' + str(line[3:])
@@ -143,19 +144,23 @@ def parse_wos(filepath):
     #end line loop
 
     #define keys that should be lists instead of default string
-    list_keys = ['AU','AF','DE','ID','CR']
+    list_keys = ['AU','AF','DE','ID','CR','C1']
     delims = {'AU':'\n',
               'AF':'\n',
               'DE':';',
               'ID':';',
+              'C1':'\n',
               'CR':'\n'}
-
+    
     #and convert the data at those keys into lists
     for wos_dict in wos_list:
+        print 'wos_dict is \n',wos_dict
         for key in list_keys:
             delim = delims[key]
+            print 'delim is\n' , delim
             try:
                 key_contents = wos_dict[key]
+                print 'key_contents is \n ' , key_contents
                 if delim != '\n':
                     wos_dict[key] = key_contents.split(delim)
                 else:
@@ -167,7 +172,7 @@ def parse_wos(filepath):
                 #again a key didn't exist but it belonged to the wos
                 #data_struct set of keys; can't split a None
                 pass
-
+            
     #similarly convert some data from string to int
     int_keys = ['PY']
     for wos_dict in wos_list:
@@ -181,11 +186,12 @@ def parse_wos(filepath):
                 #again a key didn't exist but it belonged to the wos
                 #data_struct set of keys; can't convert None to an int
                 pass
-
+ 
     return wos_list
 
 
 def parse_cr(ref):
+
     """
     Supports the Web of Science reader by converting the strings found
     at the CR field tag of a record into a minimum meta_dict dictionary 
@@ -248,6 +254,58 @@ def parse_cr(ref):
  
     return meta_dict
 
+def parse_institutions(ref):
+    """
+    Supports the Web of Science reader by converting the strings found
+    at the C1 fieldtag of a record into a minimum meta_dict dictionary 
+
+    Args:
+        ref : 'C1' field tag data from a plain text Web of Science file which contains Author First and Last names, 
+              Institution affiliated, and the location/city where they are affiliated to.
+        
+
+    Returns:
+        addr_dict.  a meta_dict dictionary.
+        
+    Raises:
+        IndexError: When input 'ref' has less number of tokens than necessary ones
+        ValueError: gets input with mismacthed inputtype. Ex: getting no numbers for a date field.
+    
+    Notes:
+        Needs to check many test cases to check various input types.
+        
+    """
+    addr_dict = ds.new_meta_dict()
+    #tokens of form: 
+    tokens = ref.split(',')
+    try:
+        
+        name = tokens[0]
+        name_tokens = name.split(' ')
+        addr_dict['aulast'] = name_tokens[0]
+        addr_dict['auinit'] = name_tokens[1]
+
+        #strip initial characters based on the field (spaces, 'V', 'DOI')
+        addr_dict['date'] = int(tokens[1][1:])
+        addr_dict['jtitle'] = tokens[2][1:]
+        addr_dict['volume'] = tokens[3][2:]
+        addr_dict['spage'] = tokens[4][2:]
+        addr_dict['doi'] = tokens[5][5:]
+    except IndexError:
+        #ref did not have the full set of tokens
+        pass
+    except ValueError:
+        #this occurs when the program expects a date but gets a string with
+        #no numbers, we leave the field incomplete because chances are
+        #the CR string is too sparse to use anyway
+        pass
+
+    ayjid = create_ayjid(addr_dict['aulast'], addr_dict['auinit'], 
+                         addr_dict['date'], addr_dict['jtitle'])
+    addr_dict['ayjid'] = ayjid
+ 
+    return addr_dict
+
 def wos2meta(wos_data):
     """
     Convert a dictionary or list of dictionaries with keys from the
@@ -309,12 +367,49 @@ def wos2meta(wos_data):
                              meta_dict['date'], meta_dict['jtitle'])
         meta_dict['ayjid'] = ayjid
 
+        #Parse the C1 Field and create a fuzzy identifier for author co-institutions
+        
+        if wos_dict['C1'] is not None:
+            aulast_list = []
+            auinit_list = []
+            
+            # Need to put the '[ ] ' wildcard match which is implemented in Ipython Notebook
+            
+            for name in wos_dict['AU']:
+                name_tokens = name.split(',')
+                aulast = name_tokens[0].upper().strip()
+                try:
+                    # 1 for 'aulast, aufirst'
+                    auinit = name_tokens[1][1].upper().strip() 
+                except IndexError:
+                    # then no first initial character
+                    # preserve parallel name lists with empty string
+                    auinit = ''
+                aulast_list.append(aulast)
+                auinit_list.append(auinit)
+            meta_dict['aulast'] = aulast_list
+            meta_dict['auinit'] = auinit_list
+
+        #construct a fuzzy identifier
+       # ayjid = create_ayjid(meta_dict['aulast'], meta_dict['auinit'], 
+                           #  meta_dict['date'], meta_dict['jtitle'])
+        #meta_dict['ayjid'] = ayjid
+        
+
         #convert CR references into meta_dict format
         if wos_dict['CR'] is not None:
             meta_cr_list = []
             for ref in wos_dict['CR']:
                 meta_cr_list.append(parse_cr(ref))
             meta_dict['citations'] = meta_cr_list
+            
+        #convert C1 references into meta_dict format
+        if wos_dict['C1'] is not None:
+            meta_addr_list = []
+            for ref in wos_dict['CR']:
+                meta_addr_list.append(parse_institutions(ref))
+            meta_dict['address'] = meta_addr_list    
+            
 
         wos_meta.append(meta_dict)
     #end wos_dict for loop

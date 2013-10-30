@@ -404,12 +404,27 @@ def nx_author_coinstitution(meta_list):
     """
     coinstitution = nx.Graph(type='author_coinstitution')
 
-    #The Field in meta_list which corresponds to the affiliation is "FU" - Funding Agency
-    for paper in meta_list:
-        for affiliation in paper['fund_agency']: # needs to be added in data_struct.py
-        #to be continued. 
-            
-    pass
+    #The Field in meta_list which corresponds to the affiliation is "C1" - Authors Address
+    for author in meta_list:
+        for institution in author['address']:
+            #Need a false-proof method to arrange the authors CASE-SENSITIVE /fuzzy identifier.
+            #Working on it.
+            author_list = util.concat_list(institution['aulast'],
+                                           institution['auinit'],
+                                           ' ')
+            num_authors = len(author_list)
+            for i in xrange(num_authors):                           # writing the code - incomplete.
+                coinstitution.add_node(author_list[i])
+                for j in xrange(i+1, num_authors):
+                    try:
+                        coinstitution[author_list[i]][author_list[j]]['weight'] += 1
+                    except KeyError:
+                        # then edge doesnt yet exist
+                        cocitation.add_edge(author_list[i], author_list[j],
+                                            {'weight':1})
+
+    return cocitation
+
 
 def nx_cocitation(meta_list, timeslice, threshold):
     

@@ -515,6 +515,7 @@ AB Feature selection is one of the fundamental problems in pattern recognition a
 C1 [Herman, Gunawan; Zhang, Bang; Wang, Yang; Chen, Fang] Natl ICT Australia, Eveleigh, NSW 2015, Australia.
    [Herman, Gunawan; Zhang, Bang; Wang, Yang; Chen, Fang] Univ New S Wales, Sydney, NSW 2052, Australia.
    [Ye, Getian] Canon Informat Syst Res Australia, N Ryde, NSW 2113, Australia.
+   [Yetest, Getian] Test Australia, N Ryde, NSW 2313, Australia.
 RP Wang, Y (reprint author), Natl ICT Australia, Level 5,13 Garden St, Eveleigh, NSW 2015, Australia.
 EM Gherman.email@gmail.com; bang.zhang@nicta.com.au;
    yang.wang@nicta.com.au; getian.ye@gmail.com; fang.chen@nicta.com.au
