@@ -1,0 +1,87 @@
+﻿PT J
+AU Tuerhong, G
+   Kim, SB
+   Kang, P
+   Cho, S
+AF Tuerhong, Gulanbaier
+   Kim, Seoung Bum
+   Kang, Pilsung
+   Cho, Sungzoon
+TI Multivariate Control Charts Based on Hybrid Novelty Scores
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+LA English
+DT Article
+DE Data mining; Multivariate control charts; Novelty score; Quality control
+ID EWMA CONTROL CHART
+AB We propose a new nonparametric multivariate control chart that integrates a novelty score. The proposed control chart uses as its monitoring statistic a hybrid novelty score, calculated based on the distance to local observations as well as on the distance to the convex hull constructed by its neighbors. The control limits of the proposed control chart were established based on a bootstrap method. A rigorous simulation study was conducted to examine the properties of the proposed control chart under various scenarios and compare it with existing multivariate control charts in terms of average run length (ARL) performance. The simulation results showed that the proposed control chart outperformed both the parametric and nonparametric Hotelling's T-2 control charts, especially in nonnormal situations. Moreover, experimental results with real semiconductor data demonstrated the applicability and effectiveness of the proposed control chart. To increase the capability to detect small mean shift, we propose an exponentially weighted hybrid novelty score control chart. Simulation results indicated that exponentially weighted hybrid score charts outperformed the hybrid novelty score based control charts.
+C1 [Tuerhong, Gulanbaier; Kim, Seoung Bum] Korea Univ, Sch Ind Management Engn, Seoul 136701, South Korea.
+   [Kang, Pilsung] Seoul Natl Univ Sci & Technol, Sch Global Convergence, IT Management, Seoul, South Korea.
+   [Cho, Sungzoon] Seoul Natl Univ, Dept Ind Engn, Seoul, South Korea.
+RP Kim, SB (reprint author), Korea Univ, Sch Ind Management Engn, Seoul 136701, South Korea.
+EM sbkim1@korea.ac.kr
+FU Brain Korea 21 (Network Enterprise), Basic Science Research Program
+   through the National Research Foundation of Korea; Ministry of
+   Education, Science, and Technology [0003811]; Ministry of Knowledge
+   Economy in Korea under the IT R&D Infrastructure Program
+   [NIPA-2011-(B1110-1101-0002)]
+FX The authors would like to thank the editor and the reviewers for their
+   useful comments and suggestions, which were greatly helpful in improving
+   the quality of the article. This research was supported by Brain Korea
+   21 (Network Enterprise), Basic Science Research Program through the
+   National Research Foundation of Korea funded by the Ministry of
+   Education, Science, and Technology (0003811), and the Ministry of
+   Knowledge Economy in Korea under the IT R&D Infrastructure Program
+   supervised by the NIPA (National IT Industry Promotion Agency)
+   (NIPA-2011-(B1110-1101-0002)).
+CR Angiulli F, 2005, IEEE T KNOWL DATA EN, V17, P203, DOI 10.1109/TKDE.2005.31
+   Chakraborti S, 2001, J QUAL TECHNOL, V33, P304
+   Das N, 2009, QUAL TECHNOL QUANT M, V6, P155
+   Efron B., 1993, INTRO BOOTSTRAP
+   Frank A., 2010, UCI MACHINE LEARNING
+   Harmeling S, 2006, NEUROCOMPUTING, V69, P1608, DOI 10.1016/j.neucom.2005.05.015
+   Hodge VJ, 2004, ARTIF INTELL REV, V22, P85, DOI 10.1007/s10462-004-4304-y
+   Hotelling H., 1947, MULTIVARIATE QUALITY, P111
+   Juszczak P, 2009, NEUROCOMPUTING, V72, P1859, DOI 10.1016/j.neucom.2008.05.003
+   Kang P, 2008, PATTERN RECOGN, V41, P3507, DOI 10.1016/j.patcog.2008.04.009
+   Kang P, 2009, PATTERN RECOGN, V42, P3115, DOI 10.1016/j.patcog.2009.04.009
+   Liu R.Y., 2004, ALLGEMEINES STAT ARC, V88, P235, DOI 10.1007/s101820400170
+   Liu RY, 1995, J AM STAT ASSOC, V90, P1380, DOI 10.2307/2291529
+   LUCAS JM, 1990, TECHNOMETRICS, V32, P1, DOI 10.2307/1269835
+   Markou M, 2003, SIGNAL PROCESS, V83, P2481, DOI [10.1016/j.sigpro.2003.07.018, 10.1016/j.sigpro.2003.018]
+   Mason R. L., 2002, MULTIVARIATE STAT PR
+   Mason RL, 1997, J QUAL TECHNOL, V29, P140
+   Montgomery D. C., 2005, INTRO STAT QUALITY C
+   Ning XH, 2012, IIE TRANS, V44, P301, DOI 10.1080/0740817X.2011.587863
+   Phaladiganon P, 2011, COMMUN STAT-SIMUL C, V40, P645, DOI 10.1080/03610918.2010.549989
+   Qiu PH, 2008, IIE TRANS, V40, P664, DOI 10.1080/07408170701744843
+   Qiu PH, 2001, TECHNOMETRICS, V43, P120, DOI 10.1198/004017001750386242
+   Qiu PH, 2003, J ROY STAT SOC D-STA, V52, P151, DOI 10.1111/1467-9884.00348
+   Ramaswamy S., 2000, P INT C MAN DAT SIGM
+   Royston, 1983, J ROYAL STAT SOC C, V32, P121
+   Stoumbos ZG, 2002, J QUAL TECHNOL, V34, P260
+   Sun RX, 2003, INT J PROD RES, V41, P2975, DOI 10.1080/1352816031000075224
+   Tax D.M.J., 2001, THESIS DELF U TECHNO
+   Zou CL, 2011, TECHNOMETRICS, V53, P84, DOI 10.1198/TECH.2010.09095
+   Zou CL, 2012, NAV RES LOG, V59, P91, DOI 10.1002/nav.21475
+NR 30
+TC 0
+Z9 0
+PU TAYLOR & FRANCIS INC
+PI PHILADELPHIA
+PA 325 CHESTNUT ST, SUITE 800, PHILADELPHIA, PA 19106 USA
+SN 0361-0918
+J9 COMMUN STAT-SIMUL C
+JI Commun. Stat.-Simul. Comput.
+PD JAN 1
+PY 2014
+VL 43
+IS 1
+BP 115
+EP 131
+DI 10.1080/03610918.2012.698775
+PG 17
+WC Statistics & Probability
+SC Mathematics
+GA 200DX
+UT WOS:000323049100008
+ER
