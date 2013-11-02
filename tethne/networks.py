@@ -394,7 +394,7 @@ def nx_author_institution(meta_list):
 
     pass
 
-def nx_author_coinstitution(meta_list):
+def nx_author_coinstitution(meta_list,*args):
     
     """
     Create a graph with people as vertices, and edges indicating affiliation
@@ -406,23 +406,23 @@ def nx_author_coinstitution(meta_list):
 
     #The Field in meta_list which corresponds to the affiliation is "C1" - Authors Address
     for author in meta_list:
-        for institution in author['address']:
-            #Need a false-proof method to arrange the authors CASE-SENSITIVE /fuzzy identifier.
-            #Working on it.
-            author_list = util.concat_list(institution['aulast'],
-                                           institution['auinit'],
-                                           ' ')
-            num_authors = len(author_list)
-            for i in xrange(num_authors):                           # writing the code - incomplete.
-                coinstitution.add_node(author_list[i])
-                for j in xrange(i+1, num_authors):
-                    try:
-                        coinstitution[author_list[i]][author_list[j]]['weight'] += 1
-                    except KeyError:
-                        # then edge doesnt yet exist
-                        cocitation.add_edge(author_list[i], author_list[j],
-                                            {'weight':1})
-
+        if author[address] != "":
+            for institution in author['address']:
+               
+                author_list = util.concat_list(institution['aulast'],
+                                               institution['auinit'],
+                                               institution['country'])
+                num_authors = len(author_list)
+                for i in xrange(num_authors):                           # writing the code .
+                    coinstitution.add_node(author_list[i])
+                    for j in xrange(i+1, num_authors):
+                        try:
+                            coinstitution[author_list[i]][author_list[j]]['weight'] += 1
+                        except KeyError:
+                            # then edge doesnt yet exist
+                            cocitation.add_edge(author_list[i], author_list[j],
+                                                {'weight':1})
+    
     return cocitation
 
 

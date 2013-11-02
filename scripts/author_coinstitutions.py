@@ -10,9 +10,8 @@ meta_list=rd.wos2meta(wos_list)
 for meta in meta_list:
     print meta , '\n'
     
-#import tethne.networks as nt
-#author_coup = nt.nx_author_coupling(meta_list, 1, 'ayjid', 'atitle', 'date',
-#                                    'badkey', 'jtitle') a
+import tethne.networks as nt
+author_coinst = nt.nx_author_coinstitution(meta_list, 1, 'ayjid', 'atitle', 'addr1', 'addr2', 'country') 
 
-#import tethne.writers as wr
-#wr.to_gexf(author_coup, "/home/apoh/Repository/output/author_coupling")
+import tethne.writers as wr
+wr.to_gexf(author_coinst, "/Users/ramki/tethne/tethne/output/author_coinstitutions")

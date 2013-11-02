@@ -33,7 +33,7 @@ def new_meta_dict():
     """
     meta_dict = {'aulast':None,
                  'auinit':None,
-                 'address':None, 
+                 'address':None, #added
                  'atitle':None,
                  'jtitle':None,
                  'volume':None,
@@ -41,8 +41,13 @@ def new_meta_dict():
                  'spage':None,
                  'epage':None,
                  'date':None,
-                 'citations':None,
+                 'citations':None, 
+                 'addr1':None, #added
+                 'country':None, #added
+                 'addr2':None, #added
+                 'addr3':None,#added
                  'ayjid':None,
+                 'ainstid':None,#added author affiliation ID
                  'doi':None,
                  'pmid':None,
                  'wosid':None}

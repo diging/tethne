@@ -35,8 +35,10 @@ Missing data here also results in the above keys being set to None.
 """
 import data_struct as ds
 import xml.etree.ElementTree as ET
+import re
 
 # general functions
+
 def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     """
     .. function:: create_ayjid(aulast='', auinit='', date='', jtitle='', **kwargs)
@@ -80,6 +82,51 @@ def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
 
     return ayj
 
+def create_ainstid(aulast=None, auinit=None, addr1=None, addr2=None, country=None, **kwargs):
+    """
+    This function is to create an fuzzy identifier ainstid
+    Convert aulast, auinit, and jtitle into the fuzzy identifier ainstid.
+    Returns 'Unknown Institution' if all id components are missing (None).
+    
+    Args:
+        Kwargs: A dictionary of keyword arguments. 
+        aulast (str): Author surname.
+        auinit (str): Author initial(s).
+        address1 (str): Address of the Institution.
+        address2 (str): Address of the Institution.
+        country (str): country of affiliation
+        
+    Returns:
+        str. Fuzzy identifier ainstid, or 'Unknown Institution' if all id components are missing (None).
+        
+    Raises:    
+        None.
+    """
+    if aulast is None:
+        aulast = ''
+    elif isinstance(aulast,list):
+        aulast = aulast[0]
+
+    if auinit is None:
+        auinit = ''
+    elif isinstance(auinit,list):
+        auinit = auinit[0]
+
+    if addr1 is None:
+         addr1 = ''
+
+    if  addr2 is None:
+         addr2 = ''
+    if  country is None:
+         country = ''
+
+    ainstid = aulast + ' ' + auinit + ' ' + addr1 + ' ' + addr2 + ' ' + country 
+
+    if ainstid == ' ':
+        ainstid = 'Unknown Institution'
+
+    return ainstid
+
 
 # Web of Science functions
 def parse_wos(filepath):
@@ -102,7 +149,7 @@ def parse_wos(filepath):
     #define special key handling
     paper_start_key = 'PT'
     paper_end_key = 'ER'
-    print 'comes in readers.parsewos - V2'
+    print 'comes in readers.parsewos - V5'
     #try to read filepath
     line_list = []
     with open(filepath,'r') as f:
@@ -278,6 +325,7 @@ def parse_institutions(ref):
     addr_dict = ds.new_meta_dict()
     #tokens of form: 
     tokens = ref.split(',')
+    print 'tokens inside parse_institutions : \n', tokens
     try:
         
         name = tokens[0]
@@ -286,11 +334,10 @@ def parse_institutions(ref):
         addr_dict['auinit'] = name_tokens[1]
 
         #strip initial characters based on the field (spaces, 'V', 'DOI')
-        addr_dict['date'] = int(tokens[1][1:])
-        addr_dict['jtitle'] = tokens[2][1:]
-        addr_dict['volume'] = tokens[3][2:]
-        addr_dict['spage'] = tokens[4][2:]
-        addr_dict['doi'] = tokens[5][5:]
+        addr_dict['addr2'] = tokens[1][1:]
+        addr_dict['addr3'] = tokens[2][1:]
+        addr_dict['country'] = tokens[3][2:]
+       
     except IndexError:
         #ref did not have the full set of tokens
         pass
@@ -299,11 +346,11 @@ def parse_institutions(ref):
         #no numbers, we leave the field incomplete because chances are
         #the CR string is too sparse to use anyway
         pass
-
-    ayjid = create_ayjid(addr_dict['aulast'], addr_dict['auinit'], 
+    
+    auinsid = create_ayjid(addr_dict['aulast'], addr_dict['auinit'], 
                          addr_dict['date'], addr_dict['jtitle'])
-    addr_dict['ayjid'] = ayjid
- 
+    addr_dict['auinsid'] = auinsid
+    print 'auinsid', auinsid
     return addr_dict
 
 def wos2meta(wos_data):
@@ -375,38 +422,55 @@ def wos2meta(wos_data):
             
             # Need to put the '[ ] ' wildcard match which is implemented in Ipython Notebook
             
-            for name in wos_dict['AU']:
+            for name in wos_dict['C1']:
                 name_tokens = name.split(',')
-                aulast = name_tokens[0].upper().strip()
+                print 'name_tokens in wos_meta \n :' , name_tokens , '\n name :' , name 
+                
+                p = re.compile('\[(.*?)\]')
+                #match=p.findall("[Modis, Konstantinos] Natl Tech Univ Athens, Sch Min & Met Engn, Athens, Greece.[Vatalis, Konstantinos I.] Technol Educ Inst Western Macedonia, Dept Geotechnol & Environm Engn, Koila Kozani GREECE, Greece.")
+                match=p.findall(name)
+                if match : 
+                    print "match  found", match
+                    #auinit1 = match[1].upper().strip()
+                    #print 'auinit1' , auinit1
+                else :
+                    print "match  not found", match    
+#                 aulast = name_tokens[0].upper().strip()
                 try:
                     # 1 for 'aulast, aufirst'
-                    auinit = name_tokens[1][1].upper().strip() 
+                    auinit1 = match[1].upper().strip()
+                    print 'auinit1' , auinit1
+                    #auinit = name_tokens[1][1].upper().strip()
+                    #print auinit 
+                    
                 except IndexError:
                     # then no first initial character
                     # preserve parallel name lists with empty string
                     auinit = ''
                 aulast_list.append(aulast)
                 auinit_list.append(auinit)
-            meta_dict['aulast'] = aulast_list
-            meta_dict['auinit'] = auinit_list
-
-        #construct a fuzzy identifier
-       # ayjid = create_ayjid(meta_dict['aulast'], meta_dict['auinit'], 
-                           #  meta_dict['date'], meta_dict['jtitle'])
-        #meta_dict['ayjid'] = ayjid
-        
+                meta_dict['aulast'] = aulast_list
+                meta_dict['auinit'] = auinit_list
+                print "meta_dict is ", meta_dict
+            #construct a fuzzy identifier
+        affid = create_ayjid(meta_dict['aulast'], meta_dict['auinit'], 
+                                    meta_dict['date'], meta_dict['jtitle'])
+        meta_dict['affid'] = affid
+        print "meta_dict is ", meta_dict
 
         #convert CR references into meta_dict format
         if wos_dict['CR'] is not None:
             meta_cr_list = []
-            for ref in wos_dict['CR']:
+            for ref in wos_dict['C1']:
                 meta_cr_list.append(parse_cr(ref))
+                print 'meta_cr_list' , meta_cr_list
             meta_dict['citations'] = meta_cr_list
             
         #convert C1 references into meta_dict format
         if wos_dict['C1'] is not None:
             meta_addr_list = []
-            for ref in wos_dict['CR']:
+            for ref in wos_dict['C1']:
+                print "411 " , ref
                 meta_addr_list.append(parse_institutions(ref))
             meta_dict['address'] = meta_addr_list    
             
