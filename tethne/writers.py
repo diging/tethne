@@ -5,11 +5,11 @@ def to_sif(graph, output_path):
     Generates SIF output file from provided graph. 
 
     See http://wiki.cytoscape.org/Cytoscape_User_Manual/Network_Formats at
-        SIF Format for more details
+    SIF Format for more details
 
     Edge attribute files appended with .eda contain the values of any edge
-        attributes even though the .sif file does not (edge "weights" are
-        not supported by .sif)
+    attributes even though the .sif file does not (edge "weights" are
+    not supported by .sif)
 
     Interaction types in the .sif format allow for edge attributes
     that belong to that interaction type. Simple graphs in 
@@ -182,40 +182,49 @@ def to_xgmml(graph, name, output_path):
     f.close()
 
 
-def to_csv(file, format, delim):
+def to_csv(file, delim=","):
     '''
+    Parameters
+    ----------
+    file : string
+        Path to output file (will be created).
+    delim : string
+        String to use as field delimiter (default is ',').
+    
+    Notes
+    -----
     TODO: should operate on a (provided) graph. Still uses old library approach.
     '''
     f = open(file, "w")
-    if format is "csv":
-        # Headers
-        f.write("Identifier" + delim + "Title" + delim + "Authors" + 
-                delim + "WoS Identifier" + delim + "Journal" + delim + 
-                "Volume" + delim + "Page" + delim + "DOI" + delim + 
-                "Num Authors\n")
-        for entry in self.library:
-            # Authors are separated by a colon -> : <-
-            authors = ""
-            for author in entry.meta['AU']:
-                authors += ":" + author
-            authors = authors[1:]
-            datum = (entry.identifier + delim + entry.meta['TI'][0] + 
-                     delim + authors + delim + entry.wosid + delim + 
-                     entry.meta['SO'][0])
-            if 'VL' in entry.meta:
-                datum += delim + entry.meta['VL'][0]
-                if 'BP' in entry.meta:
-                    datum += delim + entry.meta['BP'][0]
-                else:
-                    datum += delim
-            else:
-                datum += delim + delim
-            if 'DI' in entry.meta:
-                datum += delim + entry.meta['DI'][0]
+
+    # Headers
+    f.write("Identifier" + delim + "Title" + delim + "Authors" + 
+            delim + "WoS Identifier" + delim + "Journal" + delim + 
+            "Volume" + delim + "Page" + delim + "DOI" + delim + 
+            "Num Authors\n")
+    for entry in self.library:
+        # Authors are separated by a colon -> : <-
+        authors = ""
+        for author in entry.meta['AU']:
+            authors += ":" + author
+        authors = authors[1:]
+        datum = (entry.identifier + delim + entry.meta['TI'][0] + 
+                 delim + authors + delim + entry.wosid + delim + 
+                 entry.meta['SO'][0])
+        if 'VL' in entry.meta:
+            datum += delim + entry.meta['VL'][0]
+            if 'BP' in entry.meta:
+                datum += delim + entry.meta['BP'][0]
             else:
                 datum += delim
-            datum += delim + str(entry.meta['num_authors'])
-            f.write(datum + "\n")
+        else:
+            datum += delim + delim
+        if 'DI' in entry.meta:
+            datum += delim + entry.meta['DI'][0]
+        else:
+            datum += delim
+        datum += delim + str(entry.meta['num_authors'])
+        f.write(datum + "\n")
     f.close()
 
 

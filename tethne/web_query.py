@@ -4,12 +4,17 @@ import tethne.data_struct as ds
 
 def pubmed_pmid(pmid):
     """
-    Return XML from a query of PubMed's EFetch database for the pmid
+    Get XML from a query of PubMed's EFetch database for the pmid.
+
+    Returns
+    -------
+    xml_string : string
+        Some XML.
 
     Notes
     -----
     Update this to query db = pmc instead: pmc contains citation data while
-    pubmed does not
+    pubmed does not.
     """
     url_string = ('http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?' +
                   'db=pubmed&' +
@@ -27,27 +32,35 @@ def crossref_meta(**kwargs):
     """
     Query CrossRef with article metadata with the hope to find a DOI number 
     for that metadata in their system. 
-    Inputs:
-        aulast  - first author's last name
-        auinit  - first author's first initial
-        atitle  - article title
-        jtitle  - journal title or abbreviated title
-        volume  - journal volume number
-        issue   - journal issue number
-        spage   - starting page of article in journal
-        epage   - ending page of article in journal
-        date    - article date of publication
-    Returns a DOI number as a string
+    
+    Parameters
+    ----------
+    kwargs : list
+        * aulast -- first author's last name
+        * auinit -- first author's first initial
+        * atitle -- article title
+        * jtitle -- journal title or abbreviated title
+        * volume -- journal volume number
+        * issue -- journal issue number
+        * spage -- starting page of article in journal
+        * epage -- ending page of article in journal
+        * date -- article date of publication
 
-    Notes:
-        A sample query is given here:
-        http://www.crossref.org/openurl?pid=git.tethne@gmail.com&url_ver=Z39.88-2004&rft_val_fmt=info:ofi/fmt:kev:mtx:journal&rft.atitle=Isolation%20of%20a%20common%20receptor%20for%20coxsackie%20B&rft.jtitle=Science&rft.aulast=Bergelson&rft.auinit=J&rft.date=1997&rft.volume=275&rft.issue=5304&rft.spage=1320&rft.epage=1323&redirect=false
+    Returns
+    -------
+    doi : string
+        Returns a DOI as a string.
 
-    More information is available at the CrossRef documentation site:
-        http://help.crossref.org/#home
+    Notes
+    -----
+    A sample query is given here:
+    
+    http://www.crossref.org/openurl?pid=git.tethne@gmail.com&url_ver=Z39.88-2004&rft_val_fmt=info:ofi/fmt:kev:mtx:journal&rft.atitle=Isolation%20of%20a%20common%20receptor%20for%20coxsackie%20B&rft.jtitle=Science&rft.aulast=Bergelson&rft.auinit=J&rft.date=1997&rft.volume=275&rft.issue=5304&rft.spage=1320&rft.epage=1323&redirect=false
+
+    More information is available at the CrossRef documentation site: http://help.crossref.org/#home
+    
     See "Machine Interfaces / APIs" in particular.
-
-    :copyright: (c) 2013 Aaron Baker
+    
     """
     valid_keys = ds.new_query_dict().keys()
     q_dict = util.subdict(kwargs, valid_keys)

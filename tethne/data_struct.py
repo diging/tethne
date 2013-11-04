@@ -1,4 +1,3 @@
-
 def new_meta_dict():
     """
     Creates a Meta Dictionary of citation data values. 
@@ -52,8 +51,7 @@ def new_meta_dict():
 
 def new_query_dict():
     """
-    Declares only those keys of meta_dict that are query-able through
-    CrossRef
+    Declares only those keys of meta_dict that are query-able through CrossRef.
     """
     q_dict = {'aulast':None,
               'auinit':None,
@@ -71,21 +69,14 @@ def new_query_dict():
 
 def new_wos_dict():
     """
-    Defines the set of field tags that will try to be converted into
-    a meta_dict and intializes them to 'None'.
+    Defines the set of field tags that will try to be converted into a meta_dict
+    and intializes them to 'None'.
    
-    Args:
-        None.
-    
-    Returns:
-        A 'wos_list' dictionary with 'None' as default values.
-    
-    Raises:
-        None.
-    
-    Note:
-        FIXME: order these a certain way?
-   
+    Returns
+    -------
+    wos_dict : dict
+        A wos_list dictionary with 'None' as default values for all keys.
+        
     """
     wos_dict = {'DI':None,
                 'AU':None,
@@ -106,15 +97,11 @@ def wos2meta_map():
     """
     Defines the direct relationships between the wos_dict and the meta_dict.
     
-    Args:
-        None.
-    
-    Returns:
+    Returns
+    -------
+    translator : dict
         A 'translator' dictionary.
-    
-    Raises:
-        None.
-   
+        
     """
     translator = {'DI':'doi',
                   'TI':'atitle',

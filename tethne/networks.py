@@ -23,29 +23,43 @@ import data_struct as ds
 def nx_citations(doc_list, node_id, *node_attribs):
     """
     Create a NetworkX directed graph based on citation records.
-    Nodes       - documents represented by the value of meta_dict[node_id].
-    Edges       - from one document to its citation.
-    Edge attr   - date (year) of citation
+    
+    **Nodes** -- documents represented by the value of meta_dict[node_id].
+    
+    **Edges** -- from one document to its citation.
+    
+    **Edge attributes** -- date (year) of citation
 
-    Args:
-        doc_list : a list of meta_dicts.
-        node_id  : a key from meta_dict to identify the nodes.
-        *node_attribs : List of user provided optional arguments apart from the provided positional arguments. 
+    Parameters
+    ----------
+    doc_list : list
+        A list of :py:func:`meta_dicts <tethne.data_struct.new_meta_dict>`.
         
-    Returns: 
-        A tuple t with,
-        t(0):global citation network (all citations), and an 
-        t(1):internal citation network where only the papers in the
-            list are nodes in the network
+    node_id : int
+        A key from meta_dict to identify the nodes.
+        
+    node_attribs : list
+        List of user provided optional arguments apart from the provided 
+        positional arguments.
+        
+    Returns
+    -------
+    citation_network : networkx.DiGraph
+        Global citation network (all citations).
+    citation_network_internal : networkx.DiGraph
+        Internal citation network where only the papers in the list are nodes in
+        the network.
     
-    Raises:
-        KeyError : If node_id is not present in the meta_list.
+    Raises
+    ------
+    KeyError : If node_id is not present in the meta_list.
     
-    Notes:
-        Should we allow for node attribute definition?
-        Perhaps a function that makes use of the meta_dict keys and produces
-        an edge_attribute value is in order, similar to the bibliographic
-        coupling networks.
+    Notes
+    -----
+    Should we allow for node attribute definition?
+    Perhaps a function that makes use of the meta_dict keys and produces
+    an edge_attribute value is in order, similar to the bibliographic
+    coupling networks.
     """
     citation_network = nx.DiGraph(type='citations')
     citation_network_internal = nx.DiGraph(type='citations')
@@ -103,23 +117,33 @@ def nx_citations(doc_list, node_id, *node_attribs):
 def nx_author_papers(doc_list, paper_id, *paper_attribs):
     """
     Generate an author_papers network NetworkX directed graph.
-    Nodes - two kinds of nodes with distinguishing "type" attributes
-        type = paper    - a paper in doc_list
-        type = person   - a person in doc_list
-        papers also have node attributes defined by paper_attribs
-    Edges - directed Author -> her Paper 
-            date    - date of publication
     
-    Args:
-        doc_list : a list of wos_objects.
-        paper_id  : a key from meta_dict to identify the nodes.
-        *paper_attribs : List if user provided optional arguments apart from the provided positional arguments. 
+    **Nodes** -- Two kinds of nodes with distinguishing "type" attributes.
+        * type = paper    - a paper in doc_list
+        * type = person   - a person in doc_list
+
+    Papers also have node attributes defined by paper_attribs.
+    
+    **Edges** -- Directed, Author -> her Paper 
+    
+    Parameters
+    ----------
+    doc_list : list
+        A list of wos_objects.
+    paper_id : string
+        A key from meta_dict, used to identify the nodes.
+    paper_attribs : list
+        List of user-provided optional arguments apart from the provided 
+        positional arguments. 
         
-    Returns: 
-           A DiGraph 'author_papers'.
+    Returns
+    -------
+    author_papers : networkx.DiGraph
+        A DiGraph 'author_papers'.
     
-    Raises:
-        KeyError : If paper_id is not present in the meta_list.
+    Raises
+    ------
+    KeyError : Raised when paper_id is not present in the meta_list.
     
     """
     author_papers = nx.DiGraph(type='author_papers')
@@ -154,21 +178,25 @@ def nx_author_papers(doc_list, paper_id, *paper_attribs):
 def nx_coauthors(doc_list, *edge_attribs):
     """
     Generate a co-author network. 
-    Nodes        - author names
-    Node attribs - none
-    Edges        - (a,b) \in E(G) if a and b are coauthors on the same paper
+    
+    **Nodes** -- author names
+    
+    **Node attributes** -- none
+    
+    **Edges** -- (a,b) \in E(G) if a and b are coauthors on the same paper.
        
-    
-    Args:
-        doc_list : a list of wos_objects.
-        *edge_attribs - List of user provided optional arguments apart from the provided positional arguments. 
-                        user provided edge_attribs specifying which meta_dict keys
-                       (for the paper they coauthored on) to use as edge attributes    
-    Returns: 
-        A simple 'coauthor network'.
-    
-    Raises:
-        None.
+    Parameters
+    ----------
+    doc_list : list
+        A list of wos_objects.
+    edge_attribs : list
+        List of edge_attributes specifying which meta_dict keys (from the 
+        co-authored paper) to use as edge attributes.
+        
+    Returns
+    -------
+    coauthors : networkx.MultiGraph
+        A co-authorship network.
     
     """
     coauthors = nx.MultiGraph(type='coauthors')
@@ -203,35 +231,45 @@ def nx_coauthors(doc_list, *edge_attribs):
 def nx_biblio_coupling(doc_list, citation_id, threshold, node_id, 
                        *node_attribs):
     """
-    Generate a simple bibliographic coupling network 
-    Nodes - papers represented by node_id and node attributes defined by
-            node_attribs (in meta_dict keys) 
-    Edges - (a,b) \in E(G) if a and b share x citations where 
-            x >= threshold
-    Edge attributes - 
-        overlap - the number of citations shared
+    Generate a bibliographic coupling network.
+    
+    **Nodes** -- papers represented by node_id and node attributes defined by
+    node_attribs (in meta_dict keys).
+    
+    **Edges** -- (a,b) \in E(G) if a and b share x citations where x >= 
+    threshold.
+    
+    **Edge attributes** -- overlap, the number of citations shared
         
    
-    Args:
-        doc_list : a list of wos_objects.
-        citation_id : a key from meta_dict to identify the citation overlaps.
-        threshold : A random value provided by the user. If its greater than zero two nodes 
-                    should share something common.
-        node_id  : a key from meta_dict to identify the nodes.            
-        *node_attribs : list of user-provided optional arguments apart from 
-                        the provided positional arguments. 
+    Parameters
+    ----------
+    doc_list : list
+        A list of wos_objects.
+    citation_id: string
+        A key from meta_dict to identify the citation overlaps.
+    threshold : int
+        Minimum number of shared citations to consider two papers "coupled".
+    node_id : string
+        Field in meta_dict used to identify the nodes.
+    node_attribs : list
+        List of fields in meta_dict to include as node attributes in graph.
         
-    Returns: 
+    Returns
+    -------
+    bcoupling : networkx.Graph
         A bibliographic coupling network.
     
-    Raises:
-        KeyError : If citation_id is not present in the meta_list.         
-       
+    Raises
+    ------
+    KeyError : Raised when citation_id is not present in the meta_list.
    
-    Notes:
-        lists cannot be attributes? causing errors for both gexf and graphml
-        also nodes cannot be none
+    Notes
+    -----
+    Lists cannot be attributes? causing errors for both gexf and graphml also 
+    nodes cannot be none.
     """
+    
     bcoupling = nx.Graph(type='biblio_coupling')
 
     #validate identifiers
@@ -281,24 +319,29 @@ def nx_author_coupling(doc_list, threshold, node_id, *node_attribs):
     Generate a simple author coupling network, where vertices are papers and
     an edge indicates that two papers share a common author.
     
-    Nodes        - papers
-    Edges        - (a,b) \in E(G) if a and b share x authors and x >= threshold
-    Edge attribs - overlap, the value of x above
-
-    Args:
-        doc_list : a list of wos_objects.
-        threshold : A random value provided by the user. If its greater than zero two nodes 
-                    should share something common.
-        node_id  : a key from meta_dict to identify the nodes.            
-        *node_attribs : list of user-provided optional arguments apart from 
-                        the provided positional arguments. 
-        
-    Returns: 
-        A simple author coupling network.
+    **Nodes** -- Papers.
     
-    Raises:
-        None.
-       
+    **Edges** -- (a,b) \in E(G) if a and b share x authors and x >= threshold
+    
+    **Edge attributes** -- overlap, the value of x (above).
+
+    Parameters
+    ----------
+    doc_list : list
+        A list of wos_objects.
+    threshold : int
+        Minimum number of co-citations required to draw an edge between two
+        authors.
+    node_id : string
+        Field in meta_dict used to identify nodes.    
+    node_attribs : list
+        List of fields in meta_dict to include as node attributes in graph.
+        
+    Returns
+    -------
+    acoupling : networkx.Graph
+        An author-coupling network.
+           
     """
     acoupling = nx.Graph(type='author_coupling')
     
@@ -340,32 +383,38 @@ def nx_author_coupling(doc_list, threshold, node_id, *node_attribs):
 def nx_author_cocitation(meta_list, threshold):
     
     """
-    Create an author cocitation network. Vertices are authors, and an edge
+    Creates an author cocitation network. Vertices are authors, and an edge
     implies that two authors have been cited (via their publications) by in at
     least one paper in the dataset.
     
-    Nodes           - Authors
-    Node attributes - None
-    Edges           - (a, b) if a and b are referenced by the same paper in 
-                      the meta_list
-    Edge attributes - 'weight' the count of papers that would cause an
-                      edge to be drawn between a and b
+    **Nodes** -- Authors
+    
+    **Node attributes** -- None
+    
+    **Edges** -- (a, b) if a and b are referenced by the same paper in the 
+    meta_list
+    
+    **Edge attributes** -- 'weight', the number of papers that co-cite two 
+    authors.
                       
-    Args:
-        meta_list : a list of wos_objects.
-        threshold : A random value provided by the user. If its greater than zero two nodes 
-                    should share something common.
+    Parameters
+    ----------
+    meta_list : list
+        a list of wos_objects.
         
-    Returns: 
+    threshold : int
+        A random value provided by the user. If its greater than zero two nodes 
+        should share something common.
+        
+    Returns
+    -------
+    cocitation : networkx.Graph
         A cocitation network.
-    
-    Raises:
-        None.                     
                       
-    Notes: 
-    
-    should be able to specify a threshold -- number of co-citations
-    required to draw an edge.
+    Notes
+    -----
+    should be able to specify a threshold -- number of co-citations required to 
+    draw an edge.
     
     """
     cocitation = nx.Graph(type='author_cocitation')

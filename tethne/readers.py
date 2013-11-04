@@ -1,7 +1,4 @@
 """
-.. module:: readers
-    :synopsis: Methods for parsing bibliographic data.
-    
 Each file reader takes an input file from an academic knowledge database
 such as the Web of Science or PubMed and parses the input file into a
 list of "meta_dict" dictionaries for each paper with as many as possible of 
@@ -24,12 +21,11 @@ Agencies such as CrossRef and DataCite.
 In addition, meta_dict dictionaries will contain keys with information 
 relevant to the networks of interest for Tethne including:
 
-    * citations   - a list of minimum meta_dict dictionaries for cited references
-    * ayjid       - First author's last name, initial the publication year and
-                  the journal published in
-    * doi         - Digital Object Identifier
-    * pmid        - PubMed ID
-    * wosid       - Web of Science UT fieldtag
+    * citations -- list of minimum meta_dict dictionaries for cited references.
+    * ayjid -- First author's name (last, fi), publication year, and journal.
+    * doi -- Digital Object Identifier
+    * pmid -- PubMed ID
+    * wosid -- Web of Science UT fieldtag
     
 Missing data here also results in the above keys being set to None.
 """
@@ -41,23 +37,28 @@ import re
 
 def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     """
-    .. function:: create_ayjid(aulast='', auinit='', date='', jtitle='', **kwargs)
-    
     Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid
     Returns 'Unknown paper' if all id components are missing (None).
     
-    Args:
-        Kwargs: A dictionary of keyword arguments. 
-        aulast (str): Author surname.
-        auinit (str): Author initial(s).
-        date (str): Four-digit year.
-        jtitle (str): Title of the journal.
+    Parameters
+    ----------
+    Kwargs : dict
+        A dictionary of keyword arguments.
+    aulast : string
+        Author surname.
+    auinit: string
+        Author initial(s).
+    date : string
+        Four-digit year.
+    jtitle : string
+        Title of the journal.
         
-    Returns:
-        str. Fuzzy identifier ayjid, or 'Unknown paper' if all id components are missing (None).
+    Returns
+    -------
+    ayj : string
+        Fuzzy identifier ayjid, or 'Unknown paper' if all id components are 
+        missing (None).
         
-    Raises:    
-        None.
     """
     if aulast is None:
         aulast = ''
@@ -84,23 +85,31 @@ def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
 
 def create_ainstid(aulast=None, auinit=None, addr1=None, addr2=None, country=None, **kwargs):
     """
-    This function is to create an fuzzy identifier ainstid
+    This function is to create an fuzzy identifier ainstid.
     Convert aulast, auinit, and jtitle into the fuzzy identifier ainstid.
     Returns 'Unknown Institution' if all id components are missing (None).
     
-    Args:
-        Kwargs: A dictionary of keyword arguments. 
-        aulast (str): Author surname.
-        auinit (str): Author initial(s).
-        address1 (str): Address of the Institution.
-        address2 (str): Address of the Institution.
-        country (str): country of affiliation
+    Parameters
+    ----------
+    Kwargs : dict
+        A dictionary of keyword arguments.
+    aulast : string
+        Author surname.
+    auinit : string
+        Author initial(s).
+    address1 : string
+        Address of the Institution.
+    address2 : string
+        Address of the Institution.
+    country : string
+        Country of affiliation
         
-    Returns:
-        str. Fuzzy identifier ainstid, or 'Unknown Institution' if all id components are missing (None).
+    Returns
+    -------
+    ainstid : string
+        Fuzzy identifier ainstid, or 'Unknown Institution' if all id components 
+        are missing (None).
         
-    Raises:    
-        None.
     """
     if aulast is None:
         aulast = ''
@@ -132,17 +141,31 @@ def create_ainstid(aulast=None, auinit=None, addr1=None, addr2=None, country=Non
 def parse_wos(filepath):
     """Read Web of Science plain text data.
     
-    Args:
-        filepath (str): Filepath to the Web of Science plain text file.
+    Parameters
+    ----------
+    filepath : string
+        Filepath to the Web of Science plain text file.
         
-    Returns:
-        list.  A list of dictionaries each associated with a paper from the Web of Science with keys from docs/fieldtags.txt as encountered in the file; most values associated with keys are strings with special exceptions defined by the list_keys and int_keys variables.
+    Returns
+    -------
+    wos_list : list
+        A list of dictionaries each associated with a paper from the Web of 
+        Science with keys from docs/fieldtags.txt as encountered in the file; 
+        most values associated with keys are strings with special exceptions 
+        defined by the list_keys and int_keys variables.
             
-    Raises: 
-        KeyError : One key value which needs to be converted to an 'int' is not present
-        AttributeError : similar type of error as given above.
-    Notes:
-       Unknown keys: RI, OI, Z9
+    Raises
+    ------
+    KeyError
+        One key value which needs to be converted to an 'int' is not present.
+    
+    AttributeError
+        similar type of error as given above.
+    
+    Notes
+    -----
+    Unknown keys: RI, OI, Z9
+    
     """
     wos_list = []
 
@@ -242,34 +265,45 @@ def parse_cr(ref):
 
     """
     Supports the Web of Science reader by converting the strings found
-    at the CR field tag of a record into a minimum meta_dict dictionary 
+    at the CR field tag of a record into a minimum meta_dict dictionary.
 
-    Args:
-        ref (str): CR field tag data from a plain text Web of Science file.
+    Parameters
+    ----------
+    ref : str
+        CR field tag data from a plain text Web of Science file.
 
-    Returns:
-        dict.  meta_dict dictionary.
+    Returns
+    -------
+    meta_dict : dict
+        meta_dict dictionary.
         
-    Raises:
-        IndexError: When input 'ref' has less number of tokens than necessary ones
-        ValueError: gets input with mismacthed inputtype. Ex: getting no numbers for a date field.
+    Raises
+    ------
+    IndexError
+        When input 'ref' has less number of tokens than necessary ones.
+    ValueError
+        Gets input with mismacthed inputtype. Ex: getting no numbers for a date 
+        field.
     
-    Notes:
-        Needs a sophisticated name parser, would like to use an open source
-        resource for this.
-        
-        If WoS is missing a field in the middle of the list there are NOT
-        commas indicating that; the following example does NOT occur
-        
-            Doe J, ,, Some Journal
+    Notes
+    -----
+    Needs a sophisticated name parser, would like to use an open source resource
+    for this.
+    
+    If WoS is missing a field in the middle of the list there are NOT commas 
+    indicating that; the following example does NOT occur:
+    
+        Doe J, ,, Some Journal
 
-        instead
+    instead
 
-            Doe J, Some Journal
+        Doe J, Some Journal
 
-        this threatens the integrity of WoS data; should we address it?
-        Another threat: if WoS is unsure of the DOI number there will be
-        multiple DOI numbers in a list of form [doi1, doi2, ...], address this?
+    This threatens the integrity of WoS data; should we address it?
+    
+    Another threat: if WoS is unsure of the DOI number there will be multiple 
+    DOI numbers in a list of form [doi1, doi2, ...], address this?
+    
     """
     meta_dict = ds.new_meta_dict()
     #tokens of form: aulast auinit, date, jtitle, volume, spage, doi
@@ -304,23 +338,33 @@ def parse_cr(ref):
 
 def parse_institutions(ref):
     """
-    Supports the Web of Science reader by converting the strings found
-    at the C1 fieldtag of a record into a minimum meta_dict dictionary 
+    Supports the Web of Science reader by converting the strings found at the C1
+    fieldtag of a record into a minimum meta_dict dictionary.
 
-    Args:
-        ref : 'C1' field tag data from a plain text Web of Science file which contains Author First and Last names, 
-              Institution affiliated, and the location/city where they are affiliated to.
+    Parameters
+    ----------
+    ref : str
+        'C1' field tag data from a plain text Web of Science file which contains
+        Author First and Last names, Institution affiliated, and the 
+        location/city where they are affiliated to.
         
+    Returns
+    -------
+    addr_dict : dict
+        A meta_dict dictionary.
+        
+    Raises
+    ------
+    IndexError
+        When input 'ref' has less number of tokens than necessary ones.
 
-    Returns:
-        addr_dict.  a meta_dict dictionary.
-        
-    Raises:
-        IndexError: When input 'ref' has less number of tokens than necessary ones
-        ValueError: gets input with mismacthed inputtype. Ex: getting no numbers for a date field.
+    ValueError
+        Gets input with mismacthed inputtype. Ex: getting no numbers for a date 
+        field.
     
-    Notes:
-        Needs to check many test cases to check various input types.
+    Notes
+    -----
+    Needs to check many test cases to check various input types.
         
     """
     addr_dict = ds.new_meta_dict()
@@ -360,17 +404,22 @@ def wos2meta(wos_data):
     Web of Science field tags into a meta_dict dictionary or list of
     dictionaries, the standard for Tethne.
 
-    Args:
-        wos_data (dict): A list of dictionaries with keys from the WoS field tags.
+    Parameters
+    ----------
+    wos_data : list
+        A list of wos_dict dictionaries with keys from the WoS field tags.
 
-    Returns:
-        dict. a meta_dict dictionary.
-    Raises:
-        None.
-    Notes:
-        need to handle author name anomolies (case, blank spaces, etc.)
-        that may make the same author appear to be two different authors
-        in Networkx; this is important for any graph with authors as nodes.
+    Returns
+    -------
+    wos_meta : dict
+        A list of meta_dict dictionaries.
+
+    Notes
+    -----
+    Need to handle author name anomolies (case, blank spaces, etc.) that may 
+    make the same author appear to be two different authors in Networkx; this is
+    important for any graph with authors as nodes.
+    
     """
     #create a meta_dict for each wos_dict and append to this list
     wos_meta = []
@@ -514,17 +563,20 @@ def wos2meta(wos_data):
 # PubMed functions
 def pubmed_file_id(filename):
     """Future (not implemented).
+    
     Given a filename (presumed to contain PubMed compatible IDs)
     return an xml string for each article associated with that ID.
     
-    Args:
-        filename (str): Path to a file containing PubMed-compatible IDs.
+    Parameters
+    ----------
+    filename : string
+        Path to a file containing PubMed-compatible IDs.
     
-    Returns:
-        list.  A list of XML strings.
+    Returns
+    -------
+    list : list
+        A list of XML strings.
         
-    Raises:    
-        None.
     """
 
     return None
@@ -534,17 +586,18 @@ def parse_pubmed_xml(filepath):
     Given a file with PubMed XML, return a list of meta_dicts
     
     See the following hyperlinks regarding possible structures of XML:
-        http://www.ncbi.nlm.nih.gov/pmc/pmcdoc/tagging-guidelines/citations/v2/citationtags.html#2Articlewithmorethan10authors%28listthefirst10andaddetal%29
-        http://dtd.nlm.nih.gov/publishing/
+    * http://www.ncbi.nlm.nih.gov/pmc/pmcdoc/tagging-guidelines/citations/v2/citationtags.html#2Articlewithmorethan10authors%28listthefirst10andaddetal%29
+    * http://dtd.nlm.nih.gov/publishing/
         
-    Args:
-        filepath (str): Path to PubMed XML file.
+    Parameters
+    ----------
+    filepath : string
+        Path to PubMed XML file.
     
-    Returns:
-        list.  A list of meta_dict dictionaries.
-    
-    Raises:
-        None.           
+    Returns
+    -------
+    meta_list : list
+        A list of meta_dict dictionaries.
         
     """
     tree = ET.parse(filepath)
@@ -712,7 +765,6 @@ def parse_pubmed_xml(filepath):
     # end article loop
     
     return meta_list
-    return None
 
 def expand_pubmed(meta_list):
     """Future (not implemented).
@@ -725,37 +777,43 @@ def expand_pubmed(meta_list):
     of meta data, most notably their citation data, parse the associated xml, 
     and append their meta_dicts to the meta_list.
 
-    Args:
-        meta_list (list): A list of meta_dict dictionaries.
+    Parameters
+    ----------
+    meta_list : list
+        A list of meta_dict dictionaries.
     
-    Returns:
-        list.  A list of meta_dict dictionaries.
-
-    Raises:
-        None.
+    Returns
+    -------
+    list : list
+        A list of meta_dict dictionaries.
         
-    Notes:
-        (and do something about the redundent information about them stored
-        still in the first level?)
+    Notes
+    -----
+    Do something about the redundent information about them stored still in the 
+    first level?
+    
     """
 
 def parse_bib(filename):
     """
-    Args:
-        filename (str): Path to BibTex file.
+    Parameters
+    ----------
+    filename : string
+        Path to BibTex file.
     
-    Returns:
-        list. A list of meta_dict dictionaries.
+    Returns
+    -------
+    bib_list : list
+        A list of meta_dict dictionaries.
     
-    Raises:
-        None.
-    
-    Notes:
-    tethne.bib has been known to make errors in parsing bib files
-    FIXME: structure the bibtex translator in the data_struct folder
-    along with the others.
+    Notes
+    -----
+    tethne.resources. bib has been known to make errors in parsing bib files.
+
+    FIXME: structure the bibtex translator in the data_struct folder along with 
+    the others.
     """
-    import tethne.bib as bb
+    import tethne.resources.bib as bb
 
     #load file into bib.py readable format
     data = ""
