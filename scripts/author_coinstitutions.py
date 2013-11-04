@@ -15,3 +15,4 @@ author_coinst = nt.nx_author_coinstitution(meta_list, 1, 'ayjid', 'atitle', 'add
 
 import tethne.writers as wr
 wr.to_gexf(author_coinst, "/Users/ramki/tethne/tethne/output/author_coinstitutions")
+
