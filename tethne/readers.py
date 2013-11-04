@@ -24,12 +24,11 @@ Agencies such as CrossRef and DataCite.
 In addition, meta_dict dictionaries will contain keys with information 
 relevant to the networks of interest for Tethne including:
 
-    * citations   - a list of minimum meta_dict dictionaries for cited references
-    * ayjid       - First author's last name, initial the publication year and
-                  the journal published in
-    * doi         - Digital Object Identifier
-    * pmid        - PubMed ID
-    * wosid       - Web of Science UT fieldtag
+    * citations -- list of minimum meta_dict dictionaries for cited references.
+    * ayjid -- First author's name (last, fi), publication year, and journal.
+    * doi -- Digital Object Identifier
+    * pmid -- PubMed ID
+    * wosid -- Web of Science UT fieldtag
     
 Missing data here also results in the above keys being set to None.
 """
@@ -41,23 +40,28 @@ import re
 
 def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     """
-    .. function:: create_ayjid(aulast='', auinit='', date='', jtitle='', **kwargs)
-    
     Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid
     Returns 'Unknown paper' if all id components are missing (None).
     
-    Args:
-        Kwargs: A dictionary of keyword arguments. 
-        aulast (str): Author surname.
-        auinit (str): Author initial(s).
-        date (str): Four-digit year.
-        jtitle (str): Title of the journal.
+    Parameters
+    ----------
+    Kwargs : dict
+        A dictionary of keyword arguments.
+    aulast : string
+        Author surname.
+    auinit: string
+        Author initial(s).
+    date : string
+        Four-digit year.
+    jtitle : string
+        Title of the journal.
         
-    Returns:
-        str. Fuzzy identifier ayjid, or 'Unknown paper' if all id components are missing (None).
+    Returns
+    -------
+    ayj : string
+        Fuzzy identifier ayjid, or 'Unknown paper' if all id components are 
+        missing (None).
         
-    Raises:    
-        None.
     """
     if aulast is None:
         aulast = ''
@@ -84,23 +88,31 @@ def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
 
 def create_ainstid(aulast=None, auinit=None, addr1=None, addr2=None, country=None, **kwargs):
     """
-    This function is to create an fuzzy identifier ainstid
+    This function is to create an fuzzy identifier ainstid.
     Convert aulast, auinit, and jtitle into the fuzzy identifier ainstid.
     Returns 'Unknown Institution' if all id components are missing (None).
     
-    Args:
-        Kwargs: A dictionary of keyword arguments. 
-        aulast (str): Author surname.
-        auinit (str): Author initial(s).
-        address1 (str): Address of the Institution.
-        address2 (str): Address of the Institution.
-        country (str): country of affiliation
+    Parameters
+    ----------
+    Kwargs : dict
+        A dictionary of keyword arguments.
+    aulast : string
+        Author surname.
+    auinit : string
+        Author initial(s).
+    address1 : string
+        Address of the Institution.
+    address2 : string
+        Address of the Institution.
+    country : string
+        Country of affiliation
         
-    Returns:
-        str. Fuzzy identifier ainstid, or 'Unknown Institution' if all id components are missing (None).
+    Returns
+    -------
+    ainstid : string
+        Fuzzy identifier ainstid, or 'Unknown Institution' if all id components 
+        are missing (None).
         
-    Raises:    
-        None.
     """
     if aulast is None:
         aulast = ''
