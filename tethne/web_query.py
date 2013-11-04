@@ -4,7 +4,12 @@ import tethne.data_struct as ds
 
 def pubmed_pmid(pmid):
     """
-    Return XML from a query of PubMed's EFetch database for the pmid.
+    Get XML from a query of PubMed's EFetch database for the pmid.
+
+    Returns
+    -------
+    xml_string : string
+        Some XML.
 
     Notes
     -----
@@ -28,19 +33,23 @@ def crossref_meta(**kwargs):
     Query CrossRef with article metadata with the hope to find a DOI number 
     for that metadata in their system. 
     
-    Inputs
-    ------
-    * aulast -- first author's last name
-    * auinit -- first author's first initial
-    * atitle -- article title
-    * jtitle -- journal title or abbreviated title
-    * volume -- journal volume number
-    * issue -- journal issue number
-    * spage -- starting page of article in journal
-    * epage -- ending page of article in journal
-    * date -- article date of publication
+    Parameters
+    ----------
+    kwargs : list
+        * aulast -- first author's last name
+        * auinit -- first author's first initial
+        * atitle -- article title
+        * jtitle -- journal title or abbreviated title
+        * volume -- journal volume number
+        * issue -- journal issue number
+        * spage -- starting page of article in journal
+        * epage -- ending page of article in journal
+        * date -- article date of publication
 
-    Returns a DOI as a string
+    Returns
+    -------
+    doi : string
+        Returns a DOI as a string.
 
     Notes
     -----
