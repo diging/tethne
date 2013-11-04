@@ -33,7 +33,7 @@ def new_meta_dict():
     """
     meta_dict = {'aulast':None,
                  'auinit':None,
-                 'address':None, #added
+                 'institutions':None, #added
                  'atitle':None,
                  'jtitle':None,
                  'volume':None,
