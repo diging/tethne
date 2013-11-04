@@ -177,9 +177,10 @@ def parse_wos(filepath):
         #add value for the key to the wos_dict: the rest of the line
         try:
             if field_tag in ['AU', 'AF', 'CR','C1']: 
-                #these unique fields use the new line delimiter to distinguish
-                #their list elements below
-                #the field C1 can be either in multiple lines or in a single line- It is the address/institutions of the author.
+                # These unique fields use the new line delimiter to distinguish
+                # their list elements below.
+                # The field C1 can be either in multiple lines or in a single
+                # line -- It is the address/institutions of the author.
                 wos_dict[field_tag] += '\n' + str(line[3:])
             else:
                 wos_dict[field_tag] += ' ' + str(line[3:])
@@ -414,7 +415,8 @@ def wos2meta(wos_data):
                              meta_dict['date'], meta_dict['jtitle'])
         meta_dict['ayjid'] = ayjid
 
-        #Parse the C1 Field and create a fuzzy identifier for author co-institutions
+        # Parse the C1 Field and create a fuzzy identifier for author
+        # co-institutions.
         
         if wos_dict['C1'] is not None:
             aulast_list = []

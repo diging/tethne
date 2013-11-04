@@ -395,9 +395,38 @@ def nx_author_institution(meta_list):
     edges indicating affiliation. This may be slightly ambiguous for WoS data
     where num authors != num institutions.
     
+    Story #57746740
+    
+    Parameters
+    ----------
+    meta_list : list
+        A list of meta_dict dictionaries.
+    
+    Returns
+    -------
+    author_institution : networkx.DiGraph
+        A graph describing institutional affiliations of authors in the corpus.
+        
+    
+    
     """
+    
+    author_institution = nx.DiGraph(type='author_institution')
 
-    pass
+    for meta_dict in meta_list:
+        name_list = util.concat_list(meta_dict['aulast'],
+                                     meta_dict['auinit'],
+                                     ' ')
+        for i in xrange(len(name_list)):
+            name = name_list[i]
+            institution meta_dict['institution'][i]
+
+            # Create nodes
+            # Draw edges
+            # Add edge attributes
+
+    return author_institution
+
 
 def nx_author_coinstitution(meta_list,threshold):
     

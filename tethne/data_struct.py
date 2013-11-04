@@ -2,38 +2,37 @@
 def new_meta_dict():
     """
     Creates a Meta Dictionary of citation data values. 
-    This function has the most common values from citation data sources like WebOfScience,PubMed etc., 
+    This function has the most common values from citation data sources like WebOfScience,PubMed etc.,
     
-    Args:
-        None.
-    
-    Returns:
+    Returns
+    --------
+    meta_list : list
         A meta_list dictionary with 'None' as default values.
     
-    Raises:
-        None.
-        
-    aulast  - authors' last name as a list
-    auinit  - authors' first initial as a list
-    atitle  - article title
-    jtitle  - journal title or abbreviated title
-    volume  - journal volume number
-    issue   - journal issue number
-    spage   - starting page of article in journal
-    epage   - ending page of article in journal
-    date    - article date of publication
-    citations   - a list of minimum meta_dict dictionaries for cited references
-    ayjid       - First author's last name, initial the publication year and
-                  the journal published in
-
-    doi         - Digital Object Identifier 
-    pmid        - PubMed ID
-    wosid       - Web of Science UT fieldtag
+    Notes
+    -----
+    * aulast -- authors' last name as a list.
+    * auinit -- authors' first initial as a list.
+    * institution -- institutions with which the authors are affiliated.
+    * atitle -- article title
+    * jtitle -- journal title or abbreviated title
+    * volume -- journal volume number
+    * issue -- journal issue number
+    * spage -- starting page of article in journal
+    * epage -- ending page of article in journal
+    * date -- article date of publication
+    * country -- country with which the authors are affiliated.
+    * citations -- a list of minimum meta_dict dictionaries for cited references
+    * ayjid -- First author's last name, initial the publication year and the 
+        journal published in
+    * doi -- Digital Object Identifier 
+    * pmid -- PubMed ID
+    * wosid -- Web of Science UT fieldtag
     
     """
     meta_dict = {'aulast':None,
                  'auinit':None,
-                 'address':None, #added
+                 'institution':None, #
                  'atitle':None,
                  'jtitle':None,
                  'volume':None,
@@ -41,13 +40,9 @@ def new_meta_dict():
                  'spage':None,
                  'epage':None,
                  'date':None,
-                 'citations':None, 
-                 'addr1':None, #added
-                 'country':None, #added
-                 'addr2':None, #added
-                 'addr3':None,#added
+                 'citations':None,
+                 'country':None, #
                  'ayjid':None,
-                 'auth_ins':None,#added author affiliation ID
                  'doi':None,
                  'pmid':None,
                  'wosid':None}
