@@ -440,7 +440,7 @@ def wos2meta(wos_data):
                     #convert to string
                     authors_name_str = ''.join(m for m in match)
                     split_name_tokens = authors_name_str.split(';')
-                    print '\n split_name_tokens : ', split_name_tokens.
+                    print '\n split_name_tokens : ', split_name_tokens
                     
                     #go for the remaining string in the C1 field and try extracting the institutions.
                     remaining_str = ''.join(m for m in authors_inst_list[1])
