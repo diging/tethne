@@ -377,7 +377,7 @@ def wos2meta(wos_data):
     #handle dict inputs by converting to a 1-item list
     if type(wos_data) is dict:
         wos_data = [wos_data]
-
+        print 'wos data \n' , wos_data
     #define the direct relationships between WoS fieldtags and meta_dict keys
     translator = ds.wos2meta_map()
     
@@ -420,41 +420,69 @@ def wos2meta(wos_data):
             aulast_list = []
             auinit_list = []
             
-            # Need to put the '[ ] ' wildcard match which is implemented in Ipython Notebook
-            
+            #Split the authors, their affiliations 
+            #C1 [Galar, Mike; Barrenechea, Edurne] Univ Publ Navarra, Dept Automat & Comp, Pamplona 31006, Spain.
+
             for name in wos_dict['C1']:
-                name_tokens = name.split(',')
-                print 'name_tokens in wos_meta \n :' , name_tokens , '\n name :' , name 
-                
+                print '\n name :' , name 
                 p = re.compile('\[(.*?)\]')
                 #match=p.findall("[Modis, Konstantinos] Natl Tech Univ Athens, Sch Min & Met Engn, Athens, Greece.[Vatalis, Konstantinos I.] Technol Educ Inst Western Macedonia, Dept Geotechnol & Environm Engn, Koila Kozani GREECE, Greece.")
                 match=p.findall(name)
                 if match : 
-                    print "match  found", match
-                    #auinit1 = match[1].upper().strip()
-                    #print 'auinit1' , auinit1
+                    print " \n match  found : ", match
+                    name_tokens = ''.join(m for m in match)
+                    split_name_tokens = name_tokens.split(';')
+                    print '\n split_name : ', split_name_tokens
+                    print type(split_name_tokens)
+                    aulast = split_name_tokens[0].upper().strip()
+                    print '\n aulast :' , aulast
+                    meta_dict['addr1'] = 'ASU'
+                    meta_dict['country'] = 'USA'
+#                   
+                    
+                    #commented code
+                    #tmp_list= name.split(']')
+                    #list_with_no_splchars = [w.strip('[') for w in tmp_list]
+                   
+                    #splitting into single words
+                    #split_list = re.findall(r"[\w']+", name)
+                    #print 'split_list', split_list 
+                    #name_tokens = name.split(',')
+                    #name_tokens1=str(list_with_no_splchars[:1]).split(';')
+                    #name_tokens1=list_with_no_splchars[:1]
+                    #print type(name_tokens1)
+                    #print 'name_tokens in wos_meta \n :' , name_tokens1 
+                    #commnted code
+                    
+                
                 else :
-                    print "match  not found", match    
-#                 aulast = name_tokens[0].upper().strip()
+                    print "match  not found", match 
+                    #No authors specified in the C1 field   
+                    aulast =""
+                    meta_dict['addr1'] = 'CMU'
+                    meta_dict['country'] = 'Pittsburgh'
+#                   
                 try:
                     # 1 for 'aulast, aufirst'
-                    auinit1 = match[1].upper().strip()
-                    print 'auinit1' , auinit1
-                    #auinit = name_tokens[1][1].upper().strip()
-                    #print auinit 
-                    
+                    #auinit = split_name_tokens[0][1].upper().strip()
+                    #print 'auinit' , auinit
+                    pass
                 except IndexError:
                     # then no first initial character
                     # preserve parallel name lists with empty string
                     auinit = ''
-                aulast_list.append(aulast)
-                auinit_list.append(auinit)
-                meta_dict['aulast'] = aulast_list
-                meta_dict['auinit'] = auinit_list
-                print "meta_dict is ", meta_dict
-            #construct a fuzzy identifier
+                    
+            aulast_list.append(aulast)
+            auinit_list.append(auinit)
+            meta_dict['aulast'] = aulast_list
+            meta_dict['auinit'] = auinit_list                
+            print "meta_dict is ", meta_dict
+        
+            
+        #construct a fuzzy identifier affliation identifier
         affid = create_ayjid(meta_dict['aulast'], meta_dict['auinit'], 
-                                    meta_dict['date'], meta_dict['jtitle'])
+                                    meta_dict['addr1'], meta_dict['country'])
+        print 'affid', affid
         meta_dict['affid'] = affid
         print "meta_dict is ", meta_dict
 
@@ -463,7 +491,7 @@ def wos2meta(wos_data):
             meta_cr_list = []
             for ref in wos_dict['C1']:
                 meta_cr_list.append(parse_cr(ref))
-                print 'meta_cr_list' , meta_cr_list
+                #print 'meta_cr_list' , meta_cr_list
             meta_dict['citations'] = meta_cr_list
             
         #convert C1 references into meta_dict format

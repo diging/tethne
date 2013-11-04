@@ -301,15 +301,18 @@ def nx_author_coupling(doc_list, threshold, node_id, *node_attribs):
        
     """
     acoupling = nx.Graph(type='author_coupling')
+    
+    
 
     for i in xrange(len(doc_list)):
         #define last name first initial name lists for each document
         name_list_i = util.concat_list(doc_list[i]['aulast'],
                                        doc_list[i]['auinit'], 
                                        ' ')
-
+        
         #create nodes
         node_attrib_dict = util.subdict(doc_list[i], node_attribs)
+        
         acoupling.add_node(doc_list[i][node_id], node_attrib_dict)
 
         for j in xrange(i+1, len(doc_list)):
@@ -324,10 +327,12 @@ def nx_author_coupling(doc_list, threshold, node_id, *node_attribs):
 
             #draw edges as appropriate
             overlap = util.overlap(name_list_i, name_list_j)
+            
             if len(overlap) >= threshold:
-                acoupling.add_edge(doc_list[i][node_id], 
+                a= acoupling.add_edge(doc_list[i][node_id], 
                                    doc_list[j][node_id],
                                    overlap=len(overlap))
+                print ' final :' , a
 
     return acoupling 
 
@@ -394,12 +399,36 @@ def nx_author_institution(meta_list):
 
     pass
 
-def nx_author_coinstitution(meta_list,*args):
+def nx_author_coinstitution(meta_list,threshold):
     
     """
     Create a graph with people as vertices, and edges indicating affiliation
     with the same institution. This may be slightly ambiguous for WoS data
     where num authors != num institutions.
+    
+    
+    Nodes           - Authors
+    Node attributes - affiliation ID (fuzzy identifier)
+    Edges           - (a, b) if a and b are share the same affiliated institution 
+                      the meta_list
+                      (a, b) if a and b are share the same affiliated country 
+                      the meta_list
+                      
+                      
+    Edge attributes - 'weight' the count of shared  institutions, shared country between 2 authors that would cause an
+                       edge to be drawn between a and b
+                      
+    Args:
+        meta_list : a list of wos_objects.
+        threshold : A random value provided by the user. If its greater than zero two nodes 
+                    should share something common.
+        
+    Returns: 
+        A coinstitution network.
+    
+    Raises:
+        None.                     
+                   
     
     """
     coinstitution = nx.Graph(type='author_coinstitution')
@@ -413,14 +442,14 @@ def nx_author_coinstitution(meta_list,*args):
                                                institution['auinit'],
                                                institution['country'])
                 num_authors = len(author_list)
-                for i in xrange(num_authors):                           # writing the code .
-                    coinstitution.add_node(author_list[i])
+                for i in xrange(num_authors):                           
+                    coinstitution.add_node(author_list[i])              #add node attributes
                     for j in xrange(i+1, num_authors):
                         try:
                             coinstitution[author_list[i]][author_list[j]]['weight'] += 1
                         except KeyError:
-                            # then edge doesnt yet exist
-                            cocitation.add_edge(author_list[i], author_list[j],
+                            # then edge doesn't yet exist
+                            cocitation.add_edge(author_list[i], author_list[j],   #add edge attributes
                                                 {'weight':1})
     
     return cocitation

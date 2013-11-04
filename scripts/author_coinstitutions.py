@@ -1,10 +1,10 @@
 import tethne.readers as rd
-filepath = "/Users/ramki/tethne/tethne/testsuite/testin/tissues.txt"
+filepath = "/Users/ramki/tethne/tethne/testsuite/testin/instituitions_2_types_input.txt"
 wos_list = rd.parse_wos(filepath)
 
 for wos in wos_list:
     print wos,'\n'
-
+print ' am done '
 meta_list=rd.wos2meta(wos_list)    
 
 for meta in meta_list:

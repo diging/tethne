@@ -47,7 +47,7 @@ def new_meta_dict():
                  'addr2':None, #added
                  'addr3':None,#added
                  'ayjid':None,
-                 'ainstid':None,#added author affiliation ID
+                 'auth_ins':None,#added author affiliation ID
                  'doi':None,
                  'pmid':None,
                  'wosid':None}
