@@ -149,7 +149,7 @@ def parse_wos(filepath):
     #define special key handling
     paper_start_key = 'PT'
     paper_end_key = 'ER'
-    print 'comes in readers.parsewos - V6'
+    print 'comes in readers.parsewos - V5'
     #try to read filepath
     line_list = []
     with open(filepath,'r') as f:
@@ -201,13 +201,13 @@ def parse_wos(filepath):
     
     #and convert the data at those keys into lists
     for wos_dict in wos_list:
-        #print 'wos_dict is \n',wos_dict
+        print 'wos_dict is \n',wos_dict
         for key in list_keys:
             delim = delims[key]
-            #print 'delim is\n' , delim
+            print 'delim is\n' , delim
             try:
                 key_contents = wos_dict[key]
-                #print 'key_contents is \n ' , key_contents
+                print 'key_contents is \n ' , key_contents
                 if delim != '\n':
                     wos_dict[key] = key_contents.split(delim)
                 else:
@@ -408,7 +408,7 @@ def wos2meta(wos_data):
                 auinit_list.append(auinit)
             meta_dict['aulast'] = aulast_list
             meta_dict['auinit'] = auinit_list
-            
+
         #construct ayjid
         ayjid = create_ayjid(meta_dict['aulast'], meta_dict['auinit'], 
                              meta_dict['date'], meta_dict['jtitle'])
@@ -417,98 +417,74 @@ def wos2meta(wos_data):
         #Parse the C1 Field and create a fuzzy identifier for author co-institutions
         
         if wos_dict['C1'] is not None:
-            
             aulast_list = []
             auinit_list = []
-            remaining_list=[]
-            institutions_list=[]
             
             #Split the authors, their affiliations 
             #C1 [Galar, Mike; Barrenechea, Edurne] Univ Publ Navarra, Dept Automat & Comp, Pamplona 31006, Spain.
 
-            for c1_str in wos_dict['C1']:
-                print 'c1_str' , c1_str
-                pattern = re.compile('\[(.*?)\]')
-                match=pattern.findall(c1_str)
-                
-                
+            for name in wos_dict['C1']:
+                print '\n name :' , name 
+                p = re.compile('\[(.*?)\]')
+                #match=p.findall("[Modis, Konstantinos] Natl Tech Univ Athens, Sch Min & Met Engn, Athens, Greece.[Vatalis, Konstantinos I.] Technol Educ Inst Western Macedonia, Dept Geotechnol & Environm Engn, Koila Kozani GREECE, Greece.")
+                match=p.findall(name)
                 if match : 
                     print " \n match  found : ", match
-                    authors_inst_list=c1_str.split("]")
-                    print 'authors_inst_list:' ,authors_inst_list , 'match' , match
+                    name_tokens = ''.join(m for m in match)
+                    split_name_tokens = name_tokens.split(';')
+                    print '\n split_name : ', split_name_tokens
+                    print type(split_name_tokens)
+                    aulast = split_name_tokens[0].upper().strip()
+                    print '\n aulast :' , aulast
+                    meta_dict['addr1'] = 'ASU'
+                    meta_dict['country'] = 'USA'
+#                   
                     
-                    #convert to string
-                    authors_name_str = ''.join(m for m in match)
-                    split_name_tokens = authors_name_str.split(';')
-                    print '\n split_name_tokens : ', split_name_tokens.
+                    #commented code
+                    #tmp_list= name.split(']')
+                    #list_with_no_splchars = [w.strip('[') for w in tmp_list]
+                   
+                    #splitting into single words
+                    #split_list = re.findall(r"[\w']+", name)
+                    #print 'split_list', split_list 
+                    #name_tokens = name.split(',')
+                    #name_tokens1=str(list_with_no_splchars[:1]).split(';')
+                    #name_tokens1=list_with_no_splchars[:1]
+                    #print type(name_tokens1)
+                    #print 'name_tokens in wos_meta \n :' , name_tokens1 
+                    #commnted code
                     
-                    #go for the remaining string in the C1 field and try extracting the institutions.
-                    remaining_str = ''.join(m for m in authors_inst_list[1])
-                    list_of_remaining_strings= remaining_str.split(',')
-                    institution=list_of_remaining_strings[0]
-                    print  'institution' , institution 
-                    
-                    # mapping authors with Institutions.
-                    #authors - key ; instiutions - a list of institutions
-                    inst_dict = dict()
-                    for each_author in split_name_tokens:
-                        inst_dict[each_author]= institution;
-                            
-                       
-                    for key,val in inst_dict.iteritems():
-                        print 'inst_dict:' , inst_dict   
+                
                 else :
                     print "match  not found", match 
-                    #No authors specified in the C1 field
-                    #Create the author : institutions dictionary using the 'AU' field (authors)  : C1 field (institutions only)   
-                
-                    c1_list=c1_str.split(',')
-                    institution=c1_list[0]
-                    print  'institution in else part :' , institution 
+                    #No authors specified in the C1 field   
+                    aulast =""
+                    meta_dict['addr1'] = 'CMU'
+                    meta_dict['country'] = 'Pittsburgh'
+#                   
+                try:
+                    # 1 for 'aulast, aufirst'
+                    #auinit = split_name_tokens[0][1].upper().strip()
+                    #print 'auinit' , auinit
+                    pass
+                except IndexError:
+                    # then no first initial character
+                    # preserve parallel name lists with empty string
+                    auinit = ''
                     
-                    
-                    for name in wos_dict['AU']:
-                        name_tokens = name.split(',')
-                        aulast = name_tokens[0].upper().strip()
-                        try:
-                            # 1 for 'aulast, aufirst'
-                            auinit = name_tokens[1][1].upper().strip() 
-                        except IndexError:
-                            # then no first initial character
-                            # preserve parallel name lists with empty string
-                            auinit = ''
-                            
-                    #combine the author first names and last names         
-                        aulast_list.append(aulast)
-                        auinit_list.append(auinit)
-                        split_name_tokens=aulast_list+auinit_list # combined author name list
-                        
-                    # mapping authors with Institutions.
-                    #authors - key ; instiutions - a list of institutions
-                    inst_dict = dict()
-                    for each_author in split_name_tokens:
-                        inst_dict[each_author]= institution;
-                         
-                    for key,val in inst_dict.iteritems():
-                        print 'inst_dict in else:' , inst_dict   
-                   
-              
-                    
-            #aulast_list.append(aulast)
-            #auinit_list.append(auinit)
-            #institutions_list.append(institution)
-            #meta_dict['aulast'] = aulast_list
-            #meta_dict['auinit'] = auinit_list
-            meta_dict['address'] = institutions_list                
+            aulast_list.append(aulast)
+            auinit_list.append(auinit)
+            meta_dict['aulast'] = aulast_list
+            meta_dict['auinit'] = auinit_list                
             print "meta_dict is ", meta_dict
         
             
         #construct a fuzzy identifier affliation identifier
-        #affid = create_ayjid(meta_dict['aulast'], meta_dict['auinit'], 
-                            #  meta_dict['addr1'], meta_dict['country'])
-        #print 'affid', affid
-        #meta_dict['affid'] = affid
-        #print "meta_dict is ", meta_dict
+        affid = create_ayjid(meta_dict['aulast'], meta_dict['auinit'], 
+                                    meta_dict['addr1'], meta_dict['country'])
+        print 'affid', affid
+        meta_dict['affid'] = affid
+        print "meta_dict is ", meta_dict
 
         #convert CR references into meta_dict format
         if wos_dict['CR'] is not None:
@@ -519,12 +495,12 @@ def wos2meta(wos_data):
             meta_dict['citations'] = meta_cr_list
             
         #convert C1 references into meta_dict format
-        #if wos_dict['C1'] is not None:
-         #   meta_addr_list = []
-          #  for ref in wos_dict['C1']:
-           #     print "411 " , ref
-            #    meta_addr_list.append(parse_institutions(ref))
-            # meta_dict['address'] = meta_addr_list    
+        if wos_dict['C1'] is not None:
+            meta_addr_list = []
+            for ref in wos_dict['C1']:
+                print "411 " , ref
+                meta_addr_list.append(parse_institutions(ref))
+            meta_dict['address'] = meta_addr_list    
             
 
         wos_meta.append(meta_dict)
