@@ -207,7 +207,7 @@ def parse_wos(filepath):
                 wos_dict[field_tag] += '\n' + str(line[3:])
             else:
                 wos_dict[field_tag] += ' ' + str(line[3:])
-        except (KeyError, TypeError):
+        except (KeyError, TypeError,UnboundLocalError):
             #key didn't exist already, can't append but must create
             wos_dict[field_tag] = str(line[3:])
 
@@ -473,12 +473,13 @@ def wos2meta(wos_data):
             auinit_list = []
             remaining_list=[]
             institutions_list=[]
+            inst_dict = dict()
             
             #Split the authors, their affiliations 
             #C1 [Galar, Mike; Barrenechea, Edurne] Univ Publ Navarra, Dept Automat & Comp, Pamplona 31006, Spain.
 
             for c1_str in wos_dict['C1']:
-                print 'c1_str' , c1_str
+                print '\n c1_str :' , c1_str
                 pattern = re.compile('\[(.*?)\]')
                 match=pattern.findall(c1_str)
                 
@@ -489,33 +490,36 @@ def wos2meta(wos_data):
                     print 'authors_inst_list:' ,authors_inst_list , 'match' , match
                     
                     #convert to string
-                    authors_name_str = ''.join(m for m in match)
-                    split_name_tokens = authors_name_str.split(';')
-                    print '\n split_name_tokens : ', split_name_tokens
+                    authors_name_str = ''.join(m.strip() for m in match)
+                    authors_list     = authors_name_str.strip().split(';')
+                    print '\n split_name_tokens : ', authors_list
                     
                     #go for the remaining string in the C1 field and try extracting the institutions.
-                    remaining_str = ''.join(m for m in authors_inst_list[1])
+                    remaining_str = ''.join(m.strip() for m in authors_inst_list[1])
                     list_of_remaining_strings= remaining_str.split(',')
-                    institution=list_of_remaining_strings[0]
-                    print  'institution' , institution 
+                    institutions_list=list_of_remaining_strings[0]
+                    print  'institution' , institutions_list, type(institutions_list)
                     
                     # mapping authors with Institutions.
                     #authors - key ; instiutions - a list of institutions
-                    inst_dict = dict()
-                    for each_author in split_name_tokens:
-                        inst_dict[each_author]= institution;
+                    
+                    
+                    
+                    #inst_dict = dict()
+                    #for each_author in authors_list:
+                     #   inst_dict[each_author]= institution;
                             
                        
-                    for key,val in inst_dict.iteritems():
-                        print 'inst_dict:' , inst_dict   
+                    #for key,val in inst_dict.iteritems():
+                     #   print '\n inst_dict:' , inst_dict   
                 else :
-                    print "match  not found", match 
+                    print "\n match  not found", match 
                     #No authors specified in the C1 field
                     #Create the author : institutions dictionary using the 'AU' field (authors)  : C1 field (institutions only)   
                 
                     c1_list=c1_str.split(',')
                     institution=c1_list[0]
-                    print  'institution in else part :' , institution 
+                    print  '\n institution in else part :' , institution 
                     
                     
                     for name in wos_dict['AU']:
@@ -536,22 +540,38 @@ def wos2meta(wos_data):
                         
                     # mapping authors with Institutions.
                     #authors - key ; instiutions - a list of institutions
-                    inst_dict = dict()
-                    for each_author in split_name_tokens:
-                        inst_dict[each_author]= institution;
+                   # inst_dict = dict()
+                   # for each_author in split_name_tokens:
+                    #    inst_dict[each_author]= institution;
                          
-                    for key,val in inst_dict.iteritems():
-                        print 'inst_dict in else:' , inst_dict   
+                    #for key,val in inst_dict.iteritems():
+                     #   print '\n inst_dict in else:' , inst_dict   
                    
               
+            #trying eric's idea
+            try:
+                
+                print '\n Comes in try block'
+                for each_author in authors_list:
+                    for ins in institutions_list:
+                        print 'each_author', each_author , 'ins' , ins
+                        inst_dict[each_author].append(ins)
+                        
                     
+            except KeyError:
+                print '\n comes in catch block'        
+                inst_dict[each_author]= ins
+                       
+           
+            for key,val in inst_dict.iteritems():
+                     print  'inst_dict:', inst_dict            
             #aulast_list.append(aulast)
             #auinit_list.append(auinit)
             #institutions_list.append(institution)
             #meta_dict['aulast'] = aulast_list
             #meta_dict['auinit'] = auinit_list
-            meta_dict['address'] = institutions_list                
-            print "meta_dict is ", meta_dict
+            #meta_dict['address'] = institutions_list                
+            #print "meta_dict is ", meta_dict
         
             
         #construct a fuzzy identifier affliation identifier
