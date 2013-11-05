@@ -42,6 +42,7 @@ erick [dot] peirson [at] asu [dot] edu
 ## Contributors
 * [erickpeirson](http://github.com/erickpeirson)
 * [aabaker99](http://github.com/aabaker99)
+* [rsubra13](http://github.com/rsubra13)
 
 ## Contributing // To Do
 * Complete test cases for the other networks in the form of those for the citations network.
