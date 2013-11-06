@@ -1,6 +1,5 @@
-﻿FN Thomson Reuters Web of Knowledge
+FN Thomson Reuters Web of Knowledge
 VR 1.0
-
 PT J
 AU Wu, ZD
    Xu, GD
