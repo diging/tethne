@@ -9,47 +9,92 @@ import os.path
 class Testwos2meta(unittest.TestCase):
 
     def setUp(self):
-       filepath = '/Users/ramki/tethne/tethne/testsuite/testin/semantic_web.txt' 
+       filepath =  "/Users/ramki/tethne/tethne/testsuite/testin/authorinstitution_testrecords.txt" 
        self.wos_list  = rd.parse_wos(filepath)
-       self.meta_list = rd.wos2meta(self.wos_list)
-       
-       
+       self.meta_list = rd.wos2meta(self.wos_list) 
     
     def test_institutions_1(self):
         # define expected values for C1 meta_dict key
-        # citations left out for front matter test
-        expected_dict = {'institutions': {  'ZHANG, YC': ['Victoria Univ'], 
-                                            'WU, ZD': ['Wenzhou Univ', 'Univ Sci & Technol China'],   
-                                            'LU, CL': ['Wenzhou Univ', 'Northwestern Polytech Univ'], 
-                                            'CHEN, EH': ['Univ Sci & Technol China'],
-                                            'ZHANG, H': ['Inst Sci & Technol Informat Zhejiang Prov'], 
-                                            'XU, GD': ['Univ Technol Sydney']}
-                        }
         
-        input_dict = {'C1': ['[Wu, Zongda; Lu, Chenglang] Wenzhou Univ, Wenzhou 325035, Peoples R China.', 
-                             '[Wu, Zongda; Chen, Enhong] Univ Sci & Technol China, Hefei 230026, Anhui, Peoples R China.', 
-                             '[Xu, Guandong] Univ Technol Sydney, Sydney, NSW 2007, Australia.', 
-                             '[Lu, Chenglang] Northwestern Polytech Univ, Xian 710072, Peoples R China.', 
-                             '[Zhang, Yanchun] Victoria Univ, Melbourne, Vic 8001, Australia.', 
-                             '[Zhang, Hong] Inst Sci & Technol Informat Zhejiang Prov, Hangzhou 310006, Zhejiang, Peoples R China.']
-                    }
+        # testing the overlapping of authors - whether append works correctly or not
         
-        #assign obtained dict
-        for key,val in self.meta_list[]:
+        institutions = self.meta_list[0]['institutions']
+        
+        expected_dict1 = [{'ZHANG, YC': ['Victoria Univ'],
+                                             'WU, ZD': ['Wenzhou Univ', 'Univ Sci & Technol China'],
+                                             'LU, CL': ['Wenzhou Univ', 'Northwestern Polytech Univ'],
+                                             'CHEN, EH': ['Univ Sci & Technol China'],
+                                             'ZHANG, H': ['Inst Sci & Technol Informat Zhejiang Prov'],
+                                             'XU, GD': ['Univ Technol Sydney']}
+                        ]
+      
+         
+        #Check if the expected and resulted 'institutions' field are the same.
+        
+        self.assertListEqual(self.resulted_list, expected_dict1,"Not equal")
             
+            
+       # writing the remaining tests.     
         
+    def test_institutions_2(self):
+        # define expected values for C1 meta_dict key
         
-        #for i in len(self.meta_list):
-        #    obtained_dict = self.meta_list[i].index('institutions')
-        #for key in expected.iterkeys():
-         #   self.assertEqual(expected[key], obtained[key])
-
-    def test_sample1_back(self):
-        pass
-
-    def test_sample2_result(self):
-        pass
-
+        # testing the overlapping of authors - whether append works correctly or not
+        
+        institutions = self.meta_list[1]['institutions']
+        
+        expected_dict1 = [{'ZHANG, YC': ['Victoria Univ'],
+                                             'WU, ZD': ['Wenzhou Univ', 'Univ Sci & Technol China'],
+                                             'LU, CL': ['Wenzhou Univ', 'Northwestern Polytech Univ'],
+                                             'CHEN, EH': ['Univ Sci & Technol China'],
+                                             'ZHANG, H': ['Inst Sci & Technol Informat Zhejiang Prov'],
+                                             'XU, GD': ['Univ Technol Sydney']}
+                        ]
+      
+        
+        #Check if the expected and resulted 'institutions' field are the same.
+        
+        self.assertListEqual(self.resulted_list, expected_dict1,"Not equal")
+   
+    def test_institutions_3(self):
+        # define expected values for C1 meta_dict key
+        # testing the overlapping of authors - whether append works correctly or not
+        
+        institutions = self.meta_list[2]['institutions']
+        
+        expected_dict1 = [{'ZHANG, YC': ['Victoria Univ'],
+                                             'WU, ZD': ['Wenzhou Univ', 'Univ Sci & Technol China'],
+                                             'LU, CL': ['Wenzhou Univ', 'Northwestern Polytech Univ'],
+                                             'CHEN, EH': ['Univ Sci & Technol China'],
+                                             'ZHANG, H': ['Inst Sci & Technol Informat Zhejiang Prov'],
+                                             'XU, GD': ['Univ Technol Sydney']}
+                        ]
+      
+        
+        #Check if the expected and resulted 'institutions' field are the same.
+        
+        self.assertListEqual(self.resulted_list, expected_dict1,"Not equal")
+   
+    def test_institutions_4(self):
+        # define expected values for C1 meta_dict key
+        
+        # testing the overlapping of authors - whether append works correctly or not
+        
+        institutions = self.meta_list[3]['institutions']
+        
+        expected_dict1 = [{'ZHANG, YC': ['Victoria Univ'],
+                                             'WU, ZD': ['Wenzhou Univ', 'Univ Sci & Technol China'],
+                                             'LU, CL': ['Wenzhou Univ', 'Northwestern Polytech Univ'],
+                                             'CHEN, EH': ['Univ Sci & Technol China'],
+                                             'ZHANG, H': ['Inst Sci & Technol Informat Zhejiang Prov'],
+                                             'XU, GD': ['Univ Technol Sydney']}
+                        ]
+      
+        
+        #Check if the expected and resulted 'institutions' field are the same.
+        
+        self.assertListEqual(self.resulted_list, expected_dict1,"Not equal")
+   
     def tearDown(self):
         pass
 
