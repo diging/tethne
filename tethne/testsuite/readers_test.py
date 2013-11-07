@@ -35,7 +35,7 @@ class Testwos2meta(unittest.TestCase):
                     }
         
         #assign obtained dict
-        for key,val in self.meta_list[]:
+        #for key,val in self.meta_list[]:
             
         
         

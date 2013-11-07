@@ -1,4 +1,6 @@
-﻿PT J
+FN Thomson Reuters Web of Knowledge
+VR 1.0
+PT J
 AU Tuerhong, G
    Kim, SB
    Kang, P

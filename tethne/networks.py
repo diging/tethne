@@ -1,5 +1,5 @@
 """
-Each network relies on certain meta data in the meta_dict associated with
+Each network relies on certain meta data in the :class:`.Paper` associated with
 each document. Often we wish to construct a network with nodes representing
 these documents and edges representing relationships between those documents,
 but this is not always the case.
@@ -11,20 +11,21 @@ such as the Web of Science, wosid is most appropriate. If not, using doi
 will result in a more accurate, but also more sparse network; while ayjid 
 will result in a less accurate, but more complete network.
 
-Any type of meta data from the meta_dict may be used as an identifier, however.
+Any type of meta data from the :class:`.Paper` may be used as an identifier, 
+however.
 
 We use "head" and "tail" nomenclature to refer to the members of a directed
 edge (x,y), x -> y, xy, etc. by calling x the "tail" and y the "head"
 """
 import networkx as nx
 import utilities as util
-import data_struct as ds
+import data as ds
 
 def nx_citations(doc_list, node_id, *node_attribs):
     """
     Create a NetworkX directed graph based on citation records.
     
-    **Nodes** -- documents represented by the value of meta_dict[node_id].
+    **Nodes** -- documents represented by the value of :class:`.Paper` [node_id].
     
     **Edges** -- from one document to its citation.
     
@@ -33,10 +34,10 @@ def nx_citations(doc_list, node_id, *node_attribs):
     Parameters
     ----------
     doc_list : list
-        A list of :py:func:`meta_dicts <tethne.data_struct.new_meta_dict>`.
+        A list of :class:`.Paper` instances.
         
     node_id : int
-        A key from meta_dict to identify the nodes.
+        A key from :class:`.Paper` to identify the nodes.
         
     node_attribs : list
         List of user provided optional arguments apart from the provided 
@@ -57,15 +58,16 @@ def nx_citations(doc_list, node_id, *node_attribs):
     Notes
     -----
     Should we allow for node attribute definition?
-    Perhaps a function that makes use of the meta_dict keys and produces
+    Perhaps a function that makes use of the :class:`.Paper` keys and produces
     an edge_attribute value is in order, similar to the bibliographic
     coupling networks.
     """
     citation_network = nx.DiGraph(type='citations')
     citation_network_internal = nx.DiGraph(type='citations')
 
-    #check general node_id validity
-    meta_keys = ds.new_meta_dict().keys()
+    # Check node_id validity.
+    meta_dict = ds.Paper()
+    meta_keys = meta_dict.keys()
     if node_id not in meta_keys:
         raise KeyError('node_id:' + node_id + 'is not in the set of' +
                        'meta_keys')
@@ -131,7 +133,7 @@ def nx_author_papers(doc_list, paper_id, *paper_attribs):
     doc_list : list
         A list of wos_objects.
     paper_id : string
-        A key from meta_dict, used to identify the nodes.
+        A key from :class:`.Paper` used to identify the nodes.
     paper_attribs : list
         List of user-provided optional arguments apart from the provided 
         positional arguments. 
@@ -148,27 +150,28 @@ def nx_author_papers(doc_list, paper_id, *paper_attribs):
     """
     author_papers = nx.DiGraph(type='author_papers')
 
-    #validate paper_id
-    meta_keys = ds.new_meta_dict().keys()
+    # Validate paper_id.
+    meta_dict = ds.Paper()
+    meta_keys = meta_dict.keys()
     meta_keys.remove('citations')
     if paper_id not in meta_keys:
         raise KeyError('paper_id' + paper_id + ' cannot be used to identify' +
                        ' papers.')
 
     for entry in doc_list:
-        #define paper_attribute dictionary
+        # Define paper_attribute dictionary.
         paper_attrib_dict = util.subdict(entry, paper_attribs)
         paper_attrib_dict['type'] = 'paper'
 
-        #add paper node with attributes
+        # Add paper node with attributes.
         author_papers.add_node(entry[paper_id], paper_attrib_dict)
                                
         authors = util.concat_list(entry['aulast'], entry['auinit'], ' ')
         for i in xrange(len(authors)):
-            #add person node
+            # Add person node.
             author_papers.add_node(authors[i], type="person")
 
-            #draw edges
+            # Draw edges.
             author_papers.add_edge(authors[i], entry[paper_id],
                                    date=entry['date'])
 
@@ -190,7 +193,7 @@ def nx_coauthors(doc_list, *edge_attribs):
     doc_list : list
         A list of wos_objects.
     edge_attribs : list
-        List of edge_attributes specifying which meta_dict keys (from the 
+        List of edge_attributes specifying which :class:`.Paper` keys (from the 
         co-authored paper) to use as edge attributes.
         
     Returns
@@ -234,7 +237,7 @@ def nx_biblio_coupling(doc_list, citation_id, threshold, node_id,
     Generate a bibliographic coupling network.
     
     **Nodes** -- papers represented by node_id and node attributes defined by
-    node_attribs (in meta_dict keys).
+    node_attribs (in :class:`.Paper` keys).
     
     **Edges** -- (a,b) \in E(G) if a and b share x citations where x >= 
     threshold.
@@ -247,13 +250,14 @@ def nx_biblio_coupling(doc_list, citation_id, threshold, node_id,
     doc_list : list
         A list of wos_objects.
     citation_id: string
-        A key from meta_dict to identify the citation overlaps.
+        A key from :class:`.Paper` to identify the citation overlaps.
     threshold : int
         Minimum number of shared citations to consider two papers "coupled".
     node_id : string
-        Field in meta_dict used to identify the nodes.
+        Field in :class:`.Paper` used to identify the nodes.
     node_attribs : list
-        List of fields in meta_dict to include as node attributes in graph.
+        List of fields in :class:`.Paper` to include as node attributes in 
+        graph.
         
     Returns
     -------
@@ -272,8 +276,9 @@ def nx_biblio_coupling(doc_list, citation_id, threshold, node_id,
     
     bcoupling = nx.Graph(type='biblio_coupling')
 
-    #validate identifiers
-    meta_keys = ds.new_meta_dict().keys()
+    # Validate identifiers.
+    meta_dict = ds.Paper()
+    meta_keys = meta_dict.keys()
     if node_id not in meta_keys:
         raise KeyError('node_id' + node_id + ' is not a meta_dict key.')
 
@@ -333,9 +338,9 @@ def nx_author_coupling(doc_list, threshold, node_id, *node_attribs):
         Minimum number of co-citations required to draw an edge between two
         authors.
     node_id : string
-        Field in meta_dict used to identify nodes.    
+        Field in :class:`.Paper` used to identify nodes.    
     node_attribs : list
-        List of fields in meta_dict to include as node attributes in graph.
+        List of fields in :class:`.Paper` to include as node attributes in graph.
         
     Returns
     -------
@@ -400,7 +405,7 @@ def nx_author_cocitation(meta_list, threshold):
     Parameters
     ----------
     meta_list : list
-        a list of wos_objects.
+        a list of :class:`.Paper` objects.
         
     threshold : int
         A random value provided by the user. If its greater than zero two nodes 
@@ -449,7 +454,7 @@ def nx_author_institution(meta_list):
     Parameters
     ----------
     meta_list : list
-        A list of meta_dict dictionaries.
+        A list of :class:`.Paper` instances.
     
     Returns
     -------
@@ -462,17 +467,17 @@ def nx_author_institution(meta_list):
     
     author_institution = nx.DiGraph(type='author_institution')
 
-    for meta_dict in meta_list:
-        name_list = util.concat_list(meta_dict['aulast'],
-                                     meta_dict['auinit'],
-                                     ' ')
-        for i in xrange(len(name_list)):
-            name = name_list[i]
-            institution meta_dict['institution'][i]
-
-            # Create nodes
-            # Draw edges
-            # Add edge attributes
+#    for meta_dict in meta_list:
+#        name_list = util.concat_list(meta_dict['aulast'],
+#                                     meta_dict['auinit'],
+#                                     ' ')
+#        for i in xrange(len(name_list)):
+#            name = name_list[i]
+#            institution meta_dict['institution'][i]
+#
+#            # Create nodes
+#            # Draw edges
+#            # Add edge attributes
 
     return author_institution
 
