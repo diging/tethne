@@ -1,9 +1,30 @@
 class Paper():
     """
-    Base class for Papers. Enforces a limited vocabulary of keys, and specific
-    data types.
+    Base class for Papers. Behaves just like a dict, but enforces a limited 
+    vocabulary of keys, and specific data types.
     
-    Should be used in place of data_struct.new_meta_dict(), below.
+    Notes
+    -----
+    The following fields (and corresponding data types) are allowed:
+    
+    * aulast (list) -- Authors' last name, as a list.
+    * auinit (list) -- Authors' first initial as a list.
+    * institution (dict) -- Institutions with which the authors are affiliated.
+    * atitle (str) -- Article title.
+    * jtitle (str) -- Journal title or abbreviated title.
+    * volume (str) -- Journal volume number.
+    * issue (str) -- Journal issue number.
+    * spage (str) -- Starting page of article in journal.
+    * epage (str) -- Ending page of article in journal.
+    * date (int) -- Article date of publication.
+    * country (dict) -- Author-Country mapping.
+    * citations (list) -- A list of :class:`.Paper` instances.
+    * ayjid (str) -- First author's name (last, fi), pub year, and journal.
+    * doi (str) -- Digital Object Identifier.
+    * pmid (str) -- PubMed ID.
+    * wosid (str) -- Web of Science UT fieldtag value.
+    
+    None values are also allowed for all fields.
     """
     
     def __init__(self):
@@ -13,7 +34,7 @@ class Paper():
         self.meta_dict = {
                             'aulast':None,
                             'auinit':None,
-                            'institution':None,
+                            'institutions':None,
                             'atitle':None,
                             'jtitle':None,
                             'volume':None,
@@ -30,7 +51,6 @@ class Paper():
     
         self.list_fields = [ 'aulast', 
                              'auinit', 
-                             'institution', 
                              'citations' ]
         
         self.string_fields = [ 'atitle', 
@@ -45,6 +65,8 @@ class Paper():
                                'wosid' ]
         
         self.int_fields = [ 'date' ]
+        
+        self.dict_fields = [ 'institutions' ]
     
     def __setitem__(self, key, value):
         """
@@ -54,90 +76,34 @@ class Paper():
         
         if key not in self.meta_dict.keys():
             raise KeyError(str(key) + " is not a valid key in Paper meta_dict.")
-        elif key in self.list_fields and type(value) is not list:
-                raise ValueError("Value for key "+str(key)+" must be a list.")
-        elif key in self.string_fields and type(value) is not str:
-                raise ValueError("Value for key "+str(key)+" must be a string.")
-        elif key in self.int_fields and type(value) is not int:
-                raise ValueError("Value for key "+str(key)+" must be an integer.")              
+        elif key in self.list_fields and type(value) is not list and value is not None:
+                raise ValueError("Value for field '"+str(key)+"' must be a list.")
+        elif key in self.string_fields and type(value) is not str and value is not None:
+                raise ValueError("Value for field '"+str(key)+"' must be a string.")
+        elif key in self.int_fields and type(value) is not int and value is not None:
+                raise ValueError("Value for field '"+str(key)+"' must be an integer.")   
+        elif key in self.dict_fields and type(value) is not dict and value is not None:
+                raise ValueError("Value for field '"+str(key)+"' must be a dictionary.")              
         else:
             self.meta_dict[key] = value
         
     def __getitem__(self, key):
-        """Passes through to core dictionary."""
         return self.meta_dict[key]
     
     def __delitem__(self, key):
-        """Passes through to core dictionary."""
         del self.meta_dict[key]
     
     def __len__(self):
-        """Passes through to core dictionary."""
         return len(self.meta_dict)
     
     def keys(self):
-        """Passes through to core dictionary."""
         return self.meta_dict.keys()
     
     def values(self):
-        """Passes through to core dictionary."""
         return self.meta_dict.values()
     
     def iteritems(self):
-        """Passes through to core dictionary."""
         return self.meta_dict.iteritems()
-    
-
-def new_meta_dict():
-    """
-    Creates a Meta Dictionary of citation data values. 
-    This function has the most common values from citation data sources like WebOfScience,PubMed etc.,
-    
-    Returns
-    --------
-    meta_list : list
-        A meta_list dictionary with 'None' as default values.
-    
-    Notes
-    -----
-    * aulast -- authors' last name as a list.
-    * auinit -- authors' first initial as a list.
-    * institution -- institutions with which the authors are affiliated.
-    * atitle -- article title
-    * jtitle -- journal title or abbreviated title
-    * volume -- journal volume number
-    * issue -- journal issue number
-    * spage -- starting page of article in journal
-    * epage -- ending page of article in journal
-    * date -- article date of publication
-    * country -- country with which the authors are affiliated.
-    * citations -- a list of minimum meta_dict dictionaries for cited references
-    * ayjid -- First author's last name, initial the publication year and the 
-        journal published in
-    * doi -- Digital Object Identifier 
-    * pmid -- PubMed ID
-    * wosid -- Web of Science UT fieldtag
-    
-    """
-    meta_dict = {
-                    'aulast':None,
-                    'auinit':None,
-                    'institution':None, #
-                    'atitle':None,
-                    'jtitle':None,
-                    'volume':None,
-                    'issue':None,
-                    'spage':None,
-                    'epage':None,
-                    'date':None,
-                    'citations':None,
-                    'country':None, #
-                    'ayjid':None,
-                    'doi':None,
-                    'pmid':None,
-                    'wosid':None    }
-    
-    return meta_dict
 
 
 def new_query_dict():
@@ -200,7 +166,6 @@ def wos2meta_map():
                     'DI':'doi',
                     'TI':'atitle',
                     'SO':'jtitle',
-                    'C1':'address',
                     'VL':'volume',
                     'IS':'issue',
                     'BP':'spage',

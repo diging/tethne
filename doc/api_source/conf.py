@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # tethne documentation build configuration file, created by
-# sphinx-quickstart on Mon Nov  4 16:21:34 2013.
+# sphinx-quickstart on Thu Nov  7 16:11:46 2013.
 #
 # This file is execfile()d with the current directory set to its containing dir.
 #
@@ -26,7 +26,7 @@ sys.path.append("/Users/erickpeirson/Dropbox/DigitalHPS/Scripts/tethne")
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'numpydoc', 'sphinx.ext.autosummary']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.autosummary', 'numpydoc']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

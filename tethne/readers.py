@@ -1,7 +1,7 @@
 """
 Each file reader takes an input file from an academic knowledge database
 such as the Web of Science or PubMed and parses the input file into a
-list of "meta_dict" dictionaries for each paper with as many as possible of 
+list of :class:`.Paper` instances for each paper with as many as possible of 
 the following keys; missing values are set to None:
 
     * aulast  - authors' last name as a list
@@ -18,10 +18,11 @@ These keys are associated with the meta data entries in the databases of
 organizations such as the International DOI Foundation and its Registration
 Agencies such as CrossRef and DataCite.
 
-In addition, meta_dict dictionaries will contain keys with information 
+In addition, :class:`.Paper` instances will contain keys with information 
 relevant to the networks of interest for Tethne including:
 
-    * citations -- list of minimum meta_dict dictionaries for cited references.
+    * citations -- list of minimum :class:`.Paper` instances for cited 
+        references.
     * ayjid -- First author's name (last, fi), publication year, and journal.
     * doi -- Digital Object Identifier
     * pmid -- PubMed ID
@@ -29,7 +30,7 @@ relevant to the networks of interest for Tethne including:
     
 Missing data here also results in the above keys being set to None.
 """
-import data_struct as ds
+import data as ds
 import xml.etree.ElementTree as ET
 import re
 
@@ -266,7 +267,7 @@ def parse_cr(ref):
 
     """
     Supports the Web of Science reader by converting the strings found
-    at the CR field tag of a record into a minimum meta_dict dictionary.
+    at the CR field tag of a record into a minimum :class:`.Paper` instance.
 
     Parameters
     ----------
@@ -275,8 +276,8 @@ def parse_cr(ref):
 
     Returns
     -------
-    meta_dict : dict
-        meta_dict dictionary.
+    meta_dict : :class:`.Paper`
+        A :class:`.Paper` instance.
         
     Raises
     ------
@@ -306,15 +307,15 @@ def parse_cr(ref):
     DOI numbers in a list of form [doi1, doi2, ...], address this?
     
     """
-    meta_dict = ds.new_meta_dict()
+    meta_dict = ds.Paper()
     #tokens of form: aulast auinit, date, jtitle, volume, spage, doi
     tokens = ref.split(',')
     try:
         #FIXME: needs better name parser
         name = tokens[0]
         name_tokens = name.split(' ')
-        meta_dict['aulast'] = name_tokens[0]
-        meta_dict['auinit'] = name_tokens[1]
+        meta_dict['aulast'] = [name_tokens[0]]
+        meta_dict['auinit'] = [name_tokens[1]]
 
         #strip initial characters based on the field (spaces, 'V', 'DOI')
         meta_dict['date'] = int(tokens[1][1:])
@@ -322,15 +323,13 @@ def parse_cr(ref):
         meta_dict['volume'] = tokens[3][2:]
         meta_dict['spage'] = tokens[4][2:]
         meta_dict['doi'] = tokens[5][5:]
-    except IndexError:
-        #ref did not have the full set of tokens
+    except IndexError as E:     # ref did not have the full set of tokens
         pass
-    except ValueError:
-        #this occurs when the program expects a date but gets a string with
-        #no numbers, we leave the field incomplete because chances are
-        #the CR string is too sparse to use anyway
-        pass
-
+    except ValueError as E:     # This occurs when the program expects a date 
+        pass                    #  but gets a string with no numbers. We leave 
+                                #  the field incomplete because chances are the 
+                                #  CR string is too sparse to use anyway.
+                                
     ayjid = create_ayjid(meta_dict['aulast'], meta_dict['auinit'], 
                          meta_dict['date'], meta_dict['jtitle'])
     meta_dict['ayjid'] = ayjid
@@ -340,7 +339,7 @@ def parse_cr(ref):
 def parse_institutions(ref):
     """
     Supports the Web of Science reader by converting the strings found at the C1
-    fieldtag of a record into a minimum meta_dict dictionary.
+    fieldtag of a record into a minimum :class:`.Paper` instance.
 
     Parameters
     ----------
@@ -351,8 +350,8 @@ def parse_institutions(ref):
         
     Returns
     -------
-    addr_dict : dict
-        A meta_dict dictionary.
+    addr_dict : :class:`.Paper`
+        A :class:`.Paper` instance.
         
     Raises
     ------
@@ -368,7 +367,7 @@ def parse_institutions(ref):
     Needs to check many test cases to check various input types.
         
     """
-    addr_dict = ds.new_meta_dict()
+    addr_dict = ds.Paper()
     #tokens of form: 
     tokens = ref.split(',')
     print 'tokens inside parse_institutions : \n', tokens
@@ -402,8 +401,8 @@ def parse_institutions(ref):
 def wos2meta(wos_data):
     """
     Convert a dictionary or list of dictionaries with keys from the
-    Web of Science field tags into a meta_dict dictionary or list of
-    dictionaries, the standard for Tethne.
+    Web of Science field tags into a :class:`.Paper` instance or list of
+    :class:`.Paper` instances, the standard for Tethne.
 
     Parameters
     ----------
@@ -412,8 +411,8 @@ def wos2meta(wos_data):
 
     Returns
     -------
-    wos_meta : dict
-        A list of meta_dict dictionaries.
+    wos_meta : list
+        A list of :class:`.Paper` instances.
 
     Notes
     -----
@@ -422,19 +421,19 @@ def wos2meta(wos_data):
     important for any graph with authors as nodes.
     
     """
-    #create a meta_dict for each wos_dict and append to this list
+    #create a Paper for each wos_dict and append to this list
     wos_meta = []
 
     #handle dict inputs by converting to a 1-item list
     if type(wos_data) is dict:
         wos_data = [wos_data]
         print 'wos data \n' , wos_data
-    #define the direct relationships between WoS fieldtags and meta_dict keys
+    #define the direct relationships between WoS fieldtags and Paper keys
     translator = ds.wos2meta_map()
     
     #perform the key convertions
     for wos_dict in wos_data:
-        meta_dict = ds.new_meta_dict()
+        meta_dict = ds.Paper()
 
         #direct translations
         for key in translator.iterkeys():
@@ -539,7 +538,7 @@ def pubmed_file_id(filename):
 
 def parse_pubmed_xml(filepath):
     """
-    Given a file with PubMed XML, return a list of meta_dicts
+    Given a file with PubMed XML, return a list of :class:`.Paper` instances.
     
     See the following hyperlinks regarding possible structures of XML:
     * http://www.ncbi.nlm.nih.gov/pmc/pmcdoc/tagging-guidelines/citations/v2/citationtags.html#2Articlewithmorethan10authors%28listthefirst10andaddetal%29
@@ -553,7 +552,7 @@ def parse_pubmed_xml(filepath):
     Returns
     -------
     meta_list : list
-        A list of meta_dict dictionaries.
+        A list of :class:`.Paper` instances.
         
     """
     tree = ET.parse(filepath)
@@ -579,7 +578,7 @@ def parse_pubmed_xml(filepath):
     
     meta_list = []
     for article in root.iter('article'):
-        meta_dict = ds.new_meta_dict()
+        meta_dict = ds.Paper()
     
         # collect information from the 'front' section of the article
         # collect the simple data
@@ -652,7 +651,7 @@ def parse_pubmed_xml(filepath):
         # element-citation handling different from mixed-citation handling
         citations = article.findall('./back/ref-list/ref/element-citation')
         for cite in citations:
-            cite_dict = ds.new_meta_dict()
+            cite_dict = ds.Paper()
             
             # simple meta data
             for key in cit_meta_loc.iterkeys():
@@ -731,17 +730,17 @@ def expand_pubmed(meta_list):
     sufficient information (either a DOI, PubMed ID, enough metadata to
     query for a DOI, etc.), query PubMed for their more expansive set 
     of meta data, most notably their citation data, parse the associated xml, 
-    and append their meta_dicts to the meta_list.
+    and append their :class:`.Paper` to the meta_list.
 
     Parameters
     ----------
     meta_list : list
-        A list of meta_dict dictionaries.
+        A list of :class:`.Paper` instances.
     
     Returns
     -------
     list : list
-        A list of meta_dict dictionaries.
+        A list of :class:`.Paper` instances.
         
     Notes
     -----
@@ -760,7 +759,7 @@ def parse_bib(filename):
     Returns
     -------
     bib_list : list
-        A list of meta_dict dictionaries.
+        A list of :class:`.Paper` instances.
     
     Notes
     -----
@@ -783,7 +782,7 @@ def parse_bib(filename):
     bib = bb.Bibparser(data)
     bib.parse()
 
-    #convert data into a list of tethne meta_dict
+    #convert data into a list of tethne Papers
     translator = {'doi':'doi',
                   'author':'aulast',
                   'title':'atitle',
@@ -792,7 +791,7 @@ def parse_bib(filename):
                   'year':'date'}
     bib_list = []
     for record in bib.records.itervalues():
-        meta_dict = ds.new_meta_dict()
+        meta_dict = ds.Paper()
         meta_dict['file'] = filename
         for key, value in record.iteritems():
             translator_keys = translator.keys()
