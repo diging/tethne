@@ -493,7 +493,8 @@ def wos2meta(wos_data):
                         #  therefore map all authors to all institutions.
                     for author_au in wos_dict['AU']:
                         institution = c1_str.strip().split(', ')
-
+                        inst_name = institution[0]
+                        
                         try:
                             author_institutions[author_au].append(inst_name)
                         except KeyError:
