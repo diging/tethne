@@ -17,10 +17,10 @@ tethne Package
     :undoc-members:
     :show-inheritance:
 
-:mod:`data_struct` Module
--------------------------
+:mod:`data` Module
+------------------
 
-.. automodule:: tethne.data_struct
+.. automodule:: tethne.data
     :members:
     :undoc-members:
     :show-inheritance:
