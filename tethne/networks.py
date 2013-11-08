@@ -460,15 +460,17 @@ def nx_author_institution(meta_list):
     
     """
     
-    author_institution = nx.DiGraph(type='author_institution')
-
-    for meta_dict in meta_list:
-        name_list = util.concat_list(meta_dict['aulast'],
-                                     meta_dict['auinit'],
-                                     ' ')
-        for i in xrange(len(name_list)):
-            name = name_list[i]
-            institution meta_dict['institution'][i]
+#===============================================================================
+#     author_institution = nx.DiGraph(type='author_institution')
+# 
+#     for meta_dict in meta_list:
+#         name_list = util.concat_list(meta_dict['aulast'],
+#                                      meta_dict['auinit'],
+#                                      ' ')
+#         for i in xrange(len(name_list)):
+#             name = name_list[i]
+#             institution meta_dict['institution'][i]
+#===============================================================================
 
             # Create nodes
             # Draw edges
@@ -486,7 +488,7 @@ def nx_author_coinstitution(meta_list,threshold):
     
     
     Nodes           - Authors
-    Node attributes - affiliation ID (fuzzy identifier)
+    Node attributes - affiliation ID (fuzzy identifier) # not considered as of now.
     Edges           - (a, b) if a and b are share the same affiliated institution 
                       the meta_list
                       (a, b) if a and b are share the same affiliated country 
@@ -510,6 +512,13 @@ def nx_author_coinstitution(meta_list,threshold):
     
     """
     coinstitution = nx.Graph(type='author_coinstitution')
+    
+    let the metalist have 10 metadicts
+        take the 1 st meta dict and retrieve the key of institutions
+             continue till the number of authors in that field (let it be 5)
+                
+    
+    
 
     #The Field in meta_list which corresponds to the affiliation is "C1" - Authors Address
     for author in meta_list:
