@@ -32,7 +32,14 @@ Missing data here also results in the above keys being set to None.
 """
 import data as ds
 import xml.etree.ElementTree as ET
+import os
 import re
+
+class DataError(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
 
 # general functions
 
@@ -162,6 +169,9 @@ def parse_wos(filepath):
     
     AttributeError
         similar type of error as given above.
+        
+    IOError
+        File at filepath not found, not readable, or empty.
     
     Notes
     -----
@@ -170,17 +180,22 @@ def parse_wos(filepath):
     """
     wos_list = []
 
-    #define special key handling
     paper_start_key = 'PT'
     paper_end_key = 'ER'
-#    print 'comes in readers.parsewos - V6'
-    #try to read filepath
+
+    # Try to read filepath
     line_list = []
-    with open(filepath,'r') as f:
-        line_list = f.read().splitlines()
+    try:
+        with open(filepath,'r') as f:
+            line_list = f.read().splitlines()
+    except IOError: # File does not exist, or couldn't be read.
+        raise IOError("File does not exist, or cannot be read.")
         
     if len(line_list) is 0:
-        raise IOError("Unable to read filepath or filepath is empty")
+        raise IOError("Unable to read filepath or filepath is empty.")
+
+    if line_list[0][3:5] != 'FN':
+        raise DataError("WoS data file must begin with tag 'FN'.")
 
     #convert the data in the file to a usable list of dictionaries
     #note: first two lines of file are not related to any paper therein
@@ -818,3 +833,41 @@ def parse_bib(filename):
             print 'Parser failed at', meta_dict
 
     return bib_list
+
+# [#60462784]
+def parse_from_dir(path):
+    """
+    Convenience function for generating a wos_list from a directory of Web of
+    Science field-tagged data files.
+    
+    Parameters
+    ----------
+    path : string
+        Path to directory of field-tagged data files.
+        
+    Returns
+    -------
+    wos_list : list
+        A list of wos_dict dictionaries.
+    
+    Raises
+    ------
+    IOError
+        Invalid path.
+    
+    """
+    
+    wos_list = []
+    
+    try:
+        files = os.listdir(path)
+    except IOError:
+        raise IOError("Invalid path.")
+        
+    for file in files:
+        try:
+            wos_list += parse_wos(path + "/" + file)
+        except (IOError, DataError): # Ignore files that don't contain WoS data.
+            pass
+            
+    return wos_list
