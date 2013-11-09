@@ -1,0 +1,307 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tethne.data &mdash; tethne  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="tethne  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">tethne  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for tethne.data</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="Paper"><a class="viewcode-back" href="../../tethne.html#tethne.data.Paper">[docs]</a><span class="k">class</span> <span class="nc">Paper</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for Papers. Enforces a limited vocabulary of keys, and specific</span>
+<span class="sd">    data types.</span>
+<span class="sd">    </span>
+<span class="sd">    Should be used in place of data_struct.new_meta_dict(), below.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines keys, and acceptable data types for values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="s">&#39;aulast&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                            <span class="s">&#39;auinit&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                            <span class="s">&#39;institutions&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                            <span class="s">&#39;atitle&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                            <span class="s">&#39;jtitle&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                            <span class="s">&#39;volume&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                            <span class="s">&#39;issue&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                            <span class="s">&#39;spage&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                            <span class="s">&#39;epage&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                            <span class="s">&#39;date&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                            <span class="s">&#39;citations&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                            <span class="s">&#39;country&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                            <span class="s">&#39;ayjid&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                            <span class="s">&#39;doi&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                            <span class="s">&#39;pmid&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                            <span class="s">&#39;wosid&#39;</span><span class="p">:</span><span class="bp">None</span>    <span class="p">}</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">list_fields</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&#39;aulast&#39;</span><span class="p">,</span> 
+                             <span class="s">&#39;auinit&#39;</span><span class="p">,</span> 
+                             <span class="s">&#39;citations&#39;</span> <span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">string_fields</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&#39;atitle&#39;</span><span class="p">,</span> 
+                               <span class="s">&#39;jtitle&#39;</span><span class="p">,</span> 
+                               <span class="s">&#39;volume&#39;</span><span class="p">,</span> 
+                               <span class="s">&#39;issue&#39;</span><span class="p">,</span> 
+                               <span class="s">&#39;spage&#39;</span><span class="p">,</span> 
+                               <span class="s">&#39;epage&#39;</span><span class="p">,</span> 
+                               <span class="s">&#39;ayjid&#39;</span><span class="p">,</span> 
+                               <span class="s">&#39;doi&#39;</span><span class="p">,</span> 
+                               <span class="s">&#39;pmid&#39;</span><span class="p">,</span> 
+                               <span class="s">&#39;wosid&#39;</span> <span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">int_fields</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&#39;date&#39;</span> <span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_fields</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&#39;institutions&#39;</span> <span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Enforces limited vocabulary of keys, and acceptable data types for</span>
+<span class="sd">        values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; is not a valid key in Paper meta_dict.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_fields</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">list</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Value for field &#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;&#39; must be a list.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">string_fields</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">str</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Value for field &#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;&#39; must be a string.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">int_fields</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">int</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Value for field &#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;&#39; must be an integer.&quot;</span><span class="p">)</span>   
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict_fields</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">dict</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Value for field &#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;&#39; must be a dictionary.&quot;</span><span class="p">)</span>              
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Passes through to core dictionary.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Passes through to core dictionary.&quot;&quot;&quot;</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Passes through to core dictionary.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="Paper.keys"><a class="viewcode-back" href="../../tethne.html#tethne.data.Paper.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Passes through to core dictionary.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    </div>
+<div class="viewcode-block" id="Paper.values"><a class="viewcode-back" href="../../tethne.html#tethne.data.Paper.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Passes through to core dictionary.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    </div>
+<div class="viewcode-block" id="Paper.iteritems"><a class="viewcode-back" href="../../tethne.html#tethne.data.Paper.iteritems">[docs]</a>    <span class="k">def</span> <span class="nf">iteritems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Passes through to core dictionary.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
+    
+</div></div>
+<div class="viewcode-block" id="new_meta_dict"><a class="viewcode-back" href="../../tethne.html#tethne.data.new_meta_dict">[docs]</a><span class="k">def</span> <span class="nf">new_meta_dict</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a Meta Dictionary of citation data values. </span>
+<span class="sd">    This function has the most common values from citation data sources like WebOfScience,PubMed etc.,</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    meta_list : list</span>
+<span class="sd">        A meta_list dictionary with &#39;None&#39; as default values.</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    * aulast -- authors&#39; last name as a list.</span>
+<span class="sd">    * auinit -- authors&#39; first initial as a list.</span>
+<span class="sd">    * institution -- institutions with which the authors are affiliated.</span>
+<span class="sd">    * atitle -- article title</span>
+<span class="sd">    * jtitle -- journal title or abbreviated title</span>
+<span class="sd">    * volume -- journal volume number</span>
+<span class="sd">    * issue -- journal issue number</span>
+<span class="sd">    * spage -- starting page of article in journal</span>
+<span class="sd">    * epage -- ending page of article in journal</span>
+<span class="sd">    * date -- article date of publication</span>
+<span class="sd">    * country -- country with which the authors are affiliated.</span>
+<span class="sd">    * citations -- a list of minimum meta_dict dictionaries for cited references</span>
+<span class="sd">    * ayjid -- First author&#39;s last name, initial the publication year and the </span>
+<span class="sd">        journal published in</span>
+<span class="sd">    * doi -- Digital Object Identifier </span>
+<span class="sd">    * pmid -- PubMed ID</span>
+<span class="sd">    * wosid -- Web of Science UT fieldtag</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">meta_dict</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&#39;aulast&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;auinit&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;institution&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span> <span class="c">#</span>
+                    <span class="s">&#39;atitle&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;jtitle&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;volume&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;issue&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;spage&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;epage&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;date&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;citations&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;country&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span> <span class="c">#</span>
+                    <span class="s">&#39;ayjid&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;doi&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;pmid&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;wosid&#39;</span><span class="p">:</span><span class="bp">None</span>    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="n">meta_dict</span>
+
+</div>
+<div class="viewcode-block" id="new_query_dict"><a class="viewcode-back" href="../../tethne.html#tethne.data.new_query_dict">[docs]</a><span class="k">def</span> <span class="nf">new_query_dict</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Declares only those keys of meta_dict that are query-able through CrossRef.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">q_dict</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s">&#39;aulast&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;auinit&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;atitle&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;address&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span> 
+                <span class="s">&#39;jtitle&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;volume&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;issue&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;spage&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;epage&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;date&#39;</span><span class="p">:</span><span class="bp">None</span>     <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">q_dict</span>
+
+</div>
+<div class="viewcode-block" id="new_wos_dict"><a class="viewcode-back" href="../../tethne.html#tethne.data.new_wos_dict">[docs]</a><span class="k">def</span> <span class="nf">new_wos_dict</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines the set of field tags that will try to be converted into a meta_dict</span>
+<span class="sd">    and intializes them to &#39;None&#39;.</span>
+<span class="sd">   </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    wos_dict : dict</span>
+<span class="sd">        A wos_list dictionary with &#39;None&#39; as default values for all keys.</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wos_dict</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&#39;DI&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;AU&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;C1&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span> 
+                    <span class="s">&#39;TI&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;SO&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;VL&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;IS&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;BP&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;EP&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;PY&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;UT&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;CR&#39;</span><span class="p">:</span><span class="bp">None</span>   <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">wos_dict</span>
+</div>
+<div class="viewcode-block" id="wos2meta_map"><a class="viewcode-back" href="../../tethne.html#tethne.data.wos2meta_map">[docs]</a><span class="k">def</span> <span class="nf">wos2meta_map</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines the direct relationships between the wos_dict and the meta_dict.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    translator : dict</span>
+<span class="sd">        A &#39;translator&#39; dictionary.</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">translator</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&#39;DI&#39;</span><span class="p">:</span><span class="s">&#39;doi&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;TI&#39;</span><span class="p">:</span><span class="s">&#39;atitle&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;SO&#39;</span><span class="p">:</span><span class="s">&#39;jtitle&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;VL&#39;</span><span class="p">:</span><span class="s">&#39;volume&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;IS&#39;</span><span class="p">:</span><span class="s">&#39;issue&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;BP&#39;</span><span class="p">:</span><span class="s">&#39;spage&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;EP&#39;</span><span class="p">:</span><span class="s">&#39;epage&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;PY&#39;</span><span class="p">:</span><span class="s">&#39;date&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;UT&#39;</span><span class="p">:</span><span class="s">&#39;wosid&#39;</span>    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">translator</span>
+</pre></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">tethne  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Author.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
