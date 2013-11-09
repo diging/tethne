@@ -9,99 +9,92 @@ import os.path
 class Testwos2meta(unittest.TestCase):
 
     def setUp(self):
-       filepath =  "/Users/ramki/tethne/tethne/testsuite/testin/authorinstitutions_test.txt" 
+       filepath =  "/Users/ramki/tethne/tethne/testsuite/testin/authorinstitution_testrecords.txt" 
        self.wos_list  = rd.parse_wos(filepath)
        self.meta_list = rd.wos2meta(self.wos_list) 
-
     
     def test_institutions_1(self):
         # define expected values for C1 meta_dict key
         
-        # CASES : TESTED
-        # overlapping of authors - whether append works correctly or not - 5 authors:instution pairs where 1 or 2 authors have common institutions.
-
-        # KeyError is not creating exception issues.
+        # testing the overlapping of authors - whether append works correctly or not
         
         institutions = self.meta_list[0]['institutions']
-     
         
-        print 'institutions', institutions
-                
-        expected_dict1 =  {'ZHANG, YC': ['Victoria Univ'],
+        expected_dict1 = [{'ZHANG, YC': ['Victoria Univ'],
                                              'WU, ZD': ['Wenzhou Univ', 'Univ Sci & Technol China'],
                                              'LU, CL': ['Wenzhou Univ', 'Northwestern Polytech Univ'],
                                              'CHEN, EH': ['Univ Sci & Technol China'],
                                              'ZHANG, H': ['Inst Sci & Technol Informat Zhejiang Prov'],
                                              'XU, GD': ['Univ Technol Sydney']}
-                        
-        
-
-        print 'expected_dict1', expected_dict1
+                        ]
+      
+         
         #Check if the expected and resulted 'institutions' field are the same.
         
-        #self.assertListEqual(institutionslist, expected_dict1,"Not equal")
-        self.assertDictEqual(institutions, expected_dict1,"Not equal")    
+        self.assertListEqual(self.resulted_list, expected_dict1,"Not equal")
+            
             
        # writing the remaining tests.     
         
     def test_institutions_2(self):
         # define expected values for C1 meta_dict key
         
-           
-        # CASES : TESTED
-        # 2 authors - 2 institutions .. both should be mapped. no overlapping or missing out of expected mappings.
-    
-    
-     
+        # testing the overlapping of authors - whether append works correctly or not
+        
         institutions = self.meta_list[1]['institutions']
         
-
-        
-        
-        expected_dict2 =  {'VITIELLO, A': ['Univ Salerno'], 'LOIA, V': ['Univ Salerno'], 'ACAMPORA, G': ['Eindhoven Univ Technol']}
-                        
+        expected_dict1 = [{'ZHANG, YC': ['Victoria Univ'],
+                                             'WU, ZD': ['Wenzhou Univ', 'Univ Sci & Technol China'],
+                                             'LU, CL': ['Wenzhou Univ', 'Northwestern Polytech Univ'],
+                                             'CHEN, EH': ['Univ Sci & Technol China'],
+                                             'ZHANG, H': ['Inst Sci & Technol Informat Zhejiang Prov'],
+                                             'XU, GD': ['Univ Technol Sydney']}
+                        ]
       
         
         #Check if the expected and resulted 'institutions' field are the same.
         
-        #self.assertListEqual(institutions, expected_dict2,"Not equal")
-        self.assertDictEqual(institutions, expected_dict2,"Not equal")       #changed to Dict Check from List check
-        
-   # commented the following block as it will throw Key Error ( as expected). We can uncomment it anytime.     
-   #============================================================================
-   # 
-   #  def test_institutions_3(self):
-   #      # define expected values for C1 meta_dict key
-   #       
-   #      # CASES : TESTED
-   #      # What if the record did not contain C1 input field info.
-   #        
-   #      institutions = self.meta_list[2]['institutions']
-   #      
-   #      expected_dict3 = {} # Null as it wont have any field
-   #    
-   #      
-   #      #Check if the expected and resulted 'institutions' field are the same.
-   #      with self.assertRaises(KeyError):
-   #          self.institutions[:1]
-   #      #self.assertListEqual(institutions, expected_dict3,"Not equal")
-   #      self.assertDictEqual(institutions, expected_dict3,"Not equal")    
-   #  
-   #============================================================================
-    def test_institutions_4(self):
+        self.assertListEqual(self.resulted_list, expected_dict1,"Not equal")
+   
+    def test_institutions_3(self):
         # define expected values for C1 meta_dict key
+        # testing the overlapping of authors - whether append works correctly or not
         
-        # No authors in the C1 field and the N authors must be mapped with 1 institution - N-1 Mapping
+        institutions = self.meta_list[2]['institutions']
         
-        institutions = self.meta_list[3]['institutions']
-        
-        expected_dict4 = {'Huang, TCK': ['Natl Chung Cheng Univ']}
-                        
+        expected_dict1 = [{'ZHANG, YC': ['Victoria Univ'],
+                                             'WU, ZD': ['Wenzhou Univ', 'Univ Sci & Technol China'],
+                                             'LU, CL': ['Wenzhou Univ', 'Northwestern Polytech Univ'],
+                                             'CHEN, EH': ['Univ Sci & Technol China'],
+                                             'ZHANG, H': ['Inst Sci & Technol Informat Zhejiang Prov'],
+                                             'XU, GD': ['Univ Technol Sydney']}
+                        ]
+      
         
         #Check if the expected and resulted 'institutions' field are the same.
         
-        #self.assertListEqual(institutions, expected_dict4,"Not equal")
-        self.assertDictEqual(institutions, expected_dict4,"Not equal")    
+        self.assertListEqual(self.resulted_list, expected_dict1,"Not equal")
+   
+    def test_institutions_4(self):
+        # define expected values for C1 meta_dict key
+        
+        # testing the overlapping of authors - whether append works correctly or not
+        
+        institutions = self.meta_list[3]['institutions']
+        
+        expected_dict1 = [{'ZHANG, YC': ['Victoria Univ'],
+                                             'WU, ZD': ['Wenzhou Univ', 'Univ Sci & Technol China'],
+                                             'LU, CL': ['Wenzhou Univ', 'Northwestern Polytech Univ'],
+                                             'CHEN, EH': ['Univ Sci & Technol China'],
+                                             'ZHANG, H': ['Inst Sci & Technol Informat Zhejiang Prov'],
+                                             'XU, GD': ['Univ Technol Sydney']}
+                        ]
+      
+        
+        #Check if the expected and resulted 'institutions' field are the same.
+        
+        self.assertListEqual(self.resulted_list, expected_dict1,"Not equal")
+   
     def tearDown(self):
         pass
 
