@@ -14,7 +14,7 @@ def closeness_introgression(papers, node, start, end, chunk, normalize = False):
     Parameters
     ----------
     papers : list
-        A list of :class:`Paper` instances.
+        A list of :class:`.Paper` instances.
     node : any
         Handle of the node to analyze.
     start : int
