@@ -194,9 +194,6 @@ def parse_wos(filepath):
     if len(line_list) is 0:
         raise IOError("Unable to read filepath or filepath is empty.")
 
-    if line_list[0][3:5] != 'FN':
-        raise DataError("WoS data file must begin with tag 'FN'.")
-
     #convert the data in the file to a usable list of dictionaries
     #note: first two lines of file are not related to any paper therein
     last_field_tag = paper_start_key #initialize to something
@@ -866,8 +863,10 @@ def parse_from_dir(path):
         
     for file in files:
         try:
+            print "Loaded " + file
             wos_list += parse_wos(path + "/" + file)
         except (IOError, DataError): # Ignore files that don't contain WoS data.
+            print "Could not load " + file
             pass
             
     return wos_list
