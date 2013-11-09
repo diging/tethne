@@ -23,7 +23,7 @@ ID MATCHING APPROACH
 AB Web advertising, a form of online advertising, which uses the Internet as a medium to post product or service information and attract customers, has become one of the most important marketing channels. As one prevalent type of web advertising, contextual advertising refers to the placement of the most relevant ads at appropriate positions of a web page, so as to provide a better user experience and increase the user's ad-click rate. However, most existing contextual advertising techniques only take into account how to select as relevant ads for a given page as possible, without considering the positional effect of the ad placement on the page, resulting in an unsatisfactory performance in ad local context relevance. In this paper, we address the novel problem of position-wise contextual advertising, i.e., how to select and place relevant ads properly for a target web page. In our proposed approach, the relevant ads are selected based on not only global context relevance but also local context relevance, so that the embedded ads yield contextual relevance to both the whole target page and the insertion positions where the ads are placed. In addition, to improve the accuracy of global and local context relevance measure, the rich wikipedia knowledge is used to enhance the semantic feature representation of pages and ad candidates. Last, we evaluate our approach using a set of ads and pages downloaded from the Internet, and demonstrate the effectiveness of our approach. (c) 2013 Elsevier B.V. All rights reserved.
 C1 [Wu, Zongda; Lu, Chenglang] Wenzhou Univ, Wenzhou 325035, Peoples R China.
    [Wu, Zongda; Chen, Enhong] Univ Sci & Technol China, Hefei 230026, Anhui, Peoples R China.
-   [Xu, Guandong] Univ Technol Sydney, Sydney, NSW 2007, Australia.
+   [Xu, Guandong]  Univ Sci & Technol China, Sydney, NSW 2007, Australia.
    [Lu, Chenglang] Northwestern Polytech Univ, Xian 710072, Peoples R China.
    [Zhang, Yanchun] Victoria Univ, Melbourne, Vic 8001, Australia.
    [Zhang, Hong] Inst Sci & Technol Informat Zhejiang Prov, Hangzhou 310006, Zhejiang, Peoples R China.
@@ -205,11 +205,7 @@ AB Modern infrastructures for information and communication technologies are aim
 RP Loia, V (reprint author), Univ Salerno, Dept Comp Sci, I-84084 Fisciano, Italy.
 EM g.acampora@tue.nl; loia@unisa.it; avitiello@unisa.it
 CR Abdullah S, 2012, INFORM SCIENCES, V191, P146, DOI 10.1016/j.ins.2011.12.018
-   Acampora G, 2012, INT J INTELL SYST, V27, P189, DOI 10.1002/int.20517
-   Bock J, 2012, INFORM SCIENCES, V192, P152, DOI 10.1016/j.ins.2010.08.013
-   Cruz I.F., 2010, P 5 INT WORKSH ONT M
-   David J., 2007, THESIS U NANTE
-   Xu P., 2010, P 5 INT WORKSH ONT M
+   
 NR 57
 TC 0
 Z9 0
