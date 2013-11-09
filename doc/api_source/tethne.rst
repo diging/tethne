@@ -9,6 +9,14 @@ tethne Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`analysis` Module
+----------------------
+
+.. automodule:: tethne.analysis
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`crossref` Module
 ----------------------
 

@@ -59,6 +59,56 @@ Modules within Tethne can generate a variety of networks, such as
 bibliographic coupling, citation, author-paper, and co-author networks, 
 using networkx.</p>
 </div>
+<div class="section" id="module-tethne.analysis">
+<span id="analysis-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">analysis</span></tt> Module<a class="headerlink" href="#module-tethne.analysis" title="Permalink to this headline">¶</a></h2>
+<p>Methods for network analysis.</p>
+<dl class="function">
+<dt id="tethne.analysis.closeness_introgression">
+<tt class="descclassname">tethne.analysis.</tt><tt class="descname">closeness_introgression</tt><big>(</big><em>papers</em>, <em>node</em>, <em>start</em>, <em>end</em>, <em>chunk</em>, <em>normalize=False</em><big>)</big><a class="reference internal" href="_modules/tethne/analysis.html#closeness_introgression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analysis.closeness_introgression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analyzes the global closeness centrality of a node over time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
+<blockquote>
+<div><p>A list of <tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt> instances.</p>
+</div></blockquote>
+<p><strong>node</strong> : any</p>
+<blockquote>
+<div><p>Handle of the node to analyze.</p>
+</div></blockquote>
+<p><strong>start</strong> : int</p>
+<blockquote>
+<div><p>Year to start analysis.</p>
+</div></blockquote>
+<p><strong>end</strong> : int</p>
+<blockquote>
+<div><p>Start year of final time-window.</p>
+</div></blockquote>
+<p><strong>chunk</strong> : int</p>
+<blockquote>
+<div><p>Size of time-window.</p>
+</div></blockquote>
+<p><strong>normalize</strong> : bool</p>
+<blockquote>
+<div><p>If True, normalizes global closeness centrality for each year against
+the average closeness centrality for that year. This will require
+substantially more processing time, and values will usually be &gt;&gt; 0.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>trajectory</strong> : list</p>
+<blockquote class="last">
+<div><p>Global closeness centrality for node over specified period.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 <div class="section" id="module-tethne.crossref">
 <span id="crossref-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">crossref</span></tt> Module<a class="headerlink" href="#module-tethne.crossref" title="Permalink to this headline">¶</a></h2>
 <p>.</p>
@@ -557,6 +607,12 @@ relevant to the networks of interest for Tethne including:</p>
 </ul>
 </div></blockquote>
 <p>Missing data here also results in the above keys being set to None.</p>
+<dl class="exception">
+<dt id="tethne.readers.DataError">
+<em class="property">exception </em><tt class="descclassname">tethne.readers.</tt><tt class="descname">DataError</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#tethne.readers.DataError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+</dd></dl>
+
 <dl class="function">
 <dt id="tethne.readers.create_ainstid">
 <tt class="descclassname">tethne.readers.</tt><tt class="descname">create_ainstid</tt><big>(</big><em>aulast=None</em>, <em>auinit=None</em>, <em>addr1=None</em>, <em>addr2=None</em>, <em>country=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/readers.html#create_ainstid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.create_ainstid" title="Permalink to this definition">¶</a></dt>
@@ -757,6 +813,37 @@ DOI numbers in a list of form [doi1, doi2, ...], address this?</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="tethne.readers.parse_from_dir">
+<tt class="descclassname">tethne.readers.</tt><tt class="descname">parse_from_dir</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#tethne.readers.parse_from_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function for generating a wos_list from a directory of Web of
+Science field-tagged data files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>path</strong> : string</p>
+<blockquote>
+<div><p>Path to directory of field-tagged data files.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>wos_list</strong> : list</p>
+<blockquote>
+<div><p>A list of wos_dict dictionaries.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>IOError</strong> :</p>
+<blockquote class="last">
+<div><p>Invalid path.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="tethne.readers.parse_institutions">
 <tt class="descclassname">tethne.readers.</tt><tt class="descname">parse_institutions</tt><big>(</big><em>ref</em><big>)</big><a class="reference internal" href="_modules/tethne/readers.html#parse_institutions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.parse_institutions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Supports the Web of Science reader by converting the strings found at the C1
@@ -851,8 +938,12 @@ defined by the list_keys and int_keys variables.</p>
 <div><p>One key value which needs to be converted to an &#8216;int&#8217; is not present.</p>
 </div></blockquote>
 <p><strong>AttributeError</strong> :</p>
-<blockquote class="last">
+<blockquote>
 <div><p>similar type of error as given above.</p>
+</div></blockquote>
+<p><strong>IOError</strong> :</p>
+<blockquote class="last">
+<div><p>File at filepath not found, not readable, or empty.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -958,69 +1049,8 @@ Raises index error if lists are not parallel</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-tethne.web_query">
-<span id="web-query-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">web_query</span></tt> Module<a class="headerlink" href="#module-tethne.web_query" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="tethne.web_query.crossref_meta">
-<tt class="descclassname">tethne.web_query.</tt><tt class="descname">crossref_meta</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/web_query.html#crossref_meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.web_query.crossref_meta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Query CrossRef with article metadata with the hope to find a DOI number 
-for that metadata in their system.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>kwargs</strong> : list</p>
-<blockquote>
-<div><ul class="simple">
-<li>aulast &#8211; first author&#8217;s last name</li>
-<li>auinit &#8211; first author&#8217;s first initial</li>
-<li>atitle &#8211; article title</li>
-<li>jtitle &#8211; journal title or abbreviated title</li>
-<li>volume &#8211; journal volume number</li>
-<li>issue &#8211; journal issue number</li>
-<li>spage &#8211; starting page of article in journal</li>
-<li>epage &#8211; ending page of article in journal</li>
-<li>date &#8211; article date of publication</li>
-</ul>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>doi</strong> : string</p>
-<blockquote class="last">
-<div><p>Returns a DOI as a string.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>A sample query is given here:</p>
-<p><a class="reference external" href="http://www.crossref.org/openurl?pid=git.tethne&#64;gmail.com&amp;url_ver=Z39.88-2004&amp;rft_val_fmt=info:ofi/fmt:kev:mtx:journal&amp;rft.atitle=Isolation%20of%20a%20common%20receptor%20for%20coxsackie%20B&amp;rft.jtitle=Science&amp;rft.aulast=Bergelson&amp;rft.auinit=J&amp;rft.date=1997&amp;rft.volume=275&amp;rft.issue=5304&amp;rft.spage=1320&amp;rft.epage=1323&amp;redirect=false">http://www.crossref.org/openurl?pid=git.tethne&#64;gmail.com&amp;url_ver=Z39.88-2004&amp;rft_val_fmt=info:ofi/fmt:kev:mtx:journal&amp;rft.atitle=Isolation%20of%20a%20common%20receptor%20for%20coxsackie%20B&amp;rft.jtitle=Science&amp;rft.aulast=Bergelson&amp;rft.auinit=J&amp;rft.date=1997&amp;rft.volume=275&amp;rft.issue=5304&amp;rft.spage=1320&amp;rft.epage=1323&amp;redirect=false</a></p>
-<p>More information is available at the CrossRef documentation site: <a class="reference external" href="http://help.crossref.org/#home">http://help.crossref.org/#home</a></p>
-<p>See &#8220;Machine Interfaces / APIs&#8221; in particular.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="tethne.web_query.pubmed_pmid">
-<tt class="descclassname">tethne.web_query.</tt><tt class="descname">pubmed_pmid</tt><big>(</big><em>pmid</em><big>)</big><a class="reference internal" href="_modules/tethne/web_query.html#pubmed_pmid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.web_query.pubmed_pmid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get XML from a query of PubMed&#8217;s EFetch database for the pmid.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>xml_string</strong> : string</p>
-<blockquote class="last">
-<div><p>Some XML.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>Update this to query db = pmc instead: pmc contains citation data while
-pubmed does not.</p>
-</dd></dl>
-
+<div class="section" id="web-query-module">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">web_query</span></tt> Module<a class="headerlink" href="#web-query-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-tethne.writers">
 <span id="writers-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">writers</span></tt> Module<a class="headerlink" href="#module-tethne.writers" title="Permalink to this headline">¶</a></h2>
@@ -1102,7 +1132,9 @@ as the interaction type&#8217;s edge attributes.</p>
 <li class="toctree-l2"><a class="reference internal" href="tethne.testsuite.html#module-tethne.testsuite.networks_test"><tt class="docutils literal"><span class="pre">networks_test</span></tt> Module</a><ul class="simple">
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.testsuite.html#readers-test-module"><tt class="docutils literal"><span class="pre">readers_test</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.testsuite.html#module-tethne.testsuite.readers_test"><tt class="docutils literal"><span class="pre">readers_test</span></tt> Module</a><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.testsuite.html#module-tethne.testsuite.simple_graph"><tt class="docutils literal"><span class="pre">simple_graph</span></tt> Module</a><ul class="simple">
 </ul>
 </li>
@@ -1126,6 +1158,7 @@ as the interaction type&#8217;s edge attributes.</p>
   <ul>
 <li><a class="reference internal" href="#">tethne Package</a><ul>
 <li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">tethne</span></tt> Package</a></li>
+<li><a class="reference internal" href="#module-tethne.analysis"><tt class="docutils literal"><span class="pre">analysis</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.crossref"><tt class="docutils literal"><span class="pre">crossref</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.data"><tt class="docutils literal"><span class="pre">data</span></tt> Module</a><ul>
 </ul>
@@ -1133,7 +1166,7 @@ as the interaction type&#8217;s edge attributes.</p>
 <li><a class="reference internal" href="#module-tethne.networks"><tt class="docutils literal"><span class="pre">networks</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.readers"><tt class="docutils literal"><span class="pre">readers</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.utilities"><tt class="docutils literal"><span class="pre">utilities</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-tethne.web_query"><tt class="docutils literal"><span class="pre">web_query</span></tt> Module</a></li>
+<li><a class="reference internal" href="#web-query-module"><tt class="docutils literal"><span class="pre">web_query</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.writers"><tt class="docutils literal"><span class="pre">writers</span></tt> Module</a></li>
 <li><a class="reference internal" href="#subpackages">Subpackages</a><ul>
 </ul>
