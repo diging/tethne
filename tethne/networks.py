@@ -511,11 +511,11 @@ def nx_author_coinstitution(meta_list,threshold):
                    
     
     """
-    coinstitution = nx.Graph(type='author_coinstitution')
-    
-    let the metalist have 10 metadicts
-        take the 1 st meta dict and retrieve the key of institutions
-             continue till the number of authors in that field (let it be 5)
+#    coinstitution = nx.Graph(type='author_coinstitution')
+#    
+#    let the metalist have 10 metadicts
+#        take the 1 st meta dict and retrieve the key of institutions
+#             continue till the number of authors in that field (let it be 5)
                 
     
     
