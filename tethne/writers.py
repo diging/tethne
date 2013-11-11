@@ -140,12 +140,85 @@ def to_graphml(graph, output_path):
     nx.write_graphml(graph, output_path + ".graphml")
 
 
-def to_xgmml(graph, name, output_path):
+def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, nodedecay=0, edgeattack=0, edgedecay=0):
     """
     Generates dynamic XGMML output from provided graph.
+    
+    Parameters
+    ----------
+    graph : Networkx Graph
+    name : string
+        Name of the graph.
+    output_path : string
+        Path to output file, including name ('.xgmml' will be appended).
+    dynamic : bool
+        If True, will try to include start and end date for nodes and edges.
+    nodeattack : int
+        For dynamic networks, number of years to prepend to display start.
+    nodedecay : int
+        For dynamic networks, additional number of years to display node.
+    edgeattack : int
+        For dynamic networks, number of years to prepend to display start.
+    edgedecay : int
+        For dynamic networks, additional number of years to display edge.
+    
+    Raises
+    ------
+    ValueError
+        Raised when dynamic=True and 'date' is not a valid edge attribute in
+        graph.
+
+        
     """
     f = open(output_path + ".xgmml", "w")
     f.write('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<graph directed="0"  xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.cs.rpi.edu/XGMML">\n\t<att name="selected" value="1" type="boolean" />\n\t<att name="name" value="{0}" type="string"/>\n\t<att name="shared name" value="{0}" type="string"/>\n'.format(name))
+
+    if dynamic:
+        node_dates = {}
+        date = None
+    
+    for edge in graph.edges(data=True):
+        if dynamic:
+            # Update node start/end values.
+            if edge[0] not in node_dates.keys():
+                node_dates[edge[0]] = { 'start': 3000, 'end': 0 }
+            if edge[1] not in node_dates.keys():
+                node_dates[edge[1]] = { 'start': 3000, 'end': 0 }
+
+
+            try:    # First look for explicit start and end dates.
+                start = edge[2]['start']
+                end = edge[2]['end']
+            except KeyError:
+                try:
+                    start = edge[2]['date']
+                    end = edge[2]['date']
+                except KeyError:
+                    raise ValueError("Missing 'date' in graph edge attributes. Required when dynamic=True.")
+                
+            if date < node_dates[edge[0]]['start']:
+                node_dates[edge[0]]['start'] = date
+            if date > node_dates[edge[0]]['end']:
+                node_dates[edge[0]]['end'] = date
+
+
+            if date < node_dates[edge[1]]['start']:
+                node_dates[edge[1]]['start'] = date
+            if date > node_dates[edge[1]]['end']:
+                node_dates[edge[1]]['end'] = date
+
+        try:
+            f.write ('\t<edge source="{src}" target="{tgt}" start="{start}" end="{end}">\n'.format(src=edge[0], tgt=edge[1], start=start-edgeattack, end=end+edgedecay).replace('&','&amp;'))
+            for key, value in edge[2].iteritems():
+                if (type (value).__name__ == "str"):
+                    v_type = "string"
+                elif (type (value).__name__ == "int"):
+                    v_type = "integer"
+
+                f.write('\t\t<att name="{}" value="{}" type="{}" />\n'.format(key, value, v_type).replace('&','&amp;'))
+            f.write('\t</edge>\n')
+        except:
+            print edge
     
     for node in graph.nodes(data=True):
         id = node[0]
@@ -155,31 +228,25 @@ def to_xgmml(graph, name, output_path):
             del node_attributes['label']
         else:
             label = id
-            
-        if 'year' in node_attributes:
-            start = node_attributes['year']
+        
+        if dynamic:
+            start = node_dates[id]['start']
+            end = node_dates[id]['end']
         else:
-            start = 1900
+            start = 0
+            end = 0
+        try:
+            f.write('\t<node id="{id}" label="{label}" start="{start}" end="{end}">\n'.format(id=id, label=label, start=start-nodeattack, end=end+nodedecay).replace('&','&amp;'))
+            for key, value in node_attributes.iteritems():
+                if (type (value).__name__ == "str"):
+                    v_type = "string"
+                elif (type (value).__name__ == "int"):
+                    v_type = "integer"
+                f.write('\t\t<att name="{}" value="{}" type="{}" />\n'.format(key, value, v_type).replace('&','&amp;'))
+            f.write('\t</node>\n')
+        except:
+            print node
         
-        f.write('\t<node id="{id}" label="{label}" start="{start}">\n'.format(id=id, label=label, start=start).replace('&','&amp;'))
-        for key, value in node_attributes.iteritems():
-            if (type (value).__name__ == "str"):
-                v_type = "string"
-            elif (type (value).__name__ == "int"):
-                v_type = "integer"
-            f.write('\t\t<att name="{}" value="{}" type="{}" />\n'.format(key, value, v_type).replace('&','&amp;'))
-        f.write('\t</node>\n')
-        
-    for edge in graph.edges(data=True):
-        f.write ('\t<edge source="{}" target="{}">\n'.format(edge[0], edge[1]).replace('&','&amp;'))
-        for key, value in edge[2].iteritems():
-            if (type (value).__name__ == "str"):
-                v_type = "string"
-            elif (type (value).__name__ == "int"):
-                v_type = "integer"
-
-            f.write('\t\t<att name="{}" value="{}" type="{}" />\n'.format(key, value, v_type).replace('&','&amp;'))
-        f.write('\t</edge>')
     f.write('</graph>')
     
     f.close()
