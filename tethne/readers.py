@@ -656,7 +656,7 @@ def parse_pubmed_xml(filepath):
         meta_list.append(meta_dict)
     
         # construct ayjid
-        meta_dict['ayjid'] = rd.create_ayjid(**meta_dict)
+        meta_dict['ayjid'] = create_ayjid(**meta_dict)
     
         # citations
         citations_list = []
@@ -790,8 +790,8 @@ def parse_bib(filename):
             line = line.rstrip()
             data += line + "\n"
 
-    #parse the bibtex file into a dict (article) of dicts (article meta)
-    data = bb.clear_comments(data)
+    # Parse the bibtex file into a dict (article) of dicts (article meta)
+    #data = bb.clear_comments(data)
     bib = bb.Bibparser(data)
     bib.parse()
 
@@ -801,11 +801,11 @@ def parse_bib(filename):
                   'title':'atitle',
                   'journal':'jtitle',
                   'volume':'volume',
-                  'year':'date'}
+                  'issued':'date'}
     bib_list = []
     for record in bib.records.itervalues():
         meta_dict = ds.Paper()
-        meta_dict['file'] = filename
+#        meta_dict['file'] = filename
         for key, value in record.iteritems():
             translator_keys = translator.keys()
             if key in translator_keys:
@@ -828,6 +828,7 @@ def parse_bib(filename):
             meta_dict['auinit'] = auinit
         else:
             print 'Parser failed at', meta_dict
+        meta_dict['ayjid'] = create_ayjid(**meta_dict)
 
     return bib_list
 
