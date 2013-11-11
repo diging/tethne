@@ -81,7 +81,7 @@ class Bibparser() :
     @log
     def database(self) :
         """Database"""
-        if self.token == '@' :            
+        if self.token == '@' :
             self.next_token()            
             self.entry()
     
@@ -222,12 +222,12 @@ class Bibparser() :
                         if field :
                             k = field[0]
                             val = field[1]
-
+                            
                             if k == 'author' :
                                 val = self.parse_authors(val)
 
                             if k == 'year' :
-                                val = {'literal':val}
+                                val = int(val)
                                 k = 'issued'
 
                             if k == 'pages' :
@@ -260,7 +260,15 @@ class Bibparser() :
         authors = authors.split('and')
         for author in authors :
             _author = author.split(',')
-            family = _author[0].strip().rstrip()
+            family = _author[0]
+            family = family.replace("\\\\ { o }","o")
+            family = family.replace("\\\\ { e }","e")
+            family = family.replace("\\\\ { \\\\i } ", "i")
+            family = family.replace("{","").replace("}","").replace("\\", "")
+            family = family.replace('"','')
+            family = family.replace('  ', '')
+            family = family.strip().rstrip()
+            
             rec = {'family':family}
             try :
                 given = _author[1].strip().rstrip()
@@ -293,26 +301,37 @@ def post_request( j ) :
 def main() :
     """Main function"""
 
-    # TODO: Probably a solution with iterations will be better
-    data = ""
-    for line in fileinput.input():
-        line = line.rstrip()
-        data += line + "\n"
+#    # TODO: Probably a solution with iterations will be better
+#    data = ""
+#    for line in fileinput.input():
+#        line = line.rstrip()
+#        data += line + "\n"
+#
+#    print 'loaded...'
+#    data = clear_comments(data)
+#    print 'cleared...'
+#    bib = Bibparser(data)
+#    bib.parse()
+#    data = bib.json()
+#    #post_request( data )
+#    #print data
+#    print type(bib.records)
+#    for key, value in bib.records.iteritems():
+#        print key
+#        for key1, value1 in value.iteritems():
+#            print key1, type(value1)
+#    print 'done...'
 
-    print 'loaded...'
-    data = clear_comments(data)
-    print 'cleared...'
+    datapath = "/Users/erickpeirson/Downloads/EvoMed_Authors_v2.bib"
+    data = ""
+    with open(datapath,'r') as f:
+        for line in f:
+            line = line.rstrip()
+            data += line + "\n"
+
+    #data = clear_comments(data)
     bib = Bibparser(data)
     bib.parse()
-    data = bib.json()
-    #post_request( data )
-    #print data
-    print type(bib.records)
-    for key, value in bib.records.iteritems():
-        print key
-        for key1, value1 in value.iteritems():
-            print key1, type(value1)
-    print 'done...'
-    
+
 if __name__ == "__main__" :
     main()

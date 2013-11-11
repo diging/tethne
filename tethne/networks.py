@@ -178,7 +178,7 @@ def nx_author_papers(doc_list, paper_id, *paper_attribs):
     return author_papers
 
 
-def nx_coauthors(doc_list, *edge_attribs):
+def nx_coauthors(papers, *edge_attribs):
     """
     Generate a co-author network. 
     
@@ -190,8 +190,8 @@ def nx_coauthors(doc_list, *edge_attribs):
        
     Parameters
     ----------
-    doc_list : list
-        A list of wos_objects.
+    papers : list
+        A list of :class:`Paper` instances.
     edge_attribs : list
         List of edge_attributes specifying which :class:`.Paper` keys (from the 
         co-authored paper) to use as edge attributes.
@@ -200,29 +200,31 @@ def nx_coauthors(doc_list, *edge_attribs):
     -------
     coauthors : networkx.MultiGraph
         A co-authorship network.
+        
+    Notes
+    -----
+    TODO: Check whether papers contains :class:`Papers` instances, and raise
+    an exception if not.
     
     """
+
     coauthors = nx.MultiGraph(type='coauthors')
 
-    for entry in doc_list:
+    for entry in papers:
         if entry['aulast'] is not None:
-            #edge_attrib_dict for any edges that get added
+            # edge_attrib_dict for any edges that get added
             edge_attrib_dict = util.subdict(entry, edge_attribs)
 
-            #make a new list of aulast, auinit names
+            # make a new list of aulast, auinit names
             full_names = util.concat_list(entry['aulast'], 
                                           entry['auinit'], 
                                           ' ')
 
-            #index the authors twice
             for a in xrange(len(full_names)):
-                #create node for author a
-                coauthors.add_node(full_names[a])
-
+                coauthors.add_node(full_names[a]) # create node for author a
                 for b in xrange(a+1, len(entry['aulast'])):
-                    #create node for author b
-                    coauthors.add_node(full_names[b])
-
+                    coauthors.add_node(full_names[b]) #create node for author b
+                    
                     #add edges with specified edge attributes
                     coauthors.add_edge(full_names[a], 
                                        full_names[b],
@@ -230,7 +232,61 @@ def nx_coauthors(doc_list, *edge_attribs):
 
     return coauthors
 
+def simplify_multigraph(multigraph, time=False):
+    """
+    Simplifies a graph by condensing multiple edges between the same node pair
+    into a single edge, with a weight attribute equal to the number of edges.
+    
+    Parameters
+    ----------
+    graph : networkx.MultiGraph
+        E.g. a coauthorship graph.
+    time : bool
+        If True, will generate 'start' and 'end' attributes for each edge, 
+        corresponding to the earliest and latest 'date' values for that edge.
+    
+    Returns
+    -------
+    graph : networkx.Graph
+        Simplifies a ``multigraph``.
+    
+    """
 
+    graph = nx.Graph()
+
+    for node in multigraph.nodes(data=True):
+        u = node[0]
+        node_attribs = node[1]
+        graph.add_node(u, node_attribs)
+
+
+        for v in multigraph[u]:
+            edges = multigraph.get_edge_data(u, v) # Dict.
+
+            edge_attribs = { 'weight': len(edges) }
+
+            if time:    # Look for a date in each edge.
+                start = 3000
+                end = 0
+                found_date = False
+                for edge in edges.values():
+                    try:
+                        found_date = True
+                        if edge['date'] < start: start = edge['date']
+                        if edge['date'] > end: end = edge['date']
+                    except KeyError:    # No date to be found.
+                        pass
+
+                if found_date:  # If no date found, don't add start/end atts.
+                    edge_attribs['start'] = start
+                    edge_attribs['end'] = end
+
+            graph.add_edge(u, v, edge_attribs)
+
+    return graph
+            
+
+        
 def nx_biblio_coupling(doc_list, citation_id, threshold, node_id, 
                        *node_attribs):
     """
