@@ -11,7 +11,7 @@ for meta in meta_list:
     print meta , '\n'
     
 import tethne.networks as nt
-author_coinst = nt.nx_author_coinstitution(meta_list, 1, 'ayjid', 'atitle', 'addr1', 'addr2', 'country') 
+author_coinst = nt.nx_author_coinstitution(meta_list, 1) 
 
 import tethne.writers as wr
 wr.to_gexf(author_coinst, "/Users/ramki/tethne/tethne/output/author_coinstitutions")

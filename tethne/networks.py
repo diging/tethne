@@ -522,20 +522,46 @@ def nx_author_institution(meta_list):
     """
     
     author_institution = nx.DiGraph(type='author_institution')
-
-#    for meta_dict in meta_list:
-#        name_list = util.concat_list(meta_dict['aulast'],
-#                                     meta_dict['auinit'],
-#                                     ' ')
-#        for i in xrange(len(name_list)):
-#            name = name_list[i]
-#            institution meta_dict['institution'][i]
-#
-#            # Create nodes
-#            # Draw edges
-#            # Add edge attributes
-
-    return author_institution
+     #The Field in meta_list which corresponds to the affiliation is "institutions"   { 'institutions' : { Authors:[institutions_list]}}
+    
+#===============================================================================
+#          #The Field in meta_list which corresponds to the affiliation is "institutions"   
+#      # { 'institutions' : { Authors:[institutions_list]}}
+#     author_institutions = {}  # keys: author names, values: list of institutions
+#     for paper in meta_list:
+#         for key, value in paper['institutions'].iteritems():
+#             try:
+#                 author_institutions[key] += value
+#             except KeyError:
+#                 author_institutions[key] = value
+#                 
+#     authors = author_institutions.keys()
+#     for i in xrange(len(authors)):
+#         coinstitution.add_node(authors[i])
+#         institutions = author_institutions.values() # pull out the values of institutions
+#         for i in xrange(len(institutions)):
+#             
+#       
+#                 overlap = set(author_institutions[authors[i]]) & set(author_institutions[authors[j]]) #compare 2 author dict elements
+#                 if len(overlap) > threshold:
+#                     if coinstitution.has_node(j):           
+#                         print ' has node already'  
+#                         print authors[i] + "->" + authors[j]
+#                         coinstitution.add_edge(authors[i], authors[j],threshold=overlap)
+#                     else:
+#                         print ' node J needs to be created'   
+#                         coinstitution.add_node(authors[j])            
+#                         print authors[i] + "->" + authors[j]
+#                         coinstitution.add_edge(authors[i], authors[j],threshold=overlap)
+#                 else :
+#                     print 'there are no shared affliations between', authors[i], ' and' , authors[j] , 'overlap is ', overlap
+#                 
+#                 
+#     return coinstitution
+# 
+# 
+#     return author_institution
+#===============================================================================
 
 
 def nx_author_coinstitution(meta_list,threshold):
@@ -572,26 +598,37 @@ def nx_author_coinstitution(meta_list,threshold):
     """
     coinstitution = nx.Graph(type='author_coinstitution')
 
-    #The Field in meta_list which corresponds to the affiliation is "C1" - Authors Address
-    for author in meta_list:
-        if author[address] != "":
-            for institution in author['address']:
-               
-                author_list = util.concat_list(institution['aulast'],
-                                               institution['auinit'],
-                                               institution['country'])
-                num_authors = len(author_list)
-                for i in xrange(num_authors):                           
-                    coinstitution.add_node(author_list[i])              #add node attributes
-                    for j in xrange(i+1, num_authors):
-                        try:
-                            coinstitution[author_list[i]][author_list[j]]['weight'] += 1
-                        except KeyError:
-                            # then edge doesn't yet exist
-                            cocitation.add_edge(author_list[i], author_list[j],   #add edge attributes
-                                                {'weight':1})
-    
-    return cocitation
+     #The Field in meta_list which corresponds to the affiliation is "institutions"   
+     # { 'institutions' : { Authors:[institutions_list]}}
+    author_institutions = {}  # keys: author names, values: list of institutions
+    for paper in meta_list:
+        for key, value in paper['institutions'].iteritems():
+            try:
+                author_institutions[key] += value
+            except KeyError:
+                author_institutions[key] = value
+                
+    authors = author_institutions.keys()
+    for i in xrange(len(authors)):
+        coinstitution.add_node(authors[i])  
+        for j in xrange(len(authors)):
+            if i != j:
+                overlap = set(author_institutions[authors[i]]) & set(author_institutions[authors[j]]) #compare 2 author dict elements
+                if len(overlap) > threshold:
+                    if coinstitution.has_node(j):           
+                        print ' has node already'  
+                        print authors[i] + "->" + authors[j]
+                        coinstitution.add_edge(authors[i], authors[j],threshold=overlap)
+                    else:
+                        print ' node J needs to be created'   
+                        coinstitution.add_node(authors[j])            
+                        print authors[i] + "->" + authors[j]
+                        coinstitution.add_edge(authors[i], authors[j],threshold=overlap)
+                else :
+                    print 'there are no shared affliations between', authors[i], ' and' , authors[j] , 'overlap is ', overlap
+                
+                
+    return coinstitution
 
 
 def nx_cocitation(meta_list, timeslice, threshold):
