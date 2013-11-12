@@ -196,15 +196,15 @@ def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, nodedecay=0, 
                 except KeyError:
                     raise ValueError("Missing 'date' in graph edge attributes. Required when dynamic=True.")
                 
-            if date < node_dates[edge[0]]['start']:
+            if start < node_dates[edge[0]]['start']:
                 node_dates[edge[0]]['start'] = start
-            if date > node_dates[edge[0]]['end']:
+            if end > node_dates[edge[0]]['end']:
                 node_dates[edge[0]]['end'] = end
 
 
-            if date < node_dates[edge[1]]['start']:
+            if start < node_dates[edge[1]]['start']:
                 node_dates[edge[1]]['start'] = start
-            if date > node_dates[edge[1]]['end']:
+            if end > node_dates[edge[1]]['end']:
                 node_dates[edge[1]]['end'] = end
 
         try:
