@@ -197,15 +197,15 @@ def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, nodedecay=0, 
                     raise ValueError("Missing 'date' in graph edge attributes. Required when dynamic=True.")
                 
             if date < node_dates[edge[0]]['start']:
-                node_dates[edge[0]]['start'] = date
+                node_dates[edge[0]]['start'] = start
             if date > node_dates[edge[0]]['end']:
-                node_dates[edge[0]]['end'] = date
+                node_dates[edge[0]]['end'] = end
 
 
             if date < node_dates[edge[1]]['start']:
-                node_dates[edge[1]]['start'] = date
+                node_dates[edge[1]]['start'] = start
             if date > node_dates[edge[1]]['end']:
-                node_dates[edge[1]]['end'] = date
+                node_dates[edge[1]]['end'] = end
 
         try:
             f.write ('\t<edge source="{src}" target="{tgt}" start="{start}" end="{end}">\n'.format(src=edge[0], tgt=edge[1], start=start-edgeattack, end=end+edgedecay).replace('&','&amp;'))
@@ -230,22 +230,24 @@ def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, nodedecay=0, 
             label = id
         
         if dynamic:
-            start = node_dates[id]['start']
-            end = node_dates[id]['end']
+            try:
+                start = node_dates[id]['start']
+                end = node_dates[id]['end']
+            except:
+                start = end = 0
         else:
-            start = 0
-            end = 0
-        try:
-            f.write('\t<node id="{id}" label="{label}" start="{start}" end="{end}">\n'.format(id=id, label=label, start=start-nodeattack, end=end+nodedecay).replace('&','&amp;'))
-            for key, value in node_attributes.iteritems():
-                if (type (value).__name__ == "str"):
-                    v_type = "string"
-                elif (type (value).__name__ == "int"):
-                    v_type = "integer"
-                f.write('\t\t<att name="{}" value="{}" type="{}" />\n'.format(key, value, v_type).replace('&','&amp;'))
-            f.write('\t</node>\n')
-        except:
-            print node
+            start = end = 0
+#        try:
+        f.write('\t<node id="{id}" label="{label}" start="{start}" end="{end}">\n'.format(id=id, label=label, start=start-nodeattack, end=end+nodedecay).replace('&','&amp;'))
+        for key, value in node_attributes.iteritems():
+            if (type (value).__name__ == "str"):
+                v_type = "string"
+            elif (type (value).__name__ == "int"):
+                v_type = "integer"
+            f.write('\t\t<att name="{}" value="{}" type="{}" />\n'.format(key, value, v_type).replace('&','&amp;'))
+        f.write('\t</node>\n')
+#        except:
+#            print node
         
     f.write('</graph>')
     
