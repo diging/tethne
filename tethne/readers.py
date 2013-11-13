@@ -32,6 +32,7 @@ Missing data here also results in the above keys being set to None.
 """
 import data as ds
 import xml.etree.ElementTree as ET
+import tethne.utilities as util
 import os
 import re
 
@@ -198,6 +199,7 @@ def parse_wos(filepath):
     #note: first two lines of file are not related to any paper therein
     last_field_tag = paper_start_key #initialize to something
     for line in line_list[2:]:
+        line = util.strip_non_ascii(line)
         field_tag = line[:2]
         if field_tag == paper_start_key:
             #then prepare for next paper
@@ -787,7 +789,7 @@ def parse_bib(filename):
     data = ""
     with open(filename,'r') as f:
         for line in f:
-            line = line.rstrip()
+            line = util.strip_non_ascii(line.rstrip())
             data += line + "\n"
 
     # Parse the bibtex file into a dict (article) of dicts (article meta)

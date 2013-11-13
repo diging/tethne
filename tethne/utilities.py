@@ -66,4 +66,22 @@ def concat_list(listA, listB, delim=' '):
 
     return listC
 
+def strip_non_ascii(string):
+    '''
+    Returns the string without non-ASCII characters.
+    
+    Parameters
+    ----------
+    string : string
+        A string that may contain non-ASCII characters.
+    
+    Returns
+    -------
+    clean_string : string
+        A string that does not contain non-ASCII characters.
+        
+    '''
+    stripped = (c for c in string if 0 < ord(c) < 127)
+    clean_string = ''.join(stripped)
+    return clean_string
 
