@@ -439,7 +439,7 @@ def wos2meta(wos_data):
     #handle dict inputs by converting to a 1-item list
     if type(wos_data) is dict:
         wos_data = [wos_data]
-        print 'wos data \n' , wos_data
+        #print 'wos data \n' , wos_data
     #define the direct relationships between WoS fieldtags and Paper keys
     translator = ds.wos2meta_map()
     

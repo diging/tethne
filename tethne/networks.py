@@ -498,70 +498,90 @@ def nx_author_cocitation(meta_list, threshold):
 
     return cocitation
 
-def nx_author_institution(meta_list):
+def nx_author_institution(meta_list,*edge_attribs):
     
     """
-    Create a bi-partite graph with people and institutions as vertices, and
+    Generate a bi-partite graph with people and institutions as vertices, and
     edges indicating affiliation. This may be slightly ambiguous for WoS data
     where num authors != num institutions.
     
-    Story #57746740
+    **Nodes** -- author names
+    
+    **Node attributes** -- none
+    
+    **Edges** -- (a,b) \in E(G) if a and b are authors on the same paper.
     
     Parameters
     ----------
     meta_list : list
         A list of :class:`.Paper` instances.
-    
+    edge_attribs : list
+        List of edge_attributes specifying which :class:`.Paper` keys (from the 
+        authored paper) to use as edge attributes.
+        for example : 'date' key from the meta_list 
+        
     Returns
     -------
-    author_institution : networkx.DiGraph
+    author_institution : networkx.MultiGraph
         A graph describing institutional affiliations of authors in the corpus.
         
     
     
     """
     
-    author_institution = nx.DiGraph(type='author_institution')
-     #The Field in meta_list which corresponds to the affiliation is "institutions"   { 'institutions' : { Authors:[institutions_list]}}
+  
     
-#===============================================================================
-#          #The Field in meta_list which corresponds to the affiliation is "institutions"   
-#      # { 'institutions' : { Authors:[institutions_list]}}
-#     author_institutions = {}  # keys: author names, values: list of institutions
-#     for paper in meta_list:
-#         for key, value in paper['institutions'].iteritems():
-#             try:
-#                 author_institutions[key] += value
-#             except KeyError:
-#                 author_institutions[key] = value
-#                 
-#     authors = author_institutions.keys()
-#     for i in xrange(len(authors)):
-#         coinstitution.add_node(authors[i])
-#         institutions = author_institutions.values() # pull out the values of institutions
-#         for i in xrange(len(institutions)):
-#             
-#       
-#                 overlap = set(author_institutions[authors[i]]) & set(author_institutions[authors[j]]) #compare 2 author dict elements
-#                 if len(overlap) > threshold:
-#                     if coinstitution.has_node(j):           
-#                         print ' has node already'  
-#                         print authors[i] + "->" + authors[j]
-#                         coinstitution.add_edge(authors[i], authors[j],threshold=overlap)
-#                     else:
-#                         print ' node J needs to be created'   
-#                         coinstitution.add_node(authors[j])            
-#                         print authors[i] + "->" + authors[j]
-#                         coinstitution.add_edge(authors[i], authors[j],threshold=overlap)
-#                 else :
-#                     print 'there are no shared affliations between', authors[i], ' and' , authors[j] , 'overlap is ', overlap
-#                 
-#                 
-#     return coinstitution
-# 
-# 
-#     return author_institution
-#===============================================================================
+    author_institution = nx.MultiGraph(type='author_institution')
+    #The Field in meta_list which corresponds to the affiliation is "institutions"   
+    # { 'institutions' : { Authors:[institutions_list]}}
+    author_institutions = {}  # keys: author names, values: list of institutions
+    for paper in meta_list:
+        if paper['institutions'] is not None:
+            edge_attrib_dict = util.subdict(paper, edge_attribs)
+            
+    #===========================================================================
+    # for au,ins_list in author_institutions.iteritems():
+    #      author_institution.add_node(au)
+    #     
+    #      for ins in ins_list:
+    #             print ins, type(ins)
+    #             for ins_str in ins:
+    #                 author_institution.add_node(ins_str)  
+    #                 print au + "->" + ins_str
+    #                 author_institution.add_edge(au,ins_str, attr_dict=edge_attrib_dict)
+    #                 print ' Edges between', au, ' and' , ins_str , 'attr_dict is ', edge_attrib_dict 
+    #     
+    #===========================================================================
+        
+        authors = author_institutions.keys()
+        
+        #for i in xrange(len(authors)):
+        for au in authors:
+             author_institution.add_node(au)
+             institutions_list = author_institutions.values()
+             print 'institutions_list', institutions_list, type(institutions_list)
+        for ins in institutions_list:
+             print ins, type(ins)
+             for ins_str in ins:
+                    author_institution.add_node(ins_str)  
+                    print au + "->" + ins_str
+                    author_institution.add_edge(au,ins_str, attr_dict=edge_attrib_dict)
+              
+         
+         #======================================================================
+         # for i in xrange(len(authors)):
+         #     institutions_list = author_institutions.values()
+         #     print 'institutions_list', institutions_list    
+         #     ins_list = nx.Graph(institutions_list)
+         #     author_institution.add_nodes_from(ins_list,node_attribs="")  
+         #     print authors[i] + "->" + institutions_list
+         #     author_institution.add_edge(authors[i],institutions_list, attr_dict=edge_attrib_dict)
+         #     print ' shared affiliations between', authors[i], ' and' , institutions_list , 'attr_dict is ', attr_dict
+         #======================================================================
+                   
+                         
+                          
+    return author_institution
 
 
 def nx_author_coinstitution(meta_list,threshold):
@@ -602,31 +622,31 @@ def nx_author_coinstitution(meta_list,threshold):
      # { 'institutions' : { Authors:[institutions_list]}}
     author_institutions = {}  # keys: author names, values: list of institutions
     for paper in meta_list:
-        for key, value in paper['institutions'].iteritems():
-            try:
-                author_institutions[key] += value
-            except KeyError:
-                author_institutions[key] = value
-                
-    authors = author_institutions.keys()
-    for i in xrange(len(authors)):
-        coinstitution.add_node(authors[i])  
-        for j in xrange(len(authors)):
-            if i != j:
-                overlap = set(author_institutions[authors[i]]) & set(author_institutions[authors[j]]) #compare 2 author dict elements
-                if len(overlap) > threshold:
-                    if coinstitution.has_node(j):           
-                        print ' has node already'  
-                        print authors[i] + "->" + authors[j]
-                        coinstitution.add_edge(authors[i], authors[j],threshold=overlap)
-                    else:
-                        print ' node J needs to be created'   
-                        coinstitution.add_node(authors[j])            
-                        print authors[i] + "->" + authors[j]
-                        coinstitution.add_edge(authors[i], authors[j],threshold=overlap)
-                else :
-                    print 'there are no shared affliations between', authors[i], ' and' , authors[j] , 'overlap is ', overlap
-                
+        if paper['institutions'] is not None:
+            
+            for key, value in paper['institutions'].iteritems():
+                try:
+                    author_institutions[key] += value
+                except KeyError:
+                    author_institutions[key] = value
+        authors = author_institutions.keys()
+        print 'authors dict:' , author_institutions.items()
+        for i in xrange(len(authors)):
+            coinstitution.add_node(authors[i])  
+            for j in xrange(len(authors)):
+                if i != j:
+                    overlap = set(author_institutions[authors[i]]) & set(author_institutions[authors[j]]) #compare 2 author dict elements
+                    print len(overlap), 'threshold', threshold
+                    if len(overlap) >= threshold:
+                            coinstitution.add_node(authors[j])            
+                            print authors[i] + "->" + authors[j]
+                            coinstitution.add_edge(authors[i], authors[j], overlap=len(overlap))
+                            print ' shared affiliations between', authors[i], ' and' , authors[j] , 'overlap is ', overlap
+                    else :
+                        print 'there are no shared affiliations between', authors[i], ' and' , authors[j] , 'overlap is ', overlap
+
+                         
+                          
                 
     return coinstitution
 
