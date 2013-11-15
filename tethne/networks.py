@@ -542,7 +542,7 @@ def nx_author_institution(meta_list,*edge_attribs):
                 ins_list = auth_inst[au]
                 for ins_str in ins_list:   
                   author_institution.add_node(ins_str,type='institution') #add node ins  
-                  print au ,'---->' , ins_str     
+                  #print au ,'---->' , ins_str     
                   author_institution.add_edge(au,ins_str, attr_dict=edge_attrib_dict)
                          
                           
@@ -596,21 +596,17 @@ def nx_author_coinstitution(meta_list,threshold):
                 except KeyError:
                     author_institutions[key] = value
         authors = author_institutions.keys()
-        print 'authors dict:' , author_institutions.items()
         for i in xrange(len(authors)):
             coinstitution.add_node(authors[i],type ='author')  
             for j in xrange(len(authors)):
                 if i != j:
                     overlap = set(author_institutions[authors[i]]) & set(author_institutions[authors[j]]) #compare 2 author dict elements
-                    print len(overlap), 'threshold', threshold
                     if len(overlap) >= threshold:
                             coinstitution.add_node(authors[j],type ='author')            
                             print authors[i] + "->" + authors[j]
                             coinstitution.add_edge(authors[i], authors[j], overlap=len(overlap))
-                            print ' shared affiliations between', authors[i], ' and' , authors[j] , 'overlap is ', overlap
                     else :
-                        print 'there are no shared affiliations between', authors[i], ' and' , authors[j] , 'overlap is ', overlap
-
+                            pass
                          
                           
                 
