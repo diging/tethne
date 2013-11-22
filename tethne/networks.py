@@ -625,4 +625,44 @@ def nx_cocitation(meta_list, timeslice, threshold):
     
     """
     
+                    
+# Co-citation function starts here
+paper_references = {}         #keys: ayjid of each paper, values: a list of cited references of that paper (ayjid of citations) 
+for paper in meta_list:
+        if paper['ayjid'] is not None:
+            authors= paper['ayjid']
+            #print authors, '\n'
+            cit_str = "" 
+            final_cit =""
+            for cited_paper in paper['citations']:  
+                  cit_str = cited_paper['ayjid']    # field ayjid in the citations sub-dict is going to be the vertex of the Network graph.
+                  final_cit = cit_str.upper() + ',' + final_cit    # upper case
+                  cit_list= final_cit.split(',')    # to create a list
+                  paper_references[authors] = cit_list  # created a dictionary whose structure is given below.
+                    
+#To check if its correct                    
+for key,val in paper_references.iteritems():
+   # print key,'->',  val , '\n'
     pass
+
+
+# Example
+#{CHEN T 2013 ADVANCES IN ENGINEERING SOFTWARE : ['Zhang QF 2004 ENG COMPUTATION', 'Witten IH 2005 DATA MINING PRACTICA', 'Tu ZG 2004 IEEE T EVOLUT COMPUT', 
+                                                 #'Toksari MD 2006 APPL MATH COMPUT', 'Schwefel H-P 1977 NUMERICAL OPTIMIZATI', 'Rechenberg I. 1973 EVOLUTIONSSTRATEGIE'] }
+    
+papers = paper_references.keys()
+references = paper_references.values()
+
+for each_paper in papers:
+            no_of_references= len(paper_references[each_paper]) # how many reference papers in each 'article'
+            reference_list = paper_references[each_paper]  # create a list to traverse pairs of references,
+            print reference_list
+            print no_of_references , '---------' , '\n'
+            for i in range(no_of_references) :
+                    for j in range(no_of_references-1) :
+                        #print reference_list[i], ',', reference_list[j]
+                           # yet to do
+                           #Here I need to pick up pairs of i and j from the reference_list and compare it with the other paper's cited references. 
+                           #if I am able to find the cited pair in another paper, I keep increasing the weight/index.
+                           #Add 2 nodes i and j , when the pair i and j has traversed the full list of references and add an edge between themby checking the condition if index>= threshold.
+                        pass  
