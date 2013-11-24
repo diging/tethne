@@ -2,7 +2,6 @@
 To do: move testing of different types of attributes to writers testing
 rather than graph testing; NetworkX can support any data structure as an
 attribute but the graph file formats may not.
-Copyright 2013 Aaron Baker
 """
 import tethne.readers as rd
 import tethne.networks as nt
@@ -21,7 +20,7 @@ class TestCitationGraph(unittest.TestCase):
         node attributes or 4 node attributes of 4 different variable
         types
     The sparse data file networks are built on is //testin/wos_citations.txt
-   """
+    """
     def setUp(self):
         wos_data = rd.parse_wos('./testin/wos_citations.txt')
         meta_list = rd.wos2meta(wos_data)

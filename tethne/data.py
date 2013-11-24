@@ -247,8 +247,7 @@ class GraphCollection():
                 raise(ValueError("No such method in networkx.connected."))
             else:
                 for k,G in self.graphs.iteritems():
-                    r = nx.connected.__dict__[method](G, **kwargs)
-                    results[k] = value
+                    results[k] = nx.connected.__dict__[method](G, **kwargs)
         return results
         
 
