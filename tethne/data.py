@@ -1,3 +1,6 @@
+import types
+import networkx as nx
+
 class Paper():
     """
     Base class for Papers. Behaves just like a dict, but enforces a limited 
@@ -105,6 +108,148 @@ class Paper():
     def iteritems(self):
         return self.meta_dict.iteritems()
 
+
+class GraphCollection():
+    """
+    Collection of NetworkX Graph objects, organized by some index (e.g. time).
+    Provides analysis functions in NetworkX for entire collection of Graphs.
+    """
+
+    def __init__(self):
+        self.graphs = {}
+        self.metadata = {}
+        return
+
+    def __setitem__(self, index, value):
+        """
+        The value param can be either a Graph, or a (Graph, metadata) tuple.
+        Metadata can be anything, but is probably most profitably a dictionary.
+        
+        Parameters
+        ----------
+        index
+            This can be anything used to refer to the graph.
+        value : :class:`.nx.classes.graph.Graph` or :type:`tuple`
+            If a tuple, value[0] must be of type :class:`.nx.classes.graph.Graph`.
+            tuple[1] should contain metadata.
+            
+        Raises
+        ------
+        ValueError : Graph must be of type networkx.classes.graph.Graph
+            Provided value (or value[0]) is not a Graph.
+        """
+        
+        if type(value) is tuple:
+            g, metadata = value
+            self.metadata[index] = metadata
+        else:
+            g = value
+
+        if type(g) is not nx.classes.graph.Graph:
+            raise(ValueError("Graph must be of type networkx.classes.graph.Graph"))
+
+        self.graphs[index] = value
+
+    def __getitem__(self, key):
+        return self.graphs[key]
+
+    def analyze(self, method, **kwargs):
+        """
+        Passes kwargs to specified NetworkX method for each Graph, and returns
+        a dictionary of results as:
+        
+        results
+            | elem (node or edge)
+                | graph index (e.g. year)
+        
+        For example:
+
+        ::
+        import tethne.data as dt
+        import numpy as np
+        collection = dt.GraphCollection()
+        N = 100
+        for graph_index in xrange(1999, 2004):
+            d = np.random.random((N, N))
+            g = nx.Graph()
+            for i in xrange(N):
+                for j in xrange(i+1, N):
+                    if d[i, j] > 0.8:
+                        g.add_edge(i, j)
+            collection.graphs[graph_index] = g
+        
+        results = collection.analyze('betweenness_centrality', k=None)
+        print results[0]
+        ::
+        
+        {1999: 0.010101651117889644,
+        2000: 0.0008689093723107329,
+        2001: 0.010504898852426189,
+        2002: 0.009338654511194512,
+        2003: 0.007519105636349891}        
+        
+        Parameters
+        ----------
+        method : string
+            Name of a method in NetworkX to execute on graph collection.
+        **kwargs
+            A list of keyword arguments that should correspond to the parameters
+            of the specified method.
+        
+        Returns
+        -------
+        results : dictionary
+            A nested dictionary of results: results/elem(node or edge)/graph 
+            index.
+        """
+        
+        results = {}
+        
+        if not method in nx.__dict__:
+            raise(ValueError("No such name in networkx."))
+        else:
+            if type(nx.__dict__[method]) is not types.FunctionType:
+                raise(ValueError("No such method in networkx."))
+            else:
+                for k,G in self.graphs.iteritems():
+                    r = nx.__dict__[method](G, **kwargs)
+                    for elem, value in r.iteritems():
+                        try:
+                            results[elem][k] = value
+                        except KeyError:
+                            results[elem] = { k: value }
+        return results
+
+    def connected(self, method, **kwargs):
+        """
+        Performs analysis methods from networkx.connected on each graph in the
+        collection.
+        
+        Parameters
+        ----------
+        method : string
+            Name of method in networkx.connected.
+        **kwargs : kwargs
+            Keyword arguments, passed directly to method.
+            
+        Returns
+        -------
+        results : dictionary
+            Keys are graph indices, values are output of method for that graph.
+        """
+
+        results = {}
+        
+        if not method in nx.connected.__dict__:
+            raise(ValueError("No such name in networkx.connected."))
+        else:
+            if type(nx.connected.__dict__[method]) is not types.FunctionType:
+                raise(ValueError("No such method in networkx.connected."))
+            else:
+                for k,G in self.graphs.iteritems():
+                    results[k] = nx.connected.__dict__[method](G, **kwargs)
+        return results
+        
 
 def new_query_dict():
     """
