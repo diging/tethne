@@ -1,11 +1,14 @@
 import unittest
 import tethne.readers as rd
 import tethne.utilities as util
+import os
+
 
 class Testwos2meta(unittest.TestCase):
 
     def setUp(self):
-       filepath =  "/Users/ramki/tethne/tethne/testsuite/testin/authorinstitutions_test.txt" 
+       print os.getcwd() 
+       filepath =  "./testin/authorinstitutions_test.txt" 
        self.wos_list  = rd.wos.parse_wos(filepath)
        self.meta_list = rd.wos.wos2meta(self.wos_list)
 

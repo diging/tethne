@@ -752,7 +752,7 @@ class TestAuthorInstitution(unittest.TestCase):
     
     
     def setUp(self):
-        wos_data = rd.wos.parse_wos("/Users/ramki/tethne/tethne/testsuite/testin/authorinstitutions_test.txt")
+        wos_data = rd.wos.parse_wos("./testin/authorinstitutions_test.txt")
         meta_list = rd.wos.wos2meta(wos_data)
         
         
@@ -848,7 +848,7 @@ class TestAuthorCoinstitution(unittest.TestCase):
     
     
     def setUp(self):
-        wos_data = rd.wos.parse_wos("/Users/ramki/tethne/tethne/testsuite/testin/authorinstitutions_test.txt")
+        wos_data = rd.wos.parse_wos("./testin/authorinstitutions_test.txt")
         meta_list = rd.wos.wos2meta(wos_data)
         
         
