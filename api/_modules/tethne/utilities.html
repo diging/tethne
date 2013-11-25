@@ -38,6 +38,9 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../index.html">tethne  documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -52,7 +55,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Contains utilities for building networks in networks.py</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<div class="viewcode-block" id="contains"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.contains">[docs]</a><span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+<div class="viewcode-block" id="contains"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.contains">[docs]</a><span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Searches list l for a pattern specified in a lambda function f.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -62,7 +65,7 @@
     <span class="k">return</span> <span class="bp">False</span>
 
 </div>
-<div class="viewcode-block" id="overlap"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.overlap">[docs]</a><span class="k">def</span> <span class="nf">overlap</span><span class="p">(</span><span class="n">listA</span><span class="p">,</span> <span class="n">listB</span><span class="p">):</span>
+<div class="viewcode-block" id="overlap"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.overlap">[docs]</a><span class="k">def</span> <span class="nf">overlap</span><span class="p">(</span><span class="n">listA</span><span class="p">,</span> <span class="n">listB</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return number of shared objects between listA, listB as a list</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -72,7 +75,7 @@
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">listA</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">listB</span><span class="p">))</span>
 
 </div>
-<div class="viewcode-block" id="subdict"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.subdict">[docs]</a><span class="k">def</span> <span class="nf">subdict</span><span class="p">(</span><span class="n">super_dict</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
+<div class="viewcode-block" id="subdict"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.subdict">[docs]</a><span class="k">def</span> <span class="nf">subdict</span><span class="p">(</span><span class="n">super_dict</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns a subset of the super_dict with the specified keys</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -85,7 +88,7 @@
     <span class="k">return</span> <span class="n">sub_dict</span>
 
 </div>
-<div class="viewcode-block" id="attribs_to_string"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.attribs_to_string">[docs]</a><span class="k">def</span> <span class="nf">attribs_to_string</span><span class="p">(</span><span class="n">attrib_dict</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
+<div class="viewcode-block" id="attribs_to_string"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.attribs_to_string">[docs]</a><span class="k">def</span> <span class="nf">attribs_to_string</span><span class="p">(</span><span class="n">attrib_dict</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A more specific version of the subdict utility aimed at handling</span>
 <span class="sd">    node and edge attribute dictionaries for NetworkX file formats such as</span>
@@ -100,7 +103,7 @@
     <span class="k">return</span> <span class="n">attrib_dict</span>
 
 </div>
-<div class="viewcode-block" id="concat_list"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.concat_list">[docs]</a><span class="k">def</span> <span class="nf">concat_list</span><span class="p">(</span><span class="n">listA</span><span class="p">,</span> <span class="n">listB</span><span class="p">,</span> <span class="n">delim</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="concat_list"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.concat_list">[docs]</a><span class="k">def</span> <span class="nf">concat_list</span><span class="p">(</span><span class="n">listA</span><span class="p">,</span> <span class="n">listB</span><span class="p">,</span> <span class="n">delim</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Concatenate list elements pair-wise with the delim character</span>
 <span class="sd">    Returns the concatenated list</span>
@@ -116,6 +119,25 @@
         <span class="n">listC</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">listA</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">delim</span> <span class="o">+</span> <span class="n">listB</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
     <span class="k">return</span> <span class="n">listC</span>
+</div>
+<div class="viewcode-block" id="strip_non_ascii"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.strip_non_ascii">[docs]</a><span class="k">def</span> <span class="nf">strip_non_ascii</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns the string without non-ASCII characters.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    string : string</span>
+<span class="sd">        A string that may contain non-ASCII characters.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    clean_string : string</span>
+<span class="sd">        A string that does not contain non-ASCII characters.</span>
+<span class="sd">        </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">stripped</span> <span class="o">=</span> <span class="p">(</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">string</span> <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">127</span><span class="p">)</span>
+    <span class="n">clean_string</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stripped</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">clean_string</span>
 </pre></div></div>
 
           </div>
@@ -148,6 +170,9 @@
              >index</a></li>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="../../index.html">tethne  documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
