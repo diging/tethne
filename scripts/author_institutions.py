@@ -1,5 +1,5 @@
 import tethne.readers as rd
-filepath = "/Users/ramki/tethne/tethne/testsuite/testin/instituitions_2_types_input.txt"
+filepath = "../testsuite/testin/instituitions_2_types_input.txt"
 wos_list = rd.wos.parse_wos(filepath)
 
 
@@ -17,4 +17,4 @@ import tethne.networks as nt
 author_inst = nt.authors.author_institution(meta_list, 'date',  'jtitle')
 
 import tethne.writers as wr
-wr.graph.to_gexf(author_inst, "/Users/ramki/output/author_institutions")
+wr.graph.to_gexf(author_inst, "../testsuite/testout/author_institutions")

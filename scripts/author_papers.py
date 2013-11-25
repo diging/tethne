@@ -1,5 +1,5 @@
 import tethne.readers as rd
-filepath = "/home/apoh/Repository/tethne/docs/savedrecs.txt"
+filepath = "../testsuite/testin/savedrecs.txt"
 wos_list = rd.wos.parse_wos(filepath)
 meta_list = rd.wos.wos2meta(wos_list)
 
@@ -8,4 +8,4 @@ author_papers = nt.authors.author_papers(meta_list, 'ayjid', 'date', 'badkey',
                                     'atitle')
 
 import tethne.writers as wr
-wr.graph.to_gexf(author_papers, "/home/apoh/Repository/output/author_papers")
+wr.graph.to_gexf(author_papers, "../testsuite/testout/author_papers")
