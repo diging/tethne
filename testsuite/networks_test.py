@@ -855,13 +855,13 @@ class TestAuthorCoinstitution(unittest.TestCase):
         
         
         
-        self.node_attribs_check = nt.author_coinstitution(meta_list,1) # test 2
+        self.node_attribs_check = nt.authors.author_coinstitution(meta_list,1) # test 2
         
-        self.shared_institutions_zero = nt.author_coinstitution(meta_list,0) #test 3
+        self.shared_institutions_zero = nt.authors.author_coinstitution(meta_list,0) #test 3
         
-        self.shared_institutions_one = nt.author_coinstitution(meta_list,1)  # test 4
+        self.shared_institutions_one = nt.authors.author_coinstitution(meta_list,1)  # test 4
         
-        self.shared_institutions_two = nt.author_coinstitution(meta_list,2)  # test 5                                     
+        self.shared_institutions_two = nt.authors.author_coinstitution(meta_list,2)  # test 5                                     
         
         
 
@@ -936,41 +936,34 @@ class TestCocitation(unittest.TestCase):
         
         wos_data = rd.wos.parse_wos("./testin/authorinstitutions_test.txt")
         meta_list = rd.wos.wos2meta(wos_data)
-        self.cocitations_zero = nt.author_coinstitution(meta_list,0) #test 3
-        self.cocitations_one = nt.author_coinstitution(meta_list,1)  # test 4
-        self.cocitations_two = nt.author_coinstitution(meta_list,2)  # test 5                                     
+        self.cocitations_zero = nt.citations.cocitation(meta_list,0,2013) #test 3
+        self.cocitations_one = nt.citations.cocitation(meta_list,1,2013)  # test 4
+        self.cocitations_two = nt.citations.cocitation(meta_list,2,2013)  # test 5                                     
+        abc= nt.citations.cocitation(meta_list,1,2013)
+        
+        print "Nodes List:", type(abc), abc.nodes()
         
         
-
     def test_cocitations_zero(self):
-        # 10 nodes: one for each author
-        self.assertEqual(nx.number_of_nodes(self.cocitations_zero), 10)
-        # as noted in doc string, 45 edges between them
-        self.assertEqual(nx.number_of_edges(self.cocitations_zero), 45) 
+        # 8+9 nodes: 
+        self.assertEqual(nx.number_of_nodes(self.cocitations_zero),111)
+        # 62 edges between them
+        self.assertEqual(nx.number_of_edges(self.cocitations_zero),62) 
     
-    
+        
     def test_cocitations_one(self):
-        # 10 nodes: one for each author
-        self.assertEqual(nx.number_of_nodes(self.cocitations_one), 10)
-        # as noted in doc string, 3 edges between them
-        self.assertEqual(nx.number_of_edges(self.cocitations_one), 3) 
+        # 8+9 nodes: 
+        self.assertEqual(nx.number_of_nodes(self.cocitations_one), 111)
+        # 
+        self.assertEqual(nx.number_of_edges(self.cocitations_one), 62) 
     
     def test_cocitations_two(self):
-        # 10 nodes: one for each author
-        self.assertEqual(nx.number_of_nodes(self.cocitations_two), 10)
-        # as noted in doc string, 0 edges between them 
+        # 8+9 nodes: for each article paper
+        self.assertEqual(nx.number_of_nodes(self.cocitations_two), 111)
+        # 
         self.assertEqual(nx.number_of_edges(self.cocitations_two), 0) 
     
-    def test_node_attribs_check(self):
-        
-        obtained_node_attribs_dict= nx.get_node_attributes(self.node_attribs_check,"type")
-        
-        expected_node_attribs_dict= {'ZHANG, YC': 'author', 'ACAMPORA, G': 'author', 
-        'Huang, TCK': 'author', 'LOIA, V': 'author', 'WU, ZD': 'author', 'LU, CL': 'author',
-         'CHEN, EH': 'author', 'VITIELLO, A': 'author', 'ZHANG, H': 'author', 'XU, GD': 'author'}
-        
-        self.assertDictEqual(expected_node_attribs_dict, obtained_node_attribs_dict, " Node Attribs are equal")
-        
+   
     def tearDown(self):
          pass
 
