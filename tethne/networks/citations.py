@@ -308,17 +308,20 @@ def cocitation(meta_list, timeslice, threshold):
                         #  cocitations.keys() every time.           
                         try: 
                             cocitations[ papers_pair] += 1
-                            cocitation_graph.add_node(papers_pair) #add the node only if KeyError is not thrown
+                            cocitation_graph.add_node(papers_pair[0])
+                            cocitation_graph.add_node(papers_pair[1]) #add the node only if KeyError is not thrown
                         except KeyError: 
                             # May have been entered in opposite order.
                             try:
                                 cocitations[papers_pair_inv ] += 1
-                                cocitation_graph.add_node(papers_pair_inv) #add node will be ignored if those nodes are already present
-                                
+                                # Networkx will ignore add_node if those nodes are already present
+                                cocitation_graph.add_node(papers_pair_inv[0]) 
+                                cocitation_graph.add_node(papers_pair_inv[1]) 
                             except KeyError:
                                 # First time these papers have been co-cited.
                                 cocitations[papers_pair] = 1
-                                cocitation_graph.add_node(papers_pair_inv)    #This add node gets executed mostly
+                                cocitation_graph.add_node(papers_pair[0])   
+                                cocitation_graph.add_node(papers_pair[1])    #This loop gets executed mostly
     
     for key,val in cocitations.iteritems():
         if val >= threshold : # If the weight is greater or equal to the user I/P threshold 

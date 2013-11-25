@@ -739,7 +739,8 @@ class TestAuthorInstitution(unittest.TestCase):
     
     #Nodes:
     #-------
-    # As the networks is built between 10 authors and 9 institutions, there should be 19 nodes (10+9). - test 1 is checked in other tests.
+    # As the networks is built between 10 authors and 9 institutions, 
+    #there should be 19 nodes (10+9). - test 1 is checked in other tests.
     # Test the node attributes - (value="author / institutions") It should match with number of nodes and ---- 
     #--- distinguished author and institutions count ( value = "authors" count=10, value = "Institutions" count = 9, hence total 19)  - test 2
     
@@ -895,6 +896,84 @@ class TestAuthorCoinstitution(unittest.TestCase):
         
     def tearDown(self):
          pass
+
+       
+class TestCocitation(unittest.TestCase):
+    """
+    Test the cocitations network
+    Assumes reader is functioning
+
+    The ./testin/cocitations_test_2recs.txt file has been constructed with
+    The following properties:
+    
+    There are 2 article papers in the file 
+    
+    number of citations in paper1 = n1(8 in this paper) 
+    number of citations in paper1 = n2(9 in this paper)
+    
+    They share 4 common citations among them ( threshold =2) 
+    
+    """
+   
+    # There are 2 papers with n1+n2 cited papers ( 8+9 = 17) in this case
+    
+    #Nodes:
+    #-------
+    # As the networks is built between cited papers , there should be 17 nodes
+    # As of now there are node attributes of the paper to be tested
+    
+    
+    #Edges:
+    #------
+    # To test the edges, we need to give various options for the 'threshold' value in input. of cocitations  between them.
+    # Threshold =0,  58 edges between the cited papers
+    # Threshold =1,  58 edges between the cited papers
+    # Threshold =2,  6 edges between the cited papers
+    # No edge attributes as of now, hence no tests required.
+    
+    
+    def setUp(self):
+        
+        wos_data = rd.wos.parse_wos("./testin/authorinstitutions_test.txt")
+        meta_list = rd.wos.wos2meta(wos_data)
+        self.cocitations_zero = nt.author_coinstitution(meta_list,0) #test 3
+        self.cocitations_one = nt.author_coinstitution(meta_list,1)  # test 4
+        self.cocitations_two = nt.author_coinstitution(meta_list,2)  # test 5                                     
+        
+        
+
+    def test_cocitations_zero(self):
+        # 10 nodes: one for each author
+        self.assertEqual(nx.number_of_nodes(self.cocitations_zero), 10)
+        # as noted in doc string, 45 edges between them
+        self.assertEqual(nx.number_of_edges(self.cocitations_zero), 45) 
+    
+    
+    def test_cocitations_one(self):
+        # 10 nodes: one for each author
+        self.assertEqual(nx.number_of_nodes(self.cocitations_one), 10)
+        # as noted in doc string, 3 edges between them
+        self.assertEqual(nx.number_of_edges(self.cocitations_one), 3) 
+    
+    def test_cocitations_two(self):
+        # 10 nodes: one for each author
+        self.assertEqual(nx.number_of_nodes(self.cocitations_two), 10)
+        # as noted in doc string, 0 edges between them 
+        self.assertEqual(nx.number_of_edges(self.cocitations_two), 0) 
+    
+    def test_node_attribs_check(self):
+        
+        obtained_node_attribs_dict= nx.get_node_attributes(self.node_attribs_check,"type")
+        
+        expected_node_attribs_dict= {'ZHANG, YC': 'author', 'ACAMPORA, G': 'author', 
+        'Huang, TCK': 'author', 'LOIA, V': 'author', 'WU, ZD': 'author', 'LU, CL': 'author',
+         'CHEN, EH': 'author', 'VITIELLO, A': 'author', 'ZHANG, H': 'author', 'XU, GD': 'author'}
+        
+        self.assertDictEqual(expected_node_attribs_dict, obtained_node_attribs_dict, " Node Attribs are equal")
+        
+    def tearDown(self):
+         pass
+
         
 if __name__ == '__main__':
     unittest.main()
