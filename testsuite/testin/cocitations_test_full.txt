@@ -1,0 +1,119 @@
+﻿FN Thomson Reuters Web of Knowledge
+VR 1.0
+PT J
+AU Modis, K
+   Vatalis, KI
+AF Modis, Konstantinos
+   Vatalis, Konstantinos I.
+TI Assessing the Risk of Soil Pollution around an Industrialized Mining
+   Region Using a Geostatistical Approach
+SO SOIL & SEDIMENT CONTAMINATION
+LA English
+DT Article
+DE Risk assessment; soil pollution; lignite; heavy metals; Bayesian Maximum
+   Entropy
+ID CONTAMINATED SOILS; NORTHERN GREECE; HEAVY-METALS; LIGNITE; PTOLEMAIS;
+   SYSTEMS; CHEMISTRY; SEDIMENTS; MOBILITY; CHINA
+AB Knowledge of mobility of some heavy metals in coal mining areas is fundamental in order to understand their toxicity and geochemical behavior. This paper aims to map pollution and assess the risk to agricultural soils in a wider lignite opencast mining and industrial area. Geochemical data related to environmental studies show that the waste characteristics favor solubilization and mobilization of inorganic contaminants. The geochemical distribution of soil pollution is studied by the application of the Bayesian Maximum Entropy (BME) procedure, a versatile extension of geostatistics which allows merging spatial and temporal estimations in a single model. Results reveal a correlation range of contaminants concentrations up to 5000m and indicate a potential forecasting range of up to five years. Inspection of the produced spatiotemporal maps indicates that the whole study area is contaminated by As and various heavy metals, a situation which seems to be more or less stable over time.
+C1 [Modis, Konstantinos] Natl Tech Univ Athens, Sch Min & Met Engn, Athens, Greece.
+   [Vatalis, Konstantinos I.] Technol Educ Inst Western Macedonia, Dept Geotechnol & Environm Engn, Koila Kozani GREECE, Greece.
+RP Vatalis, KI (reprint author), Technol Educ Inst Western Macedonia, Dept Geotechnol & Environm Engn, Koila Kozani GREECE, Greece.
+EM kvatalis@teikoz.gr
+CR Adriano D. C., 2001, TRACE ELEMENTS TERRE
+   Rao J L, 1992, RNEA TECHN B SER LAN
+   FILIPPIDIS A, 1992, FUEL, V71, P373, DOI 10.1016/0016-2361(92)90024-I
+   Vatalis KI, 2006, ENVIRON MANAGE, V38, P1031, DOI 10.1007/s00267-005-0114-5
+   Xiao HY, 2011, SOIL SEDIMENT CONTAM, V20, P810, DOI 10.1080/15320383.2011.609200
+   Yu HL, 2007, STOCH ENV RES RISK A, V21, P555, DOI 10.1007/s00477-007-0135-0
+   Zou CL, 2011, TECHNOMETRICS, V53, P84, DOI 10.1198/TECH.2010.09095
+   Zou CL, 2012, NAV RES LOG, V59, P91, DOI 10.1002/nav.21475
+N
+NR 54
+TC 0
+Z9 0
+PU TAYLOR & FRANCIS INC
+PI PHILADELPHIA
+PA 325 CHESTNUT ST, SUITE 800, PHILADELPHIA, PA 19106 USA
+SN 1532-0383
+J9 SOIL SEDIMENT CONTAM
+JI Soil. Sediment. Contam.
+PD JAN 1
+PY 2014
+VL 23
+IS 1
+BP 63
+EP 75
+DI 10.1080/15320383.2013.777393
+PG 13
+WC Environmental Sciences
+SC Environmental Sciences & Ecology
+GA 205VL
+UT WOS:000323472800005
+ER
+
+PT J
+AU Tuerhong, G
+   Kim, SB
+   Kang, P
+   Cho, S
+AF Tuerhong, Gulanbaier
+   Kim, Seoung Bum
+   Kang, Pilsung
+   Cho, Sungzoon
+TI Multivariate Control Charts Based on Hybrid Novelty Scores
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+LA English
+DT Article
+DE Data mining; Multivariate control charts; Novelty score; Quality control
+ID EWMA CONTROL CHART
+AB We propose a new nonparametric multivariate control chart that integrates a novelty score. The proposed control chart uses as its monitoring statistic a hybrid novelty score, calculated based on the distance to local observations as well as on the distance to the convex hull constructed by its neighbors. The control limits of the proposed control chart were established based on a bootstrap method. A rigorous simulation study was conducted to examine the properties of the proposed control chart under various scenarios and compare it with existing multivariate control charts in terms of average run length (ARL) performance. The simulation results showed that the proposed control chart outperformed both the parametric and nonparametric Hotelling's T-2 control charts, especially in nonnormal situations. Moreover, experimental results with real semiconductor data demonstrated the applicability and effectiveness of the proposed control chart. To increase the capability to detect small mean shift, we propose an exponentially weighted hybrid novelty score control chart. Simulation results indicated that exponentially weighted hybrid score charts outperformed the hybrid novelty score based control charts.
+C1 [Tuerhong, Gulanbaier; Kim, Seoung Bum] Korea Univ, Sch Ind Management Engn, Seoul 136701, South Korea.
+   [Kang, Pilsung] Seoul Natl Univ Sci & Technol, Sch Global Convergence, IT Management, Seoul, South Korea.
+   [Cho, Sungzoon] Seoul Natl Univ, Dept Ind Engn, Seoul, South Korea.
+RP Kim, SB (reprint author), Korea Univ, Sch Ind Management Engn, Seoul 136701, South Korea.
+EM sbkim1@korea.ac.kr
+FU Brain Korea 21 (Network Enterprise), Basic Science Research Program
+   through the National Research Foundation of Korea; Ministry of
+   Education, Science, and Technology [0003811]; Ministry of Knowledge
+   Economy in Korea under the IT R&D Infrastructure Program
+   [NIPA-2011-(B1110-1101-0002)]
+FX The authors would like to thank the editor and the reviewers for their
+   useful comments and suggestions, which were greatly helpful in improving
+   the quality of the article. This research was supported by Brain Korea
+   21 (Network Enterprise), Basic Science Research Program through the
+   National Research Foundation of Korea funded by the Ministry of
+   Education, Science, and Technology (0003811), and the Ministry of
+   Knowledge Economy in Korea under the IT R&D Infrastructure Program
+   supervised by the NIPA (National IT Industry Promotion Agency)
+   (NIPA-2011-(B1110-1101-0002)).
+CR Angiulli F, 2005, IEEE T KNOWL DATA EN, V17, P203, DOI 10.1109/TKDE.2005.31
+   Chakraborti S, 2001, J QUAL TECHNOL, V33, P304
+   Das N, 2009, QUAL TECHNOL QUANT M, V6, P155
+   Efron B., 1993, INTRO BOOTSTRAP
+   Frank A., 2010, UCI MACHINE LEARNING
+   Rao J L, 1992, RNEA TECHN B SER LAN
+   FILIPPIDIS A, 1992, FUEL, V71, P373, DOI 10.1016/0016-2361(92)90024-I
+   Zou CR, 2011, TECHNOMETRICS, V53, P84, DOI 10.1198/TECH.2010.09095
+   Zou CL, 2012, NAV RES LOG, V59, P91, DOI 10.1002/nav.21475
+NR 30
+TC 0
+Z9 0
+PU TAYLOR & FRANCIS INC
+PI PHILADELPHIA
+PA 325 CHESTNUT ST, SUITE 800, PHILADELPHIA, PA 19106 USA
+SN 0361-0918
+J9 COMMUN STAT-SIMUL C
+JI Commun. Stat.-Simul. Comput.
+PD JAN 1
+PY 2014
+VL 43
+IS 1
+BP 115
+EP 131
+DI 10.1080/03610918.2012.698775
+PG 17
+WC Statistics & Probability
+SC Mathematics
+GA 200DX
+UT WOS:000323049100008
+ER

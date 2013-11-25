@@ -218,7 +218,7 @@ def author_cocitation(meta_list, threshold):
                       
     Notes
     -----
-    should be able to specify a threshold -- number of co-citations required to 
+    should be able to specify a threshold -- number of co-citations required to
     draw an edge.
     
     """
@@ -254,46 +254,75 @@ def cocitation(meta_list, timeslice, threshold):
     separate networkx Graph in which vertices are the _cited_ papers. Separate
     graphs allows to analyze each timeslice separately.
     
+    **Nodes** -- papers
+    
+    **Node attributes** -- None
+    
+    **Edges** -- (a, b) if a and b are cited by the same paper. 
+    
+    **Edge attributes** -- 'weight', number of times two papers are co-cited together.
+                      
+    
+    Parameters
+    ----------
+    meta_list : list
+        a list of :class:`.Paper` objects.
+        
+    threshold : int
+        A random value provided by the user. If its greater than zero two nodes 
+        should share something common.
+        
+    Returns
+    -------
+    cocitation : networkx.Graph
+        A cocitation network.
+                      
+    Notes
+    -----
+    should be able to specify a threshold -- number of co-citations required to 
+    draw an edge.
+
+    
     """
     
-                    
-    # Co-citation function starts here
-    paper_references = {}         #keys: ayjid of each paper, values: a list of cited references of that paper (ayjid of citations) 
+    cocitation_graph = nx.Graph(type='author_cocitation')
+     
+    # We'll use tuples as keys. Values are the number of times each pair
+    #  of papers is co-cited.   
+    
+    cocitations = {}    
+
     for paper in meta_list:
-            if paper['ayjid'] is not None:
-                authors= paper['ayjid']
-                #print authors, '\n'
-                cit_str = "" 
-                final_cit =""
-                for cited_paper in paper['citations']:  
-                      cit_str = cited_paper['ayjid']    # field ayjid in the citations sub-dict is going to be the vertex of the Network graph.
-                      final_cit = cit_str.upper() + ',' + final_cit    # upper case
-                      cit_list= final_cit.split(',')    # to create a list
-                      paper_references[authors] = cit_list  # created a dictionary whose structure is given below.
-                        
-    #To check if its correct                    
-    for key,val in paper_references.iteritems():
-       # print key,'->',  val , '\n'
-        pass
-
-
-    # Example
-    #{CHEN T 2013 ADVANCES IN ENGINEERING SOFTWARE : ['Zhang QF 2004 ENG COMPUTATION', 'Witten IH 2005 DATA MINING PRACTICA', 'Tu ZG 2004 IEEE T EVOLUT COMPUT', 
-                                                     #'Toksari MD 2006 APPL MATH COMPUT', 'Schwefel H-P 1977 NUMERICAL OPTIMIZATI', 'Rechenberg I. 1973 EVOLUTIONSSTRATEGIE'] }
-        
-    papers = paper_references.keys()
-    references = paper_references.values()
-
-    for each_paper in papers:
-                no_of_references= len(paper_references[each_paper]) # how many reference papers in each 'article'
-                reference_list = paper_references[each_paper]  # create a list to traverse pairs of references,
-                print reference_list
-                print no_of_references , '---------' , '\n'
-                for i in range(no_of_references) :
-                        for j in range(no_of_references-1) :
-                            #print reference_list[i], ',', reference_list[j]
-                               # yet to do
-                               #Here I need to pick up pairs of i and j from the reference_list and compare it with the other paper's cited references. 
-                               #if I am able to find the cited pair in another paper, I keep increasing the weight/index.
-                               #Add 2 nodes i and j , when the pair i and j has traversed the full list of references and add an edge between themby checking the condition if index>= threshold.
-                            pass  
+        # Some papers don't have citations.
+        if paper['citations'] is not None:
+            # n is the number of papers in the provided list of Papers.
+            n = len(paper['citations'])
+            if n > 1:     # No point in proceeding if there is only one citation.
+                for i in xrange(0, n):
+                    # Start inner loop at i+1, to avoid redundancy and self-loops.
+                    for j in xrange(i+1, n):
+                        papers_pair     = ( paper['citations'][i]['ayjid'].upper(), paper['citations'][j]['ayjid'].upper() )                  
+                        papers_pair_inv = ( paper['citations'][j]['ayjid'].upper(), paper['citations'][i]['ayjid'].upper() )                
+                        # Have these papers been co-cited before?
+                        # try blocks are much more efficient than checking
+                        #  cocitations.keys() every time.           
+                        try: 
+                            cocitations[ papers_pair] += 1
+                            cocitation_graph.add_node(papers_pair) #add the node only if KeyError is not thrown
+                        except KeyError: 
+                            # May have been entered in opposite order.
+                            try:
+                                cocitations[papers_pair_inv ] += 1
+                                cocitation_graph.add_node(papers_pair_inv) #add node will be ignored if those nodes are already present
+                                
+                            except KeyError:
+                                # First time these papers have been co-cited.
+                                cocitations[papers_pair] = 1
+                                cocitation_graph.add_node(papers_pair_inv)    #This add node gets executed mostly
+    
+    for key,val in cocitations.iteritems():
+        if val >= threshold : # If the weight is greater or equal to the user I/P threshold 
+            cocitation_graph.add_edge(key[0],key[1]) #add edge between the 2 co-cited papers
+            
+    
+    return cocitation_graph
