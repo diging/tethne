@@ -271,7 +271,10 @@ def cocitation(meta_list, timeslice, threshold):
     threshold : int
         A random value provided by the user. If its greater than zero two nodes 
         should share something common.
-        
+    timeslice : int
+    
+        Ex: 2013, 1997 - proper year values
+            
     Returns
     -------
     cocitation : networkx.Graph

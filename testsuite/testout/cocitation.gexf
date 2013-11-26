@@ -18,14 +18,10 @@
     <edges>
       <edge id="0" source="ZOU CK 2011 TECHNOMETRICS" target="LANG CL 2012 NAV RES LOG" />
       <edge id="1" source="ZOU CK 2011 TECHNOMETRICS" target="RAO J 1992 RNEA TECHN B SER LAN" />
-      <edge id="2" source="ZOU CK 2011 TECHNOMETRICS" target="EFRON B. 1993 INTRO BOOTSTRAP" />
-      <edge id="3" source="ZOU CK 2011 TECHNOMETRICS" target="FILIPPIDIS A 1992 FUEL" />
-      <edge id="4" source="FILIPPIDIS A 1992 FUEL" target="RAO J 1992 RNEA TECHN B SER LAN" />
-      <edge id="5" source="FILIPPIDIS A 1992 FUEL" target="EFRON B. 1993 INTRO BOOTSTRAP" />
-      <edge id="6" source="FILIPPIDIS A 1992 FUEL" target="LANG CL 2012 NAV RES LOG" />
-      <edge id="7" source="EFRON B. 1993 INTRO BOOTSTRAP" target="LANG CL 2012 NAV RES LOG" />
-      <edge id="8" source="EFRON B. 1993 INTRO BOOTSTRAP" target="RAO J 1992 RNEA TECHN B SER LAN" />
-      <edge id="9" source="LANG CL 2012 NAV RES LOG" target="RAO J 1992 RNEA TECHN B SER LAN" />
+      <edge id="2" source="ZOU CK 2011 TECHNOMETRICS" target="FILIPPIDIS A 1992 FUEL" />
+      <edge id="3" source="FILIPPIDIS A 1992 FUEL" target="RAO J 1992 RNEA TECHN B SER LAN" />
+      <edge id="4" source="FILIPPIDIS A 1992 FUEL" target="LANG CL 2012 NAV RES LOG" />
+      <edge id="5" source="LANG CL 2012 NAV RES LOG" target="RAO J 1992 RNEA TECHN B SER LAN" />
     </edges>
   </graph>
 </gexf>
