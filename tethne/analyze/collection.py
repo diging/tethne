@@ -59,8 +59,8 @@ def algorithm(C, method, **kwargs):
                     if d[i, j] > 0.8:
                         g.add_edge(i, j)
             collection.graphs[graph_index] = g
-        
-        results = az.collection.analyze('betweenness_centrality', k=None)
+
+        results = az.collection.algorithm(collection, 'betweenness_centrality', k=None)
         print results[0]
     
     Should produce something like:
@@ -91,6 +91,7 @@ def algorithm(C, method, **kwargs):
                         results[elem][k] = value
                     except KeyError:
                         results[elem] = { k: value }
+                nx.set_node_attributes(G, method, r)    # [#61510128]
     return results
 
 def connected(C, method, **kwargs):

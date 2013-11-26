@@ -16,7 +16,7 @@ def node_global_closeness_centrality(g, node, normalize=True):
     Parameters
     ----------
     g : networkx.Graph
-    node
+    node : any
         Identifier of node of interest in g.
     normalize : boolean
         If True, normalizes centrality based on the average shortest path 
