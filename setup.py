@@ -9,7 +9,7 @@ LICENSE = 'new BSD'
 URL = 'https://github.com/erickpeirson/tethne' 
 VERSION = '0.2' 
 LONG_DESCRIPTION = open('README.md').read()
-PACKAGES = ['tethne','tethne.testsuite']
+PACKAGES = ['tethne','tethne.analyze','tethne.networks','tethne.readers','tethne.resources','tethne.services','tethne.utilities', 'tethne.writers','testsuite']
 
 setup(name=DISTNAME,
       maintainer=MAINTAINER,
