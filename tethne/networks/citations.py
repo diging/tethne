@@ -332,3 +332,45 @@ def cocitation(meta_list, timeslice, threshold):
             
     
     return cocitation_graph
+
+#trying DAG's for citations
+
+# for paper nodes - i.e outflow
+def descendants(G, source):
+    """Return all nodes reachable from `source` in G.
+
+    Parameters
+    ----------
+    G : NetworkX DiGraph
+    source : node in G
+
+    Returns
+    -------
+    des : set()
+       The descendants of source in G
+    """
+
+    if not G.has_node(source):
+        raise nx.NetworkXError("The node %s is not in the graph." % source)
+    
+    des = set(nx.shortest_path_length(G, source=source).keys()) - set([source])
+    return des 
+
+#For cited nodes - i.e inflow
+def ancestors(G, source):
+    """Return all nodes having a path to `source` in G.
+
+    Parameters
+    ----------
+    G : NetworkX DiGraph
+    source : node in G
+
+    Returns
+    -------
+    ancestors : set()
+       The ancestors of source in G
+    """
+    if not G.has_node(source):
+        raise nx.NetworkXError("The node %s is not in the graph." % source)
+    anc = set(nx.shortest_path_length(G, target=source).keys()) - set([source])
+    return anc

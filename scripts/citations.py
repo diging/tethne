@@ -2,7 +2,7 @@
 #with value of None
 import tethne.readers as rd
 #filepath = "../docs/savedrecs.txt"
-filepath = "../testsuite/testin/semantic_web.txt"
+filepath = "../testsuite/testin/cocitations_test_2recs.txt"
 wos_list = rd.wos.parse_wos(filepath)
 meta_list = rd.wos.wos2meta(wos_list)
 

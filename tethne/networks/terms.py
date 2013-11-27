@@ -52,7 +52,7 @@ def keyword_cooccurrence(papers, threshold, connected=False):
     cooccurrence = np.zeros((len(wordset), len(wordset)))
     frequencies = np.zeros((len(wordset),))
     
-    for entry in papers
+    for entry in papers:
         if entry['keywords'] in keywords.keys():
             for word in keywords[entry['wosid']]:
                 frequencies[dictionary[word]] += 1
