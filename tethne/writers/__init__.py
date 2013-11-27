@@ -5,3 +5,4 @@ and analysis in external applications, and for storage.
 
 import graph
 import matrix
+import collection
