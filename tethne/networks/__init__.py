@@ -21,3 +21,4 @@ edge (x,y), x -> y, xy, etc. by calling x the "tail" and y the "head".
 import citations
 import authors
 import helpers
+import terms
