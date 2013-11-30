@@ -79,12 +79,15 @@ def to_dxgmml(C, path): # [#61510094]
             for period in nodes[n]['periods']:
                 f.write('\t<node label="'+str(n)+'" id="'+str(n)+'" start="'+ str(period['start']) + '" end="' + str(period['end']+1) + '">\n')
                 for i in xrange(period['start'], period['end'] + 1):
-                    for attr, value in nodes[n][i].iteritems():
-                        # Type names are slightly different in XGMML.
-                        if type(value) is str: dtype = 'string'
-                        if type(value) is int: dtype = 'integer'
-                        if type(value) is float: dtype = 'real'
-                        f.write('\t\t<att name="'+str(attr)+'" type="'+dtype+'" value="'+str(value)+'" start="'+str(i)+'" end="'+str(i+1)+'" />\n')
+                    try:
+                        for attr, value in nodes[n][i].iteritems():
+                            # Type names are slightly different in XGMML.
+                            if type(value) is str: dtype = 'string'
+                            if type(value) is int: dtype = 'integer'
+                            if type(value) is float: dtype = 'real'
+                            f.write('\t\t<att name="'+str(attr)+'" type="'+dtype+'" value="'+str(value)+'" start="'+str(i)+'" end="'+str(i+1)+'" />\n')
+                    except KeyError:
+                        pass
                 f.write('\t</node>\n')    
       
         for e in edges.keys():
