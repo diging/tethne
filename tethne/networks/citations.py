@@ -244,7 +244,7 @@ def author_cocitation(meta_list, threshold):
 
 
 
-def cocitation(meta_list, timeslice, threshold):
+def cocitation(meta_list, threshold):
     
     """
     A cocitation network is a network in which vertices are papers, and edges
