@@ -147,7 +147,7 @@ def bibliographic_coupling(doc_list, citation_id, threshold, node_id,
     if node_id not in meta_keys:
         raise KeyError('node_id' + node_id + ' is not a meta_dict key.')
 
-    #citations is the only invalid meta_key for citation_id
+    # 'citations' is the only invalid meta_key for citation_id
     meta_keys.remove('citations')
     if citation_id not in meta_keys:
         raise KeyError('citation_id' + citation_id + ' is not a meta_dict' +
@@ -155,30 +155,30 @@ def bibliographic_coupling(doc_list, citation_id, threshold, node_id,
                        ' overlap.')
     
     for i in xrange(len(doc_list)):
-        #make a list of citation_id's for each document
+        # Make a list of citation_id's for each document...
         i_list = []
         if doc_list[i]['citations'] is not None:
             for citation in doc_list[i]['citations']:
                 i_list.append(citation[citation_id])
-
-        #and construct that document's node
+        
+        # ...and construct that document's node.
         node_i_attribs = util.subdict(doc_list[i], node_attribs)
-        bcoupling.add_node(doc_list[i][node_id], node_i_attribs)
 
         for j in xrange(i+1, len(doc_list)):
-            #make a list of citation_id's for each document
+            # Make a list of citation_id's for each document...
             j_list = []
             if doc_list[j]['citations'] is not None:
                 for citation in doc_list[j]['citations']:
                     j_list.append(citation[citation_id])
 
-            #and construct that document's node
+            # ...and construct that document's node.
             node_j_attribs = util.subdict(doc_list[j], node_attribs)
-            bcoupling.add_node(doc_list[j][node_id], node_j_attribs)
 
-            #add an edge if the citation overlap is sufficiently high
+            # Add nodes and edge if the citation overlap is sufficiently high.
             overlap = util.overlap(i_list, j_list)
             if len(overlap) >= threshold:
+                bcoupling.add_node(doc_list[i][node_id], node_i_attribs)
+                bcoupling.add_node(doc_list[j][node_id], node_j_attribs)
                 bcoupling.add_edge(doc_list[i][node_id],
                                    doc_list[j][node_id],
                                    overlap=len(overlap))
