@@ -77,32 +77,28 @@ def to_dxgmml(C, path): # [#61510094]
         f.write('<graph>\n')
         for n in nodes.keys():
             for period in nodes[n]['periods']:
-                f.write('\t<node label="'+str(n)+'" id="'+str(n)+'" start="'+ str(period['start']) + '" end="' + str(period['end']+1) + '">\n')
-                keys = nodes[n].keys()
-                keys.sort()
-                for i in [ year for year in keys if period['start'] <= year <= period['end'] ]:
-                #for i in xrange(period['start'], period['end'] + 1):
-                    for attr, value in nodes[n][i].iteritems():
-                        # Type names are slightly different in XGMML.
-                        if type(value) is str: dtype = 'string'
-                        if type(value) is int: dtype = 'integer'
-                        if type(value) is float: dtype = 'real'
-                        f.write('\t\t<att name="'+str(attr)+'" type="'+dtype+'" value="'+str(value)+'" start="'+str(i)+'" end="'+str(i+1)+'" />\n')
+                f.write('\t<node label="'+str(n)+'" id="'+str(n)+'" start="'+ str(period['start']) + '" end="' + str(period['end']+1) + '">\n'.replace("&", "&amp;"))
+                for i in sorted(nodes[n].keys()):
+                    if period['start'] <= i <= period['end']:
+                        for attr, value in nodes[n][i].iteritems():
+                            # Type names are slightly different in XGMML.
+                            if type(value) is str: dtype = 'string'
+                            if type(value) is int: dtype = 'integer'
+                            if type(value) is float: dtype = 'real'
+                            f.write('\t\t<att name="'+str(attr)+'" type="'+dtype+'" value="'+str(value)+'" start="'+str(i)+'" end="'+str(i+1)+'" />\n'.replace("&", "&amp;"))
                 f.write('\t</node>\n')    
       
         for e in edges.keys():
             for period in edges[e]['periods']:
-                f.write('\t<edge source="' + str(e[0]) + '" target="' + str(e[1]) + '" start="'+ str(period['start']) + '" end="' + str(period['end']+1) + '">\n')
-                keys = edges[e].keys()
-                keys.sort()
-                for i in [ year for year in keys if period['start'] <= year <= period['end'] ]:
-                #for i in xrange(period['start'], period['end'] + 1):
-                    for attr, value in edges[e][i].iteritems():
-                        # Type names are slightly different in XGMML.
-                        if type(value) is str: dtype = 'string'
-                        if type(value) is int: dtype = 'integer'
-                        if type(value) is float: dtype = 'real'
-                        f.write('\t\t<att name="'+str(attr)+'" type="'+dtype+'" value="'+str(value)+'" start="'+str(i)+'" end="'+str(i+1)+'" />\n')
+                f.write('\t<edge source="' + str(e[0]) + '" target="' + str(e[1]) + '" start="'+ str(period['start']) + '" end="' + str(period['end']+1) + '">\n'.replace("&", "&amp;"))
+                for i in sorted(edges[e].keys()):
+                    if period['start'] <= i <= period['end']:
+                        for attr, value in edges[e][i].iteritems():
+                            # Type names are slightly different in XGMML.
+                            if type(value) is str: dtype = 'string'
+                            if type(value) is int: dtype = 'integer'
+                            if type(value) is float: dtype = 'real'
+                            f.write('\t\t<att name="'+str(attr)+'" type="'+dtype+'" value="'+str(value)+'" start="'+str(i)+'" end="'+str(i+1)+'" />\n'.replace("&", "&amp;"))
                 f.write('\t</edge>\n')                
         
         f.write('</graph>')
