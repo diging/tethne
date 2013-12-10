@@ -4,6 +4,7 @@ with care.
 """
 
 import tethne.data as ds
+import xml.etree.ElementTree as ET
 
 # PubMed functions
 def pubmed_file_id(filename):

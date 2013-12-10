@@ -281,7 +281,7 @@ def author_coinstitution(Papers, threshold):
                     overlap = set(author_institutions[authors[i]]) & set(author_institutions[authors[j]]) #compare 2 author dict elements
                     if len(overlap) >= threshold:
                             coinstitution.add_node(authors[j],type ='author')            
-                            print authors[i] + "->" + authors[j]
+                            #print authors[i] + "->" + authors[j]
                             coinstitution.add_edge(authors[i], authors[j], overlap=len(overlap))
                     else :
                             pass
