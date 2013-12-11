@@ -6,6 +6,7 @@ with care.
 import tethne.data as ds
 import xml.etree.ElementTree as ET
 
+
 # PubMed functions
 def pubmed_file_id(filename):
     """Future (not implemented).
@@ -46,8 +47,16 @@ def parse_pubmed_xml(filepath):
         A list of :class:`.Paper` instances.
         
     """
-    tree = ET.parse(filepath)
-    root = tree.getroot()
+    
+
+   
+    try:
+        with open(filepath,'r') as f:
+             tree = ET.fromstring(text, parser)(filepath)
+             root = tree.getroot()
+    
+    except IOError: # File does not exist, or couldn't be read.
+        raise IOError("File does not exist, or cannot be read.")
     
     # define location of simple article meta data relative to xml tree rooted 
     # at 'article'

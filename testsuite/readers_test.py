@@ -15,16 +15,13 @@ class Testwos2meta(unittest.TestCase):
     
     def test_institutions_1(self):
         # define expected values for C1 meta_dict key
-        
         # CASES : TESTED
         # overlapping of authors - whether append works correctly or not - 5 authors:instution pairs where 1 or 2 authors have common institutions.
-
         # KeyError is not creating exception issues.
         
         institutions = self.meta_list[0]['institutions']
      
-        
-        print 'institutions', institutions
+        #print 'institutions', institutions
                 
         expected_dict1 =  {'ZHANG, YC': ['Victoria Univ'],
                                              'WU, ZD': ['Wenzhou Univ', 'Univ Sci & Technol China'],
@@ -35,13 +32,12 @@ class Testwos2meta(unittest.TestCase):
                         
         
 
-        print 'expected_dict1', expected_dict1
-        #Check if the expected and resulted 'institutions' field are the same.
+        # print 'expected_dict1', expected_dict1
+        # Check if the expected and resulted 'institutions' field are the same.
         
-        #self.assertListEqual(institutionslist, expected_dict1,"Not equal")
         self.assertDictEqual(institutions, expected_dict1,"Not equal")    
             
-       # writing the remaining tests.     
+        # writing the remaining tests.     
         
     def test_institutions_2(self):
         # define expected values for C1 meta_dict key
@@ -52,7 +48,6 @@ class Testwos2meta(unittest.TestCase):
           
         #Check if the expected and resulted 'institutions' field are the same.
         
-        #self.assertListEqual(institutions, expected_dict2,"Not equal")
         self.assertDictEqual(institutions, expected_dict2,"Not equal")       #changed to Dict Check from List check
         
    # commented the following block as it will throw Key Error ( as expected). We can uncomment it anytime.     
@@ -63,31 +58,24 @@ class Testwos2meta(unittest.TestCase):
           
         # CASES : TESTED
         # What if the record did not contain C1 input field info.
-        with self.assertRaises(AttributeError):
-            #self.institutions[:1]   
-            institutions = self.meta_list[2]['institutions']
-            print 'ins::', type(institutions)
-            
-        
-         
-        expected_dict3 = {} # Null as it wont have any field       
-         
-        #Check if the expected and resulted 'institutions' field are the same.
-      
-        self.assertDictEqual(institutions, expected_dict3,"Not equal")    
+        institutions = self.meta_list[2]['institutions']
+        print "instit", institutions
+        expected_dict3 = {}   
+        try:
+           institutions = self.meta_list[2]['institutions']
+        except AssertationError:
+           self.assertDictEqual(institutions, expected_dict3,"Not equal")    
      
+        
     def test_institutions_4(self):
         # define expected values for C1 meta_dict key
         
         # No authors in the C1 field and the N authors must be mapped with 1 institution - N-1 Mapping
         
         institutions = self.meta_list[3]['institutions']
-        
-        expected_dict4 = {'Huang, TCK': ['Natl Chung Cheng Univ']}
-                        
+        expected_dict4 = {'Huang, TCK': ['Natl Chung Cheng Univ']}                
         
         #Check if the expected and resulted 'institutions' field are the same.
-        
         #self.assertListEqual(institutions, expected_dict4,"Not equal")
         self.assertDictEqual(institutions, expected_dict4,"Not equal")    
     def tearDown(self):

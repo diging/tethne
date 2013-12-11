@@ -442,10 +442,10 @@ class TestBiblioGraph(unittest.TestCase):
         paper. This makes a complete graph.
         """
         obtained_nodes_list=  self.ayjid_zero.nodes()
-        print "nodes 0:", obtained_nodes_list
+        #print "nodes 0:", obtained_nodes_list
         
         obtained_edges_list=  self.ayjid_zero.edges()
-        print "edges 0:", obtained_edges_list
+        #print "edges 0:", obtained_edges_list
         
         # 4 papers
         self.assertEqual(nx.number_of_nodes(self.ayjid_zero), 4)
@@ -457,15 +457,15 @@ class TestBiblioGraph(unittest.TestCase):
         With threshold greater than 0, two papers must share at least 1
         reference in common. Test this when threshold is 1.
         """
-        # 4 papers
+        # 3 papers- optimized
         obtained_nodes_list=  self.ayjid_one.nodes()
-        print "nodes 1 :", obtained_nodes_list
+        #print "nodes 1 :", obtained_nodes_list
         
         obtained_edges_list=  self.ayjid_one.edges()
-        print "edges 1:", obtained_edges_list
+        #print "edges 1:", obtained_edges_list
         
         
-        self.assertEqual(nx.number_of_nodes(self.ayjid_one), 4)
+        self.assertEqual(nx.number_of_nodes(self.ayjid_one), 3)
         # first paper shares 2 >= 1 references with second, 1 >= 1 references
         # with third, and the second and third share 1 >= 1 references
         self.assertEqual(nx.number_of_edges(self.ayjid_one), 3)
@@ -479,11 +479,11 @@ class TestBiblioGraph(unittest.TestCase):
         """
         
         obtained_nodes_list=  self.ayjid_two.nodes()
-        print "nodes 2:", obtained_nodes_list
+        #print "nodes 2:", obtained_nodes_list
         
         obtained_edges_list=  self.ayjid_two.edges()
-        print "edges 2:", obtained_edges_list
-        self.assertEqual(nx.number_of_nodes(self.ayjid_two), 4)
+        #print "edges 2:", obtained_edges_list
+        self.assertEqual(nx.number_of_nodes(self.ayjid_two), 2)
         # first paper shares 2 >= 2 references with second
         self.assertEqual(nx.number_of_edges(self.ayjid_two), 1)
  
@@ -564,34 +564,42 @@ class TestBiblioGraph(unittest.TestCase):
                                   'aulast':node3_aulast,
                                   'citations':node3_citations}
         node3_ayjid = 'MULAZZANI L 2013 MARINE POLICY'
- 
-        # paper 4 meta data
-        node4_atitle = ('Application of multiple geochemical markers to ' + 
-                        'investigate organic pollution in a dynamic coastal ' + 
-                        'zone')
-        node4_date = 2013
-        node4_aulast = ['Liu', 'Wang', 'Wong', 'Qiu', 'Zeng']
-        for i in xrange(len(node4_aulast)):
-            node4_aulast[i] = node4_aulast[i].upper().strip()
-        node4_cr_list = [('AIZENSHT.Z, 1973, GEOCHIM COSMOCHIM AC, V37, ' + 
-                          'P559, DOI 10.1016/0016-7037(73)90218-4'),
-                         ('BLUMER M, 1971, MAR BIOL, V8, P183, DOI ' + 
-                          '10.1007/BF00355214'),
-                         ('Cachot J, 2007, ENVIRON SCI TECHNOL, V41, ' + 
-                          'P7830, DOI 10.1021/es071082v')]
-        node4_citations = []
-        for cite in node4_cr_list:
-            node4_citations.append(rd.wos.parse_cr(cite))
-        node4_expected_attribs = {'atitle':node4_atitle,
-                                  'date':node4_date,
-                                  'aulast':node4_aulast,
-                                  'citations':node4_citations}
-        node4_ayjid = 'LIU L 2013 ENVIRONMENTAL TOXICOLOGY AND CHEMISTRY'
- 
-        # obtain node attributes from network and test them
-        node_list = [node1_ayjid, node2_ayjid, node3_ayjid, node4_ayjid]
+        
+        #commenting the paper 4, as it doesnt exist at all. Previosly all nodes were added in the graph
+#      
+#         # paper 4 meta data
+#         node4_atitle = ('Application of multiple geochemical markers to ' + 
+#                         'investigate organic pollution in a dynamic coastal ' + 
+#                         'zone')
+#         node4_date = 2013
+#         node4_aulast = ['Liu', 'Wang', 'Wong', 'Qiu', 'Zeng']
+#         for i in xrange(len(node4_aulast)):
+#             node4_aulast[i] = node4_aulast[i].upper().strip()
+#         node4_cr_list = [('AIZENSHT.Z, 1973, GEOCHIM COSMOCHIM AC, V37, ' + 
+#                           'P559, DOI 10.1016/0016-7037(73)90218-4'),
+#                          ('BLUMER M, 1971, MAR BIOL, V8, P183, DOI ' + 
+#                           '10.1007/BF00355214'),
+#                          ('Cachot J, 2007, ENVIRON SCI TECHNOL, V41, ' + 
+#                           'P7830, DOI 10.1021/es071082v')]
+#         node4_citations = []
+#         for cite in node4_cr_list:
+#             node4_citations.append(rd.wos.parse_cr(cite))
+#         node4_expected_attribs = {'atitle':node4_atitle,
+#                                   'date':node4_date,
+#                                   'aulast':node4_aulast,
+#                                   'citations':node4_citations}
+#         node4_ayjid = 'LIU L 2013 ENVIRONMENTAL TOXICOLOGY AND CHEMISTRY'
+#  
+#         # obtain node attributes from network and test them
+        node_list = [node1_ayjid, node2_ayjid, node3_ayjid]
         attrib_list = [node1_expected_attribs, node2_expected_attribs,
-                       node3_expected_attribs, node4_expected_attribs]
+                       node3_expected_attribs]
+
+       #commenting as 4th node is not in the graph.
+       # node_list = [node1_ayjid, node2_ayjid, node3_ayjid, node4_ayjid]
+       # attrib_list = [node1_expected_attribs, node2_expected_attribs,
+        #               node3_expected_attribs, node4_expected_attribs]
+        
         for i in xrange(len(node_list)):
             node = node_list[i]
             expected_attribs = attrib_list[i]
@@ -614,8 +622,8 @@ class TestBiblioGraph(unittest.TestCase):
         if fails network is not robust to papers missing citation data
         test for threshold = 1
         """
-        # 4 papers
-        self.assertEqual(nx.number_of_nodes(self.missing_citations_one), 4)
+        # 3 papers
+        self.assertEqual(nx.number_of_nodes(self.missing_citations_one), 3)
         # first paper shares 2 >= 1 references with second, 1 >= 1 references
         # with third, and the second and third share 1 >= 1 references and
         # fourth constructed to have no citations
@@ -974,12 +982,12 @@ class TestCocitation(unittest.TestCase):
         obtained_edges_list= self.cocitations_zero.edges()
         expected_edges_list= [('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'YU HL 2007 STOCH ENV RES RISK A'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'ZOU CK 2011 TECHNOMETRICS'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'FILIPPIDIS A 1992 FUEL'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'VATALIS K. 2006 ENVIRON MANAGE'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'LANG CL 2012 NAV RES LOG'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'RAO J 1992 RNEA TECHN B SER LAN'), ('YU HL 2007 STOCH ENV RES RISK A', 'ZOU CK 2011 TECHNOMETRICS'), ('YU HL 2007 STOCH ENV RES RISK A', 'FILIPPIDIS A 1992 FUEL'), ('YU HL 2007 STOCH ENV RES RISK A', 'VATALIS K. 2006 ENVIRON MANAGE'), ('YU HL 2007 STOCH ENV RES RISK A', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), ('YU HL 2007 STOCH ENV RES RISK A', 'LANG CL 2012 NAV RES LOG'), ('YU HL 2007 STOCH ENV RES RISK A', 'RAO J 1992 RNEA TECHN B SER LAN'), ('ZOU CK 2011 TECHNOMETRICS', 'VATALIS K. 2006 ENVIRON MANAGE'), ('ZOU CK 2011 TECHNOMETRICS', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('ZOU CK 2011 TECHNOMETRICS', 'FILIPPIDIS A 1992 FUEL'), ('ZOU CK 2011 TECHNOMETRICS', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), ('ZOU CK 2011 TECHNOMETRICS', 'EFRON B. 1993 INTRO BOOTSTRAP'), ('ZOU CK 2011 TECHNOMETRICS', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('ZOU CK 2011 TECHNOMETRICS', 'LANG CL 2012 NAV RES LOG'), ('ZOU CK 2011 TECHNOMETRICS', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('ZOU CK 2011 TECHNOMETRICS', 'RAO J 1992 RNEA TECHN B SER LAN'), ('ZOU CK 2011 TECHNOMETRICS', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('FILIPPIDIS A 1992 FUEL', 'VATALIS K. 2006 ENVIRON MANAGE'), ('FILIPPIDIS A 1992 FUEL', 'RAO J 1992 RNEA TECHN B SER LAN'), ('FILIPPIDIS A 1992 FUEL', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), ('FILIPPIDIS A 1992 FUEL', 'EFRON B. 1993 INTRO BOOTSTRAP'), ('FILIPPIDIS A 1992 FUEL', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('FILIPPIDIS A 1992 FUEL', 'LANG CL 2012 NAV RES LOG'), ('FILIPPIDIS A 1992 FUEL', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('FILIPPIDIS A 1992 FUEL', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('FILIPPIDIS A 1992 FUEL', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('VATALIS K. 2006 ENVIRON MANAGE', 'RAO J 1992 RNEA TECHN B SER LAN'), ('VATALIS K. 2006 ENVIRON MANAGE', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), ('VATALIS K. 2006 ENVIRON MANAGE', 'LANG CL 2012 NAV RES LOG'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'LANG CL 2012 NAV RES LOG'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'RAO J 1992 RNEA TECHN B SER LAN'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('ADRIANO D. 2001 TRACE ELEMENTS TERRE', 'LANG CL 2012 NAV RES LOG'), ('ADRIANO D. 2001 TRACE ELEMENTS TERRE', 'RAO J 1992 RNEA TECHN B SER LAN'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'LANG CL 2012 NAV RES LOG'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'RAO J 1992 RNEA TECHN B SER LAN'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('LANG CL 2012 NAV RES LOG', 'RAO J 1992 RNEA TECHN B SER LAN'), ('LANG CL 2012 NAV RES LOG', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('LANG CL 2012 NAV RES LOG', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('LANG CL 2012 NAV RES LOG', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('FRANK A. 2010 UCI MACHINE LEARNING', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('FRANK A. 2010 UCI MACHINE LEARNING', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('FRANK A. 2010 UCI MACHINE LEARNING', 'RAO J 1992 RNEA TECHN B SER LAN'), ('RAO J 1992 RNEA TECHN B SER LAN', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('RAO J 1992 RNEA TECHN B SER LAN', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('ANGIULLI F 2005 IEEE T KNOWL DATA EN', 'CHAKRABORTI S 2001 J QUAL TECHNOL')]
         self.assertListEqual(obtained_edges_list, expected_edges_list, "Edges List is not as expected")
-        print "cocitation_zero_edges:",obtained_edges_list
+        #print "cocitation_zero_edges:",obtained_edges_list
         #check if the nodes_list is same as expected
         
         expected_nodes_list=['XIAO HY 2011 SOIL SEDIMENT CONTAM', 'YU HL 2007 STOCH ENV RES RISK A', 'ZOU CK 2011 TECHNOMETRICS', 'FILIPPIDIS A 1992 FUEL', 'VATALIS K. 2006 ENVIRON MANAGE', 'EFRON B. 1993 INTRO BOOTSTRAP', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE', 'DAS N 2009 QUAL TECHNOL QUANT M', 'LANG CL 2012 NAV RES LOG', 'FRANK A. 2010 UCI MACHINE LEARNING', 'RAO J 1992 RNEA TECHN B SER LAN', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN', 'CHAKRABORTI S 2001 J QUAL TECHNOL']
         obtained_nodes_list= self.cocitations_zero.nodes()
-        print "cocitation_zero:",obtained_nodes_list
+        #print "cocitation_zero:",obtained_nodes_list
         self.assertListEqual(obtained_nodes_list, expected_nodes_list, "Nodes List is as expected")
         
  

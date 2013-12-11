@@ -163,7 +163,7 @@ def bibliographic_coupling(doc_list, citation_id, threshold, node_id,
         
         # ...and construct that document's node.
         node_i_attribs = util.subdict(doc_list[i], node_attribs)
-
+        #print node_i_attribs
         for j in xrange(i+1, len(doc_list)):
             # Make a list of citation_id's for each document...
             j_list = []
@@ -173,12 +173,14 @@ def bibliographic_coupling(doc_list, citation_id, threshold, node_id,
 
             # ...and construct that document's node.
             node_j_attribs = util.subdict(doc_list[j], node_attribs)
-
+            #print "n j ", node_j_attribs
             # Add nodes and edge if the citation overlap is sufficiently high.
             overlap = util.overlap(i_list, j_list)
             if len(overlap) >= threshold:
                 bcoupling.add_node(doc_list[i][node_id], node_i_attribs)
                 bcoupling.add_node(doc_list[j][node_id], node_j_attribs)
+                #nx.set_node_attributes(bcoupling,"",node_i_attribs)
+                
                 bcoupling.add_edge(doc_list[i][node_id],
                                    doc_list[j][node_id],
                                    overlap=len(overlap))
