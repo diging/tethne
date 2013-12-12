@@ -7,13 +7,6 @@ AF Modis, Konstantinos
    Vatalis, Konstantinos I.
 TI Assessing the Risk of Soil Pollution around an Industrialized Mining
    Region Using a Geostatistical Approach
-SO SOIL & SEDIMENT CONTAMINATION
-LA English
-DT Article
-DE Risk assessment; soil pollution; lignite; heavy metals; Bayesian Maximum
-   Entropy
-ID CONTAMINATED SOILS; NORTHERN GREECE; HEAVY-METALS; LIGNITE; PTOLEMAIS;
-   SYSTEMS; CHEMISTRY; SEDIMENTS; MOBILITY; CHINA
 AB Knowledge of mobility of some heavy metals in coal mining areas is fundamental in order to understand their toxicity and geochemical behavior. This paper aims to map pollution and assess the risk to agricultural soils in a wider lignite opencast mining and industrial area. Geochemical data related to environmental studies show that the waste characteristics favor solubilization and mobilization of inorganic contaminants. The geochemical distribution of soil pollution is studied by the application of the Bayesian Maximum Entropy (BME) procedure, a versatile extension of geostatistics which allows merging spatial and temporal estimations in a single model. Results reveal a correlation range of contaminants concentrations up to 5000m and indicate a potential forecasting range of up to five years. Inspection of the produced spatiotemporal maps indicates that the whole study area is contaminated by As and various heavy metals, a situation which seems to be more or less stable over time.
 C1 [Modis, Konstantinos] Natl Tech Univ Athens, Sch Min & Met Engn, Athens, Greece.
    [Vatalis, Konstantinos I.] Technol Educ Inst Western Macedonia, Dept Geotechnol & Environm Engn, Koila Kozani GREECE, Greece.
@@ -61,12 +54,6 @@ AF Tuerhong, Gulanbaier
    Kang, Pilsung
    Cho, Sungzoon
 TI Multivariate Control Charts Based on Hybrid Novelty Scores
-SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
-LA English
-DT Article
-DE Data mining; Multivariate control charts; Novelty score; Quality control
-ID EWMA CONTROL CHART
-AB We propose a new nonparametric multivariate control chart that integrates a novelty score. The proposed control chart uses as its monitoring statistic a hybrid novelty score, calculated based on the distance to local observations as well as on the distance to the convex hull constructed by its neighbors. The control limits of the proposed control chart were established based on a bootstrap method. A rigorous simulation study was conducted to examine the properties of the proposed control chart under various scenarios and compare it with existing multivariate control charts in terms of average run length (ARL) performance. The simulation results showed that the proposed control chart outperformed both the parametric and nonparametric Hotelling's T-2 control charts, especially in nonnormal situations. Moreover, experimental results with real semiconductor data demonstrated the applicability and effectiveness of the proposed control chart. To increase the capability to detect small mean shift, we propose an exponentially weighted hybrid novelty score control chart. Simulation results indicated that exponentially weighted hybrid score charts outperformed the hybrid novelty score based control charts.
 C1 [Tuerhong, Gulanbaier; Kim, Seoung Bum] Korea Univ, Sch Ind Management Engn, Seoul 136701, South Korea.
    [Kang, Pilsung] Seoul Natl Univ Sci & Technol, Sch Global Convergence, IT Management, Seoul, South Korea.
    [Cho, Sungzoon] Seoul Natl Univ, Dept Ind Engn, Seoul, South Korea.
