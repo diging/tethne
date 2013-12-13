@@ -2,7 +2,7 @@ import networkx as nx
 import tethne.utilities as util
 import tethne.data as ds
 import tethne.readers as rd
-import tethne.networks as nt
+#import tethne.networks as nt
 
 #trying DAG's for citations
 
