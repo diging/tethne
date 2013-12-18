@@ -1,7 +1,6 @@
 import networkx as nx
 import tethne.utilities as util
 import tethne.data as ds
-#import tethne.networks.dagfunctions as dag
 
 def direct_citation(doc_list, node_id, *node_attribs):
     """
@@ -66,7 +65,6 @@ def direct_citation(doc_list, node_id, *node_attribs):
             citation_network.add_node(entry[node_id], node_attrib_dict)
             citation_network_internal.add_node(entry[node_id], 
                                                node_attrib_dict) 
-
         if entry['citations'] is not None:
             for citation in entry['citations']:
                 #check the tail
@@ -79,7 +77,7 @@ def direct_citation(doc_list, node_id, *node_attribs):
                     node_attrib_dict = util.subdict(citation, node_attribs)
                     citation_network.add_node(citation[node_id], 
                                               node_attrib_dict)
-
+     
                 if head_has_id and tail_has_id:
                     #then draw an edge in the network
                     citation_network.add_edge(entry[node_id], 
@@ -94,20 +92,18 @@ def direct_citation(doc_list, node_id, *node_attribs):
                             entry[node_id], 
                             citation[node_id],
                             date=entry['date'])
-    
-        #checking if both the graphs are Directed Acyclic Graphs's.
-        #=======================================================================
-        # cit_is_dag = dag.is_directed_acyclic_graph(citation_network)
-        # internal_is_dag= dag.is_directed_acyclic_graph(citation_network_internal) 
-        # 
-        # if(cit_is_dag and internal_is_dag): 
-        #     return citation_network, citation_network_internal 
-        # else: 
-        #    raise nx.NetworkXError(
-        #         "The citations and Internal citations graph are not Directed Acyclic Graphs.")
-        #=======================================================================
-        return citation_network, citation_network_internal       
- 
+        
+    #checking if both the graphs are Directed Acyclic Graphs's.
+    cit_is_dag = nx.is_directed_acyclic_graph(citation_network)
+    internal_is_dag= nx.is_directed_acyclic_graph(citation_network_internal) 
+         
+    if(cit_is_dag and internal_is_dag): 
+        return citation_network, citation_network_internal 
+                
+    else: 
+        raise nx.NetworkXError(
+        "The citations and Internal citations graph are not Directed Acyclic Graphs.")
+         
         
    
 
@@ -302,7 +298,7 @@ def cocitation(meta_list, threshold):
     
     """
     
-    cocitation_graph = nx.Graph(type='author_cocitation')
+    cocitation_graph = nx.Graph(type='cocitation')
      
     # We'll use tuples as keys. Values are the number of times each pair
     #  of papers is co-cited.   
