@@ -2,7 +2,7 @@ import networkx as nx
 import tethne.utilities as util
 import tethne.data as ds
 
-def direct_citation(doc_list, node_id, *node_attribs):
+def direct_citation(doc_list, node_id='ayjid', *node_attribs):
     """
     Create a NetworkX directed graph based on citation records.
     
@@ -18,7 +18,7 @@ def direct_citation(doc_list, node_id, *node_attribs):
         A list of :class:`.Paper` instances.
         
     node_id : int
-        A key from :class:`.Paper` to identify the nodes.
+        A key from :class:`.Paper` to identify the nodes. Default is 'ayjid'.
         
     node_attribs : list
         List of user provided optional arguments apart from the provided 
@@ -107,8 +107,8 @@ def direct_citation(doc_list, node_id, *node_attribs):
         
    
 
-def bibliographic_coupling(doc_list, citation_id, threshold, node_id,
-                           *node_attribs):
+def bibliographic_coupling(doc_list, citation_id='ayjid', threshold='1',
+                           node_id='ayjid', *node_attribs):
     """
     Generate a bibliographic coupling network.
     
@@ -126,11 +126,12 @@ def bibliographic_coupling(doc_list, citation_id, threshold, node_id,
     doc_list : list
         A list of wos_objects.
     citation_id: string
-        A key from :class:`.Paper` to identify the citation overlaps.
+        A key from :class:`.Paper` to identify the citation overlaps.  Default 
+        is 'ayjid'.
     threshold : int
         Minimum number of shared citations to consider two papers "coupled".
     node_id : string
-        Field in :class:`.Paper` used to identify the nodes.
+        Field in :class:`.Paper` used to identify the nodes. Default is 'ayjid'.
     node_attribs : list
         List of fields in :class:`.Paper` to include as node attributes in 
         graph.
