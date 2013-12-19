@@ -18,8 +18,7 @@ We use "head" and "tail" nomenclature to refer to the members of a directed
 edge (x,y), x -> y, xy, etc. by calling x the "tail" and y the "head".
 """
 
-import citations
+import papers
 import authors
 import helpers
 import terms
-import dagfunctions

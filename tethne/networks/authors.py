@@ -168,7 +168,7 @@ def author_institution(Papers, *edge_attribs):
     return author_institution
 
 
-def author_coinstitution(Papers, threshold):
+def author_coinstitution(Papers, threshold=1):
     
     """
     Create a graph with people as vertices, and edges indicating affiliation
@@ -186,13 +186,14 @@ def author_coinstitution(Papers, threshold):
     Parameters
     ----------
     Papers : list
-    a list of wos_objects.
-    threshold : A random value provided by the user. If its greater than zero two nodes 
-                should share something common.
+        A list of :class:`.Paper` objects.
+    threshold : int
+        Minimum number of shared institutions required for an edge between
+        two authors.
         
     Returns
     -------
-    coinstitution : NetworkX :class:`.graph`
+    coinstitution : NetworkX :class:`.Graph`
         A coinstitution network.  
     
     """
