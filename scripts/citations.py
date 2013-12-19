@@ -22,7 +22,7 @@ wos_list = rd.wos.parse_wos(filepath)
 meta_list = rd.wos.wos2meta(wos_list)
 
 import tethne.networks as nt
-cites, internal_cites = nt.citations.direct_citation(meta_list, 'ayjid', 'atitle', 'date') 
+cites, internal_cites = nt.papers.direct_citation(meta_list, 'ayjid', 'atitle', 'date')
 
 print "------Cites Nodes----"
 print cites.nodes()
@@ -32,10 +32,10 @@ print "----Internal Cites--"
 print internal_cites.nodes()
 print internal_cites.edges()
 
-c_des = nt.citations.descendants(cites,'Abdullah S 2012 INFORM SCIENCES')
-i_des = nt.citations.descendants(internal_cites,'ACAMPORA G 2013 INFORMATION SCIENCES')
+c_des = nt.papers.descendants(cites,'Abdullah S 2012 INFORM SCIENCES')
+i_des = nt.papers.descendants(internal_cites,'ACAMPORA G 2013 INFORMATION SCIENCES')
 
-c_ans = nt.citations.ancestors(cites,'Borda J. 1981 MEMOIRE ELECTIONS SC')
+c_ans = nt.papers.ancestors(cites,'Borda J. 1981 MEMOIRE ELECTIONS SC')
 #i_ans = nt.citations.ancestors(internal_cites,'Borda J. 1981 MEMOIRE ELECTIONS SC')
 
 #print 'cites des:', c_des
@@ -45,6 +45,6 @@ print 'cites ans:', c_ans
 #print 'Internal ans:', i_ans
 
 is_directed = cites.is_directed()
-is_dag = nt.citations.is_directed_acyclic_graph(cites)
+is_dag = nt.papers.is_directed_acyclic_graph(cites)
 print 'Is it directed? :' , is_directed
 print 'Is it dag :' , is_dag

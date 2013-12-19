@@ -4,7 +4,7 @@ wos_list = rd.wos.parse_wos(filepath)
 meta_list = rd.wos.wos2meta(wos_list)
 
 import tethne.networks as nt
-biblios = nt.citations.bibliographic_coupling(meta_list, 'ayjid', 1, 'ayjid',
+biblios = nt.papers.bibliographic_coupling(meta_list, 'ayjid', 1, 'ayjid',
                                 'atitle', 'date', 'badkey', 'jtitle') 
 
 import tethne.writers as wr

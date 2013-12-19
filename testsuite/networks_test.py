@@ -27,23 +27,23 @@ class TestDirectCitationGraph(unittest.TestCase):
  
         # ayjid with no attributes
         (self.ayjid_citations, 
-         self.ayjid_internal) = nt.citations.direct_citation(meta_list, 'ayjid')
+         self.ayjid_internal) = nt.papers.direct_citation(meta_list, 'ayjid')
  
         # doi with no attributes                                          
         (self.doi_citations, 
-         self.doi_internal) = nt.citations.direct_citation(meta_list, 'doi')
+         self.doi_internal) = nt.papers.direct_citation(meta_list, 'doi')
  
         # int, string, list, dict
         self.node_attribs = ('date', 'atitle', 'aulast', 'citations')
  
         # ayjid with attribs 
         (self.ayjid_cit_attrib,
-         self.ayjid_int_attrib) = nt.citations.direct_citation(meta_list,
+         self.ayjid_int_attrib) = nt.papers.direct_citation(meta_list,
                                                   'ayjid',
                                                   *self.node_attribs)
         # doi with attribs
         (self.doi_cit_attrib,
-         self.doi_int_attrib) = nt.citations.direct_citation(meta_list,
+         self.doi_int_attrib) = nt.papers.direct_citation(meta_list,
                                                 'doi',
                                                 *self.node_attribs)
  
@@ -154,21 +154,21 @@ class Test_DirectCitation_DAG(unittest.TestCase):
  
         # ayjid with no attributes
         (self.ayjid_citations, 
-         self.ayjid_internal) = nt.citations.direct_citation(meta_list, 'ayjid')
+         self.ayjid_internal) = nt.papers.direct_citation(meta_list, 'ayjid')
  
         # doi with no attributes                                          
         (self.doi_citations, 
-         self.doi_internal) = nt.citations.direct_citation(meta_list, 'doi')
+         self.doi_internal) = nt.papers.direct_citation(meta_list, 'doi')
  
         
         # ayjid with attribs 
         (self.ayjid_cit_attrib,
-         self.ayjid_int_attrib) = nt.citations.direct_citation(meta_list,
+         self.ayjid_int_attrib) = nt.papers.direct_citation(meta_list,
                                                   'ayjid',
                                                   'date')
         # doi with attribs
         (self.doi_cit_attrib,
-         self.doi_int_attrib) = nt.citations.direct_citation(meta_list,
+         self.doi_int_attrib) = nt.papers.direct_citation(meta_list,
                                                 'doi',
                                                 'date')
  
@@ -532,19 +532,19 @@ class TestBiblioGraph(unittest.TestCase):
     def setUp(self):
         wos_data = rd.wos.parse_wos('./testin/wos_biblio.txt')
         wos_meta = rd.wos.wos2meta(wos_data)
-        self.ayjid_zero = nt.citations.bibliographic_coupling(wos_meta,
+        self.ayjid_zero = nt.papers.bibliographic_coupling(wos_meta,
                                                  'ayjid',
                                                  0,
                                                  'ayjid')
-        self.ayjid_one = nt.citations.bibliographic_coupling(wos_meta,
+        self.ayjid_one = nt.papers.bibliographic_coupling(wos_meta,
                                                'ayjid',
                                                1,
                                                'ayjid')
-        self.ayjid_two = nt.citations.bibliographic_coupling(wos_meta,
+        self.ayjid_two = nt.papers.bibliographic_coupling(wos_meta,
                                                'ayjid',
                                                2,
                                                'ayjid')
-        self.ayjid_attribs = nt.citations.bibliographic_coupling(wos_meta,
+        self.ayjid_attribs = nt.papers.bibliographic_coupling(wos_meta,
                                                    'ayjid',
                                                    1,
                                                    'ayjid',
@@ -558,12 +558,12 @@ class TestBiblioGraph(unittest.TestCase):
         # that the fourth paper is missing its citation record
         wos_cite = rd.wos.parse_wos('./testin/wos_biblio_cite.txt')
         doc_list_cite = rd.wos.wos2meta(wos_cite)
-        self.missing_citations_zero =  nt.citations.bibliographic_coupling(doc_list_cite,
+        self.missing_citations_zero =  nt.papers.bibliographic_coupling(doc_list_cite,
                                                              'ayjid',
                                                              0,
                                                              'ayjid')
  
-        self.missing_citations_one =  nt.citations.bibliographic_coupling(doc_list_cite,
+        self.missing_citations_one =  nt.papers.bibliographic_coupling(doc_list_cite,
                                                             'ayjid',
                                                             1,
                                                             'ayjid')
@@ -781,19 +781,19 @@ class TestAuthorCouplingGraph(unittest.TestCase):
         wos_data = rd.wos.parse_wos('./testin/wos_author_coupling.txt')
         meta_list = rd.wos.wos2meta(wos_data)
  
-        self.ayjid_zero = nt.authors.author_coupling(meta_list,
+        self.ayjid_zero = nt.papers.author_coupling(meta_list,
                                                 0,
                                                 'ayjid')
  
-        self.ayjid_one = nt.authors.author_coupling(meta_list,
+        self.ayjid_one = nt.papers.author_coupling(meta_list,
                                                1,
                                                'ayjid')
  
-        self.ayjid_two = nt.authors.author_coupling(meta_list,
+        self.ayjid_two = nt.papers.author_coupling(meta_list,
                                                2,
                                                'ayjid')
  
-        self.ayjid_attribs = nt.authors.author_coupling(meta_list,
+        self.ayjid_attribs = nt.papers.author_coupling(meta_list,
                                                    1,
                                                    'ayjid',
                                                    'atitle',
@@ -1097,9 +1097,9 @@ class TestCocitation(unittest.TestCase):
         
         wos_data = rd.wos.parse_wos("./testin/cocitations_test_2recs.txt")
         meta_list = rd.wos.wos2meta(wos_data)
-        self.cocitations_zero = nt.citations.cocitation(meta_list,0) #test 1
-        self.cocitations_one = nt.citations.cocitation(meta_list,1)  # test 2
-        self.cocitations_two = nt.citations.cocitation(meta_list,2)  # test 5                                     
+        self.cocitations_zero = nt.papers.cocitation(meta_list,0) #test 1
+        self.cocitations_one = nt.papers.cocitation(meta_list,1)  # test 2
+        self.cocitations_two = nt.papers.cocitation(meta_list,2)  # test 5                                     
         
         
         
