@@ -38,9 +38,6 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="../../index.html">tethne  documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -119,25 +116,6 @@
         <span class="n">listC</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">listA</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">delim</span> <span class="o">+</span> <span class="n">listB</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
     <span class="k">return</span> <span class="n">listC</span>
-</div>
-<div class="viewcode-block" id="strip_non_ascii"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.strip_non_ascii">[docs]</a><span class="k">def</span> <span class="nf">strip_non_ascii</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Returns the string without non-ASCII characters.</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    string : string</span>
-<span class="sd">        A string that may contain non-ASCII characters.</span>
-<span class="sd">    </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    clean_string : string</span>
-<span class="sd">        A string that does not contain non-ASCII characters.</span>
-<span class="sd">        </span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">stripped</span> <span class="o">=</span> <span class="p">(</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">string</span> <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">127</span><span class="p">)</span>
-    <span class="n">clean_string</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stripped</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">clean_string</span>
 </pre></div></div>
 
           </div>
@@ -170,9 +148,6 @@
              >index</a></li>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="../../index.html">tethne  documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
