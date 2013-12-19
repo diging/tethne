@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,7 +9,7 @@
     
     <title>analyze Package &mdash; tethne  documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="tethne  documentation" href="index.html" />
     <link rel="up" title="tethne Package" href="tethne.html" />
-    <link rel="next" title="data Package" href="tethne.data.html" />
-    <link rel="prev" title="tethne Package" href="tethne.html" /> 
+    <link rel="next" title="networks Package" href="tethne.networks.html" /> 
   </head>
   <body>
     <div class="related">
@@ -41,14 +39,8 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="tethne.data.html" title="data Package"
+          <a href="tethne.networks.html" title="networks Package"
              accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="tethne.html" title="tethne Package"
-             accesskey="P">previous</a> |</li>
         <li><a href="index.html">tethne  documentation</a> &raquo;</li>
           <li><a href="tethne.html" accesskey="U">tethne Package</a> &raquo;</li> 
       </ul>
@@ -135,7 +127,7 @@ index.</p>
                 <span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
     <span class="n">collection</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="n">graph_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
 
-<span class="n">results</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="s">&#39;betweenness_centrality&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="s">&#39;betweenness_centrality&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -261,7 +253,7 @@ in different components.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>g</strong> : networkx.Graph</p>
-<p><strong>node</strong> :</p>
+<p><strong>node</strong> : any</p>
 <blockquote>
 <div><p>Identifier of node of interest in g.</p>
 </div></blockquote>
@@ -352,12 +344,9 @@ substantially more processing time, and values will usually be &gt;&gt; 0.</p>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="tethne.html"
-                        title="previous chapter">tethne Package</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="tethne.data.html"
-                        title="next chapter">data Package</a></p>
+  <p class="topless"><a href="tethne.networks.html"
+                        title="next chapter">networks Package</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/tethne.analyze.txt"
@@ -390,20 +379,14 @@ substantially more processing time, and values will usually be &gt;&gt; 0.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="tethne.data.html" title="data Package"
+          <a href="tethne.networks.html" title="networks Package"
              >next</a> |</li>
-        <li class="right" >
-          <a href="tethne.html" title="tethne Package"
-             >previous</a> |</li>
         <li><a href="index.html">tethne  documentation</a> &raquo;</li>
           <li><a href="tethne.html" >tethne Package</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2013, Author.
+        &copy; Copyright 2013, ASU Digital Innovation Group.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

@@ -1,0 +1,140 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tethne.testsuite.readers_test &mdash; tethne  documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="tethne  documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">tethne  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for tethne.testsuite.readers_test</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
+
+<div class="viewcode-block" id="TestPubmedXmlParse"><a class="viewcode-back" href="../../../tethne.testsuite.html#tethne.testsuite.readers_test.TestPubmedXmlParse">[docs]</a><span class="k">class</span> <span class="nc">TestPubmedXmlParse</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestPubmedXmlParse.setUp"><a class="viewcode-back" href="../../../tethne.testsuite.html#tethne.testsuite.readers_test.TestPubmedXmlParse.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+       <span class="n">filepath</span> <span class="o">=</span> <span class="s">&#39;./testin/pmc_sample1.xml&#39;</span> 
+       <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">parse_pubmed_xml</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestPubmedXmlParse.test_schema_validation"><a class="viewcode-back" href="../../../tethne.testsuite.html#tethne.testsuite.readers_test.TestPubmedXmlParse.test_schema_validation">[docs]</a>    <span class="k">def</span> <span class="nf">test_schema_validation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="TestPubmedXmlParse.test_sample1_front"><a class="viewcode-back" href="../../../tethne.testsuite.html#tethne.testsuite.readers_test.TestPubmedXmlParse.test_sample1_front">[docs]</a>    <span class="k">def</span> <span class="nf">test_sample1_front</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># define expected values for each meta_dict key</span>
+        <span class="c"># citations left out for front matter test</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;aulast&#39;</span><span class="p">:[</span><span class="s">&#39;Peng&#39;</span><span class="p">,</span> <span class="s">&#39;Yuan&#39;</span><span class="p">,</span> <span class="s">&#39;Wang&#39;</span><span class="p">],</span>
+                    <span class="s">&#39;auinit&#39;</span><span class="p">:[</span><span class="s">&#39;J&#39;</span><span class="p">,</span> <span class="s">&#39;J&#39;</span><span class="p">,</span> <span class="s">&#39;J&#39;</span><span class="p">],</span>
+                    <span class="s">&#39;atitle&#39;</span><span class="p">:(</span><span class="s">&#39;Effect of Diets Supplemented with Different&#39;</span> <span class="o">+</span>
+                              <span class="s">&#39; Sources of Astaxanthin on the Gonad of the&#39;</span> <span class="o">+</span>
+                              <span class="s">&#39; Sea Urchin Anthocidaris crassispina&#39;</span><span class="p">),</span>
+                    <span class="s">&#39;jtitle&#39;</span><span class="p">:</span><span class="s">&#39;Nutrients&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;volume&#39;</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span>
+                    <span class="s">&#39;issue&#39;</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span>
+                    <span class="s">&#39;spage&#39;</span><span class="p">:</span><span class="mi">922</span><span class="p">,</span>
+                    <span class="s">&#39;epage&#39;</span><span class="p">:</span><span class="mi">934</span><span class="p">,</span>
+                    <span class="s">&#39;date&#39;</span><span class="p">:</span><span class="mi">2012</span><span class="p">,</span>
+                    <span class="s">&#39;ayjid&#39;</span><span class="p">:</span><span class="s">&#39;Peng J 2012 Nutrients&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;doi&#39;</span><span class="p">:</span><span class="s">&#39;10.3390/nu4080922&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;pmid&#39;</span><span class="p">:</span><span class="mi">23016124</span><span class="p">,</span>
+                    <span class="s">&#39;wosid&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">}</span>
+
+        <span class="n">obtained</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">expected</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expected</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">obtained</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+</div>
+<div class="viewcode-block" id="TestPubmedXmlParse.test_sample1_back"><a class="viewcode-back" href="../../../tethne.testsuite.html#tethne.testsuite.readers_test.TestPubmedXmlParse.test_sample1_back">[docs]</a>    <span class="k">def</span> <span class="nf">test_sample1_back</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="TestPubmedXmlParse.test_sample2_result"><a class="viewcode-back" href="../../../tethne.testsuite.html#tethne.testsuite.readers_test.TestPubmedXmlParse.test_sample2_result">[docs]</a>    <span class="k">def</span> <span class="nf">test_sample2_result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="TestPubmedXmlParse.tearDown"><a class="viewcode-back" href="../../../tethne.testsuite.html#tethne.testsuite.readers_test.TestPubmedXmlParse.tearDown">[docs]</a>    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">tethne  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, ASU Digital Innovation Group.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

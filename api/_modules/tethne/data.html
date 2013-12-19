@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,7 +9,7 @@
     
     <title>tethne.data &mdash; tethne  documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -38,9 +37,6 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="../../index.html">tethne  documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -52,36 +48,12 @@
           <div class="body">
             
   <h1>Source code for tethne.data</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">types</span>
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
-
 <div class="viewcode-block" id="Paper"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.Paper">[docs]</a><span class="k">class</span> <span class="nc">Paper</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Base class for Papers. Behaves just like a dict, but enforces a limited </span>
-<span class="sd">    vocabulary of keys, and specific data types.</span>
+<span class="sd">    Base class for Papers. Enforces a limited vocabulary of keys, and specific</span>
+<span class="sd">    data types.</span>
 <span class="sd">    </span>
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    The following fields (and corresponding data types) are allowed:</span>
-<span class="sd">    </span>
-<span class="sd">    * aulast (list) -- Authors&#39; last name, as a list.</span>
-<span class="sd">    * auinit (list) -- Authors&#39; first initial as a list.</span>
-<span class="sd">    * institution (dict) -- Institutions with which the authors are affiliated.</span>
-<span class="sd">    * atitle (str) -- Article title.</span>
-<span class="sd">    * jtitle (str) -- Journal title or abbreviated title.</span>
-<span class="sd">    * volume (str) -- Journal volume number.</span>
-<span class="sd">    * issue (str) -- Journal issue number.</span>
-<span class="sd">    * spage (str) -- Starting page of article in journal.</span>
-<span class="sd">    * epage (str) -- Ending page of article in journal.</span>
-<span class="sd">    * date (int) -- Article date of publication.</span>
-<span class="sd">    * country (dict) -- Author-Country mapping.</span>
-<span class="sd">    * citations (list) -- A list of :class:`.Paper` instances.</span>
-<span class="sd">    * ayjid (str) -- First author&#39;s name (last, fi), pub year, and journal.</span>
-<span class="sd">    * doi (str) -- Digital Object Identifier.</span>
-<span class="sd">    * pmid (str) -- PubMed ID.</span>
-<span class="sd">    * wosid (str) -- Web of Science UT fieldtag value.</span>
-<span class="sd">    </span>
-<span class="sd">    None values are also allowed for all fields.</span>
+<span class="sd">    Should be used in place of data_struct.new_meta_dict(), below.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -145,68 +117,81 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
         
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Passes through to core dictionary.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
     
     <span class="k">def</span> <span class="nf">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Passes through to core dictionary.&quot;&quot;&quot;</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
     
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Passes through to core dictionary.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span><span class="p">)</span>
     
 <div class="viewcode-block" id="Paper.keys"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.Paper.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Passes through to core dictionary.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
     </div>
 <div class="viewcode-block" id="Paper.values"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.Paper.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Passes through to core dictionary.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
     </div>
 <div class="viewcode-block" id="Paper.iteritems"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.Paper.iteritems">[docs]</a>    <span class="k">def</span> <span class="nf">iteritems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Passes through to core dictionary.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_dict</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
-
+    
 </div></div>
-<div class="viewcode-block" id="GraphCollection"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.GraphCollection">[docs]</a><span class="k">class</span> <span class="nc">GraphCollection</span><span class="p">():</span>
+<div class="viewcode-block" id="new_meta_dict"><a class="viewcode-back" href="../../tethne.html#tethne.data.new_meta_dict">[docs]</a><span class="k">def</span> <span class="nf">new_meta_dict</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Collection of NetworkX Graph objects, organized by some index (e.g. time).</span>
-<span class="sd">    Provides analysis functions in NetworkX for entire collection of Graphs.</span>
+<span class="sd">    Creates a Meta Dictionary of citation data values. </span>
+<span class="sd">    This function has the most common values from citation data sources like WebOfScience,PubMed etc.,</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    meta_list : list</span>
+<span class="sd">        A meta_list dictionary with &#39;None&#39; as default values.</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    * aulast -- authors&#39; last name as a list.</span>
+<span class="sd">    * auinit -- authors&#39; first initial as a list.</span>
+<span class="sd">    * institution -- institutions with which the authors are affiliated.</span>
+<span class="sd">    * atitle -- article title</span>
+<span class="sd">    * jtitle -- journal title or abbreviated title</span>
+<span class="sd">    * volume -- journal volume number</span>
+<span class="sd">    * issue -- journal issue number</span>
+<span class="sd">    * spage -- starting page of article in journal</span>
+<span class="sd">    * epage -- ending page of article in journal</span>
+<span class="sd">    * date -- article date of publication</span>
+<span class="sd">    * country -- country with which the authors are affiliated.</span>
+<span class="sd">    * citations -- a list of minimum meta_dict dictionaries for cited references</span>
+<span class="sd">    * ayjid -- First author&#39;s last name, initial the publication year and the </span>
+<span class="sd">        journal published in</span>
+<span class="sd">    * doi -- Digital Object Identifier </span>
+<span class="sd">    * pmid -- PubMed ID</span>
+<span class="sd">    * wosid -- Web of Science UT fieldtag</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">meta_dict</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&#39;aulast&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;auinit&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;institution&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span> <span class="c">#</span>
+                    <span class="s">&#39;atitle&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;jtitle&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;volume&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;issue&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;spage&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;epage&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;date&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;citations&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;country&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span> <span class="c">#</span>
+                    <span class="s">&#39;ayjid&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;doi&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;pmid&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;wosid&#39;</span><span class="p">:</span><span class="bp">None</span>    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="n">meta_dict</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">graphs</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">return</span>
-
-    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The value param can be either a Graph, or a (Graph, metadata) tuple.</span>
-<span class="sd">        Metadata can be anything, but is probably most profitably a dictionary.</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        index</span>
-<span class="sd">            This can be anything used to refer to the graph.</span>
-<span class="sd">        value : :class:`.nx.classes.graph.Graph` or :type:`tuple`</span>
-<span class="sd">            If a tuple, value[0] must be of type :class:`.nx.classes.graph.Graph`.</span>
-<span class="sd">            tuple[1] should contain metadata.</span>
-<span class="sd">            </span>
-<span class="sd">        Raises</span>
-<span class="sd">        ------</span>
-<span class="sd">        ValueError : Graph must be of type networkx.classes.graph.Graph</span>
-<span class="sd">            Provided value (or value[0]) is not a Graph.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">tuple</span><span class="p">:</span>
-            <span class="n">g</span><span class="p">,</span> <span class="n">metadata</span> <span class="o">=</span> <span class="n">value</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">g</span> <span class="o">=</span> <span class="n">value</span>
-
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">nx</span><span class="o">.</span><span class="n">classes</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
-            <span class="k">raise</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Graph must be of type networkx.classes.graph.Graph&quot;</span><span class="p">))</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-
-    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-        
 </div>
 <div class="viewcode-block" id="new_query_dict"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.new_query_dict">[docs]</a><span class="k">def</span> <span class="nf">new_query_dict</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -309,15 +294,12 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="../../index.html">tethne  documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2013, Author.
+        &copy; Copyright 2013, ASU Digital Innovation Group.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
