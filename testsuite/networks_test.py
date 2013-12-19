@@ -10,7 +10,8 @@ import tethne.writers as wr
 import tethne.utilities as util
 import unittest
 import networkx as nx
- 
+import sys 
+
 class TestDirectCitationGraph(unittest.TestCase):
     """
     Test the citations, internal_citations networks (assuming the reader 
@@ -136,14 +137,18 @@ class TestDirectCitationGraph(unittest.TestCase):
 
 class Test_DirectCitation_DAG(unittest.TestCase):
     """
-    Test the citations, internal_citations networks (assuming the reader 
-        is functioning) by checking both 'citation' and 'internal' networks
-        each with either 'doi' or 'ayjid' node_ids and either no
-        node attributes or 4 node attributes of 4 different variable
-        types
+    Test the citations, internal_citations networks (assuming the reader is functioning)
+    by checking both 'citation' and 'internal' networks
+    each with either 'doi' or 'ayjid' node_ids and date as an attribute,
+    
+    This is the somewhat similar to the class TestDirectCitationGraph but it has extra tests 
+    to check if it is a DAG or not, and if the ancestors/descendants are populated correctly.     
     The sparse data file networks are built on is "../testsuite/testin/citations_test.txt"
+    
+    It has 2 papers.
     """
     def setUp(self):
+        
         wos_data = rd.wos.parse_wos("../testsuite/testin/citations_test.txt")
         meta_list = rd.wos.wos2meta(wos_data)
  
@@ -155,19 +160,17 @@ class Test_DirectCitation_DAG(unittest.TestCase):
         (self.doi_citations, 
          self.doi_internal) = nt.citations.direct_citation(meta_list, 'doi')
  
-        # int, string, list, dict
-        self.node_attribs = ('date', 'aulast', 'citations')
- 
+        
         # ayjid with attribs 
         (self.ayjid_cit_attrib,
          self.ayjid_int_attrib) = nt.citations.direct_citation(meta_list,
                                                   'ayjid',
-                                                  *self.node_attribs)
+                                                  'date')
         # doi with attribs
         (self.doi_cit_attrib,
          self.doi_int_attrib) = nt.citations.direct_citation(meta_list,
                                                 'doi',
-                                                *self.node_attribs)
+                                                'date')
  
     def test_ayjid(self):
         """
@@ -176,17 +179,16 @@ class Test_DirectCitation_DAG(unittest.TestCase):
         If fails, something is wrong with the construction of ayjid's
         """
         # three papers in file each with author, year, journal information
-        self.assertEqual(nx.number_of_nodes(self.ayjid_internal), 3)
+        self.assertEqual(nx.number_of_nodes(self.ayjid_internal), 2)
  
-        # ayjid of first paper's first reference does not match exactly
-        # with the ayjid of the second paper
-        self.assertEqual(nx.number_of_edges(self.ayjid_internal), 0)
+        # only 1 edge between 2 internal nodes
+        self.assertEqual(nx.number_of_edges(self.ayjid_internal), 1)
  
-        # since inexact match, 3 papers with 8 citations
-        self.assertEqual(nx.number_of_nodes(self.ayjid_citations), 11)
+        # 56
+        self.assertEqual(nx.number_of_nodes(self.ayjid_citations), 56)
  
-        # one edge from paper to its citations
-        self.assertEqual(nx.number_of_edges(self.ayjid_citations), 8)
+        # 65 edges
+        self.assertEqual(nx.number_of_edges(self.ayjid_citations), 65)
  
     def test_doi(self):
         """
@@ -196,64 +198,70 @@ class Test_DirectCitation_DAG(unittest.TestCase):
         either the DI field tag for papers or the DOI number in the CR
         field tag
         """
-        # three papers in file, each with DI(=DOI) field tags
-        self.assertEqual(nx.number_of_nodes(self.doi_internal), 3)
+        # 2 internal papers
+        self.assertEqual(nx.number_of_nodes(self.doi_internal), 2)
  
-        # DOI does match exactly: first paper references second paper
-        self.assertEqual(nx.number_of_edges(self.doi_internal), 1)
+        # DOI does match exactly: 
+        self.assertEqual(nx.number_of_edges(self.doi_internal), 0)
  
-        # only 7 of the papers/references have DOI numbers
-        self.assertEqual(nx.number_of_nodes(self.doi_citations), 7)
+        # only 19 of the papers/references have DOI numbers
+        self.assertEqual(nx.number_of_nodes(self.doi_citations), 19)
+        
+        #22 edges between the nodes.
+        self.assertEqual(nx.number_of_edges(self.doi_citations), 22)
  
-        # first paper has edges to its 3 citations, second has one to its
-        # and third has one
-        self.assertEqual(nx.number_of_edges(self.doi_citations), 5)
- 
-    def test_node_attribs(self):
+    def is_citationnetwork_dag(self):
         """
-        Test adding of node attributes to 4 graphs: ayjid no attribs, ayjid
-            with attribs, doi no attribs, and doi with attribs
- 
-        If fails, something is wrong with the assigning of node attributes
-        from a meta_dict in the citations networks
+        Testing if the citations graph is Directed Acyclic Graph or not.
+        If it is false then the network will not be created and an Networkxerror will be thrown that it is not a DAG.
         """
-        # check that the attributes got added to each node
-        graphs = [self.ayjid_cit_attrib, self.ayjid_int_attrib,
-                  self.doi_cit_attrib, self.doi_int_attrib]
-        for graph in graphs:
-            for node in graph.nodes():
-                node_attribs = sorted(graph.node[node])
-                check_attribs = sorted(self.node_attribs)
-                self.assertEqual(node_attribs, check_attribs)
+        # Returns true if citations graph is DAG
+        self.assert_(nx.is_directed_acyclic_graph(self.ayjid_cit_attrib), "Citations Graph is not DAG")
          
-    def test_edge_attribs(self):
+    def is_internal_citationnetwork_dag(self):
         """
-        Test adding of edge attributes indicating what date a paper is cited
- 
-        If fails, something is wrong with assigning the edge attribute from a
-        paper to its citation indicating the date of citation
+        Testing if the Internal citations graph is Directed Acyclic Graph or not.
+        If it is false then the network will not be created and an Networkxerror will be thrown that it is not a DAG.
+        
         """
-        # attributes of first paper citing its first reference
-        edge_attribs = self.doi_citations.edge['10.1007/s10646-013-1042-4']['10.1577/1548-8659(1993)122<0063:AQHAIF>2.3.CO;2']
-        keys = edge_attribs.keys()
-        self.assertIn('date', keys)
-        self.assertEqual(edge_attribs['date'], 2013)
+        # Returns true if citations graph is DAG
+        self.assert_(nx.is_directed_acyclic_graph(self.ayjid_int_attrib), "Internal Citations Graph is not DAG")
+       
  
-    def test_no_edge_attrib(self):
+    def test_ancestors(self):
         """
-        Test adding of edge attributes when citating paper's date is missing
- 
-        If the publication date is unknown (that is, PY field tag is missing
-        from the WOS data file), the edge_attribute has value None; if
-        fails that assumption is wrong
+        Testing the ancestors for a particular node which is specified in the input. 
+        It throws the error "Node not in the graph" if that node is not present.
         """
-        # attributes of third paper citing its only reference, PY=date key
-        # missing
-        edge_attribs = self.doi_citations.edge['10.1016/j.ecolind.2011.07.024']['10.1016/j.ecss.2008.08.010']
-        keys = edge_attribs.keys()
-        self.assertIn('date', keys)
-        self.assertEqual(edge_attribs['date'], None)
- 
+
+        #ESHELMAN is one of the citation of paper 1.
+        c_ans = nx.ancestors(self.ayjid_citations,'ESHELMAN LJ 1993 FDN GENETIC ALGORITH')
+        #ALAMPORA G is a citation as well as a paper, hence its a node in internal citations
+        i_ans = nx.ancestors(self.ayjid_internal,'ALAMPORA G 1999 INFORMATION SCIENCES')
+        
+    def test_descendants(self):
+        """
+        Testing the descendants of a particular node which is specified in the input. 
+        It throws the error "Node not in the graph" if that node is not present.
+        """
+        
+        c_des = nx.descendants(self.ayjid_citations,'ALAMPORA G 1999 INFORMATION SCIENCES')
+        i_des = nx.descendants(self.ayjid_internal,'WU Z 2012 NEUROCOMPUTING')
+        
+        #to check if error is raised if a node which is not in the graph is called.
+        
+        #commented as of now
+        #c_des_err = nx.descendants(self.ayjid_citations,'ALAMPORA G 1999 addadaddsa SCIENCES')
+        
+        #self.assertRaises(NetworkXError, testsuite.networks_test.Test_DirectCitation_DAG)
+           
+        #=======================================================================
+        # try:
+        #     c_des_err = nx.descendants(self.ayjid_citations,'ALAMPORA G 1999 addadaddsa SCIENCES')
+        # except NetworkXError :
+        #     self.fail('NetworkXerror thrown:', NetworkXError)         
+        #=======================================================================
+        
     def tearDown(self):
         pass
 
@@ -1157,7 +1165,10 @@ class TestCocitation(unittest.TestCase):
    
     def tearDown(self):
          pass
-
+     
+#Custom Error Defined
+class NetworkXError(Exception):
+    pass
         
 if __name__ == '__main__':
     unittest.main()
