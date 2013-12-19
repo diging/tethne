@@ -223,46 +223,37 @@ def author_coinstitution(Papers, threshold=1):
                         pass
     return coinstitution
 
-def author_cocitation(meta_list, threshold):
+def author_cocitation(papers, threshold):
     
     """
     Creates an author cocitation network. Vertices are authors, and an edge
-    implies that two authors have been cited (via their publications) by in at
-    least one paper in the dataset.
+    implies that two authors have been cited (via their publications) in at
+    least **threshold** papers in the dataset.
     
     **Nodes** -- Authors
     
     **Node attributes** -- None
     
-    **Edges** -- (a, b) if a and b are referenced by the same paper in the 
-    meta_list
-    
+    **Edges** -- (a, b) if a and b are referenced by the same paper.
+        
     **Edge attributes** -- 'weight', the number of papers that co-cite two 
     authors.
                       
     Parameters
     ----------
-    meta_list : list
-        a list of :class:`.Paper` objects.
-        
+    papers : list
+        A list of :class:`.Paper` objects.
     threshold : int
-        A random value provided by the user. If its greater than zero two nodes 
-        should share something common.
+        Minimum number of co-citations required for an edge between two authors.
         
     Returns
     -------
     cocitation : networkx.Graph
         A cocitation network.
-                      
-    Notes
-    -----
-    should be able to specify a threshold -- number of co-citations required to
-    draw an edge.
-    
     """
     cocitation = nx.Graph(type='author_cocitation')
 
-    for paper in meta_list:
+    for paper in papers:
         for citation in paper['citations']:
             author_list = util.concat_list(citation['aulast'],
                                            citation['auinit'],
