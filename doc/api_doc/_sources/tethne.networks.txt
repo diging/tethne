@@ -17,18 +17,26 @@ networks Package
     :undoc-members:
     :show-inheritance:
 
-:mod:`citations` Module
------------------------
-
-.. automodule:: tethne.networks.citations
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 :mod:`helpers` Module
 ---------------------
 
 .. automodule:: tethne.networks.helpers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`papers` Module
+--------------------
+
+.. automodule:: tethne.networks.papers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`terms` Module
+-------------------
+
+.. automodule:: tethne.networks.terms
     :members:
     :undoc-members:
     :show-inheritance:
