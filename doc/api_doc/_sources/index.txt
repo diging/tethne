@@ -19,10 +19,10 @@ Framework. Tethne relies on NetworkX_ for graph classes, and leverages its netwo
 algorithms.
 
 .. _NetworkX: http://networkx.github.io/
-.. _parsing: tethne.readers.html
-.. _construction: tethne.networks.html
-.. _analysis: tethne.analyze.html
-.. _writing: tethne.writers.html
+.. _parsing: tutorial.readers.html
+.. _construction: tutorial.networks.html
+.. _analysis: tutorial.analyze.html
+.. _writing: tutorial.writers.html
 .. _Cytoscape: http://www.cytoscape.org/
 .. _Gephi: https://gephi.org/
 .. _VSM: https://github.com/inpho/vsm

@@ -58,27 +58,39 @@
             
   <div class="section" id="quickstart">
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
-<p>Download &amp; install the latest version of Tethne from our GitHub repository:</p>
-<div class="highlight-bash"><div class="highlight"><pre>git clone https://github.com/diging/tethne.git
-<span class="nb">cd </span>tethne
-pip install ./tethne
-</pre></div>
-</div>
 <p>After starting Python, import Tethne modules with:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
-<span class="kn">import</span> <span class="nn">tethne.networks</span> <span class="kn">as</span> <span class="nn">nt</span>
-<span class="kn">import</span> <span class="nn">tethne.analyze</span> <span class="kn">as</span> <span class="nn">az</span>
-<span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.networks</span> <span class="kn">as</span> <span class="nn">nt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.analyze</span> <span class="kn">as</span> <span class="nn">az</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
 </pre></div>
 </div>
 <p>To parse some data from the Web of Science, use the tethne.readers.wos module.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">wos_list</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">parse_wos</span><span class="p">(</span><span class="s">&quot;/Path/To/Data.txt&quot;</span><span class="p">)</span>  <span class="c"># Field-tagged data.</span>
-<span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos2meta</span><span class="p">(</span><span class="n">wos_list</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wos_list</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">parse_wos</span><span class="p">(</span><span class="s">&quot;/Path/To/Data.txt&quot;</span><span class="p">)</span>  <span class="c"># Field-tagged data.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos2meta</span><span class="p">(</span><span class="n">wos_list</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">&lt;tethne.data.Paper instance at 0x1015ed200&gt;</span>
 </pre></div>
 </div>
 <p>You can then generate a network using methods from the tethne.networks
 subpackage. For example, to build a bibliographic coupling network:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">BC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">citations</span><span class="o">.</span><span class="n">bibliographic_coupling</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">citation_id</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">node_id</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">citations</span><span class="o">.</span><span class="n">bibliographic_coupling</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span>
+<span class="go">&lt;networkx.classes.graph.Graph object at 0x101b4fe50&gt;</span>
+</pre></div>
+</div>
+<p>NetworkX provides <a class="reference external" href="http://networkx.github.io/documentation/networkx-1.7/reference/algorithms.html">algorithms</a> for graph analysis. To generate
+betweenness-centrality values for each node, try:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">networks</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b_centrality</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">betweenness_centrality</span><span class="p">(</span><span class="n">BC</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">BC</span><span class="p">,</span> <span class="s">&#39;betweenness&#39;</span><span class="p">,</span> <span class="n">b_centrality</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">(&#39;BRADSHAW 1965 ADV GENET&#39;, {&#39;betweenness&#39;: 0.12345})</span>
+</pre></div>
+</div>
+<p>You can then export your network for visualization using one of the methods
+in tethne.writers. For example, to generate a simple interaction file (SIF):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">to_sif</span><span class="p">(</span><span class="n">BC</span><span class="p">,</span> <span class="s">&#39;/Path/to/Output/File&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

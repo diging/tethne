@@ -1,0 +1,187 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting Data from the Web of Science &mdash; tethne  documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="tethne  documentation" href="index.html" />
+    <link rel="up" title="Tutorial" href="tutorial.html" />
+    <link rel="next" title="Parsing Bibliographic Data" href="tutorial.readers.html" />
+    <link rel="prev" title="Quickstart" href="tutorial.quickstart.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.readers.html" title="Parsing Bibliographic Data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.quickstart.html" title="Quickstart"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">tethne  documentation</a> &raquo;</li>
+          <li><a href="tutorial.html" accesskey="U">Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-data-from-the-web-of-science">
+<h1>Getting Data from the Web of Science<a class="headerlink" href="#getting-data-from-the-web-of-science" title="Permalink to this headline">¶</a></h1>
+<p>The ISI Web of Science is a proprietary database owned by Thompson Reuters.
+If you are affiliated with an academic institution, you may have access to
+this database via an institutional license.</p>
+<p>To access the Web of Science database via the Arizona State University library,
+find the Web of Science <a class="reference external" href="http://library.lib.asu.edu/record=e1000458">entry</a> in the library&#8217;s online catalog. You may be prompted
+to log in to the University&#8217;s Central Authentication System.</p>
+<img alt="_images/getting.0.png" src="_images/getting.0.png" style="width: 600px;" />
+<p>Perform a search for literature of interest using the interface provided.</p>
+<img alt="_images/getting.1.png" src="_images/getting.1.png" style="width: 600px;" />
+<p>Once you have found the papers that you are interested in, find the &#8220;Send to:&#8221; menu
+at the top of the list of results. Click the small orange down-arrow, and select
+&#8220;Other File Formats&#8221;.</p>
+<img alt="_images/getting.2.png" src="_images/getting.2.png" style="width: 600px;" />
+<p>A small in-browser window should open in the foreground. Specify the range of
+records that you wish to download. <strong>Note that you can only download 500 records
+at a time</strong>, so you may have to make multiple download requests. Be sure to specify
+&#8220;Full Record and Cited References&#8221; in the <em>Record Content</em> field, and &#8220;Plain Text&#8221;
+in the <em>File Format</em> field. Then click &#8220;Send&#8221;.</p>
+<img alt="_images/getting.3.png" src="_images/getting.3.png" style="width: 600px;" />
+<p>After a few moments, a download should begin. WoS usually returns a field-tagged
+data file called &#8220;savedrecs.txt&#8221;. Put this in a location on your filesystem where
+you can find it later; this is the input for Tethne&#8217;s WoS reader methods.</p>
+<img alt="_images/getting.4.png" src="_images/getting.4.png" style="width: 600px;" />
+<div class="section" id="structure-of-the-wos-field-tagged-data-file">
+<h2>Structure of the WoS Field-Tagged Data File<a class="headerlink" href="#structure-of-the-wos-field-tagged-data-file" title="Permalink to this headline">¶</a></h2>
+<p>If you open the text file returned by the WoS database (usually named &#8216;savedrecs.txt&#8217;), you should see a whole bunch of
+field-tagged data. &#8220;Field-tagged&#8221; means that each metadata field is denoted by a &#8220;tag&#8221; (a two-letter code), followed by
+values for that field. A complete list of WoS field tags can be found <a class="reference external" href="http://images.webofknowledge.com/WOKRS53B4/help/WOS/hs_wos_fieldtags.html">here</a>. For best results, you should avoid making
+changes to the contents of WoS data files.</p>
+<p>The metadata record for each paper in your data file should begin with:</p>
+<div class="highlight-none"><div class="highlight"><pre>PT J
+</pre></div>
+</div>
+<p>...and end with:</p>
+<div class="highlight-none:"><pre>ER</pre>
+</div>
+<p>There are two author fields: the AU field is always provided, and values take the form &#8220;Last, FI&#8221;. AF is provided if
+author full-names are available, and values take the form &#8220;Last, First Middle&#8221;. For example:</p>
+<div class="highlight-none"><div class="highlight"><pre>AU Dauvin, JC
+   Grimes, S
+   Bakalem, A
+AF Dauvin, Jean-Claude
+   Grimes, Samir
+   Bakalem, Ali
+</pre></div>
+</div>
+<p>Citations are listed in the CR block. For example:</p>
+<div class="highlight-none:"><pre>CR Airoldi L, 2007, OCEANOGR MAR BIOL, V45, P345
+   Alexander Vera, 2011, Marine Biodiversity, V41, P545, DOI 10.1007/s12526-011-0084-1
+   Arvanitidis C, 2002, MAR ECOL PROG SER, V244, P139, DOI 10.3354/meps244139
+   Bakalem A, 2009, ECOL INDIC, V9, P395, DOI 10.1016/j.ecolind.2008.05.008
+   Bakalem Ali, 1995, Mesogee, V54, P49
+   …
+   Zenetos A, 2005, MEDITERR MAR SCI, V6, P63
+   Zenetos A, 2004, CIESM ATLAS EXOTIC S, V3</pre>
+</div>
+<p>For more information about WoS field tags, see a list on the Thompson Reuters website, <a class="reference external" href="http://images.webofknowledge.com/WOKRS53B4/help/WOS/hs_wos_fieldtags.html">here</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Getting Data from the Web of Science</a><ul>
+<li><a class="reference internal" href="#structure-of-the-wos-field-tagged-data-file">Structure of the WoS Field-Tagged Data File</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial.quickstart.html"
+                        title="previous chapter">Quickstart</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tutorial.readers.html"
+                        title="next chapter">Parsing Bibliographic Data</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tutorial.getting_data.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.readers.html" title="Parsing Bibliographic Data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.quickstart.html" title="Quickstart"
+             >previous</a> |</li>
+        <li><a href="index.html">tethne  documentation</a> &raquo;</li>
+          <li><a href="tutorial.html" >Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Author.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
