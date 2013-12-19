@@ -9,13 +9,20 @@ tethne Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`data` Module
+------------------
+
+.. automodule:: tethne.data
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 
 .. toctree::
 
     tethne.analyze
-    tethne.data
     tethne.networks
     tethne.readers
     tethne.resources
