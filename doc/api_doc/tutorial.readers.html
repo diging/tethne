@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,7 +9,7 @@
     
     <title>tethne.readers: Parsing Bibliographic Data &mdash; tethne  documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="tethne  documentation" href="index.html" />
     <link rel="up" title="Tutorial" href="tutorial.html" />
-    <link rel="next" title="tethne Package" href="tethne.html" />
+    <link rel="next" title="tethne.networks: Creating Bibliographic Networks" href="tutorial.networks.html" />
     <link rel="prev" title="Getting Data from the Web of Science" href="tutorial.getting_data.html" /> 
   </head>
   <body>
@@ -41,7 +40,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tethne.html" title="tethne Package"
+          <a href="tutorial.networks.html" title="tethne.networks: Creating Bibliographic Networks"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="tutorial.getting_data.html" title="Getting Data from the Web of Science"
@@ -62,9 +61,9 @@
 <h2>Web of Science<a class="headerlink" href="#web-of-science" title="Permalink to this headline">¶</a></h2>
 <p>Methods for parsing bibliographic data from the Web of Science are contained in the
 <a class="reference internal" href="tethne.readers.html#module-tethne.readers.wos" title="tethne.readers.wos"><tt class="xref py py-mod docutils literal"><span class="pre">readers.wos</span></tt></a> module. Tethne parses Web of Science field-tagged data into a
-list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects. This is a two-step process: data are first parsed
+list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects. This is a two-step process: data are first parsed
 into a list of dictionaries with field-tags as keys, and then each dictionary is
-converted to a <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> .</p>
+converted to a <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> .</p>
 <p>First import the <a class="reference internal" href="tethne.readers.html#module-tethne.readers.wos" title="tethne.readers.wos"><tt class="xref py py-mod docutils literal"><span class="pre">readers.wos</span></tt></a> module:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
 </pre></div>
@@ -79,7 +78,7 @@ converted to a <a class="reference internal" href="tethne.data.html#tethne.data.
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wos_list</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">parse_from_dir</span><span class="p">(</span><span class="s">&quot;/Path/to&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Finally, convert those field-tagged dictionaries to <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects using <a class="reference internal" href="tethne.readers.html#tethne.readers.wos.wos2meta" title="tethne.readers.wos.wos2meta"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.wos2meta()</span></tt></a> :</p>
+<p>Finally, convert those field-tagged dictionaries to <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects using <a class="reference internal" href="tethne.readers.html#tethne.readers.wos.wos2meta" title="tethne.readers.wos.wos2meta"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.wos2meta()</span></tt></a> :</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">wos2meta</span><span class="p">(</span><span class="n">wos_list</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">&lt;tethne.data.Paper instance at 0x101b575a8&gt;</span>
@@ -106,8 +105,8 @@ converted to a <a class="reference internal" href="tethne.data.html#tethne.data.
   <p class="topless"><a href="tutorial.getting_data.html"
                         title="previous chapter">Getting Data from the Web of Science</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="tethne.html"
-                        title="next chapter">tethne Package</a></p>
+  <p class="topless"><a href="tutorial.networks.html"
+                        title="next chapter">tethne.networks: Creating Bibliographic Networks</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/tutorial.readers.txt"
@@ -140,7 +139,7 @@ converted to a <a class="reference internal" href="tethne.data.html#tethne.data.
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tethne.html" title="tethne Package"
+          <a href="tutorial.networks.html" title="tethne.networks: Creating Bibliographic Networks"
              >next</a> |</li>
         <li class="right" >
           <a href="tutorial.getting_data.html" title="Getting Data from the Web of Science"
@@ -150,7 +149,7 @@ converted to a <a class="reference internal" href="tethne.data.html#tethne.data.
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2013, Author.
+        &copy; Copyright 2013, ASU Digital Innovation Group.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

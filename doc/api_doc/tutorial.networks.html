@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,7 +9,7 @@
     
     <title>tethne.networks: Creating Bibliographic Networks &mdash; tethne  documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -58,28 +57,33 @@
             
   <div class="section" id="tethne-networks-creating-bibliographic-networks">
 <h1>tethne.networks: Creating Bibliographic Networks<a class="headerlink" href="#tethne-networks-creating-bibliographic-networks" title="Permalink to this headline">¶</a></h1>
+<div class="sidebar">
+<p class="first sidebar-title">Ready to Proceed?</p>
+<p class="last">Once you have <a class="reference external" href="tutorial.getting_data.html">collected</a> and <a class="reference external" href="tutorial.readers.html">parsed</a>
+your bibliographic data, you&#8217;re ready
+to build networks.</p>
+</div>
 <p>There are many different network models that can be used to describe bibliographic data. These can be
 roughly divided into two categories: networks that describe relationships among documents,
 and networks that describe relationships among the authors of those documents. Each of these is
 described in turn, below.</p>
-<p>Once you have <a class="reference external" href="tutorial.getting_data">collected</a> and <a class="reference external" href="tutorial.readers">parsed</a> your bibliographic data, you&#8217;re ready to build networks.</p>
 <p>First, import the <a class="reference internal" href="tethne.networks.html#module-tethne.networks" title="tethne.networks"><tt class="xref py py-mod docutils literal"><span class="pre">networks</span></tt></a> module.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.networks</span> <span class="kn">as</span> <span class="nn">nt</span>
 </pre></div>
 </div>
 <div class="section" id="networks-of-documents">
 <h2>Networks of Documents<a class="headerlink" href="#networks-of-documents" title="Permalink to this headline">¶</a></h2>
-<p>Methods for building networks in which vertices represent documents are provided in the <a class="reference internal" href="tethne.networks.html#module-tethne.networks.citations" title="tethne.networks.citations"><tt class="xref py py-mod docutils literal"><span class="pre">networks.citations</span></tt></a> module.</p>
+<p>Methods for building networks in which vertices represent documents are provided in the <a class="reference internal" href="tethne.networks.html#module-tethne.networks.papers" title="tethne.networks.papers"><tt class="xref py py-mod docutils literal"><span class="pre">networks.papers</span></tt></a> module.</p>
 <div class="section" id="direct-citation-graphs">
 <h3>Direct-Citation Graphs<a class="headerlink" href="#direct-citation-graphs" title="Permalink to this headline">¶</a></h3>
 <p>Direct-citation graphs are <a class="reference external" href="http://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graphs</a> in which vertices are documents, and each
 (directed) edge represents a citation of the target paper by the source paper. The
-<a class="reference internal" href="tethne.networks.html#tethne.networks.citations.direct_citation" title="tethne.networks.citations.direct_citation"><tt class="xref py py-func docutils literal"><span class="pre">networks.citations.direct_citation()</span></tt></a> method generates both a global citation graph, which
+<a class="reference internal" href="tethne.networks.html#tethne.networks.papers.direct_citation" title="tethne.networks.papers.direct_citation"><tt class="xref py py-func docutils literal"><span class="pre">networks.papers.direct_citation()</span></tt></a> method generates both a global citation graph, which
 includes all cited and citing papers, and an internal citation graph that describes only citations
 among papers in the original dataset.</p>
-<p>To generate direct-citation graphs, use the <a class="reference internal" href="tethne.networks.html#tethne.networks.citations.direct_citation" title="tethne.networks.citations.direct_citation"><tt class="xref py py-func docutils literal"><span class="pre">networks.citations.direct_citation()</span></tt></a> method.
+<p>To generate direct-citation graphs, use the <a class="reference internal" href="tethne.networks.html#tethne.networks.papers.direct_citation" title="tethne.networks.papers.direct_citation"><tt class="xref py py-func docutils literal"><span class="pre">networks.papers.direct_citation()</span></tt></a> method.
 Note the size difference between the global and internal citation graphs.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">gDC</span><span class="p">,</span> <span class="n">iDC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">citations</span><span class="o">.</span><span class="n">direct_citation</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">gDC</span><span class="p">,</span> <span class="n">iDC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">direct_citation</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">gDC</span><span class="p">)</span>
 <span class="go">5998</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">iDC</span><span class="p">)</span>
@@ -90,9 +94,9 @@ Note the size difference between the global and internal citation graphs.</p>
 <div class="section" id="bibliographic-coupling">
 <h3>Bibliographic Coupling<a class="headerlink" href="#bibliographic-coupling" title="Permalink to this headline">¶</a></h3>
 <p>Two papers are <strong>bibliographically coupled</strong> when they both cite the same, third, paper. You
-can generate a bibliographic coupling network using the <a class="reference internal" href="tethne.networks.html#tethne.networks.citations.bibliographic_coupling" title="tethne.networks.citations.bibliographic_coupling"><tt class="xref py py-func docutils literal"><span class="pre">networks.citations.bibliographic_coupling()</span></tt></a>
+can generate a bibliographic coupling network using the <a class="reference internal" href="tethne.networks.html#tethne.networks.papers.bibliographic_coupling" title="tethne.networks.papers.bibliographic_coupling"><tt class="xref py py-func docutils literal"><span class="pre">networks.papers.bibliographic_coupling()</span></tt></a>
 method.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">citations</span><span class="o">.</span><span class="n">bibliographic_coupling</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">bibliographic_coupling</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span>
 <span class="go">&lt;networkx.classes.graph.Graph object at 0x102eec710&gt;</span>
 </pre></div>
@@ -100,12 +104,72 @@ method.</p>
 <p>Especially when working with large datasets, or disciplinarily narrow literatures, it is
 usually helpful to set a minimum number of shared citations required for two papers to be
 coupled. You can do this by setting the <strong>threshold</strong> parameter.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">citations</span><span class="o">.</span><span class="n">bibliographic_coupling</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">bibliographic_coupling</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">BC</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
 <span class="go">1216</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">citations</span><span class="o">.</span><span class="n">bibliographic_coupling</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">bibliographic_coupling</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">BC</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
 <span class="go">542</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="co-citation-networks">
+<h3>Co-Citation Networks<a class="headerlink" href="#co-citation-networks" title="Permalink to this headline">¶</a></h3>
+<p>A <strong>cocitation network</strong> is a network in which vertices are papers, and edges indicate that two papers were cited
+by the same third paper. <a class="reference external" href="http://cluster.cis.drexel.edu/~cchen/citespace/">CiteSpace</a> is a popular desktop application for co-citation analysis, and you can read
+about the theory behind it <a class="reference external" href="http://cluster.cis.drexel.edu/~cchen/citespace/doc/jasist2006.pdf">here</a>.</p>
+<p>You can generate a co-citation network using the <a class="reference internal" href="tethne.networks.html#tethne.networks.papers.cocitation" title="tethne.networks.papers.cocitation"><tt class="xref py py-func docutils literal"><span class="pre">networks.papers.cocitation()</span></tt></a> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">CC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">cocitation</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CC</span>
+<span class="go">&lt;networkx.classes.graph.Graph object at 0x102eec790&gt;</span>
+</pre></div>
+</div>
+<p>For large datasets, you may wish to set a minimum number of co-citations required for an edge between two papers.
+Keep in mind that all of the references in a single paper are co-cited once, so a threshold of at least 2 is
+prudent. Note the dramatic decrease in the number of edges when the threshold is changed from 2 to 3.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">CC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">cocitation</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">CC</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
+<span class="go">8889</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">cocitation</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">CC</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
+<span class="go">1493</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="networks-of-authors">
+<h2>Networks of Authors<a class="headerlink" href="#networks-of-authors" title="Permalink to this headline">¶</a></h2>
+<p>Methods for building networks in which vertices represent authors are provided in the <a class="reference internal" href="tethne.networks.html#module-tethne.networks.authors" title="tethne.networks.authors"><tt class="xref py py-mod docutils literal"><span class="pre">networks.authors</span></tt></a> module.</p>
+<div class="section" id="co-authorship-networks">
+<h3>Co-Authorship Networks<a class="headerlink" href="#co-authorship-networks" title="Permalink to this headline">¶</a></h3>
+<p>As the name suggests, edges are drawn between two author-vertices in the case that those authors published a paper together.
+Co-authorship networks are popular models for studying patterns of collaboration in scientific communities.</p>
+<p>To generate a co-authorship network, use the <a class="reference internal" href="tethne.networks.html#tethne.networks.authors.coauthors" title="tethne.networks.authors.coauthors"><tt class="xref py py-func docutils literal"><span class="pre">networks.authors.coauthors()</span></tt></a> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">CA</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">coauthors</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CA</span>
+<span class="go">&lt;networkx.classes.multigraph.MultiGraph object at 0x101705650&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="author-co-institution-networks">
+<h3>Author Co-Institution Networks<a class="headerlink" href="#author-co-institution-networks" title="Permalink to this headline">¶</a></h3>
+<p>Some bibliographic datasets, including data from the Web of Science, includes the institutional affiliations of authors.
+In a co-institution graph, two authors (vertices) have an edge between them if they share an institutional affiliation
+in the dataset.</p>
+<p>To generate a co-institution network, use the <a class="reference internal" href="tethne.networks.html#tethne.networks.authors.author_coinstitution" title="tethne.networks.authors.author_coinstitution"><tt class="xref py py-func docutils literal"><span class="pre">networks.authors.author_coinstitution()</span></tt></a> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ACI</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">author_coinstitution</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ACI</span>
+<span class="go">&lt;networkx.classes.graph.Graph object at 0x106571190&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="author-co-citation-networks">
+<h3>Author Co-Citation Networks<a class="headerlink" href="#author-co-citation-networks" title="Permalink to this headline">¶</a></h3>
+<p>Similar to <a class="reference internal" href="#co-citation-networks">co-citation networks</a>, except that vertices are authors rather than papers. To generate an author
+co-citation network, use the <a class="reference internal" href="tethne.networks.html#tethne.networks.authors.author_cocitation" title="tethne.networks.authors.author_cocitation"><tt class="xref py py-func docutils literal"><span class="pre">networks.authors.author_cocitation()</span></tt></a> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ACC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">author_cocitation</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ACC</span>
+<span class="go">&lt;networkx.classes.graph.Graph object at 0x106571190&gt;</span>
 </pre></div>
 </div>
 </div>
@@ -124,6 +188,13 @@ coupled. You can do this by setting the <strong>threshold</strong> parameter.</p
 <li><a class="reference internal" href="#networks-of-documents">Networks of Documents</a><ul>
 <li><a class="reference internal" href="#direct-citation-graphs">Direct-Citation Graphs</a></li>
 <li><a class="reference internal" href="#bibliographic-coupling">Bibliographic Coupling</a></li>
+<li><a class="reference internal" href="#co-citation-networks">Co-Citation Networks</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#networks-of-authors">Networks of Authors</a><ul>
+<li><a class="reference internal" href="#co-authorship-networks">Co-Authorship Networks</a></li>
+<li><a class="reference internal" href="#author-co-institution-networks">Author Co-Institution Networks</a></li>
+<li><a class="reference internal" href="#author-co-citation-networks">Author Co-Citation Networks</a></li>
 </ul>
 </li>
 </ul>
@@ -178,7 +249,7 @@ coupled. You can do this by setting the <strong>threshold</strong> parameter.</p
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2013, Author.
+        &copy; Copyright 2013, ASU Digital Innovation Group.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
