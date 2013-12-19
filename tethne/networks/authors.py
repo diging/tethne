@@ -1,3 +1,5 @@
+"""Methods for generating networks in which authors are vertices."""
+
 import networkx as nx
 import tethne.utilities as util
 import tethne.data as ds
@@ -117,72 +119,6 @@ def coauthors(papers, *edge_attribs):
 
     return coauthors
 
-def author_coupling(doc_list, threshold, node_id, *node_attribs):
-    """
-    Generate a simple author coupling network, where vertices are papers and
-    an edge indicates that two papers share a common author.
-    
-    **Nodes** -- Papers.
-    
-    **Edges** -- (a,b) \in E(G) if a and b share x authors and x >= threshold
-    
-    **Edge attributes** -- overlap, the value of x (above).
-
-    Parameters
-    ----------
-    doc_list : list
-        A list of wos_objects.
-    threshold : int
-        Minimum number of co-citations required to draw an edge between two
-        authors.
-    node_id : string
-        Field in :class:`.Paper` used to identify nodes.    
-    node_attribs : list
-        List of fields in :class:`.Paper` to include as node attributes in graph.
-        
-    Returns
-    -------
-    acoupling : networkx.Graph
-        An author-coupling network.
-           
-    """
-    acoupling = nx.Graph(type='author_coupling')
-    
-    
-
-    for i in xrange(len(doc_list)):
-        #define last name first initial name lists for each document
-        name_list_i = util.concat_list(doc_list[i]['aulast'],
-                                       doc_list[i]['auinit'], 
-                                       ' ')
-        
-        #create nodes
-        node_attrib_dict = util.subdict(doc_list[i], node_attribs)
-        
-        acoupling.add_node(doc_list[i][node_id], node_attrib_dict)
-
-        for j in xrange(i+1, len(doc_list)):
-            #define last name first initial name lists for each document
-            name_list_j = util.concat_list(doc_list[j]['aulast'],
-                                           doc_list[j]['auinit'], 
-                                           ' ')
-
-            #create nodes
-            node_attrib_dict = util.subdict(doc_list[j], node_attribs)
-            acoupling.add_node(doc_list[j][node_id], node_attrib_dict)
-
-            #draw edges as appropriate
-            overlap = util.overlap(name_list_i, name_list_j)
-            
-            if len(overlap) >= threshold:
-                a= acoupling.add_edge(doc_list[i][node_id], 
-                                   doc_list[j][node_id],
-                                   overlap=len(overlap))
-                #print ' final :' , a
-
-    return acoupling
-
-
 def author_institution(Papers, *edge_attribs):
     
     """
@@ -289,3 +225,60 @@ def author_coinstitution(Papers, threshold):
                           
                 
     return coinstitution
+
+def author_cocitation(meta_list, threshold):
+    
+    """
+    Creates an author cocitation network. Vertices are authors, and an edge
+    implies that two authors have been cited (via their publications) by in at
+    least one paper in the dataset.
+    
+    **Nodes** -- Authors
+    
+    **Node attributes** -- None
+    
+    **Edges** -- (a, b) if a and b are referenced by the same paper in the 
+    meta_list
+    
+    **Edge attributes** -- 'weight', the number of papers that co-cite two 
+    authors.
+                      
+    Parameters
+    ----------
+    meta_list : list
+        a list of :class:`.Paper` objects.
+        
+    threshold : int
+        A random value provided by the user. If its greater than zero two nodes 
+        should share something common.
+        
+    Returns
+    -------
+    cocitation : networkx.Graph
+        A cocitation network.
+                      
+    Notes
+    -----
+    should be able to specify a threshold -- number of co-citations required to
+    draw an edge.
+    
+    """
+    cocitation = nx.Graph(type='author_cocitation')
+
+    for paper in meta_list:
+        for citation in paper['citations']:
+            author_list = util.concat_list(citation['aulast'],
+                                           citation['auinit'],
+                                           ' ')
+            num_authors = len(author_list)
+            for i in xrange(num_authors):
+                cocitation.add_node(author_list[i])
+                for j in xrange(i+1, num_authors):
+                    try:
+                        cocitation[author_list[i]][author_list[j]]['weight'] += 1
+                    except KeyError:
+                        # then edge doesnt yet exist
+                        cocitation.add_edge(author_list[i], author_list[j],
+                                            {'weight':1})
+
+    return cocitation
