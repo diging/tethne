@@ -40,9 +40,6 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="tethne.analyze.html" title="analyze Package"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">tethne  documentation</a> &raquo;</li>
@@ -61,9 +58,77 @@
 <h2><tt class="xref py py-mod docutils literal"><span class="pre">data</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <span class="target" id="module-tethne.data"></span><dl class="class">
 <dt id="tethne.data.GraphCollection">
-<em class="property">class </em><tt class="descclassname">tethne.data.</tt><tt class="descname">GraphCollection</tt><a class="reference internal" href="_modules/tethne/data.html#GraphCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.GraphCollection" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">tethne.data.</tt><tt class="descname">GraphCollection</tt><a class="headerlink" href="#tethne.data.GraphCollection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collection of NetworkX Graph objects, organized by some index (e.g. time).
 Provides analysis functions in NetworkX for entire collection of Graphs.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.GraphCollection.edges" title="tethne.data.GraphCollection.edges"><tt class="xref py py-obj docutils literal"><span class="pre">edges</span></tt></a>([overwrite])</td>
+<td>Return complete set of edges for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . If</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.data.GraphCollection.nodes" title="tethne.data.GraphCollection.nodes"><tt class="xref py py-obj docutils literal"><span class="pre">nodes</span></tt></a>([overwrite])</td>
+<td>Return complete set of nodes for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . If</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="tethne.data.GraphCollection.edges">
+<tt class="descname">edges</tt><big>(</big><em>overwrite=False</em><big>)</big><a class="headerlink" href="#tethne.data.GraphCollection.edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return complete set of edges for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . If
+this method has been called previously for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>
+then will not recompute unless overwrite = True.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>overwrite</strong> : bool</p>
+<blockquote>
+<div><p>If True, will generate new node list, even if one already exists.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>edges</strong> : list</p>
+<blockquote class="last">
+<div><p>List (complete set) of edges for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.data.GraphCollection.nodes">
+<tt class="descname">nodes</tt><big>(</big><em>overwrite=False</em><big>)</big><a class="headerlink" href="#tethne.data.GraphCollection.nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return complete set of nodes for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . If 
+this method has been called previously for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>
+then will not recompute unless overwrite = True.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>overwrite</strong> : bool</p>
+<blockquote>
+<div><p>If True, will generate new node list, even if one already exists.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>nodes</strong> : list</p>
+<blockquote class="last">
+<div><p>List (complete set) of node identifiers for this 
+<a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -222,9 +287,6 @@ and intializes them to &#8216;None&#8217;.</p>
              >index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="tethne.analyze.html" title="analyze Package"

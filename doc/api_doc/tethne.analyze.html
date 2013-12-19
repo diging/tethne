@@ -41,9 +41,6 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="tethne.data.html" title="data Package"
              accesskey="N">next</a> |</li>
         <li class="right" >
@@ -135,7 +132,7 @@ index.</p>
                 <span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
     <span class="n">collection</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="n">graph_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
 
-<span class="n">results</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="s">&#39;betweenness_centrality&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="s">&#39;betweenness_centrality&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -261,7 +258,7 @@ in different components.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>g</strong> : networkx.Graph</p>
-<p><strong>node</strong> :</p>
+<p><strong>node</strong> : any</p>
 <blockquote>
 <div><p>Identifier of node of interest in g.</p>
 </div></blockquote>
@@ -388,9 +385,6 @@ substantially more processing time, and values will usually be &gt;&gt; 0.</p>
              >index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="tethne.data.html" title="data Package"

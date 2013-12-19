@@ -40,9 +40,6 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="tethne.readers.html" title="readers Package"
              accesskey="N">next</a> |</li>
         <li><a href="index.html">tethne  documentation</a> &raquo;</li>
@@ -269,6 +266,28 @@ an exception if not.</p>
 <div class="section" id="module-tethne.networks.citations">
 <span id="citations-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">citations</span></tt> Module<a class="headerlink" href="#module-tethne.networks.citations" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
+<dt id="tethne.networks.citations.ancestors">
+<tt class="descclassname">tethne.networks.citations.</tt><tt class="descname">ancestors</tt><big>(</big><em>G</em>, <em>source</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/citations.html#ancestors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.citations.ancestors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all nodes having a path to <cite>source</cite> in G.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>G</strong> : NetworkX DiGraph</p>
+<p><strong>source</strong> : node in G</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ancestors</strong> : set()</p>
+<blockquote class="last">
+<div><p>The ancestors of source in G</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="tethne.networks.citations.author_cocitation">
 <tt class="descclassname">tethne.networks.citations.</tt><tt class="descname">author_cocitation</tt><big>(</big><em>meta_list</em>, <em>threshold</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/citations.html#author_cocitation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.citations.author_cocitation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates an author cocitation network. Vertices are authors, and an edge
@@ -304,7 +323,7 @@ should share something common.</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>should be able to specify a threshold &#8211; number of co-citations required to 
+<p>should be able to specify a threshold &#8211; number of co-citations required to
 draw an edge.</p>
 </dd></dl>
 
@@ -362,13 +381,65 @@ nodes cannot be none.</p>
 
 <dl class="function">
 <dt id="tethne.networks.citations.cocitation">
-<tt class="descclassname">tethne.networks.citations.</tt><tt class="descname">cocitation</tt><big>(</big><em>meta_list</em>, <em>timeslice</em>, <em>threshold</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/citations.html#cocitation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.citations.cocitation" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">tethne.networks.citations.</tt><tt class="descname">cocitation</tt><big>(</big><em>meta_list</em>, <em>threshold</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/citations.html#cocitation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.citations.cocitation" title="Permalink to this definition">¶</a></dt>
 <dd><p>A cocitation network is a network in which vertices are papers, and edges
 indicate that two papers were cited by the same third paper. Should slice
 the dataset into timeslices (as indicated) based on the publication date of
 the citing papers in the dataset. Each time-slice should result in a
 separate networkx Graph in which vertices are the _cited_ papers. Separate
 graphs allows to analyze each timeslice separately.</p>
+<p><strong>Nodes</strong> &#8211; papers</p>
+<p><strong>Node attributes</strong> &#8211; None</p>
+<p><strong>Edges</strong> &#8211; (a, b) if a and b are cited by the same paper.</p>
+<p><strong>Edge attributes</strong> &#8211; &#8216;weight&#8217;, number of times two papers are co-cited together.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>meta_list</strong> : list</p>
+<blockquote>
+<div><p>a list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects.</p>
+</div></blockquote>
+<p><strong>threshold</strong> : int</p>
+<blockquote>
+<div><p>A random value provided by the user. If its greater than zero two nodes 
+should share something common.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>cocitation</strong> : networkx.Graph</p>
+<blockquote class="last">
+<div><p>A cocitation network.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>should be able to specify a threshold &#8211; number of co-citations required to 
+draw an edge.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.networks.citations.descendants">
+<tt class="descclassname">tethne.networks.citations.</tt><tt class="descname">descendants</tt><big>(</big><em>G</em>, <em>source</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/citations.html#descendants"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.citations.descendants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all nodes reachable from <cite>source</cite> in G.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>G</strong> : NetworkX DiGraph</p>
+<p><strong>source</strong> : node in G</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>des</strong> : set()</p>
+<blockquote class="last">
+<div><p>The descendants of source in G</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -506,9 +577,6 @@ corresponding to the earliest and latest &#8216;date&#8217; values for that edge
              >index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="tethne.readers.html" title="readers Package"

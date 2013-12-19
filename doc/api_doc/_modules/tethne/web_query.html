@@ -8,38 +8,38 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>tethne.services.web_query &mdash; tethne  documentation</title>
+    <title>tethne.web_query &mdash; tethne  documentation</title>
     
-    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
+        URL_ROOT:    '../../',
         VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="tethne  documentation" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="tethne  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
+          <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">tethne  documentation</a> &raquo;</li>
-          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li><a href="../../index.html">tethne  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -48,12 +48,12 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1>Source code for tethne.services.web_query</h1><div class="highlight"><pre>
+  <h1>Source code for tethne.web_query</h1><div class="highlight"><pre>
 <span class="kn">import</span> <span class="nn">urllib</span>
 <span class="kn">import</span> <span class="nn">tethne.utilities</span> <span class="kn">as</span> <span class="nn">util</span>
-<span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">ds</span>
+<span class="kn">import</span> <span class="nn">tethne.data_struct</span> <span class="kn">as</span> <span class="nn">ds</span>
 
-<div class="viewcode-block" id="pubmed_pmid"><a class="viewcode-back" href="../../../tethne.services.html#tethne.services.web_query.pubmed_pmid">[docs]</a><span class="k">def</span> <span class="nf">pubmed_pmid</span><span class="p">(</span><span class="n">pmid</span><span class="p">):</span>
+<div class="viewcode-block" id="pubmed_pmid"><a class="viewcode-back" href="../../tethne.html#tethne.web_query.pubmed_pmid">[docs]</a><span class="k">def</span> <span class="nf">pubmed_pmid</span><span class="p">(</span><span class="n">pmid</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get XML from a query of PubMed&#39;s EFetch database for the pmid.</span>
 
@@ -79,7 +79,7 @@
     <span class="k">return</span> <span class="n">xml_string</span>
 
 </div>
-<div class="viewcode-block" id="crossref_meta"><a class="viewcode-back" href="../../../tethne.services.html#tethne.services.web_query.crossref_meta">[docs]</a><span class="k">def</span> <span class="nf">crossref_meta</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="crossref_meta"><a class="viewcode-back" href="../../tethne.html#tethne.web_query.crossref_meta">[docs]</a><span class="k">def</span> <span class="nf">crossref_meta</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Query CrossRef with article metadata with the hope to find a DOI number </span>
 <span class="sd">    for that metadata in their system. </span>
@@ -181,7 +181,7 @@
         <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../../../search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -200,13 +200,13 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
+          <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">tethne  documentation</a> &raquo;</li>
-          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+        <li><a href="../../index.html">tethne  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

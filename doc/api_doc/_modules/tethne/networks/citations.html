@@ -26,7 +26,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="top" title="tethne  documentation" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
+    <link rel="up" title="tethne.networks" href="../networks.html" /> 
   </head>
   <body>
     <div class="related">
@@ -38,11 +38,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="../../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="../../../index.html">tethne  documentation</a> &raquo;</li>
-          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../networks.html" accesskey="U">tethne.networks</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -201,7 +199,7 @@
     <span class="k">if</span> <span class="n">node_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">meta_keys</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&#39;node_id&#39;</span> <span class="o">+</span> <span class="n">node_id</span> <span class="o">+</span> <span class="s">&#39; is not a meta_dict key.&#39;</span><span class="p">)</span>
 
-    <span class="c">#citations is the only invalid meta_key for citation_id</span>
+    <span class="c"># &#39;citations&#39; is the only invalid meta_key for citation_id</span>
     <span class="n">meta_keys</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s">&#39;citations&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">citation_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">meta_keys</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&#39;citation_id&#39;</span> <span class="o">+</span> <span class="n">citation_id</span> <span class="o">+</span> <span class="s">&#39; is not a meta_dict&#39;</span> <span class="o">+</span>
@@ -209,30 +207,30 @@
                        <span class="s">&#39; overlap.&#39;</span><span class="p">)</span>
     
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">doc_list</span><span class="p">)):</span>
-        <span class="c">#make a list of citation_id&#39;s for each document</span>
+        <span class="c"># Make a list of citation_id&#39;s for each document...</span>
         <span class="n">i_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">doc_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">citation</span> <span class="ow">in</span> <span class="n">doc_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;citations&#39;</span><span class="p">]:</span>
                 <span class="n">i_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">citation</span><span class="p">[</span><span class="n">citation_id</span><span class="p">])</span>
-
-        <span class="c">#and construct that document&#39;s node</span>
+        
+        <span class="c"># ...and construct that document&#39;s node.</span>
         <span class="n">node_i_attribs</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">subdict</span><span class="p">(</span><span class="n">doc_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">node_attribs</span><span class="p">)</span>
-        <span class="n">bcoupling</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">doc_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">node_id</span><span class="p">],</span> <span class="n">node_i_attribs</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">doc_list</span><span class="p">)):</span>
-            <span class="c">#make a list of citation_id&#39;s for each document</span>
+            <span class="c"># Make a list of citation_id&#39;s for each document...</span>
             <span class="n">j_list</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">if</span> <span class="n">doc_list</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">citation</span> <span class="ow">in</span> <span class="n">doc_list</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="s">&#39;citations&#39;</span><span class="p">]:</span>
                     <span class="n">j_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">citation</span><span class="p">[</span><span class="n">citation_id</span><span class="p">])</span>
 
-            <span class="c">#and construct that document&#39;s node</span>
+            <span class="c"># ...and construct that document&#39;s node.</span>
             <span class="n">node_j_attribs</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">subdict</span><span class="p">(</span><span class="n">doc_list</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">node_attribs</span><span class="p">)</span>
-            <span class="n">bcoupling</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">doc_list</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">node_id</span><span class="p">],</span> <span class="n">node_j_attribs</span><span class="p">)</span>
 
-            <span class="c">#add an edge if the citation overlap is sufficiently high</span>
+            <span class="c"># Add nodes and edge if the citation overlap is sufficiently high.</span>
             <span class="n">overlap</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">i_list</span><span class="p">,</span> <span class="n">j_list</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">overlap</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">:</span>
+                <span class="n">bcoupling</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">doc_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">node_id</span><span class="p">],</span> <span class="n">node_i_attribs</span><span class="p">)</span>
+                <span class="n">bcoupling</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">doc_list</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">node_id</span><span class="p">],</span> <span class="n">node_j_attribs</span><span class="p">)</span>
                 <span class="n">bcoupling</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">doc_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">node_id</span><span class="p">],</span>
                                    <span class="n">doc_list</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">node_id</span><span class="p">],</span>
                                    <span class="n">overlap</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">overlap</span><span class="p">))</span>
@@ -272,7 +270,7 @@
 <span class="sd">                      </span>
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    should be able to specify a threshold -- number of co-citations required to </span>
+<span class="sd">    should be able to specify a threshold -- number of co-citations required to</span>
 <span class="sd">    draw an edge.</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -298,7 +296,7 @@
 
 
 </div>
-<div class="viewcode-block" id="cocitation"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.citations.cocitation">[docs]</a><span class="k">def</span> <span class="nf">cocitation</span><span class="p">(</span><span class="n">meta_list</span><span class="p">,</span> <span class="n">timeslice</span><span class="p">,</span> <span class="n">threshold</span><span class="p">):</span>
+<div class="viewcode-block" id="cocitation"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.citations.cocitation">[docs]</a><span class="k">def</span> <span class="nf">cocitation</span><span class="p">(</span><span class="n">meta_list</span><span class="p">,</span> <span class="n">threshold</span><span class="p">):</span>
     
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A cocitation network is a network in which vertices are papers, and edges</span>
@@ -308,49 +306,115 @@
 <span class="sd">    separate networkx Graph in which vertices are the _cited_ papers. Separate</span>
 <span class="sd">    graphs allows to analyze each timeslice separately.</span>
 <span class="sd">    </span>
+<span class="sd">    **Nodes** -- papers</span>
+<span class="sd">    </span>
+<span class="sd">    **Node attributes** -- None</span>
+<span class="sd">    </span>
+<span class="sd">    **Edges** -- (a, b) if a and b are cited by the same paper. </span>
+<span class="sd">    </span>
+<span class="sd">    **Edge attributes** -- &#39;weight&#39;, number of times two papers are co-cited together.</span>
+<span class="sd">                      </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    meta_list : list</span>
+<span class="sd">        a list of :class:`.Paper` objects.</span>
+<span class="sd">        </span>
+<span class="sd">    threshold : int</span>
+<span class="sd">        A random value provided by the user. If its greater than zero two nodes </span>
+<span class="sd">        should share something common.</span>
+<span class="sd">            </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    cocitation : networkx.Graph</span>
+<span class="sd">        A cocitation network.</span>
+<span class="sd">                      </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    should be able to specify a threshold -- number of co-citations required to </span>
+<span class="sd">    draw an edge.</span>
+
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
-                    
-    <span class="c"># Co-citation function starts here</span>
-    <span class="n">paper_references</span> <span class="o">=</span> <span class="p">{}</span>         <span class="c">#keys: ayjid of each paper, values: a list of cited references of that paper (ayjid of citations) </span>
+    <span class="n">cocitation_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;author_cocitation&#39;</span><span class="p">)</span>
+     
+    <span class="c"># We&#39;ll use tuples as keys. Values are the number of times each pair</span>
+    <span class="c">#  of papers is co-cited.   </span>
+    
+    <span class="n">cocitations</span> <span class="o">=</span> <span class="p">{}</span>    
+
     <span class="k">for</span> <span class="n">paper</span> <span class="ow">in</span> <span class="n">meta_list</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">authors</span><span class="o">=</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span>
-                <span class="c">#print authors, &#39;\n&#39;</span>
-                <span class="n">cit_str</span> <span class="o">=</span> <span class="s">&quot;&quot;</span> 
-                <span class="n">final_cit</span> <span class="o">=</span><span class="s">&quot;&quot;</span>
-                <span class="k">for</span> <span class="n">cited_paper</span> <span class="ow">in</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]:</span>  
-                      <span class="n">cit_str</span> <span class="o">=</span> <span class="n">cited_paper</span><span class="p">[</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span>    <span class="c"># field ayjid in the citations sub-dict is going to be the vertex of the Network graph.</span>
-                      <span class="n">final_cit</span> <span class="o">=</span> <span class="n">cit_str</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="n">final_cit</span>    <span class="c"># upper case</span>
-                      <span class="n">cit_list</span><span class="o">=</span> <span class="n">final_cit</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>    <span class="c"># to create a list</span>
-                      <span class="n">paper_references</span><span class="p">[</span><span class="n">authors</span><span class="p">]</span> <span class="o">=</span> <span class="n">cit_list</span>  <span class="c"># created a dictionary whose structure is given below.</span>
-                        
-    <span class="c">#To check if its correct                    </span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="n">paper_references</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-       <span class="c"># print key,&#39;-&gt;&#39;,  val , &#39;\n&#39;</span>
-        <span class="k">pass</span>
+        <span class="c"># Some papers don&#39;t have citations.</span>
+        <span class="k">if</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># n is the number of papers in the provided list of Papers.</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>     <span class="c"># No point in proceeding if there is only one citation.</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+                    <span class="c"># Start inner loop at i+1, to avoid redundancy and self-loops.</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+                        <span class="n">papers_pair</span> <span class="o">=</span> <span class="p">(</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="p">)</span>
+                        <span class="n">papers_pair_inv</span> <span class="o">=</span> <span class="p">(</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="p">)</span>                
+                        <span class="c"># Have these papers been co-cited before?</span>
+                        <span class="c"># try blocks are much more efficient than checking</span>
+                        <span class="c">#  cocitations.keys() every time.           </span>
+                        <span class="k">try</span><span class="p">:</span> 
+                            <span class="n">cocitations</span><span class="p">[</span><span class="n">papers_pair</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span> 
+                            <span class="k">try</span><span class="p">:</span> <span class="c"># May have been entered in opposite order.</span>
+                                <span class="n">cocitations</span><span class="p">[</span><span class="n">papers_pair_inv</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                                <span class="c"># Networkx will ignore add_node if those nodes are already present</span>
+                            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                                <span class="c"># First time these papers have been co-cited.</span>
+                                <span class="n">cocitations</span><span class="p">[</span><span class="n">papers_pair</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="n">cocitations</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="o">&gt;=</span> <span class="n">threshold</span> <span class="p">:</span> <span class="c"># If the weight is greater or equal to the user I/P threshold </span>
+            <span class="n">cocitation_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">weight</span><span class="o">=</span><span class="n">val</span><span class="p">)</span> <span class="c">#add edge between the 2 co-cited papers</span>
+    
+    <span class="k">return</span> <span class="n">cocitation_graph</span>
 
+<span class="c">#trying DAG&#39;s for citations</span>
 
-    <span class="c"># Example</span>
-    <span class="c">#{CHEN T 2013 ADVANCES IN ENGINEERING SOFTWARE : [&#39;Zhang QF 2004 ENG COMPUTATION&#39;, &#39;Witten IH 2005 DATA MINING PRACTICA&#39;, &#39;Tu ZG 2004 IEEE T EVOLUT COMPUT&#39;, </span>
-                                                     <span class="c">#&#39;Toksari MD 2006 APPL MATH COMPUT&#39;, &#39;Schwefel H-P 1977 NUMERICAL OPTIMIZATI&#39;, &#39;Rechenberg I. 1973 EVOLUTIONSSTRATEGIE&#39;] }</span>
-        
-    <span class="n">papers</span> <span class="o">=</span> <span class="n">paper_references</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-    <span class="n">references</span> <span class="o">=</span> <span class="n">paper_references</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="c"># for paper nodes - i.e outflow</span></div>
+<div class="viewcode-block" id="descendants"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.citations.descendants">[docs]</a><span class="k">def</span> <span class="nf">descendants</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return all nodes reachable from `source` in G.</span>
 
-    <span class="k">for</span> <span class="n">each_paper</span> <span class="ow">in</span> <span class="n">papers</span><span class="p">:</span>
-                <span class="n">no_of_references</span><span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">paper_references</span><span class="p">[</span><span class="n">each_paper</span><span class="p">])</span> <span class="c"># how many reference papers in each &#39;article&#39;</span>
-                <span class="n">reference_list</span> <span class="o">=</span> <span class="n">paper_references</span><span class="p">[</span><span class="n">each_paper</span><span class="p">]</span>  <span class="c"># create a list to traverse pairs of references,</span>
-                <span class="k">print</span> <span class="n">reference_list</span>
-                <span class="k">print</span> <span class="n">no_of_references</span> <span class="p">,</span> <span class="s">&#39;---------&#39;</span> <span class="p">,</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no_of_references</span><span class="p">)</span> <span class="p">:</span>
-                        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no_of_references</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">:</span>
-                            <span class="c">#print reference_list[i], &#39;,&#39;, reference_list[j]</span>
-                               <span class="c"># yet to do</span>
-                               <span class="c">#Here I need to pick up pairs of i and j from the reference_list and compare it with the other paper&#39;s cited references. </span>
-                               <span class="c">#if I am able to find the cited pair in another paper, I keep increasing the weight/index.</span>
-                               <span class="c">#Add 2 nodes i and j , when the pair i and j has traversed the full list of references and add an edge between themby checking the condition if index&gt;= threshold.</span>
-                            <span class="k">pass</span>  </div>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    G : NetworkX DiGraph</span>
+<span class="sd">    source : node in G</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    des : set()</span>
+<span class="sd">       The descendants of source in G</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">G</span><span class="o">.</span><span class="n">has_node</span><span class="p">(</span><span class="n">source</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">nx</span><span class="o">.</span><span class="n">NetworkXError</span><span class="p">(</span><span class="s">&quot;The node </span><span class="si">%s</span><span class="s"> is not in the graph.&quot;</span> <span class="o">%</span> <span class="n">source</span><span class="p">)</span>
+    
+    <span class="n">des</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">shortest_path_length</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="n">source</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">des</span> 
+
+<span class="c">#For cited nodes - i.e inflow</span></div>
+<div class="viewcode-block" id="ancestors"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.citations.ancestors">[docs]</a><span class="k">def</span> <span class="nf">ancestors</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return all nodes having a path to `source` in G.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    G : NetworkX DiGraph</span>
+<span class="sd">    source : node in G</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ancestors : set()</span>
+<span class="sd">       The ancestors of source in G</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">G</span><span class="o">.</span><span class="n">has_node</span><span class="p">(</span><span class="n">source</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">nx</span><span class="o">.</span><span class="n">NetworkXError</span><span class="p">(</span><span class="s">&quot;The node </span><span class="si">%s</span><span class="s"> is not in the graph.&quot;</span> <span class="o">%</span> <span class="n">source</span><span class="p">)</span>
+    <span class="n">anc</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">shortest_path_length</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">source</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="n">source</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">anc</span></div>
 </pre></div>
 
           </div>
@@ -384,11 +448,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="../../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li><a href="../../../index.html">tethne  documentation</a> &raquo;</li>
-          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../networks.html" >tethne.networks</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
