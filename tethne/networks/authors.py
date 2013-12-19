@@ -189,7 +189,7 @@ def author_coinstitution(Papers, threshold=1):
         A list of :class:`.Paper` objects.
     threshold : int
         Minimum number of shared institutions required for an edge between
-        two authors.
+        two authors. Default is 1.
         
     Returns
     -------
@@ -223,7 +223,7 @@ def author_coinstitution(Papers, threshold=1):
                         pass
     return coinstitution
 
-def author_cocitation(papers, threshold):
+def author_cocitation(papers, threshold=2):
     
     """
     Creates an author cocitation network. Vertices are authors, and an edge
@@ -245,6 +245,7 @@ def author_cocitation(papers, threshold):
         A list of :class:`.Paper` objects.
     threshold : int
         Minimum number of co-citations required for an edge between two authors.
+        Default is 2.
         
     Returns
     -------

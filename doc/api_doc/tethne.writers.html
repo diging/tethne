@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,7 +9,7 @@
     
     <title>writers Package &mdash; tethne  documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -58,6 +57,40 @@
 <h2><tt class="xref py py-mod docutils literal"><span class="pre">writers</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <span class="target" id="module-tethne.writers"></span><p>Methods for writing datasets to commonly-used data formats, for visualization
 and analysis in external applications, and for storage.</p>
+</div>
+<div class="section" id="module-tethne.writers.collection">
+<span id="collection-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">collection</span></tt> Module<a class="headerlink" href="#module-tethne.writers.collection" title="Permalink to this headline">¶</a></h2>
+<p>Methods for writing <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to commonly-used network file 
+formats. Many methods simply leverage equivalent methods in NetworkX.</p>
+<dl class="function">
+<dt id="tethne.writers.collection.to_dxgmml">
+<tt class="descclassname">tethne.writers.collection.</tt><tt class="descname">to_dxgmml</tt><big>(</big><em>C</em>, <em>path</em><big>)</big><a class="reference internal" href="_modules/tethne/writers/collection.html#to_dxgmml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.writers.collection.to_dxgmml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes a <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to dynamic XGMML. Assumes that <cite>Graph</cite>
+indices are orderable points in time (e.g. years). The &#8220;start&#8221; and &#8220;end&#8221;
+of each node and edge are determined by periods of consecutive appearance
+in the <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . Node and edge attributes are defined for
+each <cite>Graph</cite>. in the <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
+<blockquote>
+<div><p>The <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to be written to XGMML.</p>
+</div></blockquote>
+<p><strong>path</strong> : str</p>
+<blockquote class="last">
+<div><p>Path to file to be written. Will be created/overwritten.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Period start and end dates in this method are inclusive, whereas XGMML end
+dates are exclusive. Hence +1 is added to all end dates when writing XGMML.</p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-tethne.writers.graph">
 <span id="graph-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">graph</span></tt> Module<a class="headerlink" href="#module-tethne.writers.graph" title="Permalink to this headline">¶</a></h2>
@@ -185,6 +218,7 @@ visualization and analysis. Not yet implemented.</p>
   <ul>
 <li><a class="reference internal" href="#">writers Package</a><ul>
 <li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">writers</span></tt> Package</a></li>
+<li><a class="reference internal" href="#module-tethne.writers.collection"><tt class="docutils literal"><span class="pre">collection</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.writers.graph"><tt class="docutils literal"><span class="pre">graph</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.writers.matrix"><tt class="docutils literal"><span class="pre">matrix</span></tt> Module</a></li>
 </ul>
@@ -233,7 +267,7 @@ visualization and analysis. Not yet implemented.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2013, Author.
+        &copy; Copyright 2013, ASU Digital Innovation Group.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
