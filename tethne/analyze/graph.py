@@ -4,7 +4,6 @@ Methods for network analysis.
 
 import networkx as nx
 import tethne.networks as nt
-import tethne.data as ds
 
 def node_global_closeness_centrality(g, node, normalize=True):
     """
@@ -12,16 +11,16 @@ def node_global_closeness_centrality(g, node, normalize=True):
     For connected graphs, equivalent to conventional betweenness centrality.
     For disconnected graphs, works around infinite path lengths between nodes
     in different components.
-    
+
     Parameters
     ----------
     g : networkx.Graph
     node : any
         Identifier of node of interest in g.
     normalize : boolean
-        If True, normalizes centrality based on the average shortest path 
+        If True, normalizes centrality based on the average shortest path
         length. Default is True.
-    
+
     Returns
     -------
     c : float
@@ -30,37 +29,38 @@ def node_global_closeness_centrality(g, node, normalize=True):
 
     g = nt.authors.coauthors(slice)
     c = 0
-    try:   
+    try:
         for pl in nx.shortest_path_length(g, node).values():
             if pl != 0:     # Ignore self-loops.
                 c += 1/float(pl)
         c = c/len(g)
-    except:
+    except ZeroDivisionError:
         c = 0.
-        
+
     if normalize:
         ac = 0
         for sg in nx.connected_component_subgraphs(g):
             if len(sg.nodes()) > 1:
-                ac += (1/nx.average_shortest_path_length(sg)) * (float(len(sg)) / float(len(g))**2 )
+                aspl = nx.average_shortest_path_length(sg)
+                ac += (1/aspl) * (float(len(sg)) / float(len(g))**2 )
         c = c/ac
 
     return c
 
 def global_closeness_centrality(g, normalize=True):
     """
-    Calculates global closeness centrality for all nodes in the network. For 
-    connected graphs, equivalent to conventional betweenness centrality. For 
-    disconnected graphs, works around infinite path lengths between nodes in 
+    Calculates global closeness centrality for all nodes in the network. For
+    connected graphs, equivalent to conventional betweenness centrality. For
+    disconnected graphs, works around infinite path lengths between nodes in
     different components.
-    
+
     Parameters
     ----------
     g : networkx.Graph
     normalize : boolean
         If True, normalizes centrality based on the average shortest path
         length. Default is True.
-    
+
     Returns
     -------
     C : dict
@@ -69,7 +69,6 @@ def global_closeness_centrality(g, normalize=True):
 
     C = {}
     for node in g.nodes():
-        C[node] = node_global_closeness_centrality(g, node, normalize=True)
+        C[node] = node_global_closeness_centrality(g, node, normalize=normalize)
 
     return C
-        
