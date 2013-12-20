@@ -7,17 +7,17 @@ def parse_bib(filename):
     ----------
     filename : string
         Path to BibTex file.
-    
+
     Returns
     -------
     bib_list : list
         A list of :class:`.Paper` instances.
-    
+
     Notes
     -----
     tethne.resources. bib has been known to make errors in parsing bib files.
 
-    FIXME: structure the bibtex translator in the data_struct folder along with 
+    FIXME: structure the bibtex translator in the data_struct folder along with
     the others.
     """
 
