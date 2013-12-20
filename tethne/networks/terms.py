@@ -8,7 +8,7 @@ import numpy as np
 def keyword_cooccurrence(papers, threshold, connected=False):
     """
     Generates a keyword cooccurrence network.
-    
+
     Parameters
     ----------
     papers : list
@@ -17,14 +17,14 @@ def keyword_cooccurrence(papers, threshold, connected=False):
         Minimum number of occurrences for a keyword pair to appear in graph.
     connected : bool
         If True, returns only the largest connected component.
-        
+
     Returns
     -------
     k_coccurrence :  networkx.Graph
         A keyword coccurrence network.
-        
+
     """
-    
+
     # Extract keywords from papers.
     keywords = {}
     for entry in papers:
@@ -51,7 +51,7 @@ def keyword_cooccurrence(papers, threshold, connected=False):
 
     cooccurrence = np.zeros((len(wordset), len(wordset)))
     frequencies = np.zeros((len(wordset),))
-    
+
     for entry in papers:
         if entry['keywords'] in keywords.keys():
             for word in keywords[entry['wosid']]:
@@ -61,7 +61,7 @@ def keyword_cooccurrence(papers, threshold, connected=False):
                     j = dictionary[word_]
                     if i != j:
                         cooccurrence[i, j] += 1
-    
+
     G = nx.Graph()
     for i in xrange(len(wordset)):
         for j in xrange(i, len(wordset)):
