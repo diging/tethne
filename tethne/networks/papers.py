@@ -244,6 +244,7 @@ def cocitation(meta_list, threshold):
     #  of papers is co-cited.   
     
     cocitations = {}    
+    citations_count={}
 
     for paper in meta_list:
         # Some papers don't have citations.
@@ -261,18 +262,31 @@ def cocitation(meta_list, threshold):
                         #  cocitations.keys() every time.           
                         try: 
                             cocitations[papers_pair] += 1
+                            print "try:", papers_pair[0], papers_pair[1]
+                            citations_count[papers_pair[0]]+=1
+                            citations_count[papers_pair[1]]+=1
                         except KeyError: 
                             try: # May have been entered in opposite order.
+                                
                                 cocitations[papers_pair_inv] += 1
+                                print "except try:", papers_pair_inv[0], papers_pair_inv[1]
+                                citations_count[papers_pair_inv[0]]+=1
+                                citations_count[papers_pair_inv[1]]+=1
                                 # Networkx will ignore add_node if those nodes are already present
                             except KeyError:
                                 # First time these papers have been co-cited.
                                 cocitations[papers_pair] = 1
-    
+                                citations_count[papers_pair[0]]=1
+                                citations_count[papers_pair[1]]=1
+                                print "except except :", papers_pair[0], papers_pair[1]
     for key,val in cocitations.iteritems():
         if val >= threshold : # If the weight is greater or equal to the user I/P threshold 
             cocitation_graph.add_edge(key[0],key[1], weight=val) #add edge between the 2 co-cited papers
-    
+    #62657522        
+    for key,val in citations_count.iteritems():
+            print "key : ", key, "val:" , val    
+            nx.set_node_attributes( cocitation_graph, 'number_of_cited_times', { k:v for k,v in citations_count.iteritems() if k in cocitation_graph.nodes() } ) 
+            
     return cocitation_graph
 
 def author_coupling(doc_list, threshold, node_id, *node_attribs):

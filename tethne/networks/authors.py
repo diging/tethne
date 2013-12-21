@@ -14,7 +14,7 @@ def author_papers(doc_list, paper_id, *paper_attribs):
 
     Papers also have node attributes defined by paper_attribs.
     
-    **Edges** -- Directed, Author -> her Paper 
+    **Edges** -- Directed, Author -> his/her Paper 
     
     Parameters
     ----------
@@ -211,18 +211,23 @@ def author_coinstitution(Papers, threshold):
                     author_institutions[key] = value
         authors = author_institutions.keys()
         for i in xrange(len(authors)):
-            coinstitution.add_node(authors[i],type ='author')  
+            #coinstitution.add_node(authors[i],type ='author')  
             for j in xrange(len(authors)):
                 if i != j:
                     overlap = set(author_institutions[authors[i]]) & set(author_institutions[authors[j]]) #compare 2 author dict elements
                     if len(overlap) >= threshold:
-                            coinstitution.add_node(authors[j],type ='author')            
+                            #coinstitution.add_node(authors[i],type ='author')  
+                            #coinstitution.add_node(authors[j],type ='author')   
                             #print authors[i] + "->" + authors[j]
                             coinstitution.add_edge(authors[i], authors[j], overlap=len(overlap))
                     else :
                             pass
-                         
-                          
+        #62809656                
+        attribs_dict={}                
+        for node in coinstitution.nodes():                
+            attribs_dict[node]='author'                 
+        nx.set_node_attributes( coinstitution, 'type', attribs_dict ) 
+                            
                 
     return coinstitution
 
