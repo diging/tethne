@@ -56,14 +56,21 @@ def concat_list(listA, listB, delim=' '):
     Raises index error if lists are not parallel
     """
     #validate input
+    
+    print "Len:",len(listA),listA 
+    
     if len(listA) != len(listB):
         raise IndexError('Input lists are not parallel.')
 
     #concatenate lists
     listC = []
     for i in xrange(len(listA)):
-        listC.append(listA[i] + delim + listB[i])
-
+        print "i:", i, 'val 1:', listA[i],'val 2:', listB[i]
+        app=listA[i] + delim + listB[i]
+        listC.append(app)
+        print "listC: inside",listC
+        
+    print 'outside', listC    
     return listC
 
 def strip_non_ascii(string):
