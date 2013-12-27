@@ -268,22 +268,68 @@ def author_cocitation(meta_list, threshold):
     draw an edge.
     
     """
-    cocitation = nx.Graph(type='author_cocitation')
+
+    author_cocitations = nx.Graph(type='author_cocitation')
+     
+    # We'll use tuples as keys. Values are the number of times each pair
+    # of 2 authors is co-cited.   
+    
+    cocitations = {}    
+    citations_count={}
+    delim=' '
 
     for paper in meta_list:
-        for citation in paper['citations']:
-            author_list = util.concat_list(citation['aulast'],
-                                           citation['auinit'],
-                                           ' ')
-            num_authors = len(author_list)
-            for i in xrange(num_authors):
-                cocitation.add_node(author_list[i])
-                for j in xrange(i+1, num_authors):
-                    try:
-                        cocitation[author_list[i]][author_list[j]]['weight'] += 1
-                    except KeyError:
-                        # then edge doesnt yet exist
-                        cocitation.add_edge(author_list[i], author_list[j],
-                                            {'weight':1})
-
-    return cocitation
+        # Some papers don't have citations.
+        if paper['citations'] is not None:
+            # n is the number of papers in the provided list of Papers.
+            n = len(paper['citations'])
+            if n > 1:     # No point in proceeding if there is only one citation.
+                for i in xrange(0, n):
+                    al_i_str=''.join(map(str,(paper['citations'][i]['aulast']))) #author i's last name
+                    ai_i_str=''.join(map(str,(paper['citations'][i]['auinit']))) #author i's initial
+                    author_i_str=al_i_str+delim+ai_i_str#making it a tuple, so that it becomes the key for cocitations dict
+                    #print "1:",author_i_str, type(author_i_str)
+                    
+                    # Start inner loop at i+1, to avoid redundancy and self-loops.
+                    for j in xrange(i+1, n):
+                        al_j_str=''.join(map(str,(paper['citations'][j]['aulast']))) # last name of author j
+                        ai_j_str=''.join(map(str,(paper['citations'][j]['auinit']))) # last name of author i
+                        author_j_str=al_j_str+delim+ai_j_str # making it a tuple so that it becomes the key for cocitations dict
+                        #print "2:",author_j_str, type(author_j_str)
+                   
+                        # 2 tuples which are going to be the keys of the dict.                         
+                        authors_pair = (author_i_str.upper(),author_j_str.upper()) 
+                        authors_pair_inv =(author_j_str.upper(),author_i_str.upper()) 
+                        # Have these authors been co-cited before?
+                        # try blocks are much more efficient than checking
+                        # cocitations.keys() every time.           
+                        try: 
+                            cocitations[authors_pair] += 1
+                            #print "try:", authors_pair[0], authors_pair[1]
+                            citations_count[authors_pair[0]]+=1 # this is just an addition
+                            citations_count[authors_pair[1]]+=1 # this is just an addition
+                        except KeyError: 
+                            try: # May have been entered in opposite order.
+                                cocitations[authors_pair_inv] += 1
+                                #print "except try:", authors_pair_inv[0], authors_pair_inv[1]
+                                citations_count[authors_pair_inv[0]]+=1
+                                citations_count[authors_pair_inv[1]]+=1
+                                # Networkx will ignore add_node if those nodes are already present
+                                
+                            except KeyError:
+                                # First time these papers have been co-cited.
+                                cocitations[authors_pair] = 1
+                                citations_count[authors_pair[0]]=1
+                                citations_count[authors_pair[1]]=1
+                                #print "except except :", authors_pair[0], authors_pair[1]
+    for key,val in cocitations.iteritems():
+        if val >= threshold : # If the weight is greater or equal to the user I/P threshold 
+            author_cocitations.add_edge(key[0],key[1], weight=val) #add edge between the 2 co-cited authors
+            
+    
+    #This feature might be added as like paper_cocitations        
+    for key,val in citations_count.iteritems():
+            #print "key : ", key, "val:" , val    
+            nx.set_node_attributes( author_cocitations, 'number_of_cited_times', { k:v for k,v in citations_count.iteritems() if k in author_cocitations.nodes() } ) 
+            
+    return author_cocitations
