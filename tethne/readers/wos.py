@@ -322,6 +322,9 @@ def parse_cr(ref):
         #FIXME: needs better name parser
         name = tokens[0]
         name_tokens = name.split(' ')
+        
+        
+        
         meta_dict['aulast'] = [name_tokens[0]]
         meta_dict['auinit'] = [name_tokens[1]]
 
