@@ -95,25 +95,32 @@ def coauthors(papers, *edge_attribs):
     
     """
 
-    coauthors = nx.MultiGraph(type='coauthors')
+    coauthors = nx.Graph(type='coauthors')
 
     for entry in papers:
         if entry['aulast'] is not None:
             # edge_attrib_dict for any edges that get added
             edge_attrib_dict = util.subdict(entry, edge_attribs)
-
+            edge_attrib_dict['no_of_times']=0
             # make a new list of aulast, auinit names
             full_names = util.concat_list(entry['aulast'], 
                                           entry['auinit'], 
                                           ' ')
 
             for a in xrange(len(full_names)):
-                coauthors.add_node(full_names[a]) # create node for author a
+                #commented add_nodes as they will be added in add_edge
+                #coauthors.add_node(full_names[a]) # create node for author a
                 for b in xrange(a+1, len(entry['aulast'])):
-                    coauthors.add_node(full_names[b]) #create node for author b
-                    
+                    #coauthors.add_node(full_names[b]) #create node for author b
+                    if (a==b):
+                       edge_attrib_dict['no_of_times']+=1 
+                       coauthors.add_edge(full_names[a], 
+                                       full_names[b],
+                                       attr_dict=edge_attrib_dict)
+ 
+                    else:                        
                     #add edges with specified edge attributes
-                    coauthors.add_edge(full_names[a], 
+                        coauthors.add_edge(full_names[a], 
                                        full_names[b],
                                        attr_dict=edge_attrib_dict)
 
