@@ -254,37 +254,42 @@ def cocitation(meta_list, threshold):
             if n > 1:     # No point in proceeding if there is only one citation.
                 for i in xrange(0, n):
                     # Start inner loop at i+1, to avoid redundancy and self-loops.
+                    paper_i=paper['citations'][i]['ayjid'].upper()   #to be used to build the cocitations_count dict
+                    try:    
+                            #if the dict has this paper as a key?
+                            citations_count[paper_i]+=1
+                            #print "try:", citations_count[paper_i],paper_i
+                    except KeyError: 
+                            # First time this paper has been cited. Add it to the citations_count dict
+                            citations_count[paper_i]=1
+                            #print "except:", citations_count[paper_i],paper_i
+    
                     for j in xrange(i+1, n):
                         papers_pair = ( paper['citations'][i]['ayjid'].upper(), paper['citations'][j]['ayjid'].upper() )
-                        papers_pair_inv = ( paper['citations'][j]['ayjid'].upper(), paper['citations'][i]['ayjid'].upper() )                
+                        papers_pair_inv = ( paper['citations'][j]['ayjid'].upper(), paper['citations'][i]['ayjid'].upper() )
                         # Have these papers been co-cited before?
                         # try blocks are much more efficient than checking
                         #  cocitations.keys() every time.           
+                        paper_j=paper['citations'][j]['ayjid'].upper()
                         try: 
                             cocitations[papers_pair] += 1
-                            print "try:", papers_pair[0], papers_pair[1]
-                            citations_count[papers_pair[0]]+=1
-                            citations_count[papers_pair[1]]+=1
+                        
                         except KeyError: 
                             try: # May have been entered in opposite order.
                                 
                                 cocitations[papers_pair_inv] += 1
-                                print "except try:", papers_pair_inv[0], papers_pair_inv[1]
-                                citations_count[papers_pair_inv[0]]+=1
-                                citations_count[papers_pair_inv[1]]+=1
+                            
                                 # Networkx will ignore add_node if those nodes are already present
                             except KeyError:
                                 # First time these papers have been co-cited.
                                 cocitations[papers_pair] = 1
-                                citations_count[papers_pair[0]]=1
-                                citations_count[papers_pair[1]]=1
-                                print "except except :", papers_pair[0], papers_pair[1]
+    
     for key,val in cocitations.iteritems():
         if val >= threshold : # If the weight is greater or equal to the user I/P threshold 
             cocitation_graph.add_edge(key[0],key[1], weight=val) #add edge between the 2 co-cited papers
     #62657522        
     for key,val in citations_count.iteritems():
-            print "key : ", key, "val:" , val    
+            #print "key : ", key, "val:" , val    
             nx.set_node_attributes( cocitation_graph, 'number_of_cited_times', { k:v for k,v in citations_count.iteritems() if k in cocitation_graph.nodes() } ) 
             
     return cocitation_graph
