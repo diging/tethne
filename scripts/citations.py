@@ -28,7 +28,7 @@ cites, internal_cites = nt.papers.direct_citation(meta_list, 'ayjid', 'atitle', 
 
 print "------Cites Nodes----"
 print cites.nodes()
-print "####Cites Edges####"
+print "#### Cites Edges ####"
 print cites.edges()
 print "----Internal Cites--"
 print internal_cites.nodes()
@@ -38,9 +38,9 @@ c_des = nx.descendants(cites,'ALAMPORA G 1999 INFORMATION SCIENCES')
 i_des = nx.descendants(internal_cites,'WU Z 2012 NEUROCOMPUTING')
 c_ans = nx.ancestors(cites,'Hu J. 2008 SIGIR 08')
 i_ans = nx.ancestors(internal_cites,'WU Z 2012 NEUROCOMPUTING')
+
 print '####cites des#####:', c_des
 print 'Internal des:', i_des
-
 print '----cites ans------:', c_ans
 print '-----Internal ans----:', i_ans
 
