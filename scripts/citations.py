@@ -16,8 +16,8 @@
 
 #making some changs for testing new fork feature.
 
-
 import tethne.readers as rd
+import networkx as nx
 #filepath = "../docs/savedrecs.txt"
 filepath = "../testsuite/testin/citations_test.txt"
 wos_list = rd.wos.parse_wos(filepath)
@@ -34,19 +34,17 @@ print "----Internal Cites--"
 print internal_cites.nodes()
 print internal_cites.edges()
 
-c_des = nt.papers.descendants(cites,'Abdullah S 2012 INFORM SCIENCES')
-i_des = nt.papers.descendants(internal_cites,'ACAMPORA G 2013 INFORMATION SCIENCES')
+c_des = nx.descendants(cites,'ALAMPORA G 1999 INFORMATION SCIENCES')
+i_des = nx.descendants(internal_cites,'WU Z 2012 NEUROCOMPUTING')
+c_ans = nx.ancestors(cites,'Hu J. 2008 SIGIR 08')
+i_ans = nx.ancestors(internal_cites,'WU Z 2012 NEUROCOMPUTING')
+print '####cites des#####:', c_des
+print 'Internal des:', i_des
 
-c_ans = nt.papers.ancestors(cites,'Borda J. 1981 MEMOIRE ELECTIONS SC')
-#i_ans = nt.citations.ancestors(internal_cites,'Borda J. 1981 MEMOIRE ELECTIONS SC')
-
-#print 'cites des:', c_des
-#print 'Internal des:', i_des
-
-print 'cites ans:', c_ans
-#print 'Internal ans:', i_ans
+print '----cites ans------:', c_ans
+print '-----Internal ans----:', i_ans
 
 is_directed = cites.is_directed()
-is_dag = nt.papers.is_directed_acyclic_graph(cites)
+is_dag = nx.is_directed_acyclic_graph(cites)
 print 'Is it directed? :' , is_directed
 print 'Is it dag :' , is_dag
