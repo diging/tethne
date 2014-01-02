@@ -19,4 +19,6 @@ setup(name=DISTNAME,
       url=URL,
       version=VERSION,
       long_description=LONG_DESCRIPTION,
-      packages = PACKAGES)
+      packages = PACKAGES,
+      install_requires = ['networkx >= 1.8']
+      )
