@@ -239,7 +239,6 @@ def author_coinstitution(Papers, threshold):
     return coinstitution
 
 def author_cocitation(meta_list, threshold):
-    
     """
     Creates an author cocitation network. Vertices are authors, and an edge
     implies that two authors have been cited (via their publications) by in at
@@ -271,7 +270,7 @@ def author_cocitation(meta_list, threshold):
                       
     Notes
     -----
-    should be able to specify a threshold -- number of co-citations required to
+    Should be able to specify a threshold -- number of co-citations required to
     draw an edge.
     
     """
@@ -297,7 +296,8 @@ def author_cocitation(meta_list, threshold):
             
             if n > 1:     # No point in proceeding if there is only one citation.
                 for i in xrange(0, n):
-                    al_i_str=''.join(map(str,(paper['citations'][i]['aulast']))) #author i's last name
+                    # al_i_str is the author i's last name.
+                    al_i_str=''.join(map(str,(paper['citations'][i]['aulast']))) 
                     print "main name --- i:", paper['citations'][i]['aulast']
                     #ai_i_str=''.join(map(str,(paper['citations'][i]['auinit']))) #author i's initial
                     l=paper['citations'][i]['auinit']
