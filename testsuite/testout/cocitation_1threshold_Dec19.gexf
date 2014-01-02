@@ -1,74 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?><gexf version="1.1" xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gexf.net/1.1draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
   <graph defaultedgetype="undirected" mode="static">
-    <attributes class="node" mode="static">
-      <attribute id="0" title="number_of_cited_times" type="integer" />
-    </attributes>
     <nodes>
-      <node id="XIAO HY 2011 SOIL SEDIMENT CONTAM" label="XIAO HY 2011 SOIL SEDIMENT CONTAM">
-        <attvalues>
-          <attvalue for="0" value="1" />
-        </attvalues>
-      </node>
-      <node id="YU HL 2007 STOCH ENV RES RISK A" label="YU HL 2007 STOCH ENV RES RISK A">
-        <attvalues>
-          <attvalue for="0" value="1" />
-        </attvalues>
-      </node>
-      <node id="ZOU CK 2011 TECHNOMETRICS" label="ZOU CK 2011 TECHNOMETRICS">
-        <attvalues>
-          <attvalue for="0" value="2" />
-        </attvalues>
-      </node>
-      <node id="FILIPPIDIS A 1992 FUEL" label="FILIPPIDIS A 1992 FUEL">
-        <attvalues>
-          <attvalue for="0" value="2" />
-        </attvalues>
-      </node>
-      <node id="VATALIS K. 2006 ENVIRON MANAGE" label="VATALIS K. 2006 ENVIRON MANAGE">
-        <attvalues>
-          <attvalue for="0" value="1" />
-        </attvalues>
-      </node>
-      <node id="EFRON B. 1993 INTRO BOOTSTRAP" label="EFRON B. 1993 INTRO BOOTSTRAP">
-        <attvalues>
-          <attvalue for="0" value="1" />
-        </attvalues>
-      </node>
-      <node id="ADRIANO D. 2001 TRACE ELEMENTS TERRE" label="ADRIANO D. 2001 TRACE ELEMENTS TERRE">
-        <attvalues>
-          <attvalue for="0" value="1" />
-        </attvalues>
-      </node>
-      <node id="DAS N 2009 QUAL TECHNOL QUANT M" label="DAS N 2009 QUAL TECHNOL QUANT M">
-        <attvalues>
-          <attvalue for="0" value="1" />
-        </attvalues>
-      </node>
-      <node id="LANG CL 2012 NAV RES LOG" label="LANG CL 2012 NAV RES LOG">
-        <attvalues>
-          <attvalue for="0" value="2" />
-        </attvalues>
-      </node>
-      <node id="FRANK A. 2010 UCI MACHINE LEARNING" label="FRANK A. 2010 UCI MACHINE LEARNING">
-        <attvalues>
-          <attvalue for="0" value="1" />
-        </attvalues>
-      </node>
-      <node id="RAO J 1992 RNEA TECHN B SER LAN" label="RAO J 1992 RNEA TECHN B SER LAN">
-        <attvalues>
-          <attvalue for="0" value="2" />
-        </attvalues>
-      </node>
-      <node id="ANGIULLI F 2005 IEEE T KNOWL DATA EN" label="ANGIULLI F 2005 IEEE T KNOWL DATA EN">
-        <attvalues>
-          <attvalue for="0" value="1" />
-        </attvalues>
-      </node>
-      <node id="CHAKRABORTI S 2001 J QUAL TECHNOL" label="CHAKRABORTI S 2001 J QUAL TECHNOL">
-        <attvalues>
-          <attvalue for="0" value="1" />
-        </attvalues>
-      </node>
+      <node id="XIAO HY 2011 SOIL SEDIMENT CONTAM" label="XIAO HY 2011 SOIL SEDIMENT CONTAM" />
+      <node id="YU HL 2007 STOCH ENV RES RISK A" label="YU HL 2007 STOCH ENV RES RISK A" />
+      <node id="ZOU CK 2011 TECHNOMETRICS" label="ZOU CK 2011 TECHNOMETRICS" />
+      <node id="FILIPPIDIS A 1992 FUEL" label="FILIPPIDIS A 1992 FUEL" />
+      <node id="VATALIS K. 2006 ENVIRON MANAGE" label="VATALIS K. 2006 ENVIRON MANAGE" />
+      <node id="EFRON B. 1993 INTRO BOOTSTRAP" label="EFRON B. 1993 INTRO BOOTSTRAP" />
+      <node id="ADRIANO D. 2001 TRACE ELEMENTS TERRE" label="ADRIANO D. 2001 TRACE ELEMENTS TERRE" />
+      <node id="DAS N 2009 QUAL TECHNOL QUANT M" label="DAS N 2009 QUAL TECHNOL QUANT M" />
+      <node id="LANG CL 2012 NAV RES LOG" label="LANG CL 2012 NAV RES LOG" />
+      <node id="FRANK A. 2010 UCI MACHINE LEARNING" label="FRANK A. 2010 UCI MACHINE LEARNING" />
+      <node id="RAO J 1992 RNEA TECHN B SER LAN" label="RAO J 1992 RNEA TECHN B SER LAN" />
+      <node id="ANGIULLI F 2005 IEEE T KNOWL DATA EN" label="ANGIULLI F 2005 IEEE T KNOWL DATA EN" />
+      <node id="CHAKRABORTI S 2001 J QUAL TECHNOL" label="CHAKRABORTI S 2001 J QUAL TECHNOL" />
     </nodes>
     <edges>
       <edge id="0" source="XIAO HY 2011 SOIL SEDIMENT CONTAM" target="ADRIANO D. 2001 TRACE ELEMENTS TERRE" weight="1" />
