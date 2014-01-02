@@ -292,6 +292,9 @@ def author_cocitation(meta_list, threshold):
             # n is the number of papers in the provided list of Papers.
             n = len(paper['citations'])
             print 'no of citations:', n
+            
+            found_authors = []  # To avoid extra incrementation of author pairs.
+            
             if n > 1:     # No point in proceeding if there is only one citation.
                 for i in xrange(0, n):
                     al_i_str=''.join(map(str,(paper['citations'][i]['aulast']))) #author i's last name
@@ -320,16 +323,21 @@ def author_cocitation(meta_list, threshold):
                         # try blocks are much more efficient than checking
                         # cocitations.keys() every time.           
                         try: 
-                            cocitations[authors_pair] += 1
+                            if authors_pair not in found_authors:
+                                cocitations[authors_pair] += 1
+                                found_authors.append(authors_pair)
                             print "try:", authors_pair[0], authors_pair[1]
                         except KeyError: 
                             try: # May have been entered in opposite order.
-                                cocitations[authors_pair_inv] += 1
+                                if authors_pair_inv not in found_authors:
+                                    cocitations[authors_pair_inv] += 1
+                                    found_authors.append(authors_pair_inv)
                                 print "except try:", authors_pair_inv[0], authors_pair_inv[1]
                                 # Networkx will ignore add_node if those nodes are already present
                             except KeyError:
                                 # First time these papers have been co-cited.
                                 cocitations[authors_pair] = 1
+                                found_authors.append(authors_pair_inv)
                                 print "except except :", authors_pair[0], authors_pair[1]
     for key,val in cocitations.iteritems():
         if val >= threshold : # If the weight is greater or equal to the user I/P threshold 
