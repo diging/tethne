@@ -296,7 +296,9 @@ def author_cocitation(meta_list, threshold):
                 for i in xrange(0, n):
                     al_i_str=''.join(map(str,(paper['citations'][i]['aulast']))) #author i's last name
                     print "main name --- i:", paper['citations'][i]['aulast']
-                    ai_i_str=''.join(map(str,(paper['citations'][i]['auinit']))) #author i's initial
+                    #ai_i_str=''.join(map(str,(paper['citations'][i]['auinit']))) #author i's initial
+                    l=paper['citations'][i]['auinit']
+                    ai_i_str=str(l).strip('[]') # last name of author i
                     author_i_str=al_i_str+delim+ai_i_str#making it a tuple, so that it becomes the key for cocitations dict
                     #print "1:",author_i_str, type(author_i_str)
                     

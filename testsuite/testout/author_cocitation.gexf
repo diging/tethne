@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="utf-8"?><gexf version="1.1" xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gexf.net/1.1draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
+  <graph defaultedgetype="undirected" mode="static">
+    <nodes>
+      <node id="PAK 'A.'" label="PAK 'A.'" />
+      <node id="GEN 'M'" label="GEN 'M'" />
+      <node id="DEMSAR 'J'" label="DEMSAR 'J'" />
+      <node id="DAVID 'J.'" label="DAVID 'J.'" />
+      <node id="WU 'HC'" label="WU 'HC'" />
+      <node id="HU 'J.'" label="HU 'J.'" />
+      <node id="WANG 'Z.'" label="WANG 'Z.'" />
+      <node id="CHEN YL" label="CHEN YL" />
+      <node id="SALTON 'G'" label="SALTON 'G'" />
+      <node id="ALAMPORA 'G'" label="ALAMPORA 'G'" />
+      <node id="WU 'ZD'" label="WU 'ZD'" />
+      <node id="MURDOCK 'V.'" label="MURDOCK 'V.'" />
+      <node id="DO 'HH'" label="DO 'HH'" />
+      <node id="EHRIG 'M'" label="EHRIG 'M'" />
+      <node id="VAZQUEZ 'NAYA'" label="VAZQUEZ 'NAYA'" />
+      <node id="FRIEDMAN 'M'" label="FRIEDMAN 'M'" />
+      <node id="HUANG 'T'" label="HUANG 'T'" />
+      <node id="EUZENAT J." label="EUZENAT J." />
+      <node id="AZAMPORA 'G'" label="AZAMPORA 'G'" />
+      <node id="RIBEIRO-NETO 'B.'" label="RIBEIRO-NETO 'B.'" />
+      <node id="HU XH" label="HU XH" />
+      <node id="PAPADOPOULOS S" label="PAPADOPOULOS S" />
+      <node id="CHEN 'YL'" label="CHEN 'YL'" />
+      <node id="FRIEDMAN M" label="FRIEDMAN M" />
+      <node id="DAVID J." label="DAVID J." />
+      <node id="CRUZ I.F." label="CRUZ I.F." />
+      <node id="PAK A." label="PAK A." />
+      <node id="DEMSAR J" label="DEMSAR J" />
+      <node id="WINKLER W." label="WINKLER W." />
+      <node id="PAK 'AN'" label="PAK 'AN'" />
+      <node id="DAWKINS R" label="DAWKINS R" />
+      <node id="XU P." label="XU P." />
+      <node id="BOCK J" label="BOCK J" />
+      <node id="VAZQUEZ NAYA" label="VAZQUEZ NAYA" />
+      <node id="STOILOS G." label="STOILOS G." />
+      <node id="EUZENAT 'J.'" label="EUZENAT 'J.'" />
+      <node id="EHRIG M" label="EHRIG M" />
+      <node id="WANG 'J.'" label="WANG 'J.'" />
+      <node id="VAN RIJSBERGEN" label="VAN RIJSBERGEN" />
+      <node id="GARCIA S" label="GARCIA S" />
+      <node id="MEI 'T.'" label="MEI 'T.'" />
+      <node id="RAHM 'E'" label="RAHM 'E'" />
+      <node id="WEI 'W.'" label="WEI 'W.'" />
+      <node id="PAK AN" label="PAK AN" />
+      <node id="ANAGNOSTOPOULOS A." label="ANAGNOSTOPOULOS A." />
+      <node id="RIBEIRO-NETO B." label="RIBEIRO-NETO B." />
+      <node id="HU J." label="HU J." />
+      <node id="VAN 'RIJSBERGEN'" label="VAN 'RIJSBERGEN'" />
+      <node id="WEN Y" label="WEN Y" />
+      <node id="GEN M" label="GEN M" />
+      <node id="ACAMPORA 'G'" label="ACAMPORA 'G'" />
+      <node id="DO HH" label="DO HH" />
+      <node id="QUIX C." label="QUIX C." />
+      <node id="MURDOCK V." label="MURDOCK V." />
+      <node id="WU HC" label="WU HC" />
+      <node id="BOCK 'J'" label="BOCK 'J'" />
+      <node id="HUANG T" label="HUANG T" />
+      <node id="MEI T." label="MEI T." />
+      <node id="DEB 'K.'" label="DEB 'K.'" />
+      <node id="STOILOS 'G.'" label="STOILOS 'G.'" />
+      <node id="CRUZ 'I.F.'" label="CRUZ 'I.F.'" />
+      <node id="TING CK" label="TING CK" />
+      <node id="WEN 'Y'" label="WEN 'Y'" />
+      <node id="RAHM E" label="RAHM E" />
+      <node id="SALTON G" label="SALTON G" />
+      <node id="WANG J." label="WANG J." />
+      <node id="PAPADOPOULOS 'S'" label="PAPADOPOULOS 'S'" />
+      <node id="WU Z." label="WU Z." />
+      <node id="ESHELMAN LJ" label="ESHELMAN LJ" />
+      <node id="XU 'P.'" label="XU 'P.'" />
+      <node id="WINKLER 'W.'" label="WINKLER 'W.'" />
+      <node id="DEB K." label="DEB K." />
+      <node id="WU 'Z.'" label="WU 'Z.'" />
+      <node id="TING 'CK'" label="TING 'CK'" />
+      <node id="ABDULLAH S" label="ABDULLAH S" />
+      <node id="DAWKINS 'R'" label="DAWKINS 'R'" />
+      <node id="HU 'XH'" label="HU 'XH'" />
+      <node id="QUIX 'C.'" label="QUIX 'C.'" />
+      <node id="ACAMPORA G" label="ACAMPORA G" />
+      <node id="WEI W." label="WEI W." />
+      <node id="TANG J." label="TANG J." />
+      <node id="TANG 'J.'" label="TANG 'J.'" />
+      <node id="GARCIA 'S'" label="GARCIA 'S'" />
+      <node id="WANG Z." label="WANG Z." />
+      <node id="ESHELMAN 'LJ'" label="ESHELMAN 'LJ'" />
+      <node id="WU ZD" label="WU ZD" />
+    </nodes>
+    <edges>
+      <edge id="0" source="PAK 'A.'" target="MURDOCK V." weight="1" />
+      <edge id="1" source="PAK 'A.'" target="CHEN YL" weight="4" />
+      <edge id="2" source="PAK 'A.'" target="ANAGNOSTOPOULOS A." weight="1" />
+      <edge id="3" source="PAK 'A.'" target="HU XH" weight="1" />
+      <edge id="4" source="PAK 'A.'" target="MEI T." weight="3" />
+      <edge id="5" source="PAK 'A.'" target="HU J." weight="2" />
+      <edge id="6" source="GEN 'M'" target="EHRIG M" weight="1" />
+      <edge id="7" source="GEN 'M'" target="ABDULLAH S" weight="1" />
+      <edge id="8" source="GEN 'M'" target="CHEN YL" weight="4" />
+      <edge id="9" source="GEN 'M'" target="DEB K." weight="1" />
+      <edge id="10" source="GEN 'M'" target="DEMSAR J" weight="1" />
+      <edge id="11" source="GEN 'M'" target="EUZENAT J." weight="5" />
+      <edge id="12" source="GEN 'M'" target="CRUZ I.F." weight="1" />
+      <edge id="13" source="GEN 'M'" target="ACAMPORA G" weight="1" />
+      <edge id="14" source="GEN 'M'" target="DAWKINS R" weight="1" />
+      <edge id="15" source="GEN 'M'" target="GARCIA S" weight="1" />
+      <edge id="16" source="GEN 'M'" target="FRIEDMAN M" weight="1" />
+      <edge id="17" source="GEN 'M'" target="DAVID J." weight="1" />
+      <edge id="18" source="GEN 'M'" target="BOCK J" weight="1" />
+      <edge id="19" source="GEN 'M'" target="DO HH" weight="1" />
+      <edge id="20" source="GEN 'M'" target="ESHELMAN LJ" weight="1" />
+      <edge id="21" source="DEMSAR 'J'" target="ABDULLAH S" weight="1" />
+      <edge id="22" source="DEMSAR 'J'" target="CHEN YL" weight="4" />
+      <edge id="23" source="DEMSAR 'J'" target="DEB K." weight="1" />
+      <edge id="24" source="DEMSAR 'J'" target="CRUZ I.F." weight="1" />
+      <edge id="25" source="DEMSAR 'J'" target="ACAMPORA G" weight="1" />
+      <edge id="26" source="DEMSAR 'J'" target="DAWKINS R" weight="1" />
+      <edge id="27" source="DEMSAR 'J'" target="DAVID J." weight="1" />
+      <edge id="28" source="DEMSAR 'J'" target="BOCK J" weight="1" />
+      <edge id="29" source="DAVID 'J.'" target="CRUZ I.F." weight="1" />
+      <edge id="30" source="DAVID 'J.'" target="ACAMPORA G" weight="1" />
+      <edge id="31" source="DAVID 'J.'" target="CHEN YL" weight="4" />
+      <edge id="32" source="DAVID 'J.'" target="ABDULLAH S" weight="1" />
+      <edge id="33" source="DAVID 'J.'" target="BOCK J" weight="1" />
+      <edge id="34" source="WU 'HC'" target="MURDOCK V." weight="1" />
+      <edge id="35" source="WU 'HC'" target="PAK AN" weight="1" />
+      <edge id="36" source="WU 'HC'" target="CHEN YL" weight="4" />
+      <edge id="37" source="WU 'HC'" target="ANAGNOSTOPOULOS A." weight="1" />
+      <edge id="38" source="WU 'HC'" target="HU XH" weight="1" />
+      <edge id="39" source="WU 'HC'" target="RIBEIRO-NETO B." weight="1" />
+      <edge id="40" source="WU 'HC'" target="MEI T." weight="3" />
+      <edge id="41" source="WU 'HC'" target="PAK A." weight="1" />
+      <edge id="42" source="WU 'HC'" target="HU J." weight="2" />
+      <edge id="43" source="WU 'HC'" target="PAPADOPOULOS S" weight="1" />
+      <edge id="44" source="WU 'HC'" target="SALTON G" weight="1" />
+      <edge id="45" source="HU 'J.'" target="ANAGNOSTOPOULOS A." weight="2" />
+      <edge id="46" source="HU 'J.'" target="HU J." weight="1" />
+      <edge id="47" source="WANG 'Z.'" target="WANG J." weight="1" />
+      <edge id="48" source="WANG 'Z.'" target="CHEN YL" weight="4" />
+      <edge id="49" source="WANG 'Z.'" target="DEMSAR J" weight="1" />
+      <edge id="50" source="WANG 'Z.'" target="DO HH" weight="1" />
+      <edge id="51" source="WANG 'Z.'" target="ESHELMAN LJ" weight="1" />
+      <edge id="52" source="WANG 'Z.'" target="QUIX C." weight="1" />
+      <edge id="53" source="WANG 'Z.'" target="GEN M" weight="1" />
+      <edge id="54" source="WANG 'Z.'" target="DEB K." weight="1" />
+      <edge id="55" source="WANG 'Z.'" target="BOCK J" weight="1" />
+      <edge id="56" source="WANG 'Z.'" target="VAZQUEZ NAYA" weight="1" />
+      <edge id="57" source="WANG 'Z.'" target="STOILOS G." weight="1" />
+      <edge id="58" source="WANG 'Z.'" target="EHRIG M" weight="1" />
+      <edge id="59" source="WANG 'Z.'" target="ABDULLAH S" weight="1" />
+      <edge id="60" source="WANG 'Z.'" target="VAN RIJSBERGEN" weight="1" />
+      <edge id="61" source="WANG 'Z.'" target="EUZENAT J." weight="5" />
+      <edge id="62" source="WANG 'Z.'" target="ACAMPORA G" weight="1" />
+      <edge id="63" source="WANG 'Z.'" target="MEI T." weight="3" />
+      <edge id="64" source="WANG 'Z.'" target="GARCIA S" weight="1" />
+      <edge id="65" source="WANG 'Z.'" target="TANG J." weight="1" />
+      <edge id="66" source="WANG 'Z.'" target="TING CK" weight="1" />
+      <edge id="67" source="WANG 'Z.'" target="CRUZ I.F." weight="1" />
+      <edge id="68" source="WANG 'Z.'" target="DAWKINS R" weight="1" />
+      <edge id="69" source="WANG 'Z.'" target="FRIEDMAN M" weight="1" />
+      <edge id="70" source="WANG 'Z.'" target="DAVID J." weight="1" />
+      <edge id="71" source="WANG 'Z.'" target="RAHM E" weight="1" />
+      <edge id="72" source="CHEN YL" target="XU 'P.'" weight="4" />
+      <edge id="73" source="CHEN YL" target="WINKLER 'W.'" weight="4" />
+      <edge id="74" source="CHEN YL" target="PAPADOPOULOS 'S'" weight="4" />
+      <edge id="75" source="CHEN YL" target="DAWKINS 'R'" weight="4" />
+      <edge id="76" source="CHEN YL" target="SALTON 'G'" weight="4" />
+      <edge id="77" source="CHEN YL" target="PAK 'AN'" weight="4" />
+      <edge id="78" source="CHEN YL" target="ALAMPORA 'G'" weight="4" />
+      <edge id="79" source="CHEN YL" target="WU 'ZD'" weight="4" />
+      <edge id="80" source="CHEN YL" target="MURDOCK 'V.'" weight="4" />
+      <edge id="81" source="CHEN YL" target="DO 'HH'" weight="4" />
+      <edge id="82" source="CHEN YL" target="EHRIG 'M'" weight="4" />
+      <edge id="83" source="CHEN YL" target="WU 'Z.'" weight="4" />
+      <edge id="84" source="CHEN YL" target="VAZQUEZ 'NAYA'" weight="8" />
+      <edge id="85" source="CHEN YL" target="EUZENAT 'J.'" weight="20" />
+      <edge id="86" source="CHEN YL" target="FRIEDMAN 'M'" weight="4" />
+      <edge id="87" source="CHEN YL" target="HUANG 'T'" weight="4" />
+      <edge id="88" source="CHEN YL" target="TING 'CK'" weight="8" />
+      <edge id="89" source="CHEN YL" target="WANG 'J.'" weight="4" />
+      <edge id="90" source="CHEN YL" target="ESHELMAN 'LJ'" weight="4" />
+      <edge id="91" source="CHEN YL" target="HU 'XH'" weight="4" />
+      <edge id="92" source="CHEN YL" target="QUIX 'C.'" weight="4" />
+      <edge id="93" source="CHEN YL" target="AZAMPORA 'G'" weight="4" />
+      <edge id="94" source="CHEN YL" target="MEI 'T.'" weight="24" />
+      <edge id="95" source="CHEN YL" target="RAHM 'E'" weight="4" />
+      <edge id="96" source="CHEN YL" target="WEI 'W.'" weight="4" />
+      <edge id="97" source="CHEN YL" target="DEB 'K.'" weight="4" />
+      <edge id="98" source="CHEN YL" target="TANG 'J.'" weight="4" />
+      <edge id="99" source="CHEN YL" target="RIBEIRO-NETO 'B.'" weight="4" />
+      <edge id="100" source="CHEN YL" target="GARCIA 'S'" weight="4" />
+      <edge id="101" source="CHEN YL" target="CHEN 'YL'" weight="12" />
+      <edge id="102" source="CHEN YL" target="WEN 'Y'" weight="4" />
+      <edge id="103" source="CHEN YL" target="STOILOS 'G.'" weight="4" />
+      <edge id="104" source="CHEN YL" target="VAN 'RIJSBERGEN'" weight="8" />
+      <edge id="105" source="SALTON 'G'" target="MURDOCK V." weight="1" />
+      <edge id="106" source="SALTON 'G'" target="PAK AN" weight="1" />
+      <edge id="107" source="SALTON 'G'" target="ANAGNOSTOPOULOS A." weight="1" />
+      <edge id="108" source="SALTON 'G'" target="HU XH" weight="1" />
+      <edge id="109" source="SALTON 'G'" target="RIBEIRO-NETO B." weight="1" />
+      <edge id="110" source="SALTON 'G'" target="PAPADOPOULOS S" weight="1" />
+      <edge id="111" source="SALTON 'G'" target="MEI T." weight="3" />
+      <edge id="112" source="SALTON 'G'" target="PAK A." weight="1" />
+      <edge id="113" source="SALTON 'G'" target="HU J." weight="2" />
+      <edge id="114" source="ALAMPORA 'G'" target="MURDOCK V." weight="1" />
+      <edge id="115" source="ALAMPORA 'G'" target="PAK AN" weight="1" />
+      <edge id="116" source="ALAMPORA 'G'" target="VAN RIJSBERGEN" weight="1" />
+      <edge id="117" source="ALAMPORA 'G'" target="TING CK" weight="1" />
+      <edge id="118" source="ALAMPORA 'G'" target="HU XH" weight="1" />
+      <edge id="119" source="ALAMPORA 'G'" target="RIBEIRO-NETO B." weight="1" />
+      <edge id="120" source="ALAMPORA 'G'" target="WU HC" weight="1" />
+      <edge id="121" source="ALAMPORA 'G'" target="PAPADOPOULOS S" weight="1" />
+      <edge id="122" source="ALAMPORA 'G'" target="MEI T." weight="3" />
+      <edge id="123" source="ALAMPORA 'G'" target="PAK A." weight="1" />
+      <edge id="124" source="ALAMPORA 'G'" target="WU Z." weight="1" />
+      <edge id="125" source="ALAMPORA 'G'" target="HU J." weight="2" />
+      <edge id="126" source="ALAMPORA 'G'" target="ANAGNOSTOPOULOS A." weight="1" />
+      <edge id="127" source="ALAMPORA 'G'" target="HUANG T" weight="1" />
+      <edge id="128" source="ALAMPORA 'G'" target="VAZQUEZ NAYA" weight="1" />
+      <edge id="129" source="ALAMPORA 'G'" target="SALTON G" weight="1" />
+      <edge id="130" source="ALAMPORA 'G'" target="WU ZD" weight="1" />
+      <edge id="131" source="WU 'ZD'" target="MURDOCK V." weight="1" />
+      <edge id="132" source="WU 'ZD'" target="PAK A." weight="1" />
+      <edge id="133" source="WU 'ZD'" target="ANAGNOSTOPOULOS A." weight="1" />
+      <edge id="134" source="WU 'ZD'" target="HU XH" weight="1" />
+      <edge id="135" source="WU 'ZD'" target="WU HC" weight="1" />
+      <edge id="136" source="WU 'ZD'" target="RIBEIRO-NETO B." weight="1" />
+      <edge id="137" source="WU 'ZD'" target="MEI T." weight="3" />
+      <edge id="138" source="WU 'ZD'" target="PAK AN" weight="1" />
+      <edge id="139" source="WU 'ZD'" target="WU Z." weight="1" />
+      <edge id="140" source="WU 'ZD'" target="HU J." weight="2" />
+      <edge id="141" source="WU 'ZD'" target="PAPADOPOULOS S" weight="1" />
+      <edge id="142" source="WU 'ZD'" target="SALTON G" weight="1" />
+      <edge id="143" source="MURDOCK 'V.'" target="MEI T." weight="3" />
+      <edge id="144" source="MURDOCK 'V.'" target="HU XH" weight="1" />
+      <edge id="145" source="MURDOCK 'V.'" target="HU J." weight="2" />
+      <edge id="146" source="MURDOCK 'V.'" target="ANAGNOSTOPOULOS A." weight="1" />
+      <edge id="147" source="DO 'HH'" target="ABDULLAH S" weight="1" />
+      <edge id="148" source="DO 'HH'" target="DEB K." weight="1" />
+      <edge id="149" source="DO 'HH'" target="DEMSAR J" weight="1" />
+      <edge id="150" source="DO 'HH'" target="CRUZ I.F." weight="1" />
+      <edge id="151" source="DO 'HH'" target="ACAMPORA G" weight="1" />
+      <edge id="152" source="DO 'HH'" target="DAWKINS R" weight="1" />
+      <edge id="153" source="DO 'HH'" target="DAVID J." weight="1" />
+      <edge id="154" source="DO 'HH'" target="BOCK J" weight="1" />
+      <edge id="155" source="EHRIG 'M'" target="ABDULLAH S" weight="1" />
+      <edge id="156" source="EHRIG 'M'" target="DEB K." weight="1" />
+      <edge id="157" source="EHRIG 'M'" target="DEMSAR J" weight="1" />
+      <edge id="158" source="EHRIG 'M'" target="CRUZ I.F." weight="1" />
+      <edge id="159" source="EHRIG 'M'" target="ACAMPORA G" weight="1" />
+      <edge id="160" source="EHRIG 'M'" target="DAWKINS R" weight="1" />
+      <edge id="161" source="EHRIG 'M'" target="DO HH" weight="1" />
+      <edge id="162" source="EHRIG 'M'" target="DAVID J." weight="1" />
+      <edge id="163" source="EHRIG 'M'" target="BOCK J" weight="1" />
+      <edge id="164" source="VAZQUEZ 'NAYA'" target="PAK A." weight="1" />
+      <edge id="165" source="VAZQUEZ 'NAYA'" target="GEN M" weight="1" />
+      <edge id="166" source="VAZQUEZ 'NAYA'" target="DO HH" weight="1" />
+      <edge id="167" source="VAZQUEZ 'NAYA'" target="WU Z." weight="1" />
+      <edge id="168" source="VAZQUEZ 'NAYA'" target="ESHELMAN LJ" weight="1" />
+      <edge id="169" source="VAZQUEZ 'NAYA'" target="QUIX C." weight="1" />
+      <edge id="170" source="VAZQUEZ 'NAYA'" target="MURDOCK V." weight="1" />
+      <edge id="171" source="VAZQUEZ 'NAYA'" target="DEMSAR J" weight="1" />
+      <edge id="172" source="VAZQUEZ 'NAYA'" target="WU HC" weight="1" />
+      <edge id="173" source="VAZQUEZ 'NAYA'" target="DEB K." weight="1" />
+      <edge id="174" source="VAZQUEZ 'NAYA'" target="BOCK J" weight="1" />
+      <edge id="175" source="VAZQUEZ 'NAYA'" target="STOILOS G." weight="1" />
+      <edge id="176" source="VAZQUEZ 'NAYA'" target="EHRIG M" weight="1" />
+      <edge id="177" source="VAZQUEZ 'NAYA'" target="ABDULLAH S" weight="1" />
+      <edge id="178" source="VAZQUEZ 'NAYA'" target="HU J." weight="2" />
+      <edge id="179" source="VAZQUEZ 'NAYA'" target="VAN RIJSBERGEN" weight="2" />
+      <edge id="180" source="VAZQUEZ 'NAYA'" target="EUZENAT J." weight="5" />
+      <edge id="181" source="VAZQUEZ 'NAYA'" target="ACAMPORA G" weight="1" />
+      <edge id="182" source="VAZQUEZ 'NAYA'" target="MEI T." weight="6" />
+      <edge id="183" source="VAZQUEZ 'NAYA'" target="GARCIA S" weight="1" />
+      <edge id="184" source="VAZQUEZ 'NAYA'" target="TANG J." weight="1" />
+      <edge id="185" source="VAZQUEZ 'NAYA'" target="PAK AN" weight="1" />
+      <edge id="186" source="VAZQUEZ 'NAYA'" target="TING CK" weight="2" />
+      <edge id="187" source="VAZQUEZ 'NAYA'" target="CRUZ I.F." weight="1" />
+      <edge id="188" source="VAZQUEZ 'NAYA'" target="RIBEIRO-NETO B." weight="1" />
+      <edge id="189" source="VAZQUEZ 'NAYA'" target="PAPADOPOULOS S" weight="1" />
+      <edge id="190" source="VAZQUEZ 'NAYA'" target="DAWKINS R" weight="1" />
+      <edge id="191" source="VAZQUEZ 'NAYA'" target="FRIEDMAN M" weight="1" />
+      <edge id="192" source="VAZQUEZ 'NAYA'" target="DAVID J." weight="1" />
+      <edge id="193" source="VAZQUEZ 'NAYA'" target="ANAGNOSTOPOULOS A." weight="1" />
+      <edge id="194" source="VAZQUEZ 'NAYA'" target="RAHM E" weight="1" />
+      <edge id="195" source="VAZQUEZ 'NAYA'" target="SALTON G" weight="1" />
+      <edge id="196" source="VAZQUEZ 'NAYA'" target="HU XH" weight="1" />
+      <edge id="197" source="VAZQUEZ 'NAYA'" target="WU ZD" weight="1" />
+      <edge id="198" source="FRIEDMAN 'M'" target="EHRIG M" weight="1" />
+      <edge id="199" source="FRIEDMAN 'M'" target="ABDULLAH S" weight="1" />
+      <edge id="200" source="FRIEDMAN 'M'" target="DAVID J." weight="1" />
+      <edge id="201" source="FRIEDMAN 'M'" target="DEMSAR J" weight="1" />
+      <edge id="202" source="FRIEDMAN 'M'" target="EUZENAT J." weight="5" />
+      <edge id="203" source="FRIEDMAN 'M'" target="CRUZ I.F." weight="1" />
+      <edge id="204" source="FRIEDMAN 'M'" target="ACAMPORA G" weight="1" />
+      <edge id="205" source="FRIEDMAN 'M'" target="DAWKINS R" weight="1" />
+      <edge id="206" source="FRIEDMAN 'M'" target="DO HH" weight="1" />
+      <edge id="207" source="FRIEDMAN 'M'" target="DEB K." weight="1" />
+      <edge id="208" source="FRIEDMAN 'M'" target="BOCK J" weight="1" />
+      <edge id="209" source="FRIEDMAN 'M'" target="ESHELMAN LJ" weight="1" />
+      <edge id="210" source="HUANG 'T'" target="MURDOCK V." weight="1" />
+      <edge id="211" source="HUANG 'T'" target="PAK AN" weight="1" />
+      <edge id="212" source="HUANG 'T'" target="VAN RIJSBERGEN" weight="1" />
+      <edge id="213" source="HUANG 'T'" target="TING CK" weight="1" />
+      <edge id="214" source="HUANG 'T'" target="HU XH" weight="1" />
+      <edge id="215" source="HUANG 'T'" target="RIBEIRO-NETO B." weight="1" />
+      <edge id="216" source="HUANG 'T'" target="WU HC" weight="1" />
+      <edge id="217" source="HUANG 'T'" target="PAPADOPOULOS S" weight="1" />
+      <edge id="218" source="HUANG 'T'" target="MEI T." weight="3" />
+      <edge id="219" source="HUANG 'T'" target="PAK A." weight="1" />
+      <edge id="220" source="HUANG 'T'" target="WU Z." weight="1" />
+      <edge id="221" source="HUANG 'T'" target="HU J." weight="2" />
+      <edge id="222" source="HUANG 'T'" target="ANAGNOSTOPOULOS A." weight="1" />
+      <edge id="223" source="HUANG 'T'" target="VAZQUEZ NAYA" weight="1" />
+      <edge id="224" source="HUANG 'T'" target="SALTON G" weight="1" />
+      <edge id="225" source="HUANG 'T'" target="WU ZD" weight="1" />
+      <edge id="226" source="EUZENAT J." target="TING 'CK'" weight="5" />
+      <edge id="227" source="EUZENAT J." target="TANG 'J.'" weight="5" />
+      <edge id="228" source="EUZENAT J." target="XU 'P.'" weight="5" />
+      <edge id="229" source="EUZENAT J." target="EUZENAT 'J.'" weight="10" />
+      <edge id="230" source="EUZENAT J." target="AZAMPORA 'G'" weight="5" />
+      <edge id="231" source="EUZENAT J." target="GARCIA 'S'" weight="5" />
+      <edge id="232" source="EUZENAT J." target="WANG 'J.'" weight="5" />
+      <edge id="233" source="EUZENAT J." target="WINKLER 'W.'" weight="5" />
+      <edge id="234" source="EUZENAT J." target="STOILOS 'G.'" weight="5" />
+      <edge id="235" source="EUZENAT J." target="WEN 'Y'" weight="5" />
+      <edge id="236" source="EUZENAT J." target="QUIX 'C.'" weight="5" />
+      <edge id="237" source="EUZENAT J." target="MEI 'T.'" weight="15" />
+      <edge id="238" source="EUZENAT J." target="RAHM 'E'" weight="5" />
+      <edge id="239" source="EUZENAT J." target="VAN 'RIJSBERGEN'" weight="5" />
+      <edge id="240" source="EUZENAT J." target="WEI 'W.'" weight="5" />
+      <edge id="241" source="AZAMPORA 'G'" target="WANG J." weight="1" />
+      <edge id="242" source="AZAMPORA 'G'" target="WEN Y" weight="1" />
+      <edge id="243" source="AZAMPORA 'G'" target="DEMSAR J" weight="1" />
+      <edge id="244" source="AZAMPORA 'G'" target="WINKLER W." weight="1" />
+      <edge id="245" source="AZAMPORA 'G'" target="DO HH" weight="1" />
+      <edge id="246" source="AZAMPORA 'G'" target="ESHELMAN LJ" weight="1" />
+      <edge id="247" source="AZAMPORA 'G'" target="QUIX C." weight="1" />
+      <edge id="248" source="AZAMPORA 'G'" target="GEN M" weight="1" />
+      <edge id="249" source="AZAMPORA 'G'" target="XU P." weight="1" />
+      <edge id="250" source="AZAMPORA 'G'" target="DEB K." weight="1" />
+      <edge id="251" source="AZAMPORA 'G'" target="BOCK J" weight="1" />
+      <edge id="252" source="AZAMPORA 'G'" target="VAZQUEZ NAYA" weight="1" />
+      <edge id="253" source="AZAMPORA 'G'" target="STOILOS G." weight="1" />
+      <edge id="254" source="AZAMPORA 'G'" target="EHRIG M" weight="1" />
+      <edge id="255" source="AZAMPORA 'G'" target="ABDULLAH S" weight="1" />
+      <edge id="256" source="AZAMPORA 'G'" target="VAN RIJSBERGEN" weight="1" />
+      <edge id="257" source="AZAMPORA 'G'" target="ACAMPORA G" weight="1" />
+      <edge id="258" source="AZAMPORA 'G'" target="MEI T." weight="3" />
+      <edge id="259" source="AZAMPORA 'G'" target="GARCIA S" weight="1" />
+      <edge id="260" source="AZAMPORA 'G'" target="WEI W." weight="1" />
+      <edge id="261" source="AZAMPORA 'G'" target="TANG J." weight="1" />
+      <edge id="262" source="AZAMPORA 'G'" target="TING CK" weight="1" />
+      <edge id="263" source="AZAMPORA 'G'" target="CRUZ I.F." weight="1" />
+      <edge id="264" source="AZAMPORA 'G'" target="WANG Z." weight="1" />
+      <edge id="265" source="AZAMPORA 'G'" target="DAWKINS R" weight="1" />
+      <edge id="266" source="AZAMPORA 'G'" target="FRIEDMAN M" weight="1" />
+      <edge id="267" source="AZAMPORA 'G'" target="DAVID J." weight="1" />
+      <edge id="268" source="AZAMPORA 'G'" target="RAHM E" weight="1" />
+      <edge id="269" source="RIBEIRO-NETO 'B.'" target="MURDOCK V." weight="1" />
+      <edge id="270" source="RIBEIRO-NETO 'B.'" target="PAK AN" weight="1" />
+      <edge id="271" source="RIBEIRO-NETO 'B.'" target="ANAGNOSTOPOULOS A." weight="1" />
+      <edge id="272" source="RIBEIRO-NETO 'B.'" target="HU XH" weight="1" />
+      <edge id="273" source="RIBEIRO-NETO 'B.'" target="PAPADOPOULOS S" weight="1" />
+      <edge id="274" source="RIBEIRO-NETO 'B.'" target="MEI T." weight="3" />
+      <edge id="275" source="RIBEIRO-NETO 'B.'" target="PAK A." weight="1" />
+      <edge id="276" source="RIBEIRO-NETO 'B.'" target="HU J." weight="2" />
+      <edge id="277" source="HU XH" target="PAK 'AN'" weight="1" />
+      <edge id="278" source="HU XH" target="TING 'CK'" weight="1" />
+      <edge id="279" source="HU XH" target="PAPADOPOULOS 'S'" weight="1" />
+      <edge id="280" source="HU XH" target="WU 'Z.'" weight="1" />
+      <edge id="281" source="HU XH" target="MEI 'T.'" weight="3" />
+      <edge id="282" source="HU XH" target="VAN 'RIJSBERGEN'" weight="1" />
+      <edge id="283" source="PAPADOPOULOS S" target="TING 'CK'" weight="1" />
+      <edge id="284" source="PAPADOPOULOS S" target="VAN 'RIJSBERGEN'" weight="1" />
+      <edge id="285" source="PAPADOPOULOS S" target="WU 'Z.'" weight="1" />
+      <edge id="286" source="CHEN 'YL'" target="ABDULLAH S" weight="4" />
+      <edge id="287" source="CHEN 'YL'" target="ANAGNOSTOPOULOS A." weight="4" />
+      <edge id="288" source="CHEN 'YL'" target="CRUZ I.F." weight="4" />
+      <edge id="289" source="CHEN 'YL'" target="ACAMPORA G" weight="4" />
+      <edge id="290" source="CHEN 'YL'" target="HU J." weight="8" />
+      <edge id="291" source="CHEN 'YL'" target="BOCK J" weight="4" />
+      <edge id="292" source="FRIEDMAN M" target="TING 'CK'" weight="1" />
+      <edge id="293" source="FRIEDMAN M" target="TANG 'J.'" weight="1" />
+      <edge id="294" source="FRIEDMAN M" target="STOILOS 'G.'" weight="1" />
+      <edge id="295" source="FRIEDMAN M" target="QUIX 'C.'" weight="1" />
+      <edge id="296" source="FRIEDMAN M" target="XU 'P.'" weight="1" />
+      <edge id="297" source="FRIEDMAN M" target="GARCIA 'S'" weight="1" />
+      <edge id="298" source="FRIEDMAN M" target="WINKLER 'W.'" weight="1" />
+      <edge id="299" source="FRIEDMAN M" target="WEN 'Y'" weight="1" />
+      <edge id="300" source="FRIEDMAN M" target="MEI 'T.'" weight="3" />
+      <edge id="301" source="FRIEDMAN M" target="RAHM 'E'" weight="1" />
+      <edge id="302" source="FRIEDMAN M" target="VAN 'RIJSBERGEN'" weight="1" />
+      <edge id="303" source="FRIEDMAN M" target="WANG 'J.'" weight="1" />
+      <edge id="304" source="FRIEDMAN M" target="WEI 'W.'" weight="1" />
+      <edge id="305" source="DAVID J." target="WANG 'J.'" weight="1" />
+      <edge id="306" source="DAVID J." target="XU 'P.'" weight="1" />
+      <edge id="307" source="DAVID J." target="WINKLER 'W.'" weight="1" />
+      <edge id="308" source="DAVID J." target="EUZENAT 'J.'" weight="5" />
+      <edge id="309" source="DAVID J." target="TING 'CK'" weight="1" />
+      <edge id="310" source="DAVID J." target="DAWKINS 'R'" weight="1" />
+      <edge id="311" source="DAVID J." target="WEN 'Y'" weight="1" />
+      <edge id="312" source="DAVID J." target="QUIX 'C.'" weight="1" />
+      <edge id="313" source="DAVID J." target="RAHM 'E'" weight="1" />
+      <edge id="314" source="DAVID J." target="WEI 'W.'" weight="1" />
+      <edge id="315" source="DAVID J." target="DEB 'K.'" weight="1" />
+      <edge id="316" source="DAVID J." target="TANG 'J.'" weight="1" />
+      <edge id="317" source="DAVID J." target="STOILOS 'G.'" weight="1" />
+      <edge id="318" source="DAVID J." target="GARCIA 'S'" weight="1" />
+      <edge id="319" source="DAVID J." target="ESHELMAN 'LJ'" weight="1" />
+      <edge id="320" source="DAVID J." target="MEI 'T.'" weight="3" />
+      <edge id="321" source="DAVID J." target="VAN 'RIJSBERGEN'" weight="1" />
+      <edge id="322" source="CRUZ I.F." target="WANG 'J.'" weight="1" />
+      <edge id="323" source="CRUZ I.F." target="XU 'P.'" weight="1" />
+      <edge id="324" source="CRUZ I.F." target="WINKLER 'W.'" weight="1" />
+      <edge id="325" source="CRUZ I.F." target="EUZENAT 'J.'" weight="5" />
+      <edge id="326" source="CRUZ I.F." target="TING 'CK'" weight="1" />
+      <edge id="327" source="CRUZ I.F." target="DAWKINS 'R'" weight="1" />
+      <edge id="328" source="CRUZ I.F." target="WEN 'Y'" weight="1" />
+      <edge id="329" source="CRUZ I.F." target="QUIX 'C.'" weight="1" />
+      <edge id="330" source="CRUZ I.F." target="RAHM 'E'" weight="1" />
+      <edge id="331" source="CRUZ I.F." target="WEI 'W.'" weight="1" />
+      <edge id="332" source="CRUZ I.F." target="DEB 'K.'" weight="1" />
+      <edge id="333" source="CRUZ I.F." target="TANG 'J.'" weight="1" />
+      <edge id="334" source="CRUZ I.F." target="STOILOS 'G.'" weight="1" />
+      <edge id="335" source="CRUZ I.F." target="GARCIA 'S'" weight="1" />
+      <edge id="336" source="CRUZ I.F." target="ESHELMAN 'LJ'" weight="1" />
+      <edge id="337" source="CRUZ I.F." target="MEI 'T.'" weight="3" />
+      <edge id="338" source="CRUZ I.F." target="VAN 'RIJSBERGEN'" weight="1" />
+      <edge id="339" source="PAK A." target="PAK 'AN'" weight="1" />
+      <edge id="340" source="PAK A." target="TING 'CK'" weight="1" />
+      <edge id="341" source="PAK A." target="VAN 'RIJSBERGEN'" weight="1" />
+      <edge id="342" source="PAK A." target="PAPADOPOULOS 'S'" weight="1" />
+      <edge id="343" source="PAK A." target="WU 'Z.'" weight="1" />
+      <edge id="344" source="DEMSAR J" target="XU 'P.'" weight="1" />
+      <edge id="345" source="DEMSAR J" target="WINKLER 'W.'" weight="1" />
+      <edge id="346" source="DEMSAR J" target="EUZENAT 'J.'" weight="5" />
+      <edge id="347" source="DEMSAR J" target="TING 'CK'" weight="1" />
+      <edge id="348" source="DEMSAR J" target="WANG 'J.'" weight="1" />
+      <edge id="349" source="DEMSAR J" target="WEN 'Y'" weight="1" />
+      <edge id="350" source="DEMSAR J" target="QUIX 'C.'" weight="1" />
+      <edge id="351" source="DEMSAR J" target="RAHM 'E'" weight="1" />
+      <edge id="352" source="DEMSAR J" target="WEI 'W.'" weight="1" />
+      <edge id="353" source="DEMSAR J" target="TANG 'J.'" weight="1" />
+      <edge id="354" source="DEMSAR J" target="STOILOS 'G.'" weight="1" />
+      <edge id="355" source="DEMSAR J" target="GARCIA 'S'" weight="1" />
+      <edge id="356" source="DEMSAR J" target="ESHELMAN 'LJ'" weight="1" />
+      <edge id="357" source="DEMSAR J" target="MEI 'T.'" weight="3" />
+      <edge id="358" source="DEMSAR J" target="VAN 'RIJSBERGEN'" weight="1" />
+      <edge id="359" source="WINKLER W." target="XU 'P.'" weight="1" />
+      <edge id="360" source="PAK 'AN'" target="MURDOCK V." weight="1" />
+      <edge id="361" source="PAK 'AN'" target="ANAGNOSTOPOULOS A." weight="1" />
+      <edge id="362" source="PAK 'AN'" target="MEI T." weight="3" />
+      <edge id="363" source="PAK 'AN'" target="HU J." weight="2" />
+      <edge id="364" source="DAWKINS R" target="XU 'P.'" weight="1" />
+      <edge id="365" source="DAWKINS R" target="WINKLER 'W.'" weight="1" />
+      <edge id="366" source="DAWKINS R" target="EUZENAT 'J.'" weight="5" />
+      <edge id="367" source="DAWKINS R" target="TING 'CK'" weight="1" />
+      <edge id="368" source="DAWKINS R" target="WANG 'J.'" weight="1" />
+      <edge id="369" source="DAWKINS R" target="WEN 'Y'" weight="1" />
+      <edge id="370" source="DAWKINS R" target="QUIX 'C.'" weight="1" />
+      <edge id="371" source="DAWKINS R" target="RAHM 'E'" weight="1" />
+      <edge id="372" source="DAWKINS R" target="WEI 'W.'" weight="1" />
+      <edge id="373" source="DAWKINS R" target="DEB 'K.'" weight="1" />
+      <edge id="374" source="DAWKINS R" target="TANG 'J.'" weight="1" />
+      <edge id="375" source="DAWKINS R" target="STOILOS 'G.'" weight="1" />
+      <edge id="376" source="DAWKINS R" target="GARCIA 'S'" weight="1" />
+      <edge id="377" source="DAWKINS R" target="ESHELMAN 'LJ'" weight="1" />
+      <edge id="378" source="DAWKINS R" target="MEI 'T.'" weight="3" />
+      <edge id="379" source="DAWKINS R" target="VAN 'RIJSBERGEN'" weight="1" />
+      <edge id="380" source="BOCK J" target="DAWKINS 'R'" weight="1" />
+      <edge id="381" source="BOCK J" target="XU 'P.'" weight="1" />
+      <edge id="382" source="BOCK J" target="WINKLER 'W.'" weight="1" />
+      <edge id="383" source="BOCK J" target="EUZENAT 'J.'" weight="5" />
+      <edge id="384" source="BOCK J" target="TING 'CK'" weight="1" />
+      <edge id="385" source="BOCK J" target="WANG 'J.'" weight="1" />
+      <edge id="386" source="BOCK J" target="WEN 'Y'" weight="1" />
+      <edge id="387" source="BOCK J" target="QUIX 'C.'" weight="1" />
+      <edge id="388" source="BOCK J" target="RAHM 'E'" weight="1" />
+      <edge id="389" source="BOCK J" target="WEI 'W.'" weight="1" />
+      <edge id="390" source="BOCK J" target="DEB 'K.'" weight="1" />
+      <edge id="391" source="BOCK J" target="TANG 'J.'" weight="1" />
+      <edge id="392" source="BOCK J" target="STOILOS 'G.'" weight="1" />
+      <edge id="393" source="BOCK J" target="CRUZ 'I.F.'" weight="1" />
+      <edge id="394" source="BOCK J" target="GARCIA 'S'" weight="1" />
+      <edge id="395" source="BOCK J" target="ESHELMAN 'LJ'" weight="1" />
+      <edge id="396" source="BOCK J" target="MEI 'T.'" weight="3" />
+      <edge id="397" source="BOCK J" target="VAN 'RIJSBERGEN'" weight="1" />
+      <edge id="398" source="VAZQUEZ NAYA" target="WANG 'J.'" weight="1" />
+      <edge id="399" source="VAZQUEZ NAYA" target="WINKLER 'W.'" weight="1" />
+      <edge id="400" source="VAZQUEZ NAYA" target="WEN 'Y'" weight="1" />
+      <edge id="401" source="VAZQUEZ NAYA" target="XU 'P.'" weight="1" />
+      <edge id="402" source="VAZQUEZ NAYA" target="WEI 'W.'" weight="1" />
+      <edge id="403" source="STOILOS G." target="TING 'CK'" weight="1" />
+      <edge id="404" source="STOILOS G." target="TANG 'J.'" weight="1" />
+      <edge id="405" source="STOILOS G." target="WANG 'J.'" weight="1" />
+      <edge id="406" source="STOILOS G." target="WEI 'W.'" weight="1" />
+      <edge id="407" source="STOILOS G." target="WINKLER 'W.'" weight="1" />
+      <edge id="408" source="STOILOS G." target="WEN 'Y'" weight="1" />
+      <edge id="409" source="STOILOS G." target="XU 'P.'" weight="1" />
+      <edge id="410" source="STOILOS G." target="VAN 'RIJSBERGEN'" weight="1" />
+      <edge id="411" source="EUZENAT 'J.'" target="EHRIG M" weight="5" />
+      <edge id="412" source="EUZENAT 'J.'" target="ABDULLAH S" weight="5" />
+      <edge id="413" source="EUZENAT 'J.'" target="ACAMPORA G" weight="5" />
+      <edge id="414" source="EUZENAT 'J.'" target="DO HH" weight="5" />
+      <edge id="415" source="EUZENAT 'J.'" target="DEB K." weight="5" />
+      <edge id="416" source="EUZENAT 'J.'" target="ESHELMAN LJ" weight="5" />
+      <edge id="417" source="EHRIG M" target="TING 'CK'" weight="1" />
+      <edge id="418" source="EHRIG M" target="TANG 'J.'" weight="1" />
+      <edge id="419" source="EHRIG M" target="STOILOS 'G.'" weight="1" />
+      <edge id="420" source="EHRIG M" target="WEN 'Y'" weight="1" />
+      <edge id="421" source="EHRIG M" target="VAN 'RIJSBERGEN'" weight="1" />
+      <edge id="422" source="EHRIG M" target="XU 'P.'" weight="1" />
+      <edge id="423" source="EHRIG M" target="GARCIA 'S'" weight="1" />
+      <edge id="424" source="EHRIG M" target="WINKLER 'W.'" weight="1" />
+      <edge id="425" source="EHRIG M" target="QUIX 'C.'" weight="1" />
+      <edge id="426" source="EHRIG M" target="ESHELMAN 'LJ'" weight="1" />
+      <edge id="427" source="EHRIG M" target="MEI 'T.'" weight="3" />
+      <edge id="428" source="EHRIG M" target="WANG 'J.'" weight="1" />
+      <edge id="429" source="EHRIG M" target="RAHM 'E'" weight="1" />
+      <edge id="430" source="EHRIG M" target="WEI 'W.'" weight="1" />
+      <edge id="431" source="WANG 'J.'" target="DO HH" weight="1" />
+      <edge id="432" source="WANG 'J.'" target="ESHELMAN LJ" weight="1" />
+      <edge id="433" source="WANG 'J.'" target="QUIX C." weight="1" />
+      <edge id="434" source="WANG 'J.'" target="GEN M" weight="1" />
+      <edge id="435" source="WANG 'J.'" target="DEB K." weight="1" />
+      <edge id="436" source="WANG 'J.'" target="ABDULLAH S" weight="1" />
+      <edge id="437" source="WANG 'J.'" target="VAN RIJSBERGEN" weight="1" />
+      <edge id="438" source="WANG 'J.'" target="ACAMPORA G" weight="1" />
+      <edge id="439" source="WANG 'J.'" target="MEI T." weight="3" />
+      <edge id="440" source="WANG 'J.'" target="GARCIA S" weight="1" />
+      <edge id="441" source="WANG 'J.'" target="TANG J." weight="1" />
+      <edge id="442" source="WANG 'J.'" target="TING CK" weight="1" />
+      <edge id="443" source="WANG 'J.'" target="RAHM E" weight="1" />
+      <edge id="444" source="VAN RIJSBERGEN" target="XU 'P.'" weight="1" />
+      <edge id="445" source="VAN RIJSBERGEN" target="WINKLER 'W.'" weight="1" />
+      <edge id="446" source="VAN RIJSBERGEN" target="WEN 'Y'" weight="1" />
+      <edge id="447" source="VAN RIJSBERGEN" target="WEI 'W.'" weight="1" />
+      <edge id="448" source="GARCIA S" target="TING 'CK'" weight="1" />
+      <edge id="449" source="GARCIA S" target="TANG 'J.'" weight="1" />
+      <edge id="450" source="GARCIA S" target="XU 'P.'" weight="1" />
+      <edge id="451" source="GARCIA S" target="VAN 'RIJSBERGEN'" weight="1" />
+      <edge id="452" source="GARCIA S" target="WINKLER 'W.'" weight="1" />
+      <edge id="453" source="GARCIA S" target="STOILOS 'G.'" weight="1" />
+      <edge id="454" source="GARCIA S" target="WEN 'Y'" weight="1" />
+      <edge id="455" source="GARCIA S" target="QUIX 'C.'" weight="1" />
+      <edge id="456" source="GARCIA S" target="MEI 'T.'" weight="3" />
+      <edge id="457" source="GARCIA S" target="RAHM 'E'" weight="1" />
+      <edge id="458" source="GARCIA S" target="WEI 'W.'" weight="1" />
+      <edge id="459" source="MEI 'T.'" target="GEN M" weight="3" />
+      <edge id="460" source="MEI 'T.'" target="DO HH" weight="3" />
+      <edge id="461" source="MEI 'T.'" target="ESHELMAN LJ" weight="3" />
+      <edge id="462" source="MEI 'T.'" target="QUIX C." weight="3" />
+      <edge id="463" source="MEI 'T.'" target="DEB K." weight="3" />
+      <edge id="464" source="MEI 'T.'" target="ABDULLAH S" weight="3" />
+      <edge id="465" source="MEI 'T.'" target="ACAMPORA G" weight="3" />
+      <edge id="466" source="MEI 'T.'" target="MEI T." weight="6" />
+      <edge id="467" source="MEI 'T.'" target="ANAGNOSTOPOULOS A." weight="3" />
+      <edge id="468" source="MEI 'T.'" target="HU J." weight="6" />
+      <edge id="469" source="MEI 'T.'" target="RAHM E" weight="3" />
+      <edge id="470" source="RAHM 'E'" target="ABDULLAH S" weight="1" />
+      <edge id="471" source="RAHM 'E'" target="DEB K." weight="1" />
+      <edge id="472" source="RAHM 'E'" target="GEN M" weight="1" />
+      <edge id="473" source="RAHM 'E'" target="ACAMPORA G" weight="1" />
+      <edge id="474" source="RAHM 'E'" target="DO HH" weight="1" />
+      <edge id="475" source="RAHM 'E'" target="ESHELMAN LJ" weight="1" />
+      <edge id="476" source="RAHM 'E'" target="QUIX C." weight="1" />
+      <edge id="477" source="WEI 'W.'" target="WANG J." weight="1" />
+      <edge id="478" source="WEI 'W.'" target="GEN M" weight="1" />
+      <edge id="479" source="WEI 'W.'" target="DO HH" weight="1" />
+      <edge id="480" source="WEI 'W.'" target="ESHELMAN LJ" weight="1" />
+      <edge id="481" source="WEI 'W.'" target="QUIX C." weight="1" />
+      <edge id="482" source="WEI 'W.'" target="DEB K." weight="1" />
+      <edge id="483" source="WEI 'W.'" target="ABDULLAH S" weight="1" />
+      <edge id="484" source="WEI 'W.'" target="ACAMPORA G" weight="1" />
+      <edge id="485" source="WEI 'W.'" target="MEI T." weight="3" />
+      <edge id="486" source="WEI 'W.'" target="TANG J." weight="1" />
+      <edge id="487" source="WEI 'W.'" target="TING CK" weight="1" />
+      <edge id="488" source="WEI 'W.'" target="WANG Z." weight="1" />
+      <edge id="489" source="WEI 'W.'" target="RAHM E" weight="1" />
+      <edge id="490" source="PAK AN" target="TING 'CK'" weight="1" />
+      <edge id="491" source="PAK AN" target="VAN 'RIJSBERGEN'" weight="1" />
+      <edge id="492" source="PAK AN" target="PAPADOPOULOS 'S'" weight="1" />
+      <edge id="493" source="PAK AN" target="WU 'Z.'" weight="1" />
+      <edge id="494" source="ANAGNOSTOPOULOS A." target="TING 'CK'" weight="1" />
+      <edge id="495" source="ANAGNOSTOPOULOS A." target="HU 'XH'" weight="1" />
+      <edge id="496" source="ANAGNOSTOPOULOS A." target="PAPADOPOULOS 'S'" weight="1" />
+      <edge id="497" source="ANAGNOSTOPOULOS A." target="WU 'Z.'" weight="1" />
+      <edge id="498" source="ANAGNOSTOPOULOS A." target="VAN 'RIJSBERGEN'" weight="1" />
+      <edge id="499" source="RIBEIRO-NETO B." target="TING 'CK'" weight="1" />
+      <edge id="500" source="RIBEIRO-NETO B." target="WU 'Z.'" weight="1" />
+      <edge id="501" source="RIBEIRO-NETO B." target="VAN 'RIJSBERGEN'" weight="1" />
+      <edge id="502" source="HU J." target="HU 'XH'" weight="2" />
+      <edge id="503" source="HU J." target="TING 'CK'" weight="2" />
+      <edge id="504" source="HU J." target="VAN 'RIJSBERGEN'" weight="2" />
+      <edge id="505" source="HU J." target="PAPADOPOULOS 'S'" weight="2" />
+      <edge id="506" source="HU J." target="WU 'Z.'" weight="2" />
+      <edge id="507" source="VAN 'RIJSBERGEN'" target="DO HH" weight="1" />
+      <edge id="508" source="VAN 'RIJSBERGEN'" target="WU Z." weight="1" />
+      <edge id="509" source="VAN 'RIJSBERGEN'" target="ESHELMAN LJ" weight="1" />
+      <edge id="510" source="VAN 'RIJSBERGEN'" target="QUIX C." weight="1" />
+      <edge id="511" source="VAN 'RIJSBERGEN'" target="GEN M" weight="1" />
+      <edge id="512" source="VAN 'RIJSBERGEN'" target="WU HC" weight="1" />
+      <edge id="513" source="VAN 'RIJSBERGEN'" target="DEB K." weight="1" />
+      <edge id="514" source="VAN 'RIJSBERGEN'" target="ABDULLAH S" weight="1" />
+      <edge id="515" source="VAN 'RIJSBERGEN'" target="MURDOCK V." weight="1" />
+      <edge id="516" source="VAN 'RIJSBERGEN'" target="ACAMPORA G" weight="1" />
+      <edge id="517" source="VAN 'RIJSBERGEN'" target="MEI T." weight="6" />
+      <edge id="518" source="VAN 'RIJSBERGEN'" target="TANG J." weight="1" />
+      <edge id="519" source="VAN 'RIJSBERGEN'" target="TING CK" weight="2" />
+      <edge id="520" source="VAN 'RIJSBERGEN'" target="RAHM E" weight="1" />
+      <edge id="521" source="VAN 'RIJSBERGEN'" target="SALTON G" weight="1" />
+      <edge id="522" source="VAN 'RIJSBERGEN'" target="WU ZD" weight="1" />
+      <edge id="523" source="WEN Y" target="XU 'P.'" weight="1" />
+      <edge id="524" source="WEN Y" target="WINKLER 'W.'" weight="1" />
+      <edge id="525" source="GEN M" target="TING 'CK'" weight="1" />
+      <edge id="526" source="GEN M" target="TANG 'J.'" weight="1" />
+      <edge id="527" source="GEN M" target="XU 'P.'" weight="1" />
+      <edge id="528" source="GEN M" target="QUIX 'C.'" weight="1" />
+      <edge id="529" source="GEN M" target="WINKLER 'W.'" weight="1" />
+      <edge id="530" source="GEN M" target="STOILOS 'G.'" weight="1" />
+      <edge id="531" source="GEN M" target="WEN 'Y'" weight="1" />
+      <edge id="532" source="ACAMPORA 'G'" target="ABDULLAH S" weight="1" />
+      <edge id="533" source="DO HH" target="TING 'CK'" weight="1" />
+      <edge id="534" source="DO HH" target="TANG 'J.'" weight="1" />
+      <edge id="535" source="DO HH" target="XU 'P.'" weight="1" />
+      <edge id="536" source="DO HH" target="ESHELMAN 'LJ'" weight="1" />
+      <edge id="537" source="DO HH" target="QUIX 'C.'" weight="1" />
+      <edge id="538" source="DO HH" target="GARCIA 'S'" weight="1" />
+      <edge id="539" source="DO HH" target="WINKLER 'W.'" weight="1" />
+      <edge id="540" source="DO HH" target="STOILOS 'G.'" weight="1" />
+      <edge id="541" source="DO HH" target="WEN 'Y'" weight="1" />
+      <edge id="542" source="QUIX C." target="TING 'CK'" weight="1" />
+      <edge id="543" source="QUIX C." target="TANG 'J.'" weight="1" />
+      <edge id="544" source="QUIX C." target="XU 'P.'" weight="1" />
+      <edge id="545" source="QUIX C." target="WINKLER 'W.'" weight="1" />
+      <edge id="546" source="QUIX C." target="STOILOS 'G.'" weight="1" />
+      <edge id="547" source="QUIX C." target="WEN 'Y'" weight="1" />
+      <edge id="548" source="MURDOCK V." target="TING 'CK'" weight="1" />
+      <edge id="549" source="MURDOCK V." target="PAPADOPOULOS 'S'" weight="1" />
+      <edge id="550" source="MURDOCK V." target="WU 'Z.'" weight="1" />
+      <edge id="551" source="WU HC" target="TING 'CK'" weight="1" />
+      <edge id="552" source="WU HC" target="WU 'Z.'" weight="1" />
+      <edge id="553" source="BOCK 'J'" target="ABDULLAH S" weight="1" />
+      <edge id="554" source="BOCK 'J'" target="ACAMPORA G" weight="1" />
+      <edge id="555" source="MEI T." target="WINKLER 'W.'" weight="3" />
+      <edge id="556" source="MEI T." target="PAPADOPOULOS 'S'" weight="3" />
+      <edge id="557" source="MEI T." target="XU 'P.'" weight="3" />
+      <edge id="558" source="MEI T." target="WU 'Z.'" weight="3" />
+      <edge id="559" source="MEI T." target="TING 'CK'" weight="6" />
+      <edge id="560" source="MEI T." target="TANG 'J.'" weight="3" />
+      <edge id="561" source="MEI T." target="WEN 'Y'" weight="3" />
+      <edge id="562" source="MEI T." target="STOILOS 'G.'" weight="3" />
+      <edge id="563" source="DEB 'K.'" target="ABDULLAH S" weight="1" />
+      <edge id="564" source="DEB 'K.'" target="ACAMPORA G" weight="1" />
+      <edge id="565" source="STOILOS 'G.'" target="ABDULLAH S" weight="1" />
+      <edge id="566" source="STOILOS 'G.'" target="ACAMPORA G" weight="1" />
+      <edge id="567" source="STOILOS 'G.'" target="DEB K." weight="1" />
+      <edge id="568" source="STOILOS 'G.'" target="RAHM E" weight="1" />
+      <edge id="569" source="STOILOS 'G.'" target="ESHELMAN LJ" weight="1" />
+      <edge id="570" source="CRUZ 'I.F.'" target="ABDULLAH S" weight="1" />
+      <edge id="571" source="CRUZ 'I.F.'" target="ACAMPORA G" weight="1" />
+      <edge id="572" source="TING CK" target="XU 'P.'" weight="1" />
+      <edge id="573" source="TING CK" target="WINKLER 'W.'" weight="1" />
+      <edge id="574" source="TING CK" target="WEN 'Y'" weight="1" />
+      <edge id="575" source="WEN 'Y'" target="WANG J." weight="1" />
+      <edge id="576" source="WEN 'Y'" target="ESHELMAN LJ" weight="1" />
+      <edge id="577" source="WEN 'Y'" target="DEB K." weight="1" />
+      <edge id="578" source="WEN 'Y'" target="ABDULLAH S" weight="1" />
+      <edge id="579" source="WEN 'Y'" target="ACAMPORA G" weight="1" />
+      <edge id="580" source="WEN 'Y'" target="WEI W." weight="1" />
+      <edge id="581" source="WEN 'Y'" target="TANG J." weight="1" />
+      <edge id="582" source="WEN 'Y'" target="WANG Z." weight="1" />
+      <edge id="583" source="WEN 'Y'" target="RAHM E" weight="1" />
+      <edge id="584" source="RAHM E" target="TING 'CK'" weight="1" />
+      <edge id="585" source="RAHM E" target="TANG 'J.'" weight="1" />
+      <edge id="586" source="RAHM E" target="XU 'P.'" weight="1" />
+      <edge id="587" source="RAHM E" target="WINKLER 'W.'" weight="1" />
+      <edge id="588" source="SALTON G" target="TING 'CK'" weight="1" />
+      <edge id="589" source="SALTON G" target="WU 'Z.'" weight="1" />
+      <edge id="590" source="WANG J." target="XU 'P.'" weight="1" />
+      <edge id="591" source="WANG J." target="WINKLER 'W.'" weight="1" />
+      <edge id="592" source="WU Z." target="TING 'CK'" weight="1" />
+      <edge id="593" source="ESHELMAN LJ" target="TING 'CK'" weight="1" />
+      <edge id="594" source="ESHELMAN LJ" target="TANG 'J.'" weight="1" />
+      <edge id="595" source="ESHELMAN LJ" target="XU 'P.'" weight="1" />
+      <edge id="596" source="ESHELMAN LJ" target="QUIX 'C.'" weight="1" />
+      <edge id="597" source="ESHELMAN LJ" target="GARCIA 'S'" weight="1" />
+      <edge id="598" source="ESHELMAN LJ" target="WINKLER 'W.'" weight="1" />
+      <edge id="599" source="XU 'P.'" target="DEB K." weight="1" />
+      <edge id="600" source="XU 'P.'" target="ABDULLAH S" weight="1" />
+      <edge id="601" source="XU 'P.'" target="ACAMPORA G" weight="1" />
+      <edge id="602" source="XU 'P.'" target="WEI W." weight="1" />
+      <edge id="603" source="XU 'P.'" target="TANG J." weight="1" />
+      <edge id="604" source="XU 'P.'" target="WANG Z." weight="1" />
+      <edge id="605" source="WINKLER 'W.'" target="DEB K." weight="1" />
+      <edge id="606" source="WINKLER 'W.'" target="ABDULLAH S" weight="1" />
+      <edge id="607" source="WINKLER 'W.'" target="ACAMPORA G" weight="1" />
+      <edge id="608" source="WINKLER 'W.'" target="WEI W." weight="1" />
+      <edge id="609" source="WINKLER 'W.'" target="TANG J." weight="1" />
+      <edge id="610" source="WINKLER 'W.'" target="WANG Z." weight="1" />
+      <edge id="611" source="DEB K." target="TING 'CK'" weight="1" />
+      <edge id="612" source="DEB K." target="QUIX 'C.'" weight="1" />
+      <edge id="613" source="DEB K." target="TANG 'J.'" weight="1" />
+      <edge id="614" source="DEB K." target="GARCIA 'S'" weight="1" />
+      <edge id="615" source="DEB K." target="ESHELMAN 'LJ'" weight="1" />
+      <edge id="616" source="TING 'CK'" target="ABDULLAH S" weight="1" />
+      <edge id="617" source="TING 'CK'" target="ACAMPORA G" weight="1" />
+      <edge id="618" source="TING 'CK'" target="TANG J." weight="1" />
+      <edge id="619" source="TING 'CK'" target="WU ZD" weight="1" />
+      <edge id="620" source="ABDULLAH S" target="DAWKINS 'R'" weight="1" />
+      <edge id="621" source="ABDULLAH S" target="ESHELMAN 'LJ'" weight="1" />
+      <edge id="622" source="ABDULLAH S" target="QUIX 'C.'" weight="1" />
+      <edge id="623" source="ABDULLAH S" target="TANG 'J.'" weight="1" />
+      <edge id="624" source="ABDULLAH S" target="GARCIA 'S'" weight="1" />
+      <edge id="625" source="DAWKINS 'R'" target="ACAMPORA G" weight="1" />
+      <edge id="626" source="QUIX 'C.'" target="ACAMPORA G" weight="1" />
+      <edge id="627" source="ACAMPORA G" target="ESHELMAN 'LJ'" weight="1" />
+      <edge id="628" source="ACAMPORA G" target="TANG 'J.'" weight="1" />
+      <edge id="629" source="ACAMPORA G" target="GARCIA 'S'" weight="1" />
+    </edges>
+  </graph>
+</gexf>
