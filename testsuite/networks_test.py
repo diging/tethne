@@ -876,7 +876,17 @@ class TestAuthorCouplingGraph(unittest.TestCase):
 class TestAuthorCocitation(unittest.TestCase):
     """
     Test the author cocitation (analysis) network
-    """
+    Assumes reader is functioning
+
+    the "/Users/ramki/tethne/tethne/testsuite/testin/cocitations_test_2recs.txt" 
+	file has been constructed with the following properties:
+      
+     """
+	# def setUp(self):
+	#     wos_data = rd.wos.parse_wos("./testin/authorinstitutions_test.txt")
+ #        meta_list = rd.wos.wos2meta(wos_data)
+        		
+
     pass
 
 
@@ -901,7 +911,7 @@ class TestAuthorInstitution(unittest.TestCase):
     #Nodes:
     #-------
     # As the networks is built between 10 authors and 9 institutions, 
-    #there should be 19 nodes (10+9). - test 1 is checked in other tests.
+    # there should be 19 nodes (10+9). - test 1 is checked in other tests.
     # Test the node attributes - (value="author / institutions") It should match with number of nodes and ---- 
     #--- distinguished author and institutions count ( value = "authors" count=10, value = "Institutions" count = 9, hence total 19)  - test 2
     
@@ -916,8 +926,6 @@ class TestAuthorInstitution(unittest.TestCase):
     def setUp(self):
         wos_data = rd.wos.parse_wos("./testin/authorinstitutions_test.txt")
         meta_list = rd.wos.wos2meta(wos_data)
-        
-        
         
         
         self.node_attribs_check = nt.authors.author_institution(meta_list) # test 2
@@ -1034,26 +1042,25 @@ class TestAuthorCoinstitution(unittest.TestCase):
     
     
     def test_shared_institutions_one(self):
-        # 10 nodes: one for each author
-        self.assertEqual(nx.number_of_nodes(self.shared_institutions_one), 10)
+        # 5 nodes: #63128668
+        self.assertEqual(nx.number_of_nodes(self.shared_institutions_one), 5)
         # as noted in doc string, 3 edges between them
         self.assertEqual(nx.number_of_edges(self.shared_institutions_one), 3) 
     
     def test_shared_institutions_two(self):
-        # 10 nodes: one for each author
-        self.assertEqual(nx.number_of_nodes(self.shared_institutions_two), 10)
+        # 0 nodes: #63128668
+        self.assertEqual(nx.number_of_nodes(self.shared_institutions_two), 0)
         # as noted in doc string, 0 edges between them 
         self.assertEqual(nx.number_of_edges(self.shared_institutions_two), 0) 
     
     def test_node_attribs_check(self):
         
         obtained_node_attribs_dict= nx.get_node_attributes(self.node_attribs_check,"type")
+
+        expected_node_attribs_dict= {'WU, ZD': 'author', 'VITIELLO, A': 'author', 
+                                     'LU, CL': 'author', 'LOIA, V': 'author', 'CHEN, EH': 'author'}
         
-        expected_node_attribs_dict= {'ZHANG, YC': 'author', 'ACAMPORA, G': 'author', 
-        'Huang, TCK': 'author', 'LOIA, V': 'author', 'WU, ZD': 'author', 'LU, CL': 'author',
-         'CHEN, EH': 'author', 'VITIELLO, A': 'author', 'ZHANG, H': 'author', 'XU, GD': 'author'}
-        
-        self.assertDictEqual(expected_node_attribs_dict, obtained_node_attribs_dict, " Node Attribs are equal")
+        self.assertDictEqual(expected_node_attribs_dict, obtained_node_attribs_dict, " Node Attribs are not same")
         
     def tearDown(self):
          pass

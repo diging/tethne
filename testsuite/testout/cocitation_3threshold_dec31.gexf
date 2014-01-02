@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?><gexf version="1.1" xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gexf.net/1.1draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
+  <graph defaultedgetype="undirected" mode="static">
+    <attributes class="node" mode="static">
+      <attribute id="0" title="number_of_cited_times" type="integer" />
+    </attributes>
+    <nodes>
+      <node id="CHEN LS 2005 EUR J OPER RES" label="CHEN LS 2005 EUR J OPER RES">
+        <attvalues>
+          <attvalue for="0" value="3" />
+        </attvalues>
+      </node>
+      <node id="CHEN YL 2006 FUZZY SET SYST" label="CHEN YL 2006 FUZZY SET SYST">
+        <attvalues>
+          <attvalue for="0" value="4" />
+        </attvalues>
+      </node>
+      <node id="CHEN YL 2008 EXPERT SYST APPL" label="CHEN YL 2008 EXPERT SYST APPL">
+        <attvalues>
+          <attvalue for="0" value="3" />
+        </attvalues>
+      </node>
+      <node id="CHEN YL 2009 EUR J OPER RES" label="CHEN YL 2009 EUR J OPER RES">
+        <attvalues>
+          <attvalue for="0" value="3" />
+        </attvalues>
+      </node>
+      <node id="CHEN YL 2010 DECIS SUPPORT SYST" label="CHEN YL 2010 DECIS SUPPORT SYST">
+        <attvalues>
+          <attvalue for="0" value="3" />
+        </attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <edge id="0" source="CHEN LS 2005 EUR J OPER RES" target="CHEN YL 2006 FUZZY SET SYST" weight="3" />
+      <edge id="1" source="CHEN LS 2005 EUR J OPER RES" target="CHEN YL 2008 EXPERT SYST APPL" weight="3" />
+      <edge id="2" source="CHEN LS 2005 EUR J OPER RES" target="CHEN YL 2009 EUR J OPER RES" weight="3" />
+      <edge id="3" source="CHEN LS 2005 EUR J OPER RES" target="CHEN YL 2010 DECIS SUPPORT SYST" weight="3" />
+      <edge id="4" source="CHEN YL 2006 FUZZY SET SYST" target="CHEN YL 2008 EXPERT SYST APPL" weight="3" />
+      <edge id="5" source="CHEN YL 2006 FUZZY SET SYST" target="CHEN YL 2010 DECIS SUPPORT SYST" weight="3" />
+      <edge id="6" source="CHEN YL 2006 FUZZY SET SYST" target="CHEN YL 2009 EUR J OPER RES" weight="3" />
+      <edge id="7" source="CHEN YL 2008 EXPERT SYST APPL" target="CHEN YL 2009 EUR J OPER RES" weight="3" />
+      <edge id="8" source="CHEN YL 2008 EXPERT SYST APPL" target="CHEN YL 2010 DECIS SUPPORT SYST" weight="3" />
+      <edge id="9" source="CHEN YL 2009 EUR J OPER RES" target="CHEN YL 2010 DECIS SUPPORT SYST" weight="3" />
+    </edges>
+  </graph>
+</gexf>
