@@ -1,5 +1,5 @@
-tethne.networks: Creating Bibliographic Networks
-================================================
+Creating Bibliographic Networks
+===============================
 
 .. sidebar:: Ready to Proceed?
 
