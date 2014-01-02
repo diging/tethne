@@ -286,7 +286,7 @@ def author_cocitation(meta_list, threshold):
     delim=' '
 
     for paper in meta_list:
-        print '----New paper---'
+        #print '----New paper---'
         # Some papers don't have citations.
         if paper['citations'] is not None:
             # n is the number of papers in the provided list of Papers.
@@ -305,7 +305,7 @@ def author_cocitation(meta_list, threshold):
                     # Start inner loop at i+1, to avoid redundancy and self-loops.
                     for j in xrange(i+1, n):
                         al_j_str=''.join(map(str,(paper['citations'][j]['aulast']))) # last name of author j
-                        print "first name:", paper['citations'][j]['aulast']
+                        #print "first name:", paper['citations'][j]['aulast']
                         #ai_j_str=''.join(map(str,(paper['citations'][j]['auinit']))) # last name of author i
                         l=paper['citations'][j]['auinit']
                         ai_j_str=str(l).strip('[]') # last name of author i

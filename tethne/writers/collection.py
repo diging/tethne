@@ -1,5 +1,5 @@
 """
-Methods for writing :class:`.GraphCollection` to commonly-used network file 
+Methods for writing :class:`.GraphCollection` to commonly-used network file
 formats. Many methods simply leverage equivalent methods in NetworkX.
 """
 
@@ -12,14 +12,14 @@ def to_dxgmml(C, path): # [#61510094]
     of each node and edge are determined by periods of consecutive appearance
     in the :class:`.GraphCollection` . Node and edge attributes are defined for
     each `Graph`. in the :class:`.GraphCollection`.
-    
+
     Parameters
     ----------
     C : :class:`.GraphCollection`
         The :class:`.GraphCollection` to be written to XGMML.
     path : str
         Path to file to be written. Will be created/overwritten.
-    
+
     Notes
     -----
     Period start and end dates in this method are inclusive, whereas XGMML end
@@ -86,8 +86,8 @@ def to_dxgmml(C, path): # [#61510094]
                             if type(value) is int: dtype = 'integer'
                             if type(value) is float: dtype = 'real'
                             f.write('\t\t<att name="'+str(attr)+'" type="'+dtype+'" value="'+str(value)+'" start="'+str(i)+'" end="'+str(i+1)+'" />\n'.replace("&", "&amp;"))
-                f.write('\t</node>\n')    
-      
+                f.write('\t</node>\n')
+
         for e in edges.keys():
             for period in edges[e]['periods']:
                 f.write('\t<edge source="' + str(e[0]) + '" target="' + str(e[1]) + '" start="'+ str(period['start']) + '" end="' + str(period['end']+1) + '">\n'.replace("&", "&amp;"))
@@ -99,7 +99,7 @@ def to_dxgmml(C, path): # [#61510094]
                             if type(value) is int: dtype = 'integer'
                             if type(value) is float: dtype = 'real'
                             f.write('\t\t<att name="'+str(attr)+'" type="'+dtype+'" value="'+str(value)+'" start="'+str(i)+'" end="'+str(i+1)+'" />\n'.replace("&", "&amp;"))
-                f.write('\t</edge>\n')                
-        
+                f.write('\t</edge>\n')
+
         f.write('</graph>')
 

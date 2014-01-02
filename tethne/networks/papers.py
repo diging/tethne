@@ -269,7 +269,7 @@ def cocitation(meta_list, threshold):
                         papers_pair_inv = ( paper['citations'][j]['ayjid'].upper(), paper['citations'][i]['ayjid'].upper() )
                         # Have these papers been co-cited before?
                         # try blocks are much more efficient than checking
-                        #  cocitations.keys() every time.           
+                        # cocitations.keys() every time.           
                         paper_j=paper['citations'][j]['ayjid'].upper()
                         try: 
                             cocitations[papers_pair] += 1

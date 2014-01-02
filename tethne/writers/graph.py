@@ -7,7 +7,7 @@ import networkx as nx
 
 def to_sif(graph, output_path):
     """
-    Generates SIF output file from provided graph. 
+    Generates SIF output file from provided graph.
 
     See http://wiki.cytoscape.org/Cytoscape_User_Manual/Network_Formats at
     SIF Format for more details
@@ -17,7 +17,7 @@ def to_sif(graph, output_path):
     not supported by .sif)
 
     Interaction types in the .sif format allow for edge attributes
-    that belong to that interaction type. Simple graphs in 
+    that belong to that interaction type. Simple graphs in
     networkx do not support this kind of edge nesting, but multigraphs do.
 
     If the graph is a simple graph, it is assumed to have only one interaction
@@ -36,7 +36,7 @@ def to_sif(graph, output_path):
         f.close()
 
     else:
-        # write node files 
+        # write node files
         nodes = graph.nodes(data=True)
         for node in nodes:
             node_name = node[0]
@@ -48,17 +48,17 @@ def to_sif(graph, output_path):
                     with open(output_path + "_" + key + ".noa",
                               "w") as f:
                         f.write(str(key) + '\n')
-                        f.write(str(node_name).replace(" ","_") + " = " + 
+                        f.write(str(node_name).replace(" ","_") + " = " +
                                 str(value) + "\n")
                 else:
                     # not first, append file
                     with open(output_path + "_" + key + ".noa",
                               "a") as f:
-                        f.write(str(node_name).replace(" ","_") + " = " + 
+                        f.write(str(node_name).replace(" ","_") + " = " +
                                 str(value) + "\n")
 
         if nx.number_of_edges(graph) == 0:
-            # write an empty graph to a .sif file (just its nodes) 
+            # write an empty graph to a .sif file (just its nodes)
             for node in nodes:
                 node_name = node[0]
                 if node == nodes[0]:
@@ -69,9 +69,9 @@ def to_sif(graph, output_path):
                     # not first, append file
                     with open(output_path + ".sif","a") as f:
                         f.write(str(node_name).replace(" ","_") + "\n")
-    
+
         else:
-            # write the graph to a .sif file as well as other edge 
+            # write the graph to a .sif file as well as other edge
             # attribute files
 
             if graph.is_multigraph():
@@ -101,7 +101,7 @@ def to_sif(graph, output_path):
                         for attrib, value in edge[3].iteritems():
                             eda_line = (node1 + ' (' + intr_type + ') ' +
                                         node2 + ' = ' + str(value) + '\n')
-                            with open(output_path + '_' + str(attrib) + '.eda', 
+                            with open(output_path + '_' + str(attrib) + '.eda',
                                       'a') as g:
                                 g.write(eda_line)
 
@@ -148,7 +148,7 @@ def to_graphml(graph, output_path):
 def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, nodedecay=0, edgeattack=0, edgedecay=0):
     """
     Generates dynamic XGMML output from provided graph.
-    
+
     Parameters
     ----------
     graph : Networkx Graph
@@ -166,14 +166,14 @@ def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, nodedecay=0, 
         For dynamic networks, number of years to prepend to display start.
     edgedecay : int
         For dynamic networks, additional number of years to display edge.
-    
+
     Raises
     ------
     ValueError
         Raised when dynamic=True and 'date' is not a valid edge attribute in
         graph.
 
-        
+
     """
     f = open(output_path + ".xgmml", "w")
     f.write('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<graph directed="0"  xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.cs.rpi.edu/XGMML">\n\t<att name="selected" value="1" type="boolean" />\n\t<att name="name" value="{0}" type="string"/>\n\t<att name="shared name" value="{0}" type="string"/>\n'.format(name))
@@ -181,7 +181,7 @@ def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, nodedecay=0, 
     if dynamic:
         node_dates = {}
         date = None
-    
+
     for edge in graph.edges(data=True):
         if dynamic:
             # Update node start/end values.
@@ -200,7 +200,7 @@ def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, nodedecay=0, 
                     end = edge[2]['date']
                 except KeyError:
                     raise ValueError("Missing 'date' in graph edge attributes. Required when dynamic=True.")
-                
+
             if start < node_dates[edge[0]]['start']:
                 node_dates[edge[0]]['start'] = start
             if end > node_dates[edge[0]]['end']:
@@ -224,7 +224,7 @@ def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, nodedecay=0, 
             f.write('\t</edge>\n')
         except:
             print edge
-    
+
     for node in graph.nodes(data=True):
         id = node[0]
         node_attributes = dict(node[1])
@@ -233,7 +233,7 @@ def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, nodedecay=0, 
             del node_attributes['label']
         else:
             label = id
-        
+
         if dynamic:
             try:
                 start = node_dates[id]['start']
@@ -253,9 +253,9 @@ def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, nodedecay=0, 
         f.write('\t</node>\n')
 #        except:
 #            print node
-        
+
     f.write('</graph>')
-    
+
     f.close()
 
 
@@ -267,7 +267,7 @@ def to_csv(file, delim=","):
         Path to output file (will be created).
     delim : string
         String to use as field delimiter (default is ',').
-    
+
     Notes
     -----
     TODO: should operate on a (provided) graph. Still uses old library approach.
@@ -275,9 +275,9 @@ def to_csv(file, delim=","):
     f = open(file, "w")
 
     # Headers
-    f.write("Identifier" + delim + "Title" + delim + "Authors" + 
-            delim + "WoS Identifier" + delim + "Journal" + delim + 
-            "Volume" + delim + "Page" + delim + "DOI" + delim + 
+    f.write("Identifier" + delim + "Title" + delim + "Authors" +
+            delim + "WoS Identifier" + delim + "Journal" + delim +
+            "Volume" + delim + "Page" + delim + "DOI" + delim +
             "Num Authors\n")
     for entry in self.library:
         # Authors are separated by a colon -> : <-
@@ -285,8 +285,8 @@ def to_csv(file, delim=","):
         for author in entry.meta['AU']:
             authors += ":" + author
         authors = authors[1:]
-        datum = (entry.identifier + delim + entry.meta['TI'][0] + 
-                 delim + authors + delim + entry.wosid + delim + 
+        datum = (entry.identifier + delim + entry.meta['TI'][0] +
+                 delim + authors + delim + entry.wosid + delim +
                  entry.meta['SO'][0])
         if 'VL' in entry.meta:
             datum += delim + entry.meta['VL'][0]

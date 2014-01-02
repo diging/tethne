@@ -1,7 +1,7 @@
 """
 Each file reader takes an input file from an academic knowledge database
 such as the Web of Science or PubMed and parses the input file into a
-list of :class:`.Paper` instances for each paper with as many as possible of 
+list of :class:`.Paper` instances for each paper with as many as possible of
 the following keys; missing values are set to None:
 
     * aulast  - authors' last name as a list
@@ -13,21 +13,21 @@ the following keys; missing values are set to None:
     * spage   - starting page of article in journal
     * epage   - ending page of article in journal
     * date    - article date of publication
-    
+
 These keys are associated with the meta data entries in the databases of
 organizations such as the International DOI Foundation and its Registration
 Agencies such as CrossRef and DataCite.
 
-In addition, :class:`.Paper` instances will contain keys with information 
+In addition, :class:`.Paper` instances will contain keys with information
 relevant to the networks of interest for Tethne including:
 
-    * citations -- list of minimum :class:`.Paper` instances for cited 
+    * citations -- list of minimum :class:`.Paper` instances for cited
         references.
     * ayjid -- First author's name (last, fi), publication year, and journal.
     * doi -- Digital Object Identifier
     * pmid -- PubMed ID
     * wosid -- Web of Science UT fieldtag
-    
+
 Missing data here also results in the above keys being set to None.
 """
 import tethne.data as ds
@@ -42,7 +42,7 @@ def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     """
     Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid
     Returns 'Unknown paper' if all id components are missing (None).
-    
+
     Parameters
     ----------
     Kwargs : dict
@@ -55,13 +55,13 @@ def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
         Four-digit year.
     jtitle : string
         Title of the journal.
-        
+
     Returns
     -------
     ayj : string
-        Fuzzy identifier ayjid, or 'Unknown paper' if all id components are 
+        Fuzzy identifier ayjid, or 'Unknown paper' if all id components are
         missing (None).
-        
+
     """
     if aulast is None:
         aulast = ''
@@ -91,7 +91,7 @@ def create_ainstid(aulast=None, auinit=None, addr1=None, addr2=None, country=Non
     This function is to create an fuzzy identifier ainstid.
     Convert aulast, auinit, and jtitle into the fuzzy identifier ainstid.
     Returns 'Unknown Institution' if all id components are missing (None).
-    
+
     Parameters
     ----------
     Kwargs : dict
@@ -106,13 +106,13 @@ def create_ainstid(aulast=None, auinit=None, addr1=None, addr2=None, country=Non
         Address of the Institution.
     country : string
         Country of affiliation
-        
+
     Returns
     -------
     ainstid : string
-        Fuzzy identifier ainstid, or 'Unknown Institution' if all id components 
+        Fuzzy identifier ainstid, or 'Unknown Institution' if all id components
         are missing (None).
-        
+
     """
     if aulast is None:
         aulast = ''
@@ -132,7 +132,7 @@ def create_ainstid(aulast=None, auinit=None, addr1=None, addr2=None, country=Non
     if  country is None:
          country = ''
 
-    ainstid = aulast + ' ' + auinit + ' ' + addr1 + ' ' + addr2 + ' ' + country 
+    ainstid = aulast + ' ' + auinit + ' ' + addr1 + ' ' + addr2 + ' ' + country
 
     if ainstid == ' ':
         ainstid = 'Unknown Institution'
@@ -143,35 +143,35 @@ def create_ainstid(aulast=None, auinit=None, addr1=None, addr2=None, country=Non
 # Web of Science functions
 def parse_wos(filepath):
     """Read Web of Science plain text data.
-    
+
     Parameters
     ----------
     filepath : string
         Filepath to the Web of Science plain text file.
-        
+
     Returns
     -------
     wos_list : list
-        A list of dictionaries each associated with a paper from the Web of 
-        Science with keys from docs/fieldtags.txt as encountered in the file; 
-        most values associated with keys are strings with special exceptions 
+        A list of dictionaries each associated with a paper from the Web of
+        Science with keys from docs/fieldtags.txt as encountered in the file;
+        most values associated with keys are strings with special exceptions
         defined by the list_keys and int_keys variables.
-            
+
     Raises
     ------
     KeyError
         One key value which needs to be converted to an 'int' is not present.
-    
+
     AttributeError
         similar type of error as given above.
-        
+
     IOError
         File at filepath not found, not readable, or empty.
-    
+
     Notes
     -----
     Unknown keys: RI, OI, Z9
-    
+
     """
     wos_list = []
 
@@ -185,7 +185,7 @@ def parse_wos(filepath):
             line_list = f.read().splitlines()
     except IOError: # File does not exist, or couldn't be read.
         raise IOError("File does not exist, or cannot be read.")
-        
+
     if len(line_list) is 0:
         raise IOError("Unable to read filepath or filepath is empty.")
 
@@ -209,7 +209,7 @@ def parse_wos(filepath):
 
         #add value for the key to the wos_dict: the rest of the line
         try:
-            if field_tag in ['AU', 'AF', 'CR','C1']: 
+            if field_tag in ['AU', 'AF', 'CR','C1']:
                 # These unique fields use the new line delimiter to distinguish
                 # their list elements below.
                 # The field C1 can be either in multiple lines or in a single
@@ -232,7 +232,7 @@ def parse_wos(filepath):
               'ID':';',
               'C1':'\n',
               'CR':'\n'}
-    
+
     #and convert the data at those keys into lists
     for wos_dict in wos_list:
         #print 'wos_dict is \n',wos_dict
@@ -253,7 +253,7 @@ def parse_wos(filepath):
                 #again a key didn't exist but it belonged to the wos
                 #data_struct set of keys; can't split a None
                 pass
-            
+
     #similarly convert some data from string to int
     int_keys = ['PY']
     for wos_dict in wos_list:
@@ -267,7 +267,7 @@ def parse_wos(filepath):
                 #again a key didn't exist but it belonged to the wos
                 #data_struct set of keys; can't convert None to an int
                 pass
- 
+
     return wos_list
 
 
@@ -286,23 +286,23 @@ def parse_cr(ref):
     -------
     meta_dict : :class:`.Paper`
         A :class:`.Paper` instance.
-        
+
     Raises
     ------
     IndexError
         When input 'ref' has less number of tokens than necessary ones.
     ValueError
-        Gets input with mismacthed inputtype. Ex: getting no numbers for a date 
+        Gets input with mismacthed inputtype. Ex: getting no numbers for a date
         field.
-    
+
     Notes
     -----
     Needs a sophisticated name parser, would like to use an open source resource
     for this.
-    
-    If WoS is missing a field in the middle of the list there are NOT commas 
+
+    If WoS is missing a field in the middle of the list there are NOT commas
     indicating that; the following example does NOT occur:
-    
+
         Doe J, ,, Some Journal
 
     instead
@@ -310,10 +310,10 @@ def parse_cr(ref):
         Doe J, Some Journal
 
     This threatens the integrity of WoS data; should we address it?
-    
-    Another threat: if WoS is unsure of the DOI number there will be multiple 
+
+    Another threat: if WoS is unsure of the DOI number there will be multiple
     DOI numbers in a list of form [doi1, doi2, ...], address this?
-    
+
     """
     meta_dict = ds.Paper()
     #tokens of form: aulast auinit, date, jtitle, volume, spage, doi
@@ -336,15 +336,15 @@ def parse_cr(ref):
         meta_dict['doi'] = tokens[5][5:]
     except IndexError as E:     # ref did not have the full set of tokens
         pass
-    except ValueError as E:     # This occurs when the program expects a date 
-        pass                    #  but gets a string with no numbers. We leave 
-                                #  the field incomplete because chances are the 
+    except ValueError as E:     # This occurs when the program expects a date
+        pass                    #  but gets a string with no numbers. We leave
+                                #  the field incomplete because chances are the
                                 #  CR string is too sparse to use anyway.
-                                
-    ayjid = create_ayjid(meta_dict['aulast'], meta_dict['auinit'], 
+
+    ayjid = create_ayjid(meta_dict['aulast'], meta_dict['auinit'],
                          meta_dict['date'], meta_dict['jtitle'])
     meta_dict['ayjid'] = ayjid
- 
+
     return meta_dict
 
 def parse_institutions(ref):
@@ -356,34 +356,34 @@ def parse_institutions(ref):
     ----------
     ref : str
         'C1' field tag data from a plain text Web of Science file which contains
-        Author First and Last names, Institution affiliated, and the 
+        Author First and Last names, Institution affiliated, and the
         location/city where they are affiliated to.
-        
+
     Returns
     -------
     addr_dict : :class:`.Paper`
         A :class:`.Paper` instance.
-        
+
     Raises
     ------
     IndexError
         When input 'ref' has less number of tokens than necessary ones.
 
     ValueError
-        Gets input with mismacthed inputtype. Ex: getting no numbers for a date 
+        Gets input with mismacthed inputtype. Ex: getting no numbers for a date
         field.
-    
+
     Notes
     -----
     Needs to check many test cases to check various input types.
-        
+
     """
     addr_dict = ds.Paper()
-    #tokens of form: 
+    #tokens of form:
     tokens = ref.split(',')
     print 'tokens inside parse_institutions : \n', tokens
     try:
-        
+
         name = tokens[0]
         name_tokens = name.split(' ')
         addr_dict['aulast'] = name_tokens[0]
@@ -393,7 +393,7 @@ def parse_institutions(ref):
         addr_dict['addr2'] = tokens[1][1:]
         addr_dict['addr3'] = tokens[2][1:]
         addr_dict['country'] = tokens[3][2:]
-       
+
     except IndexError:
         #ref did not have the full set of tokens
         pass
@@ -402,8 +402,8 @@ def parse_institutions(ref):
         #no numbers, we leave the field incomplete because chances are
         #the CR string is too sparse to use anyway
         pass
-    
-    auinsid = create_ayjid(addr_dict['aulast'], addr_dict['auinit'], 
+
+    auinsid = create_ayjid(addr_dict['aulast'], addr_dict['auinit'],
                          addr_dict['date'], addr_dict['jtitle'])
     addr_dict['auinsid'] = auinsid
     print 'auinsid', auinsid
@@ -427,10 +427,10 @@ def wos2meta(wos_data):
 
     Notes
     -----
-    Need to handle author name anomolies (case, blank spaces, etc.) that may 
+    Need to handle author name anomolies (case, blank spaces, etc.) that may
     make the same author appear to be two different authors in Networkx; this is
     important for any graph with authors as nodes.
-    
+
     """
     #create a Paper for each wos_dict and append to this list
     wos_meta = []
@@ -441,7 +441,7 @@ def wos2meta(wos_data):
         #print 'wos data \n' , wos_data
     #define the direct relationships between WoS fieldtags and Paper keys
     translator = ds.wos2meta_map()
-    
+
     #perform the key convertions
     for wos_dict in wos_data:
         meta_dict = ds.Paper()
@@ -460,7 +460,7 @@ def wos2meta(wos_data):
                 aulast = name_tokens[0].upper().strip()
                 try:
                     # 1 for 'aulast, aufirst'
-                    auinit = name_tokens[1][1].upper().strip() 
+                    auinit = name_tokens[1][1].upper().strip()
                 except IndexError:
                     # then no first initial character
                     # preserve parallel name lists with empty string
@@ -469,9 +469,9 @@ def wos2meta(wos_data):
                 auinit_list.append(auinit)
             meta_dict['aulast'] = aulast_list
             meta_dict['auinit'] = auinit_list
-            
+
         #construct ayjid
-        ayjid = create_ayjid(meta_dict['aulast'], meta_dict['auinit'], 
+        ayjid = create_ayjid(meta_dict['aulast'], meta_dict['auinit'],
                              meta_dict['date'], meta_dict['jtitle'])
         meta_dict['ayjid'] = ayjid
 
@@ -481,7 +481,7 @@ def wos2meta(wos_data):
 
         if wos_dict['C1'] is not None:
             for c1_str in wos_dict['C1']:   # One C1 line for each institution.
-            
+
                 match = pattern.search(c1_str)
                 if match:   # Explicit author-institution mappings are provided.
                     authors = c1_str[match.start()+1:match.end()-1].split('; ')
@@ -489,28 +489,28 @@ def wos2meta(wos_data):
                     for author in authors:
                         # The A-I mapping (in data) uses the AF representation
                         #  of author names. But we use the AU representation
-                        #  as our mapping key to ensure consistency with older 
+                        #  as our mapping key to ensure consistency with older
                         #  datasets.
                         author_index = wos_dict['AF'].index(author)
                         author_au = wos_dict['AU'][author_index].upper()    # e.g. "WU, ZD"
                         inst_name = institution[0]
-                        
+
                         try:
                             author_institutions[author_au].append(inst_name)
                         except KeyError:
                             author_institutions[author_au] = [inst_name]
-                            
+
                 else:   # Author-institution mappings are not provided. We
                         #  therefore map all authors to all institutions.
                     for author_au in wos_dict['AU']:
                         institution = c1_str.strip().split(', ')
                         inst_name = institution[0]
-                        
+
                         try:
                             author_institutions[author_au].append(inst_name)
                         except KeyError:
                             author_institutions[author_au] = [inst_name]
-                
+
             meta_dict['institutions'] = author_institutions
 
         # Convert CR references into meta_dict format
@@ -519,7 +519,7 @@ def wos2meta(wos_data):
             for ref in wos_dict['CR']:
                 meta_cr_list.append(parse_cr(ref))
                 #print 'meta_cr_list' , meta_cr_list
-            meta_dict['citations'] = meta_cr_list 
+            meta_dict['citations'] = meta_cr_list
 
         wos_meta.append(meta_dict)
     # End wos_dict for loop.
@@ -531,31 +531,31 @@ def parse_from_dir(path):
     """
     Convenience function for generating a wos_list from a directory of Web of
     Science field-tagged data files.
-    
+
     Parameters
     ----------
     path : string
         Path to directory of field-tagged data files.
-        
+
     Returns
     -------
     wos_list : list
         A list of wos_dict dictionaries.
-    
+
     Raises
     ------
     IOError
         Invalid path.
-    
+
     """
-    
+
     wos_list = []
-    
+
     try:
         files = os.listdir(path)
     except IOError:
         raise IOError("Invalid path.")
-        
+
     for file in files:
         try:
             print "Loaded " + file
@@ -563,5 +563,5 @@ def parse_from_dir(path):
         except (IOError, DataError): # Ignore files that don't contain WoS data.
             print "Could not load " + file
             pass
-            
+
     return wos_list
