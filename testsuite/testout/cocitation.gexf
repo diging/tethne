@@ -1,27 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?><gexf version="1.1" xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gexf.net/1.1draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
   <graph defaultedgetype="undirected" mode="static">
+    <attributes class="node" mode="static">
+      <attribute id="0" title="number_of_cited_times" type="integer" />
+    </attributes>
     <nodes>
-      <node id="XIAO HY 2011 SOIL SEDIMENT CONTAM" label="XIAO HY 2011 SOIL SEDIMENT CONTAM" />
-      <node id="YU HL 2007 STOCH ENV RES RISK A" label="YU HL 2007 STOCH ENV RES RISK A" />
-      <node id="ZOU CK 2011 TECHNOMETRICS" label="ZOU CK 2011 TECHNOMETRICS" />
-      <node id="FILIPPIDIS A 1992 FUEL" label="FILIPPIDIS A 1992 FUEL" />
-      <node id="ADRIANO D. 2001 TRACE ELEMENTS TERRE" label="ADRIANO D. 2001 TRACE ELEMENTS TERRE" />
-      <node id="EFRON B. 1993 INTRO BOOTSTRAP" label="EFRON B. 1993 INTRO BOOTSTRAP" />
-      <node id="DAS N 2009 QUAL TECHNOL QUANT M" label="DAS N 2009 QUAL TECHNOL QUANT M" />
-      <node id="LANG CL 2012 NAV RES LOG" label="LANG CL 2012 NAV RES LOG" />
-      <node id="FRANK A. 2010 UCI MACHINE LEARNING" label="FRANK A. 2010 UCI MACHINE LEARNING" />
-      <node id="RAO J 1992 RNEA TECHN B SER LAN" label="RAO J 1992 RNEA TECHN B SER LAN" />
-      <node id="VATALIS KI 2006 ENVIRON MANAGE" label="VATALIS KI 2006 ENVIRON MANAGE" />
-      <node id="ANGIULLI F 2005 IEEE T KNOWL DATA EN" label="ANGIULLI F 2005 IEEE T KNOWL DATA EN" />
-      <node id="CHAKRABORTI S 2001 J QUAL TECHNOL" label="CHAKRABORTI S 2001 J QUAL TECHNOL" />
+      <node id="XIAO HY 2011 SOIL SEDIMENT CONTAM" label="XIAO HY 2011 SOIL SEDIMENT CONTAM">
+        <attvalues>
+          <attvalue for="0" value="1" />
+        </attvalues>
+      </node>
+      <node id="YU HL 2007 STOCH ENV RES RISK A" label="YU HL 2007 STOCH ENV RES RISK A">
+        <attvalues>
+          <attvalue for="0" value="1" />
+        </attvalues>
+      </node>
+      <node id="ZOU CK 2011 TECHNOMETRICS" label="ZOU CK 2011 TECHNOMETRICS">
+        <attvalues>
+          <attvalue for="0" value="2" />
+        </attvalues>
+      </node>
+      <node id="FILIPPIDIS A 1992 FUEL" label="FILIPPIDIS A 1992 FUEL">
+        <attvalues>
+          <attvalue for="0" value="2" />
+        </attvalues>
+      </node>
+      <node id="VATALIS K. 2006 ENVIRON MANAGE" label="VATALIS K. 2006 ENVIRON MANAGE">
+        <attvalues>
+          <attvalue for="0" value="1" />
+        </attvalues>
+      </node>
+      <node id="EFRON B. 1993 INTRO BOOTSTRAP" label="EFRON B. 1993 INTRO BOOTSTRAP">
+        <attvalues>
+          <attvalue for="0" value="1" />
+        </attvalues>
+      </node>
+      <node id="ADRIANO D. 2001 TRACE ELEMENTS TERRE" label="ADRIANO D. 2001 TRACE ELEMENTS TERRE">
+        <attvalues>
+          <attvalue for="0" value="1" />
+        </attvalues>
+      </node>
+      <node id="DAS N 2009 QUAL TECHNOL QUANT M" label="DAS N 2009 QUAL TECHNOL QUANT M">
+        <attvalues>
+          <attvalue for="0" value="1" />
+        </attvalues>
+      </node>
+      <node id="LANG CL 2012 NAV RES LOG" label="LANG CL 2012 NAV RES LOG">
+        <attvalues>
+          <attvalue for="0" value="2" />
+        </attvalues>
+      </node>
+      <node id="FRANK A. 2010 UCI MACHINE LEARNING" label="FRANK A. 2010 UCI MACHINE LEARNING">
+        <attvalues>
+          <attvalue for="0" value="1" />
+        </attvalues>
+      </node>
+      <node id="RAO J 1992 RNEA TECHN B SER LAN" label="RAO J 1992 RNEA TECHN B SER LAN">
+        <attvalues>
+          <attvalue for="0" value="2" />
+        </attvalues>
+      </node>
+      <node id="ANGIULLI F 2005 IEEE T KNOWL DATA EN" label="ANGIULLI F 2005 IEEE T KNOWL DATA EN">
+        <attvalues>
+          <attvalue for="0" value="1" />
+        </attvalues>
+      </node>
+      <node id="CHAKRABORTI S 2001 J QUAL TECHNOL" label="CHAKRABORTI S 2001 J QUAL TECHNOL">
+        <attvalues>
+          <attvalue for="0" value="1" />
+        </attvalues>
+      </node>
     </nodes>
     <edges>
-      <edge id="0" source="ZOU CK 2011 TECHNOMETRICS" target="LANG CL 2012 NAV RES LOG" />
-      <edge id="1" source="ZOU CK 2011 TECHNOMETRICS" target="RAO J 1992 RNEA TECHN B SER LAN" />
-      <edge id="2" source="ZOU CK 2011 TECHNOMETRICS" target="FILIPPIDIS A 1992 FUEL" />
-      <edge id="3" source="FILIPPIDIS A 1992 FUEL" target="RAO J 1992 RNEA TECHN B SER LAN" />
-      <edge id="4" source="FILIPPIDIS A 1992 FUEL" target="LANG CL 2012 NAV RES LOG" />
-      <edge id="5" source="LANG CL 2012 NAV RES LOG" target="RAO J 1992 RNEA TECHN B SER LAN" />
+      <edge id="0" source="XIAO HY 2011 SOIL SEDIMENT CONTAM" target="ADRIANO D. 2001 TRACE ELEMENTS TERRE" weight="1" />
+      <edge id="1" source="XIAO HY 2011 SOIL SEDIMENT CONTAM" target="YU HL 2007 STOCH ENV RES RISK A" weight="1" />
+      <edge id="2" source="XIAO HY 2011 SOIL SEDIMENT CONTAM" target="ZOU CK 2011 TECHNOMETRICS" weight="1" />
+      <edge id="3" source="XIAO HY 2011 SOIL SEDIMENT CONTAM" target="FILIPPIDIS A 1992 FUEL" weight="1" />
+      <edge id="4" source="XIAO HY 2011 SOIL SEDIMENT CONTAM" target="VATALIS K. 2006 ENVIRON MANAGE" weight="1" />
+      <edge id="5" source="XIAO HY 2011 SOIL SEDIMENT CONTAM" target="LANG CL 2012 NAV RES LOG" weight="1" />
+      <edge id="6" source="XIAO HY 2011 SOIL SEDIMENT CONTAM" target="RAO J 1992 RNEA TECHN B SER LAN" weight="1" />
+      <edge id="7" source="YU HL 2007 STOCH ENV RES RISK A" target="ZOU CK 2011 TECHNOMETRICS" weight="1" />
+      <edge id="8" source="YU HL 2007 STOCH ENV RES RISK A" target="FILIPPIDIS A 1992 FUEL" weight="1" />
+      <edge id="9" source="YU HL 2007 STOCH ENV RES RISK A" target="VATALIS K. 2006 ENVIRON MANAGE" weight="1" />
+      <edge id="10" source="YU HL 2007 STOCH ENV RES RISK A" target="ADRIANO D. 2001 TRACE ELEMENTS TERRE" weight="1" />
+      <edge id="11" source="YU HL 2007 STOCH ENV RES RISK A" target="LANG CL 2012 NAV RES LOG" weight="1" />
+      <edge id="12" source="YU HL 2007 STOCH ENV RES RISK A" target="RAO J 1992 RNEA TECHN B SER LAN" weight="1" />
+      <edge id="13" source="ZOU CK 2011 TECHNOMETRICS" target="VATALIS K. 2006 ENVIRON MANAGE" weight="1" />
+      <edge id="14" source="ZOU CK 2011 TECHNOMETRICS" target="CHAKRABORTI S 2001 J QUAL TECHNOL" weight="1" />
+      <edge id="15" source="ZOU CK 2011 TECHNOMETRICS" target="FILIPPIDIS A 1992 FUEL" weight="2" />
+      <edge id="16" source="ZOU CK 2011 TECHNOMETRICS" target="ADRIANO D. 2001 TRACE ELEMENTS TERRE" weight="1" />
+      <edge id="17" source="ZOU CK 2011 TECHNOMETRICS" target="EFRON B. 1993 INTRO BOOTSTRAP" weight="1" />
+      <edge id="18" source="ZOU CK 2011 TECHNOMETRICS" target="ANGIULLI F 2005 IEEE T KNOWL DATA EN" weight="1" />
+      <edge id="19" source="ZOU CK 2011 TECHNOMETRICS" target="LANG CL 2012 NAV RES LOG" weight="2" />
+      <edge id="20" source="ZOU CK 2011 TECHNOMETRICS" target="FRANK A. 2010 UCI MACHINE LEARNING" weight="1" />
+      <edge id="21" source="ZOU CK 2011 TECHNOMETRICS" target="RAO J 1992 RNEA TECHN B SER LAN" weight="2" />
+      <edge id="22" source="ZOU CK 2011 TECHNOMETRICS" target="DAS N 2009 QUAL TECHNOL QUANT M" weight="1" />
+      <edge id="23" source="FILIPPIDIS A 1992 FUEL" target="VATALIS K. 2006 ENVIRON MANAGE" weight="1" />
+      <edge id="24" source="FILIPPIDIS A 1992 FUEL" target="RAO J 1992 RNEA TECHN B SER LAN" weight="2" />
+      <edge id="25" source="FILIPPIDIS A 1992 FUEL" target="ADRIANO D. 2001 TRACE ELEMENTS TERRE" weight="1" />
+      <edge id="26" source="FILIPPIDIS A 1992 FUEL" target="EFRON B. 1993 INTRO BOOTSTRAP" weight="1" />
+      <edge id="27" source="FILIPPIDIS A 1992 FUEL" target="ANGIULLI F 2005 IEEE T KNOWL DATA EN" weight="1" />
+      <edge id="28" source="FILIPPIDIS A 1992 FUEL" target="LANG CL 2012 NAV RES LOG" weight="2" />
+      <edge id="29" source="FILIPPIDIS A 1992 FUEL" target="FRANK A. 2010 UCI MACHINE LEARNING" weight="1" />
+      <edge id="30" source="FILIPPIDIS A 1992 FUEL" target="DAS N 2009 QUAL TECHNOL QUANT M" weight="1" />
+      <edge id="31" source="FILIPPIDIS A 1992 FUEL" target="CHAKRABORTI S 2001 J QUAL TECHNOL" weight="1" />
+      <edge id="32" source="VATALIS K. 2006 ENVIRON MANAGE" target="RAO J 1992 RNEA TECHN B SER LAN" weight="1" />
+      <edge id="33" source="VATALIS K. 2006 ENVIRON MANAGE" target="ADRIANO D. 2001 TRACE ELEMENTS TERRE" weight="1" />
+      <edge id="34" source="VATALIS K. 2006 ENVIRON MANAGE" target="LANG CL 2012 NAV RES LOG" weight="1" />
+      <edge id="35" source="EFRON B. 1993 INTRO BOOTSTRAP" target="CHAKRABORTI S 2001 J QUAL TECHNOL" weight="1" />
+      <edge id="36" source="EFRON B. 1993 INTRO BOOTSTRAP" target="DAS N 2009 QUAL TECHNOL QUANT M" weight="1" />
+      <edge id="37" source="EFRON B. 1993 INTRO BOOTSTRAP" target="LANG CL 2012 NAV RES LOG" weight="1" />
+      <edge id="38" source="EFRON B. 1993 INTRO BOOTSTRAP" target="FRANK A. 2010 UCI MACHINE LEARNING" weight="1" />
+      <edge id="39" source="EFRON B. 1993 INTRO BOOTSTRAP" target="RAO J 1992 RNEA TECHN B SER LAN" weight="1" />
+      <edge id="40" source="EFRON B. 1993 INTRO BOOTSTRAP" target="ANGIULLI F 2005 IEEE T KNOWL DATA EN" weight="1" />
+      <edge id="41" source="ADRIANO D. 2001 TRACE ELEMENTS TERRE" target="LANG CL 2012 NAV RES LOG" weight="1" />
+      <edge id="42" source="ADRIANO D. 2001 TRACE ELEMENTS TERRE" target="RAO J 1992 RNEA TECHN B SER LAN" weight="1" />
+      <edge id="43" source="DAS N 2009 QUAL TECHNOL QUANT M" target="CHAKRABORTI S 2001 J QUAL TECHNOL" weight="1" />
+      <edge id="44" source="DAS N 2009 QUAL TECHNOL QUANT M" target="LANG CL 2012 NAV RES LOG" weight="1" />
+      <edge id="45" source="DAS N 2009 QUAL TECHNOL QUANT M" target="FRANK A. 2010 UCI MACHINE LEARNING" weight="1" />
+      <edge id="46" source="DAS N 2009 QUAL TECHNOL QUANT M" target="RAO J 1992 RNEA TECHN B SER LAN" weight="1" />
+      <edge id="47" source="DAS N 2009 QUAL TECHNOL QUANT M" target="ANGIULLI F 2005 IEEE T KNOWL DATA EN" weight="1" />
+      <edge id="48" source="LANG CL 2012 NAV RES LOG" target="RAO J 1992 RNEA TECHN B SER LAN" weight="2" />
+      <edge id="49" source="LANG CL 2012 NAV RES LOG" target="FRANK A. 2010 UCI MACHINE LEARNING" weight="1" />
+      <edge id="50" source="LANG CL 2012 NAV RES LOG" target="ANGIULLI F 2005 IEEE T KNOWL DATA EN" weight="1" />
+      <edge id="51" source="LANG CL 2012 NAV RES LOG" target="CHAKRABORTI S 2001 J QUAL TECHNOL" weight="1" />
+      <edge id="52" source="FRANK A. 2010 UCI MACHINE LEARNING" target="CHAKRABORTI S 2001 J QUAL TECHNOL" weight="1" />
+      <edge id="53" source="FRANK A. 2010 UCI MACHINE LEARNING" target="ANGIULLI F 2005 IEEE T KNOWL DATA EN" weight="1" />
+      <edge id="54" source="FRANK A. 2010 UCI MACHINE LEARNING" target="RAO J 1992 RNEA TECHN B SER LAN" weight="1" />
+      <edge id="55" source="RAO J 1992 RNEA TECHN B SER LAN" target="CHAKRABORTI S 2001 J QUAL TECHNOL" weight="1" />
+      <edge id="56" source="RAO J 1992 RNEA TECHN B SER LAN" target="ANGIULLI F 2005 IEEE T KNOWL DATA EN" weight="1" />
+      <edge id="57" source="ANGIULLI F 2005 IEEE T KNOWL DATA EN" target="CHAKRABORTI S 2001 J QUAL TECHNOL" weight="1" />
     </edges>
   </graph>
 </gexf>
