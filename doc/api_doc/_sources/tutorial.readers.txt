@@ -1,5 +1,5 @@
-tethne.readers: Parsing Bibliographic Data
-==========================================
+Parsing Bibliographic Data
+==========================
 
 Web of Science
 --------------
