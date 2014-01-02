@@ -9,6 +9,14 @@ writers Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`collection` Module
+------------------------
+
+.. automodule:: tethne.writers.collection
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`graph` Module
 -------------------
 

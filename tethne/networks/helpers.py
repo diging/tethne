@@ -6,20 +6,20 @@ def simplify_multigraph(multigraph, time=False):
     """
     Simplifies a graph by condensing multiple edges between the same node pair
     into a single edge, with a weight attribute equal to the number of edges.
-    
+
     Parameters
     ----------
     graph : networkx.MultiGraph
         E.g. a coauthorship graph.
     time : bool
-        If True, will generate 'start' and 'end' attributes for each edge, 
+        If True, will generate 'start' and 'end' attributes for each edge,
         corresponding to the earliest and latest 'date' values for that edge.
-    
+
     Returns
     -------
     graph : networkx.Graph
         A NetworkX :class:`.graph` .
-    
+
     """
 
     graph = nx.Graph()
