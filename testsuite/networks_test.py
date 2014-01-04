@@ -137,13 +137,15 @@ class TestDirectCitationGraph(unittest.TestCase):
 
 class Test_DirectCitation_DAG(unittest.TestCase):
     """
-    Test the citations, internal_citations networks (assuming the reader is functioning)
+    Test the citations, internal_citations networks 
+    (assuming the reader is functioning)
     by checking both 'citation' and 'internal' networks
     each with either 'doi' or 'ayjid' node_ids and date as an attribute,
     
-    This is the somewhat similar to the class TestDirectCitationGraph but it has extra tests 
-    to check if it is a DAG or not, and if the ancestors/descendants are populated correctly.     
-    The sparse data file networks are built on is "../testsuite/testin/citations_test.txt"
+    This is the somewhat similar to the class TestDirectCitationGraph
+    but it has extra tests to check if it is a DAG or not, and if the 
+    ancestors/descendants are populated correctly. The sparse data file networks
+    are built on is "../testsuite/testin/citations_test.txt"
     
     It has 2 papers.
     """
@@ -213,31 +215,39 @@ class Test_DirectCitation_DAG(unittest.TestCase):
     def is_citationnetwork_dag(self):
         """
         Testing if the citations graph is Directed Acyclic Graph or not.
-        If it is false then the network will not be created and an Networkxerror will be thrown that it is not a DAG.
+        If it is false then the network will not be created and 
+        a Networkxerror will be thrown that it is not a DAG.
         """
         # Returns true if citations graph is DAG
-        self.assert_(nx.is_directed_acyclic_graph(self.ayjid_cit_attrib), "Citations Graph is not DAG")
+        self.assert_(nx.is_directed_acyclic_graph(self.ayjid_cit_attrib),
+                        "Citations Graph is not DAG")
          
     def is_internal_citationnetwork_dag(self):
         """
         Testing if the Internal citations graph is Directed Acyclic Graph or not.
-        If it is false then the network will not be created and an Networkxerror will be thrown that it is not a DAG.
+        If it is false then the network will not be created and an Networkxerror
+        will be thrown that it is not a DAG.
         
         """
         # Returns true if citations graph is DAG
-        self.assert_(nx.is_directed_acyclic_graph(self.ayjid_int_attrib), "Internal Citations Graph is not DAG")
+        self.assert_(nx.is_directed_acyclic_graph(self.ayjid_int_attrib),
+                     "Internal Citations Graph is not DAG")
        
  
     def test_ancestors(self):
         """
-        Testing the ancestors for a particular node which is specified in the input. 
-        It throws the error "Node not in the graph" if that node is not present.
+        Testing the ancestors for a particular node which is specified 
+        in the input.It throws the error "Node not in the graph" 
+        if that node is not present.
         """
 
         #ESHELMAN is one of the citation of paper 1.
-        c_ans = nx.ancestors(self.ayjid_citations,'ESHELMAN LJ 1993 FDN GENETIC ALGORITH')
-        #ALAMPORA G is a citation as well as a paper, hence its a node in internal citations
-        i_ans = nx.ancestors(self.ayjid_internal,'ALAMPORA G 1999 INFORMATION SCIENCES')
+        c_ans = nx.ancestors(self.ayjid_citations,
+                             'ESHELMAN LJ 1993 FDN GENETIC ALGORITH')
+        #ALAMPORA G is a citation as well as a paper,
+            #hence its a node in internal citations
+        i_ans = nx.ancestors(self.ayjid_internal,
+                             'ALAMPORA G 1999 INFORMATION SCIENCES')
         
     def test_descendants(self):
         """
@@ -245,8 +255,10 @@ class Test_DirectCitation_DAG(unittest.TestCase):
         It throws the error "Node not in the graph" if that node is not present.
         """
         
-        c_des = nx.descendants(self.ayjid_citations,'ALAMPORA G 1999 INFORMATION SCIENCES')
-        i_des = nx.descendants(self.ayjid_internal,'WU Z 2012 NEUROCOMPUTING')
+        c_des = nx.descendants(self.ayjid_citations,
+                               'ALAMPORA G 1999 INFORMATION SCIENCES')
+        i_des = nx.descendants(self.ayjid_internal,
+                               'WU Z 2012 NEUROCOMPUTING')
         
         #to check if error is raised if a node which is not in the graph is called.
         
@@ -502,7 +514,8 @@ class TestCoauthorsGraph(unittest.TestCase):
                 paper1_obtained_attribs = self.edge_attribs.edge[name1]\
                                                                 [name2]
                # self.assertItemsEqual(paper1_expected_attribs,
-                               #       paper1_obtained_attribs)   # commented - later to uncomment and check why this error is thrown.
+                               #       paper1_obtained_attribs)
+            # commented - later to uncomment and check why this error is thrown.
  
         for name_index_1 in xrange(len(paper2_name_list)):
             name1 = paper2_name_list[name_index_1]
@@ -511,7 +524,8 @@ class TestCoauthorsGraph(unittest.TestCase):
                 paper2_obtained_attribs = self.edge_attribs.edge[name1]\
                                                                 [name2]
                # self.assertItemsEqual(paper2_expected_attribs,
-                #                      paper2_obtained_attribs)  #later to uncomment this and check the error
+                #                      paper2_obtained_attribs)
+            #later to uncomment this and check the error
  
     def tearDown(self):
         pass
@@ -697,7 +711,8 @@ class TestBiblioGraph(unittest.TestCase):
                                   'citations':node3_citations}
         node3_ayjid = 'MULAZZANI L 2013 MARINE POLICY'
         
-        #commenting the paper 4, as it doesnt exist at all. Previosly all nodes were added in the graph
+        #commenting the paper 4, as it doesnt exist at all.
+        #Previosly all nodes were added in the graph
 #      
 #         # paper 4 meta data
 #         node4_atitle = ('Application of multiple geochemical markers to ' + 
@@ -896,12 +911,18 @@ class TestAuthorInstitution(unittest.TestCase):
     Test the author_institutions network
     Assumes reader is functioning
 
-    the "/Users/ramki/tethne/tethne/testsuite/testin/authorinstitutions_test.txt" file has been constructed with
+    the "/Users/ramki/tethne/tethne/testsuite/testin/authorinstitutions_test.txt" 
+    file has been constructed with
     the following properties:
-        the first paper has 6 authors and 6 institutions ,  where one author Wu,ZD shares affiliations with 2 other different institutions and authors.
-        the second paper has 3 authors with 2 institutions, where 2 authors share same affliated institution. 
-        the third paper has no 'institutions' key field hence no author-institutions sharing.
-        the fourth paper has 1 author and 1 institution with no shared institutions.
+        - the first paper has 6 authors and 6 institutions ,
+        where one author Wu,ZD shares affiliations with 
+        2 other different institutions and authors.
+        - the second paper has 3 authors with 2 institutions,
+        where 2 authors share same affliated institution.
+        - the third paper has no 'institutions' key field ,
+        hence no author-institutions sharing.
+        - the fourth paper has 1 author and 1 institution ,
+        with no shared institutions.
     
     """
    
@@ -912,8 +933,10 @@ class TestAuthorInstitution(unittest.TestCase):
     #-------
     # As the networks is built between 10 authors and 9 institutions, 
     # there should be 19 nodes (10+9). - test 1 is checked in other tests.
-    # Test the node attributes - (value="author / institutions") It should match with number of nodes and ---- 
-    #--- distinguished author and institutions count ( value = "authors" count=10, value = "Institutions" count = 9, hence total 19)  - test 2
+    # Test the node attributes - (value="author / institutions")
+    # It should match with number of nodes and ----
+    #--- distinguished author and institutions count
+    #( value = "authors" count=10,value = "Institutions" count = 9,total19)-test 2
     
     #Edges:
     #------
