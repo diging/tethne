@@ -94,49 +94,71 @@ def coauthors(papers, *edge_attribs):
     an exception if not.
     
     """
-
+  
     coauthors = nx.Graph(type='coauthors')
-    edge_attrib_dict=[]
-    edge_att=[]
+
     for entry in papers:
         if entry['aulast'] is not None:
             # edge_attrib_dict for any edges that get added
             edge_attrib_dict = util.subdict(entry, edge_attribs)
-            #print 'edge att', edge_att,type(edge_att)
-            n = len(papers)
-            #print "n", n
-#                
-#            for key,val in edge_att.iteritems():
-#                try:
-#                    edge_attrib_dict[key].append(val)
-#                        
-#                except KeyError:
-#                    print'comes in except'
-#                    edge_attrib_dict[key]=val
-#                        
-#                        
-                
             # make a new list of aulast, auinit names
             full_names = util.concat_list(entry['aulast'], 
                                           entry['auinit'], 
                                           ' ')
 
-#            print 'full_names', full_names, type(full_names)
-#            print 'edge att', edge_att,type(edge_att)
-#            
             for a in xrange(len(full_names)):
                 #commented add_nodes as they will be added in add_edge
                 #coauthors.add_node(full_names[a]) # create node for author a
                 for b in xrange(a+1, len(entry['aulast'])):
                     #coauthors.add_node(full_names[b]) #create node for author b
-
-                    if a==b:
-                        print 'they are equal', a,b
-                    
-                        #add edges with specified edge attributes
-                        coauthors.add_edge(full_names[a],
+                        coauthors.add_edge(full_names[a], 
                                        full_names[b],
                                        attr_dict=edge_attrib_dict)
+
+#commenting my changes because it is hindering #63112276
+
+#    coauthors = nx.Graph(type='coauthors')
+#    edge_attrib_dict=[]
+#    edge_att=[]
+#    for entry in papers:
+#        if entry['aulast'] is not None:
+#            # edge_attrib_dict for any edges that get added
+#            edge_attrib_dict = util.subdict(entry, edge_attribs)
+#            #print 'edge att', edge_att,type(edge_att)
+#            n = len(papers)
+#            #print "n", n
+##                
+##            for key,val in edge_att.iteritems():
+##                try:
+##                    edge_attrib_dict[key].append(val)
+##                        
+##                except KeyError:
+##                    print'comes in except'
+##                    edge_attrib_dict[key]=val
+##                        
+##                        
+#                
+#            # make a new list of aulast, auinit names
+#            full_names = util.concat_list(entry['aulast'], 
+#                                          entry['auinit'], 
+#                                          ' ')
+#
+##            print 'full_names', full_names, type(full_names)
+##            print 'edge att', edge_att,type(edge_att)
+##            
+#            for a in xrange(len(full_names)):
+#                #commented add_nodes as they will be added in add_edge
+#                #coauthors.add_node(full_names[a]) # create node for author a
+#                for b in xrange(a+1, len(entry['aulast'])):
+#                    #coauthors.add_node(full_names[b]) #create node for author b
+#
+#                    if a==b:
+#                        print 'they are equal', a,b
+#                    
+#                        #add edges with specified edge attributes
+#                        coauthors.add_edge(full_names[a],
+#                                       full_names[b],
+#                                       attr_dict=edge_attrib_dict)
 
     return coauthors
 
