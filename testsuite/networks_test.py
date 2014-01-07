@@ -894,16 +894,56 @@ class TestAuthorCocitation(unittest.TestCase):
     Assumes reader is functioning
 
     the "/Users/ramki/tethne/tethne/testsuite/testin/cocitations_test_2recs.txt" 
-	file has been constructed with the following properties:
+
       
      """
-	# def setUp(self):
-	#     wos_data = rd.wos.parse_wos("./testin/authorinstitutions_test.txt")
- #        meta_list = rd.wos.wos2meta(wos_data)
-        		
+    def setUp(self):
 
+        wos_data =rd.wos.parse_wos("../testsuite/testin/cocitations_test_full.txt")
+        meta_list = rd.wos.wos2meta(wos_data)
+            
+        #No need to check edge / node attribs as there are none. 
+        
+        self.cocitations_zero  = nt.authors.author_cocitation(meta_list,0)
+        
+        self.cocitations_one  = nt.authors.author_cocitation(meta_list,1)
+            
+        self.cocitations_two  = nt.authors.author_cocitation(meta_list,2)
+        
+        self.cocitations_three = nt.authors.author_cocitation(meta_list,3)
+
+    
+    #When the Input threshold is
+    def test_cocitations_zero(self):
+        # 249 nodes: one for each author and his co-author
+        self.assertEqual(nx.number_of_nodes(self.cocitations_zero),249)
+        # as noted in doc string, 12 edges between them
+        self.assertEqual  (nx.number_of_edges(self.cocitations_zero),4970)
+    pass
+    
+    
+    def test_cocitations_one(self):
+        # 249 nodes: one for each author and his co-author
+        self.assertEqual  (nx.number_of_nodes(self.cocitations_one),249)
+        # as noted in doc string, 12 edges between them
+        self.assertEqual  (nx.number_of_edges(self.cocitations_one),4970)
     pass
 
+    
+    def test_cocitations_two(self):
+        # 19 nodes: one for each author, one for each institution
+        self.assertEqual  (nx.number_of_nodes(self.cocitations_two),13)
+        # as noted in doc string, 12 edges between them
+        self.assertEqual  (nx.number_of_edges(self.cocitations_two),41)
+    pass
+
+    
+    def test_cocitations_three(self):
+        # 19 nodes: one for each author, one for each institution
+        self.assertEqual (nx.number_of_nodes(self.cocitations_three),2)
+        # as noted in doc string, 12 edges between them
+        self.assertEqual (nx.number_of_edges(self.cocitations_three),1)
+    pass
 
 
 class TestAuthorInstitution(unittest.TestCase):
@@ -936,29 +976,31 @@ class TestAuthorInstitution(unittest.TestCase):
     # Test the node attributes - (value="author / institutions")
     # It should match with number of nodes and ----
     #--- distinguished author and institutions count
-    #( value = "authors" count=10,value = "Institutions" count = 9,total19)-test 2
+    #(value = "authors" count=10,value = "Institutions" count = 9,total19)-test 2
     
     #Edges:
     #------
-    # To test the edges, there is no concept of providing input 'threshold' from the user.
-    # 12 edges ( 10 + 2 ) between the 10 authors and 9 institutions where 2 authors are affliated to 2 different institutions   - test 3
-    # check the edge attributes - 'Date' is an edge attribute which is can be used - test 4
-    # check the edge attributes - no edge attributes are provided by user - test 5
+    # To test the edges, there is no concept of providing input 'threshold'
+    # from the user.
+    # 12 edges ( 10 + 2 ) between the 10 authors and 9 institutions
+    # where 2 authors are affliated to 2 different institutions   - test 3
+    # check the edge attributes - 'Date' is an edge attribute  - test 4
+    # check the edge attributes - no edge attributes are provided - test 5
     
     
     def setUp(self):
         wos_data = rd.wos.parse_wos("./testin/authorinstitutions_test.txt")
         meta_list = rd.wos.wos2meta(wos_data)
         
+        self.node_attribs_check = nt.authors.author_institution(meta_list) 
         
-        self.node_attribs_check = nt.authors.author_institution(meta_list) # test 2
+        self.shared_institutions= nt.authors.author_institution(meta_list)
         
-        self.shared_institutions= nt.authors.author_institution(meta_list) #test 3
+        self.edge_attribs_zero = nt.authors.author_institution(meta_list)  
         
-        self.edge_attribs_zero = nt.authors.author_institution(meta_list)  # test 4
-        
-        self.edge_attribs_one = nt.authors.author_institution(meta_list,'date')  # test 5
-        
+        self.edge_attribs_one = nt.authors.author_institution(meta_list,'date') 
+       
+    
         
 
     def test_shared_institutions(self):
