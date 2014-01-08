@@ -13,7 +13,7 @@ def author_papers(doc_list, paper_id, *paper_attribs):
         * type = person   - a person in doc_list
 
     Papers also have node attributes defined by paper_attribs.
-    
+
     **Edges** -- Directed, Author -> his/her Paper 
     
     Parameters
@@ -45,12 +45,10 @@ def author_papers(doc_list, paper_id, *paper_attribs):
     if paper_id not in meta_keys:
         raise KeyError('paper_id' + paper_id + ' cannot be used to identify' +
                        ' papers.')
-
     for entry in doc_list:
         # Define paper_attribute dictionary.
         paper_attrib_dict = util.subdict(entry, paper_attribs)
         paper_attrib_dict['type'] = 'paper'
-
         # Add paper node with attributes.
         author_papers.add_node(entry[paper_id], paper_attrib_dict)
                                
@@ -58,7 +56,6 @@ def author_papers(doc_list, paper_id, *paper_attribs):
         for i in xrange(len(authors)):
             # Add person node.
             author_papers.add_node(authors[i], type="person")
-
             # Draw edges.
             author_papers.add_edge(authors[i], entry[paper_id],
                                    date=entry['date'])
@@ -95,71 +92,87 @@ def coauthors(papers, *edge_attribs):
     
     """
   
-    coauthors = nx.Graph(type='coauthors')
+#     coauthors = nx.Graph(type='coauthors')
+# 
+#     for entry in papers:
+#         if entry['aulast'] is not None:
+#             # edge_attrib_dict for any edges that get added
+#             edge_attrib_dict = util.subdict(entry, edge_attribs)
+#             # make a new list of aulast, auinit names
+#             full_names = util.concat_list(entry['aulast'], 
+#                                           entry['auinit'], 
+#                                           ' ')
+# 
+#             for a in xrange(len(full_names)):
+#                 #commented add_nodes as they will be added in add_edge
+#                 #coauthors.add_node(full_names[a]) # create node for author a
+#                 for b in xrange(a+1, len(entry['aulast'])):
+#                     #coauthors.add_node(full_names[b]) #create node for author b
+#                         coauthors.add_edge(full_names[a], 
+#                                        full_names[b],
+#                                        attr_dict=edge_attrib_dict)
 
+    #commenting my changes because it is hindering #63112276
+
+    coauthors = nx.Graph(type='coauthors')
+    edge_attrib_dict=[]
+    edge_att=[]
+    edge_listdict={}
+    coauthor_dict={}
     for entry in papers:
+        print "#### Paper######"
         if entry['aulast'] is not None:
             # edge_attrib_dict for any edges that get added
-            edge_attrib_dict = util.subdict(entry, edge_attribs)
+            edge_att= util.subdict(entry, edge_attribs)
+            print 'edge att:', edge_att
             # make a new list of aulast, auinit names
-            full_names = util.concat_list(entry['aulast'], 
-                                          entry['auinit'], 
+            full_names = util.concat_list(entry['aulast'],
+                                          entry['auinit'],
                                           ' ')
-
+            print 'full_names', full_names, type(full_names)
+            
+            
             for a in xrange(len(full_names)):
                 #commented add_nodes as they will be added in add_edge
                 #coauthors.add_node(full_names[a]) # create node for author a
                 for b in xrange(a+1, len(entry['aulast'])):
                     #coauthors.add_node(full_names[b]) #create node for author b
-                        coauthors.add_edge(full_names[a], 
-                                       full_names[b],
-                                       attr_dict=edge_attrib_dict)
+                    authors=full_names[a],full_names[b]
+                    authors_inv=full_names[b],full_names[a]
+                    if(authors in coauthor_dict.keys()):
+                        print "coauthor_dict.val()", coauthor_dict.values() \
+                                 ,"coauthor_dict.keys()", coauthor_dict.keys()
+                        print "comes in if"
+                            
+                        try:
+                            for key,val in edge_att.iteritems():
+                                print "key:", key,"val:",val
+                                edge_listdict[key].append(val)
+                                coauthor_dict[authors]=(edge_listdict)
+                        except KeyError:
+                            try:
+                                coauthor_dict[authors_inv]=(edge_listdict)
+                            except:
+                                coauthor_dict[authors]=edge_att
+                    else:
+                        print "comes in else"
+                        try:
+                            coauthor_dict[authors]=(edge_att)
+                        except KeyError:
+                            try:
+                                coauthor_dict[authors_inv]=(edge_att)
+                            except:
+                                coauthor_dict[authors]=edge_att
+                                    
 
-#commenting my changes because it is hindering #63112276
-
-#    coauthors = nx.Graph(type='coauthors')
-#    edge_attrib_dict=[]
-#    edge_att=[]
-#    for entry in papers:
-#        if entry['aulast'] is not None:
-#            # edge_attrib_dict for any edges that get added
-#            edge_attrib_dict = util.subdict(entry, edge_attribs)
-#            #print 'edge att', edge_att,type(edge_att)
-#            n = len(papers)
-#            #print "n", n
-##                
-##            for key,val in edge_att.iteritems():
-##                try:
-##                    edge_attrib_dict[key].append(val)
-##                        
-##                except KeyError:
-##                    print'comes in except'
-##                    edge_attrib_dict[key]=val
-##                        
-##                        
-#                
-#            # make a new list of aulast, auinit names
-#            full_names = util.concat_list(entry['aulast'], 
-#                                          entry['auinit'], 
-#                                          ' ')
-#
-##            print 'full_names', full_names, type(full_names)
-##            print 'edge att', edge_att,type(edge_att)
-##            
-#            for a in xrange(len(full_names)):
-#                #commented add_nodes as they will be added in add_edge
-#                #coauthors.add_node(full_names[a]) # create node for author a
-#                for b in xrange(a+1, len(entry['aulast'])):
-#                    #coauthors.add_node(full_names[b]) #create node for author b
-#
-#                    if a==b:
-#                        print 'they are equal', a,b
-#                    
-#                        #add edges with specified edge attributes
-#                        coauthors.add_edge(full_names[a],
-#                                       full_names[b],
-#                                       attr_dict=edge_attrib_dict)
-
+    #add edges with specified edge attributes
+    for key,val in coauthor_dict.iteritems():
+         print key , "---- >" , val
+         print "split keys:",key[0],key[1]
+         coauthors.add_edge(key[0],
+                  key[1],
+                   attr_dict=val)
+    
     return coauthors
 
 def author_institution(Papers, *edge_attribs):
@@ -202,11 +215,11 @@ def author_institution(Papers, *edge_attribs):
             authors = auth_inst.keys()
             for au in authors:
                 #add node of type 'author'
-                author_institution.add_node(au,type='author')
+                author_institution.add_node(au, type='author')
                 ins_list = auth_inst[au]
                 for ins_str in ins_list:
                   #add node of type 'institutions'   
-                  author_institution.add_node(ins_str,type='institution')   
+                  author_institution.add_node(ins_str, type='institution')
                   #print au ,'---->' , ins_str     
                   author_institution.add_edge(au,ins_str, attr_dict=edge_attrib_dict)
                          
@@ -266,13 +279,13 @@ def author_coinstitution(Papers, threshold):
                                 &
                                 set(author_institutions[authors[j]]))
                     if len(overlap) >= threshold:
-                            #commented these because 'add_edge' adds nodes aswell.
-                            #coinstitution.add_node(authors[i],type ='author')
-                            #coinstitution.add_node(authors[j],type ='author')   
-                            #print authors[i] + "->" + authors[j]
-                            coinstitution.add_edge(authors[i], authors[j], overlap=len(overlap))
+                        #commented these because 'add_edge' adds nodes aswell.
+                        #coinstitution.add_node(authors[i],type ='author')
+                        #coinstitution.add_node(authors[j],type ='author')
+                        #print authors[i] + "->" + authors[j]
+                        coinstitution.add_edge(authors[i], authors[j], overlap=len(overlap))
                     else :
-                            pass
+                        pass
         #62809656                
         attribs_dict={}                
         for node in coinstitution.nodes():                
@@ -334,9 +347,7 @@ def author_cocitation(meta_list, threshold):
         if paper['citations'] is not None:
             # n is the number of papers in the provided list of Papers.
             n = len(paper['citations'])
-
             found_authors = []  # To avoid extra incrementation of author pairs.
-            
             if n > 1:     # No point in proceeding if there is only one citation.
                 for i in xrange(0, n):
                     
@@ -345,21 +356,19 @@ def author_cocitation(meta_list, threshold):
                     #print "author name --- i:", paper['citations'][i]['aulast']
                     
                     # ai_i_str is the author i's first name
-                    #converting list to str
-                    #commented the following line because of some issues in MAP.
-                    #ai_i_str=''.join(map(str,(paper['citations'][i]['auinit'])))
-                    
-                    
-                    last_name_list=paper['citations'][i]['auinit']
+                    # converting list to str
+                    # commented the following line because of some issues in MAP.
+                    # ai_i_str=''.join(map(str,(paper['citations'][i]['auinit'])))
+                    last_name_list = paper['citations'][i]['auinit']
                     # last name of author i, converted to str.
-                    ai_i_str=str(last_name_list).strip('[]')
-                    #making it a tuple,that it becomes key for cocitations dict
-                    author_i_str=al_i_str+delim+ai_i_str
+                    ai_i_str = str(last_name_list).strip('[]')
+                    # making it a tuple,that it becomes key for cocitations dict
+                    author_i_str = al_i_str+delim+ai_i_str
                     # Start inner loop at i+1, to avoid redundancy and self-loops.
                     
                     for j in xrange(i+1, n):
                         # al_j_str is the last name of author j
-                        al_j_str=''.join(map(str,(paper['citations'][j]['aulast'])))
+                        al_j_str =''.join(map(str,(paper['citations'][j]['aulast'])))
                         #print "author name ----j:", paper['citations'][j]['aulast']
                         
                         #ai_j_str is the author j's first name
@@ -367,16 +376,16 @@ def author_cocitation(meta_list, threshold):
                         #commented the following line because of some issues in MAP.
                         #ai_j_str=''.join(map(str,(paper['citations'][j]['auinit'])))
 
-                        last_name_list=paper['citations'][j]['auinit']
+                        last_name_list = paper['citations'][j]['auinit']
                         # last name of author i, converted to str.
-                        ai_j_str=str(last_name_list).strip('[]')
+                        ai_j_str = str(last_name_list).strip('[]')
                         # making it a tuple so that it becomes the key for
                         #cocitations dict
-                        author_j_str=al_j_str+delim+ai_j_str
+                        author_j_str = al_j_str+delim+ai_j_str
                        
                         # 2 tuples which are going to be the keys of the dict.                         
-                        authors_pair =(author_i_str.upper(),author_j_str.upper()) 
-                        authors_pair_inv=(author_j_str.upper(),author_i_str.upper())
+                        authors_pair = (author_i_str.upper(),author_j_str.upper())
+                        authors_pair_inv = (author_j_str.upper(),author_i_str.upper())
                         
                         # Have these authors been co-cited before?
                         # try blocks are much more efficient than checking
