@@ -3,6 +3,7 @@
 import networkx as nx
 import tethne.utilities as util
 import tethne.data as ds
+from collections import defaultdict
 
 def author_papers(doc_list, paper_id, *paper_attribs):
     """
@@ -115,63 +116,73 @@ def coauthors(papers, *edge_attribs):
     #commenting my changes because it is hindering #63112276
 
     coauthors = nx.Graph(type='coauthors')
-    edge_attrib_dict=[]
-    edge_att=[]
-    edge_listdict={}
+    edge_attrib_dict={}
+    edge_att={}
+    #edge_listdict={}
     coauthor_dict={}
     for entry in papers:
-        print "#### Paper######"
         if entry['aulast'] is not None:
-            # edge_attrib_dict for any edges that get added
+            # edge_att dictionary has the atributes given by user input \
+            # for any edges that get added
             edge_att= util.subdict(entry, edge_attribs)
-            print 'edge att:', edge_att
             # make a new list of aulast, auinit names
             full_names = util.concat_list(entry['aulast'],
                                           entry['auinit'],
                                           ' ')
-            print 'full_names', full_names, type(full_names)
-            
-            
             for a in xrange(len(full_names)):
-                #commented add_nodes as they will be added in add_edge
-                #coauthors.add_node(full_names[a]) # create node for author a
                 for b in xrange(a+1, len(entry['aulast'])):
-                    #coauthors.add_node(full_names[b]) #create node for author b
+                    #Create tuples of authors names and authors names inverse \
+                    #They will be the keys of coauthor_dict.
                     authors=full_names[a],full_names[b]
                     authors_inv=full_names[b],full_names[a]
+                    #To check if the authors are already in the 'dict' keys
                     if(authors in coauthor_dict.keys()):
-                        print "coauthor_dict.val()", coauthor_dict.values() \
-                                 ,"coauthor_dict.keys()", coauthor_dict.keys()
-                        print "comes in if"
-                            
+                        # Now create a dict of lists
+                        # i.e., append the current values of edge attributes\
+                        # to values of same author pair if already present.
+                        # use the defaultdict python module
+                        edge_listdict=defaultdict(list)
+                        for combined_dict in (coauthor_dict[authors],edge_att):
+                            for key,val in combined_dict.iteritems():
+                                    edge_listdict[key].append(val)
+                        # To check if authors keys are in same order
                         try:
-                            for key,val in edge_att.iteritems():
-                                print "key:", key,"val:",val
+                            coauthor_dict[authors]=edge_listdict
+                        except KeyError:
+                            coauthor_dict[authors]=edge_att
+                    # Checking if the authors names in the dict keys are in \
+                    # inverse order. This is not handled in the aforegiven \
+                    # loop for some specific reason. 
+                    elif(authors_inv in coauthor_dict.keys()):
+                        # Now create a list of dicts
+                        # i.e., append the current values of edge attributes\
+                        # to the edge attribs of same author pair if already present.
+                        # use the defaultdict python module
+                        edge_listdict=defaultdict(list)
+                        for combined_dict in (coauthor_dict[authors_inv],edge_att):
+                            for key,val in combined_dict.iteritems():
                                 edge_listdict[key].append(val)
-                                coauthor_dict[authors]=(edge_listdict)
-                        except KeyError:
-                            try:
-                                coauthor_dict[authors_inv]=(edge_listdict)
-                            except:
-                                coauthor_dict[authors]=edge_att
-                    else:
-                        print "comes in else"
+                        # To check if authors_inv keys are in same order
                         try:
-                            coauthor_dict[authors]=(edge_att)
+                            coauthor_dict[authors_inv]=edge_listdict
+                        except KeyError:
+                            coauthor_dict[authors_inv]=edge_att
+                    #if the authors or authors_inv are already not keys of \
+                    # coauhor dict, then add them.
+                    else:
+                        try:
+                            coauthor_dict[authors]=edge_att
                         except KeyError:
                             try:
-                                coauthor_dict[authors_inv]=(edge_att)
+                                coauthor_dict[authors_inv]=edge_att
                             except:
                                 coauthor_dict[authors]=edge_att
-                                    
-
     #add edges with specified edge attributes
     for key,val in coauthor_dict.iteritems():
-         print key , "---- >" , val
-         print "split keys:",key[0],key[1]
+        #print "Starting the Map:",key , "---- >" ,val
          coauthors.add_edge(key[0],
-                  key[1],
-                   attr_dict=val)
+         key[1],
+         attr_dict=val)
     
     return coauthors
 
