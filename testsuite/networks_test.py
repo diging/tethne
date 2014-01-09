@@ -411,125 +411,73 @@ class TestAuthorPapersGraph(unittest.TestCase):
 class TestCoauthorsGraph(unittest.TestCase):
     """
     Test the coauthors network, assumes reader is functioning
+    The file has 2 papers in which 2 pairs of authors are co-authors in both. 
+    The edges attributes should contain a list which identifies each paper 
+    It should be a Normal graph and not a MultiGraph.
     """
  
     def setUp(self):
-        #read data from docs folder
-        wos_data = rd.wos.parse_wos('./testin/wos_coauthors.txt')
+        
+        wos_data =rd.wos.parse_wos("../testsuite/testin/coauthors_2_recs.txt")
         meta_list = rd.wos.wos2meta(wos_data)
- 
-        # test network built from meta_list with no edge attributes
-        self.no_attribs = nt.authors.coauthors(meta_list)
- 
-        # test network built from meta_list with optional edge attributes
-        # attributes of type str, int, list, dict
-        self.attribs = ('atitle', 'date', 'aulast', 'citations')
-        self.edge_attribs = nt.authors.coauthors(meta_list, *self.attribs)
- 
-    def test_graph_structure(self):
-        # test for number of nodes and edges
-        # viewing the input file we see 2 papers, one with 6 authors and
-        # another with 4 but Cajaraville is a common author
-        self.assertEqual(nx.number_of_nodes(self.no_attribs), 9)
- 
-        # 6 choose 2 + 4 choose 2 = 21 edges
-        self.assertEqual(nx.number_of_edges(self.no_attribs), 21)
- 
-    def test_no_attribs(self):
-        # test to ensure no edge attributes in the no_attribs graph
-        expected_attribs = {}
-        for edge in self.no_attribs.edges(data=True):
-            obtained_attribs = edge[2]
-            self.assertItemsEqual(expected_attribs, obtained_attribs)
- 
-    def test_edge_attribs(self):
-        # test to ensure proper edge attributes in the edge_attribs graph
-        # the following data is obtained from the input file for the
-        # attribs specified in the setUp step: atitle, date, aulast, citations
-        # note the wos2meta function runs upper() on names
-        paper1_name_list = ['Marigomez I', 'Garmendia L', 'Soto M', 'Orbea A',
-                            'Izagirre U', 'Cajaraville M']
-        for i in xrange(len(paper1_name_list)):
-            paper1_name_list[i] = paper1_name_list[i].upper().strip()
- 
-        paper1_atitle = ('TI Marine ecosystem health status assessment' +
-                         'through integrative biomarker indices: a' + 
-                         'comparative study after the Prestige oil' + 
-                         'spill "Mussel Watch"')
-        paper1_date = 2013
-        paper1_aulast = ['Marigomez', 'Garmendia', 'Soto', 'Orbea'] 
-        for i in xrange(len(paper1_aulast)):
-            paper1_aulast[i] = paper1_aulast[i].upper().strip()
-        paper1_cr_list = [('ADAMS SM, 1993, T AM FISH SOC, V122, P63,' +
-                           'DOI 10.1577/1548-8659(1993)122<0063:AQHAIF>' + 
-                           '2.3.CO;2'),
-                          ('Beliaeff B, 2002, ENVIRON TOXICOL CHEM, V21,' +
-                           'P1316, DOI 10.1897/1551-5028(2002)021' +
-                           '<1316:IBRAUT>2.0.CO;2')]
-        paper1_citations =  []
-        for cite in paper1_cr_list:
-            paper1_citations.append(rd.wos.parse_cr(cite))
- 
-        # put the above data in the form that it is processed in Tethne
-        paper1_expected_attribs = {'atitle':paper1_atitle,
-                                   'date':paper1_date,
-                                   'aulast':paper1_aulast,
-                                   'citations':paper1_citations}
-        paper1_expected_attribs = util.subdict(paper1_expected_attribs,
-                                                      self.attribs)
- 
-        # do the same for the second paper in the document
-        paper2_name_list = ['Han D', 'Tong X', 'Jin M', 'Cajaraville M']
-        for i in xrange(len(paper2_name_list)):
-            paper2_name_list[i] = paper2_name_list[i].upper().strip()
-        paper2_atitle = ('Evaluation of organic contamination in urban' + 
-                         'groundwater surrounding a municipal landfill,' + 
-                         'Zhoukou, China')
-        paper2_date = 2013
-        paper2_aulast = ['Han', 'Tong', 'Jin', 'Cajaraville']
-        for i in xrange(len(paper2_aulast)):
-            paper2_aulast[i] = paper2_aulast[i].upper().strip()
-        paper2_cr_list = [('Akyuz M, 2010, SCI TOTAL ENVIRON, V408, P5550,' + 
-                           'DOI 10.1016/j.scitotenv.2010.07.063'),
-                          ('APHA, 1992, STAND METH EX WAT WA'),
-                          ('Basberg L, 1998, AQUAT GEOCHEM, V4, P253,' + 
-                           'DOI 10.1023/A:1009623205558')]
-        paper2_citations = []
-        for cite in paper2_cr_list:
-            paper2_citations.append(rd.wos.parse_cr(cite))
- 
-        # and again put it in the expected form in Tethne
-        paper2_expected_attribs = {'atitle':paper2_atitle,
-                                   'date':paper2_date,
-                                   'aulast':paper2_aulast,
-                                   'citations':paper2_citations}
-        paper2_expected_attribs = util.subdict(paper2_expected_attribs,
-                                                      self.attribs)
- 
-        # test the actual edge attributes in the graph
-        for name_index_1 in xrange(len(paper1_name_list)):
-            name1 = paper1_name_list[name_index_1]
-            for name_index_2 in xrange(name_index_1+1, len(paper1_name_list)):
-                name2 = paper1_name_list[name_index_2]
-                paper1_obtained_attribs = self.edge_attribs.edge[name1]\
-                                                                [name2]
-               # self.assertItemsEqual(paper1_expected_attribs,
-                               #       paper1_obtained_attribs)
-            # commented - later to uncomment and check why this error is thrown.
- 
-        for name_index_1 in xrange(len(paper2_name_list)):
-            name1 = paper2_name_list[name_index_1]
-            for name_index_2 in xrange(name_index_1+1, len(paper2_name_list)):
-                name2 = paper2_name_list[name_index_2]
-                paper2_obtained_attribs = self.edge_attribs.edge[name1]\
-                                                                [name2]
-               # self.assertItemsEqual(paper2_expected_attribs,
-                #                      paper2_obtained_attribs)
-            #later to uncomment this and check the error
- 
-    def tearDown(self):
-        pass
- 
+        
+        # There is no concept of user input threshold testcases as the authors \
+        # will be mapped with their respective co-authors anyways.
+        self.coauthors_noattribs  = nt.authors.coauthors(meta_list,)
+        self.coauthors_one_attribs  = nt.authors.coauthors \
+                            (meta_list,'ayjid')
+        self.coauthors_two_attribs  = nt.authors.coauthors \
+                            (meta_list,'ayjid','jtitle')
+        self.coauthors_three_attribs  = nt.authors.coauthors \
+                            (meta_list,'ayjid','jtitle','date')
+
+    # When no attribs are provided by the user.
+    def test_coauthors_one_attribs(self):
+        # 249 nodes: one for each author and his co-author
+        self.assertEqual(nx.number_of_nodes(self.coauthors_one_attribs),9)
+        # as noted in doc string, 12 edges between them
+        self.assertEqual(nx.number_of_edges(self.coauthors_one_attribs),26)
+        obtained_edge_attribs_dict = nx.get_edge_attributes(self.coauthors_one_attribs,"ayjid")
+        print obtained_edge_attribs_dict
+#        expected_edge_attribs_dict = 
+#        {   ('JIN M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('IZAGIRRE U', 'JIN M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('IZAGIRRE U', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('MARIGOMEZ I', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('ORBEA A', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('JIN M', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('CAJARAVILLE M', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('IZAGIRRE U', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('IZAGIRRE U', 'CAJARAVILLE M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('IZAGIRRE U', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('TONG X', 'CAJARAVILLE M'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT',
+#            ('CAJARAVILLE M', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('JIN M', 'TONG X'): 'HAN D 2013 ENVIRONMENTALMONITORING AND ASSESSMENT',
+#            ('JIN M', 'CAJARAVILLE M'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#                        'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'],
+#            ('ORBEA A', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('CAJARAVILLE M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('CAJARAVILLE M', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('JIN M', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('SOTO M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('HAN D', 'JIN M'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 
+#            ('HAN D', 'CAJARAVILLE M'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT',
+#            ('MARIGOMEZ I', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 
+#            ('HAN D', 'TONG X'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 
+#            ('IZAGIRRE U', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 
+#            ('JIN M', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+#            ('MARIGOMEZ I', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY'
+#        }
+        
+                
+        expected_edge_attribs_dict = \
+    {('JIN M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('IZAGIRRE U', 'JIN M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('IZAGIRRE U', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('MARIGOMEZ I', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('ORBEA A', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('JIN M', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('CAJARAVILLE M', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('IZAGIRRE U', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('IZAGIRRE U', 'CAJARAVILLE M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('IZAGIRRE U', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('TONG X', 'CAJARAVILLE M'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', ('CAJARAVILLE M', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('JIN M', 'TONG X'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', ('JIN M', 'CAJARAVILLE M'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY', 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], ('ORBEA A', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('CAJARAVILLE M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('CAJARAVILLE M', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('JIN M', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('SOTO M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('HAN D', 'JIN M'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', ('HAN D', 'CAJARAVILLE M'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', ('MARIGOMEZ I', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('HAN D', 'TONG X'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', ('IZAGIRRE U', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('JIN M', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('MARIGOMEZ I', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY'}
+    
+        self.assertDictEqual(expected_edge_attribs_dict,obtained_edge_attribs_dict, "Edge Attribs are equal")
+                                
+    pass
+    
+   
  
 class TestBiblioGraph(unittest.TestCase):
     """
@@ -751,7 +699,8 @@ class TestBiblioGraph(unittest.TestCase):
             node = node_list[i]
             expected_attribs = attrib_list[i]
             obtained_attribs = self.ayjid_attribs.node[node]
-           # self.assertEqual(expected_attribs, obtained_attribs) #later to uncomment and check this error
+           # self.assertEqual(expected_attribs, obtained_attribs)
+           #later to uncomment and check this error
  
     def test_missing_citations_zero(self):
         """
@@ -893,7 +842,8 @@ class TestAuthorCocitation(unittest.TestCase):
     Test the author cocitation (analysis) network
     Assumes reader is functioning
 
-    the "/Users/ramki/tethne/tethne/testsuite/testin/cocitations_test_2recs.txt" 
+    testfile is
+    "/Users/ramki/tethne/tethne/testsuite/testin/cocitations_test_2recs.txt"
 
       
      """
