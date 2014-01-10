@@ -426,56 +426,77 @@ class TestCoauthorsGraph(unittest.TestCase):
         self.coauthors_noattribs  = nt.authors.coauthors(meta_list,)
         self.coauthors_one_attribs  = nt.authors.coauthors \
                             (meta_list,'ayjid')
-        self.coauthors_two_attribs  = nt.authors.coauthors \
-                            (meta_list,'ayjid','jtitle')
         self.coauthors_three_attribs  = nt.authors.coauthors \
                             (meta_list,'ayjid','jtitle','date')
+        
+    # When no attribs are provided by the user.
+    def test_coauthors_no_attribs(self):
+        # 9 nodes: one for each author and his co-author
+        self.assertEqual(nx.number_of_nodes(self.coauthors_noattribs),9)
+        # 26 edges between them
+        self.assertEqual(nx.number_of_edges(self.coauthors_noattribs),26)
+        obtained_edge_attribs_dict = nx.get_edge_attributes(self.coauthors_noattribs,"")
+        expected_edge_attribs_dict = {}
+        self.assertDictEqual(expected_edge_attribs_dict,obtained_edge_attribs_dict,\
+                             "Edge Attribs are equal")
 
     # When no attribs are provided by the user.
     def test_coauthors_one_attribs(self):
-        # 249 nodes: one for each author and his co-author
+        # 9 nodes: one for each author and his co-author
         self.assertEqual(nx.number_of_nodes(self.coauthors_one_attribs),9)
-        # as noted in doc string, 12 edges between them
+        # 26 edges between them
         self.assertEqual(nx.number_of_edges(self.coauthors_one_attribs),26)
         obtained_edge_attribs_dict = nx.get_edge_attributes(self.coauthors_one_attribs,"ayjid")
-        print obtained_edge_attribs_dict
-#        expected_edge_attribs_dict = 
-#        {   ('JIN M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('IZAGIRRE U', 'JIN M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('IZAGIRRE U', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('MARIGOMEZ I', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('ORBEA A', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('JIN M', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('CAJARAVILLE M', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('IZAGIRRE U', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('IZAGIRRE U', 'CAJARAVILLE M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('IZAGIRRE U', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('TONG X', 'CAJARAVILLE M'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT',
-#            ('CAJARAVILLE M', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('JIN M', 'TONG X'): 'HAN D 2013 ENVIRONMENTALMONITORING AND ASSESSMENT',
-#            ('JIN M', 'CAJARAVILLE M'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#                        'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'],
-#            ('ORBEA A', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('CAJARAVILLE M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('CAJARAVILLE M', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('JIN M', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('SOTO M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('HAN D', 'JIN M'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 
-#            ('HAN D', 'CAJARAVILLE M'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT',
-#            ('MARIGOMEZ I', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 
-#            ('HAN D', 'TONG X'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 
-#            ('IZAGIRRE U', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 
-#            ('JIN M', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-#            ('MARIGOMEZ I', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY'
-#        }
-        
-                
         expected_edge_attribs_dict = \
-    {('JIN M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('IZAGIRRE U', 'JIN M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('IZAGIRRE U', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('MARIGOMEZ I', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('ORBEA A', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('JIN M', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('CAJARAVILLE M', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('IZAGIRRE U', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('IZAGIRRE U', 'CAJARAVILLE M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('IZAGIRRE U', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('TONG X', 'CAJARAVILLE M'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', ('CAJARAVILLE M', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('JIN M', 'TONG X'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', ('JIN M', 'CAJARAVILLE M'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY', 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], ('ORBEA A', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('CAJARAVILLE M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('CAJARAVILLE M', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('JIN M', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('SOTO M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('HAN D', 'JIN M'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', ('HAN D', 'CAJARAVILLE M'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', ('MARIGOMEZ I', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('HAN D', 'TONG X'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', ('IZAGIRRE U', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('JIN M', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', ('MARIGOMEZ I', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY'}
+        {   ('JIN M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('IZAGIRRE U', 'JIN M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('IZAGIRRE U', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('MARIGOMEZ I', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('ORBEA A', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('JIN M', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('CAJARAVILLE M', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('IZAGIRRE U', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('IZAGIRRE U', 'CAJARAVILLE M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('IZAGIRRE U', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('TONG X', 'CAJARAVILLE M'): ('HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'),
+            ('CAJARAVILLE M', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('JIN M', 'TONG X'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT',
+            ('JIN M', 'CAJARAVILLE M'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY',
+             'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'],
+            ('ORBEA A', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('CAJARAVILLE M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('CAJARAVILLE M', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('JIN M', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('SOTO M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('HAN D', 'JIN M'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 
+            ('HAN D', 'CAJARAVILLE M'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT',
+            ('MARIGOMEZ I', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 
+            ('HAN D', 'TONG X'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 
+            ('IZAGIRRE U', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 
+            ('JIN M', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('MARIGOMEZ I', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY'
+        }
+      
     
-        self.assertDictEqual(expected_edge_attribs_dict,obtained_edge_attribs_dict, "Edge Attribs are equal")
+        self.assertDictEqual(expected_edge_attribs_dict,obtained_edge_attribs_dict)
                                 
-    pass
+
+        # When three attribs are provided by the user.
+    def test_coauthors_three_attribs(self):
+        # 9 nodes: one for each author and his co-author
+        self.assertEqual(nx.number_of_nodes(self.coauthors_three_attribs),9)
+        # 26 edges between them
+        self.assertEqual(nx.number_of_edges(self.coauthors_three_attribs),26)
+        obtained_edge_attribs_list = self.coauthors_three_attribs.edges(data=True)
+        #Need to properly format them in 80Char limit. 
+        expected_edge_attribs_list = \
+        [('IZAGIRRE U', 'JIN M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('IZAGIRRE U', 'CAJARAVILLE M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('IZAGIRRE U', 'MARIGOMEZ I', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('IZAGIRRE U', 'ORBEA A', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('IZAGIRRE U', 'SOTO M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('IZAGIRRE U', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('HAN D', 'CAJARAVILLE M', {'date': 2013, 'ayjid': 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 'jtitle': 'ENVIRONMENTAL MONITORING AND ASSESSMENT'}), ('HAN D', 'JIN M', {'date': 2013, 'ayjid': 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 'jtitle': 'ENVIRONMENTAL MONITORING AND ASSESSMENT'}), ('HAN D', 'TONG X', {'date': 2013, 'ayjid': 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 'jtitle': 'ENVIRONMENTAL MONITORING AND ASSESSMENT'}), ('JIN M', 'TONG X', {'date': 2013, 'ayjid': 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 'jtitle': 'ENVIRONMENTAL MONITORING AND ASSESSMENT'}), ('JIN M', 'CAJARAVILLE M', {'date': [2013, 2013], 'jtitle': ['ECOTOXICOLOGY', 'ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY', 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT']}), ('JIN M', 'MARIGOMEZ I', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('JIN M', 'ORBEA A', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('JIN M', 'SOTO M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('JIN M', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('TONG X', 'CAJARAVILLE M', {'date': 2013, 'ayjid': 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 'jtitle': 'ENVIRONMENTAL MONITORING AND ASSESSMENT'}), ('CAJARAVILLE M', 'MARIGOMEZ I', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('CAJARAVILLE M', 'ORBEA A', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('CAJARAVILLE M', 'SOTO M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('CAJARAVILLE M', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('MARIGOMEZ I', 'ORBEA A', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('MARIGOMEZ I', 'SOTO M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('MARIGOMEZ I', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('ORBEA A', 'SOTO M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('ORBEA A', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('SOTO M', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'})]
+        
+        self.assertListEqual(expected_edge_attribs_list,obtained_edge_attribs_list)
+            
+            
+    def tearDown(self):
+            pass
     
    
  
@@ -843,7 +864,7 @@ class TestAuthorCocitation(unittest.TestCase):
     Assumes reader is functioning
 
     testfile is
-    "/Users/ramki/tethne/tethne/testsuite/testin/cocitations_test_2recs.txt"
+    "/Users/ramki/tethne/tethne/testsuite/testin/cocitations_test_full.txt"
 
       
      """
