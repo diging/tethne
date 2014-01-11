@@ -400,8 +400,6 @@ def author_cocitation(meta_list, threshold):
                         authors_pair_inv = (author_j_str.upper(),author_i_str.upper())
 
                         # Have these authors been co-cited before?
-                        # try blocks are much more efficient than checking
-                        # cocitations.keys() every time.
                         try:
                             # check if author pair is not already in the list and
                             # if the pair and inverse are not same. This is done
