@@ -320,14 +320,21 @@ def parse_cr(ref):
     tokens = ref.split(',')
     try:
         #FIXME: needs better name parser
+        # Checking for few parsers, in the meantime trying out few things.
+        
         name = tokens[0]
+        if '[]' in name:
+            print 'name:', name
+            # remove the [] and make it a proper one.
+        
         name_tokens = name.split(' ')
-        
-        
         
         meta_dict['aulast'] = [name_tokens[0]]
         meta_dict['auinit'] = [name_tokens[1]]
-
+    
+        if meta_dict['auinit'] == 'None' :
+            # Do something here
+    
         #strip initial characters based on the field (spaces, 'V', 'DOI')
         meta_dict['date'] = int(tokens[1][1:])
         meta_dict['jtitle'] = tokens[2][1:]
