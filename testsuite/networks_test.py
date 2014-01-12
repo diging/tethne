@@ -137,13 +137,15 @@ class TestDirectCitationGraph(unittest.TestCase):
 
 class Test_DirectCitation_DAG(unittest.TestCase):
     """
-    Test the citations, internal_citations networks (assuming the reader is functioning)
+    Test the citations, internal_citations networks 
+    (assuming the reader is functioning)
     by checking both 'citation' and 'internal' networks
     each with either 'doi' or 'ayjid' node_ids and date as an attribute,
     
-    This is the somewhat similar to the class TestDirectCitationGraph but it has extra tests 
-    to check if it is a DAG or not, and if the ancestors/descendants are populated correctly.     
-    The sparse data file networks are built on is "../testsuite/testin/citations_test.txt"
+    This is the somewhat similar to the class TestDirectCitationGraph
+    but it has extra tests to check if it is a DAG or not, and if the 
+    ancestors/descendants are populated correctly. The sparse data file networks
+    are built on is "../testsuite/testin/citations_test.txt"
     
     It has 2 papers.
     """
@@ -213,31 +215,39 @@ class Test_DirectCitation_DAG(unittest.TestCase):
     def is_citationnetwork_dag(self):
         """
         Testing if the citations graph is Directed Acyclic Graph or not.
-        If it is false then the network will not be created and an Networkxerror will be thrown that it is not a DAG.
+        If it is false then the network will not be created and 
+        a Networkxerror will be thrown that it is not a DAG.
         """
         # Returns true if citations graph is DAG
-        self.assert_(nx.is_directed_acyclic_graph(self.ayjid_cit_attrib), "Citations Graph is not DAG")
+        self.assert_(nx.is_directed_acyclic_graph(self.ayjid_cit_attrib),
+                        "Citations Graph is not DAG")
          
     def is_internal_citationnetwork_dag(self):
         """
         Testing if the Internal citations graph is Directed Acyclic Graph or not.
-        If it is false then the network will not be created and an Networkxerror will be thrown that it is not a DAG.
+        If it is false then the network will not be created and an Networkxerror
+        will be thrown that it is not a DAG.
         
         """
         # Returns true if citations graph is DAG
-        self.assert_(nx.is_directed_acyclic_graph(self.ayjid_int_attrib), "Internal Citations Graph is not DAG")
+        self.assert_(nx.is_directed_acyclic_graph(self.ayjid_int_attrib),
+                     "Internal Citations Graph is not DAG")
        
  
     def test_ancestors(self):
         """
-        Testing the ancestors for a particular node which is specified in the input. 
-        It throws the error "Node not in the graph" if that node is not present.
+        Testing the ancestors for a particular node which is specified 
+        in the input.It throws the error "Node not in the graph" 
+        if that node is not present.
         """
 
         #ESHELMAN is one of the citation of paper 1.
-        c_ans = nx.ancestors(self.ayjid_citations,'ESHELMAN LJ 1993 FDN GENETIC ALGORITH')
-        #ALAMPORA G is a citation as well as a paper, hence its a node in internal citations
-        i_ans = nx.ancestors(self.ayjid_internal,'ALAMPORA G 1999 INFORMATION SCIENCES')
+        c_ans = nx.ancestors(self.ayjid_citations,
+                             'ESHELMAN LJ 1993 FDN GENETIC ALGORITH')
+        #ALAMPORA G is a citation as well as a paper,
+            #hence its a node in internal citations
+        i_ans = nx.ancestors(self.ayjid_internal,
+                             'ALAMPORA G 1999 INFORMATION SCIENCES')
         
     def test_descendants(self):
         """
@@ -245,8 +255,10 @@ class Test_DirectCitation_DAG(unittest.TestCase):
         It throws the error "Node not in the graph" if that node is not present.
         """
         
-        c_des = nx.descendants(self.ayjid_citations,'ALAMPORA G 1999 INFORMATION SCIENCES')
-        i_des = nx.descendants(self.ayjid_internal,'WU Z 2012 NEUROCOMPUTING')
+        c_des = nx.descendants(self.ayjid_citations,
+                               'ALAMPORA G 1999 INFORMATION SCIENCES')
+        i_des = nx.descendants(self.ayjid_internal,
+                               'WU Z 2012 NEUROCOMPUTING')
         
         #to check if error is raised if a node which is not in the graph is called.
         
@@ -399,123 +411,94 @@ class TestAuthorPapersGraph(unittest.TestCase):
 class TestCoauthorsGraph(unittest.TestCase):
     """
     Test the coauthors network, assumes reader is functioning
+    The file has 2 papers in which 2 pairs of authors are co-authors in both. 
+    The edges attributes should contain a list which identifies each paper 
+    It should be a Normal graph and not a MultiGraph.
     """
  
     def setUp(self):
-        #read data from docs folder
-        wos_data = rd.wos.parse_wos('./testin/wos_coauthors.txt')
+        
+        wos_data =rd.wos.parse_wos("../testsuite/testin/coauthors_2_recs.txt")
         meta_list = rd.wos.wos2meta(wos_data)
- 
-        # test network built from meta_list with no edge attributes
-        self.no_attribs = nt.authors.coauthors(meta_list)
- 
-        # test network built from meta_list with optional edge attributes
-        # attributes of type str, int, list, dict
-        self.attribs = ('atitle', 'date', 'aulast', 'citations')
-        self.edge_attribs = nt.authors.coauthors(meta_list, *self.attribs)
- 
-    def test_graph_structure(self):
-        # test for number of nodes and edges
-        # viewing the input file we see 2 papers, one with 6 authors and
-        # another with 4 but Cajaraville is a common author
-        self.assertEqual(nx.number_of_nodes(self.no_attribs), 9)
- 
-        # 6 choose 2 + 4 choose 2 = 21 edges
-        self.assertEqual(nx.number_of_edges(self.no_attribs), 21)
- 
-    def test_no_attribs(self):
-        # test to ensure no edge attributes in the no_attribs graph
-        expected_attribs = {}
-        for edge in self.no_attribs.edges(data=True):
-            obtained_attribs = edge[2]
-            self.assertItemsEqual(expected_attribs, obtained_attribs)
- 
-    def test_edge_attribs(self):
-        # test to ensure proper edge attributes in the edge_attribs graph
-        # the following data is obtained from the input file for the
-        # attribs specified in the setUp step: atitle, date, aulast, citations
-        # note the wos2meta function runs upper() on names
-        paper1_name_list = ['Marigomez I', 'Garmendia L', 'Soto M', 'Orbea A',
-                            'Izagirre U', 'Cajaraville M']
-        for i in xrange(len(paper1_name_list)):
-            paper1_name_list[i] = paper1_name_list[i].upper().strip()
- 
-        paper1_atitle = ('TI Marine ecosystem health status assessment' +
-                         'through integrative biomarker indices: a' + 
-                         'comparative study after the Prestige oil' + 
-                         'spill "Mussel Watch"')
-        paper1_date = 2013
-        paper1_aulast = ['Marigomez', 'Garmendia', 'Soto', 'Orbea'] 
-        for i in xrange(len(paper1_aulast)):
-            paper1_aulast[i] = paper1_aulast[i].upper().strip()
-        paper1_cr_list = [('ADAMS SM, 1993, T AM FISH SOC, V122, P63,' +
-                           'DOI 10.1577/1548-8659(1993)122<0063:AQHAIF>' + 
-                           '2.3.CO;2'),
-                          ('Beliaeff B, 2002, ENVIRON TOXICOL CHEM, V21,' +
-                           'P1316, DOI 10.1897/1551-5028(2002)021' +
-                           '<1316:IBRAUT>2.0.CO;2')]
-        paper1_citations =  []
-        for cite in paper1_cr_list:
-            paper1_citations.append(rd.wos.parse_cr(cite))
- 
-        # put the above data in the form that it is processed in Tethne
-        paper1_expected_attribs = {'atitle':paper1_atitle,
-                                   'date':paper1_date,
-                                   'aulast':paper1_aulast,
-                                   'citations':paper1_citations}
-        paper1_expected_attribs = util.subdict(paper1_expected_attribs,
-                                                      self.attribs)
- 
-        # do the same for the second paper in the document
-        paper2_name_list = ['Han D', 'Tong X', 'Jin M', 'Cajaraville M']
-        for i in xrange(len(paper2_name_list)):
-            paper2_name_list[i] = paper2_name_list[i].upper().strip()
-        paper2_atitle = ('Evaluation of organic contamination in urban' + 
-                         'groundwater surrounding a municipal landfill,' + 
-                         'Zhoukou, China')
-        paper2_date = 2013
-        paper2_aulast = ['Han', 'Tong', 'Jin', 'Cajaraville']
-        for i in xrange(len(paper2_aulast)):
-            paper2_aulast[i] = paper2_aulast[i].upper().strip()
-        paper2_cr_list = [('Akyuz M, 2010, SCI TOTAL ENVIRON, V408, P5550,' + 
-                           'DOI 10.1016/j.scitotenv.2010.07.063'),
-                          ('APHA, 1992, STAND METH EX WAT WA'),
-                          ('Basberg L, 1998, AQUAT GEOCHEM, V4, P253,' + 
-                           'DOI 10.1023/A:1009623205558')]
-        paper2_citations = []
-        for cite in paper2_cr_list:
-            paper2_citations.append(rd.wos.parse_cr(cite))
- 
-        # and again put it in the expected form in Tethne
-        paper2_expected_attribs = {'atitle':paper2_atitle,
-                                   'date':paper2_date,
-                                   'aulast':paper2_aulast,
-                                   'citations':paper2_citations}
-        paper2_expected_attribs = util.subdict(paper2_expected_attribs,
-                                                      self.attribs)
- 
-        # test the actual edge attributes in the graph
-        for name_index_1 in xrange(len(paper1_name_list)):
-            name1 = paper1_name_list[name_index_1]
-            for name_index_2 in xrange(name_index_1+1, len(paper1_name_list)):
-                name2 = paper1_name_list[name_index_2]
-                paper1_obtained_attribs = self.edge_attribs.edge[name1]\
-                                                                [name2]
-               # self.assertItemsEqual(paper1_expected_attribs,
-                               #       paper1_obtained_attribs)   # commented - later to uncomment and check why this error is thrown.
- 
-        for name_index_1 in xrange(len(paper2_name_list)):
-            name1 = paper2_name_list[name_index_1]
-            for name_index_2 in xrange(name_index_1+1, len(paper2_name_list)):
-                name2 = paper2_name_list[name_index_2]
-                paper2_obtained_attribs = self.edge_attribs.edge[name1]\
-                                                                [name2]
-               # self.assertItemsEqual(paper2_expected_attribs,
-                #                      paper2_obtained_attribs)  #later to uncomment this and check the error
- 
+        
+        # There is no concept of user input threshold testcases as the authors \
+        # will be mapped with their respective co-authors anyways.
+        self.coauthors_noattribs  = nt.authors.coauthors(meta_list,)
+        self.coauthors_one_attribs  = nt.authors.coauthors \
+                            (meta_list,'ayjid')
+        self.coauthors_three_attribs  = nt.authors.coauthors \
+                            (meta_list,'ayjid','jtitle','date')
+        
+    # When no attribs are provided by the user.
+    def test_coauthors_no_attribs(self):
+        # 9 nodes: one for each author and his co-author
+        self.assertEqual(nx.number_of_nodes(self.coauthors_noattribs),9)
+        # 26 edges between them
+        self.assertEqual(nx.number_of_edges(self.coauthors_noattribs),26)
+        obtained_edge_attribs_dict = nx.get_edge_attributes(self.coauthors_noattribs,"")
+        expected_edge_attribs_dict = {}
+        self.assertDictEqual(expected_edge_attribs_dict,obtained_edge_attribs_dict,\
+                             "Edge Attribs are equal")
+
+    # When no attribs are provided by the user.
+    def test_coauthors_one_attribs(self):
+        # 9 nodes: one for each author and his co-author
+        self.assertEqual(nx.number_of_nodes(self.coauthors_one_attribs),9)
+        # 26 edges between them
+        self.assertEqual(nx.number_of_edges(self.coauthors_one_attribs),26)
+        obtained_edge_attribs_dict = nx.get_edge_attributes(self.coauthors_one_attribs,"ayjid")
+        expected_edge_attribs_dict = \
+        {   ('JIN M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('IZAGIRRE U', 'JIN M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('IZAGIRRE U', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('MARIGOMEZ I', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('ORBEA A', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('JIN M', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('CAJARAVILLE M', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('IZAGIRRE U', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('IZAGIRRE U', 'CAJARAVILLE M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('IZAGIRRE U', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('TONG X', 'CAJARAVILLE M'): ('HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'),
+            ('CAJARAVILLE M', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('JIN M', 'TONG X'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT',
+            ('JIN M', 'CAJARAVILLE M'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY',
+             'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'],
+            ('ORBEA A', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('CAJARAVILLE M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('CAJARAVILLE M', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('JIN M', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('SOTO M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('HAN D', 'JIN M'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 
+            ('HAN D', 'CAJARAVILLE M'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT',
+            ('MARIGOMEZ I', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 
+            ('HAN D', 'TONG X'): 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 
+            ('IZAGIRRE U', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 
+            ('JIN M', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
+            ('MARIGOMEZ I', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY'
+        }
+      
+    
+        self.assertDictEqual(expected_edge_attribs_dict,obtained_edge_attribs_dict)
+                                
+
+        # When three attribs are provided by the user.
+    def test_coauthors_three_attribs(self):
+        # 9 nodes: one for each author and his co-author
+        self.assertEqual(nx.number_of_nodes(self.coauthors_three_attribs),9)
+        # 26 edges between them
+        self.assertEqual(nx.number_of_edges(self.coauthors_three_attribs),26)
+        obtained_edge_attribs_list = self.coauthors_three_attribs.edges(data=True)
+        #Need to properly format them in 80Char limit. 
+        expected_edge_attribs_list = \
+        [('IZAGIRRE U', 'JIN M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('IZAGIRRE U', 'CAJARAVILLE M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('IZAGIRRE U', 'MARIGOMEZ I', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('IZAGIRRE U', 'ORBEA A', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('IZAGIRRE U', 'SOTO M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('IZAGIRRE U', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('HAN D', 'CAJARAVILLE M', {'date': 2013, 'ayjid': 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 'jtitle': 'ENVIRONMENTAL MONITORING AND ASSESSMENT'}), ('HAN D', 'JIN M', {'date': 2013, 'ayjid': 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 'jtitle': 'ENVIRONMENTAL MONITORING AND ASSESSMENT'}), ('HAN D', 'TONG X', {'date': 2013, 'ayjid': 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 'jtitle': 'ENVIRONMENTAL MONITORING AND ASSESSMENT'}), ('JIN M', 'TONG X', {'date': 2013, 'ayjid': 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 'jtitle': 'ENVIRONMENTAL MONITORING AND ASSESSMENT'}), ('JIN M', 'CAJARAVILLE M', {'date': [2013, 2013], 'jtitle': ['ECOTOXICOLOGY', 'ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY', 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT']}), ('JIN M', 'MARIGOMEZ I', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('JIN M', 'ORBEA A', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('JIN M', 'SOTO M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('JIN M', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('TONG X', 'CAJARAVILLE M', {'date': 2013, 'ayjid': 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 'jtitle': 'ENVIRONMENTAL MONITORING AND ASSESSMENT'}), ('CAJARAVILLE M', 'MARIGOMEZ I', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('CAJARAVILLE M', 'ORBEA A', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('CAJARAVILLE M', 'SOTO M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('CAJARAVILLE M', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('MARIGOMEZ I', 'ORBEA A', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('MARIGOMEZ I', 'SOTO M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('MARIGOMEZ I', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('ORBEA A', 'SOTO M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('ORBEA A', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('SOTO M', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'})]
+        
+        self.assertListEqual(expected_edge_attribs_list,obtained_edge_attribs_list)
+            
+            
     def tearDown(self):
-        pass
- 
+            pass
+    
+   
  
 class TestBiblioGraph(unittest.TestCase):
     """
@@ -697,7 +680,8 @@ class TestBiblioGraph(unittest.TestCase):
                                   'citations':node3_citations}
         node3_ayjid = 'MULAZZANI L 2013 MARINE POLICY'
         
-        #commenting the paper 4, as it doesnt exist at all. Previosly all nodes were added in the graph
+        #commenting the paper 4, as it doesnt exist at all.
+        #Previosly all nodes were added in the graph
 #      
 #         # paper 4 meta data
 #         node4_atitle = ('Application of multiple geochemical markers to ' + 
@@ -736,7 +720,8 @@ class TestBiblioGraph(unittest.TestCase):
             node = node_list[i]
             expected_attribs = attrib_list[i]
             obtained_attribs = self.ayjid_attribs.node[node]
-           # self.assertEqual(expected_attribs, obtained_attribs) #later to uncomment and check this error
+           # self.assertEqual(expected_attribs, obtained_attribs)
+           #later to uncomment and check this error
  
     def test_missing_citations_zero(self):
         """
@@ -878,17 +863,58 @@ class TestAuthorCocitation(unittest.TestCase):
     Test the author cocitation (analysis) network
     Assumes reader is functioning
 
-    the "/Users/ramki/tethne/tethne/testsuite/testin/cocitations_test_2recs.txt" 
-	file has been constructed with the following properties:
+    testfile is
+    "/Users/ramki/tethne/tethne/testsuite/testin/cocitations_test_full.txt"
+
       
      """
-	# def setUp(self):
-	#     wos_data = rd.wos.parse_wos("./testin/authorinstitutions_test.txt")
- #        meta_list = rd.wos.wos2meta(wos_data)
-        		
+    def setUp(self):
 
+        wos_data =rd.wos.parse_wos("../testsuite/testin/cocitations_test_full.txt")
+        meta_list = rd.wos.wos2meta(wos_data)
+            
+        #No need to check edge / node attribs as there are none. 
+        
+        self.cocitations_zero  = nt.authors.author_cocitation(meta_list,0)
+        
+        self.cocitations_one  = nt.authors.author_cocitation(meta_list,1)
+            
+        self.cocitations_two  = nt.authors.author_cocitation(meta_list,2)
+        
+        self.cocitations_three = nt.authors.author_cocitation(meta_list,3)
+
+    
+    #When the Input threshold is
+    def test_cocitations_zero(self):
+        # 249 nodes: one for each author and his co-author
+        self.assertEqual(nx.number_of_nodes(self.cocitations_zero),249)
+        # as noted in doc string, 12 edges between them
+        self.assertEqual  (nx.number_of_edges(self.cocitations_zero),4970)
+    pass
+    
+    
+    def test_cocitations_one(self):
+        # 249 nodes: one for each author and his co-author
+        self.assertEqual  (nx.number_of_nodes(self.cocitations_one),249)
+        # as noted in doc string, 12 edges between them
+        self.assertEqual  (nx.number_of_edges(self.cocitations_one),4970)
     pass
 
+    
+    def test_cocitations_two(self):
+        # 19 nodes: one for each author, one for each institution
+        self.assertEqual  (nx.number_of_nodes(self.cocitations_two),13)
+        # as noted in doc string, 12 edges between them
+        self.assertEqual  (nx.number_of_edges(self.cocitations_two),41)
+    pass
+
+    
+    def test_cocitations_three(self):
+        # 19 nodes: one for each author, one for each institution
+        self.assertEqual (nx.number_of_nodes(self.cocitations_three),2)
+        # as noted in doc string, 12 edges between them
+        self.assertEqual (nx.number_of_edges(self.cocitations_three),1)
+    pass
 
 
 class TestAuthorInstitution(unittest.TestCase):
@@ -896,12 +922,18 @@ class TestAuthorInstitution(unittest.TestCase):
     Test the author_institutions network
     Assumes reader is functioning
 
-    the "/Users/ramki/tethne/tethne/testsuite/testin/authorinstitutions_test.txt" file has been constructed with
+    the "/Users/ramki/tethne/tethne/testsuite/testin/authorinstitutions_test.txt" 
+    file has been constructed with
     the following properties:
-        the first paper has 6 authors and 6 institutions ,  where one author Wu,ZD shares affiliations with 2 other different institutions and authors.
-        the second paper has 3 authors with 2 institutions, where 2 authors share same affliated institution. 
-        the third paper has no 'institutions' key field hence no author-institutions sharing.
-        the fourth paper has 1 author and 1 institution with no shared institutions.
+        - the first paper has 6 authors and 6 institutions ,
+        where one author Wu,ZD shares affiliations with 
+        2 other different institutions and authors.
+        - the second paper has 3 authors with 2 institutions,
+        where 2 authors share same affliated institution.
+        - the third paper has no 'institutions' key field ,
+        hence no author-institutions sharing.
+        - the fourth paper has 1 author and 1 institution ,
+        with no shared institutions.
     
     """
    
@@ -912,30 +944,34 @@ class TestAuthorInstitution(unittest.TestCase):
     #-------
     # As the networks is built between 10 authors and 9 institutions, 
     # there should be 19 nodes (10+9). - test 1 is checked in other tests.
-    # Test the node attributes - (value="author / institutions") It should match with number of nodes and ---- 
-    #--- distinguished author and institutions count ( value = "authors" count=10, value = "Institutions" count = 9, hence total 19)  - test 2
+    # Test the node attributes - (value="author / institutions")
+    # It should match with number of nodes and ----
+    #--- distinguished author and institutions count
+    #(value = "authors" count=10,value = "Institutions" count = 9,total19)-test 2
     
     #Edges:
     #------
-    # To test the edges, there is no concept of providing input 'threshold' from the user.
-    # 12 edges ( 10 + 2 ) between the 10 authors and 9 institutions where 2 authors are affliated to 2 different institutions   - test 3
-    # check the edge attributes - 'Date' is an edge attribute which is can be used - test 4
-    # check the edge attributes - no edge attributes are provided by user - test 5
+    # To test the edges, there is no concept of providing input 'threshold'
+    # from the user.
+    # 12 edges ( 10 + 2 ) between the 10 authors and 9 institutions
+    # where 2 authors are affliated to 2 different institutions   - test 3
+    # check the edge attributes - 'Date' is an edge attribute  - test 4
+    # check the edge attributes - no edge attributes are provided - test 5
     
     
     def setUp(self):
         wos_data = rd.wos.parse_wos("./testin/authorinstitutions_test.txt")
         meta_list = rd.wos.wos2meta(wos_data)
         
+        self.node_attribs_check = nt.authors.author_institution(meta_list) 
         
-        self.node_attribs_check = nt.authors.author_institution(meta_list) # test 2
+        self.shared_institutions= nt.authors.author_institution(meta_list)
         
-        self.shared_institutions= nt.authors.author_institution(meta_list) #test 3
+        self.edge_attribs_zero = nt.authors.author_institution(meta_list)  
         
-        self.edge_attribs_zero = nt.authors.author_institution(meta_list)  # test 4
-        
-        self.edge_attribs_one = nt.authors.author_institution(meta_list,'date')  # test 5
-        
+        self.edge_attribs_one = nt.authors.author_institution(meta_list,'date') 
+       
+    
         
 
     def test_shared_institutions(self):
