@@ -73,7 +73,6 @@ def algorithm(C, method, **kwargs):
         2002: 0.009338654511194512,
         2003: 0.007519105636349891}
 
-
     """
 
     results = {}
@@ -164,3 +163,32 @@ def connected(C, method, **kwargs):
             for k, G in C.graphs.iteritems():
                 results[k] = nx.connected.__dict__[method](G, **kwargs)
     return results
+
+def node_history(C, node, attribute, key='ayjid'):
+    """
+    Returns a dictionary of attribute values for each Graph in C for a single
+    node.
+    
+    Parameters
+    ----------
+    C : :class:`.GraphCollection`
+    node : str
+        The node of interest.
+    attribute : str
+        The attribute of interest; e.g. 'betweenness_centrality'
+    key : str
+        The key used to identify nodes. Default is 'ayjid' (recommended).
+        
+    Returns
+    -------
+    history : dict
+        Keys are Graph keys in C; values are attribute values for node.
+    """
+
+    history = {}
+
+    for k,G in C.graphs.iteritems():
+        if node in G.nodes():
+            history[k] = { v[0]:v[1] for v in G.nodes(data=True) }[node][attribute]
+
+    return history

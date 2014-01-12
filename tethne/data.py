@@ -190,7 +190,7 @@ class GraphCollection(object):
             :class:`.GraphCollection` .
         """
 
-        if not hasattr(self, 'node_list') or overwrite:
+        if not len(self.node_list) > 0 or overwrite:
             nodes = set([])
             for G in self.graphs.values():
                 nodes = nodes | set(G.nodes())
@@ -215,7 +215,7 @@ class GraphCollection(object):
             List (complete set) of edges for this :class:`.GraphCollection` .
         """
 
-        if not hasattr(self, 'edge_list') or overwrite:
+        if not len(self.edge_list) > 0 or overwrite:
             edges = set([])
             for G in self.graphs.values():
                 edges = edges | set(G.edges())
