@@ -5,7 +5,7 @@ import tethne.utilities as util
 import tethne.data as ds
 import operator
 
-def citation_count(papers, key='ayjid', verbose=True):
+def citation_count(papers, key='ayjid', verbose=False):
     """Generates citation counts for all of the papers cited by papers.
     
     Parameters
@@ -14,6 +14,8 @@ def citation_count(papers, key='ayjid', verbose=True):
         A list of :class:`.Paper` instances.
     key : str
         Property to use as node key. Default is 'ayjid' (recommended).
+    verbose : bool
+        If True, prints status messages.
     
     Returns
     -------
@@ -35,7 +37,7 @@ def citation_count(papers, key='ayjid', verbose=True):
 
     return counts
 
-def top_cited(papers, topn=20, verbose=True):
+def top_cited(papers, topn=20, verbose=False):
     """Generates a list of the topn most cited papers.
     
     Parameters    
@@ -44,6 +46,8 @@ def top_cited(papers, topn=20, verbose=True):
         A list of :class:`.Paper` instances.
     topn : int
         Number of top-cited papers to return.
+    verbose : bool
+        If True, prints status messages.        
     
     Returns
     -------
@@ -63,9 +67,28 @@ def top_cited(papers, topn=20, verbose=True):
     
     return top, counts
     
-def top_parents(papers, topn=20, verbose=True):
+def top_parents(papers, topn=20, verbose=False):
     """Returns a list of :class:`.Paper` objects that cite the topn most cited
-    papers."""
+    papers.
+    
+    Parameters    
+    ----------
+    papers : list
+        A list of :class:`.Paper` objects.
+    topn : int
+        Number of top-cited papers to return.
+    verbose : bool
+        If True, prints status messages.    
+
+    Returns
+    -------
+    papers : list
+        A list of :class:`.Paper` objects.
+    top : list
+        A list of 'ayjid' keys for the topn most cited papers.
+    counts : dict
+        Citation counts for all papers cited by papers.
+    """
     
     if verbose:
         print "Getting parents of top "+str(topn)+" most cited papers."
@@ -272,7 +295,7 @@ def bibliographic_coupling(doc_list, citation_id='ayjid', threshold='1',
                                    overlap=len(overlap))
     return bcoupling
 
-def cocitation(papers, threshold, topn=None, verbose=True):
+def cocitation(papers, threshold, topn=None, verbose=False):
     """
     A cocitation network is a network in which vertices are papers, and edges
     indicate that two papers were cited by the same third paper. Should slice
@@ -289,17 +312,19 @@ def cocitation(papers, threshold, topn=None, verbose=True):
     
     **Edge attributes** -- 'weight', number of times two papers are co-cited 
     together.
-                      
     
     Parameters
     ----------
     papers : list
         a list of :class:`.Paper` objects.
-        
     threshold : int
-        A random value provided by the user. If its greater than zero two nodes 
-        should share something common.
-            
+        Minimum number of co-citations required to create an edge.
+    topn : int or None
+        If provided, only the topn most cited papers will be included in the
+        cocitation network. Otherwise includes all cited papers.
+    verbose : bool
+        If True, prints status messages.
+        
     Returns
     -------
     cocitation : networkx.Graph
@@ -324,11 +349,13 @@ def cocitation(papers, threshold, topn=None, verbose=True):
     #  parameter.    
     if topn is not None:
         parents, include, citations_count = top_parents(papers, topn=topn)
+        N = len(include)
     else:
         citations_count = citation_count(papers)
+        N = len(citations_count.keys())
 
     if verbose:
-        print "Generating a cocitation network..."
+        print "Generating a cocitation network with " + str(N) + " nodes..."
 
     for paper in papers:
         if paper['citations'] is not None:  # Some papers don't have citations.
@@ -371,15 +398,10 @@ def cocitation(papers, threshold, topn=None, verbose=True):
         
     # 62657522: Nodes in co-citation graph should have attribute containing 
     #  number of citations.
-    for key,val in citations_count.iteritems():   
-        attribs = { k:v for k,v in citations_count.iteritems() 
-                    if k in cocitation_graph.nodes() }
-        nx.set_node_attributes( cocitation_graph, 
-                                'number_of_cited_times', 
-                                attribs ) 
+    n_cit = { k:v for k,v in citations_count.iteritems()
+                if k in cocitation_graph.nodes() }
+    nx.set_node_attributes( cocitation_graph, 'times_cited', n_cit )
 
-    if verbose:
-        print True
     return cocitation_graph
 
 def author_coupling(doc_list, threshold, node_id, *node_attribs):
