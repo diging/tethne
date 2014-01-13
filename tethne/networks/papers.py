@@ -3,12 +3,90 @@
 import networkx as nx
 import tethne.utilities as util
 import tethne.data as ds
+import operator
+
+def citation_count(papers, key='ayjid', verbose=True):
+    """Generates citation counts for all of the papers cited by papers.
+    
+    Parameters
+    ----------
+    papers : list
+        A list of :class:`.Paper` instances.
+    key : str
+        Property to use as node key. Default is 'ayjid' (recommended).
+    
+    Returns
+    -------
+    counts : dict
+        Citation counts for all papers cited by papers.
+    """
+    
+    if verbose:
+        print "Generating citation counts for "+str(len(papers))+" papers..."
+    
+    counts = {}
+    for P in papers:
+        if P['citations'] is not None:
+            for p in P['citations']:
+                try:
+                    counts[p[key]] += 1
+                except KeyError:
+                    counts[p[key]] = 1
+
+    return counts
+
+def top_cited(papers, topn=20, verbose=True):
+    """Generates a list of the topn most cited papers.
+    
+    Parameters    
+    ----------
+    papers : list
+        A list of :class:`.Paper` instances.
+    topn : int
+        Number of top-cited papers to return.
+    
+    Returns
+    -------
+    top : list
+        A list of 'ayjid' keys for the topn most cited papers.
+    counts : dict
+        Citation counts for all papers cited by papers.        
+    """
+    
+    if verbose:
+        print "Finding top "+str(topn)+" most cited papers..."    
+    
+    counts = citation_count(papers, verbose=verbose)
+    top = dict(sorted(counts.iteritems(),
+                       key=operator.itemgetter(1),
+                       reverse=True)[:topn]).keys()
+    
+    return top, counts
+    
+def top_parents(papers, topn=20, verbose=True):
+    """Returns a list of :class:`.Paper` objects that cite the topn most cited
+    papers."""
+    
+    if verbose:
+        print "Getting parents of top "+str(topn)+" most cited papers."
+        
+    top, counts = top_cited(papers, topn=topn, verbose=verbose)
+    papers = [ P for P in papers if P['citations'] is not None ]
+    parents = [ P for P in papers if len(
+                    set([ c['ayjid'] for c in P['citations'] ]) &
+                    set(top) ) > 0 ]
+                    
+    if verbose:
+        print "Found " + str(len(parents)) + " parents."
+    return parents, top, counts
+    
 
 def direct_citation(doc_list, node_id='ayjid', *node_attribs):
     """
     Create a NetworkX directed graph based on citation records.
     
-    **Nodes** -- documents represented by the value of :class:`.Paper` [node_id].
+    **Nodes** -- documents represented by the value of :class:`.Paper` 
+    [node_id].
     
     **Edges** -- from one document to its citation.
     
@@ -56,37 +134,37 @@ def direct_citation(doc_list, node_id='ayjid', *node_attribs):
                        'meta_keys')
 
     for entry in doc_list:
-        #check the head
+        # Check the head.
         head_has_id = True
         if entry[node_id] is None:
             head_has_id = False
 
         if head_has_id:
-            #then create node to both global and internal networks
+            # Then create node to both global and internal networks.
             node_attrib_dict = util.subdict(entry, node_attribs)
             citation_network.add_node(entry[node_id], node_attrib_dict)
             citation_network_internal.add_node(entry[node_id], 
                                                node_attrib_dict) 
         if entry['citations'] is not None:
             for citation in entry['citations']:
-                #check the tail
+                # Check the tail.
                 tail_has_id = True
                 if citation[node_id] is None:
                     tail_has_id = False
 
                 if tail_has_id:
-                    #then create node to global but not internal network
+                    # Then create node to global but not internal network.
                     node_attrib_dict = util.subdict(citation, node_attribs)
                     citation_network.add_node(citation[node_id], 
                                               node_attrib_dict)
      
                 if head_has_id and tail_has_id:
-                    #then draw an edge in the network
+                    # Then draw an edge in the network.
                     citation_network.add_edge(entry[node_id], 
                                               citation[node_id],
                                               date=entry['date'])
 
-                    #and check if it can be added to the internal network too
+                    # And check if it can be added to the internal network, too.
                     if (util.contains (doc_list, 
                                        lambda wos_obj: 
                                        wos_obj[node_id] == citation[node_id])):
@@ -95,16 +173,13 @@ def direct_citation(doc_list, node_id='ayjid', *node_attribs):
                             citation[node_id],
                             date=entry['date'])
         
-    #checking if both the graphs are Directed Acyclic Graphs's.
-    cit_is_dag = nx.is_directed_acyclic_graph(citation_network)
-    internal_is_dag= nx.is_directed_acyclic_graph(citation_network_internal) 
-         
-    if(cit_is_dag and internal_is_dag): 
+    # Checking if both the graphs are Directed Acyclic Graphs.
+    if not nx.is_directed_acyclic_graph(citation_network):
+        raise nx.NetworkXError("Citation graph is not a DAG.")
+    elif not nx.is_directed_acyclic_graph(citation_network_internal):
+        raise nx.NetworkXError("Internal citation graph is not a DAG.")
+    else:
         return citation_network, citation_network_internal 
-                
-    else: 
-        raise nx.NetworkXError(
-        "The citations and Internal citations graph are not Directed Acyclic Graphs.")
 
 def bibliographic_coupling(doc_list, citation_id='ayjid', threshold='1',
                            node_id='ayjid', *node_attribs):
@@ -197,8 +272,7 @@ def bibliographic_coupling(doc_list, citation_id='ayjid', threshold='1',
                                    overlap=len(overlap))
     return bcoupling
 
-def cocitation(meta_list, threshold):
-    
+def cocitation(papers, threshold, topn=None, verbose=True):
     """
     A cocitation network is a network in which vertices are papers, and edges
     indicate that two papers were cited by the same third paper. Should slice
@@ -213,12 +287,13 @@ def cocitation(meta_list, threshold):
     
     **Edges** -- (a, b) if a and b are cited by the same paper. 
     
-    **Edge attributes** -- 'weight', number of times two papers are co-cited together.
+    **Edge attributes** -- 'weight', number of times two papers are co-cited 
+    together.
                       
     
     Parameters
     ----------
-    meta_list : list
+    papers : list
         a list of :class:`.Paper` objects.
         
     threshold : int
@@ -235,7 +310,6 @@ def cocitation(meta_list, threshold):
     should be able to specify a threshold -- number of co-citations required to 
     draw an edge.
 
-    
     """
     
     cocitation_graph = nx.Graph(type='cocitation')
@@ -246,52 +320,66 @@ def cocitation(meta_list, threshold):
     cocitations = {}    
     citations_count={}
 
-    for paper in meta_list:
-        # Some papers don't have citations.
-        if paper['citations'] is not None:
-            # n is the number of papers in the provided list of Papers.
+    # 61670334: networks.citations.cocitation should have a "top cited" 
+    #  parameter.    
+    if topn is not None:
+        parents, include, citations_count = top_parents(papers, topn=topn)
+    else:
+        citations_count = citation_count(papers)
+
+    if verbose:
+        print "Generating a cocitation network..."
+
+    for paper in papers:
+        if paper['citations'] is not None:  # Some papers don't have citations.
             n = len(paper['citations'])
-            if n > 1:     # No point in proceeding if there is only one citation.
-                for i in xrange(0, n):
-                    # Start inner loop at i+1, to avoid redundancy and self-loops.
-                    paper_i=paper['citations'][i]['ayjid'].upper()   #to be used to build the cocitations_count dict
-                    try:    
-                            #if the dict has this paper as a key?
-                            citations_count[paper_i]+=1
-                            #print "try:", citations_count[paper_i],paper_i
-                    except KeyError: 
-                            # First time this paper has been cited. Add it to the citations_count dict
-                            citations_count[paper_i]=1
-                            #print "except:", citations_count[paper_i],paper_i
-    
+            for i in xrange(0, n):
+
+                paper_i = paper['citations'][i]['ayjid']
+                
+                if topn is not None and paper_i not in include:
+                    pass
+                else:
                     for j in xrange(i+1, n):
-                        papers_pair = ( paper['citations'][i]['ayjid'].upper(), paper['citations'][j]['ayjid'].upper() )
-                        papers_pair_inv = ( paper['citations'][j]['ayjid'].upper(), paper['citations'][i]['ayjid'].upper() )
-                        # Have these papers been co-cited before?
-                        # try blocks are much more efficient than checking
-                        # cocitations.keys() every time.           
-                        paper_j=paper['citations'][j]['ayjid'].upper()
-                        try: 
-                            cocitations[papers_pair] += 1
-                        
-                        except KeyError: 
-                            try: # May have been entered in opposite order.
-                                
-                                cocitations[papers_pair_inv] += 1
+                        paper_j = paper['citations'][j]['ayjid']
+
+                        if topn is not None and paper_j not in include:
+                            pass
+                        else:
                             
-                                # Networkx will ignore add_node if those nodes are already present
-                            except KeyError:
-                                # First time these papers have been co-cited.
-                                cocitations[papers_pair] = 1
+                            pp = ( paper_i, paper_j ) 
+                            pp_inv = ( paper_j, paper_i )
+                            
+                            try: # Have these papers been co-cited before?
+                                cocitations[pp] += 1
+                            except KeyError: 
+                                try: # Maybe in opposite order?
+                                    cocitations[pp_inv] += 1
+                                except KeyError:
+                                    # First time these papers are co-cited.
+                                    cocitations[pp] = 1
+    
+    if verbose:
+        print "Co-citation matrix generated, building Graph..."
     
     for key,val in cocitations.iteritems():
-        if val >= threshold : # If the weight is greater or equal to the user I/P threshold 
-            cocitation_graph.add_edge(key[0],key[1], weight=val) #add edge between the 2 co-cited papers
-    #62657522        
-    for key,val in citations_count.iteritems():
-            #print "key : ", key, "val:" , val    
-            nx.set_node_attributes( cocitation_graph, 'number_of_cited_times', { k:v for k,v in citations_count.iteritems() if k in cocitation_graph.nodes() } ) 
-            
+        if val >= threshold: # and key[0] in include and key[1] in include:
+            cocitation_graph.add_edge(key[0], key[1], weight=val)
+    
+    if verbose:
+        print "Done building co-citation graph, adding attributes..."
+        
+    # 62657522: Nodes in co-citation graph should have attribute containing 
+    #  number of citations.
+    for key,val in citations_count.iteritems():   
+        attribs = { k:v for k,v in citations_count.iteritems() 
+                    if k in cocitation_graph.nodes() }
+        nx.set_node_attributes( cocitation_graph, 
+                                'number_of_cited_times', 
+                                attribs ) 
+
+    if verbose:
+        print True
     return cocitation_graph
 
 def author_coupling(doc_list, threshold, node_id, *node_attribs):
@@ -315,7 +403,8 @@ def author_coupling(doc_list, threshold, node_id, *node_attribs):
     node_id : string
         Field in :class:`.Paper` used to identify nodes.    
     node_attribs : list
-        List of fields in :class:`.Paper` to include as node attributes in graph.
+        List of fields in :class:`.Paper` to include as node attributes in 
+        graph.
         
     Returns
     -------

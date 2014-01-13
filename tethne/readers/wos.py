@@ -84,7 +84,7 @@ def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     if ayj == '   ':
         ayj = 'Unknown paper'
 
-    return ayj
+    return ayj.upper()
 
 def create_ainstid(aulast=None, auinit=None, addr1=None, addr2=None, country=None, **kwargs):
     """
