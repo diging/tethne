@@ -334,7 +334,7 @@ def parse_cr(ref):
     
         if meta_dict['auinit'] == 'None' :
             # Do something here
-    
+            pass
         #strip initial characters based on the field (spaces, 'V', 'DOI')
         meta_dict['date'] = int(tokens[1][1:])
         meta_dict['jtitle'] = tokens[2][1:]
