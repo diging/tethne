@@ -1,40 +1,20 @@
-# Tethne
-
-Tethne is a script for analyzing citation data. Right now it just works on data from the Web of Science, but hopefully it will be expanded to work on data from other sources as well. It generates a variety of networks, such as bibliographic coupling, citation, author-paper, and co-author networks, using networkx. 
-
 ![alt text](https://raw.github.com/diging/tethne/python/doc/logo.jpeg "Tethneus, an orb weaving spider.")
 
-## Collecting Web of Science data
-To use Tethne you need a Web of Science data file to work with. One such file is docs/savedrecs.txt. This file was generated from the Web of Science by first following the Web of Science's recommended search "oil spill\* mediterranean" on the Web of Science tab of the Web of Knowledge service.  
+# Tethne
 
-![alt text](https://github.com/diging/tethne/blob/python/doc/WebOfScienceSearch.png?raw=true "Web of Science Search")
+Tethne is a script for analyzing bibliographic data. The primary emphasis is on parsing
+and analyzing citation data from the Web of Science. Future versions will support data
+from PubMed, Scopus, and other scholarly databases. Tethne can be used to generate and
+analyze a variety of networks, such as bibliographic coupling, citation, author-paper, 
+and co-author networks, using [NetworkX](http://networkx.github.io/).
 
-If you scroll down to the bottom of the search results page, you will see a set of options to save your search results.  
-
-![alt text](https://github.com/diging/tethne/blob/python/doc/WebOfScienceResults.png?raw=true "Web of Science Results")  
-
-Select a set of "Records" (we could have specified 1 to 156, the number of "Results" for this query), select "Full Record" and "Cited References" if you would like to utilize the full extent of Tethne's power, and finally "Save to Plain Text" your results, by default named "savedrecs.txt". An example savedrecs.txt for this tutorial is also provided in tethne/docs/.
-
-## Collecting PubMed data
-
-While modules utilizing PubMed data have not yet been implemented, this section describes how to collect the data that will be utilized by those modules.
-
-First, visit http://www.ncbi.nlm.nih.gov/pubmed and from the drop-down menu next to the search bar select PMC. This will narrow your search results to the types of documents that can be interpretted by Tethne (rather than genome annotation data!). We sampled a search for "sea urchin" below.
-
-![alt_text](https://github.com/diging/tethne/blob/python/doc/PMCSearch.png?raw=true "PMC Search")
-
-On the search results page, check the boxes for records that you wish to network with Tethne. Then, at the top right hand corner of the page, click "Send to:" -> "File" -> "XML" -> "Create File." We've illustrated the selection of a few recrods below.
-
-![alt_text](https://github.com/diging/tethne/blob/python/doc/PMCResults.png?raw=true "PMC Results")
-
-The saved results for this example may be found in the docs/ folder.
+For more information, see the Tethne [website](https://github.com/diging/tethne) and
+(documentation)[http://diging.github.io/tethne/api/] (under development).
 
 ## Requirements
-* [Python](http://www.python.org/)
+* [Python 2.7](http://www.python.org/)
 * [NetworkX](http://networkx.github.io/)
 * [ElementTree](http://docs.python.org/2/library/xml.etree.elementtree.html)
-
-I think that's it...
 
 ## Questions?
 erick [dot] peirson [at] asu [dot] edu
@@ -44,6 +24,20 @@ erick [dot] peirson [at] asu [dot] edu
 * [aabaker99](http://github.com/aabaker99)
 * [rsubra13](http://github.com/rsubra13)
 
-## Contributing // To Do
-* Complete test cases for the other networks in the form of those for the citations network.
-* Add PubMed data sources: function skeletons provided in readers.py module
+## License
+Tethne is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Tethne is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+[GNU General Public License](http://www.gnu.org/licenses/) for more details.
+
+![alt text](http://www.gnu.org/graphics/gplv3-127x51.png "GNU GPL 3")
+
+## About
+Tethne is developed by the ASU Digital Innovation Group (DigInG), part of the Laubichler Lab in the School of Life Science’s Center for Biology & Society.
+
+This material is based upon work supported by the National Science Foundation Graduate Research Fellowship Program under Grant No. 2011131209, and NSF Doctoral Dissertation Research Improvement Grant No. 1256752.
