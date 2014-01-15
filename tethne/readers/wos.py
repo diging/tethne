@@ -36,6 +36,11 @@ import tethne.utilities as util
 import os
 import re
 
+# MACRO for printing the 'print' statement values.
+# 0 prints nothing in the console.
+# 1 prints all print statements in the console.
+DEBUG = 0
+
 # general functions
 
 def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
@@ -65,12 +70,12 @@ def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     """
     if aulast is None:
         aulast = ''
-    elif isinstance(aulast,list):
+    elif isinstance(aulast, list):
         aulast = aulast[0]
 
     if auinit is None:
         auinit = ''
-    elif isinstance(auinit,list):
+    elif isinstance(auinit, list):
         auinit = auinit[0]
 
     if date is None:
@@ -86,7 +91,8 @@ def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
 
     return ayj.upper()
 
-def create_ainstid(aulast=None, auinit=None, addr1=None, addr2=None, country=None, **kwargs):
+def create_ainstid(aulast=None, auinit=None, addr1=None, \
+                   addr2=None, country=None, **kwargs):
     """
     This function is to create an fuzzy identifier ainstid.
     Convert aulast, auinit, and jtitle into the fuzzy identifier ainstid.
@@ -116,21 +122,21 @@ def create_ainstid(aulast=None, auinit=None, addr1=None, addr2=None, country=Non
     """
     if aulast is None:
         aulast = ''
-    elif isinstance(aulast,list):
+    elif isinstance(aulast, list):
         aulast = aulast[0]
 
     if auinit is None:
         auinit = ''
-    elif isinstance(auinit,list):
+    elif isinstance(auinit, list):
         auinit = auinit[0]
 
     if addr1 is None:
-         addr1 = ''
+        addr1 = ''
 
     if  addr2 is None:
-         addr2 = ''
+        addr2 = ''
     if  country is None:
-         country = ''
+        country = ''
 
     ainstid = aulast + ' ' + auinit + ' ' + addr1 + ' ' + addr2 + ' ' + country
 
@@ -209,7 +215,7 @@ def parse_wos(filepath):
 
         #add value for the key to the wos_dict: the rest of the line
         try:
-            if field_tag in ['AU', 'AF', 'CR','C1']:
+            if field_tag in ['AU', 'AF', 'CR', 'C1']:
                 # These unique fields use the new line delimiter to distinguish
                 # their list elements below.
                 # The field C1 can be either in multiple lines or in a single
@@ -217,7 +223,7 @@ def parse_wos(filepath):
                 wos_dict[field_tag] += '\n' + str(line[3:])
             else:
                 wos_dict[field_tag] += ' ' + str(line[3:])
-        except (KeyError, TypeError,UnboundLocalError):
+        except (KeyError, TypeError, UnboundLocalError):
             #key didn't exist already, can't append but must create
             wos_dict[field_tag] = str(line[3:])
 
@@ -321,20 +327,30 @@ def parse_cr(ref):
     try:
         #FIXME: needs better name parser
         # Checking for few parsers, in the meantime trying out few things.
-        
         name = tokens[0]
-        if '[]' in name:
-            print 'name:', name
+        # Temp Solution for #62809724
+        pattern = re.compile('\[(.*?)\]')
+        match = pattern.search(name)
+        if match:
             # remove the [] and make it a proper one.
+            name = name[match.start()+1:match.end()-1]
+            if DEBUG : print  'stripped name: ',name
         
         name_tokens = name.split(' ')
-        
+        if len(name_tokens) < 2:
+            name_tokens.append('None')
+
         meta_dict['aulast'] = [name_tokens[0]]
         meta_dict['auinit'] = [name_tokens[1]]
+
+        if DEBUG:
+            print "Final Meta Dicts###",meta_dict['aulast'], meta_dict['auinit']
     
-        if meta_dict['auinit'] == 'None' :
+        # Temp Solution for #62809724
+        if meta_dict['auinit'] == 'None' or meta_dict['aulast'] == 'None' :
             # Do something here
-            pass
+            raise ("The Cited References field is not in the expeceted format")
+    
         #strip initial characters based on the field (spaces, 'V', 'DOI')
         meta_dict['date'] = int(tokens[1][1:])
         meta_dict['jtitle'] = tokens[2][1:]
@@ -446,9 +462,16 @@ def wos2meta(wos_data):
     if type(wos_data) is dict:
         wos_data = [wos_data]
         #print 'wos data \n' , wos_data
+
+    
+    # Calling the validate function here, before even building wos_meta list
+    # [62809724]
+    status = validate(wos_data)
+    if not status:
+        #raise Error
+        pass
     #define the direct relationships between WoS fieldtags and Paper keys
     translator = ds.wos2meta_map()
-
     #perform the key convertions
     for wos_dict in wos_data:
         meta_dict = ds.Paper()
@@ -499,7 +522,8 @@ def wos2meta(wos_data):
                         #  as our mapping key to ensure consistency with older
                         #  datasets.
                         author_index = wos_dict['AF'].index(author)
-                        author_au = wos_dict['AU'][author_index].upper()    # e.g. "WU, ZD"
+                        #e.g."WU, ZD"
+                        author_au = wos_dict['AU'][author_index].upper()
                         inst_name = institution[0]
 
                         try:
@@ -572,3 +596,44 @@ def parse_from_dir(path):
             pass
 
     return wos_list
+
+# [62809724]
+def validate(wos_data):
+    """
+    Defines the fucntion to check the input data validation.
+    
+    Returns
+    -------
+    bool - True or false
+    if the data is in expected format (True)
+    if the respective field is not in expected format (False)
+    
+    Raises
+    ------
+    ValueError - according to the severity of the issue,
+    whether the wrong format will affect the further processing.
+    """
+    if DEBUG: print wos_data
+   
+    
+    # Create a translator dict whose keys are the fields which needs to be
+    # validated from the input.
+    # Any new field which needs validation in the future
+    translator = ds.new_wos_dict()
+    
+    # Now all these input fields needs to be validated as per requirements.
+   
+    for wos_dict in wos_data:
+        #direct translations
+        for key in translator.iterkeys():
+            if DEBUG : print wos_dict[key]
+            if key == 'CR':
+                for cr in wos_dict['CR']:
+                    # check if the CR field is populated correctly
+                    pass
+
+    status = 1
+    return status
+    
+
+    

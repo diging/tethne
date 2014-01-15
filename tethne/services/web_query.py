@@ -18,7 +18,7 @@ def pubmed_pmid(pmid):
     """
     url_string = ('http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?' +
                   'db=pubmed&' +
-                  'id=' + str(pmid) + '&' + 
+                  'id=' + str(pmid) + '&' +
                   'retmode=xml')
 
     f = urllib.urlopen(url_string)
@@ -30,9 +30,9 @@ def pubmed_pmid(pmid):
 
 def crossref_meta(**kwargs):
     """
-    Query CrossRef with article metadata with the hope to find a DOI number 
-    for that metadata in their system. 
-    
+    Query CrossRef with article metadata with the hope to find a DOI number
+    for that metadata in their system.
+
     Parameters
     ----------
     kwargs : list
@@ -54,13 +54,19 @@ def crossref_meta(**kwargs):
     Notes
     -----
     A sample query is given here:
-    
-    http://www.crossref.org/openurl?pid=git.tethne@gmail.com&url_ver=Z39.88-2004&rft_val_fmt=info:ofi/fmt:kev:mtx:journal&rft.atitle=Isolation%20of%20a%20common%20receptor%20for%20coxsackie%20B&rft.jtitle=Science&rft.aulast=Bergelson&rft.auinit=J&rft.date=1997&rft.volume=275&rft.issue=5304&rft.spage=1320&rft.epage=1323&redirect=false
 
-    More information is available at the CrossRef documentation site: http://help.crossref.org/#home
-    
+    http://www.crossref.org/openurl?pid=git.tethne@gmail.com&
+        url_ver=Z39.88-2004&rft_val_fmt=info:ofi/fmt:kev:mtx:journal&
+        rft.atitle=Isolation%20of%20a%20common%20receptor%20for%20coxsackie%20B&
+        rft.jtitle=Science&rft.aulast=Bergelson&rft.auinit=J&
+        rft.date=1997&rft.volume=275&rft.issue=5304&rft.spage=1320&
+        rft.epage=1323&redirect=false
+
+    More information is available at
+        the CrossRef documentation site: http://help.crossref.org/#home
+
     See "Machine Interfaces / APIs" in particular.
-    
+
     """
     valid_keys = ds.new_query_dict().keys()
     q_dict = util.subdict(kwargs, valid_keys)
@@ -74,7 +80,7 @@ def crossref_meta(**kwargs):
     pid = 'git.tethne@gmail.com'
     url = ('http://www.crossref.org/openurl?' +
             'pid=' + pid +
-            '&url_ver=Z39.88-2004&' + 
+            '&url_ver=Z39.88-2004&' +
             '&rft_val_fmt=info:ofi/fmt:kev:mtx:journal')
 
     #(incomplete but expected) URL encodings
@@ -87,7 +93,7 @@ def crossref_meta(**kwargs):
         '=':'%3D',
         '&':'%26',
         ' ':'%20'}
- 
+
     #build remaining url based on inputs
     for key, value in q_dict.iteritems():
         if value is not None:
@@ -103,7 +109,7 @@ def crossref_meta(**kwargs):
     #special redirect key
     url += '&redirect=false'
 
-    #visit url 
+    #visit url
     xml_string = ''
     import urllib
     f = urllib.urlopen(url)
@@ -111,7 +117,7 @@ def crossref_meta(**kwargs):
     f.close()
 
     #and from the xml extract a doi
-    import xml.etree.ElementTree as ET 
+    import xml.etree.ElementTree as ET
     root = ET.fromstring(xml_string)
     query = root.find('.//{http://www.crossref.org/qrschema/2.0}query')
     try:

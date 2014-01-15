@@ -5,6 +5,11 @@ import tethne.utilities as util
 import tethne.data as ds
 from collections import defaultdict
 
+# MACRO for printing the 'print' statement values.
+# 0 prints nothing in the console.
+# 1 prints all print statements in the console.
+DEBUG = 1
+
 def author_papers(doc_list, paper_id, *paper_attribs):
     """
     Generate an author_papers network NetworkX directed graph.
@@ -29,15 +34,15 @@ def author_papers(doc_list, paper_id, *paper_attribs):
 
     Returns
     -------
-    author_papers : networkx.DiGraph
-        A DiGraph 'author_papers'.
+    author_papers_graph : networkx.DiGraph
+        A DiGraph 'author_papers_graph'.
 
     Raises
     ------
     KeyError : Raised when paper_id is not present in Papers.
 
     """
-    author_papers = nx.DiGraph(type='author_papers')
+    author_papers_graph = nx.DiGraph(type='author_papers')
 
     # Validate paper_id.
     meta_dict = ds.Paper()
@@ -51,17 +56,17 @@ def author_papers(doc_list, paper_id, *paper_attribs):
         paper_attrib_dict = util.subdict(entry, paper_attribs)
         paper_attrib_dict['type'] = 'paper'
         # Add paper node with attributes.
-        author_papers.add_node(entry[paper_id], paper_attrib_dict)
+        author_papers_graph.add_node(entry[paper_id], paper_attrib_dict)
 
         authors = util.concat_list(entry['aulast'], entry['auinit'], ' ')
         for i in xrange(len(authors)):
             # Add person node.
-            author_papers.add_node(authors[i], type="person")
+            author_papers_graph.add_node(authors[i], type="person")
             # Draw edges.
-            author_papers.add_edge(authors[i], entry[paper_id],
+            author_papers_graph.add_edge(authors[i], entry[paper_id],
                                    date=entry['date'])
 
-    return author_papers
+    return author_papers_graph
 
 def coauthors(papers, *edge_attribs):
     """
@@ -71,7 +76,7 @@ def coauthors(papers, *edge_attribs):
 
     **Node attributes** -- none
 
-    **Edges** -- (a,b) \in E(G) if a and b are coauthors on the same paper.
+    **Edges** -- (a,b) in E(G) if a and b are coauthors on the same paper.
 
     Parameters
     ----------
@@ -83,7 +88,7 @@ def coauthors(papers, *edge_attribs):
 
     Returns
     -------
-    coauthors : networkx.MultiGraph
+    coauthors_graph : networkx.MultiGraph
         A co-authorship network.
 
     Notes
@@ -92,8 +97,7 @@ def coauthors(papers, *edge_attribs):
     an exception if not.
 
     """
-    coauthors = nx.Graph(type='coauthors')
-    edge_attrib_dict = {}
+    coauthors_graph = nx.Graph(type='coauthors')
     edge_att = {}
     #edge_listdict={}
     coauthor_dict = {}
@@ -120,8 +124,8 @@ def coauthors(papers, *edge_attribs):
                         # use the defaultdict python module
                         edge_listdict = defaultdict(list)
                         for combined_dict in (coauthor_dict[authors], edge_att):
-                            for key,val in combined_dict.iteritems():
-                                    edge_listdict[key].append(val)
+                            for key, val in combined_dict.iteritems():
+                                edge_listdict[key].append(val)
                         # To check if authors keys are in same order
                         try:
                             coauthor_dict[authors] = edge_listdict
@@ -160,14 +164,13 @@ def coauthors(papers, *edge_attribs):
     #add edges with specified edge attributes
     for key, val in coauthor_dict.iteritems():
         #print "Starting the Map:",key , "---- >" ,val
-         coauthors.add_edge(key[0],
-         key[1],
-         attr_dict =  val)
+        coauthors_graph.add_edge(key[0],
+        key[1],
+        attr_dict =  val)
 
-    return coauthors
+    return coauthors_graph
 
 def author_institution(Papers, *edge_attribs):
-
     """
     Generate a bi-partite graph with people and institutions as vertices, and
     edges indicating affiliation. This may be slightly ambiguous for WoS data
@@ -177,7 +180,7 @@ def author_institution(Papers, *edge_attribs):
 
     **Node attributes** -- none
 
-    **Edges** -- (a,b) \in E(G) if a and b are authors on the same paper.
+    **Edges** -- (a,b) in E(G) if a and b are authors on the same paper.
 
     Parameters
     ----------
@@ -190,12 +193,11 @@ def author_institution(Papers, *edge_attribs):
 
     Returns
     -------
-    author_institution : networkx.MultiGraph
+    author_institution_graph : networkx.MultiGraph
         A graph describing institutional affiliations of authors in the corpus.
-
     """
 
-    author_institution = nx.MultiGraph(type='author_institution')
+    author_institution_graph = nx.MultiGraph(type='author_institution')
     #The Field in Papers which corresponds to authors and affliated institutions
     # is "institutions"
     # { 'institutions' : { Authors:[institutions_list]}}
@@ -206,17 +208,18 @@ def author_institution(Papers, *edge_attribs):
             authors = auth_inst.keys()
             for au in authors:
                 #add node of type 'author'
-                author_institution.add_node(au, type='author')
+                author_institution_graph.add_node(au, type='author')
                 ins_list = auth_inst[au]
                 for ins_str in ins_list:
                   #add node of type 'institutions'
-                  author_institution.add_node(ins_str, type='institution')
+                    author_institution_graph.add_node(ins_str, \
+                                                      type='institution')
                   #print au ,'---->' , ins_str
-                  author_institution.add_edge(au,ins_str, \
+                    author_institution_graph.add_edge(au, ins_str, \
                                               attr_dict=edge_attrib_dict)
 
 
-    return author_institution
+    return author_institution_graph
 
 
 def author_coinstitution(Papers, threshold):
@@ -280,9 +283,9 @@ def author_coinstitution(Papers, threshold):
                     else :
                         pass
         #62809656
-        attribs_dict={}
+        attribs_dict = {}
         for node in coinstitution.nodes():
-            attribs_dict[node]='author'
+            attribs_dict[node] = 'author'
         nx.set_node_attributes( coinstitution, 'type', attribs_dict )
 
 
@@ -331,8 +334,7 @@ def author_cocitation(meta_list, threshold):
     # of 2 authors is co-cited.
 
     cocitations = {}
-    citations_count={}
-    delim=' '
+    delim = ' '
 
     for paper in meta_list:
         #print '----New paper---'
@@ -346,51 +348,60 @@ def author_cocitation(meta_list, threshold):
 
                     # al_i_str is the author i's last name.
                     # converting list to str
-                    al_i_str =''.join(map(str,\
+                    al_i_str = ''.join(map(str, \
                                             (paper['citations'][i]['aulast'])))
-                    # print "author name --- i:",\
-                    #                   paper['citations'][i]['aulast']
 
                     # ai_i_str is the author i's first name
                     # converting list to str
+                    
                     # commented the following line
                     # because of some issues in MAP.
-                    # ai_i_str=\
-                    #    ''.join(map(str,(paper['citations'][i]['auinit'])))
-                    last_name_list = paper['citations'][i]['auinit']
-                    # last name of author i, converted to str.
-                    ai_i_str = str(last_name_list).strip('[]')
-                    # making it a tuple,that it becomes key for cocitations dict
+                    # Now uncommenting back as issue is handled in wos.py
+                    ai_i_str=\
+                        ''.join(map(str,(paper['citations'][i]['auinit'])))
+                    #-------------------------------------------------
+                    # last_name_list = paper['citations'][i]['auinit']
+                    # Last name of author i, converted to str.
+                    # ai_i_str = str(last_name_list).strip('[]')
+                    #-------------------------------------------------
+                    # Making it a tuple,that it becomes key for cocitations dict
                     author_i_str = al_i_str + delim + ai_i_str
+                
                     # Start inner loop at i+1,\
                     # to avoid redundancy and self-loops.
 
                     for j in xrange(i+1, n):
                         # al_j_str is the last name of author j
-                        al_j_str =''.join(map(str,\
+                        al_j_str = ''.join(map(str, \
                                             (paper['citations'][j]['aulast'])))
-                        #print "author name ----j:",\
-                        # paper['citations'][j]['aulast']
 
                         # ai_j_str is the author j's first name
                         # converting list to str
+                        
                         # commented the following line \
                         # because of some issues in MAP.
-                        # ai_j_str=''.join(map(str, \
-                        #                   (paper['citations'][j]['auinit'])))
-
-                        last_name_list = paper['citations'][j]['auinit']
+                        # Now uncommenting back as issue is handled in wos.py
+                        ai_j_str=''.join(map(str, \
+                                           (paper['citations'][j]['auinit'])))
+                        #-------------------------------------------------
+                        # last_name_list = paper['citations'][j]['auinit']
                         # last name of author i, converted to str.
-                        ai_j_str = str(last_name_list).strip('[]')
-                        # making it a tuple so that it becomes the key for
-                        #cocitations dict
-                        author_j_str = al_j_str+delim+ai_j_str
+                        # ai_j_str = str(last_name_list).strip('[]')
+                        #-------------------------------------------------
+                        
+                        # Making it a tuple so that it becomes the key for
+                        # cocitations dict
+                        author_j_str = al_j_str + delim + ai_j_str
 
                         # 2 tuples which are going to be the keys of the dict.
-                        authors_pair = (author_i_str.upper(),\
+                        authors_pair = (author_i_str.upper(), \
                                                 author_j_str.upper())
-                        authors_pair_inv = (author_j_str.upper(),\
+                        authors_pair_inv = (author_j_str.upper(), \
                                                 author_i_str.upper())
+                        
+                        if DEBUG:
+                            print "Authors Pairs: ",authors_pair
+                            print "Authors Pairs inv: ",authors_pair_inv
 
                         # Have these authors been co-cited before?
                         try:
@@ -398,10 +409,12 @@ def author_cocitation(meta_list, threshold):
                             # in the list and
                             # if the pair and inverse are not same. This is done
                             # to avoid drawing edges between same authors(nodes)
+                            
                             if (authors_pair not in found_authors
                                     and (authors_pair != authors_pair_inv)):
                                 cocitations[authors_pair] += 1
                                 found_authors.append(authors_pair)
+                
                         except KeyError:
                             try: # May have been entered in opposite order.
                                 if (authors_pair_inv not in found_authors
@@ -415,11 +428,11 @@ def author_cocitation(meta_list, threshold):
                                 cocitations[authors_pair] = 1
                                 found_authors.append(authors_pair)
 
-    #create the network.
-    for key,val in cocitations.iteritems():
+    # Create the network.
+    for key, val in cocitations.iteritems():
         # If the weight is greater or equal to the user I/P threshold
         if val >= threshold :
-            #add edge between the 2 co-cited authors
-            author_cocitations.add_edge(key[0],key[1], weight=val)
+            # Add edge between the 2 co-cited authors
+            author_cocitations.add_edge(key[0], key[1], weight=val)
 
     return author_cocitations
