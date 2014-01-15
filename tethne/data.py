@@ -290,5 +290,5 @@ def wos2meta_map():
                     'UT':'wosid'    }
 
     return translator
-
+    
 
