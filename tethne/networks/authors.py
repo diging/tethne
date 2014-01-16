@@ -8,7 +8,7 @@ from collections import defaultdict
 # MACRO for printing the 'print' statement values.
 # 0 prints nothing in the console.
 # 1 prints all print statements in the console.
-DEBUG = 1
+DEBUG = 0
 
 def author_papers(doc_list, paper_id, *paper_attribs):
     """
@@ -353,11 +353,11 @@ def author_cocitation(meta_list, threshold):
 
                     # ai_i_str is the author i's first name
                     # converting list to str
-                    
+
                     # commented the following line
                     # because of some issues in MAP.
                     # Now uncommenting back as issue is handled in wos.py
-                    ai_i_str=\
+                    ai_i_str = \
                         ''.join(map(str,(paper['citations'][i]['auinit'])))
                     #-------------------------------------------------
                     # last_name_list = paper['citations'][i]['auinit']
@@ -366,7 +366,7 @@ def author_cocitation(meta_list, threshold):
                     #-------------------------------------------------
                     # Making it a tuple,that it becomes key for cocitations dict
                     author_i_str = al_i_str + delim + ai_i_str
-                
+
                     # Start inner loop at i+1,\
                     # to avoid redundancy and self-loops.
 
@@ -377,18 +377,18 @@ def author_cocitation(meta_list, threshold):
 
                         # ai_j_str is the author j's first name
                         # converting list to str
-                        
+
                         # commented the following line \
                         # because of some issues in MAP.
                         # Now uncommenting back as issue is handled in wos.py
-                        ai_j_str=''.join(map(str, \
+                        ai_j_str = ''.join(map(str, \
                                            (paper['citations'][j]['auinit'])))
                         #-------------------------------------------------
                         # last_name_list = paper['citations'][j]['auinit']
                         # last name of author i, converted to str.
                         # ai_j_str = str(last_name_list).strip('[]')
                         #-------------------------------------------------
-                        
+
                         # Making it a tuple so that it becomes the key for
                         # cocitations dict
                         author_j_str = al_j_str + delim + ai_j_str
@@ -398,10 +398,10 @@ def author_cocitation(meta_list, threshold):
                                                 author_j_str.upper())
                         authors_pair_inv = (author_j_str.upper(), \
                                                 author_i_str.upper())
-                        
+
                         if DEBUG:
-                            print "Authors Pairs: ",authors_pair
-                            print "Authors Pairs inv: ",authors_pair_inv
+                            print "Authors Pairs: ", authors_pair
+                            print "Authors Pairs inv: ", authors_pair_inv
 
                         # Have these authors been co-cited before?
                         try:
@@ -409,12 +409,12 @@ def author_cocitation(meta_list, threshold):
                             # in the list and
                             # if the pair and inverse are not same. This is done
                             # to avoid drawing edges between same authors(nodes)
-                            
+
                             if (authors_pair not in found_authors
                                     and (authors_pair != authors_pair_inv)):
                                 cocitations[authors_pair] += 1
                                 found_authors.append(authors_pair)
-                
+
                         except KeyError:
                             try: # May have been entered in opposite order.
                                 if (authors_pair_inv not in found_authors

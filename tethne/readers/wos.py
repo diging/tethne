@@ -231,7 +231,7 @@ def parse_wos(filepath):
     #end line loop
 
     #define keys that should be lists instead of default string
-    list_keys = ['AU','AF','DE','ID','CR','C1']
+    list_keys = ['AU', 'AF', 'DE', 'ID', 'CR', 'C1']
     delims = {'AU':'\n',
               'AF':'\n',
               'DE':';',
@@ -334,23 +334,25 @@ def parse_cr(ref):
         if match:
             # remove the [] and make it a proper one.
             name = name[match.start()+1:match.end()-1]
-            if DEBUG : print  'stripped name: ',name
-        
+            if DEBUG :
+                print  'stripped name: ', name
+
         name_tokens = name.split(' ')
         if len(name_tokens) < 2:
-            name_tokens.append('None')
+            # name_tokens.append('None')
+            name_tokens.append(' ')
 
         meta_dict['aulast'] = [name_tokens[0]]
         meta_dict['auinit'] = [name_tokens[1]]
 
         if DEBUG:
-            print "Final Meta Dicts###",meta_dict['aulast'], meta_dict['auinit']
-    
+            print "Final Meta Dicts###", meta_dict['aulast'], meta_dict['auinit']
+
         # Temp Solution for #62809724
         if meta_dict['auinit'] == 'None' or meta_dict['aulast'] == 'None' :
             # Do something here
             raise ("The Cited References field is not in the expeceted format")
-    
+
         #strip initial characters based on the field (spaces, 'V', 'DOI')
         meta_dict['date'] = int(tokens[1][1:])
         meta_dict['jtitle'] = tokens[2][1:]
@@ -463,7 +465,7 @@ def wos2meta(wos_data):
         wos_data = [wos_data]
         #print 'wos data \n' , wos_data
 
-    
+
     # Calling the validate function here, before even building wos_meta list
     # [62809724]
     status = validate(wos_data)
@@ -587,12 +589,12 @@ def parse_from_dir(path):
     except IOError:
         raise IOError("Invalid path.")
 
-    for file in files:
+    for f in files:
         try:
-            print "Loaded " + file
-            wos_list += parse_wos(path + "/" + file)
+            print "Loaded " + f
+            wos_list += parse_wos(path + "/" + f)
         except (IOError, DataError): # Ignore files that don't contain WoS data.
-            print "Could not load " + file
+            print "Could not load " + f
             pass
 
     return wos_list
@@ -601,39 +603,44 @@ def parse_from_dir(path):
 def validate(wos_data):
     """
     Defines the fucntion to check the input data validation.
-    
+
     Returns
     -------
     bool - True or false
     if the data is in expected format (True)
     if the respective field is not in expected format (False)
-    
+
     Raises
     ------
     ValueError - according to the severity of the issue,
     whether the wrong format will affect the further processing.
     """
     if DEBUG: print wos_data
-   
-    
+
+
     # Create a translator dict whose keys are the fields which needs to be
     # validated from the input.
     # Any new field which needs validation in the future
     translator = ds.new_wos_dict()
-    
+
     # Now all these input fields needs to be validated as per requirements.
-   
+
     for wos_dict in wos_data:
         #direct translations
         for key in translator.iterkeys():
             if DEBUG : print wos_dict[key]
-            if key == 'CR':
+            # Validate for 'CR' field
+            if wos_dict['CR'] is not None:
                 for cr in wos_dict['CR']:
                     # check if the CR field is populated correctly
+                    pass
+            if wos_dict['C1'] is not None:
+                for cr in wos_dict['C1']:
+                    # check if the C1 field is populated correctly
                     pass
 
     status = 1
     return status
-    
 
-    
+
+

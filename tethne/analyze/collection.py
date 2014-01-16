@@ -59,7 +59,7 @@ def algorithm(C, method, **kwargs):
                         g.add_edge(i, j)
             collection.graphs[graph_index] = g
 
-        results = az.collection.algorithm(collection, 'betweenness_centrality', 
+        results = az.collection.algorithm(collection, 'betweenness_centrality',
                                           k=None)
         print results[0]
 

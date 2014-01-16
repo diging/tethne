@@ -443,7 +443,6 @@ def author_coupling(doc_list, threshold, node_id, *node_attribs):
             if len(overlap) >= threshold:
                 acoupling.add_edge(doc_list[i][node_id],
                                    doc_list[j][node_id],
-                                   overlap=len(overlap))
-                
+                                   overlap=len(overlap))                
     return acoupling
 

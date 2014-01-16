@@ -101,7 +101,7 @@ def crossref_meta(**kwargs):
 
             #encode special characters
             for character, encoding in encodings.iteritems():
-                value = value.replace(character,encoding)
+                value = value.replace(character, encoding)
 
             #and add to the URL
             url += '&rft.' + key + '=' + value
@@ -111,7 +111,7 @@ def crossref_meta(**kwargs):
 
     #visit url
     xml_string = ''
-    import urllib
+    # import urllib # commenting as it was already defined.
     f = urllib.urlopen(url)
     xml_string = f.read()
     f.close()
