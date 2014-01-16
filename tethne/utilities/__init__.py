@@ -64,7 +64,7 @@ def concat_list(listA, listB, delim=' '):
     #concatenate lists
     listC = []
     for i in xrange(len(listA)):
-        app=listA[i] + delim + listB[i]
+        app = listA[i] + delim + listB[i]
         listC.append(app)
 
 
