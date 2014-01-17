@@ -372,9 +372,9 @@ def cocitation(papers, threshold, topn=None, verbose=True):
     # 62657522: Nodes in co-citation graph should have attribute containing
     #  number of citations.
 
-        attribs = { k:v for k , v in citations_count.iteritems()
+    attribs = { k:v for k , v in citations_count.iteritems()
                     if k in cocitation_graph.nodes() }
-        nx.set_node_attributes( cocitation_graph,
+    nx.set_node_attributes(cocitation_graph,
                                 'number_of_cited_times',
                                 attribs )
 
