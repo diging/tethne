@@ -164,11 +164,11 @@ def connected(C, method, **kwargs):
                 results[k] = nx.connected.__dict__[method](G, **kwargs)
     return results
 
-def node_history(C, node, attribute, key='ayjid'):
+def node_history(C, node, attribute, verbose=False):
     """
     Returns a dictionary of attribute values for each Graph in C for a single
     node.
-    
+
     Parameters
     ----------
     C : :class:`.GraphCollection`
@@ -176,9 +176,9 @@ def node_history(C, node, attribute, key='ayjid'):
         The node of interest.
     attribute : str
         The attribute of interest; e.g. 'betweenness_centrality'
-    key : str
-        The key used to identify nodes. Default is 'ayjid' (recommended).
-        
+    verbose : bool
+        If True, prints status and debug messages.
+
     Returns
     -------
     history : dict
@@ -188,7 +188,48 @@ def node_history(C, node, attribute, key='ayjid'):
     history = {}
 
     for k,G in C.graphs.iteritems():
-        if node in G.nodes():
-            history[k] = { v[0]:v[1] for v in G.nodes(data=True) }[node][attribute]
+        asdict = { v[0]:v[1] for v in G.nodes(data=True) }
+        try:
+            history[k] = asdict[node][attribute]
+        except KeyError:
+            if verbose: print "No such node or attribute in Graph " + str(k)
+
+    return history
+
+def edge_history(C, source, target, attribute, verbose=False):
+    """
+    Returns a dictionary of attribute vales for each Graph in C for a single
+    edge.
+
+    Parameters
+    ----------
+    C : :class:`.GraphCollection`
+    source : str
+        Identifier for source node.
+    target : str
+        Identifier for target node.
+    attribute : str
+        The attribute of interest; e.g. 'betweenness_centrality'
+    verbose : bool
+        If True, prints status and debug messages.
+
+    Returns
+    -------
+    history : dict
+        Keys are Graph keys in C; values are attribute values for edge.
+    """
+
+    history = {}
+
+    for k,G in C.graphs.iteritems():
+        try:
+            attributes = G[source][target]
+            try:
+                history[k] = attributes[attribute]
+            except KeyError:
+                if verbose: print "No such attribute for edge in Graph " \
+                                    + str(k)
+        except KeyError:
+            if verbose: print "No such edge in Graph " + str(k)
 
     return history
