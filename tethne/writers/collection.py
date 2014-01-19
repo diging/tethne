@@ -79,6 +79,7 @@ def to_dxgmml(C, path): # [#61510094]
             for period in nodes[n]['periods']:
                 label = str(n).replace("&", "&amp;").replace('"', '')
                 f.write('\t<node label="'+label+'" id="'+label+'" start="'+ str(period['start']) + '" end="' + str(period['end']+1) + '">\n')
+
                 for i in sorted(nodes[n].keys()):
                     if period['start'] <= i <= period['end']:
                         for attr, value in nodes[n][i].iteritems():
@@ -96,7 +97,9 @@ def to_dxgmml(C, path): # [#61510094]
                 tgt = str(e[1]).replace("&", "&amp;").replace('"', '')
                 start = str(period['start'])
                 end = str(period['end']+1)
-                f.write('\t<edge source="' + src + '" target="' + tgt + '" start="'+ start + '" end="' + end + '">\n')
+                f.write('\t<edge source="' + src + '" target="' + tgt \
+                            + '" start="'+ start + '" end="' + end + '">\n')
+
                 for i in sorted(edges[e].keys()):
                     if period['start'] <= i <= period['end']:
                         for attr, value in edges[e][i].iteritems():
@@ -104,8 +107,9 @@ def to_dxgmml(C, path): # [#61510094]
                             if type(value) is str: dtype = 'string'
                             if type(value) is int: dtype = 'integer'
                             if type(value) is float: dtype = 'real'
-                            f.write('\t\t<att name="'+str(attr)+'" type="'+dtype+'" value="'+str(value)+'" start="'+str(i)+'" end="'+str(i+1)+'" />\n'.replace("&", "&amp;"))
+                            f.write('\t\t<att name="'+str(attr)+'" type="'\
+                                    +dtype+'" value="'+str(value)+'" start="'\
+                                    +str(i)+'" end="'\
+                                    +str(i+1)+'" />\n'.replace("&", "&amp;"))
                 f.write('\t</edge>\n')
-
         f.write('</graph>')
-
