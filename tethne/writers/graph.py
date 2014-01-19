@@ -145,7 +145,8 @@ def to_graphml(graph, output_path):
     nx.write_graphml(graph, output_path + ".graphml")
 
 
-def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, nodedecay=0, edgeattack=0, edgedecay=0):
+def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, \
+                    nodedecay=0, edgeattack=0, edgedecay=0):
     """
     Generates dynamic XGMML output from provided graph.
 
@@ -176,7 +177,15 @@ def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, nodedecay=0, 
 
     """
     f = open(output_path + ".xgmml", "w")
-    f.write('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<graph directed="0"  xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.cs.rpi.edu/XGMML">\n\t<att name="selected" value="1" type="boolean" />\n\t<att name="name" value="{0}" type="string"/>\n\t<att name="shared name" value="{0}" type="string"/>\n'.format(name))
+    f.write('<?xml version="1.0" encoding="UTF-8" \
+            standalone="yes"?>\n<graph directed="0" \
+            xmlns:dc="http://purl.org/dc/elements/1.1/" \
+            xmlns:xlink="http://www.w3.org/1999/xlink" \
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" \
+            xmlns="http://www.cs.rpi.edu/XGMML">\n\t<att name="selected" \
+            value="1" type="boolean" />\n\t<att name="name" value="{0}" \
+            type="string"/>\n\t<att name="shared name" value="{0}" \
+            type="string"/>\n'.format(name))
 
     if dynamic:
         node_dates = {}
@@ -199,7 +208,8 @@ def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, nodedecay=0, 
                     start = edge[2]['date']
                     end = edge[2]['date']
                 except KeyError:
-                    raise ValueError("Missing 'date' in graph edge attributes. Required when dynamic=True.")
+                    raise ValueError("Missing 'date' in graph edge attributes. \
+                                     Required when dynamic=True.")
 
             if start < node_dates[edge[0]]['start']:
                 node_dates[edge[0]]['start'] = start
@@ -213,14 +223,17 @@ def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, nodedecay=0, 
                 node_dates[edge[1]]['end'] = end
 
         try:
-            f.write ('\t<edge source="{src}" target="{tgt}" start="{start}" end="{end}">\n'.format(src=edge[0], tgt=edge[1], start=start-edgeattack, end=end+edgedecay).replace('&','&amp;'))
+            f.write ('\t<edge source="{src}" target="{tgt}" start="{start}" \
+                end="{end}">\n'.format(src=edge[0], tgt=edge[1], \
+                start=start-edgeattack, end=end+edgedecay).replace('&','&amp;'))
             for key, value in edge[2].iteritems():
                 if (type (value).__name__ == "str"):
                     v_type = "string"
                 elif (type (value).__name__ == "int"):
                     v_type = "integer"
 
-                f.write('\t\t<att name="{}" value="{}" type="{}" />\n'.format(key, value, v_type).replace('&','&amp;'))
+                f.write('\t\t<att name="{}" value="{}" \
+                type="{}" />\n'.format(key, value, v_type).replace('&','&amp;'))
             f.write('\t</edge>\n')
         except:
             print edge
@@ -243,13 +256,16 @@ def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, nodedecay=0, 
         else:
             start = end = 0
 #        try:
-        f.write('\t<node id="{id}" label="{label}" start="{start}" end="{end}">\n'.format(id=id, label=label, start=start-nodeattack, end=end+nodedecay).replace('&','&amp;'))
+        f.write('\t<node id="{id}" label="{label}" start="{start}" \
+                end="{end}">\n'.format(id=id, label=label, \
+                start=start-nodeattack, end=end+nodedecay).replace('&','&amp;'))
         for key, value in node_attributes.iteritems():
             if (type (value).__name__ == "str"):
                 v_type = "string"
             elif (type (value).__name__ == "int"):
                 v_type = "integer"
-            f.write('\t\t<att name="{}" value="{}" type="{}" />\n'.format(key, value, v_type).replace('&','&amp;'))
+            f.write('\t\t<att name="{}" value="{}" \
+                type="{}" />\n'.format(key, value, v_type).replace('&','&amp;'))
         f.write('\t</node>\n')
 #        except:
 #            print node

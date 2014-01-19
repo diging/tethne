@@ -1,4 +1,4 @@
-﻿FN Thomson Reuters Web of Knowledge
+FN Thomson Reuters Web of Knowledge
 VR 1.0
 PT J
 AU Unnikrishnan, D
@@ -29,12 +29,12 @@ FU US National Science Foundation [CNS-0831940]
 FX The work was funded in part by the US National Science Foundation Grant
    CNS-0831940. The FPGA compilation tools were generously donated by
    Xilinx Corporation.
-CR [Anonymous], 2013, UND FULL VIRT PAR HA
-   [Anonymous], 2013, CISC NEX 1000V SER S
-   [Anonymous], 2013, CLICK ELEMENT DOCUME
-   Anwer MB, 2010, COMPUT COMMUN REV, V40, P183, DOI 10.1145/1851275.1851206
-   Anwer MB, 2009, VISA 09, P1
-   Bavier A, 2006, COMPUT COMMUN REV, V36, P3, DOI 10.1145/1151659.1159916
+CR [Anonymous] , 2013, UND FULL VIRT PAR HA
+   [Anonymous] , 2013, CISC NEX 1000V SER S
+   [Anonymous] , 2013, CLICK ELEMENT DOCUME
+   Anwer, 2010, COMPUT COMMUN REV, V40, P183, DOI 10.1145/1851275.1851206
+   Anwer , 2009, VISA 09, P1
+   Bavier, 2006, COMPUT COMMUN REV, V36, P3, DOI 10.1145/1151659.1159916
    Bhatia S., 2008, P ACM C EM NETW EXP, P72
    Caesar M, 2006, COMPUT COMMUN REV, V36, P363, DOI 10.1145/1151659.1159955
    Chowdhury NMMK, 2010, COMPUT NETW, V54, P862, DOI 10.1016/j.comnet.2009.10.017

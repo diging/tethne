@@ -52,8 +52,8 @@ def parse_pubmed_xml(filepath):
 
     try:
         with open(filepath,'r') as f:
-             tree = ET.fromstring(text, parser)(filepath)
-             root = tree.getroot()
+            tree = ET.fromstring(text, parser)(filepath)
+            root = tree.getroot()
 
     except IOError: # File does not exist, or couldn't be read.
         raise IOError("File does not exist, or cannot be read.")
@@ -130,9 +130,9 @@ def parse_pubmed_xml(filepath):
         pub_dates = article.findall('./front/article-meta/pub-date')
         # if pub-date is not found then loop is skipped
         for pub_date in pub_dates:
-           pub_type = pub_date.get('pub-type')
-           print pub_type
-           if pub_type == 'collection':
+            pub_type = pub_date.get('pub-type')
+            print pub_type
+            if pub_type == 'collection':
                 year = pub_date.find('./year')
                 if year is not None:
                     # then it was found
@@ -248,3 +248,4 @@ def expand_pubmed(meta_list):
     first level?
 
     """
+    pass
