@@ -41,7 +41,7 @@ def attribs_to_string(attrib_dict, keys):
     gexf (which does not allow attributes to have a list type) by making
     them writable in those formats
     """
-    for key, value in attrib_dict.iteritems(): 
+    for key, value in attrib_dict.iteritems():
         if (isinstance(value, list) or isinstance(value, dict) or
             isinstance(value, tuple)):
             attrib_dict[key] = str(value)
@@ -56,34 +56,34 @@ def concat_list(listA, listB, delim=' '):
     Raises index error if lists are not parallel
     """
     #validate input
-    
- 
+
+
     if len(listA) != len(listB):
         raise IndexError('Input lists are not parallel.')
 
     #concatenate lists
     listC = []
     for i in xrange(len(listA)):
-        app=listA[i] + delim + listB[i]
+        app = listA[i] + delim + listB[i]
         listC.append(app)
-        
-   
+
+
     return listC
 
 def strip_non_ascii(string):
     '''
     Returns the string without non-ASCII characters.
-    
+
     Parameters
     ----------
     string : string
         A string that may contain non-ASCII characters.
-    
+
     Returns
     -------
     clean_string : string
         A string that does not contain non-ASCII characters.
-        
+
     '''
     stripped = (c for c in string if 0 < ord(c) < 127)
     clean_string = ''.join(stripped)
