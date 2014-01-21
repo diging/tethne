@@ -138,7 +138,7 @@ class TestDirectCitationGraph(unittest.TestCase):
     def tearDown(self):
         pass
 
-class Test_DirectCitation_DAG(unittest.TestCase):
+class TestDirectCitation_DAG(unittest.TestCase):
     """
     Test the citations, internal_citations networks
     (assuming the reader is functioning)
@@ -272,7 +272,7 @@ class Test_DirectCitation_DAG(unittest.TestCase):
         #     'ALAMPORA G 1999 addadaddsa SCIENCES')
 
         # self.assertRaises(NetworkXError, \
-        # testsuite.networks_test.Test_DirectCitation_DAG)
+        # testsuite.networks_test.TestDirectCitation_DAG)
 
         #=======================================================================
         # try:
