@@ -1,6 +1,8 @@
+"""Methods which provide helper functions for generating networks """
+
 import networkx as nx
-import tethne.utilities as util
-import tethne.data as ds
+#import tethne.utilities as util  # Pylint Warnings
+#import tethne.data as ds
 
 def simplify_multigraph(multigraph, time=False):
     """
@@ -42,8 +44,10 @@ def simplify_multigraph(multigraph, time=False):
                 for edge in edges.values():
                     try:
                         found_date = True
-                        if edge['date'] < start: start = edge['date']
-                        if edge['date'] > end: end = edge['date']
+                        if edge['date'] < start:
+                            start = edge['date']
+                        if edge['date'] > end:
+                            end = edge['date']
                     except KeyError:    # No date to be found.
                         pass
 

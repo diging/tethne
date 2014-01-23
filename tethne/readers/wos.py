@@ -329,7 +329,8 @@ def parse_cr(ref):
         # Checking for few parsers, in the meantime trying out few things.
         name = tokens[0]
         # Temp Solution for #62809724
-        pattern = re.compile('\[(.*?)\]')
+        # pattern = re.compile('\[(.*?)\]') #commented it for pylint.
+        pattern = re.compile(r'\[(.*?)\]')
         match = pattern.search(name)
         if match:
             # remove the [] and make it a proper one.
@@ -346,7 +347,7 @@ def parse_cr(ref):
         meta_dict['auinit'] = [name_tokens[1]]
 
         if DEBUG:
-            print "Final Meta Dicts###", meta_dict['aulast'], meta_dict['auinit']
+            print "Final Meta Dicts", meta_dict['aulast'], meta_dict['auinit']
 
         # Temp Solution for #62809724
         if meta_dict['auinit'] == 'None' or meta_dict['aulast'] == 'None' :
@@ -508,7 +509,8 @@ def wos2meta(wos_data):
         meta_dict['ayjid'] = ayjid
 
         # Parse author-institution affiliations. #60216226, #57746858.
-        pattern = re.compile('\[(.*?)\]')
+        # pattern = re.compile('\[(.*?)\]') # pylint
+        pattern = re.compile(r'\[(.*?)\]')
         author_institutions = {}
 
         if wos_dict['C1'] is not None:
@@ -615,7 +617,8 @@ def validate(wos_data):
     ValueError - according to the severity of the issue,
     whether the wrong format will affect the further processing.
     """
-    if DEBUG: print wos_data
+    if DEBUG:
+        print wos_data
 
 
     # Create a translator dict whose keys are the fields which needs to be
@@ -628,7 +631,8 @@ def validate(wos_data):
     for wos_dict in wos_data:
         #direct translations
         for key in translator.iterkeys():
-            if DEBUG : print wos_dict[key]
+            if DEBUG :
+                print wos_dict[key]
             # Validate for 'CR' field
             if wos_dict['CR'] is not None:
                 for cr in wos_dict['CR']:
