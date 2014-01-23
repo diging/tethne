@@ -32,6 +32,7 @@ def clear_comments(data):
     return res
 
 def log( f ):
+    """ Returns the Log """
     return f
 
 class Bibparser() :
@@ -162,7 +163,8 @@ class Bibparser() :
                     self.next_token()
                     # if token is in hashtable then replace
                     value = self.query_hashtable(self.token)
-                    if re.match(r"[^\w#]|,|}|{", self.token) : #self.token == '' :
+                    #self.token == '' :
+                    if re.match(r"[^\w#]|,|}|{", self.token):
                         break
                     else :
                         val.append(value)
@@ -177,7 +179,7 @@ class Bibparser() :
                     value = self.token
                 self.next_token()
 
-            if re.match(r"}|,",self.token ) :
+            if re.match(r"}|,", self.token ) :
                 break
 
         value = ' '.join(val)
@@ -235,13 +237,19 @@ class Bibparser() :
                                 k = 'page'
 
                             if k == 'title' :
-                                #   Preserve capitalization, as described in http://tex.stackexchange.com/questions/7288/preserving-capitalization-in-bibtex-titles
-                                #   This will likely choke on nested curly-brackets, but that doesn't seem like an ordinary practice.
+                                # Preserve capitalization, as described in
+                                # http://tex.stackexchange.com/questions/7288/preserving-capitalization-in-bibtex-titles
+                                # This will likely choke on nested \
+                                # curly-brackets, but that doesn't seem \
+                                # like an ordinary practice.
                                 def capitalize(s):
                                     return s.group(1) + s.group(2).upper()
                                 while val.find('{') > -1:
                                     caps = (val.find('{'), val.find('}'))
-                                    val = val.replace(val[caps[0]:caps[1]+1], re.sub("(^|\s)(\S)", capitalize, val[caps[0]+1:caps[1]]).strip())
+                                    # Added 'r' before regex for pylint warning.
+                                    val = val.replace(val[caps[0]:caps[1]+1], \
+                                          re.sub(r"(^|\s)(\S)", capitalize, \
+                                          val[caps[0]+1:caps[1]]).strip())
 
                             self.records[ key ][k] = val
                         if self.token != ',' :
@@ -286,7 +294,9 @@ def post_request( j ) :
     import urllib
     import urllib2
     import json
-    url = 'http://127.0.0.1:8085/\?bibliography\=1\&citations\=1\&linkwrap\=1\&responseformat\=json\&showoutput\=1'
+    url = \
+    "http://127.0.0.1:8085/\?bibliography\=1\&citations\=1\& \
+        linkwrap\=1\&responseformat\=json\&showoutput\=1"
     values = j
     req = urllib2.Request(url, values)
     response = urllib2.urlopen(req)

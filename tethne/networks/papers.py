@@ -78,6 +78,7 @@ def top_parents(papers, topn=20, verbose=True):
 
     if verbose:
         print "Found " + str(len(parents)) + " parents."
+       
     return parents, top, counts
 
 
@@ -329,12 +330,12 @@ def cocitation(papers, threshold, topn=None, verbose=True):
 
     if verbose:
         print "Generating a cocitation network..."
+        
 
     for paper in papers:
         if paper['citations'] is not None:  # Some papers don't have citations.
             n = len(paper['citations'])
             for i in xrange(0, n):
-
                 paper_i = paper['citations'][i]['ayjid']
 
                 if topn is not None and paper_i not in include:
@@ -443,6 +444,6 @@ def author_coupling(doc_list, threshold, node_id, *node_attribs):
             if len(overlap) >= threshold:
                 acoupling.add_edge(doc_list[i][node_id],
                                    doc_list[j][node_id],
-                                   overlap=len(overlap))                
+                                   overlap=len(overlap))
     return acoupling
 
