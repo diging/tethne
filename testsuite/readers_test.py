@@ -14,21 +14,24 @@ class Testwos2meta(unittest.TestCase):
 
     
     def test_institutions_1(self):
-        # define expected values for C1 meta_dict key
+        # Define expected values for C1 meta_dict key
         # CASES : TESTED
-        # overlapping of authors - whether append works correctly or not - 5 authors:instution pairs where 1 or 2 authors have common institutions.
+        # Overlapping of authors - whether append works correctly or not
         # KeyError is not creating exception issues.
         
         institutions = self.meta_list[0]['institutions']
      
         #print 'institutions', institutions
                 
-        expected_dict1 =  {'ZHANG, YC': ['Victoria Univ'],
-                                             'WU, ZD': ['Wenzhou Univ', 'Univ Sci & Technol China'],
-                                             'LU, CL': ['Wenzhou Univ', 'Northwestern Polytech Univ'],
-                                             'CHEN, EH': ['Univ Sci & Technol China'],
-                                             'ZHANG, H': ['Inst Sci & Technol Informat Zhejiang Prov'],
-                                             'XU, GD': ['Univ Technol Sydney']}
+        expected_dict1 =  {'ZHANG, YC': ['Victoria Univ'],\
+                            'WU, ZD': \
+                                ['Wenzhou Univ', 'Univ Sci & Technol China'],
+                            'LU, CL': \
+                                ['Wenzhou Univ', 'Northwestern Polytech Univ'],
+                            'CHEN, EH': ['Univ Sci & Technol China'],
+                            'ZHANG, H': \
+                                ['Inst Sci & Technol Informat Zhejiang Prov'],
+                            'XU, GD': ['Univ Technol Sydney']}
                         
         
 
@@ -37,20 +40,24 @@ class Testwos2meta(unittest.TestCase):
         
         self.assertDictEqual(institutions, expected_dict1,"Not equal")    
             
-        # writing the remaining tests.     
+        # Writing the remaining tests.
         
     def test_institutions_2(self):
-        # define expected values for C1 meta_dict key
-        # 2 authors - 2 institutions .. both should be mapped. no overlapping or missing out of expected mappings.
+        # Define expected values for C1 meta_dict key
+        # 2 authors - 2 institutions .. both should be mapped.
+        # No overlapping or missing out of expected mappings.
         
         institutions = self.meta_list[1]['institutions']
-        expected_dict2 =  {'VITIELLO, A': ['Univ Salerno'], 'LOIA, V': ['Univ Salerno'], 'ACAMPORA, G': ['Eindhoven Univ Technol']}
+        expected_dict2 =  {'VITIELLO, A': ['Univ Salerno'],\
+                            'LOIA, V': ['Univ Salerno'], \
+                            'ACAMPORA, G': ['Eindhoven Univ Technol']}
           
-        #Check if the expected and resulted 'institutions' field are the same.
+        # Check if the expected and resulted 'institutions' field are the same.
+        # Changed to Dict Check from List check
+        self.assertDictEqual(institutions, expected_dict2,"Not equal")
         
-        self.assertDictEqual(institutions, expected_dict2,"Not equal")       #changed to Dict Check from List check
-        
-   # commented the following block as it will throw Key Error ( as expected). We can uncomment it anytime.     
+   # Commented the following block as it will throw Key Error ( as expected).
+   # We can uncomment it anytime.
    #============================================================================
     
     def test_institutions_3(self):
@@ -81,48 +88,49 @@ class Testwos2meta(unittest.TestCase):
     def tearDown(self):
         pass
 
-
-class TestPubmedXmlParse(unittest.TestCase):
- 
-    def setUp(self):
-       filepath = './testin/pmc_sample1.xml' 
-       self.meta_list = rd.pubmed.parse_pubmed_xml(filepath)
- 
-    def test_schema_validation(self):
-        pass
- 
-    def test_sample1_front(self):
-        # define expected values for each meta_dict key
-        # citations left out for front matter test
-        expected = {'aulast':['Peng', 'Yuan', 'Wang'],
-                    'auinit':['J', 'J', 'J'],
-                    'atitle':('Effect of Diets Supplemented with Different' +
-                              ' Sources of Astaxanthin on the Gonad of the' +
-                              ' Sea Urchin Anthocidaris crassispina'),
-                    'jtitle':'Nutrients',
-                    'volume':4,
-                    'issue':8,
-                    'spage':922,
-                    'epage':934,
-                    'date':2012,
-                    'ayjid':'Peng J 2012 Nutrients',
-                    'doi':'10.3390/nu4080922',
-                    'pmid':23016124,
-                    'wosid':None}
- 
-        obtained = self.meta_list[0]
-        for key in expected.iterkeys():
-            self.assertEqual(expected[key], obtained[key])
- 
-    def test_sample1_back(self):
-        pass
- 
-    def test_sample2_result(self):
-        pass
- 
-    def tearDown(self):
-        pass
-
+# Commenting the Pubmed test cases as of now.
+#
+#class TestPubmedXmlParse(unittest.TestCase):
+# 
+#    def setUp(self):
+#       filepath = './testin/pmc_sample1.xml' 
+#       self.meta_list = rd.pubmed.parse_pubmed_xml(filepath)
+# 
+#    def test_schema_validation(self):
+#        pass
+# 
+#    def test_sample1_front(self):
+#        # define expected values for each meta_dict key
+#        # citations left out for front matter test
+#        expected = {'aulast':['Peng', 'Yuan', 'Wang'],
+#                    'auinit':['J', 'J', 'J'],
+#                    'atitle':('Effect of Diets Supplemented with Different' +
+#                              ' Sources of Astaxanthin on the Gonad of the' +
+#                              ' Sea Urchin Anthocidaris crassispina'),
+#                    'jtitle':'Nutrients',
+#                    'volume':4,
+#                    'issue':8,
+#                    'spage':922,
+#                    'epage':934,
+#                    'date':2012,
+#                    'ayjid':'Peng J 2012 Nutrients',
+#                    'doi':'10.3390/nu4080922',
+#                    'pmid':23016124,
+#                    'wosid':None}
+# 
+#        obtained = self.meta_list[0]
+#        for key in expected.iterkeys():
+#            self.assertEqual(expected[key], obtained[key])
+# 
+#    def test_sample1_back(self):
+#        pass
+# 
+#    def test_sample2_result(self):
+#        pass
+# 
+#    def tearDown(self):
+#        pass
+#
 
 
 

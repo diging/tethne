@@ -7,27 +7,7 @@
       <attribute id="0" title="type" type="string" />
     </attributes>
     <nodes>
-      <node id="CHEN, FT" label="CHEN, FT">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
-      <node id="HERMAN, G" label="HERMAN, G">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
-      <node id="PAGANO, D" label="PAGANO, D">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
-      <node id="KANG, P" label="KANG, P">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
-      <node id="WANG, Y" label="WANG, Y">
+      <node id="KOCAGUNELI, E" label="KOCAGUNELI, E">
         <attvalues>
           <attvalue for="0" value="author" />
         </attvalues>
@@ -37,72 +17,7 @@
           <attvalue for="0" value="author" />
         </attvalues>
       </node>
-      <node id="VATALIS, KI" label="VATALIS, KI">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
-      <node id="KIM, SB" label="KIM, SB">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
-      <node id="HERRERA, F" label="HERRERA, F">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
-      <node id="ZHANG, B" label="ZHANG, B">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
-      <node id="Elsheshtawy, Y" label="Elsheshtawy, Y">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
-      <node id="CHO, S" label="CHO, S">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
-      <node id="KOCAGUNELI, E" label="KOCAGUNELI, E">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
       <node id="MENZIES, T" label="MENZIES, T">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
-      <node id="BARRENECHEA, E" label="BARRENECHEA, E">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
-      <node id="YE, G" label="YE, G">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
-      <node id="KEUNG, J" label="KEUNG, J">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
-      <node id="VAN DER AALST, WMP" label="VAN DER AALST, WMP">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
-      <node id="FERNANDEZ, A" label="FERNANDEZ, A">
-        <attvalues>
-          <attvalue for="0" value="author" />
-        </attvalues>
-      </node>
-      <node id="MODIS, K" label="MODIS, K">
         <attvalues>
           <attvalue for="0" value="author" />
         </attvalues>
@@ -112,7 +27,32 @@
           <attvalue for="0" value="author" />
         </attvalues>
       </node>
+      <node id="CHEN, FT" label="CHEN, FT">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
       <node id="TUERHONG, G" label="TUERHONG, G">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="HERMAN, G" label="HERMAN, G">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="KIM, SB" label="KIM, SB">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="PAGANO, D" label="PAGANO, D">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="ZHANG, B" label="ZHANG, B">
         <attvalues>
           <attvalue for="0" value="author" />
         </attvalues>
@@ -122,7 +62,12 @@
           <attvalue for="0" value="author" />
         </attvalues>
       </node>
-      <node id="Huang, TCK" label="Huang, TCK">
+      <node id="WANG, Y" label="WANG, Y">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="BARRENECHEA, E" label="BARRENECHEA, E">
         <attvalues>
           <attvalue for="0" value="author" />
         </attvalues>
@@ -134,59 +79,59 @@
       </node>
     </nodes>
     <edges>
-      <edge id="0" source="CHEN, FT" target="ZHANG, B">
-        <attvalues>
-          <attvalue for="1" value="2" />
-        </attvalues>
-      </edge>
-      <edge id="1" source="CHEN, FT" target="WANG, Y">
-        <attvalues>
-          <attvalue for="1" value="2" />
-        </attvalues>
-      </edge>
-      <edge id="2" source="CHEN, FT" target="HERMAN, G">
-        <attvalues>
-          <attvalue for="1" value="2" />
-        </attvalues>
-      </edge>
-      <edge id="3" source="HERMAN, G" target="ZHANG, B">
-        <attvalues>
-          <attvalue for="1" value="2" />
-        </attvalues>
-      </edge>
-      <edge id="4" source="HERMAN, G" target="WANG, Y">
-        <attvalues>
-          <attvalue for="1" value="2" />
-        </attvalues>
-      </edge>
-      <edge id="5" source="PAGANO, D" target="MAALEJ, W">
+      <edge id="0" source="KOCAGUNELI, E" target="MENZIES, T">
         <attvalues>
           <attvalue for="1" value="1" />
         </attvalues>
       </edge>
-      <edge id="6" source="WANG, Y" target="ZHANG, B">
+      <edge id="1" source="GALAR, M" target="BARRENECHEA, E">
+        <attvalues>
+          <attvalue for="1" value="1" />
+        </attvalues>
+      </edge>
+      <edge id="2" source="HUANG, JH" target="CHEN, TY">
+        <attvalues>
+          <attvalue for="1" value="1" />
+        </attvalues>
+      </edge>
+      <edge id="3" source="CHEN, FT" target="ZHANG, B">
         <attvalues>
           <attvalue for="1" value="2" />
         </attvalues>
       </edge>
-      <edge id="7" source="GALAR, M" target="BARRENECHEA, E">
+      <edge id="4" source="CHEN, FT" target="WANG, Y">
+        <attvalues>
+          <attvalue for="1" value="2" />
+        </attvalues>
+      </edge>
+      <edge id="5" source="CHEN, FT" target="HERMAN, G">
+        <attvalues>
+          <attvalue for="1" value="2" />
+        </attvalues>
+      </edge>
+      <edge id="6" source="TUERHONG, G" target="KIM, SB">
         <attvalues>
           <attvalue for="1" value="1" />
         </attvalues>
       </edge>
-      <edge id="8" source="KIM, SB" target="TUERHONG, G">
+      <edge id="7" source="HERMAN, G" target="ZHANG, B">
+        <attvalues>
+          <attvalue for="1" value="2" />
+        </attvalues>
+      </edge>
+      <edge id="8" source="HERMAN, G" target="WANG, Y">
+        <attvalues>
+          <attvalue for="1" value="2" />
+        </attvalues>
+      </edge>
+      <edge id="9" source="PAGANO, D" target="MAALEJ, W">
         <attvalues>
           <attvalue for="1" value="1" />
         </attvalues>
       </edge>
-      <edge id="9" source="KOCAGUNELI, E" target="MENZIES, T">
+      <edge id="10" source="ZHANG, B" target="WANG, Y">
         <attvalues>
-          <attvalue for="1" value="1" />
-        </attvalues>
-      </edge>
-      <edge id="10" source="HUANG, JH" target="CHEN, TY">
-        <attvalues>
-          <attvalue for="1" value="1" />
+          <attvalue for="1" value="2" />
         </attvalues>
       </edge>
     </edges>
