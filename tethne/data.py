@@ -3,6 +3,9 @@ Tethne uses a small number of special classes for handling data.
 """
 
 import networkx as nx
+import pickle as pk
+from cStringIO import StringIO
+from pprint import pprint
 
 class Paper(object):
     """
@@ -221,6 +224,68 @@ class GraphCollection(object):
                 edges = edges | set(G.edges())
             self.edge_list = list(edges)
         return self.edge_list
+    
+    def dump_objects(self, obj,Filename=None):   [#61512528]
+        """
+            This method is used to pickle(save) the objects to a particular file 
+            thereby serializing them.
+            
+            Parameters
+            ----------
+            obj : any object type 
+            Examples are lists, dicts, tuples and class instances.
+            
+            Filename : path and name of the file the user wishes to
+            save the objects. by default, it will be a default path and a 
+            random file name if user did not give any filenames.
+            
+            Raises
+            -------
+            PicklingError : Raised when unpicklable objects are Pickled.
+            
+            Returns
+            -------
+            None
+            
+        """
+                                                     
+            Filename = #
+                                                     
+           # Try block if the filename is present or not.
+            with open('filename.txt', 'wb') as output:
+                pickle.dump(obj, output)
+                                                     
+           # Handle the Prickling error.
+           
+
+
+    def load_objects(self, Filename):    [#61512528]
+        """
+            This method is used to unpickle(load) the objects from the file
+            where it was serialized, and o restore the object hierarchy.
+            
+            Parameters
+            ----------
+                    
+            Filename : path and name of the file the user wishes to
+            retrieve the objects. This is a mandatory parameter.
+            
+            Raises
+            -------
+            UnpicklingError : Raised when there is some issue in unpickling.
+            
+            Returns
+            -------
+            None
+            
+        """
+             # Handle NameError File not found.
+                                          
+                                        
+            with open('filename.txt', 'rb') as input:
+                b = pickle.load(input)
+                                          
+            # Handle unprickling error.
 
 def new_query_dict():
     """
