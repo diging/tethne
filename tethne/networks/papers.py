@@ -5,7 +5,7 @@ import tethne.utilities as util
 import tethne.data as ds
 import operator
 
-def citation_count(papers, key='ayjid', verbose=True):
+def citation_count(papers, key='ayjid', verbose=False):
     """Generates citation counts for all of the papers cited by papers.
 
     Parameters
@@ -35,7 +35,7 @@ def citation_count(papers, key='ayjid', verbose=True):
 
     return counts
 
-def top_cited(papers, topn=20, verbose=True):
+def top_cited(papers, topn=20, verbose=False):
     """Generates a list of the topn most cited papers.
 
     Parameters
@@ -63,7 +63,7 @@ def top_cited(papers, topn=20, verbose=True):
 
     return top, counts
 
-def top_parents(papers, topn=20, verbose=True):
+def top_parents(papers, topn=20, verbose=False):
     """Returns a list of :class:`.Paper` objects that cite the topn most cited
     papers."""
 
@@ -183,7 +183,7 @@ def direct_citation(doc_list, node_id='ayjid', *node_attribs):
         return citation_network, citation_network_internal
 
 def bibliographic_coupling(doc_list, citation_id='ayjid', threshold='1',
-                           node_id='ayjid', *node_attribs):
+                           node_id='ayjid', weighted=False, *node_attribs):
     """
     Generate a bibliographic coupling network.
 
@@ -263,17 +263,27 @@ def bibliographic_coupling(doc_list, citation_id='ayjid', threshold='1',
             #print "n j ", node_j_attribs
             # Add nodes and edge if the citation overlap is sufficiently high.
             overlap = util.overlap(i_list, j_list)
-            if len(overlap) >= threshold:
+            
+            if weighted:
+                if len(overlap) > 0:
+                    w = (float(len(i_list)) * float(len(j_list)))**0.5
+                    similarity = float(len(overlap)) / w
+                else:
+                    similarity = 0
+            else:
+                similarity = len(overlap)
+                
+            if similarity >= threshold:
                 bcoupling.add_node(doc_list[i][node_id], node_i_attribs)
                 bcoupling.add_node(doc_list[j][node_id], node_j_attribs)
                 #nx.set_node_attributes(bcoupling,"",node_i_attribs)
 
                 bcoupling.add_edge(doc_list[i][node_id],
                                    doc_list[j][node_id],
-                                   overlap=len(overlap))
+                                   similarity=similarity)
     return bcoupling
 
-def cocitation(papers, threshold, topn=None, verbose=True):
+def cocitation(papers, threshold, topn=None, verbose=False):
     """
     A cocitation network is a network in which vertices are papers, and edges
     indicate that two papers were cited by the same third paper. Should slice
