@@ -289,14 +289,19 @@ class GraphCollection(object):
         try:
             with open(filepath,'rb') as input: #reading in binary mode
                 try:
-                     b = pk.load(input)
+                     obj_read = pk.load(input)
                 except UnpicklingError:  # Handle unprickling error.
                     raise UnpicklingError \
                         ("UnPickling error: The object cannot be found")
-
+    
         except IOError: # File does not exist, or couldn't be read.
             raise IOError("File does not exist, or cannot be read.")
-     
+
+        if type(obj_read):
+            pprint(obj_read)
+
+        return obj_read
+
                                       
 
 def new_query_dict():
