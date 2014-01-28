@@ -552,6 +552,11 @@ class TestBiblioGraph(unittest.TestCase):
                                                    'aulast',
                                                    'date',
                                                    'citations')
+        self.weighted = nt.papers.bibliographic_coupling(wos_meta,
+                                               'ayjid',
+                                               0.5,
+                                               'ayjid',
+                                               weighted=True)
 
         # define a separate file for the missing citations test case
         # with the same data as the other test file with the exception
@@ -600,6 +605,24 @@ class TestBiblioGraph(unittest.TestCase):
         self.assertEqual(nx.number_of_nodes(self.ayjid_two), 2)
         # first paper shares 2 >= 2 references with second
         self.assertEqual(nx.number_of_edges(self.ayjid_two), 1)
+
+    def test_unweighted(self):
+        """
+        Unweighted similarities.
+        """
+        edges = self.ayjid_one.edges(data=True)
+        self.assertEqual(edges[0][2]['similarity'], 2)
+        self.assertEqual(edges[1][2]['similarity'], 1)
+        self.assertEqual(edges[2][2]['similarity'], 1)  
+    
+    def test_weighted(self):
+        """
+        Weighted similarities.
+        """
+        edges = self.weighted.edges(data=True)
+        self.assertEqual(edges[0][2]['similarity'], 1.0)
+        self.assertEqual(edges[1][2]['similarity'], 0.5)
+        self.assertEqual(edges[2][2]['similarity'], 0.5)  
 
     def test_attribs(self):
         """
@@ -705,22 +728,21 @@ class TestBiblioGraph(unittest.TestCase):
 #                                   'citations':node4_citations}
 #         node4_ayjid = 'LIU L 2013 ENVIRONMENTAL TOXICOLOGY AND CHEMISTRY'
 #
-#         # obtain node attributes from network and test them
-        node_list = [node1_ayjid, node2_ayjid, node3_ayjid]
-        attrib_list = [node1_expected_attribs, node2_expected_attribs,
-                       node3_expected_attribs]
-
-       #commenting as 4th node is not in the graph.
-       # node_list = [node1_ayjid, node2_ayjid, node3_ayjid, node4_ayjid]
-       # attrib_list = [node1_expected_attribs, node2_expected_attribs,
-        #               node3_expected_attribs, node4_expected_attribs]
-
-        for i in xrange(len(node_list)):
-            node = node_list[i]
-            expected_attribs = attrib_list[i]
-            obtained_attribs = self.ayjid_attribs.node[node]
-           # self.assertEqual(expected_attribs, obtained_attribs)
-           #later to uncomment and check this error
+#        # obtain node attributes from network and test them
+#        node_list = [node1_ayjid, node2_ayjid, node3_ayjid]
+#        attrib_list = [node1_expected_attribs, node2_expected_attribs,
+#                       node3_expected_attribs]
+#
+#       #commenting as 4th node is not in the graph.
+#       # node_list = [node1_ayjid, node2_ayjid, node3_ayjid, node4_ayjid]
+#       # attrib_list = [node1_expected_attribs, node2_expected_attribs,
+#        #               node3_expected_attribs, node4_expected_attribs]
+#        for i in xrange(len(node_list)):
+#            node = node_list[i]
+#            expected_attribs = attrib_list[i]
+#            obtained_attribs = self.ayjid_attribs.node[node]
+#           # self.assertEqual(expected_attribs, obtained_attribs)
+#           #later to uncomment and check this error
 
     def test_missing_citations_zero(self):
         """
