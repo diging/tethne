@@ -159,7 +159,7 @@ def coauthors(papers, *edge_attribs):
                         except KeyError:
                             try:
                                 coauthor_dict[authors_inv] = edge_att
-                            except:
+                            except KeyError:
                                 coauthor_dict[authors] = edge_att
     #add edges with specified edge attributes
     for key, val in coauthor_dict.iteritems():

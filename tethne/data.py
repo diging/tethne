@@ -3,6 +3,9 @@ Tethne uses a small number of special classes for handling data.
 """
 
 import networkx as nx
+import pickle as pk
+from cStringIO import StringIO
+from pprint import pprint
 
 class Paper(object):
     """
@@ -221,6 +224,85 @@ class GraphCollection(object):
                 edges = edges | set(G.edges())
             self.edge_list = list(edges)
         return self.edge_list
+    
+    def dump_objects(self, obj,filepath=None):   #[61512528]
+        """
+        This method is used to pickle(save) the objects to a particular file 
+        thereby serializing them.
+        
+        Parameters
+        ----------
+        obj : any object type 
+        Examples are lists, dicts, tuples and class instances.
+        
+        filepath : path and name of the file the user wishes to
+        save the objects. by default, it will be a default path and a 
+        random file name if user did not give any filenames.
+        
+        Raises
+        -------
+        PicklingError : Raised when unpicklable objects are Pickled.
+        
+        Returns
+        -------
+        None
+        """
+    
+        if not filepath:
+            # give some standard filepath here.
+            pass
+            
+        # Try block if the filename is present or not.
+        try:
+            with open(filepath,'wb') as output:
+                try:
+                    pk.dump(obj, output)
+                except PicklingError:     # Handle the Prickling error.
+                    raise PicklingError \
+                            ("Pickling error: The object cannot be pickled")
+        except IOError: # File does not exist, or couldn't be read.
+            raise IOError("File does not exist, or cannot be read.")
+     
+
+    def load_objects(self, filepath):    #[61512528]
+        """
+        This method is used to unpickle(load) the objects from the file
+        where it was serialized, and o restore the object hierarchy.
+        
+        Parameters
+        ----------
+                
+        Filename : path and name of the file the user wishes to
+        retrieve the objects. This is a mandatory parameter.
+        
+        Raises
+        -------
+        UnpicklingError : Raised when there is some issue in unpickling.
+        
+        Returns
+        -------
+        None
+        
+        """
+         # Handle NameError File not found.
+        
+        try:
+            with open(filepath,'rb') as input: #reading in binary mode
+                try:
+                     obj_read = pk.load(input)
+                except UnpicklingError:  # Handle unprickling error.
+                    raise UnpicklingError \
+                        ("UnPickling error: The object cannot be found")
+    
+        except IOError: # File does not exist, or couldn't be read.
+            raise IOError("File does not exist, or cannot be read.")
+
+        if type(obj_read):
+            pprint(obj_read)
+
+        return obj_read
+
+                                      
 
 def new_query_dict():
     """

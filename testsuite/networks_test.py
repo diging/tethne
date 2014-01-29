@@ -138,7 +138,7 @@ class TestDirectCitationGraph(unittest.TestCase):
     def tearDown(self):
         pass
 
-class Test_DirectCitation_DAG(unittest.TestCase):
+class TestDirectCitation_DAG(unittest.TestCase):
     """
     Test the citations, internal_citations networks
     (assuming the reader is functioning)
@@ -272,7 +272,7 @@ class Test_DirectCitation_DAG(unittest.TestCase):
         #     'ALAMPORA G 1999 addadaddsa SCIENCES')
 
         # self.assertRaises(NetworkXError, \
-        # testsuite.networks_test.Test_DirectCitation_DAG)
+        # testsuite.networks_test.TestDirectCitation_DAG)
 
         #=======================================================================
         # try:
@@ -552,6 +552,11 @@ class TestBiblioGraph(unittest.TestCase):
                                                    'aulast',
                                                    'date',
                                                    'citations')
+        self.weighted = nt.papers.bibliographic_coupling(wos_meta,
+                                               'ayjid',
+                                               0.5,
+                                               'ayjid',
+                                               weighted=True)
 
         # define a separate file for the missing citations test case
         # with the same data as the other test file with the exception
@@ -600,6 +605,24 @@ class TestBiblioGraph(unittest.TestCase):
         self.assertEqual(nx.number_of_nodes(self.ayjid_two), 2)
         # first paper shares 2 >= 2 references with second
         self.assertEqual(nx.number_of_edges(self.ayjid_two), 1)
+
+    def test_unweighted(self):
+        """
+        Unweighted similarities.
+        """
+        edges = self.ayjid_one.edges(data=True)
+        self.assertEqual(edges[0][2]['similarity'], 2)
+        self.assertEqual(edges[1][2]['similarity'], 1)
+        self.assertEqual(edges[2][2]['similarity'], 1)  
+    
+    def test_weighted(self):
+        """
+        Weighted similarities.
+        """
+        edges = self.weighted.edges(data=True)
+        self.assertEqual(edges[0][2]['similarity'], 1.0)
+        self.assertEqual(edges[1][2]['similarity'], 0.5)
+        self.assertEqual(edges[2][2]['similarity'], 0.5)  
 
     def test_attribs(self):
         """
@@ -705,22 +728,21 @@ class TestBiblioGraph(unittest.TestCase):
 #                                   'citations':node4_citations}
 #         node4_ayjid = 'LIU L 2013 ENVIRONMENTAL TOXICOLOGY AND CHEMISTRY'
 #
-#         # obtain node attributes from network and test them
-        node_list = [node1_ayjid, node2_ayjid, node3_ayjid]
-        attrib_list = [node1_expected_attribs, node2_expected_attribs,
-                       node3_expected_attribs]
-
-       #commenting as 4th node is not in the graph.
-       # node_list = [node1_ayjid, node2_ayjid, node3_ayjid, node4_ayjid]
-       # attrib_list = [node1_expected_attribs, node2_expected_attribs,
-        #               node3_expected_attribs, node4_expected_attribs]
-
-        for i in xrange(len(node_list)):
-            node = node_list[i]
-            expected_attribs = attrib_list[i]
-            obtained_attribs = self.ayjid_attribs.node[node]
-           # self.assertEqual(expected_attribs, obtained_attribs)
-           #later to uncomment and check this error
+#        # obtain node attributes from network and test them
+#        node_list = [node1_ayjid, node2_ayjid, node3_ayjid]
+#        attrib_list = [node1_expected_attribs, node2_expected_attribs,
+#                       node3_expected_attribs]
+#
+#       #commenting as 4th node is not in the graph.
+#       # node_list = [node1_ayjid, node2_ayjid, node3_ayjid, node4_ayjid]
+#       # attrib_list = [node1_expected_attribs, node2_expected_attribs,
+#        #               node3_expected_attribs, node4_expected_attribs]
+#        for i in xrange(len(node_list)):
+#            node = node_list[i]
+#            expected_attribs = attrib_list[i]
+#            obtained_attribs = self.ayjid_attribs.node[node]
+#           # self.assertEqual(expected_attribs, obtained_attribs)
+#           #later to uncomment and check this error
 
     def test_missing_citations_zero(self):
         """
@@ -1268,6 +1290,8 @@ class TestCocitation(unittest.TestCase):
         #check if the edges_list is same as expected.
 
         obtained_edges_list = self.cocitations_one.edges()
+        
+        # Need to organize this.
 
         expected_edges_list = [('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'YU HL 2007 STOCH ENV RES RISK A'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'ZOU CK 2011 TECHNOMETRICS'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'FILIPPIDIS A 1992 FUEL'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'VATALIS K. 2006 ENVIRON MANAGE'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'LANG CL 2012 NAV RES LOG'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'RAO J 1992 RNEA TECHN B SER LAN'), ('YU HL 2007 STOCH ENV RES RISK A', 'ZOU CK 2011 TECHNOMETRICS'), ('YU HL 2007 STOCH ENV RES RISK A', 'FILIPPIDIS A 1992 FUEL'), ('YU HL 2007 STOCH ENV RES RISK A', 'VATALIS K. 2006 ENVIRON MANAGE'), ('YU HL 2007 STOCH ENV RES RISK A', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), ('YU HL 2007 STOCH ENV RES RISK A', 'LANG CL 2012 NAV RES LOG'), ('YU HL 2007 STOCH ENV RES RISK A', 'RAO J 1992 RNEA TECHN B SER LAN'), ('ZOU CK 2011 TECHNOMETRICS', 'VATALIS K. 2006 ENVIRON MANAGE'), ('ZOU CK 2011 TECHNOMETRICS', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('ZOU CK 2011 TECHNOMETRICS', 'FILIPPIDIS A 1992 FUEL'), ('ZOU CK 2011 TECHNOMETRICS', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), ('ZOU CK 2011 TECHNOMETRICS', 'EFRON B. 1993 INTRO BOOTSTRAP'), ('ZOU CK 2011 TECHNOMETRICS', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('ZOU CK 2011 TECHNOMETRICS', 'LANG CL 2012 NAV RES LOG'), ('ZOU CK 2011 TECHNOMETRICS', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('ZOU CK 2011 TECHNOMETRICS', 'RAO J 1992 RNEA TECHN B SER LAN'), ('ZOU CK 2011 TECHNOMETRICS', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('FILIPPIDIS A 1992 FUEL', 'VATALIS K. 2006 ENVIRON MANAGE'), ('FILIPPIDIS A 1992 FUEL', 'RAO J 1992 RNEA TECHN B SER LAN'), ('FILIPPIDIS A 1992 FUEL', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), ('FILIPPIDIS A 1992 FUEL', 'EFRON B. 1993 INTRO BOOTSTRAP'), ('FILIPPIDIS A 1992 FUEL', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('FILIPPIDIS A 1992 FUEL', 'LANG CL 2012 NAV RES LOG'), ('FILIPPIDIS A 1992 FUEL', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('FILIPPIDIS A 1992 FUEL', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('FILIPPIDIS A 1992 FUEL', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('VATALIS K. 2006 ENVIRON MANAGE', 'RAO J 1992 RNEA TECHN B SER LAN'), ('VATALIS K. 2006 ENVIRON MANAGE', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), ('VATALIS K. 2006 ENVIRON MANAGE', 'LANG CL 2012 NAV RES LOG'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'LANG CL 2012 NAV RES LOG'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'RAO J 1992 RNEA TECHN B SER LAN'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('ADRIANO D. 2001 TRACE ELEMENTS TERRE', 'LANG CL 2012 NAV RES LOG'), ('ADRIANO D. 2001 TRACE ELEMENTS TERRE', 'RAO J 1992 RNEA TECHN B SER LAN'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'LANG CL 2012 NAV RES LOG'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'RAO J 1992 RNEA TECHN B SER LAN'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('LANG CL 2012 NAV RES LOG', 'RAO J 1992 RNEA TECHN B SER LAN'), ('LANG CL 2012 NAV RES LOG', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('LANG CL 2012 NAV RES LOG', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('LANG CL 2012 NAV RES LOG', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('FRANK A. 2010 UCI MACHINE LEARNING', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('FRANK A. 2010 UCI MACHINE LEARNING', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('FRANK A. 2010 UCI MACHINE LEARNING', 'RAO J 1992 RNEA TECHN B SER LAN'), ('RAO J 1992 RNEA TECHN B SER LAN', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('RAO J 1992 RNEA TECHN B SER LAN', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('ANGIULLI F 2005 IEEE T KNOWL DATA EN', 'CHAKRABORTI S 2001 J QUAL TECHNOL')]
         self.assertListEqual(obtained_edges_list, expected_edges_list, \
@@ -1328,6 +1352,141 @@ class TestCocitation(unittest.TestCase):
 
     def tearDown(self):
          pass
+
+
+
+class TestTopCitedParameters(unittest.TestCase):
+    """
+        Test all the types of network
+        Presently for paper_cocitations.
+        Assumes reader is functioning
+        
+        "../testsuite/testin/paper_cocitations#62809724.txt"
+        file has been constructed with
+        the following properties:
+        
+        There are 2 papers , 3 references are cited 2 times.
+        ANGIULLI F 2005 IEEE T KNOWL DATA EN
+        RAO J 1992 RNEA TECHN B SER LAN
+        FILIPPIDIS A 1992 FUEL
+        
+        """
+    
+    def setUp(self):
+        """ Setting up"""
+        
+        wos_data = \
+         rd.wos.parse_wos("../testsuite/testin/paper_cocitations#62809724.txt")
+        meta_list = rd.wos.wos2meta(wos_data)
+        
+        # Trying with no function arguments as there are default ones.
+        self.top_cited,self.citation_count = nt.papers.top_cited(meta_list)
+        
+        self.top_parents,self.top_cited,self.citation_count = \
+                                            nt.papers.top_parents(meta_list)
+        
+        self.citation_count = nt.papers.citation_count(meta_list)
+        
+        # Trying with different function argument other than default one.
+        self.top_cited_date,self.citation_count_date = \
+                                 nt.papers.top_cited(meta_list,10)
+                
+        self.top_parents_date,self.top_cited_date,self.citation_count_date  = \
+                        nt.papers.top_parents(meta_list,12)
+                
+        self.citation_count_date = nt.papers.citation_count(meta_list,'date')
+        
+        # TypeError slice indices must be integers or None or \
+        #  have an __index__ method
+        # This error will be encountered if a wrong value is given in \
+        #  top_parents and top_cited functions
+    
+    
+    
+    def test_top_cited(self):
+        obtained_list = self.top_cited
+        expected_list = ['RAO J 1992 RNEA TECHN B SER LAN', \
+                         'YU HL 2007 STOCH ENV RES RISK A', \
+                         'CHAKRABORTI S 2001 J QUAL TECHNOL', \
+                         'FILIPPIDIS A 1992 FUEL', \
+                         'VATALIS K. 2006 ENVIRON MANAGE', \
+                         'EFRON B. 1993 INTRO BOOTSTRAP', \
+                         'ADRIANO D. 2001 TRACE ELEMENTS TERRE',\
+                         'DAS N 2009 QUAL TECHNOL QUANT M', \
+                         'LANG CL 2012 NAV RES LOG', \
+                         'FRANK A. 2010 UCI MACHINE LEARNING', \
+                         'XIAO HY 2011 SOIL SEDIMENT CONTAM', \
+                         'ANGIULLI F 2005 IEEE T KNOWL DATA EN', \
+                         'ZOU CK 2011 TECHNOMETRICS']
+        self.assertListEqual(obtained_list, \
+                              expected_list, "Edges List is not as expected")
+
+    def test_top_cited_date(self):
+        obtained_list = self.top_cited_date
+        expected_list = ['RAO J 1992 RNEA TECHN B SER LAN', \
+                         'YU HL 2007 STOCH ENV RES RISK A', \
+                         'CHAKRABORTI S 2001 J QUAL TECHNOL', \
+                         'FILIPPIDIS A 1992 FUEL', \
+                         'VATALIS K. 2006 ENVIRON MANAGE', \
+                         'EFRON B. 1993 INTRO BOOTSTRAP', \
+                         'ADRIANO D. 2001 TRACE ELEMENTS TERRE',\
+                         'DAS N 2009 QUAL TECHNOL QUANT M', \
+                         'LANG CL 2012 NAV RES LOG', \
+                         'FRANK A. 2010 UCI MACHINE LEARNING', \
+                         'XIAO HY 2011 SOIL SEDIMENT CONTAM', \
+                         'ANGIULLI F 2005 IEEE T KNOWL DATA EN', \
+                         'ZOU CK 2011 TECHNOMETRICS']
+        self.assertListEqual(obtained_list, \
+                             expected_list, "Edges List is not as expected")
+
+
+    def test_top_parents(self):
+        obtained_list = []
+        for p in self.top_parents:
+            obtained_list.append(p['ayjid'])
+        expected_list = ['MODIS K 2014 ', 'TUERHONG G 2014 ']
+        self.assertListEqual(obtained_list, \
+                                expected_list, "Edges List is not as expected")
+        pass
+    def test_top_cited_date(self):
+        obtained_list = []
+        for p in self.top_parents:
+            obtained_list.append(p['ayjid'])
+        expected_list = ['MODIS K 2014 ', 'TUERHONG G 2014 ']
+        self.assertListEqual(obtained_list, \
+                             expected_list, "Edges List is not as expected")
+    
+    def test_citation_count(self):
+        expected_citations_count_dict = \
+            {'XIAO HY 2011 SOIL SEDIMENT CONTAM': 1,\
+                'YU HL 2007 STOCH ENV RES RISK A': 1, \
+                'CHAKRABORTI S 2001 J QUAL TECHNOL': 1,\
+             'FILIPPIDIS A 1992 FUEL': 2, 'VATALIS K. 2006 ENVIRON MANAGE': 1, \
+                'EFRON B. 1993 INTRO BOOTSTRAP': 1, \
+                'ADRIANO D. 2001 TRACE ELEMENTS TERRE': 1, \
+                'DAS N 2009 QUAL TECHNOL QUANT M': 1, \
+                'LANG CL 2012 NAV RES LOG': 1, \
+                'FRANK A. 2010 UCI MACHINE LEARNING': 1, \
+                'RAO J 1992 RNEA TECHN B SER LAN': 2, \
+                'ANGIULLI F 2005 IEEE T KNOWL DATA EN': 2, \
+                'ZOU CK 2011 TECHNOMETRICS': 1}
+        obtained_citations_count_dict = self.citation_count
+        self.assertDictEqual(expected_citations_count_dict, \
+                             obtained_citations_count_dict, \
+                             "Edge Attribs are equal")
+
+    def test_citation_count_date(self):
+        expected_citations_count_dict = \
+            {1992: 4, 1993: 1, 2001: 2, 2005: 2, 2006: 1, 2007: 1, 2009: 1, \
+                2010: 1, 2011: 2, 2012: 1}
+        obtained_citations_count_dict = self.citation_count_date
+        self.assertDictEqual(expected_citations_count_dict, \
+                             obtained_citations_count_dict,\
+                             "Edge Attribs are equal")
+        
+
+
+
 
 #Custom Error Defined
 class NetworkXError(Exception):

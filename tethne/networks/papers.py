@@ -66,7 +66,7 @@ def top_cited(papers, topn=20, verbose=False):
                        reverse=True)[:topn]).keys()
 
     return top, counts
-    
+
 def top_parents(papers, topn=20, verbose=False):
     """Returns a list of :class:`.Paper` objects that cite the topn most cited
     papers.
@@ -101,6 +101,7 @@ def top_parents(papers, topn=20, verbose=False):
 
     if verbose:
         print "Found " + str(len(parents)) + " parents."
+       
     return parents, top, counts
 
 
@@ -205,7 +206,7 @@ def direct_citation(doc_list, node_id='ayjid', *node_attribs):
         return citation_network, citation_network_internal
 
 def bibliographic_coupling(doc_list, citation_id='ayjid', threshold='1',
-                           node_id='ayjid', *node_attribs):
+                           node_id='ayjid', weighted=False, *node_attribs):
     """
     Generate a bibliographic coupling network.
 
@@ -285,14 +286,24 @@ def bibliographic_coupling(doc_list, citation_id='ayjid', threshold='1',
             #print "n j ", node_j_attribs
             # Add nodes and edge if the citation overlap is sufficiently high.
             overlap = util.overlap(i_list, j_list)
-            if len(overlap) >= threshold:
+            
+            if weighted:
+                if len(overlap) > 0:
+                    w = (float(len(i_list)) * float(len(j_list)))**0.5
+                    similarity = float(len(overlap)) / w
+                else:
+                    similarity = 0
+            else:
+                similarity = len(overlap)
+                
+            if similarity >= threshold:
                 bcoupling.add_node(doc_list[i][node_id], node_i_attribs)
                 bcoupling.add_node(doc_list[j][node_id], node_j_attribs)
                 #nx.set_node_attributes(bcoupling,"",node_i_attribs)
 
                 bcoupling.add_edge(doc_list[i][node_id],
                                    doc_list[j][node_id],
-                                   overlap=len(overlap))
+                                   similarity=similarity)
     return bcoupling
 
 def cocitation(papers, threshold, topn=None, verbose=False):
@@ -361,7 +372,6 @@ def cocitation(papers, threshold, topn=None, verbose=False):
         if paper['citations'] is not None:  # Some papers don't have citations.
             n = len(paper['citations'])
             for i in xrange(0, n):
-
                 paper_i = paper['citations'][i]['ayjid']
 
                 if topn is not None and paper_i not in include:
@@ -400,7 +410,7 @@ def cocitation(papers, threshold, topn=None, verbose=False):
     #  number of citations.
     n_cit = { k:v for k,v in citations_count.iteritems()
                 if k in cocitation_graph.nodes() }
-    nx.set_node_attributes( cocitation_graph, 'times_cited', n_cit )
+    nx.set_node_attributes( cocitation_graph, 'citations', n_cit )
 
     return cocitation_graph
 
@@ -463,6 +473,6 @@ def author_coupling(doc_list, threshold, node_id, *node_attribs):
             if len(overlap) >= threshold:
                 acoupling.add_edge(doc_list[i][node_id],
                                    doc_list[j][node_id],
-                                   overlap=len(overlap))                
+                                   overlap=len(overlap))
     return acoupling
 
