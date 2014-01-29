@@ -4,6 +4,7 @@ formats. Many methods simply leverage equivalent methods in NetworkX.
 """
 
 import networkx as nx
+import pickle as pk
 
 def to_dxgmml(C, path): # [#61510094]
     """

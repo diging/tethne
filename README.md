@@ -17,7 +17,7 @@ For more information, see the Tethne [website](https://github.com/diging/tethne)
 * [ElementTree](http://docs.python.org/2/library/xml.etree.elementtree.html)
 
 ## Questions?
-erick [dot] peirson [at] asu [dot] edu
+Ask [Erick](https://cbs.asu.edu/gradinfo/?page_id=49)
 
 ## Contributors
 * [erickpeirson](http://github.com/erickpeirson)
@@ -38,6 +38,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ![alt text](http://www.gnu.org/graphics/gplv3-127x51.png "GNU GPL 3")
 
 ## About
-Tethne is developed by the ASU Digital Innovation Group (DigInG), part of the Laubichler Lab in the School of Life Science’s Center for Biology & Society.
+Tethne is developed by the 
+[ASU Digital Innovation Group (DigInG)](http://devo-evo.lab.asu.edu/diging),
+part of the [Laubichler Lab](http://devo-evo.lab.asu.edu) in the Center for Biology & 
+Society, School of Life Sciences.
 
-This material is based upon work supported by the National Science Foundation Graduate Research Fellowship Program under Grant No. 2011131209, and NSF Doctoral Dissertation Research Improvement Grant No. 1256752.
+This material is based upon work supported by the National Science Foundation Graduate 
+Research Fellowship Program under Grant No. 2011131209, and NSF Doctoral Dissertation 
+Research Improvement Grant No. 1256752.\
