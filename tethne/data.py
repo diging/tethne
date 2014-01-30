@@ -6,6 +6,7 @@ import networkx as nx
 import pickle as pk
 from cStringIO import StringIO
 from pprint import pprint
+import sys
 
 class Paper(object):
     """
@@ -218,7 +219,7 @@ class GraphCollection(object):
             List (complete set) of edges for this :class:`.GraphCollection` .
         """
 
-        if not hasattr(self, 'edge_list') or overwrite:
+        if not hasattr(self, 'edge_list') or not overwrite :
             edges = set([])
             for G in self.graphs.values():
                 edges = edges | set(G.edges())
@@ -234,6 +235,9 @@ class GraphCollection(object):
         ----------
         obj : any object type 
         Examples are lists, dicts, tuples and class instances.
+        For GraphCollection Objects, respective instances needs to be given.
+        For all the other general instances provide the respective instances as 
+        'obj' parameter.
         
         filepath : path and name of the file the user wishes to
         save the objects. by default, it will be a default path and a 
@@ -293,6 +297,7 @@ class GraphCollection(object):
                 except UnpicklingError:  # Handle unprickling error.
                     raise UnpicklingError \
                         ("UnPickling error: The object cannot be found")
+                    
     
         except IOError: # File does not exist, or couldn't be read.
             raise IOError("File does not exist, or cannot be read.")
