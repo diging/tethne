@@ -226,22 +226,15 @@ class GraphCollection(object):
             self.edge_list = list(edges)
         return self.edge_list
     
-    def dump_objects(self, obj,filepath=None):   #[61512528]
+    def save(self,filepath):   #[61512528]
         """
         This method is used to pickle(save) the objects to a particular file 
         thereby serializing them.
         
         Parameters
         ----------
-        obj : any object type 
-        Examples are lists, dicts, tuples and class instances.
-        For GraphCollection Objects, respective instances needs to be given.
-        For all the other general instances provide the respective instances as 
-        'obj' parameter.
-        
-        filepath : path and name of the file the user wishes to
-        save the objects. by default, it will be a default path and a 
-        random file name if user did not give any filenames.
+        filepath : path and name of the file the user wants to
+        save the GraphCollection objects. 
         
         Raises
         -------
@@ -252,15 +245,12 @@ class GraphCollection(object):
         None
         """
     
-        if not filepath:
-            # give some standard filepath here.
-            pass
             
         # Try block if the filename is present or not.
         try:
             with open(filepath,'wb') as output:
                 try:
-                    pk.dump(obj, output)
+                    pk.dump(self, output)
                 except PicklingError:     # Handle the Prickling error.
                     raise PicklingError \
                             ("Pickling error: The object cannot be pickled")
@@ -268,7 +258,7 @@ class GraphCollection(object):
             raise IOError("File does not exist, or cannot be read.")
      
 
-    def load_objects(self, filepath):    #[61512528]
+    def load(self, filepath):    #[61512528]
         """
         This method is used to unpickle(load) the objects from the file
         where it was serialized, and o restore the object hierarchy.
