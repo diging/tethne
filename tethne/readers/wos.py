@@ -148,7 +148,8 @@ def create_ainstid(aulast=None, auinit=None, addr1=None, \
 
 # Web of Science functions
 def parse(filepath):
-    """Read Web of Science plain text data.
+    """
+    Parse Web of Science field-tagged data.
 
     Parameters
     ----------
@@ -165,14 +166,9 @@ def parse(filepath):
 
     Raises
     ------
-    KeyError
-        One key value which needs to be converted to an 'int' is not present.
-
-    AttributeError
-        similar type of error as given above.
-
-    IOError
-        File at filepath not found, not readable, or empty.
+    KeyError : Key value which needs to be converted to an 'int' is not present.
+    AttributeError : 
+    IOError : File at filepath not found, not readable, or empty.
 
     Notes
     -----
@@ -195,25 +191,25 @@ def parse(filepath):
     if len(line_list) is 0:
         raise IOError("Unable to read filepath or filepath is empty.")
 
-    #convert the data in the file to a usable list of dictionaries
-    #note: first two lines of file are not related to any paper therein
-    last_field_tag = paper_start_key #initialize to something
+    # Convert the data in the file to a usable list of dictionaries.
+    # Note: first two lines of file are not related to any paper therein.
+    last_field_tag = paper_start_key #initialize to something.
     for line in line_list[2:]:
         line = util.strip_non_ascii(line)
         field_tag = line[:2]
         if field_tag == paper_start_key:
-            #then prepare for next paper
+            # Then prepare for next paper.
             wos_dict = ds.new_wos_dict()
 
         if field_tag == paper_end_key:
-            #then add paper to our list
+            # Then add paper to our list.
             wos_list.append(wos_dict)
 
-        #handle keys like AU,AF,CR that continue over many lines
+        # Handle keys like AU,AF,CR that continue over many lines.
         if field_tag == '  ':
             field_tag = last_field_tag
 
-        #add value for the key to the wos_dict: the rest of the line
+        # Add value for the key to the wos_dict: the rest of the line.
         try:
             if field_tag in ['AU', 'AF', 'CR', 'C1']:
                 # These unique fields use the new line delimiter to distinguish
@@ -224,13 +220,12 @@ def parse(filepath):
             else:
                 wos_dict[field_tag] += ' ' + str(line[3:])
         except (KeyError, TypeError, UnboundLocalError):
-            #key didn't exist already, can't append but must create
             wos_dict[field_tag] = str(line[3:])
 
         last_field_tag = field_tag
-    #end line loop
+    # End line loop.
 
-    #define keys that should be lists instead of default string
+    # Define keys that should be lists instead of default string.
     list_keys = ['AU', 'AF', 'DE', 'ID', 'CR', 'C1']
     delims = {'AU':'\n',
               'AF':'\n',
@@ -239,39 +234,36 @@ def parse(filepath):
               'C1':'\n',
               'CR':'\n'}
 
-    #and convert the data at those keys into lists
+    # And convert the data at those keys into lists.
     for wos_dict in wos_list:
-        #print 'wos_dict is \n',wos_dict
         for key in list_keys:
             delim = delims[key]
-            #print 'delim is\n' , delim
             try:
                 key_contents = wos_dict[key]
-                #print 'key_contents is \n ' , key_contents
                 if delim != '\n':
                     wos_dict[key] = key_contents.split(delim)
                 else:
                     wos_dict[key] = key_contents.splitlines()
             except KeyError:
-                #one of the keys to be converted to a list didn't exist
+                # One of the keys to be converted to a list didn't exist.
                 pass
             except AttributeError:
-                #again a key didn't exist but it belonged to the wos
-                #data_struct set of keys; can't split a None
+                # Again a key didn't exist but it belonged to the wos
+                # data_struct set of keys; can't split a None.
                 pass
 
-    #similarly convert some data from string to int
+    # Similarly convert some data from string to int.
     int_keys = ['PY']
     for wos_dict in wos_list:
         for key in int_keys:
             try:
                 wos_dict[key] = int(wos_dict[key])
             except KeyError:
-                #one of the keys to be converted to an int didn't exist
+                # One of the keys to be converted to an int didn't exist.
                 pass
             except TypeError:
-                #again a key didn't exist but it belonged to the wos
-                #data_struct set of keys; can't convert None to an int
+                # Again a key didn't exist but it belonged to the wos
+                # data_struct set of keys; can't convert None to an int.
                 pass
 
     return wos_list
@@ -289,7 +281,7 @@ def parse_cr(ref):
 
     Returns
     -------
-    meta_dict : :class:`.Paper`
+    paper : :class:`.Paper`
         A :class:`.Paper` instance.
 
     Raises
@@ -320,7 +312,7 @@ def parse_cr(ref):
     DOI numbers in a list of form [doi1, doi2, ...], address this?
 
     """
-    meta_dict = ds.Paper()
+    paper = ds.Paper()
     #tokens of form: aulast auinit, date, jtitle, volume, spage, doi
     tokens = ref.split(',')
     try:
@@ -328,7 +320,6 @@ def parse_cr(ref):
         # Checking for few parsers, in the meantime trying out few things.
         name = tokens[0]
         # Temp Solution for #62809724
-        # pattern = re.compile('\[(.*?)\]') #commented it for pylint.
         pattern = re.compile(r'\[(.*?)\]')
         match = pattern.search(name)
         if match:
@@ -342,22 +333,22 @@ def parse_cr(ref):
             # name_tokens.append('None')
             name_tokens.append(' ')
 
-        meta_dict['aulast'] = [name_tokens[0]]
-        meta_dict['auinit'] = [''.join(name_tokens[1:]).replace('.','')]
+        paper['aulast'] = [name_tokens[0]]
+        paper['auinit'] = [''.join(name_tokens[1:]).replace('.','')]
 
         if DEBUG:
-            print "Final Meta Dicts", meta_dict['aulast'], meta_dict['auinit']
+            print "Final Meta Dicts", paper['aulast'], paper['auinit']
 
         # Temp Solution for #62809724
-        if meta_dict['auinit'] == 'None' or meta_dict['aulast'] == 'None' :
+        if paper['auinit'] == 'None' or paper['aulast'] == 'None' :
             raise ("The Cited References field is not in the expeceted format")
 
         #strip initial characters based on the field (spaces, 'V', 'DOI')
-        meta_dict['date'] = int(tokens[1][1:])
-        meta_dict['jtitle'] = tokens[2][1:]
-        meta_dict['volume'] = tokens[3][2:]
-        meta_dict['spage'] = tokens[4][2:]
-        meta_dict['doi'] = tokens[5][5:]
+        paper['date'] = int(tokens[1][1:])
+        paper['jtitle'] = tokens[2][1:]
+        paper['volume'] = tokens[3][2:]
+        paper['spage'] = tokens[4][2:]
+        paper['doi'] = tokens[5][5:]
     except IndexError as E:     # ref did not have the full set of tokens
         pass
     except ValueError as E:     # This occurs when the program expects a date
@@ -365,11 +356,11 @@ def parse_cr(ref):
                                 #  the field incomplete because chances are the
                                 #  CR string is too sparse to use anyway.
 
-    ayjid = create_ayjid(meta_dict['aulast'], meta_dict['auinit'],
-                         meta_dict['date'], meta_dict['jtitle'])
-    meta_dict['ayjid'] = ayjid
+    ayjid = create_ayjid(paper['aulast'], paper['auinit'],
+                         paper['date'], paper['jtitle'])
+    paper['ayjid'] = ayjid
 
-    return meta_dict
+    return paper
 
 def parse_institutions(ref):
     """
@@ -471,16 +462,15 @@ def convert(wos_data):
     if not status:
         #raise Error
         pass
-    #define the direct relationships between WoS fieldtags and Paper keys
+    # Define the direct relationships between WoS fieldtags and Paper keys.
     translator = ds.wos2meta_map()
-    #perform the key convertions
+    # Perform the key convertions
     for wos_dict in wos_data:
-        meta_dict = ds.Paper()
+        paper = ds.Paper()
 
         #direct translations
         for key in translator.iterkeys():
-            meta_dict[translator[key]] = wos_dict[key]
-
+            paper[translator[key]] = wos_dict[key]
         # more complicated translations
         # FIXME: not robust to all names, organziation authors, etc.
         if wos_dict['AU'] is not None:
@@ -498,13 +488,13 @@ def convert(wos_data):
                     auinit = ''
                 aulast_list.append(aulast)
                 auinit_list.append(auinit)
-            meta_dict['aulast'] = aulast_list
-            meta_dict['auinit'] = auinit_list
+            paper['aulast'] = aulast_list
+            paper['auinit'] = auinit_list
 
         #construct ayjid
-        ayjid = create_ayjid(meta_dict['aulast'], meta_dict['auinit'],
-                             meta_dict['date'], meta_dict['jtitle'])
-        meta_dict['ayjid'] = ayjid
+        ayjid = create_ayjid(paper['aulast'], paper['auinit'],
+                             paper['date'], paper['jtitle'])
+        paper['ayjid'] = ayjid
 
         # Parse author-institution affiliations. #60216226, #57746858.
         # pattern = re.compile('\[(.*?)\]') # pylint
@@ -544,17 +534,17 @@ def convert(wos_data):
                         except KeyError:
                             author_institutions[author_au] = [inst_name]
 
-            meta_dict['institutions'] = author_institutions
+            paper['institutions'] = author_institutions
 
-        # Convert CR references into meta_dict format
+        # Convert CR references into paper format
         if wos_dict['CR'] is not None:
             meta_cr_list = []
             for ref in wos_dict['CR']:
                 meta_cr_list.append(parse_cr(ref))
                 #print 'meta_cr_list' , meta_cr_list
-            meta_dict['citations'] = meta_cr_list
+            paper['citations'] = meta_cr_list
 
-        wos_meta.append(meta_dict)
+        wos_meta.append(paper)
     # End wos_dict for loop.
 
     return wos_meta
