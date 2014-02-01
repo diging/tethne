@@ -560,10 +560,10 @@ def convert(wos_data):
     return wos_meta
 
 # [#60462784]
-def parse_from_dir(path):
+def from_dir(path):
     """
-    Convenience function for generating a wos_list from a directory of Web of
-    Science field-tagged data files.
+    Convenience function for generating a list of :class:`Paper` from a 
+    directory of Web of Science field-tagged data files.
 
     Parameters
     ----------
@@ -572,8 +572,7 @@ def parse_from_dir(path):
 
     Returns
     -------
-    wos_list : list
-        A list of wos_dict dictionaries.
+    list : A list of :class:`Paper` objects.
 
     Raises
     ------
@@ -597,7 +596,7 @@ def parse_from_dir(path):
             print "Could not load " + f
             pass
 
-    return wos_list
+    return convert(wos_list)
 
 # [62809724]
 def validate(wos_data):

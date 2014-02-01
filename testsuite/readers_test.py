@@ -9,7 +9,7 @@ class TestConvert(unittest.TestCase):
     def setUp(self):
        print os.getcwd() 
        filepath =  "./testin/authorinstitutions_test.txt" 
-       self.wos_list  = rd.wos.parse_wos(filepath)
+       self.wos_list  = rd.wos.parse(filepath)
        self.meta_list = rd.wos.convert(self.wos_list)
 
     
