@@ -433,7 +433,7 @@ def parse_institutions(ref):
     print 'auinsid', auinsid
     return addr_dict
 
-def wos2meta(wos_data):
+def convert(wos_data):
     """
     Convert a dictionary or list of dictionaries with keys from the
     Web of Science field tags into a :class:`.Paper` instance or list of
@@ -442,7 +442,7 @@ def wos2meta(wos_data):
     Parameters
     ----------
     wos_data : list
-        A list of wos_dict dictionaries with keys from the WoS field tags.
+        A list of dictionaries with keys from the WoS field tags.
 
     Returns
     -------
