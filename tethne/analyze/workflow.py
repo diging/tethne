@@ -2,12 +2,6 @@
 Methods for network analysis.
 """
 
-import tethne.analyze.graph as g #changed by Ramki
-
-# Pylint Warnings.
-#import networkx as nx
-#import tethne.networks as nt
-#import tethne.data as ds
 
 # [#60463184]
 def closeness_introgression(papers, node, start, end, chunk, normalize = False):
