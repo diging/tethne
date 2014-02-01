@@ -167,7 +167,7 @@ def parse(filepath):
     Raises
     ------
     KeyError : Key value which needs to be converted to an 'int' is not present.
-    AttributeError : 
+    AttributeError :
     IOError : File at filepath not found, not readable, or empty.
 
     Notes
@@ -552,7 +552,7 @@ def convert(wos_data):
 # [#60462784]
 def from_dir(path):
     """
-    Convenience function for generating a list of :class:`Paper` from a 
+    Convenience function for generating a list of :class:`Paper` from a
     directory of Web of Science field-tagged data files.
 
     Parameters
