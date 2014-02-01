@@ -228,21 +228,17 @@ class GraphCollection(object):
     
     def save(self,filepath):   #[61512528]
         """
-        This method is used to pickle(save) the objects to a particular file 
-        thereby serializing them.
+        Pickles (serializes) the GraphCollection and saves it to filepath.
         
         Parameters
         ----------
-        filepath : path and name of the file the user wants to
-        save the GraphCollection objects. 
+        filepath : 
+            Full path of output file.
         
         Raises
         -------
         PicklingError : Raised when unpicklable objects are Pickled.
-        
-        Returns
-        -------
-        None
+        IOError : File does not exist, or cannot be opened.
         """
     
             
@@ -255,31 +251,25 @@ class GraphCollection(object):
                     raise PicklingError \
                             ("Pickling error: The object cannot be pickled")
         except IOError: # File does not exist, or couldn't be read.
-            raise IOError("File does not exist, or cannot be read.")
+            raise IOError("File does not exist, or cannot be opened.")
      
 
     def load(self, filepath):    #[61512528]
         """
-        This method is used to unpickle(load) the objects from the file
-        where it was serialized, and o restore the object hierarchy.
+        Loads a pickled (serialized) GraphCollection from filepath.
         
         Parameters
         ----------
-                
-        Filename : path and name of the file the user wishes to
-        retrieve the objects. This is a mandatory parameter.
+        filepath : string
+            Full path to pickled GraphCollection.
         
         Raises
         -------
         UnpicklingError : Raised when there is some issue in unpickling.
-        
-        Returns
-        -------
-        None
-        
+        IOError : File does not exist, or cannot be read.
         """
-         # Handle NameError File not found.
         
+         # Handle NameError File not found.
         try:
             with open(filepath,'rb') as input: #reading in binary mode
                 try:
@@ -291,9 +281,6 @@ class GraphCollection(object):
     
         except IOError: # File does not exist, or couldn't be read.
             raise IOError("File does not exist, or cannot be read.")
-
-        if type(obj_read):
-            pprint(obj_read)
 
         return obj_read
 
