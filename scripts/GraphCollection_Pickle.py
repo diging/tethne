@@ -25,6 +25,7 @@ g2 = ds.GraphCollection()
 # Generate Author coupling and co-authors networks networks 
 
 import tethne.networks as nt
+
 coauthors = nt.authors.coauthors(meta_list, 'date','jtitle','ayjid')
 author_coup = nt.papers.author_coupling(meta_list, 1, 'ayjid', 'atitle', 'date')
 
@@ -40,13 +41,13 @@ g2.__setitem__('ayjid',author_coup)
 # Append 2 objects to
 
 
-g2.dump_objects\
-         (g2,"../testsuite/testout/dumped_graphcollections_objects.txt")
+g2.save\
+         ("../testsuite/testout/graphcollections.txt")
 
-g1.dump_objects\
-    (g1,"../testsuite/testout/dumped_graphcollections_objects.txt")
+g1.save\
+    ("../testsuite/testout/graphcollections.txt")
 
 loaded= \
-         g1.load_objects("../testsuite/testout/dumped_graphcollections_objects.txt")
+    g1.load("../testsuite/testout/graphcollections.txt")
 
 
