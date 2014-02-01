@@ -2,7 +2,7 @@ import unittest
 import tethne.data as ds
 import networkx as nx
 import numpy as np
-
+import pickle as pk
 
 class TestPaper(unittest.TestCase):
     """
@@ -36,8 +36,10 @@ class TestGraphCollection(unittest.TestCase):
     Tests methods for tethne.data.GraphCollection class.
     """
     
+    
     def setUp(self):
         self.collection = ds.GraphCollection()
+        self.filename = "../testsuite/testout/graphcollections.txt"
         self.N = 100    # Number of nodes
         self.I = 5  # Number of graph indices.
         for graph_index in xrange(self.I):
@@ -64,8 +66,46 @@ class TestGraphCollection(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.collection[6] = ('asdf', 'asdf')
 
+        pass
+
+    def test_save(self):
+        """
+        Test of tethne.data.GraphCollection.save .
+        """
+        # Check for Pickling Error
+        with self.assertRaises('PicklingError'):
+            self.save1 = self.collection.save(self.filename)
+            self.save2 = self.collection.save(self.filename)
+            
+
+        # Check for IOError.
+        with self.assertRaises(IOError):
+            self.save1 = self.collection.save(self.filename)
+            self.save2 = self.collection.save(self.filename)
+            
+    
+
+    def test_load(self):
+        """
+        Test of tethne.data.GraphCollection.load .
+        """
+    
+        # Check for UnPickling Error.
+        with  self.assertRaises('UnPicklingError'):
+            self.load  = self.collection.load(self.filename)
+       
+        # Check for IOError
+        with self.assertRaises(IOError):
+            self.load  = self.collection.load(self.filename)
+           
+               
+    
+                    
+
     def tearDown(self):
         pass
+
+
 
 
 if __name__ == '__main__':
