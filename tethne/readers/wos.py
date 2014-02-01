@@ -557,17 +557,17 @@ def read(filepath):
     ----------
     filepath : string
         Filepath to the Web of Science field-tagged data file.
-        
+
     Returns
     -------
     papers : list
         A list of :class:`.Paper` objects.
     """
-    
+
     wl = parse(filepath)
     papers = convert(wl)
     return papers
-    
+
 
 # [#60462784]
 def from_dir(path):
