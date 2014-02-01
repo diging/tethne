@@ -276,7 +276,6 @@ def parse_wos(filepath):
 
     return wos_list
 
-
 def parse_cr(ref):
 
     """
@@ -344,14 +343,13 @@ def parse_cr(ref):
             name_tokens.append(' ')
 
         meta_dict['aulast'] = [name_tokens[0]]
-        meta_dict['auinit'] = [name_tokens[1]]
+        meta_dict['auinit'] = [''.join(name_tokens[1:]).replace('.','')]
 
         if DEBUG:
             print "Final Meta Dicts", meta_dict['aulast'], meta_dict['auinit']
 
         # Temp Solution for #62809724
         if meta_dict['auinit'] == 'None' or meta_dict['aulast'] == 'None' :
-            # Do something here
             raise ("The Cited References field is not in the expeceted format")
 
         #strip initial characters based on the field (spaces, 'V', 'DOI')
