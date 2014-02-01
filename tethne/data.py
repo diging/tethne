@@ -227,23 +227,23 @@ class GraphCollection(object):
                 edges = edges | set(G.edges())
             self.edge_list = list(edges)
         return self.edge_list
-    
+
     def save(self,filepath):   #[61512528]
         """
         Pickles (serializes) the GraphCollection and saves it to filepath.
-        
+
         Parameters
         ----------
-        filepath : 
+        filepath :
             Full path of output file.
-        
+
         Raises
         -------
         PicklingError : Raised when unpicklable objects are Pickled.
         IOError : File does not exist, or cannot be opened.
         """
-    
-            
+
+
         # Try block if the filename is present or not.
         try:
             with open(filepath,'wb') as output:
@@ -254,23 +254,23 @@ class GraphCollection(object):
                             ("Pickling error: The object cannot be pickled")
         except IOError: # File does not exist, or couldn't be read.
             raise IOError("File does not exist, or cannot be opened.")
-     
+
 
     def load(self, filepath):    #[61512528]
         """
         Loads a pickled (serialized) GraphCollection from filepath.
-        
+
         Parameters
         ----------
         filepath : string
             Full path to pickled GraphCollection.
-        
+
         Raises
         -------
         UnpicklingError : Raised when there is some issue in unpickling.
         IOError : File does not exist, or cannot be read.
         """
-        
+
          # Handle NameError File not found.
         try:
             with open(filepath,'rb') as input: #reading in binary mode
@@ -279,18 +279,18 @@ class GraphCollection(object):
                 except UnpicklingError:  # Handle unprickling error.
                     raise UnpicklingError \
                         ("UnPickling error: The object cannot be found")
-                    
-    
+
+
         except IOError: # File does not exist, or couldn't be read.
             raise IOError("File does not exist, or cannot be read.")
 
         return obj_read
 
-                                      
+
 
 def new_query_dict():
     """
-    Declares only those keys of the :class:`.Paper`'s metadata that are 
+    Declares only those keys of the :class:`.Paper`'s metadata that are
     queryable through CrossRef.
     """
     q_dict = {
@@ -310,7 +310,7 @@ def new_query_dict():
 
 def new_wos_dict():
     """
-    Defines the set of field tags that will try to be converted, and intializes 
+    Defines the set of field tags that will try to be converted, and intializes
     them to 'None'.
 
     Returns
@@ -339,7 +339,7 @@ def new_wos_dict():
 def wos2meta_map():
     """
     Defines the direct relationships between the wos_dict and :class:`.Paper`.
-    
+
     Returns
     -------
     translator : dict
