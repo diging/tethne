@@ -147,7 +147,7 @@ def create_ainstid(aulast=None, auinit=None, addr1=None, \
 
 
 # Web of Science functions
-def parse_wos(filepath):
+def parse(filepath):
     """Read Web of Science plain text data.
 
     Parameters
@@ -592,7 +592,7 @@ def parse_from_dir(path):
     for f in files:
         try:
             print "Loaded " + f
-            wos_list += parse_wos(path + "/" + f)
+            wos_list += parse(path + "/" + f)
         except (IOError, DataError): # Ignore files that don't contain WoS data.
             print "Could not load " + f
             pass

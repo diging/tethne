@@ -22,7 +22,7 @@ class TestDirectCitationGraph(unittest.TestCase):
     The sparse data file networks are built on is //testin/wos_citations.txt
     """
     def setUp(self):
-        wos_data = rd.wos.parse_wos('./testin/wos_citations.txt')
+        wos_data = rd.wos.parse('./testin/wos_citations.txt')
         meta_list = rd.wos.convert(wos_data)
 
         # ayjid with no attributes
@@ -154,7 +154,7 @@ class TestDirectCitation_DAG(unittest.TestCase):
     """
     def setUp(self):
 
-        wos_data = rd.wos.parse_wos("../testsuite/testin/citations_test.txt")
+        wos_data = rd.wos.parse("../testsuite/testin/citations_test.txt")
         meta_list = rd.wos.convert(wos_data)
 
         # ayjid with no attributes
@@ -298,7 +298,7 @@ class TestAuthorPapersGraph(unittest.TestCase):
     We also test multiple authors and their link to the same paper
     """
     def setUp(self):
-        wos_data = rd.wos.parse_wos('./testin/wos_authors.txt')
+        wos_data = rd.wos.parse('./testin/wos_authors.txt')
         meta_list = rd.wos.convert(wos_data)
         self.no_attribs = nt.authors.author_papers(meta_list, 'doi')
 
@@ -426,7 +426,7 @@ class TestCoauthorsGraph(unittest.TestCase):
 
     def setUp(self):
 
-        wos_data =rd.wos.parse_wos("../testsuite/testin/coauthors_2_recs.txt")
+        wos_data =rd.wos.parse("../testsuite/testin/coauthors_2_recs.txt")
         meta_list = rd.wos.convert(wos_data)
 
         # There is no concept of user input threshold testcases as the authors \
@@ -530,7 +530,7 @@ class TestBiblioGraph(unittest.TestCase):
     with the third paper, and zero citations with the fourth paper.
     """
     def setUp(self):
-        wos_data = rd.wos.parse_wos('./testin/wos_biblio.txt')
+        wos_data = rd.wos.parse('./testin/wos_biblio.txt')
         wos_meta = rd.wos.convert(wos_data)
         self.ayjid_zero = nt.papers.bibliographic_coupling(wos_meta,
                                                  'ayjid',
@@ -561,7 +561,7 @@ class TestBiblioGraph(unittest.TestCase):
         # define a separate file for the missing citations test case
         # with the same data as the other test file with the exception
         # that the fourth paper is missing its citation record
-        wos_cite = rd.wos.parse_wos('./testin/wos_biblio_cite.txt')
+        wos_cite = rd.wos.parse('./testin/wos_biblio_cite.txt')
         doc_list_cite = rd.wos.convert(wos_cite)
         self.missing_citations_zero = \
                 nt.papers.bibliographic_coupling(doc_list_cite,
@@ -702,48 +702,6 @@ class TestBiblioGraph(unittest.TestCase):
                                   'citations':node3_citations}
         node3_ayjid = 'MULAZZANI L 2013 MARINE POLICY'
 
-        #commenting the paper 4, as it doesnt exist at all.
-        #Previosly all nodes were added in the graph
-#
-#         # paper 4 meta data
-#         node4_atitle = ('Application of multiple geochemical markers to ' +
-#                         'investigate organic pollution in a dynamic coastal' +
-#                         'zone')
-#         node4_date = 2013
-#         node4_aulast = ['Liu', 'Wang', 'Wong', 'Qiu', 'Zeng']
-#         for i in xrange(len(node4_aulast)):
-#             node4_aulast[i] = node4_aulast[i].upper().strip()
-#         node4_cr_list = [('AIZENSHT.Z, 1973, GEOCHIM COSMOCHIM AC, V37, ' +
-#                           'P559, DOI 10.1016/0016-7037(73)90218-4'),
-#                          ('BLUMER M, 1971, MAR BIOL, V8, P183, DOI ' +
-#                           '10.1007/BF00355214'),
-#                          ('Cachot J, 2007, ENVIRON SCI TECHNOL, V41, ' +
-#                           'P7830, DOI 10.1021/es071082v')]
-#         node4_citations = []
-#         for cite in node4_cr_list:
-#             node4_citations.append(rd.wos.parse_cr(cite))
-#         node4_expected_attribs = {'atitle':node4_atitle,
-#                                   'date':node4_date,
-#                                   'aulast':node4_aulast,
-#                                   'citations':node4_citations}
-#         node4_ayjid = 'LIU L 2013 ENVIRONMENTAL TOXICOLOGY AND CHEMISTRY'
-#
-#        # obtain node attributes from network and test them
-#        node_list = [node1_ayjid, node2_ayjid, node3_ayjid]
-#        attrib_list = [node1_expected_attribs, node2_expected_attribs,
-#                       node3_expected_attribs]
-#
-#       #commenting as 4th node is not in the graph.
-#       # node_list = [node1_ayjid, node2_ayjid, node3_ayjid, node4_ayjid]
-#       # attrib_list = [node1_expected_attribs, node2_expected_attribs,
-#        #               node3_expected_attribs, node4_expected_attribs]
-#        for i in xrange(len(node_list)):
-#            node = node_list[i]
-#            expected_attribs = attrib_list[i]
-#            obtained_attribs = self.ayjid_attribs.node[node]
-#           # self.assertEqual(expected_attribs, obtained_attribs)
-#           #later to uncomment and check this error
-
     def test_missing_citations_zero(self):
         """
         if fails network is not robust to papers missing citation data
@@ -784,7 +742,7 @@ class TestAuthorCouplingGraph(unittest.TestCase):
     """
     def setUp(self):
         # read data from docs folder
-        wos_data = rd.wos.parse_wos('./testin/wos_author_coupling.txt')
+        wos_data = rd.wos.parse('./testin/wos_author_coupling.txt')
         meta_list = rd.wos.convert(wos_data)
 
         self.ayjid_zero = nt.papers.author_coupling(meta_list,
@@ -891,7 +849,7 @@ class TestAuthorCocitation(unittest.TestCase):
      """
     def setUp(self):
 
-        wos_data =rd.wos.parse_wos \
+        wos_data =rd.wos.parse \
                 ("../testsuite/testin/cocitations_test_full.txt")
         meta_list = rd.wos.convert(wos_data)
 
@@ -982,7 +940,7 @@ class TestAuthorInstitution(unittest.TestCase):
 
 
     def setUp(self):
-        wos_data = rd.wos.parse_wos("./testin/authorinstitutions_test.txt")
+        wos_data = rd.wos.parse("./testin/authorinstitutions_test.txt")
         meta_list = rd.wos.convert(wos_data)
 
         self.node_attribs_check = nt.authors.author_institution(meta_list)
@@ -1107,7 +1065,7 @@ class TestAuthorCoinstitution(unittest.TestCase):
 
 
     def setUp(self):
-        wos_data = rd.wos.parse_wos("./testin/authorinstitutions_test.txt")
+        wos_data = rd.wos.parse("./testin/authorinstitutions_test.txt")
         meta_list = rd.wos.convert(wos_data)
 
         self.node_attribs_check = \
@@ -1197,7 +1155,7 @@ class TestCocitation(unittest.TestCase):
 
     def setUp(self):
 
-        wos_data = rd.wos.parse_wos("./testin/cocitations_test_2recs.txt")
+        wos_data = rd.wos.parse("./testin/cocitations_test_2recs.txt")
         meta_list = rd.wos.convert(wos_data)
         self.cocitations_zero = nt.papers.cocitation(meta_list, 0) #test 1
         self.cocitations_one = nt.papers.cocitation(meta_list, 1)  # test 2
@@ -1376,7 +1334,7 @@ class TestTopCitedParameters(unittest.TestCase):
         """ Setting up"""
         
         wos_data = \
-         rd.wos.parse_wos("../testsuite/testin/paper_cocitations#62809724.txt")
+         rd.wos.parse("../testsuite/testin/paper_cocitations#62809724.txt")
         meta_list = rd.wos.convert(wos_data)
         
         # Trying with no function arguments as there are default ones.
