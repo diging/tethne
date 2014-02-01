@@ -23,7 +23,7 @@ class TestDirectCitationGraph(unittest.TestCase):
     """
     def setUp(self):
         wos_data = rd.wos.parse_wos('./testin/wos_citations.txt')
-        meta_list = rd.wos.wos2meta(wos_data)
+        meta_list = rd.wos.convert(wos_data)
 
         # ayjid with no attributes
         (self.ayjid_citations,
@@ -155,7 +155,7 @@ class TestDirectCitation_DAG(unittest.TestCase):
     def setUp(self):
 
         wos_data = rd.wos.parse_wos("../testsuite/testin/citations_test.txt")
-        meta_list = rd.wos.wos2meta(wos_data)
+        meta_list = rd.wos.convert(wos_data)
 
         # ayjid with no attributes
         (self.ayjid_citations,
@@ -299,7 +299,7 @@ class TestAuthorPapersGraph(unittest.TestCase):
     """
     def setUp(self):
         wos_data = rd.wos.parse_wos('./testin/wos_authors.txt')
-        meta_list = rd.wos.wos2meta(wos_data)
+        meta_list = rd.wos.convert(wos_data)
         self.no_attribs = nt.authors.author_papers(meta_list, 'doi')
 
         # int, string, list, dict
@@ -427,7 +427,7 @@ class TestCoauthorsGraph(unittest.TestCase):
     def setUp(self):
 
         wos_data =rd.wos.parse_wos("../testsuite/testin/coauthors_2_recs.txt")
-        meta_list = rd.wos.wos2meta(wos_data)
+        meta_list = rd.wos.convert(wos_data)
 
         # There is no concept of user input threshold testcases as the authors \
         # will be mapped with their respective co-authors anyways.
@@ -531,7 +531,7 @@ class TestBiblioGraph(unittest.TestCase):
     """
     def setUp(self):
         wos_data = rd.wos.parse_wos('./testin/wos_biblio.txt')
-        wos_meta = rd.wos.wos2meta(wos_data)
+        wos_meta = rd.wos.convert(wos_data)
         self.ayjid_zero = nt.papers.bibliographic_coupling(wos_meta,
                                                  'ayjid',
                                                  0,
@@ -562,7 +562,7 @@ class TestBiblioGraph(unittest.TestCase):
         # with the same data as the other test file with the exception
         # that the fourth paper is missing its citation record
         wos_cite = rd.wos.parse_wos('./testin/wos_biblio_cite.txt')
-        doc_list_cite = rd.wos.wos2meta(wos_cite)
+        doc_list_cite = rd.wos.convert(wos_cite)
         self.missing_citations_zero = \
                 nt.papers.bibliographic_coupling(doc_list_cite,
                                                              'ayjid',
@@ -785,7 +785,7 @@ class TestAuthorCouplingGraph(unittest.TestCase):
     def setUp(self):
         # read data from docs folder
         wos_data = rd.wos.parse_wos('./testin/wos_author_coupling.txt')
-        meta_list = rd.wos.wos2meta(wos_data)
+        meta_list = rd.wos.convert(wos_data)
 
         self.ayjid_zero = nt.papers.author_coupling(meta_list,
                                                 0,
@@ -893,7 +893,7 @@ class TestAuthorCocitation(unittest.TestCase):
 
         wos_data =rd.wos.parse_wos \
                 ("../testsuite/testin/cocitations_test_full.txt")
-        meta_list = rd.wos.wos2meta(wos_data)
+        meta_list = rd.wos.convert(wos_data)
 
         #No need to check edge / node attribs as there are none.
 
@@ -983,7 +983,7 @@ class TestAuthorInstitution(unittest.TestCase):
 
     def setUp(self):
         wos_data = rd.wos.parse_wos("./testin/authorinstitutions_test.txt")
-        meta_list = rd.wos.wos2meta(wos_data)
+        meta_list = rd.wos.convert(wos_data)
 
         self.node_attribs_check = nt.authors.author_institution(meta_list)
 
@@ -1108,7 +1108,7 @@ class TestAuthorCoinstitution(unittest.TestCase):
 
     def setUp(self):
         wos_data = rd.wos.parse_wos("./testin/authorinstitutions_test.txt")
-        meta_list = rd.wos.wos2meta(wos_data)
+        meta_list = rd.wos.convert(wos_data)
 
         self.node_attribs_check = \
                 nt.authors.author_coinstitution(meta_list, 1) # test 2
@@ -1198,7 +1198,7 @@ class TestCocitation(unittest.TestCase):
     def setUp(self):
 
         wos_data = rd.wos.parse_wos("./testin/cocitations_test_2recs.txt")
-        meta_list = rd.wos.wos2meta(wos_data)
+        meta_list = rd.wos.convert(wos_data)
         self.cocitations_zero = nt.papers.cocitation(meta_list, 0) #test 1
         self.cocitations_one = nt.papers.cocitation(meta_list, 1)  # test 2
         self.cocitations_two = nt.papers.cocitation(meta_list, 2)  # test 5
@@ -1377,7 +1377,7 @@ class TestTopCitedParameters(unittest.TestCase):
         
         wos_data = \
          rd.wos.parse_wos("../testsuite/testin/paper_cocitations#62809724.txt")
-        meta_list = rd.wos.wos2meta(wos_data)
+        meta_list = rd.wos.convert(wos_data)
         
         # Trying with no function arguments as there are default ones.
         self.top_cited,self.citation_count = nt.papers.top_cited(meta_list)

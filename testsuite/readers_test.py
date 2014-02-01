@@ -4,13 +4,13 @@ import tethne.utilities as util
 import os
 
 
-class Testwos2meta(unittest.TestCase):
+class TestConvert(unittest.TestCase):
 
     def setUp(self):
        print os.getcwd() 
        filepath =  "./testin/authorinstitutions_test.txt" 
        self.wos_list  = rd.wos.parse_wos(filepath)
-       self.meta_list = rd.wos.wos2meta(self.wos_list)
+       self.meta_list = rd.wos.convert(self.wos_list)
 
     
     def test_institutions_1(self):
