@@ -194,7 +194,7 @@ class GraphCollection(object):
             :class:`.GraphCollection` .
         """
 
-        if not len(self.node_list) > 0 or overwrite:
+        if len(self.node_list) == 0 or overwrite:
             nodes = set([])
             for G in self.graphs.values():
                 nodes = nodes | set(G.nodes())
@@ -219,77 +219,57 @@ class GraphCollection(object):
             List (complete set) of edges for this :class:`.GraphCollection` .
         """
 
-        if not len(self.edge_list) > 0 or overwrite:
+        if len(self.edge_list) == 0 or overwrite :
             edges = set([])
             for G in self.graphs.values():
                 edges = edges | set(G.edges())
             self.edge_list = list(edges)
         return self.edge_list
     
-    def dump_objects(self, obj,filepath=None):   #[61512528]
+    def save(self,filepath):   #[61512528]
         """
-        This method is used to pickle(save) the objects to a particular file 
-        thereby serializing them.
+        Pickles (serializes) the GraphCollection and saves it to filepath.
         
         Parameters
         ----------
-        obj : any object type 
-        Examples are lists, dicts, tuples and class instances.
-        For GraphCollection Objects, respective instances needs to be given.
-        For all the other general instances provide the respective instances as 
-        'obj' parameter.
-        
-        filepath : path and name of the file the user wishes to
-        save the objects. by default, it will be a default path and a 
-        random file name if user did not give any filenames.
+        filepath : 
+            Full path of output file.
         
         Raises
         -------
         PicklingError : Raised when unpicklable objects are Pickled.
-        
-        Returns
-        -------
-        None
+        IOError : File does not exist, or cannot be opened.
         """
     
-        if not filepath:
-            # give some standard filepath here.
-            pass
             
         # Try block if the filename is present or not.
         try:
             with open(filepath,'wb') as output:
                 try:
-                    pk.dump(obj, output)
+                    pk.dump(self, output)
                 except PicklingError:     # Handle the Prickling error.
                     raise PicklingError \
                             ("Pickling error: The object cannot be pickled")
         except IOError: # File does not exist, or couldn't be read.
-            raise IOError("File does not exist, or cannot be read.")
+            raise IOError("File does not exist, or cannot be opened.")
      
 
-    def load_objects(self, filepath):    #[61512528]
+    def load(self, filepath):    #[61512528]
         """
-        This method is used to unpickle(load) the objects from the file
-        where it was serialized, and o restore the object hierarchy.
+        Loads a pickled (serialized) GraphCollection from filepath.
         
         Parameters
         ----------
-                
-        Filename : path and name of the file the user wishes to
-        retrieve the objects. This is a mandatory parameter.
+        filepath : string
+            Full path to pickled GraphCollection.
         
         Raises
         -------
         UnpicklingError : Raised when there is some issue in unpickling.
-        
-        Returns
-        -------
-        None
-        
+        IOError : File does not exist, or cannot be read.
         """
-         # Handle NameError File not found.
         
+         # Handle NameError File not found.
         try:
             with open(filepath,'rb') as input: #reading in binary mode
                 try:
@@ -301,9 +281,6 @@ class GraphCollection(object):
     
         except IOError: # File does not exist, or couldn't be read.
             raise IOError("File does not exist, or cannot be read.")
-
-        if type(obj_read):
-            pprint(obj_read)
 
         return obj_read
 
