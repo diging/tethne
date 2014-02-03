@@ -9,6 +9,14 @@ readers Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`dfr` Module
+-----------------
+
+.. automodule:: tethne.readers.dfr
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`pubmed` Module
 --------------------
 

@@ -62,7 +62,7 @@
 
 
 <span class="c"># PubMed functions</span>
-<div class="viewcode-block" id="pubmed_file_id"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.pubmed.pubmed_file_id">[docs]</a><span class="k">def</span> <span class="nf">pubmed_file_id</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_pubmed_file_id</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Future (not implemented).</span>
 
 <span class="sd">    Given a filename (presumed to contain PubMed compatible IDs)</span>
@@ -81,8 +81,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">return</span> <span class="bp">None</span>
-</div>
-<div class="viewcode-block" id="parse_pubmed_xml"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.pubmed.parse_pubmed_xml">[docs]</a><span class="k">def</span> <span class="nf">parse_pubmed_xml</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+
+<div class="viewcode-block" id="read"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.pubmed.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a file with PubMed XML, return a list of :class:`.Paper` instances.</span>
 
@@ -99,10 +99,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    meta_list : list</span>
 <span class="sd">        A list of :class:`.Paper` instances.</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
-
-
 
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -275,7 +272,7 @@
 
     <span class="k">return</span> <span class="n">meta_list</span>
 </div>
-<div class="viewcode-block" id="expand_pubmed"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.pubmed.expand_pubmed">[docs]</a><span class="k">def</span> <span class="nf">expand_pubmed</span><span class="p">(</span><span class="n">meta_list</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_expand_pubmed</span><span class="p">(</span><span class="n">meta_list</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Future (not implemented).</span>
 
 <span class="sd">    Given a list of first-level meta dicts and their second-level meta dicts,</span>
@@ -302,7 +299,7 @@
 <span class="sd">    first level?</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">pass</span></div>
+    <span class="k">pass</span>
 </pre></div>
 
           </div>

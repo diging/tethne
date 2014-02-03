@@ -87,6 +87,33 @@ Raises index error if lists are not parallel</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="tethne.utilities.dict_from_node">
+<tt class="descclassname">tethne.utilities.</tt><tt class="descname">dict_from_node</tt><big>(</big><em>node</em>, <em>recursive=False</em><big>)</big><a class="reference internal" href="_modules/tethne/utilities.html#dict_from_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.utilities.dict_from_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts ElementTree node to a dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>node</strong> : ElementTree node</p>
+<p><strong>recursive</strong> : boolean</p>
+<blockquote>
+<div><p>If recursive=False, the value of any field with children will be the
+number of children.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dict</strong> : nested dictionary.</p>
+<blockquote class="last">
+<div><p>Tags as keys and values as values. Sub-elements that occur multiple
+times in an element are contained in a list.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="tethne.utilities.overlap">
 <tt class="descclassname">tethne.utilities.</tt><tt class="descname">overlap</tt><big>(</big><em>listA</em>, <em>listB</em><big>)</big><a class="reference internal" href="_modules/tethne/utilities.html#overlap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.utilities.overlap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return list of objects shared by listA, listB.</p>
