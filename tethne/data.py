@@ -41,7 +41,7 @@ class Paper(object):
         """
         Defines keys, and acceptable data types for values.
         """
-        self.meta_dict = {
+        self.internal = {
                             'aulast':None,
                             'auinit':None,
                             'institutions':None,
@@ -57,7 +57,8 @@ class Paper(object):
                             'ayjid':None,
                             'doi':None,
                             'pmid':None,
-                            'wosid':None    }
+                            'wosid':None,
+                            'abstract':None    }
 
         self.list_fields = [ 'aulast',
                              'auinit',
@@ -72,7 +73,8 @@ class Paper(object):
                                'ayjid',
                                'doi',
                                'pmid',
-                               'wosid' ]
+                               'wosid',
+                               'abstract' ]
 
         self.int_fields = [ 'date' ]
 
@@ -87,8 +89,8 @@ class Paper(object):
         vt = type(value)
         ks = str(key)
 
-        if key not in self.meta_dict.keys():
-            raise KeyError(ks + " is not a valid key in Paper meta_dict.")
+        if key not in self.internal.keys():
+            raise KeyError(ks + " is not a valid key in Paper.")
         elif key in self.list_fields and vt is not list and value is not None:
             raise ValueError("Value for field '"+ ks +"' must be a list.")
         elif key in self.string_fields and vt is not str and value is not None:
@@ -98,28 +100,28 @@ class Paper(object):
         elif key in self.dict_fields and vt is not dict and value is not None:
             raise ValueError("Value for field '"+ ks +"' must be a dictionary.")
         else:
-            self.meta_dict[key] = value
+            self.internal[key] = value
 
     def __getitem__(self, key):
-        return self.meta_dict[key]
+        return self.internal[key]
 
     def __delitem__(self, key):
-        del self.meta_dict[key]
+        del self.internal[key]
 
     def __len__(self):
-        return len(self.meta_dict)
+        return len(self.internal)
 
     def keys(self):
-        """Returns the keys of the internal meta_dict."""
-        return self.meta_dict.keys()
+        """Returns the keys of the :class:`.Paper`'s metadata fields."""
+        return self.internal.keys()
 
     def values(self):
-        """Returns the values of the internal meta_dict."""
-        return self.meta_dict.values()
+        """Returns the values of the :class:`.Paper`'s metadata fields."""
+        return self.internal.values()
 
     def iteritems(self):
-        """Returns an iterator for the internal meta_dict."""
-        return self.meta_dict.iteritems()
+        """Returns an iterator for the :class:`.Paper`'s metadata fields"""
+        return self.internal.iteritems()
 
 
 class GraphCollection(object):
@@ -225,23 +227,23 @@ class GraphCollection(object):
                 edges = edges | set(G.edges())
             self.edge_list = list(edges)
         return self.edge_list
-    
+
     def save(self,filepath):   #[61512528]
         """
         Pickles (serializes) the GraphCollection and saves it to filepath.
-        
+
         Parameters
         ----------
-        filepath : 
+        filepath :
             Full path of output file.
-        
+
         Raises
         -------
         PicklingError : Raised when unpicklable objects are Pickled.
         IOError : File does not exist, or cannot be opened.
         """
-    
-            
+
+
         # Try block if the filename is present or not.
         try:
             with open(filepath,'wb') as output:
@@ -252,23 +254,23 @@ class GraphCollection(object):
                             ("Pickling error: The object cannot be pickled")
         except IOError: # File does not exist, or couldn't be read.
             raise IOError("File does not exist, or cannot be opened.")
-     
+
 
     def load(self, filepath):    #[61512528]
         """
         Loads a pickled (serialized) GraphCollection from filepath.
-        
+
         Parameters
         ----------
         filepath : string
             Full path to pickled GraphCollection.
-        
+
         Raises
         -------
         UnpicklingError : Raised when there is some issue in unpickling.
         IOError : File does not exist, or cannot be read.
         """
-        
+
          # Handle NameError File not found.
         try:
             with open(filepath,'rb') as input: #reading in binary mode
@@ -277,18 +279,19 @@ class GraphCollection(object):
                 except UnpicklingError:  # Handle unprickling error.
                     raise UnpicklingError \
                         ("UnPickling error: The object cannot be found")
-                    
-    
+
+
         except IOError: # File does not exist, or couldn't be read.
             raise IOError("File does not exist, or cannot be read.")
 
         return obj_read
 
-                                      
+
 
 def new_query_dict():
     """
-    Declares only those keys of meta_dict that are query-able through CrossRef.
+    Declares only those keys of the :class:`.Paper`'s metadata that are
+    queryable through CrossRef.
     """
     q_dict = {
                 'aulast':None,
@@ -307,8 +310,8 @@ def new_query_dict():
 
 def new_wos_dict():
     """
-    Defines the set of field tags that will try to be converted into a meta_dict
-    and intializes them to 'None'.
+    Defines the set of field tags that will try to be converted, and intializes
+    them to 'None'.
 
     Returns
     -------
@@ -328,13 +331,14 @@ def new_wos_dict():
                     'EP':None,
                     'PY':None,
                     'UT':None,
-                    'CR':None   }
+                    'CR':None,
+                    'AB':None   }
 
     return wos_dict
 
 def wos2meta_map():
     """
-    Defines the direct relationships between the wos_dict and the meta_dict.
+    Defines the direct relationships between the wos_dict and :class:`.Paper`.
 
     Returns
     -------
@@ -351,7 +355,8 @@ def wos2meta_map():
                     'BP':'spage',
                     'EP':'epage',
                     'PY':'date',
-                    'UT':'wosid'    }
+                    'UT':'wosid',
+                    'AB':'abstract'    }
 
     return translator
 
