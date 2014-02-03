@@ -536,7 +536,7 @@ def read(datapath):
         A list of :class:`.Paper` objects.
     """
 
-    wl = parse(filepath)
+    wl = parse(datapath)
     papers = convert(wl)
     return papers
 

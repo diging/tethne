@@ -50,7 +50,7 @@ def _handle_paper(article):
     translator = _dfr2paper_map()
     for key, value in translator.iteritems():
         try:
-            paper[value] = pdata[key]
+            paper[value] = str(pdata[key]).upper()
         except KeyError:    # Article may not have all keys of interest.
             pass
 
