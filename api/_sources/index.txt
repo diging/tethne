@@ -44,7 +44,7 @@ About
 -----
 
 Tethne is developed by the ASU Digital Innovation Group (DigInG_), part of the Laubichler 
-Lab in the School of Life Science's Center for Biology & Society. 
+Lab in the Center for Biology & Society, School of Life Sciences. 
 
 .. _DigInG: http://devo-evo.lab.asu.edu/diging
 

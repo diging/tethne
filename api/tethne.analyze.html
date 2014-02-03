@@ -39,6 +39,9 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="tethne.networks.html" title="networks Package"
              accesskey="N">next</a> |</li>
         <li><a href="index.html">tethne  documentation</a> &raquo;</li>
@@ -60,8 +63,8 @@ analyses specific to bibliographic datasets.</p>
 </div>
 <div class="section" id="module-tethne.analyze.collection">
 <span id="collection-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">collection</span></tt> Module<a class="headerlink" href="#module-tethne.analyze.collection" title="Permalink to this headline">¶</a></h2>
-<p>This module provides methods for analyzing <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> objects, 
-conventionally denoted as <strong>C</strong>. In large part, these methods simply provide 
+<p>This module provides methods for analyzing <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> objects,
+conventionally denoted as <strong>C</strong>. In large part, these methods simply provide
 systematic access to algorithms in NetworkX.</p>
 <dl class="function">
 <dt id="tethne.analyze.collection.algorithm">
@@ -80,9 +83,9 @@ a dictionary of results as:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
 <blockquote>
-<div><p>The <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to analyze. The specified method will be
+<div><p>The <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to analyze. The specified method will be
 applied to each <tt class="xref py py-class docutils literal"><span class="pre">graph</span></tt> in <strong>C</strong>.</p>
 </div></blockquote>
 <p><strong>method</strong> : string</p>
@@ -98,7 +101,7 @@ of the specified method.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>results</strong> : dict</p>
 <blockquote>
-<div><p>A nested dictionary of results: results/elem(node or edge)/graph 
+<div><p>A nested dictionary of results: results/elem(node or edge)/graph
 index.</p>
 </div></blockquote>
 </td>
@@ -127,7 +130,8 @@ index.</p>
                 <span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
     <span class="n">collection</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="n">graph_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
 
-<span class="n">results</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="s">&#39;betweenness_centrality&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="s">&#39;betweenness_centrality&#39;</span><span class="p">,</span>
+                                  <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -136,7 +140,7 @@ index.</p>
 2000: 0.0008689093723107329,
 2001: 0.010504898852426189,
 2002: 0.009338654511194512,
-2003: 0.007519105636349891} 
+2003: 0.007519105636349891}
 </pre></div>
 </div>
 </dd></dl>
@@ -150,9 +154,9 @@ collection.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
 <blockquote>
-<div><p>The <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to analyze. The specified method will be
+<div><p>The <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to analyze. The specified method will be
 applied to each <tt class="xref py py-class docutils literal"><span class="pre">graph</span></tt> in <strong>C</strong>.</p>
 </div></blockquote>
 <p><strong>method</strong> : string</p>
@@ -208,6 +212,78 @@ applied to each <tt class="xref py py-class docutils literal"><span class="pre">
 </div>
 </dd></dl>
 
+<dl class="function">
+<dt id="tethne.analyze.collection.edge_history">
+<tt class="descclassname">tethne.analyze.collection.</tt><tt class="descname">edge_history</tt><big>(</big><em>C</em>, <em>source</em>, <em>target</em>, <em>attribute</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/collection.html#edge_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.collection.edge_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary of attribute vales for each Graph in C for a single
+edge.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
+<p><strong>source</strong> : str</p>
+<blockquote>
+<div><p>Identifier for source node.</p>
+</div></blockquote>
+<p><strong>target</strong> : str</p>
+<blockquote>
+<div><p>Identifier for target node.</p>
+</div></blockquote>
+<p><strong>attribute</strong> : str</p>
+<blockquote>
+<div><p>The attribute of interest; e.g. &#8216;betweenness_centrality&#8217;</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool</p>
+<blockquote>
+<div><p>If True, prints status and debug messages.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>history</strong> : dict</p>
+<blockquote class="last">
+<div><p>Keys are Graph keys in C; values are attribute values for edge.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.analyze.collection.node_history">
+<tt class="descclassname">tethne.analyze.collection.</tt><tt class="descname">node_history</tt><big>(</big><em>C</em>, <em>node</em>, <em>attribute</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/collection.html#node_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.collection.node_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary of attribute values for each Graph in C for a single
+node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
+<p><strong>node</strong> : str</p>
+<blockquote>
+<div><p>The node of interest.</p>
+</div></blockquote>
+<p><strong>attribute</strong> : str</p>
+<blockquote>
+<div><p>The attribute of interest; e.g. &#8216;betweenness_centrality&#8217;</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool</p>
+<blockquote>
+<div><p>If True, prints status and debug messages.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>history</strong> : dict</p>
+<blockquote class="last">
+<div><p>Keys are Graph keys in C; values are attribute values for node.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <div class="section" id="module-tethne.analyze.graph">
 <span id="graph-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">graph</span></tt> Module<a class="headerlink" href="#module-tethne.analyze.graph" title="Permalink to this headline">¶</a></h2>
@@ -215,9 +291,9 @@ applied to each <tt class="xref py py-class docutils literal"><span class="pre">
 <dl class="function">
 <dt id="tethne.analyze.graph.global_closeness_centrality">
 <tt class="descclassname">tethne.analyze.graph.</tt><tt class="descname">global_closeness_centrality</tt><big>(</big><em>g</em>, <em>normalize=True</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/graph.html#global_closeness_centrality"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.graph.global_closeness_centrality" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates global closeness centrality for all nodes in the network. For 
-connected graphs, equivalent to conventional betweenness centrality. For 
-disconnected graphs, works around infinite path lengths between nodes in 
+<dd><p>Calculates global closeness centrality for all nodes in the network. For
+connected graphs, equivalent to conventional betweenness centrality. For
+disconnected graphs, works around infinite path lengths between nodes in
 different components.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -259,7 +335,7 @@ in different components.</p>
 </div></blockquote>
 <p><strong>normalize</strong> : boolean</p>
 <blockquote>
-<div><p>If True, normalizes centrality based on the average shortest path 
+<div><p>If True, normalizes centrality based on the average shortest path
 length. Default is True.</p>
 </div></blockquote>
 </td>
@@ -377,6 +453,9 @@ substantially more processing time, and values will usually be &gt;&gt; 0.</p>
              >index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="tethne.networks.html" title="networks Package"

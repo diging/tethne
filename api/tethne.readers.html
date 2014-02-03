@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="tethne  documentation" href="index.html" />
     <link rel="up" title="tethne Package" href="tethne.html" />
-    <link rel="next" title="resources Package" href="tethne.resources.html" />
+    <link rel="next" title="utilities Package" href="tethne.utilities.html" />
     <link rel="prev" title="networks Package" href="tethne.networks.html" /> 
   </head>
   <body>
@@ -40,7 +40,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tethne.resources.html" title="resources Package"
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tethne.utilities.html" title="utilities Package"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="tethne.networks.html" title="networks Package"
@@ -59,41 +62,53 @@
 <h1>readers Package<a class="headerlink" href="#readers-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
 <h2><tt class="xref py py-mod docutils literal"><span class="pre">readers</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-tethne.readers"></span><p>Contains methods for parsing bibliographic datasets.</p>
+<span class="target" id="module-tethne.readers"></span><p>Each file reader provides methods to parse bibliographic data from a
+scholarly database (e.g. Web of Science or PubMed), resulting in a
+list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances containing as many as possible of
+the following keys (missing values are set to None):</p>
+<blockquote>
+<div><ul class="simple">
+<li>aulast (list) &#8211; Authors&#8217; surnames, as a list.</li>
+<li>auinit (list) &#8211; Authors&#8217; initials, as a list.</li>
+<li>institution (dict) &#8211; Institutions with which the authors are affiliated.</li>
+<li>atitle (str) &#8211; Article title.</li>
+<li>jtitle (str) &#8211; Journal title or abbreviated title.</li>
+<li>volume (str) &#8211; Journal volume number.</li>
+<li>issue (str) &#8211; journal issue number.</li>
+<li>spage (str) &#8211; Etarting page of article in journal.</li>
+<li>epage (str) &#8211; Ending page of article in journal.</li>
+<li>date (int) &#8211; Date of publication.</li>
+<li>abstract (str)</li>
+</ul>
+</div></blockquote>
+<p>These keys are associated with the meta data entries in the databases of
+organizations such as the International DOI Foundation and its Registration
+Agencies such as CrossRef and DataCite.</p>
+<p>In addition, <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances will contain keys with information
+relevant to the networks of interest for Tethne including:</p>
+<blockquote>
+<div><ul>
+<li><dl class="first docutils">
+<dt>citations &#8211; list of minimum <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances for cited</dt>
+<dd><p class="first last">references.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">ayjid &#8211; First author&#8217;s name (last, fi), publication year, and journal.</p>
+</li>
+<li><p class="first">doi &#8211; Digital Object Identifier</p>
+</li>
+<li><p class="first">pmid &#8211; PubMed ID</p>
+</li>
+<li><p class="first">wosid &#8211; Web of Science UT fieldtag</p>
+</li>
+</ul>
+</div></blockquote>
+<p>Missing data here also results in the above keys being set to None.</p>
 <dl class="exception">
 <dt id="tethne.readers.DataError">
-<em class="property">exception </em><tt class="descclassname">tethne.readers.</tt><tt class="descname">DataError</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#tethne.readers.DataError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">tethne.readers.</tt><tt class="descname">DataError</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/tethne/readers.html#DataError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.DataError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-tethne.readers.bibtex">
-<span id="bibtex-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">bibtex</span></tt> Module<a class="headerlink" href="#module-tethne.readers.bibtex" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="tethne.readers.bibtex.parse_bib">
-<tt class="descclassname">tethne.readers.bibtex.</tt><tt class="descname">parse_bib</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/bibtex.html#parse_bib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.bibtex.parse_bib" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
-<blockquote>
-<div><p>Path to BibTex file.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>bib_list</strong> : list</p>
-<blockquote class="last">
-<div><p>A list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>tethne.resources. bib has been known to make errors in parsing bib files.</p>
-<p>FIXME: structure the bibtex translator in the data_struct folder along with 
-the others.</p>
 </dd></dl>
 
 </div>
@@ -109,36 +124,36 @@ with care.</p>
 first[&#8216;citations&#8217;], expand the network by adding the second-level meta
 dicts to the first level. That is, for the second-level meta dicts with
 sufficient information (either a DOI, PubMed ID, enough metadata to
-query for a DOI, etc.), query PubMed for their more expansive set 
-of meta data, most notably their citation data, parse the associated xml, 
-and append their <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> to the meta_list.</p>
+query for a DOI, etc.), query PubMed for their more expansive set
+of meta data, most notably their citation data, parse the associated xml,
+and append their <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> to the meta_list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>meta_list</strong> : list</p>
 <blockquote>
-<div><p>A list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
+<div><p>A list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
 </div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>list</strong> : list</p>
 <blockquote class="last">
-<div><p>A list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
+<div><p>A list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>Do something about the redundent information about them stored still in the 
+<p>Do something about the redundent information about them stored still in the
 first level?</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="tethne.readers.pubmed.parse_pubmed_xml">
 <tt class="descclassname">tethne.readers.pubmed.</tt><tt class="descname">parse_pubmed_xml</tt><big>(</big><em>filepath</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/pubmed.html#parse_pubmed_xml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.pubmed.parse_pubmed_xml" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given a file with PubMed XML, return a list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
+<dd><p>Given a file with PubMed XML, return a list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
 <p>See the following hyperlinks regarding possible structures of XML:
 * <a class="reference external" href="http://www.ncbi.nlm.nih.gov/pmc/pmcdoc/tagging-guidelines/citations/v2/citationtags.html#2Articlewithmorethan10authors%28listthefirst10andaddetal%29">http://www.ncbi.nlm.nih.gov/pmc/pmcdoc/tagging-guidelines/citations/v2/citationtags.html#2Articlewithmorethan10authors%28listthefirst10andaddetal%29</a>
 * <a class="reference external" href="http://dtd.nlm.nih.gov/publishing/">http://dtd.nlm.nih.gov/publishing/</a></p>
@@ -154,7 +169,7 @@ first level?</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>meta_list</strong> : list</p>
 <blockquote class="last">
-<div><p>A list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
+<div><p>A list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -191,47 +206,37 @@ return an xml string for each article associated with that ID.</p>
 </div>
 <div class="section" id="module-tethne.readers.wos">
 <span id="wos-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">wos</span></tt> Module<a class="headerlink" href="#module-tethne.readers.wos" title="Permalink to this headline">¶</a></h2>
-<p>Each file reader takes an input file from an academic knowledge database
-such as the Web of Science or PubMed and parses the input file into a
-list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances for each paper with as many as possible of 
-the following keys; missing values are set to None:</p>
+<p>Reader for Web of Science field-tagged bibliographic data.</p>
+<dl class="function">
+<dt id="tethne.readers.wos.convert">
+<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">convert</tt><big>(</big><em>wos_data</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a dictionary or list of dictionaries with keys from the
+Web of Science field tags into a <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instance or list of
+<a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances, the standard for Tethne.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>wos_data</strong> : list</p>
 <blockquote>
-<div><ul class="simple">
-<li>aulast  - authors&#8217; last name as a list</li>
-<li>auinit  - authors&#8217; first initial as a list</li>
-<li>atitle  - article title</li>
-<li>jtitle  - journal title or abbreviated title</li>
-<li>volume  - journal volume number</li>
-<li>issue   - journal issue number</li>
-<li>spage   - starting page of article in journal</li>
-<li>epage   - ending page of article in journal</li>
-<li>date    - article date of publication</li>
-</ul>
+<div><p>A list of dictionaries with keys from the WoS field tags.</p>
 </div></blockquote>
-<p>These keys are associated with the meta data entries in the databases of
-organizations such as the International DOI Foundation and its Registration
-Agencies such as CrossRef and DataCite.</p>
-<p>In addition, <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances will contain keys with information 
-relevant to the networks of interest for Tethne including:</p>
-<blockquote>
-<div><ul>
-<li><dl class="first docutils">
-<dt>citations &#8211; list of minimum <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances for cited </dt>
-<dd><p class="first last">references.</p>
-</dd>
-</dl>
-</li>
-<li><p class="first">ayjid &#8211; First author&#8217;s name (last, fi), publication year, and journal.</p>
-</li>
-<li><p class="first">doi &#8211; Digital Object Identifier</p>
-</li>
-<li><p class="first">pmid &#8211; PubMed ID</p>
-</li>
-<li><p class="first">wosid &#8211; Web of Science UT fieldtag</p>
-</li>
-</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>wos_meta</strong> : list</p>
+<blockquote class="last">
+<div><p>A list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
 </div></blockquote>
-<p>Missing data here also results in the above keys being set to None.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Need to handle author name anomolies (case, blank spaces, etc.) that may
+make the same author appear to be two different authors in Networkx; this is
+important for any graph with authors as nodes.</p>
+</dd></dl>
+
 <dl class="function">
 <dt id="tethne.readers.wos.create_ainstid">
 <tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">create_ainstid</tt><big>(</big><em>aulast=None</em>, <em>auinit=None</em>, <em>addr1=None</em>, <em>addr2=None</em>, <em>country=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#create_ainstid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.create_ainstid" title="Permalink to this definition">¶</a></dt>
@@ -270,7 +275,7 @@ Returns &#8216;Unknown Institution&#8217; if all id components are missing (None
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ainstid</strong> : string</p>
 <blockquote class="last">
-<div><p>Fuzzy identifier ainstid, or &#8216;Unknown Institution&#8217; if all id components 
+<div><p>Fuzzy identifier ainstid, or &#8216;Unknown Institution&#8217; if all id components
 are missing (None).</p>
 </div></blockquote>
 </td>
@@ -312,7 +317,7 @@ Returns &#8216;Unknown paper&#8217; if all id components are missing (None).</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ayj</strong> : string</p>
 <blockquote class="last">
-<div><p>Fuzzy identifier ayjid, or &#8216;Unknown paper&#8217; if all id components are 
+<div><p>Fuzzy identifier ayjid, or &#8216;Unknown paper&#8217; if all id components are
 missing (None).</p>
 </div></blockquote>
 </td>
@@ -322,59 +327,10 @@ missing (None).</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="tethne.readers.wos.parse_cr">
-<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">parse_cr</tt><big>(</big><em>ref</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#parse_cr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.parse_cr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Supports the Web of Science reader by converting the strings found
-at the CR field tag of a record into a minimum <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ref</strong> : str</p>
-<blockquote>
-<div><p>CR field tag data from a plain text Web of Science file.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>meta_dict</strong> : <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a></p>
-<blockquote>
-<div><p>A <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instance.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>IndexError</strong> :</p>
-<blockquote>
-<div><p>When input &#8216;ref&#8217; has less number of tokens than necessary ones.</p>
-</div></blockquote>
-<p><strong>ValueError</strong> :</p>
-<blockquote class="last">
-<div><p>Gets input with mismacthed inputtype. Ex: getting no numbers for a date 
-field.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>Needs a sophisticated name parser, would like to use an open source resource
-for this.</p>
-<p>If WoS is missing a field in the middle of the list there are NOT commas 
-indicating that; the following example does NOT occur:</p>
-<blockquote>
-<div>Doe J, ,, Some Journal</div></blockquote>
-<p>instead</p>
-<blockquote>
-<div>Doe J, Some Journal</div></blockquote>
-<p>This threatens the integrity of WoS data; should we address it?</p>
-<p>Another threat: if WoS is unsure of the DOI number there will be multiple 
-DOI numbers in a list of form [doi1, doi2, ...], address this?</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="tethne.readers.wos.parse_from_dir">
-<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">parse_from_dir</tt><big>(</big><em>path</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#parse_from_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.parse_from_dir" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience function for generating a wos_list from a directory of Web of
-Science field-tagged data files.</p>
+<dt id="tethne.readers.wos.from_dir">
+<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">from_dir</tt><big>(</big><em>path</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#from_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.from_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function for generating a list of <tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt> from a
+directory of Web of Science field-tagged data files.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -385,10 +341,7 @@ Science field-tagged data files.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>wos_list</strong> : list</p>
-<blockquote>
-<div><p>A list of wos_dict dictionaries.</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>list</strong> : A list of <tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt> objects.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>IOError</strong> :</p>
@@ -402,49 +355,9 @@ Science field-tagged data files.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="tethne.readers.wos.parse_institutions">
-<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">parse_institutions</tt><big>(</big><em>ref</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#parse_institutions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.parse_institutions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Supports the Web of Science reader by converting the strings found at the C1
-fieldtag of a record into a minimum <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ref</strong> : str</p>
-<blockquote>
-<div><p>&#8216;C1&#8217; field tag data from a plain text Web of Science file which contains
-Author First and Last names, Institution affiliated, and the 
-location/city where they are affiliated to.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>addr_dict</strong> : <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a></p>
-<blockquote>
-<div><p>A <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instance.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>IndexError</strong> :</p>
-<blockquote>
-<div><p>When input &#8216;ref&#8217; has less number of tokens than necessary ones.</p>
-</div></blockquote>
-<p><strong>ValueError</strong> :</p>
-<blockquote class="last">
-<div><p>Gets input with mismacthed inputtype. Ex: getting no numbers for a date 
-field.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>Needs to check many test cases to check various input types.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="tethne.readers.wos.parse_wos">
-<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">parse_wos</tt><big>(</big><em>filepath</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#parse_wos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.parse_wos" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read Web of Science plain text data.</p>
+<dt id="tethne.readers.wos.parse">
+<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">parse</tt><big>(</big><em>filepath</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse Web of Science field-tagged data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -457,25 +370,16 @@ field.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>wos_list</strong> : list</p>
 <blockquote>
-<div><p>A list of dictionaries each associated with a paper from the Web of 
-Science with keys from docs/fieldtags.txt as encountered in the file; 
-most values associated with keys are strings with special exceptions 
+<div><p>A list of dictionaries each associated with a paper from the Web of
+Science with keys from docs/fieldtags.txt as encountered in the file;
+most values associated with keys are strings with special exceptions
 defined by the list_keys and int_keys variables.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>KeyError</strong> :</p>
-<blockquote>
-<div><p>One key value which needs to be converted to an &#8216;int&#8217; is not present.</p>
-</div></blockquote>
-<p><strong>AttributeError</strong> :</p>
-<blockquote>
-<div><p>similar type of error as given above.</p>
-</div></blockquote>
-<p><strong>IOError</strong> :</p>
-<blockquote class="last">
-<div><p>File at filepath not found, not readable, or empty.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>KeyError</strong> : Key value which needs to be converted to an &#8216;int&#8217; is not present.</p>
+<p><strong>AttributeError :</strong> :</p>
+<p class="last"><strong>IOError</strong> : File at filepath not found, not readable, or empty.</p>
 </td>
 </tr>
 </tbody>
@@ -485,33 +389,137 @@ defined by the list_keys and int_keys variables.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="tethne.readers.wos.wos2meta">
-<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">wos2meta</tt><big>(</big><em>wos_data</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#wos2meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.wos2meta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a dictionary or list of dictionaries with keys from the
-Web of Science field tags into a <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instance or list of
-<a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances, the standard for Tethne.</p>
+<dt id="tethne.readers.wos.parse_cr">
+<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">parse_cr</tt><big>(</big><em>ref</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#parse_cr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.parse_cr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Supports the Web of Science reader by converting the strings found
+at the CR field tag of a record into a minimum <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instance.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>wos_data</strong> : list</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ref</strong> : str</p>
 <blockquote>
-<div><p>A list of wos_dict dictionaries with keys from the WoS field tags.</p>
+<div><p>CR field tag data from a plain text Web of Science file.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>wos_meta</strong> : list</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>paper</strong> : <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a></p>
+<blockquote>
+<div><p>A <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instance.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>IndexError</strong> :</p>
+<blockquote>
+<div><p>When input &#8216;ref&#8217; has less number of tokens than necessary ones.</p>
+</div></blockquote>
+<p><strong>ValueError</strong> :</p>
 <blockquote class="last">
-<div><p>A list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
+<div><p>Gets input with mismacthed inputtype. Ex: getting no numbers for a date
+field.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>Need to handle author name anomolies (case, blank spaces, etc.) that may 
-make the same author appear to be two different authors in Networkx; this is
-important for any graph with authors as nodes.</p>
+<p>Needs a sophisticated name parser, would like to use an open source resource
+for this.</p>
+<p>If WoS is missing a field in the middle of the list there are NOT commas
+indicating that; the following example does NOT occur:</p>
+<blockquote>
+<div>Doe J, ,, Some Journal</div></blockquote>
+<p>instead</p>
+<blockquote>
+<div>Doe J, Some Journal</div></blockquote>
+<p>This threatens the integrity of WoS data; should we address it?</p>
+<p>Another threat: if WoS is unsure of the DOI number there will be multiple
+DOI numbers in a list of form [doi1, doi2, ...], address this?</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.readers.wos.parse_institutions">
+<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">parse_institutions</tt><big>(</big><em>ref</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#parse_institutions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.parse_institutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Supports the Web of Science reader by converting the strings found at the C1
+fieldtag of a record into a minimum <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ref</strong> : str</p>
+<blockquote>
+<div><p>&#8216;C1&#8217; field tag data from a plain text Web of Science file which contains
+Author First and Last names, Institution affiliated, and the
+location/city where they are affiliated to.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>addr_dict</strong> : <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a></p>
+<blockquote>
+<div><p>A <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instance.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>IndexError</strong> :</p>
+<blockquote>
+<div><p>When input &#8216;ref&#8217; has less number of tokens than necessary ones.</p>
+</div></blockquote>
+<p><strong>ValueError</strong> :</p>
+<blockquote class="last">
+<div><p>Gets input with mismacthed inputtype. Ex: getting no numbers for a date
+field.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Needs to check many test cases to check various input types.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.readers.wos.read">
+<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">read</tt><big>(</big><em>filepath</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse &amp; convert a Web of Science data file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filepath</strong> : string</p>
+<blockquote>
+<div><p>Filepath to the Web of Science field-tagged data file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
+<blockquote class="last">
+<div><p>A list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.readers.wos.validate">
+<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">validate</tt><big>(</big><em>wos_data</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the fucntion to check the input data validation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>bool - True or false</strong> :</p>
+<p><strong>if the data is in expected format (True)</strong> :</p>
+<p><strong>if the respective field is not in expected format (False)</strong> :</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>ValueError - according to the severity of the issue,</strong> :</p>
+<p class="last"><strong>whether the wrong format will affect the further processing.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -527,7 +535,6 @@ important for any graph with authors as nodes.</p>
   <ul>
 <li><a class="reference internal" href="#">readers Package</a><ul>
 <li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">readers</span></tt> Package</a></li>
-<li><a class="reference internal" href="#module-tethne.readers.bibtex"><tt class="docutils literal"><span class="pre">bibtex</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.readers.pubmed"><tt class="docutils literal"><span class="pre">pubmed</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.readers.wos"><tt class="docutils literal"><span class="pre">wos</span></tt> Module</a></li>
 </ul>
@@ -538,8 +545,8 @@ important for any graph with authors as nodes.</p>
   <p class="topless"><a href="tethne.networks.html"
                         title="previous chapter">networks Package</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="tethne.resources.html"
-                        title="next chapter">resources Package</a></p>
+  <p class="topless"><a href="tethne.utilities.html"
+                        title="next chapter">utilities Package</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/tethne.readers.txt"
@@ -572,7 +579,10 @@ important for any graph with authors as nodes.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tethne.resources.html" title="resources Package"
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tethne.utilities.html" title="utilities Package"
              >next</a> |</li>
         <li class="right" >
           <a href="tethne.networks.html" title="networks Package"

@@ -25,8 +25,6 @@ Subpackages
     tethne.analyze
     tethne.networks
     tethne.readers
-    tethne.resources
-    tethne.services
     tethne.utilities
     tethne.writers
 

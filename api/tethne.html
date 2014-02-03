@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="tethne  documentation" href="index.html" />
-    <link rel="prev" title="tethne.networks: Creating Bibliographic Networks" href="tutorial.networks.html" /> 
+    <link rel="prev" title="Analyzing Bibliographic Networks" href="tutorial.analyze.html" /> 
   </head>
   <body>
     <div class="related">
@@ -38,7 +38,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorial.networks.html" title="tethne.networks: Creating Bibliographic Networks"
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.analyze.html" title="Analyzing Bibliographic Networks"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">tethne  documentation</a> &raquo;</li> 
       </ul>
@@ -53,17 +56,19 @@
 <h1>tethne Package<a class="headerlink" href="#tethne-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
 <h2><tt class="xref py py-mod docutils literal"><span class="pre">tethne</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-tethne.__init__"></span><p>Tethne is a package for analyzing citation data from the Web of Science. 
-Modules within Tethne can generate a variety of networks, such as 
-bibliographic coupling, citation, author-paper, and co-author networks, 
+<span class="target" id="module-tethne.__init__"></span><p>Tethne is a package for analyzing citation data from the Web of Science.
+Modules within Tethne can generate a variety of networks, such as
+bibliographic coupling, citation, author-paper, and co-author networks,
 using networkx.</p>
 </div>
 <div class="section" id="module-tethne.data">
 <span id="data-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">data</span></tt> Module<a class="headerlink" href="#module-tethne.data" title="Permalink to this headline">¶</a></h2>
+<p>Tethne uses a small number of special classes for handling data.</p>
 <dl class="class">
 <dt id="tethne.data.GraphCollection">
-<em class="property">class </em><tt class="descclassname">tethne.data.</tt><tt class="descname">GraphCollection</tt><a class="headerlink" href="#tethne.data.GraphCollection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Collection of NetworkX Graph objects, organized by some index (e.g. time).
+<em class="property">class </em><tt class="descclassname">tethne.data.</tt><tt class="descname">GraphCollection</tt><a class="reference internal" href="_modules/tethne/data.html#GraphCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.GraphCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Collection of NetworkX Graph objects, organized by some index (e.g. time).
 Provides analysis functions in NetworkX for entire collection of Graphs.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
@@ -72,20 +77,27 @@ Provides analysis functions in NetworkX for entire collection of Graphs.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection.edges" title="tethne.data.GraphCollection.edges"><tt class="xref py py-obj docutils literal"><span class="pre">edges</span></tt></a>([overwrite])</td>
-<td>Return complete set of edges for this <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . If</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.GraphCollection.edges" title="tethne.data.GraphCollection.edges"><tt class="xref py py-obj docutils literal"><span class="pre">edges</span></tt></a>([overwrite])</td>
+<td>Return complete set of edges for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . If</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection.nodes" title="tethne.data.GraphCollection.nodes"><tt class="xref py py-obj docutils literal"><span class="pre">nodes</span></tt></a>([overwrite])</td>
-<td>Return complete set of nodes for this <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . If</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.data.GraphCollection.load" title="tethne.data.GraphCollection.load"><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt></a>(filepath)</td>
+<td>Loads a pickled (serialized) GraphCollection from filepath.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.GraphCollection.nodes" title="tethne.data.GraphCollection.nodes"><tt class="xref py py-obj docutils literal"><span class="pre">nodes</span></tt></a>([overwrite])</td>
+<td>Return complete set of nodes for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . If</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.data.GraphCollection.save" title="tethne.data.GraphCollection.save"><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt></a>(filepath)</td>
+<td>Pickles (serializes) the GraphCollection and saves it to filepath.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="tethne.data.GraphCollection.edges">
-<tt class="descname">edges</tt><big>(</big><em>overwrite=False</em><big>)</big><a class="headerlink" href="#tethne.data.GraphCollection.edges" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return complete set of edges for this <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . If
-this method has been called previously for this <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>
-then will not recompute unless overwrite = True.</p>
+<tt class="descname">edges</tt><big>(</big><em>overwrite=False</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#GraphCollection.edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.GraphCollection.edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return complete set of edges for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . If
+this method has been called previously for this
+<a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> then will not recompute unless overwrite =
+True.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -98,7 +110,7 @@ then will not recompute unless overwrite = True.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>edges</strong> : list</p>
 <blockquote class="last">
-<div><p>List (complete set) of edges for this <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</p>
+<div><p>List (complete set) of edges for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</p>
 </div></blockquote>
 </td>
 </tr>
@@ -107,11 +119,34 @@ then will not recompute unless overwrite = True.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="tethne.data.GraphCollection.load">
+<tt class="descname">load</tt><big>(</big><em>filepath</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#GraphCollection.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.GraphCollection.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a pickled (serialized) GraphCollection from filepath.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filepath</strong> : string</p>
+<blockquote>
+<div><p>Full path to pickled GraphCollection.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>UnpicklingError</strong> : Raised when there is some issue in unpickling.</p>
+<p class="last"><strong>IOError</strong> : File does not exist, or cannot be read.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="tethne.data.GraphCollection.nodes">
-<tt class="descname">nodes</tt><big>(</big><em>overwrite=False</em><big>)</big><a class="headerlink" href="#tethne.data.GraphCollection.nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return complete set of nodes for this <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . If 
-this method has been called previously for this <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>
-then will not recompute unless overwrite = True.</p>
+<tt class="descname">nodes</tt><big>(</big><em>overwrite=False</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#GraphCollection.nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.GraphCollection.nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return complete set of nodes for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . If
+this method has been called previously for this
+<a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> then will not recompute unless overwrite =
+True.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -124,9 +159,31 @@ then will not recompute unless overwrite = True.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>nodes</strong> : list</p>
 <blockquote class="last">
-<div><p>List (complete set) of node identifiers for this 
-<a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</p>
+<div><p>List (complete set) of node identifiers for this
+<a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</p>
 </div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.data.GraphCollection.save">
+<tt class="descname">save</tt><big>(</big><em>filepath</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#GraphCollection.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.GraphCollection.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickles (serializes) the GraphCollection and saves it to filepath.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filepath :</strong> :</p>
+<blockquote>
+<div><p>Full path of output file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>PicklingError</strong> : Raised when unpicklable objects are Pickled.</p>
+<p class="last"><strong>IOError</strong> : File does not exist, or cannot be opened.</p>
 </td>
 </tr>
 </tbody>
@@ -138,7 +195,8 @@ then will not recompute unless overwrite = True.</p>
 <dl class="class">
 <dt id="tethne.data.Paper">
 <em class="property">class </em><tt class="descclassname">tethne.data.</tt><tt class="descname">Paper</tt><a class="reference internal" href="_modules/tethne/data.html#Paper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.Paper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base class for Papers. Behaves just like a dict, but enforces a limited 
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Base class for Papers. Behaves just like a dict, but enforces a limited
 vocabulary of keys, and specific data types.</p>
 <p class="rubric">Notes</p>
 <p>The following fields (and corresponding data types) are allowed:</p>
@@ -154,7 +212,7 @@ vocabulary of keys, and specific data types.</p>
 <li>epage (str) &#8211; Ending page of article in journal.</li>
 <li>date (int) &#8211; Article date of publication.</li>
 <li>country (dict) &#8211; Author-Country mapping.</li>
-<li>citations (list) &#8211; A list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</li>
+<li>citations (list) &#8211; A list of <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</li>
 <li>ayjid (str) &#8211; First author&#8217;s name (last, fi), pub year, and journal.</li>
 <li>doi (str) &#8211; Digital Object Identifier.</li>
 <li>pmid (str) &#8211; PubMed ID.</li>
@@ -168,45 +226,49 @@ vocabulary of keys, and specific data types.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="tethne.data.html#tethne.data.Paper.iteritems" title="tethne.data.Paper.iteritems"><tt class="xref py py-obj docutils literal"><span class="pre">iteritems</span></tt></a>()</td>
-<td></td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.Paper.iteritems" title="tethne.data.Paper.iteritems"><tt class="xref py py-obj docutils literal"><span class="pre">iteritems</span></tt></a>()</td>
+<td>Returns an iterator for the <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>&#8216;s metadata fields</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.data.html#tethne.data.Paper.keys" title="tethne.data.Paper.keys"><tt class="xref py py-obj docutils literal"><span class="pre">keys</span></tt></a>()</td>
-<td></td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.data.Paper.keys" title="tethne.data.Paper.keys"><tt class="xref py py-obj docutils literal"><span class="pre">keys</span></tt></a>()</td>
+<td>Returns the keys of the <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>&#8216;s metadata fields.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="tethne.data.html#tethne.data.Paper.values" title="tethne.data.Paper.values"><tt class="xref py py-obj docutils literal"><span class="pre">values</span></tt></a>()</td>
-<td></td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.Paper.values" title="tethne.data.Paper.values"><tt class="xref py py-obj docutils literal"><span class="pre">values</span></tt></a>()</td>
+<td>Returns the values of the <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>&#8216;s metadata fields.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="tethne.data.Paper.iteritems">
 <tt class="descname">iteritems</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/data.html#Paper.iteritems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.Paper.iteritems" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns an iterator for the <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>&#8216;s metadata fields</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="tethne.data.Paper.keys">
 <tt class="descname">keys</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/data.html#Paper.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.Paper.keys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the keys of the <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>&#8216;s metadata fields.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="tethne.data.Paper.values">
 <tt class="descname">values</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/data.html#Paper.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.Paper.values" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the values of the <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>&#8216;s metadata fields.</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="function">
 <dt id="tethne.data.new_query_dict">
 <tt class="descclassname">tethne.data.</tt><tt class="descname">new_query_dict</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/data.html#new_query_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.new_query_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Declares only those keys of meta_dict that are query-able through CrossRef.</p>
+<dd><p>Declares only those keys of the <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>&#8216;s metadata that are
+queryable through CrossRef.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="tethne.data.new_wos_dict">
 <tt class="descclassname">tethne.data.</tt><tt class="descname">new_wos_dict</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/data.html#new_wos_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.new_wos_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the set of field tags that will try to be converted into a meta_dict
-and intializes them to &#8216;None&#8217;.</p>
+<dd><p>Defines the set of field tags that will try to be converted, and intializes
+them to &#8216;None&#8217;.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -224,7 +286,7 @@ and intializes them to &#8216;None&#8217;.</p>
 <dl class="function">
 <dt id="tethne.data.wos2meta_map">
 <tt class="descclassname">tethne.data.</tt><tt class="descname">wos2meta_map</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/data.html#wos2meta_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.wos2meta_map" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the direct relationships between the wos_dict and the meta_dict.</p>
+<dd><p>Defines the direct relationships between the wos_dict and <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -261,22 +323,8 @@ and intializes them to &#8216;None&#8217;.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tethne.readers.html">readers Package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#id1"><tt class="docutils literal"><span class="pre">readers</span></tt> Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#module-tethne.readers.bibtex"><tt class="docutils literal"><span class="pre">bibtex</span></tt> Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#module-tethne.readers.pubmed"><tt class="docutils literal"><span class="pre">pubmed</span></tt> Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#module-tethne.readers.wos"><tt class="docutils literal"><span class="pre">wos</span></tt> Module</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tethne.resources.html">resources Package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tethne.resources.html#id1"><tt class="docutils literal"><span class="pre">resources</span></tt> Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.resources.html#module-tethne.resources.bib"><tt class="docutils literal"><span class="pre">bib</span></tt> Module</a><ul class="simple">
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tethne.services.html">services Package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tethne.services.html#id1"><tt class="docutils literal"><span class="pre">services</span></tt> Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.services.html#module-tethne.services.crossref"><tt class="docutils literal"><span class="pre">crossref</span></tt> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.services.html#module-tethne.services.web_query"><tt class="docutils literal"><span class="pre">web_query</span></tt> Module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tethne.utilities.html">utilities Package</a><ul>
@@ -316,8 +364,8 @@ and intializes them to &#8216;None&#8217;.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="tutorial.networks.html"
-                        title="previous chapter">tethne.networks: Creating Bibliographic Networks</a></p>
+  <p class="topless"><a href="tutorial.analyze.html"
+                        title="previous chapter">Analyzing Bibliographic Networks</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/tethne.txt"
@@ -350,7 +398,10 @@ and intializes them to &#8216;None&#8217;.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorial.networks.html" title="tethne.networks: Creating Bibliographic Networks"
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.analyze.html" title="Analyzing Bibliographic Networks"
              >previous</a> |</li>
         <li><a href="index.html">tethne  documentation</a> &raquo;</li> 
       </ul>
