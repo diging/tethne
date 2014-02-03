@@ -6,7 +6,7 @@ from tethne.utilities import dict_from_node, strip_non_ascii
 
 def read(datapath):
     """
-    Yields :class:`.Paper`s from JSTOR DfR package.
+    Yields :class:`.Paper` s from JSTOR DfR package.
 
     Parameters
     ----------
