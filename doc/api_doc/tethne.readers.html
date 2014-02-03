@@ -111,61 +111,6 @@ relevant to the networks of interest for Tethne including:</p>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
 </dd></dl>
 
-<dl class="function">
-<dt id="tethne.readers.merge">
-<tt class="descclassname">tethne.readers.</tt><tt class="descname">merge</tt><big>(</big><em>P1, P2, fields=['ayjid']</em><big>)</big><a class="headerlink" href="#tethne.readers.merge" title="Permalink to this definition">¶</a></dt>
-<dd><p>Combines two lists (P1 and P2) of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances into a single 
-list, and attempts to merge papers with matching fields. Where there are 
-conflicts, values from <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> in P1 will be preferred.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>P1</strong> : list</p>
-<blockquote>
-<div><p>A list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
-</div></blockquote>
-<p><strong>P2</strong> : list</p>
-<blockquote>
-<div><p>A list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
-</div></blockquote>
-<p><strong>fields</strong> : list</p>
-<blockquote class="last">
-<div><p>Fields used to identify matching <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a></p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="module-tethne.readers.dfr">
-<span id="dfr-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">dfr</span></tt> Module<a class="headerlink" href="#module-tethne.readers.dfr" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="tethne.readers.dfr.read">
-<tt class="descclassname">tethne.readers.dfr.</tt><tt class="descname">read</tt><big>(</big><em>datapath</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/dfr.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.dfr.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Yields <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> s from JSTOR DfR package.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filepath</strong> : string</p>
-<blockquote>
-<div><p>Filepath to unzipped JSTOR DfR folder containing a citations.XML file.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
-<blockquote class="last">
-<div><p>A list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 <div class="section" id="module-tethne.readers.pubmed">
 <span id="pubmed-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">pubmed</span></tt> Module<a class="headerlink" href="#module-tethne.readers.pubmed" title="Permalink to this headline">¶</a></h2>
@@ -293,6 +238,95 @@ important for any graph with authors as nodes.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="tethne.readers.wos.create_ainstid">
+<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">create_ainstid</tt><big>(</big><em>aulast=None</em>, <em>auinit=None</em>, <em>addr1=None</em>, <em>addr2=None</em>, <em>country=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#create_ainstid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.create_ainstid" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is to create an fuzzy identifier ainstid.
+Convert aulast, auinit, and jtitle into the fuzzy identifier ainstid.
+Returns &#8216;Unknown Institution&#8217; if all id components are missing (None).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Kwargs</strong> : dict</p>
+<blockquote>
+<div><p>A dictionary of keyword arguments.</p>
+</div></blockquote>
+<p><strong>aulast</strong> : string</p>
+<blockquote>
+<div><p>Author surname.</p>
+</div></blockquote>
+<p><strong>auinit</strong> : string</p>
+<blockquote>
+<div><p>Author initial(s).</p>
+</div></blockquote>
+<p><strong>address1</strong> : string</p>
+<blockquote>
+<div><p>Address of the Institution.</p>
+</div></blockquote>
+<p><strong>address2</strong> : string</p>
+<blockquote>
+<div><p>Address of the Institution.</p>
+</div></blockquote>
+<p><strong>country</strong> : string</p>
+<blockquote>
+<div><p>Country of affiliation</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ainstid</strong> : string</p>
+<blockquote class="last">
+<div><p>Fuzzy identifier ainstid, or &#8216;Unknown Institution&#8217; if all id components
+are missing (None).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.readers.wos.create_ayjid">
+<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">create_ayjid</tt><big>(</big><em>aulast=None</em>, <em>auinit=None</em>, <em>date=None</em>, <em>jtitle=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#create_ayjid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.create_ayjid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid
+Returns &#8216;Unknown paper&#8217; if all id components are missing (None).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Kwargs</strong> : dict</p>
+<blockquote>
+<div><p>A dictionary of keyword arguments.</p>
+</div></blockquote>
+<p><strong>aulast</strong> : string</p>
+<blockquote>
+<div><p>Author surname.</p>
+</div></blockquote>
+<p><strong>auinit: string</strong> :</p>
+<blockquote>
+<div><p>Author initial(s).</p>
+</div></blockquote>
+<p><strong>date</strong> : string</p>
+<blockquote>
+<div><p>Four-digit year.</p>
+</div></blockquote>
+<p><strong>jtitle</strong> : string</p>
+<blockquote>
+<div><p>Title of the journal.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ayj</strong> : string</p>
+<blockquote class="last">
+<div><p>Fuzzy identifier ayjid, or &#8216;Unknown paper&#8217; if all id components are
+missing (None).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="tethne.readers.wos.from_dir">
 <tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">from_dir</tt><big>(</big><em>path</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#from_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.from_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convenience function for generating a list of <tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt> from a
@@ -355,14 +389,103 @@ defined by the list_keys and int_keys variables.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="tethne.readers.wos.read">
-<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">read</tt><big>(</big><em>datapath</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Yields :class:<a href="#id2"><span class="problematic" id="id3">`</span></a>.Paper`s from a Web of Science data file.</p>
+<dt id="tethne.readers.wos.parse_cr">
+<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">parse_cr</tt><big>(</big><em>ref</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#parse_cr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.parse_cr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Supports the Web of Science reader by converting the strings found
+at the CR field tag of a record into a minimum <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instance.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>datapath</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ref</strong> : str</p>
+<blockquote>
+<div><p>CR field tag data from a plain text Web of Science file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>paper</strong> : <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a></p>
+<blockquote>
+<div><p>A <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instance.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>IndexError</strong> :</p>
+<blockquote>
+<div><p>When input &#8216;ref&#8217; has less number of tokens than necessary ones.</p>
+</div></blockquote>
+<p><strong>ValueError</strong> :</p>
+<blockquote class="last">
+<div><p>Gets input with mismacthed inputtype. Ex: getting no numbers for a date
+field.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Needs a sophisticated name parser, would like to use an open source resource
+for this.</p>
+<p>If WoS is missing a field in the middle of the list there are NOT commas
+indicating that; the following example does NOT occur:</p>
+<blockquote>
+<div>Doe J, ,, Some Journal</div></blockquote>
+<p>instead</p>
+<blockquote>
+<div>Doe J, Some Journal</div></blockquote>
+<p>This threatens the integrity of WoS data; should we address it?</p>
+<p>Another threat: if WoS is unsure of the DOI number there will be multiple
+DOI numbers in a list of form [doi1, doi2, ...], address this?</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.readers.wos.parse_institutions">
+<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">parse_institutions</tt><big>(</big><em>ref</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#parse_institutions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.parse_institutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Supports the Web of Science reader by converting the strings found at the C1
+fieldtag of a record into a minimum <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ref</strong> : str</p>
+<blockquote>
+<div><p>&#8216;C1&#8217; field tag data from a plain text Web of Science file which contains
+Author First and Last names, Institution affiliated, and the
+location/city where they are affiliated to.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>addr_dict</strong> : <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a></p>
+<blockquote>
+<div><p>A <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instance.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>IndexError</strong> :</p>
+<blockquote>
+<div><p>When input &#8216;ref&#8217; has less number of tokens than necessary ones.</p>
+</div></blockquote>
+<p><strong>ValueError</strong> :</p>
+<blockquote class="last">
+<div><p>Gets input with mismacthed inputtype. Ex: getting no numbers for a date
+field.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Needs to check many test cases to check various input types.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.readers.wos.read">
+<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">read</tt><big>(</big><em>filepath</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse &amp; convert a Web of Science data file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filepath</strong> : string</p>
 <blockquote>
 <div><p>Filepath to the Web of Science field-tagged data file.</p>
 </div></blockquote>
@@ -372,6 +495,27 @@ defined by the list_keys and int_keys variables.</p>
 <blockquote class="last">
 <div><p>A list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects.</p>
 </div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.readers.wos.validate">
+<tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">validate</tt><big>(</big><em>wos_data</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the fucntion to check the input data validation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>bool - True or false</strong> :</p>
+<p><strong>if the data is in expected format (True)</strong> :</p>
+<p><strong>if the respective field is not in expected format (False)</strong> :</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>ValueError - according to the severity of the issue,</strong> :</p>
+<p class="last"><strong>whether the wrong format will affect the further processing.</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -391,7 +535,6 @@ defined by the list_keys and int_keys variables.</p>
   <ul>
 <li><a class="reference internal" href="#">readers Package</a><ul>
 <li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">readers</span></tt> Package</a></li>
-<li><a class="reference internal" href="#module-tethne.readers.dfr"><tt class="docutils literal"><span class="pre">dfr</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.readers.pubmed"><tt class="docutils literal"><span class="pre">pubmed</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.readers.wos"><tt class="docutils literal"><span class="pre">wos</span></tt> Module</a></li>
 </ul>

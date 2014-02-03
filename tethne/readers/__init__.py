@@ -35,69 +35,9 @@ Missing data here also results in the above keys being set to None.
 
 import wos
 import pubmed
-import dfr
-import tethne.data as dt
 
 class DataError(Exception):
     def __init__(self, value):
         self.value = value
     def __str__(self):
         return repr(self.value)
-
-def merge(P1, P2, fields=['ayjid']):
-    """
-    Combines two lists (P1 and P2) of :class:`.Paper` instances into a single
-    list, and attempts to merge papers with matching fields. Where there are
-    conflicts, values from :class:`.Paper` in P1 will be preferred.
-
-    Parameters
-    ----------
-    P1 : list
-        A list of :class:`.Paper` instances.
-    P2 : list
-        A list of :class:`.Paper` instances.
-    fields : list
-        Fields used to identify matching :class:`.Paper`
-
-    Returns
-    -------
-    combined : list
-        A list of :class:`.Paper` instances.
-    """
-
-    combined = []
-    del_P1 = []
-    del_P2 = []
-
-    for x in xrange(len(P1)):
-        p_1 = P1[x]
-        for y in xrange(len(P2)):
-            p_2 = P2[y]
-            match = True
-            for field in fields:
-                if p_1[field] != p_2[field]:
-                    match = False
-                    break
-
-            if match:   # Add values first from P2 paper, then from P1 paper.
-                new_p = dt.Paper()
-                for key, value in p_2.iteritems():
-                    if value != '' and value != None:
-                        new_p[key] = value
-                for key, value in p_1.iteritems():
-                    if value != '' and value != None:
-                        new_p[key] = value
-
-                del_P1.append(x)    # Flag for deletion.
-                del_P2.append(y)
-
-                combined.append(new_p)
-
-    for x in xrange(len(P1)):
-        if x not in del_P1:
-            combined.append(P1[x])
-    for x in xrange(len(P2)):
-        if x not in del_P2:
-            combined.append(P2[x])
-
-    return combined
