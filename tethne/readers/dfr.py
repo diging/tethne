@@ -20,9 +20,9 @@ def read(datapath):
     """
     
     try:
-        root = ET.parse(path + "/citations.XML").getroot()
+        root = ET.parse(datapath + "/citations.XML").getroot()
     except IOError:
-        raise IOError(path+"citations.XML not found.")
+        raise IOError(datapath+"citations.XML not found.")
         
     papers = []
     for article in root:
@@ -132,7 +132,7 @@ def _handle_authors(authors):
                 auinit.append(i)
             except ValueError:
                 pass
-    elif type(authors) is str or unicode:
+    elif type(authors) is str or type(authors) is unicode:
         author = str(strip_non_ascii(authors))
         try:
             l,i = _handle_author(author)
