@@ -276,7 +276,6 @@ class GraphCollection(object):
             with open(filepath,'rb') as input: #reading in binary mode
                 try:
                      obj_read = pk.load(input)
-                     print obj_read
                 except UnpicklingError:  # Handle unprickling error.
                     raise UnpicklingError \
                         ("UnPickling error: The object cannot be found")
