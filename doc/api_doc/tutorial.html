@@ -39,6 +39,9 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="tutorial.getting_data.html" title="Getting Data from the Web of Science"
              accesskey="N">next</a> |</li>
         <li class="right" >
@@ -74,8 +77,7 @@
 </pre></div>
 </div>
 <p>To parse some data from the Web of Science, use the tethne.readers.wos module.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wos_list</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">parse_wos</span><span class="p">(</span><span class="s">&quot;/Path/To/Data.txt&quot;</span><span class="p">)</span>  <span class="c"># Field-tagged data.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos2meta</span><span class="p">(</span><span class="n">wos_list</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/Path/To/Data.txt&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">&lt;tethne.data.Paper instance at 0x1015ed200&gt;</span>
 </pre></div>
@@ -198,6 +200,9 @@ in tethne.writers. For example, to generate a simple interaction file (SIF):</p>
              >index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="tutorial.getting_data.html" title="Getting Data from the Web of Science"

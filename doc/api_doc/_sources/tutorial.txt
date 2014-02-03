@@ -28,8 +28,7 @@ To parse some data from the Web of Science, use the tethne.readers.wos module.
 
 .. code-block:: python
 
-   >>> wos_list = rd.wos.parse_wos("/Path/To/Data.txt")  # Field-tagged data.
-   >>> papers = rd.wos2meta(wos_list)
+   >>> papers = rd.wos.read("/Path/To/Data.txt")
    >>> papers[0]
    <tethne.data.Paper instance at 0x1015ed200>
 

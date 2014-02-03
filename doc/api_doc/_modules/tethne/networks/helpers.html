@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="top" title="tethne  documentation" href="../../../index.html" />
-    <link rel="up" title="tethne.networks" href="../networks.html" /> 
+    <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,9 +37,11 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../index.html">tethne  documentation</a> &raquo;</li>
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../networks.html" accesskey="U">tethne.networks</a> &raquo;</li> 
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -49,28 +51,30 @@
           <div class="body">
             
   <h1>Source code for tethne.networks.helpers</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;Methods which provide helper functions for generating networks &quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
-<span class="kn">import</span> <span class="nn">tethne.utilities</span> <span class="kn">as</span> <span class="nn">util</span>
-<span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">ds</span>
+<span class="c">#import tethne.utilities as util  # Pylint Warnings</span>
+<span class="c">#import tethne.data as ds</span>
 
 <div class="viewcode-block" id="simplify_multigraph"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.helpers.simplify_multigraph">[docs]</a><span class="k">def</span> <span class="nf">simplify_multigraph</span><span class="p">(</span><span class="n">multigraph</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Simplifies a graph by condensing multiple edges between the same node pair</span>
 <span class="sd">    into a single edge, with a weight attribute equal to the number of edges.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    graph : networkx.MultiGraph</span>
 <span class="sd">        E.g. a coauthorship graph.</span>
 <span class="sd">    time : bool</span>
-<span class="sd">        If True, will generate &#39;start&#39; and &#39;end&#39; attributes for each edge, </span>
+<span class="sd">        If True, will generate &#39;start&#39; and &#39;end&#39; attributes for each edge,</span>
 <span class="sd">        corresponding to the earliest and latest &#39;date&#39; values for that edge.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    graph : networkx.Graph</span>
 <span class="sd">        A NetworkX :class:`.graph` .</span>
-<span class="sd">    </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
@@ -93,8 +97,10 @@
                 <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="n">found_date</span> <span class="o">=</span> <span class="bp">True</span>
-                        <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">start</span><span class="p">:</span> <span class="n">start</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span>
-                        <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">end</span><span class="p">:</span> <span class="n">end</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">start</span><span class="p">:</span>
+                            <span class="n">start</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">end</span><span class="p">:</span>
+                            <span class="n">end</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span>
                     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>    <span class="c"># No date to be found.</span>
                         <span class="k">pass</span>
 
@@ -138,9 +144,11 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../index.html">tethne  documentation</a> &raquo;</li>
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../networks.html" >tethne.networks</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
