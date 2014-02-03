@@ -475,4 +475,3 @@ def author_coupling(doc_list, threshold, node_id, *node_attribs):
                                    doc_list[j][node_id],
                                    overlap=len(overlap))
     return acoupling
-
