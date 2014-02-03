@@ -205,7 +205,7 @@ def direct_citation(doc_list, node_id='ayjid', *node_attribs):
     else:
         return citation_network, citation_network_internal
 
-def bibliographic_coupling(doc_list, citation_id='ayjid', threshold='1',
+def bibliographic_coupling(doc_list, citation_id='ayjid', threshold=1,
                            node_id='ayjid', weighted=False, *node_attribs):
     """
     Generate a bibliographic coupling network.
