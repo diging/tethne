@@ -42,3 +42,53 @@ class DataError(Exception):
         self.value = value
     def __str__(self):
         return repr(self.value)
+
+def merge(P1, P2, fields=['ayjid']):
+    """
+    Combines two lists (P1 and P2) of :class:`.Paper` instances into a single
+    list, and attempts to merge papers with matching fields. Where there are
+    conflicts, values from :class:`.Paper` in P1 will be preferred.
+
+    Parameters
+    ----------
+    P1 : list
+        A list of :class:`.Paper` instances.
+    P2 : list
+        A list of :class:`.Paper` instances.
+    fields : list
+        Fields used to identify matching :class:`.Paper`
+
+    Returns
+    -------
+    combined : list
+        A list of :class:`.Paper` instances.
+    """
+
+    combined = []
+
+    for x in xrange(len(P1)):
+        p_1 = P1[x]
+        for y in xrange(len(P2)):
+            p_2 = P2[y]
+            match = True
+            for field in fields:
+                if p_1[field] != p_2[field]:
+                    match = False
+                    break
+
+            if match:   # Add values first from P2 paper, then from P1 paper.
+                new_p = dt.Paper()
+                for key, value in p_2.iteritems():
+                    new_p[key] = value
+                for key, value in p_1.iteritems():
+                    new_p[key] = value
+
+                # Delete merged papers.
+                del P1[x]
+                del P2[y]
+
+                combined.append(new_p)
+
+    # Add remaining non-matched papers.
+    combined += P1
+    combined += P2

@@ -334,7 +334,7 @@ def _parse_cr(ref):
 
     return paper
 
-def parse_institutions(ref):
+def _parse_institutions(ref):
     """
     Supports the Web of Science reader by converting the strings found at the C1
     fieldtag of a record into a minimum :class:`.Paper` instance.
