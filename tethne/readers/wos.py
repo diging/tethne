@@ -1,35 +1,7 @@
 """
-Each file reader takes an input file from an academic knowledge database
-such as the Web of Science or PubMed and parses the input file into a
-list of :class:`.Paper` instances for each paper with as many as possible of
-the following keys; missing values are set to None:
-
-    * aulast  - authors' last name as a list
-    * auinit  - authors' first initial as a list
-    * atitle  - article title
-    * jtitle  - journal title or abbreviated title
-    * volume  - journal volume number
-    * issue   - journal issue number
-    * spage   - starting page of article in journal
-    * epage   - ending page of article in journal
-    * date    - article date of publication
-
-These keys are associated with the meta data entries in the databases of
-organizations such as the International DOI Foundation and its Registration
-Agencies such as CrossRef and DataCite.
-
-In addition, :class:`.Paper` instances will contain keys with information
-relevant to the networks of interest for Tethne including:
-
-    * citations -- list of minimum :class:`.Paper` instances for cited
-        references.
-    * ayjid -- First author's name (last, fi), publication year, and journal.
-    * doi -- Digital Object Identifier
-    * pmid -- PubMed ID
-    * wosid -- Web of Science UT fieldtag
-
-Missing data here also results in the above keys being set to None.
+Reader for Web of Science field-tagged bibliographic data.
 """
+
 import tethne.data as ds
 import xml.etree.ElementTree as ET
 import tethne.utilities as util
