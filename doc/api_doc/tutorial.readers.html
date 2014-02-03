@@ -40,6 +40,9 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="tutorial.networks.html" title="Creating Bibliographic Networks"
              accesskey="N">next</a> |</li>
         <li class="right" >
@@ -68,18 +71,27 @@ converted to a <a class="reference internal" href="tethne.data.html#tethne.data.
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
 </pre></div>
 </div>
-<p>Then parse the WoS data to a list of field-tagged dictionaries using <a class="reference internal" href="tethne.readers.html#tethne.readers.wos.parse_wos" title="tethne.readers.wos.parse_wos"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.parse_wos()</span></tt></a> :</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wos_list</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">parse_wos</span><span class="p">(</span><span class="s">&quot;/Path/to/savedrecs.txt&quot;</span><span class="p">)</span>
+<p>Then parse the WoS data to a list of field-tagged dictionaries using <a class="reference internal" href="tethne.readers.html#tethne.readers.wos.parse" title="tethne.readers.wos.parse"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.parse()</span></tt></a> :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wos_list</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;/Path/to/savedrecs.txt&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wos_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 <span class="go">[&#39;EM&#39;, &#39;&#39;, &#39;CL&#39;, &#39;AB&#39;, &#39;WC&#39;, &#39;GA&#39;, &#39;DI&#39;, &#39;IS&#39;, &#39;DE&#39;, &#39;VL&#39;, &#39;CY&#39;, &#39;AU&#39;, &#39;JI&#39;, &#39;AF&#39;, &#39;CR&#39;, &#39;DT&#39;, &#39;TC&#39;, &#39;EP&#39;, &#39;CT&#39;, &#39;PG&#39;, &#39;PU&#39;, &#39;PI&#39;, &#39;RP&#39;, &#39;J9&#39;, &#39;PT&#39;, &#39;LA&#39;, &#39;UT&#39;, &#39;PY&#39;, &#39;ID&#39;, &#39;SI&#39;, &#39;PA&#39;, &#39;SO&#39;, &#39;Z9&#39;, &#39;PD&#39;, &#39;TI&#39;, &#39;SC&#39;, &#39;BP&#39;, &#39;C1&#39;, &#39;NR&#39;, &#39;RI&#39;, &#39;ER&#39;, &#39;SN&#39;]</span>
 </pre></div>
 </div>
-<p>Alternatively, if you have many data files saved in the same directory, you can use <a class="reference internal" href="tethne.readers.html#tethne.readers.wos.parse_from_dir" title="tethne.readers.wos.parse_from_dir"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.parse_from_dir()</span></tt></a> :</p>
+<p>Alternatively, if you have many data files saved in the same directory, you can use
+<a class="reference internal" href="tethne.readers.html#tethne.readers.wos.from_dir" title="tethne.readers.wos.from_dir"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.from_dir()</span></tt></a> :</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wos_list</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">parse_from_dir</span><span class="p">(</span><span class="s">&quot;/Path/to&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Finally, convert those field-tagged dictionaries to <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects using <a class="reference internal" href="tethne.readers.html#tethne.readers.wos.wos2meta" title="tethne.readers.wos.wos2meta"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.wos2meta()</span></tt></a> :</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">wos2meta</span><span class="p">(</span><span class="n">wos_list</span><span class="p">)</span>
+<p>Finally, convert those field-tagged dictionaries to <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects using
+<a class="reference internal" href="tethne.readers.html#tethne.readers.wos.convert" title="tethne.readers.wos.convert"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.convert()</span></tt></a> :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">wos_list</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">&lt;tethne.data.Paper instance at 0x101b575a8&gt;</span>
+</pre></div>
+</div>
+<p>The method <a class="reference internal" href="tethne.readers.html#tethne.readers.wos.read" title="tethne.readers.wos.read"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.read()</span></tt></a> performs both <a class="reference internal" href="tethne.readers.html#tethne.readers.wos.parse" title="tethne.readers.wos.parse"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.parse()</span></tt></a> and
+<a class="reference internal" href="tethne.readers.html#tethne.readers.wos.convert" title="tethne.readers.wos.convert"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.convert()</span></tt></a> .</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/Path/to/savedrecs.txt&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">&lt;tethne.data.Paper instance at 0x101b575a8&gt;</span>
 </pre></div>
@@ -137,6 +149,9 @@ converted to a <a class="reference internal" href="tethne.data.html#tethne.data.
              >index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="tutorial.networks.html" title="Creating Bibliographic Networks"

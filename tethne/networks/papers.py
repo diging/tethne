@@ -14,6 +14,8 @@ def citation_count(papers, key='ayjid', verbose=False):
         A list of :class:`.Paper` instances.
     key : str
         Property to use as node key. Default is 'ayjid' (recommended).
+    verbose : bool
+        If True, prints status messages.
 
     Returns
     -------
@@ -44,6 +46,8 @@ def top_cited(papers, topn=20, verbose=False):
         A list of :class:`.Paper` instances.
     topn : int
         Number of top-cited papers to return.
+    verbose : bool
+        If True, prints status messages.
 
     Returns
     -------
@@ -65,7 +69,26 @@ def top_cited(papers, topn=20, verbose=False):
 
 def top_parents(papers, topn=20, verbose=False):
     """Returns a list of :class:`.Paper` objects that cite the topn most cited
-    papers."""
+    papers.
+    
+    Parameters    
+    ----------
+    papers : list
+        A list of :class:`.Paper` objects.
+    topn : int
+        Number of top-cited papers to return.
+    verbose : bool
+        If True, prints status messages.    
+
+    Returns
+    -------
+    papers : list
+        A list of :class:`.Paper` objects.
+    top : list
+        A list of 'ayjid' keys for the topn most cited papers.
+    counts : dict
+        Citation counts for all papers cited by papers.
+    """
 
     if verbose:
         print "Getting parents of top "+str(topn)+" most cited papers."
@@ -301,15 +324,17 @@ def cocitation(papers, threshold, topn=None, verbose=False):
     **Edge attributes** -- 'weight', number of times two papers are co-cited
     together.
 
-
     Parameters
     ----------
     papers : list
         a list of :class:`.Paper` objects.
-
     threshold : int
-        A random value provided by the user. If its greater than zero two nodes
-        should share something common.
+        Minimum number of co-citations required to create an edge.
+    topn : int or None
+        If provided, only the topn most cited papers will be included in the
+        cocitation network. Otherwise includes all cited papers.
+    verbose : bool
+        If True, prints status messages.
 
     Returns
     -------
@@ -335,12 +360,13 @@ def cocitation(papers, threshold, topn=None, verbose=False):
     #  parameter.
     if topn is not None:
         parents, include, citations_count = top_parents(papers, topn=topn)
+        N = len(include)
     else:
         citations_count = citation_count(papers)
+        N = len(citations_count.keys())
 
     if verbose:
-        print "Generating a cocitation network..."
-        
+        print "Generating a cocitation network with " + str(N) + " nodes..."
 
     for paper in papers:
         if paper['citations'] is not None:  # Some papers don't have citations.
@@ -382,15 +408,10 @@ def cocitation(papers, threshold, topn=None, verbose=False):
 
     # 62657522: Nodes in co-citation graph should have attribute containing
     #  number of citations.
+    n_cit = { k:v for k,v in citations_count.iteritems()
+                if k in cocitation_graph.nodes() }
+    nx.set_node_attributes( cocitation_graph, 'citations', n_cit )
 
-    attribs = { k:v for k , v in citations_count.iteritems()
-                    if k in cocitation_graph.nodes() }
-    nx.set_node_attributes(cocitation_graph,
-                                'number_of_cited_times',
-                                attribs )
-
-    if verbose:
-        print True
     return cocitation_graph
 
 def author_coupling(doc_list, threshold, node_id, *node_attribs):
@@ -424,8 +445,6 @@ def author_coupling(doc_list, threshold, node_id, *node_attribs):
 
     """
     acoupling = nx.Graph(type='author_coupling')
-
-
 
     for i in xrange(len(doc_list)):
         #define last name first initial name lists for each document

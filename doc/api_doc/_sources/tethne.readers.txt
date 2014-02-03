@@ -9,14 +9,6 @@ readers Package
     :undoc-members:
     :show-inheritance:
 
-:mod:`bibtex` Module
---------------------
-
-.. automodule:: tethne.readers.bibtex
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 :mod:`pubmed` Module
 --------------------
 

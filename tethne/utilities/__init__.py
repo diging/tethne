@@ -13,7 +13,7 @@ def contains(l, f):
 
 def overlap(listA, listB):
     """
-    Return number of shared objects between listA, listB as a list
+    Return list of objects shared by listA, listB.
     """
     if (listA is None) or (listB is None):
         return []
@@ -23,7 +23,7 @@ def overlap(listA, listB):
 
 def subdict(super_dict, keys):
     """
-    Returns a subset of the super_dict with the specified keys
+    Returns a subset of the super_dict with the specified keys.
     """
     sub_dict = {}
     valid_keys = super_dict.keys()
@@ -55,23 +55,21 @@ def concat_list(listA, listB, delim=' '):
     Returns the concatenated list
     Raises index error if lists are not parallel
     """
-    #validate input
 
-
+    # Lists must be of equal length.
     if len(listA) != len(listB):
         raise IndexError('Input lists are not parallel.')
 
-    #concatenate lists
+    # Concatenate lists.
     listC = []
     for i in xrange(len(listA)):
         app = listA[i] + delim + listB[i]
         listC.append(app)
 
-
     return listC
 
 def strip_non_ascii(string):
-    '''
+    """
     Returns the string without non-ASCII characters.
 
     Parameters
@@ -84,7 +82,7 @@ def strip_non_ascii(string):
     clean_string : string
         A string that does not contain non-ASCII characters.
 
-    '''
+    """
     stripped = (c for c in string if 0 < ord(c) < 127)
     clean_string = ''.join(stripped)
     return clean_string
