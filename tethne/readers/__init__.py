@@ -79,9 +79,11 @@ def merge(P1, P2, fields=['ayjid']):
             if match:   # Add values first from P2 paper, then from P1 paper.
                 new_p = dt.Paper()
                 for key, value in p_2.iteritems():
-                    new_p[key] = value
+                    if value != '' and value != None:
+                        new_p[key] = value
                 for key, value in p_1.iteritems():
-                    new_p[key] = value
+                    if value != '' and value != None:
+                        new_p[key] = value
 
                 # Delete merged papers.
                 del P1[x]
