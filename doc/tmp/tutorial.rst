@@ -1,5 +1,19 @@
+Tutorial
+========
+
+Installation
+------------
+
+Download & install the latest version of Tethne from our GitHub repository:
+
+.. code-block:: bash
+
+   $ git clone https://github.com/diging/tethne.git
+   $ cd tethne
+   $ pip install ./tethne
+
 Quickstart
-==========
+----------
 
 After starting Python, import Tethne modules with:
 
@@ -14,8 +28,7 @@ To parse some data from the Web of Science, use the tethne.readers.wos module.
 
 .. code-block:: python
 
-   >>> wos_list = rd.wos.parse_wos("/Path/To/Data.txt")  # Field-tagged data.
-   >>> papers = rd.wos2meta(wos_list)
+   >>> papers = rd.wos.read("/Path/To/Data.txt")
    >>> papers[0]
    <tethne.data.Paper instance at 0x1015ed200>
 
@@ -49,4 +62,16 @@ in tethne.writers. For example, to generate a simple interaction file (SIF):
    >>> wr.graph.to_sif(BC, '/Path/to/Output/File')
 
 
+Step-By-Step Guide
+------------------
 
+.. toctree::
+
+   tutorial.getting_data
+   tutorial.readers
+   tutorial.networks
+   tutorial.analyze
+   tutorial.writers
+   tutorial.collections
+   tutorial.cocitation
+   tutorial.vsm

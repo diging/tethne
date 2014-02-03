@@ -25,7 +25,7 @@ Then parse the WoS data to a list of field-tagged dictionaries using :func:`.rea
    ['EM', '', 'CL', 'AB', 'WC', 'GA', 'DI', 'IS', 'DE', 'VL', 'CY', 'AU', 'JI', 'AF', 'CR', 'DT', 'TC', 'EP', 'CT', 'PG', 'PU', 'PI', 'RP', 'J9', 'PT', 'LA', 'UT', 'PY', 'ID', 'SI', 'PA', 'SO', 'Z9', 'PD', 'TI', 'SC', 'BP', 'C1', 'NR', 'RI', 'ER', 'SN']
 
 Alternatively, if you have many data files saved in the same directory, you can use 
-:func:`.readers.wos.from_dir` :
+:func:`.readers.wos.parse_from_dir` :
 
 .. code-block:: python
 
