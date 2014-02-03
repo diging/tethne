@@ -22,8 +22,8 @@ class TestDirectCitationGraph(unittest.TestCase):
     The sparse data file networks are built on is //testin/wos_citations.txt
     """
     def setUp(self):
-        wos_data = rd.wos.parse_wos('./testin/wos_citations.txt')
-        meta_list = rd.wos.wos2meta(wos_data)
+        wos_data = rd.wos.parse('./testin/wos_citations.txt')
+        meta_list = rd.wos.convert(wos_data)
 
         # ayjid with no attributes
         (self.ayjid_citations,
@@ -61,10 +61,10 @@ class TestDirectCitationGraph(unittest.TestCase):
         self.assertEqual(nx.number_of_edges(self.ayjid_internal), 0)
 
         # since inexact match, 3 papers with 8 citations
-        self.assertEqual(nx.number_of_nodes(self.ayjid_citations), 11)
+        self.assertEqual(nx.number_of_nodes(self.ayjid_citations), 10)
 
         # one edge from paper to its citations
-        self.assertEqual(nx.number_of_edges(self.ayjid_citations), 8)
+        self.assertEqual(nx.number_of_edges(self.ayjid_citations), 7)
 
     def test_doi(self):
         """
@@ -154,8 +154,8 @@ class TestDirectCitation_DAG(unittest.TestCase):
     """
     def setUp(self):
 
-        wos_data = rd.wos.parse_wos("../testsuite/testin/citations_test.txt")
-        meta_list = rd.wos.wos2meta(wos_data)
+        wos_data = rd.wos.parse("../testsuite/testin/citations_test.txt")
+        meta_list = rd.wos.convert(wos_data)
 
         # ayjid with no attributes
         (self.ayjid_citations,
@@ -298,8 +298,8 @@ class TestAuthorPapersGraph(unittest.TestCase):
     We also test multiple authors and their link to the same paper
     """
     def setUp(self):
-        wos_data = rd.wos.parse_wos('./testin/wos_authors.txt')
-        meta_list = rd.wos.wos2meta(wos_data)
+        wos_data = rd.wos.parse('./testin/wos_authors.txt')
+        meta_list = rd.wos.convert(wos_data)
         self.no_attribs = nt.authors.author_papers(meta_list, 'doi')
 
         # int, string, list, dict
@@ -426,8 +426,8 @@ class TestCoauthorsGraph(unittest.TestCase):
 
     def setUp(self):
 
-        wos_data =rd.wos.parse_wos("../testsuite/testin/coauthors_2_recs.txt")
-        meta_list = rd.wos.wos2meta(wos_data)
+        wos_data =rd.wos.parse("../testsuite/testin/coauthors_2_recs.txt")
+        meta_list = rd.wos.convert(wos_data)
 
         # There is no concept of user input threshold testcases as the authors \
         # will be mapped with their respective co-authors anyways.
@@ -530,8 +530,8 @@ class TestBiblioGraph(unittest.TestCase):
     with the third paper, and zero citations with the fourth paper.
     """
     def setUp(self):
-        wos_data = rd.wos.parse_wos('./testin/wos_biblio.txt')
-        wos_meta = rd.wos.wos2meta(wos_data)
+        wos_data = rd.wos.parse('./testin/wos_biblio.txt')
+        wos_meta = rd.wos.convert(wos_data)
         self.ayjid_zero = nt.papers.bibliographic_coupling(wos_meta,
                                                  'ayjid',
                                                  0,
@@ -561,8 +561,8 @@ class TestBiblioGraph(unittest.TestCase):
         # define a separate file for the missing citations test case
         # with the same data as the other test file with the exception
         # that the fourth paper is missing its citation record
-        wos_cite = rd.wos.parse_wos('./testin/wos_biblio_cite.txt')
-        doc_list_cite = rd.wos.wos2meta(wos_cite)
+        wos_cite = rd.wos.parse('./testin/wos_biblio_cite.txt')
+        doc_list_cite = rd.wos.convert(wos_cite)
         self.missing_citations_zero = \
                 nt.papers.bibliographic_coupling(doc_list_cite,
                                                              'ayjid',
@@ -613,8 +613,8 @@ class TestBiblioGraph(unittest.TestCase):
         edges = self.ayjid_one.edges(data=True)
         self.assertEqual(edges[0][2]['similarity'], 2)
         self.assertEqual(edges[1][2]['similarity'], 1)
-        self.assertEqual(edges[2][2]['similarity'], 1)  
-    
+        self.assertEqual(edges[2][2]['similarity'], 1)
+
     def test_weighted(self):
         """
         Weighted similarities.
@@ -622,7 +622,7 @@ class TestBiblioGraph(unittest.TestCase):
         edges = self.weighted.edges(data=True)
         self.assertEqual(edges[0][2]['similarity'], 1.0)
         self.assertEqual(edges[1][2]['similarity'], 0.5)
-        self.assertEqual(edges[2][2]['similarity'], 0.5)  
+        self.assertEqual(edges[2][2]['similarity'], 0.5)
 
     def test_attribs(self):
         """
@@ -702,48 +702,6 @@ class TestBiblioGraph(unittest.TestCase):
                                   'citations':node3_citations}
         node3_ayjid = 'MULAZZANI L 2013 MARINE POLICY'
 
-        #commenting the paper 4, as it doesnt exist at all.
-        #Previosly all nodes were added in the graph
-#
-#         # paper 4 meta data
-#         node4_atitle = ('Application of multiple geochemical markers to ' +
-#                         'investigate organic pollution in a dynamic coastal' +
-#                         'zone')
-#         node4_date = 2013
-#         node4_aulast = ['Liu', 'Wang', 'Wong', 'Qiu', 'Zeng']
-#         for i in xrange(len(node4_aulast)):
-#             node4_aulast[i] = node4_aulast[i].upper().strip()
-#         node4_cr_list = [('AIZENSHT.Z, 1973, GEOCHIM COSMOCHIM AC, V37, ' +
-#                           'P559, DOI 10.1016/0016-7037(73)90218-4'),
-#                          ('BLUMER M, 1971, MAR BIOL, V8, P183, DOI ' +
-#                           '10.1007/BF00355214'),
-#                          ('Cachot J, 2007, ENVIRON SCI TECHNOL, V41, ' +
-#                           'P7830, DOI 10.1021/es071082v')]
-#         node4_citations = []
-#         for cite in node4_cr_list:
-#             node4_citations.append(rd.wos.parse_cr(cite))
-#         node4_expected_attribs = {'atitle':node4_atitle,
-#                                   'date':node4_date,
-#                                   'aulast':node4_aulast,
-#                                   'citations':node4_citations}
-#         node4_ayjid = 'LIU L 2013 ENVIRONMENTAL TOXICOLOGY AND CHEMISTRY'
-#
-#        # obtain node attributes from network and test them
-#        node_list = [node1_ayjid, node2_ayjid, node3_ayjid]
-#        attrib_list = [node1_expected_attribs, node2_expected_attribs,
-#                       node3_expected_attribs]
-#
-#       #commenting as 4th node is not in the graph.
-#       # node_list = [node1_ayjid, node2_ayjid, node3_ayjid, node4_ayjid]
-#       # attrib_list = [node1_expected_attribs, node2_expected_attribs,
-#        #               node3_expected_attribs, node4_expected_attribs]
-#        for i in xrange(len(node_list)):
-#            node = node_list[i]
-#            expected_attribs = attrib_list[i]
-#            obtained_attribs = self.ayjid_attribs.node[node]
-#           # self.assertEqual(expected_attribs, obtained_attribs)
-#           #later to uncomment and check this error
-
     def test_missing_citations_zero(self):
         """
         if fails network is not robust to papers missing citation data
@@ -784,8 +742,8 @@ class TestAuthorCouplingGraph(unittest.TestCase):
     """
     def setUp(self):
         # read data from docs folder
-        wos_data = rd.wos.parse_wos('./testin/wos_author_coupling.txt')
-        meta_list = rd.wos.wos2meta(wos_data)
+        wos_data = rd.wos.parse('./testin/wos_author_coupling.txt')
+        meta_list = rd.wos.convert(wos_data)
 
         self.ayjid_zero = nt.papers.author_coupling(meta_list,
                                                 0,
@@ -891,9 +849,9 @@ class TestAuthorCocitation(unittest.TestCase):
      """
     def setUp(self):
 
-        wos_data =rd.wos.parse_wos \
+        wos_data =rd.wos.parse \
                 ("../testsuite/testin/cocitations_test_full.txt")
-        meta_list = rd.wos.wos2meta(wos_data)
+        meta_list = rd.wos.convert(wos_data)
 
         #No need to check edge / node attribs as there are none.
 
@@ -909,17 +867,17 @@ class TestAuthorCocitation(unittest.TestCase):
     #When the Input threshold is
     def test_cocitations_zero(self):
         # 249 nodes: one for each author and his co-author
-        self.assertEqual(nx.number_of_nodes(self.cocitations_zero), 249)
+        self.assertEqual(nx.number_of_nodes(self.cocitations_zero), 235)
         # as noted in doc string, 12 edges between them
-        self.assertEqual  (nx.number_of_edges(self.cocitations_zero), 4970)
+        self.assertEqual  (nx.number_of_edges(self.cocitations_zero), 4401)
     pass
 
 
     def test_cocitations_one(self):
         # 249 nodes: one for each author and his co-author
-        self.assertEqual  (nx.number_of_nodes(self.cocitations_one), 249)
+        self.assertEqual  (nx.number_of_nodes(self.cocitations_one), 235)
         # as noted in doc string, 12 edges between them
-        self.assertEqual  (nx.number_of_edges(self.cocitations_one), 4970)
+        self.assertEqual  (nx.number_of_edges(self.cocitations_one), 4401)
     pass
 
 
@@ -927,7 +885,7 @@ class TestAuthorCocitation(unittest.TestCase):
         # 19 nodes: one for each author, one for each institution
         self.assertEqual  (nx.number_of_nodes(self.cocitations_two), 13)
         # as noted in doc string, 12 edges between them
-        self.assertEqual  (nx.number_of_edges(self.cocitations_two), 41)
+        self.assertEqual  (nx.number_of_edges(self.cocitations_two), 35)
     pass
 
 
@@ -982,8 +940,8 @@ class TestAuthorInstitution(unittest.TestCase):
 
 
     def setUp(self):
-        wos_data = rd.wos.parse_wos("./testin/authorinstitutions_test.txt")
-        meta_list = rd.wos.wos2meta(wos_data)
+        wos_data = rd.wos.parse("./testin/authorinstitutions_test.txt")
+        meta_list = rd.wos.convert(wos_data)
 
         self.node_attribs_check = nt.authors.author_institution(meta_list)
 
@@ -1004,7 +962,7 @@ class TestAuthorInstitution(unittest.TestCase):
         self.assertEqual(nx.number_of_edges(self.shared_institutions),  \
                          12, "Edges Equal")
 
- 
+
     def test_node_attribs_check(self):
 
         obtained_node_attribs_dict = nx.get_node_attributes \
@@ -1074,8 +1032,8 @@ class TestAuthorCoinstitution(unittest.TestCase):
 
     the //testin/authorinstitution_testrecords.txt file is constructed with
     the following properties:
-    the first paper has 6 authors and 6 institutions , \ 
-    where one author Wu,ZD shares affiliations with  \ 
+    the first paper has 6 authors and 6 institutions , \
+    where one author Wu,ZD shares affiliations with  \
     2 other different institutions and authors.
     the second paper has 3 authors with 2 institutions, \
         where 2 authors share same affliated institution.
@@ -1107,8 +1065,8 @@ class TestAuthorCoinstitution(unittest.TestCase):
 
 
     def setUp(self):
-        wos_data = rd.wos.parse_wos("./testin/authorinstitutions_test.txt")
-        meta_list = rd.wos.wos2meta(wos_data)
+        wos_data = rd.wos.parse("./testin/authorinstitutions_test.txt")
+        meta_list = rd.wos.convert(wos_data)
 
         self.node_attribs_check = \
                 nt.authors.author_coinstitution(meta_list, 1) # test 2
@@ -1197,8 +1155,8 @@ class TestCocitation(unittest.TestCase):
 
     def setUp(self):
 
-        wos_data = rd.wos.parse_wos("./testin/cocitations_test_2recs.txt")
-        meta_list = rd.wos.wos2meta(wos_data)
+        wos_data = rd.wos.parse("./testin/cocitations_test_2recs.txt")
+        meta_list = rd.wos.convert(wos_data)
         self.cocitations_zero = nt.papers.cocitation(meta_list, 0) #test 1
         self.cocitations_one = nt.papers.cocitation(meta_list, 1)  # test 2
         self.cocitations_two = nt.papers.cocitation(meta_list, 2)  # test 5
@@ -1211,144 +1169,44 @@ class TestCocitation(unittest.TestCase):
         self.assertEqual(nx.number_of_nodes(self.cocitations_zero), 13)
         self.assertEqual(nx.number_of_edges(self.cocitations_zero), 58)
 
-        #check if the edges_list is same as expected.
+        obtained = set(self.cocitations_zero.edges())
+        expected = set([('YU HL 2007 STOCH ENV RES RISK A', 'ZOU CK 2011 TECHNOMETRICS'), ('YU HL 2007 STOCH ENV RES RISK A', 'FILIPPIDIS A 1992 FUEL'), ('YU HL 2007 STOCH ENV RES RISK A', 'RAO JL 1992 RNEA TECHN B SER LAN'), ('YU HL 2007 STOCH ENV RES RISK A', 'LANG CL 2012 NAV RES LOG'), ('YU HL 2007 STOCH ENV RES RISK A', 'XIAO HY 2011 SOIL SEDIMENT CONTAM'), ('YU HL 2007 STOCH ENV RES RISK A', 'VATALIS KI 2006 ENVIRON MANAGE'), ('YU HL 2007 STOCH ENV RES RISK A', 'ADRIANO DC 2001 TRACE ELEMENTS TERRE'), ('ZOU CK 2011 TECHNOMETRICS', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('ZOU CK 2011 TECHNOMETRICS', 'FILIPPIDIS A 1992 FUEL'), ('ZOU CK 2011 TECHNOMETRICS', 'LANG CL 2012 NAV RES LOG'), ('ZOU CK 2011 TECHNOMETRICS', 'EFRON B 1993 INTRO BOOTSTRAP'), ('ZOU CK 2011 TECHNOMETRICS', 'RAO JL 1992 RNEA TECHN B SER LAN'), ('ZOU CK 2011 TECHNOMETRICS', 'ADRIANO DC 2001 TRACE ELEMENTS TERRE'), ('ZOU CK 2011 TECHNOMETRICS', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('ZOU CK 2011 TECHNOMETRICS', 'FRANK A 2010 UCI MACHINE LEARNING'), ('ZOU CK 2011 TECHNOMETRICS', 'XIAO HY 2011 SOIL SEDIMENT CONTAM'), ('ZOU CK 2011 TECHNOMETRICS', 'VATALIS KI 2006 ENVIRON MANAGE'), ('ZOU CK 2011 TECHNOMETRICS', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('FILIPPIDIS A 1992 FUEL', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('FILIPPIDIS A 1992 FUEL', 'LANG CL 2012 NAV RES LOG'), ('FILIPPIDIS A 1992 FUEL', 'EFRON B 1993 INTRO BOOTSTRAP'), ('FILIPPIDIS A 1992 FUEL', 'RAO JL 1992 RNEA TECHN B SER LAN'), ('FILIPPIDIS A 1992 FUEL', 'ADRIANO DC 2001 TRACE ELEMENTS TERRE'), ('FILIPPIDIS A 1992 FUEL', 'FRANK A 2010 UCI MACHINE LEARNING'), ('FILIPPIDIS A 1992 FUEL', 'XIAO HY 2011 SOIL SEDIMENT CONTAM'), ('FILIPPIDIS A 1992 FUEL', 'VATALIS KI 2006 ENVIRON MANAGE'), ('FILIPPIDIS A 1992 FUEL', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('FILIPPIDIS A 1992 FUEL', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('FRANK A 2010 UCI MACHINE LEARNING', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('FRANK A 2010 UCI MACHINE LEARNING', 'EFRON B 1993 INTRO BOOTSTRAP'), ('FRANK A 2010 UCI MACHINE LEARNING', 'RAO JL 1992 RNEA TECHN B SER LAN'), ('FRANK A 2010 UCI MACHINE LEARNING', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('FRANK A 2010 UCI MACHINE LEARNING', 'LANG CL 2012 NAV RES LOG'), ('FRANK A 2010 UCI MACHINE LEARNING', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('EFRON B 1993 INTRO BOOTSTRAP', 'RAO JL 1992 RNEA TECHN B SER LAN'), ('EFRON B 1993 INTRO BOOTSTRAP', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('EFRON B 1993 INTRO BOOTSTRAP', 'LANG CL 2012 NAV RES LOG'), ('EFRON B 1993 INTRO BOOTSTRAP', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('EFRON B 1993 INTRO BOOTSTRAP', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'ADRIANO DC 2001 TRACE ELEMENTS TERRE'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'LANG CL 2012 NAV RES LOG'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'XIAO HY 2011 SOIL SEDIMENT CONTAM'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'VATALIS KI 2006 ENVIRON MANAGE'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('ADRIANO DC 2001 TRACE ELEMENTS TERRE', 'LANG CL 2012 NAV RES LOG'), ('ADRIANO DC 2001 TRACE ELEMENTS TERRE', 'XIAO HY 2011 SOIL SEDIMENT CONTAM'), ('ADRIANO DC 2001 TRACE ELEMENTS TERRE', 'VATALIS KI 2006 ENVIRON MANAGE'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'LANG CL 2012 NAV RES LOG'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('LANG CL 2012 NAV RES LOG', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('LANG CL 2012 NAV RES LOG', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('LANG CL 2012 NAV RES LOG', 'XIAO HY 2011 SOIL SEDIMENT CONTAM'), ('LANG CL 2012 NAV RES LOG', 'VATALIS KI 2006 ENVIRON MANAGE'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'VATALIS KI 2006 ENVIRON MANAGE'), ('ANGIULLI F 2005 IEEE T KNOWL DATA EN', 'CHAKRABORTI S 2001 J QUAL TECHNOL')])
 
-        obtained_edges_list = self.cocitations_zero.edges()
-        expected_edges_list = \
-        [('XIAO HY 2011 SOIL SEDIMENT CONTAM', \
-          'ADRIANO D. 2001 TRACE ELEMENTS TERRE'),\
-         ('XIAO HY 2011 SOIL SEDIMENT CONTAM', \
-          'YU HL 2007 STOCH ENV RES RISK A'), \
-         ('XIAO HY 2011 SOIL SEDIMENT CONTAM', \
-          'ZOU CK 2011 TECHNOMETRICS'),\
-         ('XIAO HY 2011 SOIL SEDIMENT CONTAM',\
-          'FILIPPIDIS A 1992 FUEL'), \
-         ('XIAO HY 2011 SOIL SEDIMENT CONTAM', \
-          'VATALIS K. 2006 ENVIRON MANAGE'), \
-         ('XIAO HY 2011 SOIL SEDIMENT CONTAM',\
-          'LANG CL 2012 NAV RES LOG'), \
-         ('XIAO HY 2011 SOIL SEDIMENT CONTAM', \
-          'RAO J 1992 RNEA TECHN B SER LAN'), \
-         ('YU HL 2007 STOCH ENV RES RISK A', \
-          'ZOU CK 2011 TECHNOMETRICS'), \
-         ('YU HL 2007 STOCH ENV RES RISK A', \
-          'FILIPPIDIS A 1992 FUEL'),\
-         ('YU HL 2007 STOCH ENV RES RISK A', \
-          'VATALIS K. 2006 ENVIRON MANAGE'), \
-         ('YU HL 2007 STOCH ENV RES RISK A', \
-          'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), \
-         ('YU HL 2007 STOCH ENV RES RISK A', \
-          'LANG CL 2012 NAV RES LOG'), \
-         ('YU HL 2007 STOCH ENV RES RISK A', \
-          'RAO J 1992 RNEA TECHN B SER LAN'), \
-         ('ZOU CK 2011 TECHNOMETRICS', \
-          'VATALIS K. 2006 ENVIRON MANAGE'),\
-         ('ZOU CK 2011 TECHNOMETRICS', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), \
-         ('ZOU CK 2011 TECHNOMETRICS', 'FILIPPIDIS A 1992 FUEL'),\
-         ('ZOU CK 2011 TECHNOMETRICS', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'),\
-         ('ZOU CK 2011 TECHNOMETRICS', 'EFRON B. 1993 INTRO BOOTSTRAP'),\
-         ('ZOU CK 2011 TECHNOMETRICS', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'),\
-         ('ZOU CK 2011 TECHNOMETRICS', 'LANG CL 2012 NAV RES LOG'),\
-         ('ZOU CK 2011 TECHNOMETRICS', 'FRANK A. 2010 UCI MACHINE LEARNING'), \
-         ('ZOU CK 2011 TECHNOMETRICS', 'RAO J 1992 RNEA TECHN B SER LAN'),\
-         ('ZOU CK 2011 TECHNOMETRICS', 'DAS N 2009 QUAL TECHNOL QUANT M'), \
-         ('FILIPPIDIS A 1992 FUEL', 'VATALIS K. 2006 ENVIRON MANAGE'), \
-         ('FILIPPIDIS A 1992 FUEL', 'RAO J 1992 RNEA TECHN B SER LAN'), \
-         ('FILIPPIDIS A 1992 FUEL', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), \
-         ('FILIPPIDIS A 1992 FUEL', 'EFRON B. 1993 INTRO BOOTSTRAP'), \
-         ('FILIPPIDIS A 1992 FUEL', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'),\
-         ('FILIPPIDIS A 1992 FUEL', 'LANG CL 2012 NAV RES LOG'),\
-         ('FILIPPIDIS A 1992 FUEL', 'FRANK A. 2010 UCI MACHINE LEARNING'), \
-         ('FILIPPIDIS A 1992 FUEL', 'DAS N 2009 QUAL TECHNOL QUANT M'),
-         ('FILIPPIDIS A 1992 FUEL', 'CHAKRABORTI S 2001 J QUAL TECHNOL'),\
-         ('VATALIS K. 2006 ENVIRON MANAGE', 'RAO J 1992 RNEA TECHN B SER LAN'),\
-         ('VATALIS K. 2006 ENVIRON MANAGE', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'),\
-         ('VATALIS K. 2006 ENVIRON MANAGE', 'LANG CL 2012 NAV RES LOG'),\
-         ('EFRON B. 1993 INTRO BOOTSTRAP', 'CHAKRABORTI S 2001 J QUAL TECHNOL'),\
-         ('EFRON B. 1993 INTRO BOOTSTRAP', 'DAS N 2009 QUAL TECHNOL QUANT M'), \
-         ('EFRON B. 1993 INTRO BOOTSTRAP', 'LANG CL 2012 NAV RES LOG'), \
-         ('EFRON B. 1993 INTRO BOOTSTRAP', 'FRANK A. 2010 UCI MACHINE LEARNING'),\
-         ('EFRON B. 1993 INTRO BOOTSTRAP', 'RAO J 1992 RNEA TECHN B SER LAN'), \
-         ('EFRON B. 1993 INTRO BOOTSTRAP', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'),\
-         ('ADRIANO D. 2001 TRACE ELEMENTS TERRE', 'LANG CL 2012 NAV RES LOG'), \
-         ('ADRIANO D. 2001 TRACE ELEMENTS TERRE', 'RAO J 1992 RNEA TECHN B SER LAN'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'LANG CL 2012 NAV RES LOG'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'RAO J 1992 RNEA TECHN B SER LAN'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('LANG CL 2012 NAV RES LOG', 'RAO J 1992 RNEA TECHN B SER LAN'), ('LANG CL 2012 NAV RES LOG', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('LANG CL 2012 NAV RES LOG', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('LANG CL 2012 NAV RES LOG', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('FRANK A. 2010 UCI MACHINE LEARNING', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('FRANK A. 2010 UCI MACHINE LEARNING', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('FRANK A. 2010 UCI MACHINE LEARNING', 'RAO J 1992 RNEA TECHN B SER LAN'), ('RAO J 1992 RNEA TECHN B SER LAN', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('RAO J 1992 RNEA TECHN B SER LAN', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('ANGIULLI F 2005 IEEE T KNOWL DATA EN', 'CHAKRABORTI S 2001 J QUAL TECHNOL')]
-        self.assertListEqual(obtained_edges_list, expected_edges_list, "Edges List is not as expected")
-        #print "cocitation_zero_edges:",obtained_edges_list
-        #check if the nodes_list is same as expected
+        self.assertSetEqual(obtained, expected, "Edges not as expected")
 
-        expected_nodes_list = ['XIAO HY 2011 SOIL SEDIMENT CONTAM', 'YU HL 2007 STOCH ENV RES RISK A', 'ZOU CK 2011 TECHNOMETRICS', 'FILIPPIDIS A 1992 FUEL', 'VATALIS K. 2006 ENVIRON MANAGE', 'EFRON B. 1993 INTRO BOOTSTRAP', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE', 'DAS N 2009 QUAL TECHNOL QUANT M', 'LANG CL 2012 NAV RES LOG', 'FRANK A. 2010 UCI MACHINE LEARNING', 'RAO J 1992 RNEA TECHN B SER LAN', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN', 'CHAKRABORTI S 2001 J QUAL TECHNOL']
-        obtained_nodes_list = self.cocitations_zero.nodes()
-        #print "cocitation_zero:",obtained_nodes_list
-        self.assertListEqual(obtained_nodes_list, expected_nodes_list, "Nodes List is as expected")
+        expected = set(['YU HL 2007 STOCH ENV RES RISK A', 'ZOU CK 2011 TECHNOMETRICS', 'FILIPPIDIS A 1992 FUEL', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN', 'LANG CL 2012 NAV RES LOG', 'EFRON B 1993 INTRO BOOTSTRAP', 'RAO JL 1992 RNEA TECHN B SER LAN', 'DAS N 2009 QUAL TECHNOL QUANT M', 'FRANK A 2010 UCI MACHINE LEARNING', 'XIAO HY 2011 SOIL SEDIMENT CONTAM', 'VATALIS KI 2006 ENVIRON MANAGE', 'ADRIANO DC 2001 TRACE ELEMENTS TERRE', 'CHAKRABORTI S 2001 J QUAL TECHNOL'])
+        obtained = set(self.cocitations_zero.nodes())
+        self.assertSetEqual(obtained, expected, "Nodes not as expected")
 
 
     def test_cocitations_one(self):
-        # 8+9 - 4common nodes :
         self.assertEqual(nx.number_of_nodes(self.cocitations_one), 13)
         self.assertEqual(nx.number_of_edges(self.cocitations_one), 58)
 
-        #check if the edges_list is same as expected.
+        obtained = set(self.cocitations_one.edges())
+        expected = set([('YU HL 2007 STOCH ENV RES RISK A', 'ZOU CK 2011 TECHNOMETRICS'), ('YU HL 2007 STOCH ENV RES RISK A', 'FILIPPIDIS A 1992 FUEL'), ('YU HL 2007 STOCH ENV RES RISK A', 'RAO JL 1992 RNEA TECHN B SER LAN'), ('YU HL 2007 STOCH ENV RES RISK A', 'LANG CL 2012 NAV RES LOG'), ('YU HL 2007 STOCH ENV RES RISK A', 'XIAO HY 2011 SOIL SEDIMENT CONTAM'), ('YU HL 2007 STOCH ENV RES RISK A', 'VATALIS KI 2006 ENVIRON MANAGE'), ('YU HL 2007 STOCH ENV RES RISK A', 'ADRIANO DC 2001 TRACE ELEMENTS TERRE'), ('ZOU CK 2011 TECHNOMETRICS', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('ZOU CK 2011 TECHNOMETRICS', 'FILIPPIDIS A 1992 FUEL'), ('ZOU CK 2011 TECHNOMETRICS', 'LANG CL 2012 NAV RES LOG'), ('ZOU CK 2011 TECHNOMETRICS', 'EFRON B 1993 INTRO BOOTSTRAP'), ('ZOU CK 2011 TECHNOMETRICS', 'RAO JL 1992 RNEA TECHN B SER LAN'), ('ZOU CK 2011 TECHNOMETRICS', 'ADRIANO DC 2001 TRACE ELEMENTS TERRE'), ('ZOU CK 2011 TECHNOMETRICS', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('ZOU CK 2011 TECHNOMETRICS', 'FRANK A 2010 UCI MACHINE LEARNING'), ('ZOU CK 2011 TECHNOMETRICS', 'XIAO HY 2011 SOIL SEDIMENT CONTAM'), ('ZOU CK 2011 TECHNOMETRICS', 'VATALIS KI 2006 ENVIRON MANAGE'), ('ZOU CK 2011 TECHNOMETRICS', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('FILIPPIDIS A 1992 FUEL', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('FILIPPIDIS A 1992 FUEL', 'LANG CL 2012 NAV RES LOG'), ('FILIPPIDIS A 1992 FUEL', 'EFRON B 1993 INTRO BOOTSTRAP'), ('FILIPPIDIS A 1992 FUEL', 'RAO JL 1992 RNEA TECHN B SER LAN'), ('FILIPPIDIS A 1992 FUEL', 'ADRIANO DC 2001 TRACE ELEMENTS TERRE'), ('FILIPPIDIS A 1992 FUEL', 'FRANK A 2010 UCI MACHINE LEARNING'), ('FILIPPIDIS A 1992 FUEL', 'XIAO HY 2011 SOIL SEDIMENT CONTAM'), ('FILIPPIDIS A 1992 FUEL', 'VATALIS KI 2006 ENVIRON MANAGE'), ('FILIPPIDIS A 1992 FUEL', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('FILIPPIDIS A 1992 FUEL', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('FRANK A 2010 UCI MACHINE LEARNING', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('FRANK A 2010 UCI MACHINE LEARNING', 'EFRON B 1993 INTRO BOOTSTRAP'), ('FRANK A 2010 UCI MACHINE LEARNING', 'RAO JL 1992 RNEA TECHN B SER LAN'), ('FRANK A 2010 UCI MACHINE LEARNING', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('FRANK A 2010 UCI MACHINE LEARNING', 'LANG CL 2012 NAV RES LOG'), ('FRANK A 2010 UCI MACHINE LEARNING', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('EFRON B 1993 INTRO BOOTSTRAP', 'RAO JL 1992 RNEA TECHN B SER LAN'), ('EFRON B 1993 INTRO BOOTSTRAP', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('EFRON B 1993 INTRO BOOTSTRAP', 'LANG CL 2012 NAV RES LOG'), ('EFRON B 1993 INTRO BOOTSTRAP', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('EFRON B 1993 INTRO BOOTSTRAP', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'ADRIANO DC 2001 TRACE ELEMENTS TERRE'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'LANG CL 2012 NAV RES LOG'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'XIAO HY 2011 SOIL SEDIMENT CONTAM'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'VATALIS KI 2006 ENVIRON MANAGE'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('ADRIANO DC 2001 TRACE ELEMENTS TERRE', 'LANG CL 2012 NAV RES LOG'), ('ADRIANO DC 2001 TRACE ELEMENTS TERRE', 'XIAO HY 2011 SOIL SEDIMENT CONTAM'), ('ADRIANO DC 2001 TRACE ELEMENTS TERRE', 'VATALIS KI 2006 ENVIRON MANAGE'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'LANG CL 2012 NAV RES LOG'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('LANG CL 2012 NAV RES LOG', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('LANG CL 2012 NAV RES LOG', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('LANG CL 2012 NAV RES LOG', 'XIAO HY 2011 SOIL SEDIMENT CONTAM'), ('LANG CL 2012 NAV RES LOG', 'VATALIS KI 2006 ENVIRON MANAGE'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'VATALIS KI 2006 ENVIRON MANAGE'), ('ANGIULLI F 2005 IEEE T KNOWL DATA EN', 'CHAKRABORTI S 2001 J QUAL TECHNOL')])
 
-        obtained_edges_list = self.cocitations_one.edges()
-        
-        # Need to organize this.
+        self.assertSetEqual(obtained, expected, "Edges not as expected")
 
-        expected_edges_list = [('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'YU HL 2007 STOCH ENV RES RISK A'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'ZOU CK 2011 TECHNOMETRICS'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'FILIPPIDIS A 1992 FUEL'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'VATALIS K. 2006 ENVIRON MANAGE'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'LANG CL 2012 NAV RES LOG'), ('XIAO HY 2011 SOIL SEDIMENT CONTAM', 'RAO J 1992 RNEA TECHN B SER LAN'), ('YU HL 2007 STOCH ENV RES RISK A', 'ZOU CK 2011 TECHNOMETRICS'), ('YU HL 2007 STOCH ENV RES RISK A', 'FILIPPIDIS A 1992 FUEL'), ('YU HL 2007 STOCH ENV RES RISK A', 'VATALIS K. 2006 ENVIRON MANAGE'), ('YU HL 2007 STOCH ENV RES RISK A', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), ('YU HL 2007 STOCH ENV RES RISK A', 'LANG CL 2012 NAV RES LOG'), ('YU HL 2007 STOCH ENV RES RISK A', 'RAO J 1992 RNEA TECHN B SER LAN'), ('ZOU CK 2011 TECHNOMETRICS', 'VATALIS K. 2006 ENVIRON MANAGE'), ('ZOU CK 2011 TECHNOMETRICS', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('ZOU CK 2011 TECHNOMETRICS', 'FILIPPIDIS A 1992 FUEL'), ('ZOU CK 2011 TECHNOMETRICS', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), ('ZOU CK 2011 TECHNOMETRICS', 'EFRON B. 1993 INTRO BOOTSTRAP'), ('ZOU CK 2011 TECHNOMETRICS', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('ZOU CK 2011 TECHNOMETRICS', 'LANG CL 2012 NAV RES LOG'), ('ZOU CK 2011 TECHNOMETRICS', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('ZOU CK 2011 TECHNOMETRICS', 'RAO J 1992 RNEA TECHN B SER LAN'), ('ZOU CK 2011 TECHNOMETRICS', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('FILIPPIDIS A 1992 FUEL', 'VATALIS K. 2006 ENVIRON MANAGE'), ('FILIPPIDIS A 1992 FUEL', 'RAO J 1992 RNEA TECHN B SER LAN'), ('FILIPPIDIS A 1992 FUEL', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), ('FILIPPIDIS A 1992 FUEL', 'EFRON B. 1993 INTRO BOOTSTRAP'), ('FILIPPIDIS A 1992 FUEL', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('FILIPPIDIS A 1992 FUEL', 'LANG CL 2012 NAV RES LOG'), ('FILIPPIDIS A 1992 FUEL', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('FILIPPIDIS A 1992 FUEL', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('FILIPPIDIS A 1992 FUEL', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('VATALIS K. 2006 ENVIRON MANAGE', 'RAO J 1992 RNEA TECHN B SER LAN'), ('VATALIS K. 2006 ENVIRON MANAGE', 'ADRIANO D. 2001 TRACE ELEMENTS TERRE'), ('VATALIS K. 2006 ENVIRON MANAGE', 'LANG CL 2012 NAV RES LOG'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'DAS N 2009 QUAL TECHNOL QUANT M'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'LANG CL 2012 NAV RES LOG'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'RAO J 1992 RNEA TECHN B SER LAN'), ('EFRON B. 1993 INTRO BOOTSTRAP', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('ADRIANO D. 2001 TRACE ELEMENTS TERRE', 'LANG CL 2012 NAV RES LOG'), ('ADRIANO D. 2001 TRACE ELEMENTS TERRE', 'RAO J 1992 RNEA TECHN B SER LAN'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'LANG CL 2012 NAV RES LOG'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'RAO J 1992 RNEA TECHN B SER LAN'), ('DAS N 2009 QUAL TECHNOL QUANT M', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('LANG CL 2012 NAV RES LOG', 'RAO J 1992 RNEA TECHN B SER LAN'), ('LANG CL 2012 NAV RES LOG', 'FRANK A. 2010 UCI MACHINE LEARNING'), ('LANG CL 2012 NAV RES LOG', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('LANG CL 2012 NAV RES LOG', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('FRANK A. 2010 UCI MACHINE LEARNING', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('FRANK A. 2010 UCI MACHINE LEARNING', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('FRANK A. 2010 UCI MACHINE LEARNING', 'RAO J 1992 RNEA TECHN B SER LAN'), ('RAO J 1992 RNEA TECHN B SER LAN', 'CHAKRABORTI S 2001 J QUAL TECHNOL'), ('RAO J 1992 RNEA TECHN B SER LAN', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN'), ('ANGIULLI F 2005 IEEE T KNOWL DATA EN', 'CHAKRABORTI S 2001 J QUAL TECHNOL')]
-        self.assertListEqual(obtained_edges_list, expected_edges_list, \
-                             "Edges List is not as expected")
+        expected = set(['YU HL 2007 STOCH ENV RES RISK A', 'ZOU CK 2011 TECHNOMETRICS', 'FILIPPIDIS A 1992 FUEL', 'FRANK A 2010 UCI MACHINE LEARNING', 'EFRON B 1993 INTRO BOOTSTRAP', 'RAO JL 1992 RNEA TECHN B SER LAN', 'ADRIANO DC 2001 TRACE ELEMENTS TERRE', 'DAS N 2009 QUAL TECHNOL QUANT M', 'LANG CL 2012 NAV RES LOG', 'XIAO HY 2011 SOIL SEDIMENT CONTAM', 'VATALIS KI 2006 ENVIRON MANAGE', 'ANGIULLI F 2005 IEEE T KNOWL DATA EN', 'CHAKRABORTI S 2001 J QUAL TECHNOL'])
+        obtained = set(self.cocitations_one.nodes())
 
-        #check if the nodes_list is same as expected
-
-        expected_nodes_list = \
-            ['XIAO HY 2011 SOIL SEDIMENT CONTAM', \
-            'YU HL 2007 STOCH ENV RES RISK A', \
-             'ZOU CK 2011 TECHNOMETRICS', \
-             'FILIPPIDIS A 1992 FUEL', \
-             'VATALIS K. 2006 ENVIRON MANAGE',\
-             'EFRON B. 1993 INTRO BOOTSTRAP', \
-             'ADRIANO D. 2001 TRACE ELEMENTS TERRE', \
-             'DAS N 2009 QUAL TECHNOL QUANT M', \
-             'LANG CL 2012 NAV RES LOG', \
-             'FRANK A. 2010 UCI MACHINE LEARNING',\
-             'RAO J 1992 RNEA TECHN B SER LAN', \
-             'ANGIULLI F 2005 IEEE T KNOWL DATA EN', \
-             'CHAKRABORTI S 2001 J QUAL TECHNOL']
-        obtained_nodes_list = self.cocitations_one.nodes()
-        #print "cocitation_one_nodes:",obtained_nodes_list
-        self.assertListEqual(obtained_nodes_list, expected_nodes_list, \
-                             "Nodes List is not as expected")
+        self.assertSetEqual(obtained, expected, "Nodes not as expected")
 
 
     def test_cocitations_two(self):
-        # 8+9 - 4common nodes :
         self.assertEqual(nx.number_of_nodes(self.cocitations_two),4)
         self.assertEqual(self.cocitations_two.number_of_edges(), 6)
 
-        #check if the edges_list is same as expected.
 
-        obtained_edges_list = self.cocitations_two.edges()
-        expected_edges_list = \
-        [('LANG CL 2012 NAV RES LOG', 'RAO J 1992 RNEA TECHN B SER LAN'), \
-        ('LANG CL 2012 NAV RES LOG', 'ZOU CK 2011 TECHNOMETRICS'), \
-         ('LANG CL 2012 NAV RES LOG', 'FILIPPIDIS A 1992 FUEL'), \
-         ('RAO J 1992 RNEA TECHN B SER LAN', 'ZOU CK 2011 TECHNOMETRICS'),\
-         ('RAO J 1992 RNEA TECHN B SER LAN', 'FILIPPIDIS A 1992 FUEL'), \
-         ('ZOU CK 2011 TECHNOMETRICS', 'FILIPPIDIS A 1992 FUEL')]
-        self.assertListEqual(obtained_edges_list, expected_edges_list, \
-                             "Edges List is not as expected")
+        obtained = set(self.cocitations_two.edges())
+        expected = set([('LANG CL 2012 NAV RES LOG', 'ZOU CK 2011 TECHNOMETRICS'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'ZOU CK 2011 TECHNOMETRICS'), ('ZOU CK 2011 TECHNOMETRICS', 'FILIPPIDIS A 1992 FUEL'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'LANG CL 2012 NAV RES LOG'), ('LANG CL 2012 NAV RES LOG', 'FILIPPIDIS A 1992 FUEL'), ('RAO JL 1992 RNEA TECHN B SER LAN', 'FILIPPIDIS A 1992 FUEL')])
 
-        #check if the nodes_list is same as expected
+        self.assertSetEqual(obtained, expected, "Edges not as expected")
 
-        expected_nodes_list = ['LANG CL 2012 NAV RES LOG', \
-                               'RAO J 1992 RNEA TECHN B SER LAN', \
-                               'ZOU CK 2011 TECHNOMETRICS', \
-                               'FILIPPIDIS A 1992 FUEL']
-        obtained_nodes_list = self.cocitations_two.nodes()
-        #print "cocitation_2_nodes:",obtained_nodes_list
-        self.assertListEqual(obtained_nodes_list, expected_nodes_list, \
-                             "Nodes List is not as expected")
-
-
+        expected = set(['RAO JL 1992 RNEA TECHN B SER LAN', 'FILIPPIDIS A 1992 FUEL', 'ZOU CK 2011 TECHNOMETRICS', 'LANG CL 2012 NAV RES LOG'])
+        obtained = set(self.cocitations_two.nodes())
+        self.assertSetEqual(obtained, expected, "Nodes not as expected")
 
     def tearDown(self):
          pass
@@ -1360,84 +1218,82 @@ class TestTopCitedParameters(unittest.TestCase):
         Test all the types of network
         Presently for paper_cocitations.
         Assumes reader is functioning
-        
+
         "../testsuite/testin/paper_cocitations#62809724.txt"
         file has been constructed with
         the following properties:
-        
+
         There are 2 papers , 3 references are cited 2 times.
         ANGIULLI F 2005 IEEE T KNOWL DATA EN
         RAO J 1992 RNEA TECHN B SER LAN
         FILIPPIDIS A 1992 FUEL
-        
+
         """
-    
+
     def setUp(self):
         """ Setting up"""
-        
+
         wos_data = \
-         rd.wos.parse_wos("../testsuite/testin/paper_cocitations#62809724.txt")
-        meta_list = rd.wos.wos2meta(wos_data)
-        
+         rd.wos.parse("../testsuite/testin/paper_cocitations#62809724.txt")
+        meta_list = rd.wos.convert(wos_data)
+
         # Trying with no function arguments as there are default ones.
         self.top_cited,self.citation_count = nt.papers.top_cited(meta_list)
-        
+
         self.top_parents,self.top_cited,self.citation_count = \
                                             nt.papers.top_parents(meta_list)
-        
+
         self.citation_count = nt.papers.citation_count(meta_list)
-        
+
         # Trying with different function argument other than default one.
         self.top_cited_date,self.citation_count_date = \
                                  nt.papers.top_cited(meta_list,10)
-                
+
         self.top_parents_date,self.top_cited_date,self.citation_count_date  = \
                         nt.papers.top_parents(meta_list,12)
-                
+
         self.citation_count_date = nt.papers.citation_count(meta_list,'date')
-        
+
         # TypeError slice indices must be integers or None or \
         #  have an __index__ method
         # This error will be encountered if a wrong value is given in \
         #  top_parents and top_cited functions
-    
-    
-    
+
+
+
     def test_top_cited(self):
-        obtained_list = self.top_cited
-        expected_list = ['RAO J 1992 RNEA TECHN B SER LAN', \
-                         'YU HL 2007 STOCH ENV RES RISK A', \
-                         'CHAKRABORTI S 2001 J QUAL TECHNOL', \
+        obtained = set(self.top_cited)
+        expected = set(['YU HL 2007 STOCH ENV RES RISK A',
+                         'CHAKRABORTI S 2001 J QUAL TECHNOL',
                          'FILIPPIDIS A 1992 FUEL', \
-                         'VATALIS K. 2006 ENVIRON MANAGE', \
-                         'EFRON B. 1993 INTRO BOOTSTRAP', \
-                         'ADRIANO D. 2001 TRACE ELEMENTS TERRE',\
-                         'DAS N 2009 QUAL TECHNOL QUANT M', \
-                         'LANG CL 2012 NAV RES LOG', \
-                         'FRANK A. 2010 UCI MACHINE LEARNING', \
-                         'XIAO HY 2011 SOIL SEDIMENT CONTAM', \
-                         'ANGIULLI F 2005 IEEE T KNOWL DATA EN', \
-                         'ZOU CK 2011 TECHNOMETRICS']
-        self.assertListEqual(obtained_list, \
-                              expected_list, "Edges List is not as expected")
+                         'FRANK A 2010 UCI MACHINE LEARNING',
+                         'EFRON B 1993 INTRO BOOTSTRAP',
+                         'RAO JL 1992 RNEA TECHN B SER LAN',
+                         'ADRIANO DC 2001 TRACE ELEMENTS TERRE',
+                         'DAS N 2009 QUAL TECHNOL QUANT M',
+                         'LANG CL 2012 NAV RES LOG',
+                         'XIAO HY 2011 SOIL SEDIMENT CONTAM',
+                         'VATALIS KI 2006 ENVIRON MANAGE',
+                         'ANGIULLI F 2005 IEEE T KNOWL DATA EN',
+                         'ZOU CK 2011 TECHNOMETRICS'])
+        self.assertSetEqual(obtained, expected, "Edges not as expected")
 
     def test_top_cited_date(self):
-        obtained_list = self.top_cited_date
-        expected_list = ['RAO J 1992 RNEA TECHN B SER LAN', \
-                         'YU HL 2007 STOCH ENV RES RISK A', \
-                         'CHAKRABORTI S 2001 J QUAL TECHNOL', \
+        obtained = set(self.top_cited_date)
+        expectedt = set(['YU HL 2007 STOCH ENV RES RISK A',
+                         'CHAKRABORTI S 2001 J QUAL TECHNOL',
                          'FILIPPIDIS A 1992 FUEL', \
-                         'VATALIS K. 2006 ENVIRON MANAGE', \
-                         'EFRON B. 1993 INTRO BOOTSTRAP', \
-                         'ADRIANO D. 2001 TRACE ELEMENTS TERRE',\
-                         'DAS N 2009 QUAL TECHNOL QUANT M', \
-                         'LANG CL 2012 NAV RES LOG', \
-                         'FRANK A. 2010 UCI MACHINE LEARNING', \
-                         'XIAO HY 2011 SOIL SEDIMENT CONTAM', \
-                         'ANGIULLI F 2005 IEEE T KNOWL DATA EN', \
-                         'ZOU CK 2011 TECHNOMETRICS']
-        self.assertListEqual(obtained_list, \
-                             expected_list, "Edges List is not as expected")
+                         'FRANK A 2010 UCI MACHINE LEARNING',
+                         'EFRON B 1993 INTRO BOOTSTRAP',
+                         'RAO JL 1992 RNEA TECHN B SER LAN',
+                         'ADRIANO DC 2001 TRACE ELEMENTS TERRE',
+                         'DAS N 2009 QUAL TECHNOL QUANT M',
+                         'LANG CL 2012 NAV RES LOG',
+                         'XIAO HY 2011 SOIL SEDIMENT CONTAM',
+                         'VATALIS KI 2006 ENVIRON MANAGE',
+                         'ANGIULLI F 2005 IEEE T KNOWL DATA EN',
+                         'ZOU CK 2011 TECHNOMETRICS'])
+        self.assertSetEqual(obtained, expected, "Edges not as expected")
 
 
     def test_top_parents(self):
@@ -1455,25 +1311,11 @@ class TestTopCitedParameters(unittest.TestCase):
         expected_list = ['MODIS K 2014 ', 'TUERHONG G 2014 ']
         self.assertListEqual(obtained_list, \
                              expected_list, "Edges List is not as expected")
-    
+
     def test_citation_count(self):
-        expected_citations_count_dict = \
-            {'XIAO HY 2011 SOIL SEDIMENT CONTAM': 1,\
-                'YU HL 2007 STOCH ENV RES RISK A': 1, \
-                'CHAKRABORTI S 2001 J QUAL TECHNOL': 1,\
-             'FILIPPIDIS A 1992 FUEL': 2, 'VATALIS K. 2006 ENVIRON MANAGE': 1, \
-                'EFRON B. 1993 INTRO BOOTSTRAP': 1, \
-                'ADRIANO D. 2001 TRACE ELEMENTS TERRE': 1, \
-                'DAS N 2009 QUAL TECHNOL QUANT M': 1, \
-                'LANG CL 2012 NAV RES LOG': 1, \
-                'FRANK A. 2010 UCI MACHINE LEARNING': 1, \
-                'RAO J 1992 RNEA TECHN B SER LAN': 2, \
-                'ANGIULLI F 2005 IEEE T KNOWL DATA EN': 2, \
-                'ZOU CK 2011 TECHNOMETRICS': 1}
-        obtained_citations_count_dict = self.citation_count
-        self.assertDictEqual(expected_citations_count_dict, \
-                             obtained_citations_count_dict, \
-                             "Edge Attribs are equal")
+        expected = {'YU HL 2007 STOCH ENV RES RISK A': 1, 'CHAKRABORTI S 2001 J QUAL TECHNOL': 1, 'FILIPPIDIS A 1992 FUEL': 2, 'LANG CL 2012 NAV RES LOG': 1, 'EFRON B 1993 INTRO BOOTSTRAP': 1, 'RAO JL 1992 RNEA TECHN B SER LAN': 2, 'ANGIULLI F 2005 IEEE T KNOWL DATA EN': 2, 'DAS N 2009 QUAL TECHNOL QUANT M': 1, 'FRANK A 2010 UCI MACHINE LEARNING': 1, 'XIAO HY 2011 SOIL SEDIMENT CONTAM': 1, 'VATALIS KI 2006 ENVIRON MANAGE': 1, 'ADRIANO DC 2001 TRACE ELEMENTS TERRE': 1, 'ZOU CK 2011 TECHNOMETRICS': 1}
+        obtained = self.citation_count
+        self.assertDictEqual(expected, obtained, "Edge attribs not as expected")
 
     def test_citation_count_date(self):
         expected_citations_count_dict = \
@@ -1483,10 +1325,6 @@ class TestTopCitedParameters(unittest.TestCase):
         self.assertDictEqual(expected_citations_count_dict, \
                              obtained_citations_count_dict,\
                              "Edge Attribs are equal")
-        
-
-
-
 
 #Custom Error Defined
 class NetworkXError(Exception):
