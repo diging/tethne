@@ -53,37 +53,9 @@
             
   <h1>Source code for tethne.readers.wos</h1><div class="highlight"><pre>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Each file reader takes an input file from an academic knowledge database</span>
-<span class="sd">such as the Web of Science or PubMed and parses the input file into a</span>
-<span class="sd">list of :class:`.Paper` instances for each paper with as many as possible of</span>
-<span class="sd">the following keys; missing values are set to None:</span>
-
-<span class="sd">    * aulast  - authors&#39; last name as a list</span>
-<span class="sd">    * auinit  - authors&#39; first initial as a list</span>
-<span class="sd">    * atitle  - article title</span>
-<span class="sd">    * jtitle  - journal title or abbreviated title</span>
-<span class="sd">    * volume  - journal volume number</span>
-<span class="sd">    * issue   - journal issue number</span>
-<span class="sd">    * spage   - starting page of article in journal</span>
-<span class="sd">    * epage   - ending page of article in journal</span>
-<span class="sd">    * date    - article date of publication</span>
-
-<span class="sd">These keys are associated with the meta data entries in the databases of</span>
-<span class="sd">organizations such as the International DOI Foundation and its Registration</span>
-<span class="sd">Agencies such as CrossRef and DataCite.</span>
-
-<span class="sd">In addition, :class:`.Paper` instances will contain keys with information</span>
-<span class="sd">relevant to the networks of interest for Tethne including:</span>
-
-<span class="sd">    * citations -- list of minimum :class:`.Paper` instances for cited</span>
-<span class="sd">        references.</span>
-<span class="sd">    * ayjid -- First author&#39;s name (last, fi), publication year, and journal.</span>
-<span class="sd">    * doi -- Digital Object Identifier</span>
-<span class="sd">    * pmid -- PubMed ID</span>
-<span class="sd">    * wosid -- Web of Science UT fieldtag</span>
-
-<span class="sd">Missing data here also results in the above keys being set to None.</span>
+<span class="sd">Reader for Web of Science field-tagged bibliographic data.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">ds</span>
 <span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">as</span> <span class="nn">ET</span>
 <span class="kn">import</span> <span class="nn">tethne.utilities</span> <span class="kn">as</span> <span class="nn">util</span>
@@ -97,7 +69,7 @@
 
 <span class="c"># general functions</span>
 
-<div class="viewcode-block" id="create_ayjid"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.create_ayjid">[docs]</a><span class="k">def</span> <span class="nf">create_ayjid</span><span class="p">(</span><span class="n">aulast</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">auinit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">date</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">jtitle</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_create_ayjid</span><span class="p">(</span><span class="n">aulast</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">auinit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">date</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">jtitle</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid</span>
 <span class="sd">    Returns &#39;Unknown paper&#39; if all id components are missing (None).</span>
@@ -144,8 +116,8 @@
         <span class="n">ayj</span> <span class="o">=</span> <span class="s">&#39;Unknown paper&#39;</span>
 
     <span class="k">return</span> <span class="n">ayj</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-</div>
-<div class="viewcode-block" id="create_ainstid"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.create_ainstid">[docs]</a><span class="k">def</span> <span class="nf">create_ainstid</span><span class="p">(</span><span class="n">aulast</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">auinit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">addr1</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> \
+
+<span class="k">def</span> <span class="nf">_create_ainstid</span><span class="p">(</span><span class="n">aulast</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">auinit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">addr1</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> \
                    <span class="n">addr2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">country</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function is to create an fuzzy identifier ainstid.</span>
@@ -200,7 +172,7 @@
     <span class="k">return</span> <span class="n">ainstid</span>
 
 
-<span class="c"># Web of Science functions</span></div>
+<span class="c"># Web of Science functions</span>
 <div class="viewcode-block" id="parse"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.parse">[docs]</a><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse Web of Science field-tagged data.</span>
@@ -253,7 +225,7 @@
         <span class="n">field_tag</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">field_tag</span> <span class="o">==</span> <span class="n">paper_start_key</span><span class="p">:</span>
             <span class="c"># Then prepare for next paper.</span>
-            <span class="n">wos_dict</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">new_wos_dict</span><span class="p">()</span>
+            <span class="n">wos_dict</span> <span class="o">=</span> <span class="n">_new_wos_dict</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">field_tag</span> <span class="o">==</span> <span class="n">paper_end_key</span><span class="p">:</span>
             <span class="c"># Then add paper to our list.</span>
@@ -322,7 +294,7 @@
 
     <span class="k">return</span> <span class="n">wos_list</span>
 </div>
-<div class="viewcode-block" id="parse_cr"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.parse_cr">[docs]</a><span class="k">def</span> <span class="nf">parse_cr</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_parse_cr</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Supports the Web of Science reader by converting the strings found</span>
@@ -410,13 +382,13 @@
                                 <span class="c">#  the field incomplete because chances are the</span>
                                 <span class="c">#  CR string is too sparse to use anyway.</span>
 
-    <span class="n">ayjid</span> <span class="o">=</span> <span class="n">create_ayjid</span><span class="p">(</span><span class="n">paper</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">],</span>
+    <span class="n">ayjid</span> <span class="o">=</span> <span class="n">_create_ayjid</span><span class="p">(</span><span class="n">paper</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">],</span>
                          <span class="n">paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;jtitle&#39;</span><span class="p">])</span>
     <span class="n">paper</span><span class="p">[</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ayjid</span>
 
     <span class="k">return</span> <span class="n">paper</span>
-</div>
-<div class="viewcode-block" id="parse_institutions"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.parse_institutions">[docs]</a><span class="k">def</span> <span class="nf">parse_institutions</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
+
+<span class="k">def</span> <span class="nf">_parse_institutions</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Supports the Web of Science reader by converting the strings found at the C1</span>
 <span class="sd">    fieldtag of a record into a minimum :class:`.Paper` instance.</span>
@@ -472,12 +444,12 @@
         <span class="c">#the CR string is too sparse to use anyway</span>
         <span class="k">pass</span>
 
-    <span class="n">auinsid</span> <span class="o">=</span> <span class="n">create_ayjid</span><span class="p">(</span><span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">],</span> <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">],</span>
+    <span class="n">auinsid</span> <span class="o">=</span> <span class="n">_create_ayjid</span><span class="p">(</span><span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">],</span> <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">],</span>
                          <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">],</span> <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;jtitle&#39;</span><span class="p">])</span>
     <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;auinsid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auinsid</span>
     <span class="k">print</span> <span class="s">&#39;auinsid&#39;</span><span class="p">,</span> <span class="n">auinsid</span>
     <span class="k">return</span> <span class="n">addr_dict</span>
-</div>
+
 <div class="viewcode-block" id="convert"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.convert">[docs]</a><span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">wos_data</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert a dictionary or list of dictionaries with keys from the</span>
@@ -512,12 +484,12 @@
 
     <span class="c"># Calling the validate function here, before even building wos_meta list</span>
     <span class="c"># [62809724]</span>
-    <span class="n">status</span> <span class="o">=</span> <span class="n">validate</span><span class="p">(</span><span class="n">wos_data</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">_validate</span><span class="p">(</span><span class="n">wos_data</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="p">:</span>
         <span class="c">#raise Error</span>
         <span class="k">pass</span>
     <span class="c"># Define the direct relationships between WoS fieldtags and Paper keys.</span>
-    <span class="n">translator</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">wos2meta_map</span><span class="p">()</span>
+    <span class="n">translator</span> <span class="o">=</span> <span class="n">_wos2paper_map</span><span class="p">()</span>
     <span class="c"># Perform the key convertions</span>
     <span class="k">for</span> <span class="n">wos_dict</span> <span class="ow">in</span> <span class="n">wos_data</span><span class="p">:</span>
         <span class="n">paper</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Paper</span><span class="p">()</span>
@@ -546,7 +518,7 @@
             <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auinit_list</span>
 
         <span class="c">#construct ayjid</span>
-        <span class="n">ayjid</span> <span class="o">=</span> <span class="n">create_ayjid</span><span class="p">(</span><span class="n">paper</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">],</span>
+        <span class="n">ayjid</span> <span class="o">=</span> <span class="n">_create_ayjid</span><span class="p">(</span><span class="n">paper</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">],</span>
                              <span class="n">paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;jtitle&#39;</span><span class="p">])</span>
         <span class="n">paper</span><span class="p">[</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ayjid</span>
 
@@ -594,7 +566,7 @@
         <span class="k">if</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;CR&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">meta_cr_list</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;CR&#39;</span><span class="p">]:</span>
-                <span class="n">meta_cr_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parse_cr</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
+                <span class="n">meta_cr_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_parse_cr</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
                 <span class="c">#print &#39;meta_cr_list&#39; , meta_cr_list</span>
             <span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">meta_cr_list</span>
 
@@ -603,13 +575,13 @@
 
     <span class="k">return</span> <span class="n">wos_meta</span>
 </div>
-<div class="viewcode-block" id="read"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+<div class="viewcode-block" id="read"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Parse &amp; convert a Web of Science data file.</span>
+<span class="sd">    Yields :class:`.Paper`s from a Web of Science data file.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    filepath : string</span>
+<span class="sd">    datapath : string</span>
 <span class="sd">        Filepath to the Web of Science field-tagged data file.</span>
 
 <span class="sd">    Returns</span>
@@ -618,7 +590,7 @@
 <span class="sd">        A list of :class:`.Paper` objects.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">wl</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="n">wl</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
     <span class="n">papers</span> <span class="o">=</span> <span class="n">convert</span><span class="p">(</span><span class="n">wl</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">papers</span>
 
@@ -663,7 +635,7 @@
     <span class="k">return</span> <span class="n">convert</span><span class="p">(</span><span class="n">wos_list</span><span class="p">)</span>
 
 <span class="c"># [62809724]</span></div>
-<div class="viewcode-block" id="validate"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.validate">[docs]</a><span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">wos_data</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_validate</span><span class="p">(</span><span class="n">wos_data</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Defines the fucntion to check the input data validation.</span>
 
@@ -685,7 +657,7 @@
     <span class="c"># Create a translator dict whose keys are the fields which needs to be</span>
     <span class="c"># validated from the input.</span>
     <span class="c"># Any new field which needs validation in the future</span>
-    <span class="n">translator</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">new_wos_dict</span><span class="p">()</span>
+    <span class="n">translator</span> <span class="o">=</span> <span class="n">_new_wos_dict</span><span class="p">()</span>
 
     <span class="c"># Now all these input fields needs to be validated as per requirements.</span>
 
@@ -706,7 +678,79 @@
 
     <span class="n">status</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">status</span>
-</pre></div></div>
+
+<span class="k">def</span> <span class="nf">_new_query_dict</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Declares only those keys of the :class:`.Paper`&#39;s metadata that are</span>
+<span class="sd">    queryable through CrossRef.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">q_dict</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s">&#39;aulast&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;auinit&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;atitle&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;address&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;jtitle&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;volume&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;issue&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;spage&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;epage&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;date&#39;</span><span class="p">:</span><span class="bp">None</span>     <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">q_dict</span>
+
+
+<span class="k">def</span> <span class="nf">_new_wos_dict</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines the set of field tags that will try to be converted, and intializes</span>
+<span class="sd">    them to &#39;None&#39;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    wos_dict : dict</span>
+<span class="sd">        A wos_list dictionary with &#39;None&#39; as default values for all keys.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wos_dict</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&#39;DI&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;AU&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;C1&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;TI&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;SO&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;VL&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;IS&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;BP&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;EP&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;PY&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;UT&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;CR&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;AB&#39;</span><span class="p">:</span><span class="bp">None</span>   <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">wos_dict</span>
+
+<span class="k">def</span> <span class="nf">_wos2paper_map</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines the direct relationships between the wos_dict and :class:`.Paper`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    translator : dict</span>
+<span class="sd">        A &#39;translator&#39; dictionary.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">translator</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&#39;DI&#39;</span><span class="p">:</span><span class="s">&#39;doi&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;TI&#39;</span><span class="p">:</span><span class="s">&#39;atitle&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;SO&#39;</span><span class="p">:</span><span class="s">&#39;jtitle&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;VL&#39;</span><span class="p">:</span><span class="s">&#39;volume&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;IS&#39;</span><span class="p">:</span><span class="s">&#39;issue&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;BP&#39;</span><span class="p">:</span><span class="s">&#39;spage&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;EP&#39;</span><span class="p">:</span><span class="s">&#39;epage&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;PY&#39;</span><span class="p">:</span><span class="s">&#39;date&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;UT&#39;</span><span class="p">:</span><span class="s">&#39;wosid&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;AB&#39;</span><span class="p">:</span><span class="s">&#39;abstract&#39;</span>    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">translator</span>
+</pre></div>
 
           </div>
         </div>

@@ -61,7 +61,7 @@
 <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
-<div class="viewcode-block" id="Paper"><a class="viewcode-back" href="../../tethne.html#tethne.data.Paper">[docs]</a><span class="k">class</span> <span class="nc">Paper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Paper"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.Paper">[docs]</a><span class="k">class</span> <span class="nc">Paper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for Papers. Behaves just like a dict, but enforces a limited</span>
 <span class="sd">    vocabulary of keys, and specific data types.</span>
@@ -164,20 +164,20 @@
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Paper.keys"><a class="viewcode-back" href="../../tethne.html#tethne.data.Paper.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Paper.keys"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.Paper.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the keys of the :class:`.Paper`&#39;s metadata fields.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Paper.values"><a class="viewcode-back" href="../../tethne.html#tethne.data.Paper.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Paper.values"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.Paper.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the values of the :class:`.Paper`&#39;s metadata fields.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Paper.iteritems"><a class="viewcode-back" href="../../tethne.html#tethne.data.Paper.iteritems">[docs]</a>    <span class="k">def</span> <span class="nf">iteritems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Paper.iteritems"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.Paper.iteritems">[docs]</a>    <span class="k">def</span> <span class="nf">iteritems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns an iterator for the :class:`.Paper`&#39;s metadata fields&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
 
 </div></div>
-<div class="viewcode-block" id="GraphCollection"><a class="viewcode-back" href="../../tethne.html#tethne.data.GraphCollection">[docs]</a><span class="k">class</span> <span class="nc">GraphCollection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="GraphCollection"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.GraphCollection">[docs]</a><span class="k">class</span> <span class="nc">GraphCollection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Collection of NetworkX Graph objects, organized by some index (e.g. time).</span>
 <span class="sd">    Provides analysis functions in NetworkX for entire collection of Graphs.</span>
@@ -230,7 +230,7 @@
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graphs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="GraphCollection.nodes"><a class="viewcode-back" href="../../tethne.html#tethne.data.GraphCollection.nodes">[docs]</a>    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="GraphCollection.nodes"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.GraphCollection.nodes">[docs]</a>    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return complete set of nodes for this :class:`.GraphCollection` . If</span>
 <span class="sd">        this method has been called previously for this</span>
@@ -256,7 +256,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span>
 </div>
-<div class="viewcode-block" id="GraphCollection.edges"><a class="viewcode-back" href="../../tethne.html#tethne.data.GraphCollection.edges">[docs]</a>    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>   <span class="c"># [#61512528]</span>
+<div class="viewcode-block" id="GraphCollection.edges"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.GraphCollection.edges">[docs]</a>    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>   <span class="c"># [#61512528]</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return complete set of edges for this :class:`.GraphCollection` . If</span>
 <span class="sd">        this method has been called previously for this</span>
@@ -281,7 +281,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">edge_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_list</span>
 </div>
-<div class="viewcode-block" id="GraphCollection.save"><a class="viewcode-back" href="../../tethne.html#tethne.data.GraphCollection.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filepath</span><span class="p">):</span>   <span class="c">#[61512528]</span>
+<div class="viewcode-block" id="GraphCollection.save"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.GraphCollection.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filepath</span><span class="p">):</span>   <span class="c">#[61512528]</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Pickles (serializes) the GraphCollection and saves it to filepath.</span>
 
@@ -309,7 +309,7 @@
             <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;File does not exist, or cannot be opened.&quot;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="GraphCollection.load"><a class="viewcode-back" href="../../tethne.html#tethne.data.GraphCollection.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">):</span>    <span class="c">#[61512528]</span>
+<div class="viewcode-block" id="GraphCollection.load"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.GraphCollection.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">):</span>    <span class="c">#[61512528]</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads a pickled (serialized) GraphCollection from filepath.</span>
 
@@ -337,82 +337,8 @@
         <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span> <span class="c"># File does not exist, or couldn&#39;t be read.</span>
             <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;File does not exist, or cannot be read.&quot;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">obj_read</span>
-
-
-</div></div>
-<div class="viewcode-block" id="new_query_dict"><a class="viewcode-back" href="../../tethne.html#tethne.data.new_query_dict">[docs]</a><span class="k">def</span> <span class="nf">new_query_dict</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Declares only those keys of the :class:`.Paper`&#39;s metadata that are</span>
-<span class="sd">    queryable through CrossRef.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">q_dict</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s">&#39;aulast&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                <span class="s">&#39;auinit&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                <span class="s">&#39;atitle&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                <span class="s">&#39;address&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                <span class="s">&#39;jtitle&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                <span class="s">&#39;volume&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                <span class="s">&#39;issue&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                <span class="s">&#39;spage&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                <span class="s">&#39;epage&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                <span class="s">&#39;date&#39;</span><span class="p">:</span><span class="bp">None</span>     <span class="p">}</span>
-
-    <span class="k">return</span> <span class="n">q_dict</span>
-
-</div>
-<div class="viewcode-block" id="new_wos_dict"><a class="viewcode-back" href="../../tethne.html#tethne.data.new_wos_dict">[docs]</a><span class="k">def</span> <span class="nf">new_wos_dict</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Defines the set of field tags that will try to be converted, and intializes</span>
-<span class="sd">    them to &#39;None&#39;.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    wos_dict : dict</span>
-<span class="sd">        A wos_list dictionary with &#39;None&#39; as default values for all keys.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">wos_dict</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="s">&#39;DI&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                    <span class="s">&#39;AU&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                    <span class="s">&#39;C1&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                    <span class="s">&#39;TI&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                    <span class="s">&#39;SO&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                    <span class="s">&#39;VL&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                    <span class="s">&#39;IS&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                    <span class="s">&#39;BP&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                    <span class="s">&#39;EP&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                    <span class="s">&#39;PY&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                    <span class="s">&#39;UT&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                    <span class="s">&#39;CR&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
-                    <span class="s">&#39;AB&#39;</span><span class="p">:</span><span class="bp">None</span>   <span class="p">}</span>
-
-    <span class="k">return</span> <span class="n">wos_dict</span>
-</div>
-<div class="viewcode-block" id="wos2meta_map"><a class="viewcode-back" href="../../tethne.html#tethne.data.wos2meta_map">[docs]</a><span class="k">def</span> <span class="nf">wos2meta_map</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Defines the direct relationships between the wos_dict and :class:`.Paper`.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    translator : dict</span>
-<span class="sd">        A &#39;translator&#39; dictionary.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">translator</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="s">&#39;DI&#39;</span><span class="p">:</span><span class="s">&#39;doi&#39;</span><span class="p">,</span>
-                    <span class="s">&#39;TI&#39;</span><span class="p">:</span><span class="s">&#39;atitle&#39;</span><span class="p">,</span>
-                    <span class="s">&#39;SO&#39;</span><span class="p">:</span><span class="s">&#39;jtitle&#39;</span><span class="p">,</span>
-                    <span class="s">&#39;VL&#39;</span><span class="p">:</span><span class="s">&#39;volume&#39;</span><span class="p">,</span>
-                    <span class="s">&#39;IS&#39;</span><span class="p">:</span><span class="s">&#39;issue&#39;</span><span class="p">,</span>
-                    <span class="s">&#39;BP&#39;</span><span class="p">:</span><span class="s">&#39;spage&#39;</span><span class="p">,</span>
-                    <span class="s">&#39;EP&#39;</span><span class="p">:</span><span class="s">&#39;epage&#39;</span><span class="p">,</span>
-                    <span class="s">&#39;PY&#39;</span><span class="p">:</span><span class="s">&#39;date&#39;</span><span class="p">,</span>
-                    <span class="s">&#39;UT&#39;</span><span class="p">:</span><span class="s">&#39;wosid&#39;</span><span class="p">,</span>
-                    <span class="s">&#39;AB&#39;</span><span class="p">:</span><span class="s">&#39;abstract&#39;</span>    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="n">translator</span>
-</pre></div></div>
+        <span class="k">return</span> <span class="n">obj_read</span></div></div>
+</pre></div>
 
           </div>
         </div>
