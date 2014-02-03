@@ -15,7 +15,7 @@ DEBUG = 0
 
 # general functions
 
-def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
+def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     """
     Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid
     Returns 'Unknown paper' if all id components are missing (None).
@@ -63,7 +63,7 @@ def create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
 
     return ayj.upper()
 
-def create_ainstid(aulast=None, auinit=None, addr1=None, \
+def _create_ainstid(aulast=None, auinit=None, addr1=None, \
                    addr2=None, country=None, **kwargs):
     """
     This function is to create an fuzzy identifier ainstid.
@@ -171,7 +171,7 @@ def parse(filepath):
         field_tag = line[:2]
         if field_tag == paper_start_key:
             # Then prepare for next paper.
-            wos_dict = ds.new_wos_dict()
+            wos_dict = _new_wos_dict()
 
         if field_tag == paper_end_key:
             # Then add paper to our list.
@@ -240,7 +240,7 @@ def parse(filepath):
 
     return wos_list
 
-def parse_cr(ref):
+def _parse_cr(ref):
 
     """
     Supports the Web of Science reader by converting the strings found
@@ -328,13 +328,13 @@ def parse_cr(ref):
                                 #  the field incomplete because chances are the
                                 #  CR string is too sparse to use anyway.
 
-    ayjid = create_ayjid(paper['aulast'], paper['auinit'],
+    ayjid = _create_ayjid(paper['aulast'], paper['auinit'],
                          paper['date'], paper['jtitle'])
     paper['ayjid'] = ayjid
 
     return paper
 
-def parse_institutions(ref):
+def _parse_institutions(ref):
     """
     Supports the Web of Science reader by converting the strings found at the C1
     fieldtag of a record into a minimum :class:`.Paper` instance.
@@ -390,7 +390,7 @@ def parse_institutions(ref):
         #the CR string is too sparse to use anyway
         pass
 
-    auinsid = create_ayjid(addr_dict['aulast'], addr_dict['auinit'],
+    auinsid = _create_ayjid(addr_dict['aulast'], addr_dict['auinit'],
                          addr_dict['date'], addr_dict['jtitle'])
     addr_dict['auinsid'] = auinsid
     print 'auinsid', auinsid
@@ -430,12 +430,12 @@ def convert(wos_data):
 
     # Calling the validate function here, before even building wos_meta list
     # [62809724]
-    status = validate(wos_data)
+    status = _validate(wos_data)
     if not status:
         #raise Error
         pass
     # Define the direct relationships between WoS fieldtags and Paper keys.
-    translator = ds.wos2meta_map()
+    translator = _wos2paper_map()
     # Perform the key convertions
     for wos_dict in wos_data:
         paper = ds.Paper()
@@ -464,7 +464,7 @@ def convert(wos_data):
             paper['auinit'] = auinit_list
 
         #construct ayjid
-        ayjid = create_ayjid(paper['aulast'], paper['auinit'],
+        ayjid = _create_ayjid(paper['aulast'], paper['auinit'],
                              paper['date'], paper['jtitle'])
         paper['ayjid'] = ayjid
 
@@ -512,7 +512,7 @@ def convert(wos_data):
         if wos_dict['CR'] is not None:
             meta_cr_list = []
             for ref in wos_dict['CR']:
-                meta_cr_list.append(parse_cr(ref))
+                meta_cr_list.append(_parse_cr(ref))
                 #print 'meta_cr_list' , meta_cr_list
             paper['citations'] = meta_cr_list
 
@@ -521,13 +521,13 @@ def convert(wos_data):
 
     return wos_meta
 
-def read(filepath):
+def read(datapath):
     """
-    Parse & convert a Web of Science data file.
+    Yields :class:`.Paper`s from a Web of Science data file.
 
     Parameters
     ----------
-    filepath : string
+    datapath : string
         Filepath to the Web of Science field-tagged data file.
 
     Returns
@@ -536,7 +536,7 @@ def read(filepath):
         A list of :class:`.Paper` objects.
     """
 
-    wl = parse(filepath)
+    wl = parse(datapath)
     papers = convert(wl)
     return papers
 
@@ -581,7 +581,7 @@ def from_dir(path):
     return convert(wos_list)
 
 # [62809724]
-def validate(wos_data):
+def _validate(wos_data):
     """
     Defines the fucntion to check the input data validation.
 
@@ -603,7 +603,7 @@ def validate(wos_data):
     # Create a translator dict whose keys are the fields which needs to be
     # validated from the input.
     # Any new field which needs validation in the future
-    translator = ds.new_wos_dict()
+    translator = _new_wos_dict()
 
     # Now all these input fields needs to be validated as per requirements.
 
@@ -625,5 +625,74 @@ def validate(wos_data):
     status = 1
     return status
 
+def _new_query_dict():
+    """
+    Declares only those keys of the :class:`.Paper`'s metadata that are
+    queryable through CrossRef.
+    """
+    q_dict = {
+                'aulast':None,
+                'auinit':None,
+                'atitle':None,
+                'address':None,
+                'jtitle':None,
+                'volume':None,
+                'issue':None,
+                'spage':None,
+                'epage':None,
+                'date':None     }
+
+    return q_dict
 
 
+def _new_wos_dict():
+    """
+    Defines the set of field tags that will try to be converted, and intializes
+    them to 'None'.
+
+    Returns
+    -------
+    wos_dict : dict
+        A wos_list dictionary with 'None' as default values for all keys.
+
+    """
+    wos_dict = {
+                    'DI':None,
+                    'AU':None,
+                    'C1':None,
+                    'TI':None,
+                    'SO':None,
+                    'VL':None,
+                    'IS':None,
+                    'BP':None,
+                    'EP':None,
+                    'PY':None,
+                    'UT':None,
+                    'CR':None,
+                    'AB':None   }
+
+    return wos_dict
+
+def _wos2paper_map():
+    """
+    Defines the direct relationships between the wos_dict and :class:`.Paper`.
+
+    Returns
+    -------
+    translator : dict
+        A 'translator' dictionary.
+
+    """
+    translator = {
+                    'DI':'doi',
+                    'TI':'atitle',
+                    'SO':'jtitle',
+                    'VL':'volume',
+                    'IS':'issue',
+                    'BP':'spage',
+                    'EP':'epage',
+                    'PY':'date',
+                    'UT':'wosid',
+                    'AB':'abstract'    }
+
+    return translator
