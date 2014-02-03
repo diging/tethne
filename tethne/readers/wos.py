@@ -435,7 +435,7 @@ def convert(wos_data):
         #raise Error
         pass
     # Define the direct relationships between WoS fieldtags and Paper keys.
-    translator = _wos2meta_map()
+    translator = _wos2paper_map()
     # Perform the key convertions
     for wos_dict in wos_data:
         paper = ds.Paper()
@@ -521,13 +521,13 @@ def convert(wos_data):
 
     return wos_meta
 
-def read(filepath):
+def read(datapath):
     """
-    Parse & convert a Web of Science data file.
+    Yields :class:`.Paper`s from a Web of Science data file.
 
     Parameters
     ----------
-    filepath : string
+    datapath : string
         Filepath to the Web of Science field-tagged data file.
 
     Returns
@@ -673,7 +673,7 @@ def _new_wos_dict():
 
     return wos_dict
 
-def _wos2meta_map():
+def _wos2paper_map():
     """
     Defines the direct relationships between the wos_dict and :class:`.Paper`.
 
