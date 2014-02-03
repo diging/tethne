@@ -289,3 +289,79 @@ class GraphCollection(object):
             self.__dict__ = obj_read.__dict__
 
         return obj_read
+
+
+
+def new_query_dict():
+    """
+    Declares only those keys of the :class:`.Paper`'s metadata that are
+    queryable through CrossRef.
+    """
+    q_dict = {
+                'aulast':None,
+                'auinit':None,
+                'atitle':None,
+                'address':None,
+                'jtitle':None,
+                'volume':None,
+                'issue':None,
+                'spage':None,
+                'epage':None,
+                'date':None     }
+
+    return q_dict
+
+
+def new_wos_dict():
+    """
+    Defines the set of field tags that will try to be converted, and intializes
+    them to 'None'.
+
+    Returns
+    -------
+    wos_dict : dict
+        A wos_list dictionary with 'None' as default values for all keys.
+
+    """
+    wos_dict = {
+                    'DI':None,
+                    'AU':None,
+                    'C1':None,
+                    'TI':None,
+                    'SO':None,
+                    'VL':None,
+                    'IS':None,
+                    'BP':None,
+                    'EP':None,
+                    'PY':None,
+                    'UT':None,
+                    'CR':None,
+                    'AB':None   }
+
+    return wos_dict
+
+def wos2meta_map():
+    """
+    Defines the direct relationships between the wos_dict and :class:`.Paper`.
+
+    Returns
+    -------
+    translator : dict
+        A 'translator' dictionary.
+
+    """
+    translator = {
+                    'DI':'doi',
+                    'TI':'atitle',
+                    'SO':'jtitle',
+                    'VL':'volume',
+                    'IS':'issue',
+                    'BP':'spage',
+                    'EP':'epage',
+                    'PY':'date',
+                    'UT':'wosid',
+                    'AB':'abstract'    }
+
+    return translator
+
+
