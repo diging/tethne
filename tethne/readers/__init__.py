@@ -36,6 +36,7 @@ Missing data here also results in the above keys being set to None.
 import wos
 import pubmed
 import dfr
+import tethne.data as dt
 
 class DataError(Exception):
     def __init__(self, value):
@@ -65,6 +66,8 @@ def merge(P1, P2, fields=['ayjid']):
     """
 
     combined = []
+    del_P1 = []
+    del_P2 = []
 
     for x in xrange(len(P1)):
         p_1 = P1[x]
@@ -85,12 +88,16 @@ def merge(P1, P2, fields=['ayjid']):
                     if value != '' and value != None:
                         new_p[key] = value
 
-                # Delete merged papers.
-                del P1[x]
-                del P2[y]
+                del_P1.append(x)    # Flag for deletion.
+                del_P2.append(y)
 
                 combined.append(new_p)
 
-    # Add remaining non-matched papers.
-    combined += P1
-    combined += P2
+    for x in xrange(len(P1)):
+        if x not in del_P1:
+            combined.append(P1[x])
+    for x in xrange(len(P2)):
+        if x not in del_P2:
+            combined.append(P2[x])
+
+    return combined
