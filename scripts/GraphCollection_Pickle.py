@@ -35,8 +35,8 @@ g2.__setitem__('ayjid',author_coup)
 
 
 # g1.__getitem__('ayjid')
-#print g1.nodes()
-#print g1.edges()
+# print g1.nodes()
+# print g1.edges()
 
 # Append 2 objects to
 
@@ -45,11 +45,9 @@ g2.save\
          ("../testsuite/testout/graphcollections.txt")
 
 g1.save\
-    ("../testsuite/testout/graphcollections.txt")
+       ("../testsuite/testout/graphcollections.txt")
 
 
+g3.load("../testsuite/testout/graphcollections.txt")
 
-loaded= \
-    g3.load("../testsuite/testout/graphcollections.txt")
-
-print "G3::::", g3.edges()
+#print "G3::::", g3.edges()
