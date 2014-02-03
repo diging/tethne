@@ -35,6 +35,7 @@ Missing data here also results in the above keys being set to None.
 
 import wos
 import pubmed
+import dfr
 
 class DataError(Exception):
     def __init__(self, value):
