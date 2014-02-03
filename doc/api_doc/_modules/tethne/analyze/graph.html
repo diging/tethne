@@ -37,6 +37,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../../index.html">tethne  documentation</a> &raquo;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -54,7 +57,6 @@
 
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">tethne.networks</span> <span class="kn">as</span> <span class="nn">nt</span>
-<span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">ds</span>
 
 <div class="viewcode-block" id="node_global_closeness_centrality"><a class="viewcode-back" href="../../../tethne.analyze.html#tethne.analyze.graph.node_global_closeness_centrality">[docs]</a><span class="k">def</span> <span class="nf">node_global_closeness_centrality</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -62,16 +64,16 @@
 <span class="sd">    For connected graphs, equivalent to conventional betweenness centrality.</span>
 <span class="sd">    For disconnected graphs, works around infinite path lengths between nodes</span>
 <span class="sd">    in different components.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    g : networkx.Graph</span>
 <span class="sd">    node : any</span>
 <span class="sd">        Identifier of node of interest in g.</span>
 <span class="sd">    normalize : boolean</span>
-<span class="sd">        If True, normalizes centrality based on the average shortest path </span>
+<span class="sd">        If True, normalizes centrality based on the average shortest path</span>
 <span class="sd">        length. Default is True.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    c : float</span>
@@ -80,37 +82,38 @@
 
     <span class="n">g</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">coauthors</span><span class="p">(</span><span class="nb">slice</span><span class="p">)</span>
     <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">try</span><span class="p">:</span>   
+    <span class="k">try</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">pl</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">shortest_path_length</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">pl</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>     <span class="c"># Ignore self-loops.</span>
                 <span class="n">c</span> <span class="o">+=</span> <span class="mi">1</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">pl</span><span class="p">)</span>
         <span class="n">c</span> <span class="o">=</span> <span class="n">c</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-    <span class="k">except</span><span class="p">:</span>
+    <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
         <span class="n">c</span> <span class="o">=</span> <span class="mf">0.</span>
-        
+
     <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
         <span class="n">ac</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">sg</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">connected_component_subgraphs</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">ac</span> <span class="o">+=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">nx</span><span class="o">.</span><span class="n">average_shortest_path_length</span><span class="p">(</span><span class="n">sg</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sg</span><span class="p">))</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
+                <span class="n">aspl</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">average_shortest_path_length</span><span class="p">(</span><span class="n">sg</span><span class="p">)</span>
+                <span class="n">ac</span> <span class="o">+=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">aspl</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sg</span><span class="p">))</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
         <span class="n">c</span> <span class="o">=</span> <span class="n">c</span><span class="o">/</span><span class="n">ac</span>
 
     <span class="k">return</span> <span class="n">c</span>
 </div>
 <div class="viewcode-block" id="global_closeness_centrality"><a class="viewcode-back" href="../../../tethne.analyze.html#tethne.analyze.graph.global_closeness_centrality">[docs]</a><span class="k">def</span> <span class="nf">global_closeness_centrality</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculates global closeness centrality for all nodes in the network. For </span>
-<span class="sd">    connected graphs, equivalent to conventional betweenness centrality. For </span>
-<span class="sd">    disconnected graphs, works around infinite path lengths between nodes in </span>
+<span class="sd">    Calculates global closeness centrality for all nodes in the network. For</span>
+<span class="sd">    connected graphs, equivalent to conventional betweenness centrality. For</span>
+<span class="sd">    disconnected graphs, works around infinite path lengths between nodes in</span>
 <span class="sd">    different components.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    g : networkx.Graph</span>
 <span class="sd">    normalize : boolean</span>
 <span class="sd">        If True, normalizes centrality based on the average shortest path</span>
 <span class="sd">        length. Default is True.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    C : dict</span>
@@ -119,10 +122,9 @@
 
     <span class="n">C</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
-        <span class="n">C</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_global_closeness_centrality</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">C</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_global_closeness_centrality</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">C</span>
-        </div>
+    <span class="k">return</span> <span class="n">C</span></div>
 </pre></div>
 
           </div>
@@ -155,6 +157,9 @@
              >index</a></li>
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="../../../index.html">tethne  documentation</a> &raquo;</li>
           <li><a href="../../index.html" >Module code</a> &raquo;</li> 

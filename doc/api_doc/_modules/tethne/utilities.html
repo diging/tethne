@@ -37,6 +37,9 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li><a href="../../index.html">tethne  documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
@@ -63,7 +66,7 @@
 </div>
 <div class="viewcode-block" id="overlap"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.overlap">[docs]</a><span class="k">def</span> <span class="nf">overlap</span><span class="p">(</span><span class="n">listA</span><span class="p">,</span> <span class="n">listB</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Return number of shared objects between listA, listB as a list</span>
+<span class="sd">    Return list of objects shared by listA, listB.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">listA</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">listB</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[]</span>
@@ -73,7 +76,7 @@
 </div>
 <div class="viewcode-block" id="subdict"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.subdict">[docs]</a><span class="k">def</span> <span class="nf">subdict</span><span class="p">(</span><span class="n">super_dict</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns a subset of the super_dict with the specified keys</span>
+<span class="sd">    Returns a subset of the super_dict with the specified keys.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">sub_dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">valid_keys</span> <span class="o">=</span> <span class="n">super_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
@@ -91,7 +94,7 @@
 <span class="sd">    gexf (which does not allow attributes to have a list type) by making</span>
 <span class="sd">    them writable in those formats</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attrib_dict</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span> 
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attrib_dict</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span>
             <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
             <span class="n">attrib_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
@@ -105,16 +108,37 @@
 <span class="sd">    Returns the concatenated list</span>
 <span class="sd">    Raises index error if lists are not parallel</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c">#validate input</span>
+
+    <span class="c"># Lists must be of equal length.</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">listA</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">listB</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s">&#39;Input lists are not parallel.&#39;</span><span class="p">)</span>
 
-    <span class="c">#concatenate lists</span>
+    <span class="c"># Concatenate lists.</span>
     <span class="n">listC</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">listA</span><span class="p">)):</span>
-        <span class="n">listC</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">listA</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">delim</span> <span class="o">+</span> <span class="n">listB</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">app</span> <span class="o">=</span> <span class="n">listA</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">delim</span> <span class="o">+</span> <span class="n">listB</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">listC</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">listC</span>
+</div>
+<div class="viewcode-block" id="strip_non_ascii"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.strip_non_ascii">[docs]</a><span class="k">def</span> <span class="nf">strip_non_ascii</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the string without non-ASCII characters.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    string : string</span>
+<span class="sd">        A string that may contain non-ASCII characters.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    clean_string : string</span>
+<span class="sd">        A string that does not contain non-ASCII characters.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">stripped</span> <span class="o">=</span> <span class="p">(</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">string</span> <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">127</span><span class="p">)</span>
+    <span class="n">clean_string</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stripped</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">clean_string</span>
 </pre></div></div>
 
           </div>
@@ -147,6 +171,9 @@
              >index</a></li>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li><a href="../../index.html">tethne  documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
