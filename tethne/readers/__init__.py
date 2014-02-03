@@ -3,7 +3,6 @@ Contains methods for parsing bibliographic datasets.
 """
 
 import wos
-import bibtex
 import pubmed
 
 class DataError(Exception):
