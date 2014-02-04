@@ -36,7 +36,7 @@ class graphCollectionBuilder(builder):
         
         Notes
         -----
-
+        
         Methods available for building GraphCollections:
         
         ===========    ========================================    =============
@@ -64,6 +64,7 @@ class graphCollectionBuilder(builder):
         step_size      int      Amount to advance time-window or period in each
                                 step (ignored for time_period).
         ===========    ======   ================================================
+
         """
         
         # Does the graph method exist?

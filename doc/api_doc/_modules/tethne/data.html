@@ -66,26 +66,28 @@
 <span class="sd">    Base class for Papers. Behaves just like a dict, but enforces a limited</span>
 <span class="sd">    vocabulary of keys, and specific data types.</span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
 <span class="sd">    The following fields (and corresponding data types) are allowed:</span>
-
-<span class="sd">    * aulast (list) -- Authors&#39; last name, as a list.</span>
-<span class="sd">    * auinit (list) -- Authors&#39; first initial as a list.</span>
-<span class="sd">    * institution (dict) -- Institutions with which the authors are affiliated.</span>
-<span class="sd">    * atitle (str) -- Article title.</span>
-<span class="sd">    * jtitle (str) -- Journal title or abbreviated title.</span>
-<span class="sd">    * volume (str) -- Journal volume number.</span>
-<span class="sd">    * issue (str) -- Journal issue number.</span>
-<span class="sd">    * spage (str) -- Starting page of article in journal.</span>
-<span class="sd">    * epage (str) -- Ending page of article in journal.</span>
-<span class="sd">    * date (int) -- Article date of publication.</span>
-<span class="sd">    * country (dict) -- Author-Country mapping.</span>
-<span class="sd">    * citations (list) -- A list of :class:`.Paper` instances.</span>
-<span class="sd">    * ayjid (str) -- First author&#39;s name (last, fi), pub year, and journal.</span>
-<span class="sd">    * doi (str) -- Digital Object Identifier.</span>
-<span class="sd">    * pmid (str) -- PubMed ID.</span>
-<span class="sd">    * wosid (str) -- Web of Science UT fieldtag value.</span>
+<span class="sd">    </span>
+<span class="sd">    ===========     =====   ====================================================</span>
+<span class="sd">    Field           Type    Description</span>
+<span class="sd">    ===========     =====   ====================================================</span>
+<span class="sd">    aulast          list    Authors&#39; last name, as a list.</span>
+<span class="sd">    auinit          list    Authors&#39; first initial as a list.</span>
+<span class="sd">    institution     dict    Institutions with which the authors are affiliated.</span>
+<span class="sd">    atitle          str     Article title.</span>
+<span class="sd">    jtitle          str     Journal title or abbreviated title.</span>
+<span class="sd">    volume          str     Journal volume number.</span>
+<span class="sd">    issue           str     Journal issue number.</span>
+<span class="sd">    spage           str     Starting page of article in journal.</span>
+<span class="sd">    epage           str     Ending page of article in journal.</span>
+<span class="sd">    date            int     Article date of publication.</span>
+<span class="sd">    country         dict    Author-Country mapping.</span>
+<span class="sd">    citations       list    A list of :class:`.Paper` instances.</span>
+<span class="sd">    ayjid           str     First author&#39;s name (last fi), pubdate, and journal.</span>
+<span class="sd">    doi             str     Digital Object Identifier.</span>
+<span class="sd">    pmid            str     PubMed ID.</span>
+<span class="sd">    wosid           str     Web of Science UT fieldtag value.</span>
+<span class="sd">    ===========     =====   ====================================================</span>
 
 <span class="sd">    None values are also allowed for all fields.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
