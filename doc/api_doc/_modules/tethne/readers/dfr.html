@@ -52,6 +52,15 @@
           <div class="body">
             
   <h1>Source code for tethne.readers.dfr</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Methods for parsing JSTOR Data-for-Research datasets.</span>
+
+<span class="sd">.. autosummary::</span>
+
+<span class="sd">   read</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">dt</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">as</span> <span class="nn">ET</span>
@@ -60,7 +69,7 @@
 
 <div class="viewcode-block" id="read"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.dfr.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Yields :class:`.Paper`s from JSTOR DfR package.</span>
+<span class="sd">    Yields :class:`.Paper` s from JSTOR DfR package.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -104,7 +113,7 @@
     <span class="n">translator</span> <span class="o">=</span> <span class="n">_dfr2paper_map</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">translator</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">paper</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">pdata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">paper</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="n">key</span><span class="p">])</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>    <span class="c"># Article may not have all keys of interest.</span>
             <span class="k">pass</span>
 

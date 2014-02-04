@@ -1,12 +1,30 @@
+"""
+Methods for parsing JSTOR Data-for-Research datasets.
+
+.. autosummary::
+
+   ngrams
+   read
+
+"""
+
 import tethne.data as dt
 import os
 import xml.etree.ElementTree as ET
 import re
 from tethne.utilities import dict_from_node, strip_non_ascii
+from nltk.corpus import stopwords
 
 def read(datapath):
     """
     Yields :class:`.Paper` s from JSTOR DfR package.
+
+    **Usage**
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> papers = rd.dfr.read("/Path/to/DfR")
 
     Parameters
     ----------
@@ -29,6 +47,60 @@ def read(datapath):
         papers.append(_handle_paper(article))
 
     return papers
+
+def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
+    """
+    Yields N-grams from a JSTOR DfR dataset.
+
+    **Usage**
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> trigrams = rd.dfr.ngrams("/Path/to/DfR", N='tri')
+
+    Parameters
+    ----------
+    filepath : string
+        Filepath to unzipped JSTOR DfR folder containing N-grams (e.g.
+        'bigrams').
+    N : string
+        'bi', 'tri', or 'quad'
+    ignore_hash : bool
+        If True, will exclude all N-grams that contain the hash '#' character.
+    apply_stoplist : bool
+        If True, will exclude all N-grams that contain words in the NLTK
+        stoplist.
+
+    Returns
+    -------
+    ngrams : dict
+        Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
+    """
+
+    gram_path = datapath + "/" + N + "grams"
+    ngrams = {}
+
+    for file in os.listdir(gram_path):
+        if file.split('.')[-1] == 'XML':
+            root = ET.parse(gram_path + "/" + file).getroot()
+            doi = root.attrib['id']
+            grams = [ (gram.text.strip(), int(gram.attrib['weight']) )
+                       for gram in root.findall(N + 'gram') # v Hashes v
+                       if not ignore_hash or '#' not in list(gram.text) ]
+
+            if apply_stoplist:
+                stoplist = stoplist.words()
+                grams_ = []
+                for g,c in grams:
+                    for w in g.split():
+                        if w not in stoplist:
+                            grams_.append( (g,c) )
+                grams = grams_
+
+            ngrams[doi] = grams
+
+    return ngrams
 
 def _handle_paper(article):
     """
@@ -248,6 +320,8 @@ if __name__ == "__main__":
     from pprint import pprint
 
     path = "/Users/erickpeirson/Downloads/DfR/ecology_1960-64"
-    papers = read(path)
+#    papers = read(path)
+    bigrams = ngrams(path)
 
-    pprint(papers[0].__dict__)
+    print bigrams.keys()[0]
+    pprint(bigrams.values()[0])

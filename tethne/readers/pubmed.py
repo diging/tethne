@@ -1,6 +1,11 @@
 """
 Methods for working with PubMed data are still under development. Please use
 with care.
+
+.. autosummary::
+
+   read
+
 """
 
 import tethne.data as ds
@@ -8,7 +13,7 @@ import xml.etree.ElementTree as ET
 
 
 # PubMed functions
-def pubmed_file_id(filename):
+def _pubmed_file_id(filename):
     """Future (not implemented).
 
     Given a filename (presumed to contain PubMed compatible IDs)
@@ -28,13 +33,20 @@ def pubmed_file_id(filename):
 
     return None
 
-def parse_pubmed_xml(filepath):
+def read(filepath):
     """
     Given a file with PubMed XML, return a list of :class:`.Paper` instances.
 
     See the following hyperlinks regarding possible structures of XML:
     * http://www.ncbi.nlm.nih.gov/pmc/pmcdoc/tagging-guidelines/citations/v2/citationtags.html#2Articlewithmorethan10authors%28listthefirst10andaddetal%29
     * http://dtd.nlm.nih.gov/publishing/
+    
+    **Usage**
+    
+    .. code-block:: python
+    
+       >>> import tethne.readers as rd
+       >>> papers = rd.pubmed.read("/Path/to/PubMedData.xml")
 
     Parameters
     ----------
@@ -45,10 +57,7 @@ def parse_pubmed_xml(filepath):
     -------
     meta_list : list
         A list of :class:`.Paper` instances.
-
     """
-
-
 
     try:
         with open(filepath,'r') as f:
@@ -221,7 +230,7 @@ def parse_pubmed_xml(filepath):
 
     return meta_list
 
-def expand_pubmed(meta_list):
+def _expand_pubmed(meta_list):
     """Future (not implemented).
 
     Given a list of first-level meta dicts and their second-level meta dicts,
