@@ -57,8 +57,9 @@
 <dt id="tethne.data.GraphCollection">
 <em class="property">class </em><tt class="descclassname">tethne.data.</tt><tt class="descname">GraphCollection</tt><a class="reference internal" href="_modules/tethne/data.html#GraphCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.GraphCollection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Collection of NetworkX Graph objects, organized by some index (e.g. time).
-Provides analysis functions in NetworkX for entire collection of Graphs.</p>
+<p>Collection of NetworkX <tt class="xref py py-class docutils literal"><span class="pre">nx.classes.graph.Graph</span></tt> objects, 
+organized by some index (e.g. time). Provides analysis functions in NetworkX
+for entire collection of Graphs.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -67,24 +68,24 @@ Provides analysis functions in NetworkX for entire collection of Graphs.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#tethne.data.GraphCollection.edges" title="tethne.data.GraphCollection.edges"><tt class="xref py py-obj docutils literal"><span class="pre">edges</span></tt></a>([overwrite])</td>
-<td>Return complete set of edges for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . If</td>
+<td>Return complete set of edges for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.data.GraphCollection.load" title="tethne.data.GraphCollection.load"><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt></a>(filepath)</td>
-<td>Loads a pickled (serialized) GraphCollection from filepath.</td>
+<td>Loads a pickled (serialized) <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> from filepath.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#tethne.data.GraphCollection.nodes" title="tethne.data.GraphCollection.nodes"><tt class="xref py py-obj docutils literal"><span class="pre">nodes</span></tt></a>([overwrite])</td>
-<td>Return complete set of nodes for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . If</td>
+<td>Return complete set of nodes for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.data.GraphCollection.save" title="tethne.data.GraphCollection.save"><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt></a>(filepath)</td>
-<td>Pickles (serializes) the GraphCollection and saves it to filepath.</td>
+<td>Pickles (serializes) the <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="tethne.data.GraphCollection.edges">
 <tt class="descname">edges</tt><big>(</big><em>overwrite=False</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#GraphCollection.edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.GraphCollection.edges" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return complete set of edges for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . If
-this method has been called previously for this
+<dd><p>Return complete set of edges for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</p>
+<p>If this method has been called previously for this
 <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> then will not recompute unless overwrite =
 True.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -110,14 +111,14 @@ True.</p>
 <dl class="method">
 <dt id="tethne.data.GraphCollection.load">
 <tt class="descname">load</tt><big>(</big><em>filepath</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#GraphCollection.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.GraphCollection.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a pickled (serialized) GraphCollection from filepath.</p>
+<dd><p>Loads a pickled (serialized) <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> from filepath.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filepath</strong> : string</p>
 <blockquote>
-<div><p>Full path to pickled GraphCollection.</p>
+<div><p>Full path to pickled <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</p>
 </div></blockquote>
 </td>
 </tr>
@@ -132,8 +133,8 @@ True.</p>
 <dl class="method">
 <dt id="tethne.data.GraphCollection.nodes">
 <tt class="descname">nodes</tt><big>(</big><em>overwrite=False</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#GraphCollection.nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.GraphCollection.nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return complete set of nodes for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . If
-this method has been called previously for this
+<dd><p>Return complete set of nodes for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</p>
+<p>If this method has been called previously for this
 <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> then will not recompute unless overwrite =
 True.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -160,7 +161,7 @@ True.</p>
 <dl class="method">
 <dt id="tethne.data.GraphCollection.save">
 <tt class="descname">save</tt><big>(</big><em>filepath</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#GraphCollection.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.GraphCollection.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pickles (serializes) the GraphCollection and saves it to filepath.</p>
+<dd><p>Pickles (serializes) the <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
