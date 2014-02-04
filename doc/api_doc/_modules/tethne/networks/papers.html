@@ -59,7 +59,8 @@
 <span class="kn">import</span> <span class="nn">operator</span>
 
 <div class="viewcode-block" id="citation_count"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.papers.citation_count">[docs]</a><span class="k">def</span> <span class="nf">citation_count</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Generates citation counts for all of the papers cited by papers.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates citation counts for all of the papers cited by papers.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -91,7 +92,8 @@
     <span class="k">return</span> <span class="n">counts</span>
 </div>
 <div class="viewcode-block" id="top_cited"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.papers.top_cited">[docs]</a><span class="k">def</span> <span class="nf">top_cited</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Generates a list of the topn most cited papers.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a list of the topn most cited papers.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -121,7 +123,8 @@
     <span class="k">return</span> <span class="n">top</span><span class="p">,</span> <span class="n">counts</span>
 </div>
 <div class="viewcode-block" id="top_parents"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.papers.top_parents">[docs]</a><span class="k">def</span> <span class="nf">top_parents</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns a list of :class:`.Paper` objects that cite the topn most cited</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a list of :class:`.Paper` objects that cite the topn most cited</span>
 <span class="sd">    papers.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters    </span>
@@ -162,13 +165,15 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a NetworkX directed graph based on citation records.</span>
 
-<span class="sd">    **Nodes** -- documents represented by the value of :class:`.Paper`</span>
-<span class="sd">    [node_id].</span>
-
-<span class="sd">    **Edges** -- from one document to its citation.</span>
-
-<span class="sd">    **Edge attributes** -- date (year) of citation</span>
-
+<span class="sd">    ==============     =========================================================</span>
+<span class="sd">    Element            Description</span>
+<span class="sd">    ==============     =========================================================</span>
+<span class="sd">    Node               Documents represented by the value of node_id in </span>
+<span class="sd">                       :class:`.Paper` </span>
+<span class="sd">    Edge               From a document to a cited reference.</span>
+<span class="sd">    Edge Attribute     Publication date of the citing document.</span>
+<span class="sd">    ==============     =========================================================</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    doc_list : list</span>
@@ -192,13 +197,6 @@
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    KeyError : If node_id is not present in the meta_list.</span>
-
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    Should we allow for node attribute definition?</span>
-<span class="sd">    Perhaps a function that makes use of the :class:`.Paper` keys and produces</span>
-<span class="sd">    an edge_attribute value is in order, similar to the bibliographic</span>
-<span class="sd">    coupling networks.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">citation_network</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;citations&#39;</span><span class="p">)</span>
     <span class="n">citation_network_internal</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;citations&#39;</span><span class="p">)</span>
@@ -263,14 +261,15 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a bibliographic coupling network.</span>
 
-<span class="sd">    **Nodes** -- papers represented by node_id and node attributes defined by</span>
-<span class="sd">    node_attribs (in :class:`.Paper` keys).</span>
-
-<span class="sd">    **Edges** -- (a,b) in E(G) if a and b share x citations where x &gt;=</span>
-<span class="sd">    threshold.</span>
-
-<span class="sd">    **Edge attributes** -- overlap, the number of citations shared</span>
-
+<span class="sd">    ===============    =========================================================</span>
+<span class="sd">    Element            Description</span>
+<span class="sd">    ===============    =========================================================</span>
+<span class="sd">    Node               Papers represented by node_id.</span>
+<span class="sd">    Node Attributes    node_attribs in :class:`.Paper`</span>
+<span class="sd">    Edge               (a,b) in E(G) if a and b share x citations where x &gt;=</span>
+<span class="sd">                       threshold.</span>
+<span class="sd">    Edge Attributes    overlap: the number of citations shared</span>
+<span class="sd">    ===============    =========================================================</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -326,7 +325,7 @@
 
         <span class="c"># ...and construct that document&#39;s node.</span>
         <span class="n">node_i_attribs</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">subdict</span><span class="p">(</span><span class="n">doc_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">node_attribs</span><span class="p">)</span>
-        <span class="c">#print node_i_attribs</span>
+
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">doc_list</span><span class="p">)):</span>
             <span class="c"># Make a list of citation_id&#39;s for each document...</span>
             <span class="n">j_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -336,7 +335,7 @@
 
             <span class="c"># ...and construct that document&#39;s node.</span>
             <span class="n">node_j_attribs</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">subdict</span><span class="p">(</span><span class="n">doc_list</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">node_attribs</span><span class="p">)</span>
-            <span class="c">#print &quot;n j &quot;, node_j_attribs</span>
+
             <span class="c"># Add nodes and edge if the citation overlap is sufficiently high.</span>
             <span class="n">overlap</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">i_list</span><span class="p">,</span> <span class="n">j_list</span><span class="p">)</span>
             
@@ -368,14 +367,14 @@
 <span class="sd">    separate networkx Graph in which vertices are the _cited_ papers. Separate</span>
 <span class="sd">    graphs allows to analyze each timeslice separately.</span>
 
-<span class="sd">    **Nodes** -- papers</span>
-
-<span class="sd">    **Node attributes** -- None</span>
-
-<span class="sd">    **Edges** -- (a, b) if a and b are cited by the same paper.</span>
-
-<span class="sd">    **Edge attributes** -- &#39;weight&#39;, number of times two papers are co-cited</span>
-<span class="sd">    together.</span>
+<span class="sd">    ===============    =========================================================</span>
+<span class="sd">    Element            Description</span>
+<span class="sd">    ===============    =========================================================</span>
+<span class="sd">    Node               Cited papers represented by :class:`.Paper` ayjid.</span>
+<span class="sd">    Edge               (a, b) if a and b are cited by the same paper.</span>
+<span class="sd">    Edge Attributes    weight: number of times two papers are co-cited</span>
+<span class="sd">                       together.</span>
+<span class="sd">    ===============    =========================================================</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -472,11 +471,14 @@
 <span class="sd">    Generate a simple author coupling network, where vertices are papers and</span>
 <span class="sd">    an edge indicates that two papers share a common author.</span>
 
-<span class="sd">    **Nodes** -- Papers.</span>
-
-<span class="sd">    **Edges** -- (a,b) in E(G) if a and b share x authors and x &gt;= threshold</span>
-
-<span class="sd">    **Edge attributes** -- overlap, the value of x (above).</span>
+<span class="sd">    ===============    =========================================================</span>
+<span class="sd">    Element            Description</span>
+<span class="sd">    ===============    =========================================================</span>
+<span class="sd">    Node               Documents, represented by node_id.</span>
+<span class="sd">    Edge               (a,b) in E(G) if a and b share x authors and x &gt;= </span>
+<span class="sd">                       threshold</span>
+<span class="sd">    Edge Attributes    overlap: the value of x (above).</span>
+<span class="sd">    ===============    =========================================================</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

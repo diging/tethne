@@ -312,9 +312,29 @@ corresponding to the earliest and latest &#8216;date&#8217; values for that edge
 <tt class="descclassname">tethne.networks.papers.</tt><tt class="descname">author_coupling</tt><big>(</big><em>doc_list</em>, <em>threshold</em>, <em>node_id</em>, <em>*node_attribs</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/papers.html#author_coupling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.papers.author_coupling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a simple author coupling network, where vertices are papers and
 an edge indicates that two papers share a common author.</p>
-<p><strong>Nodes</strong> &#8211; Papers.</p>
-<p><strong>Edges</strong> &#8211; (a,b) in E(G) if a and b share x authors and x &gt;= threshold</p>
-<p><strong>Edge attributes</strong> &#8211; overlap, the value of x (above).</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Element</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Node</td>
+<td>Documents, represented by node_id.</td>
+</tr>
+<tr class="row-odd"><td>Edge</td>
+<td>(a,b) in E(G) if a and b share x authors and x &gt;=
+threshold</td>
+</tr>
+<tr class="row-even"><td>Edge Attributes</td>
+<td>overlap: the value of x (above).</td>
+</tr>
+</tbody>
+</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -353,11 +373,32 @@ graph.</p>
 <dt id="tethne.networks.papers.bibliographic_coupling">
 <tt class="descclassname">tethne.networks.papers.</tt><tt class="descname">bibliographic_coupling</tt><big>(</big><em>doc_list</em>, <em>citation_id='ayjid'</em>, <em>threshold=1</em>, <em>node_id='ayjid'</em>, <em>weighted=False</em>, <em>*node_attribs</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/papers.html#bibliographic_coupling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.papers.bibliographic_coupling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a bibliographic coupling network.</p>
-<p><strong>Nodes</strong> &#8211; papers represented by node_id and node attributes defined by
-node_attribs (in <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> keys).</p>
-<p><strong>Edges</strong> &#8211; (a,b) in E(G) if a and b share x citations where x &gt;=
-threshold.</p>
-<p><strong>Edge attributes</strong> &#8211; overlap, the number of citations shared</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Element</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Node</td>
+<td>Papers represented by node_id.</td>
+</tr>
+<tr class="row-odd"><td>Node Attributes</td>
+<td>node_attribs in <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a></td>
+</tr>
+<tr class="row-even"><td>Edge</td>
+<td>(a,b) in E(G) if a and b share x citations where x &gt;=
+threshold.</td>
+</tr>
+<tr class="row-odd"><td>Edge Attributes</td>
+<td>overlap: the number of citations shared</td>
+</tr>
+</tbody>
+</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -443,11 +484,29 @@ the dataset into timeslices (as indicated) based on the publication date of
 the citing papers in the dataset. Each time-slice should result in a
 separate networkx Graph in which vertices are the _cited_ papers. Separate
 graphs allows to analyze each timeslice separately.</p>
-<p><strong>Nodes</strong> &#8211; papers</p>
-<p><strong>Node attributes</strong> &#8211; None</p>
-<p><strong>Edges</strong> &#8211; (a, b) if a and b are cited by the same paper.</p>
-<p><strong>Edge attributes</strong> &#8211; &#8216;weight&#8217;, number of times two papers are co-cited
-together.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Element</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Node</td>
+<td>Cited papers represented by <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> ayjid.</td>
+</tr>
+<tr class="row-odd"><td>Edge</td>
+<td>(a, b) if a and b are cited by the same paper.</td>
+</tr>
+<tr class="row-even"><td>Edge Attributes</td>
+<td>weight: number of times two papers are co-cited
+together.</td>
+</tr>
+</tbody>
+</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -488,10 +547,29 @@ draw an edge.</p>
 <dt id="tethne.networks.papers.direct_citation">
 <tt class="descclassname">tethne.networks.papers.</tt><tt class="descname">direct_citation</tt><big>(</big><em>doc_list</em>, <em>node_id='ayjid'</em>, <em>*node_attribs</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/papers.html#direct_citation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.papers.direct_citation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a NetworkX directed graph based on citation records.</p>
-<p><strong>Nodes</strong> &#8211; documents represented by the value of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>
-[node_id].</p>
-<p><strong>Edges</strong> &#8211; from one document to its citation.</p>
-<p><strong>Edge attributes</strong> &#8211; date (year) of citation</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Element</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Node</td>
+<td>Documents represented by the value of node_id in
+<a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a></td>
+</tr>
+<tr class="row-odd"><td>Edge</td>
+<td>From a document to a cited reference.</td>
+</tr>
+<tr class="row-even"><td>Edge Attribute</td>
+<td>Publication date of the citing document.</td>
+</tr>
+</tbody>
+</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -527,11 +605,6 @@ the network.</p>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Notes</p>
-<p>Should we allow for node attribute definition?
-Perhaps a function that makes use of the <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> keys and produces
-an edge_attribute value is in order, similar to the bibliographic
-coupling networks.</p>
 </dd></dl>
 
 <dl class="function">
