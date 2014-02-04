@@ -13,26 +13,28 @@ class Paper(object):
     Base class for Papers. Behaves just like a dict, but enforces a limited
     vocabulary of keys, and specific data types.
 
-    Notes
-    -----
     The following fields (and corresponding data types) are allowed:
-
-    * aulast (list) -- Authors' last name, as a list.
-    * auinit (list) -- Authors' first initial as a list.
-    * institution (dict) -- Institutions with which the authors are affiliated.
-    * atitle (str) -- Article title.
-    * jtitle (str) -- Journal title or abbreviated title.
-    * volume (str) -- Journal volume number.
-    * issue (str) -- Journal issue number.
-    * spage (str) -- Starting page of article in journal.
-    * epage (str) -- Ending page of article in journal.
-    * date (int) -- Article date of publication.
-    * country (dict) -- Author-Country mapping.
-    * citations (list) -- A list of :class:`.Paper` instances.
-    * ayjid (str) -- First author's name (last, fi), pub year, and journal.
-    * doi (str) -- Digital Object Identifier.
-    * pmid (str) -- PubMed ID.
-    * wosid (str) -- Web of Science UT fieldtag value.
+    
+    ===========     =====   ====================================================
+    Field           Type    Description
+    ===========     =====   ====================================================
+    aulast          list    Authors' last name, as a list.
+    auinit          list    Authors' first initial as a list.
+    institution     dict    Institutions with which the authors are affiliated.
+    atitle          str     Article title.
+    jtitle          str     Journal title or abbreviated title.
+    volume          str     Journal volume number.
+    issue           str     Journal issue number.
+    spage           str     Starting page of article in journal.
+    epage           str     Ending page of article in journal.
+    date            int     Article date of publication.
+    country         dict    Author-Country mapping.
+    citations       list    A list of :class:`.Paper` instances.
+    ayjid           str     First author's name (last fi), pubdate, and journal.
+    doi             str     Digital Object Identifier.
+    pmid            str     PubMed ID.
+    wosid           str     Web of Science UT fieldtag value.
+    ===========     =====   ====================================================
 
     None values are also allowed for all fields.
     """
