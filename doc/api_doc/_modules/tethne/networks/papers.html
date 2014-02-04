@@ -51,124 +51,35 @@
           <div class="body">
             
   <h1>Source code for tethne.networks.papers</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;Methods for generating networks in which papers are vertices.&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Methods for generating networks in which papers are vertices.</span>
+
+<span class="sd">.. autosummary::</span>
+
+<span class="sd">   author_coupling</span>
+<span class="sd">   bibliographic_coupling</span>
+<span class="sd">   cocitation</span>
+<span class="sd">   direct_citation   </span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">tethne.utilities</span> <span class="kn">as</span> <span class="nn">util</span>
-<span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">ds</span>
+<span class="kn">import</span> <span class="nn">helpers</span> <span class="kn">as</span> <span class="nn">hp</span>
 <span class="kn">import</span> <span class="nn">operator</span>
 
-<div class="viewcode-block" id="citation_count"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.papers.citation_count">[docs]</a><span class="k">def</span> <span class="nf">citation_count</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Generates citation counts for all of the papers cited by papers.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    papers : list</span>
-<span class="sd">        A list of :class:`.Paper` instances.</span>
-<span class="sd">    key : str</span>
-<span class="sd">        Property to use as node key. Default is &#39;ayjid&#39; (recommended).</span>
-<span class="sd">    verbose : bool</span>
-<span class="sd">        If True, prints status messages.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    counts : dict</span>
-<span class="sd">        Citation counts for all papers cited by papers.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">&quot;Generating citation counts for &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">papers</span><span class="p">))</span><span class="o">+</span><span class="s">&quot; papers...&quot;</span>
-
-    <span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">papers</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">P</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">counts</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                    <span class="n">counts</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
-
-    <span class="k">return</span> <span class="n">counts</span>
-</div>
-<div class="viewcode-block" id="top_cited"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.papers.top_cited">[docs]</a><span class="k">def</span> <span class="nf">top_cited</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Generates a list of the topn most cited papers.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    papers : list</span>
-<span class="sd">        A list of :class:`.Paper` instances.</span>
-<span class="sd">    topn : int</span>
-<span class="sd">        Number of top-cited papers to return.</span>
-<span class="sd">    verbose : bool</span>
-<span class="sd">        If True, prints status messages.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    top : list</span>
-<span class="sd">        A list of &#39;ayjid&#39; keys for the topn most cited papers.</span>
-<span class="sd">    counts : dict</span>
-<span class="sd">        Citation counts for all papers cited by papers.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">&quot;Finding top &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">topn</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; most cited papers...&quot;</span>
-
-    <span class="n">counts</span> <span class="o">=</span> <span class="n">citation_count</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-    <span class="n">top</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(),</span>
-                       <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
-                       <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[:</span><span class="n">topn</span><span class="p">])</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-
-    <span class="k">return</span> <span class="n">top</span><span class="p">,</span> <span class="n">counts</span>
-</div>
-<div class="viewcode-block" id="top_parents"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.papers.top_parents">[docs]</a><span class="k">def</span> <span class="nf">top_parents</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns a list of :class:`.Paper` objects that cite the topn most cited</span>
-<span class="sd">    papers.</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters    </span>
-<span class="sd">    ----------</span>
-<span class="sd">    papers : list</span>
-<span class="sd">        A list of :class:`.Paper` objects.</span>
-<span class="sd">    topn : int</span>
-<span class="sd">        Number of top-cited papers to return.</span>
-<span class="sd">    verbose : bool</span>
-<span class="sd">        If True, prints status messages.    </span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    papers : list</span>
-<span class="sd">        A list of :class:`.Paper` objects.</span>
-<span class="sd">    top : list</span>
-<span class="sd">        A list of &#39;ayjid&#39; keys for the topn most cited papers.</span>
-<span class="sd">    counts : dict</span>
-<span class="sd">        Citation counts for all papers cited by papers.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">&quot;Getting parents of top &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">topn</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; most cited papers.&quot;</span>
-
-    <span class="n">top</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">top_cited</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="n">topn</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-    <span class="n">papers</span> <span class="o">=</span> <span class="p">[</span> <span class="n">P</span> <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">papers</span> <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="p">]</span>
-    <span class="n">parents</span> <span class="o">=</span> <span class="p">[</span> <span class="n">P</span> <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">papers</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span>
-                    <span class="nb">set</span><span class="p">([</span> <span class="n">c</span><span class="p">[</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">P</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="p">])</span> <span class="o">&amp;</span>
-                    <span class="nb">set</span><span class="p">(</span><span class="n">top</span><span class="p">)</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">]</span>
-
-    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">&quot;Found &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">))</span> <span class="o">+</span> <span class="s">&quot; parents.&quot;</span>
-       
-    <span class="k">return</span> <span class="n">parents</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">counts</span>
-
-</div>
 <div class="viewcode-block" id="direct_citation"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.papers.direct_citation">[docs]</a><span class="k">def</span> <span class="nf">direct_citation</span><span class="p">(</span><span class="n">doc_list</span><span class="p">,</span> <span class="n">node_id</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">node_attribs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a NetworkX directed graph based on citation records.</span>
 
-<span class="sd">    **Nodes** -- documents represented by the value of :class:`.Paper`</span>
-<span class="sd">    [node_id].</span>
-
-<span class="sd">    **Edges** -- from one document to its citation.</span>
-
-<span class="sd">    **Edge attributes** -- date (year) of citation</span>
-
+<span class="sd">    ==============     =========================================================</span>
+<span class="sd">    Element            Description</span>
+<span class="sd">    ==============     =========================================================</span>
+<span class="sd">    Node               Documents represented by the value of node_id in </span>
+<span class="sd">                       :class:`.Paper` </span>
+<span class="sd">    Edge               From a document to a cited reference.</span>
+<span class="sd">    Edge Attribute     Publication date of the citing document.</span>
+<span class="sd">    ==============     =========================================================</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    doc_list : list</span>
@@ -192,13 +103,6 @@
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    KeyError : If node_id is not present in the meta_list.</span>
-
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    Should we allow for node attribute definition?</span>
-<span class="sd">    Perhaps a function that makes use of the :class:`.Paper` keys and produces</span>
-<span class="sd">    an edge_attribute value is in order, similar to the bibliographic</span>
-<span class="sd">    coupling networks.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">citation_network</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;citations&#39;</span><span class="p">)</span>
     <span class="n">citation_network_internal</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;citations&#39;</span><span class="p">)</span>
@@ -258,19 +162,20 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">citation_network</span><span class="p">,</span> <span class="n">citation_network_internal</span>
 </div>
-<div class="viewcode-block" id="bibliographic_coupling"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.papers.bibliographic_coupling">[docs]</a><span class="k">def</span> <span class="nf">bibliographic_coupling</span><span class="p">(</span><span class="n">doc_list</span><span class="p">,</span> <span class="n">citation_id</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="bibliographic_coupling"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.papers.bibliographic_coupling">[docs]</a><span class="k">def</span> <span class="nf">bibliographic_coupling</span><span class="p">(</span><span class="n">doc_list</span><span class="p">,</span> <span class="n">citation_id</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                            <span class="n">node_id</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">*</span><span class="n">node_attribs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a bibliographic coupling network.</span>
 
-<span class="sd">    **Nodes** -- papers represented by node_id and node attributes defined by</span>
-<span class="sd">    node_attribs (in :class:`.Paper` keys).</span>
-
-<span class="sd">    **Edges** -- (a,b) in E(G) if a and b share x citations where x &gt;=</span>
-<span class="sd">    threshold.</span>
-
-<span class="sd">    **Edge attributes** -- overlap, the number of citations shared</span>
-
+<span class="sd">    ===============    =========================================================</span>
+<span class="sd">    Element            Description</span>
+<span class="sd">    ===============    =========================================================</span>
+<span class="sd">    Node               Papers represented by node_id.</span>
+<span class="sd">    Node Attributes    node_attribs in :class:`.Paper`</span>
+<span class="sd">    Edge               (a,b) in E(G) if a and b share x citations where x &gt;=</span>
+<span class="sd">                       threshold.</span>
+<span class="sd">    Edge Attributes    overlap: the number of citations shared</span>
+<span class="sd">    ===============    =========================================================</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -326,7 +231,7 @@
 
         <span class="c"># ...and construct that document&#39;s node.</span>
         <span class="n">node_i_attribs</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">subdict</span><span class="p">(</span><span class="n">doc_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">node_attribs</span><span class="p">)</span>
-        <span class="c">#print node_i_attribs</span>
+
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">doc_list</span><span class="p">)):</span>
             <span class="c"># Make a list of citation_id&#39;s for each document...</span>
             <span class="n">j_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -336,7 +241,7 @@
 
             <span class="c"># ...and construct that document&#39;s node.</span>
             <span class="n">node_j_attribs</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">subdict</span><span class="p">(</span><span class="n">doc_list</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">node_attribs</span><span class="p">)</span>
-            <span class="c">#print &quot;n j &quot;, node_j_attribs</span>
+
             <span class="c"># Add nodes and edge if the citation overlap is sufficiently high.</span>
             <span class="n">overlap</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">i_list</span><span class="p">,</span> <span class="n">j_list</span><span class="p">)</span>
             
@@ -368,14 +273,14 @@
 <span class="sd">    separate networkx Graph in which vertices are the _cited_ papers. Separate</span>
 <span class="sd">    graphs allows to analyze each timeslice separately.</span>
 
-<span class="sd">    **Nodes** -- papers</span>
-
-<span class="sd">    **Node attributes** -- None</span>
-
-<span class="sd">    **Edges** -- (a, b) if a and b are cited by the same paper.</span>
-
-<span class="sd">    **Edge attributes** -- &#39;weight&#39;, number of times two papers are co-cited</span>
-<span class="sd">    together.</span>
+<span class="sd">    ===============    =========================================================</span>
+<span class="sd">    Element            Description</span>
+<span class="sd">    ===============    =========================================================</span>
+<span class="sd">    Node               Cited papers represented by :class:`.Paper` ayjid.</span>
+<span class="sd">    Edge               (a, b) if a and b are cited by the same paper.</span>
+<span class="sd">    Edge Attributes    weight: number of times two papers are co-cited</span>
+<span class="sd">                       together.</span>
+<span class="sd">    ===============    =========================================================</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -412,10 +317,10 @@
     <span class="c"># 61670334: networks.citations.cocitation should have a &quot;top cited&quot;</span>
     <span class="c">#  parameter.</span>
     <span class="k">if</span> <span class="n">topn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">parents</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">citations_count</span> <span class="o">=</span> <span class="n">top_parents</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="n">topn</span><span class="p">)</span>
+        <span class="n">parents</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">citations_count</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">top_parents</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="n">topn</span><span class="p">)</span>
         <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">include</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">citations_count</span> <span class="o">=</span> <span class="n">citation_count</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+        <span class="n">citations_count</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">citation_count</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
         <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">citations_count</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -472,11 +377,14 @@
 <span class="sd">    Generate a simple author coupling network, where vertices are papers and</span>
 <span class="sd">    an edge indicates that two papers share a common author.</span>
 
-<span class="sd">    **Nodes** -- Papers.</span>
-
-<span class="sd">    **Edges** -- (a,b) in E(G) if a and b share x authors and x &gt;= threshold</span>
-
-<span class="sd">    **Edge attributes** -- overlap, the value of x (above).</span>
+<span class="sd">    ===============    =========================================================</span>
+<span class="sd">    Element            Description</span>
+<span class="sd">    ===============    =========================================================</span>
+<span class="sd">    Node               Documents, represented by node_id.</span>
+<span class="sd">    Edge               (a,b) in E(G) if a and b share x authors and x &gt;= </span>
+<span class="sd">                       threshold</span>
+<span class="sd">    Edge Attributes    overlap: the value of x (above).</span>
+<span class="sd">    ===============    =========================================================</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -527,8 +435,8 @@
                 <span class="n">acoupling</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">doc_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">node_id</span><span class="p">],</span>
                                    <span class="n">doc_list</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">node_id</span><span class="p">],</span>
                                    <span class="n">overlap</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">overlap</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">acoupling</span>
-</pre></div></div>
+    <span class="k">return</span> <span class="n">acoupling</span></div>
+</pre></div>
 
           </div>
         </div>
