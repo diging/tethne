@@ -540,7 +540,6 @@ def read(datapath):
     papers = convert(wl)
     return papers
 
-
 # [#60462784]
 def from_dir(path):
     """
@@ -571,12 +570,13 @@ def from_dir(path):
         raise IOError("Invalid path.")
 
     for f in files:
-        try:
-            print "Loaded " + f
-            wos_list += parse(path + "/" + f)
-        except (IOError, DataError): # Ignore files that don't contain WoS data.
-            print "Could not load " + f
-            pass
+        if not f.startswith('.'): # Hidden Files ignore
+            try:
+                print "Loaded " + f
+                wos_list += parse(path + "/" + f)
+            except IOError: # Ignore files that don't contain WoS data.
+                print "Could not load " + f
+                pass
 
     return convert(wos_list)
 
@@ -696,3 +696,7 @@ def _wos2paper_map():
                     'AB':'abstract'    }
 
     return translator
+
+#Custom Error Defined
+class DataError(Exception):
+    pass
