@@ -51,116 +51,22 @@
           <div class="body">
             
   <h1>Source code for tethne.networks.papers</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;Methods for generating networks in which papers are vertices.&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Methods for generating networks in which papers are vertices.</span>
+
+<span class="sd">.. autosummary::</span>
+
+<span class="sd">   author_coupling</span>
+<span class="sd">   bibliographic_coupling</span>
+<span class="sd">   cocitation</span>
+<span class="sd">   direct_citation   </span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">tethne.utilities</span> <span class="kn">as</span> <span class="nn">util</span>
-<span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">ds</span>
+<span class="kn">import</span> <span class="nn">helpers</span> <span class="kn">as</span> <span class="nn">hp</span>
 <span class="kn">import</span> <span class="nn">operator</span>
 
-<div class="viewcode-block" id="citation_count"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.papers.citation_count">[docs]</a><span class="k">def</span> <span class="nf">citation_count</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Generates citation counts for all of the papers cited by papers.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    papers : list</span>
-<span class="sd">        A list of :class:`.Paper` instances.</span>
-<span class="sd">    key : str</span>
-<span class="sd">        Property to use as node key. Default is &#39;ayjid&#39; (recommended).</span>
-<span class="sd">    verbose : bool</span>
-<span class="sd">        If True, prints status messages.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    counts : dict</span>
-<span class="sd">        Citation counts for all papers cited by papers.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">&quot;Generating citation counts for &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">papers</span><span class="p">))</span><span class="o">+</span><span class="s">&quot; papers...&quot;</span>
-
-    <span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">papers</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">P</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">counts</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                    <span class="n">counts</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
-
-    <span class="k">return</span> <span class="n">counts</span>
-</div>
-<div class="viewcode-block" id="top_cited"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.papers.top_cited">[docs]</a><span class="k">def</span> <span class="nf">top_cited</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Generates a list of the topn most cited papers.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    papers : list</span>
-<span class="sd">        A list of :class:`.Paper` instances.</span>
-<span class="sd">    topn : int</span>
-<span class="sd">        Number of top-cited papers to return.</span>
-<span class="sd">    verbose : bool</span>
-<span class="sd">        If True, prints status messages.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    top : list</span>
-<span class="sd">        A list of &#39;ayjid&#39; keys for the topn most cited papers.</span>
-<span class="sd">    counts : dict</span>
-<span class="sd">        Citation counts for all papers cited by papers.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">&quot;Finding top &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">topn</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; most cited papers...&quot;</span>
-
-    <span class="n">counts</span> <span class="o">=</span> <span class="n">citation_count</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-    <span class="n">top</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(),</span>
-                       <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
-                       <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[:</span><span class="n">topn</span><span class="p">])</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-
-    <span class="k">return</span> <span class="n">top</span><span class="p">,</span> <span class="n">counts</span>
-</div>
-<div class="viewcode-block" id="top_parents"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.papers.top_parents">[docs]</a><span class="k">def</span> <span class="nf">top_parents</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns a list of :class:`.Paper` objects that cite the topn most cited</span>
-<span class="sd">    papers.</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters    </span>
-<span class="sd">    ----------</span>
-<span class="sd">    papers : list</span>
-<span class="sd">        A list of :class:`.Paper` objects.</span>
-<span class="sd">    topn : int</span>
-<span class="sd">        Number of top-cited papers to return.</span>
-<span class="sd">    verbose : bool</span>
-<span class="sd">        If True, prints status messages.    </span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    papers : list</span>
-<span class="sd">        A list of :class:`.Paper` objects.</span>
-<span class="sd">    top : list</span>
-<span class="sd">        A list of &#39;ayjid&#39; keys for the topn most cited papers.</span>
-<span class="sd">    counts : dict</span>
-<span class="sd">        Citation counts for all papers cited by papers.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">&quot;Getting parents of top &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">topn</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; most cited papers.&quot;</span>
-
-    <span class="n">top</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">top_cited</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="n">topn</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-    <span class="n">papers</span> <span class="o">=</span> <span class="p">[</span> <span class="n">P</span> <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">papers</span> <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="p">]</span>
-    <span class="n">parents</span> <span class="o">=</span> <span class="p">[</span> <span class="n">P</span> <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">papers</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span>
-                    <span class="nb">set</span><span class="p">([</span> <span class="n">c</span><span class="p">[</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">P</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="p">])</span> <span class="o">&amp;</span>
-                    <span class="nb">set</span><span class="p">(</span><span class="n">top</span><span class="p">)</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">]</span>
-
-    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">&quot;Found &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">))</span> <span class="o">+</span> <span class="s">&quot; parents.&quot;</span>
-       
-    <span class="k">return</span> <span class="n">parents</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">counts</span>
-
-</div>
 <div class="viewcode-block" id="direct_citation"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.papers.direct_citation">[docs]</a><span class="k">def</span> <span class="nf">direct_citation</span><span class="p">(</span><span class="n">doc_list</span><span class="p">,</span> <span class="n">node_id</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">node_attribs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a NetworkX directed graph based on citation records.</span>
@@ -411,10 +317,10 @@
     <span class="c"># 61670334: networks.citations.cocitation should have a &quot;top cited&quot;</span>
     <span class="c">#  parameter.</span>
     <span class="k">if</span> <span class="n">topn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">parents</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">citations_count</span> <span class="o">=</span> <span class="n">top_parents</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="n">topn</span><span class="p">)</span>
+        <span class="n">parents</span><span class="p">,</span> <span class="n">include</span><span class="p">,</span> <span class="n">citations_count</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">top_parents</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="n">topn</span><span class="p">)</span>
         <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">include</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">citations_count</span> <span class="o">=</span> <span class="n">citation_count</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+        <span class="n">citations_count</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">citation_count</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
         <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">citations_count</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>

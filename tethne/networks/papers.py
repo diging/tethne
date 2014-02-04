@@ -1,112 +1,18 @@
-"""Methods for generating networks in which papers are vertices."""
+"""
+Methods for generating networks in which papers are vertices.
+
+.. autosummary::
+
+   author_coupling
+   bibliographic_coupling
+   cocitation
+   direct_citation   
+"""
 
 import networkx as nx
 import tethne.utilities as util
-import tethne.data as ds
+import helpers as hp
 import operator
-
-def citation_count(papers, key='ayjid', verbose=False):
-    """
-    Generates citation counts for all of the papers cited by papers.
-
-    Parameters
-    ----------
-    papers : list
-        A list of :class:`.Paper` instances.
-    key : str
-        Property to use as node key. Default is 'ayjid' (recommended).
-    verbose : bool
-        If True, prints status messages.
-
-    Returns
-    -------
-    counts : dict
-        Citation counts for all papers cited by papers.
-    """
-
-    if verbose:
-        print "Generating citation counts for "+str(len(papers))+" papers..."
-
-    counts = {}
-    for P in papers:
-        if P['citations'] is not None:
-            for p in P['citations']:
-                try:
-                    counts[p[key]] += 1
-                except KeyError:
-                    counts[p[key]] = 1
-
-    return counts
-
-def top_cited(papers, topn=20, verbose=False):
-    """
-    Generates a list of the topn most cited papers.
-
-    Parameters
-    ----------
-    papers : list
-        A list of :class:`.Paper` instances.
-    topn : int
-        Number of top-cited papers to return.
-    verbose : bool
-        If True, prints status messages.
-
-    Returns
-    -------
-    top : list
-        A list of 'ayjid' keys for the topn most cited papers.
-    counts : dict
-        Citation counts for all papers cited by papers.
-    """
-
-    if verbose:
-        print "Finding top "+str(topn)+" most cited papers..."
-
-    counts = citation_count(papers, verbose=verbose)
-    top = dict(sorted(counts.iteritems(),
-                       key=operator.itemgetter(1),
-                       reverse=True)[:topn]).keys()
-
-    return top, counts
-
-def top_parents(papers, topn=20, verbose=False):
-    """
-    Returns a list of :class:`.Paper` objects that cite the topn most cited
-    papers.
-    
-    Parameters    
-    ----------
-    papers : list
-        A list of :class:`.Paper` objects.
-    topn : int
-        Number of top-cited papers to return.
-    verbose : bool
-        If True, prints status messages.    
-
-    Returns
-    -------
-    papers : list
-        A list of :class:`.Paper` objects.
-    top : list
-        A list of 'ayjid' keys for the topn most cited papers.
-    counts : dict
-        Citation counts for all papers cited by papers.
-    """
-
-    if verbose:
-        print "Getting parents of top "+str(topn)+" most cited papers."
-
-    top, counts = top_cited(papers, topn=topn, verbose=verbose)
-    papers = [ P for P in papers if P['citations'] is not None ]
-    parents = [ P for P in papers if len(
-                    set([ c['ayjid'] for c in P['citations'] ]) &
-                    set(top) ) > 0 ]
-
-    if verbose:
-        print "Found " + str(len(parents)) + " parents."
-       
-    return parents, top, counts
-
 
 def direct_citation(doc_list, node_id='ayjid', *node_attribs):
     """
@@ -358,10 +264,10 @@ def cocitation(papers, threshold, topn=None, verbose=False):
     # 61670334: networks.citations.cocitation should have a "top cited"
     #  parameter.
     if topn is not None:
-        parents, include, citations_count = top_parents(papers, topn=topn)
+        parents, include, citations_count = hp.top_parents(papers, topn=topn)
         N = len(include)
     else:
-        citations_count = citation_count(papers)
+        citations_count = hp.citation_count(papers)
         N = len(citations_count.keys())
 
     if verbose:

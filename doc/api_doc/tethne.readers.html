@@ -105,6 +105,23 @@ relevant to the networks of interest for Tethne including:</p>
 </ul>
 </div></blockquote>
 <p>Missing data here also results in the above keys being set to None.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#module-tethne.readers.dfr" title="tethne.readers.dfr"><tt class="xref py py-obj docutils literal"><span class="pre">dfr</span></tt></a></td>
+<td>Methods for parsing JSTOR Data-for-Research datasets.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#module-tethne.readers.pubmed" title="tethne.readers.pubmed"><tt class="xref py py-obj docutils literal"><span class="pre">pubmed</span></tt></a></td>
+<td>Methods for working with PubMed data are still under development. Please use</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#module-tethne.readers.wos" title="tethne.readers.wos"><tt class="xref py py-obj docutils literal"><span class="pre">wos</span></tt></a></td>
+<td>Reader for Web of Science field-tagged bibliographic data.</td>
+</tr>
+</tbody>
+</table>
 <dl class="exception">
 <dt id="tethne.readers.DataError">
 <em class="property">exception </em><tt class="descclassname">tethne.readers.</tt><tt class="descname">DataError</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/tethne/readers.html#DataError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.DataError" title="Permalink to this definition">¶</a></dt>
@@ -148,6 +165,18 @@ conflicts, values from <a class="reference internal" href="tethne.data.html#teth
 </div>
 <div class="section" id="module-tethne.readers.dfr">
 <span id="dfr-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">dfr</span></tt> Module<a class="headerlink" href="#module-tethne.readers.dfr" title="Permalink to this headline">¶</a></h2>
+<p>Methods for parsing JSTOR Data-for-Research datasets.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.readers.dfr.read" title="tethne.readers.dfr.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a>(datapath)</td>
+<td>Yields <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> s from JSTOR DfR package.</td>
+</tr>
+</tbody>
+</table>
 <dl class="function">
 <dt id="tethne.readers.dfr.read">
 <tt class="descclassname">tethne.readers.dfr.</tt><tt class="descname">read</tt><big>(</big><em>datapath</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/dfr.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.dfr.read" title="Permalink to this definition">¶</a></dt>
@@ -177,6 +206,17 @@ conflicts, values from <a class="reference internal" href="tethne.data.html#teth
 <span id="pubmed-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">pubmed</span></tt> Module<a class="headerlink" href="#module-tethne.readers.pubmed" title="Permalink to this headline">¶</a></h2>
 <p>Methods for working with PubMed data are still under development. Please use
 with care.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.readers.pubmed.read" title="tethne.readers.pubmed.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a>(filepath)</td>
+<td>Given a file with PubMed XML, return a list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</td>
+</tr>
+</tbody>
+</table>
 <dl class="function">
 <dt id="tethne.readers.pubmed.read">
 <tt class="descclassname">tethne.readers.pubmed.</tt><tt class="descname">read</tt><big>(</big><em>filepath</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/pubmed.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.pubmed.read" title="Permalink to this definition">¶</a></dt>
@@ -208,6 +248,26 @@ with care.</p>
 <div class="section" id="module-tethne.readers.wos">
 <span id="wos-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">wos</span></tt> Module<a class="headerlink" href="#module-tethne.readers.wos" title="Permalink to this headline">¶</a></h2>
 <p>Reader for Web of Science field-tagged bibliographic data.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.readers.wos.convert" title="tethne.readers.wos.convert"><tt class="xref py py-obj docutils literal"><span class="pre">convert</span></tt></a>(wos_data)</td>
+<td>Convert a dictionary or list of dictionaries with keys from the</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.readers.wos.from_dir" title="tethne.readers.wos.from_dir"><tt class="xref py py-obj docutils literal"><span class="pre">from_dir</span></tt></a>(path)</td>
+<td>Convenience function for generating a list of <tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt> from a</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.readers.wos.parse" title="tethne.readers.wos.parse"><tt class="xref py py-obj docutils literal"><span class="pre">parse</span></tt></a>(filepath)</td>
+<td>Parse Web of Science field-tagged data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.readers.wos.read" title="tethne.readers.wos.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a>(datapath)</td>
+<td>Yields a list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances from a Web of Science data file.</td>
+</tr>
+</tbody>
+</table>
 <dl class="function">
 <dt id="tethne.readers.wos.convert">
 <tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">convert</tt><big>(</big><em>wos_data</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.convert" title="Permalink to this definition">¶</a></dt>
@@ -303,7 +363,7 @@ defined by the list_keys and int_keys variables.</p>
 <dl class="function">
 <dt id="tethne.readers.wos.read">
 <tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">read</tt><big>(</big><em>datapath</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Yields :class:<a href="#id2"><span class="problematic" id="id3">`</span></a>.Paper`s from a Web of Science data file.</p>
+<dd><p>Yields a list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances from a Web of Science data file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -316,7 +376,7 @@ defined by the list_keys and int_keys variables.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
 <blockquote class="last">
-<div><p>A list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects.</p>
+<div><p>A list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
 </div></blockquote>
 </td>
 </tr>

@@ -1,3 +1,12 @@
+"""
+Methods for parsing JSTOR Data-for-Research datasets.
+
+.. autosummary::
+
+   read
+
+"""
+
 import tethne.data as dt
 import os
 import xml.etree.ElementTree as ET

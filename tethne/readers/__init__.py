@@ -4,6 +4,7 @@ scholarly database (e.g. Web of Science or PubMed), resulting in a
 list of :class:`.Paper` instances containing as many as possible of
 the following keys (missing values are set to None):
 
+
     * aulast (list) -- Authors' surnames, as a list.
     * auinit (list) -- Authors' initials, as a list.
     * institution (dict) -- Institutions with which the authors are affiliated.
@@ -31,6 +32,13 @@ relevant to the networks of interest for Tethne including:
     * wosid -- Web of Science UT fieldtag
 
 Missing data here also results in the above keys being set to None.
+
+.. autosummary::
+
+   dfr
+   pubmed
+   wos
+
 """
 
 import wos
