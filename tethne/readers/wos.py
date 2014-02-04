@@ -1,5 +1,13 @@
 """
 Reader for Web of Science field-tagged bibliographic data.
+
+.. autosummary::
+
+   convert
+   from_dir
+   parse
+   read
+
 """
 
 import tethne.data as ds
@@ -122,6 +130,13 @@ def _create_ainstid(aulast=None, auinit=None, addr1=None, \
 def parse(filepath):
     """
     Parse Web of Science field-tagged data.
+
+    **Usage**
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> wos_list = rd.wos.parse("/Path/to/data.txt")
 
     Parameters
     ----------
@@ -402,6 +417,14 @@ def convert(wos_data):
     Web of Science field tags into a :class:`.Paper` instance or list of
     :class:`.Paper` instances, the standard for Tethne.
 
+    **Usage**
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> wos_list = rd.wos.parse("/Path/to/data.txt")
+       >>> papers = rd.wos.convert(wos_list)
+
     Parameters
     ----------
     wos_data : list
@@ -523,7 +546,14 @@ def convert(wos_data):
 
 def read(datapath):
     """
-    Yields :class:`.Paper`s from a Web of Science data file.
+    Yields a list of :class:`.Paper` instances from a Web of Science data file.
+
+    **Usage**
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> papers = rd.wos.read("/Path/to/data.txt")
 
     Parameters
     ----------
@@ -533,7 +563,8 @@ def read(datapath):
     Returns
     -------
     papers : list
-        A list of :class:`.Paper` objects.
+        A list of :class:`.Paper` instances.
+
     """
 
     wl = parse(datapath)
@@ -545,6 +576,13 @@ def from_dir(path):
     """
     Convenience function for generating a list of :class:`Paper` from a
     directory of Web of Science field-tagged data files.
+
+    **Usage**
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> papers = rd.wos.from_dir("/Path/to/datadir")
 
     Parameters
     ----------

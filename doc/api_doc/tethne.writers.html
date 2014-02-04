@@ -63,23 +63,23 @@ and analysis in external applications, and for storage.</p>
 </div>
 <div class="section" id="module-tethne.writers.collection">
 <span id="collection-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">collection</span></tt> Module<a class="headerlink" href="#module-tethne.writers.collection" title="Permalink to this headline">¶</a></h2>
-<p>Methods for writing <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to commonly-used network file
+<p>Methods for writing <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to commonly-used network file
 formats. Many methods simply leverage equivalent methods in NetworkX.</p>
 <dl class="function">
 <dt id="tethne.writers.collection.to_dxgmml">
 <tt class="descclassname">tethne.writers.collection.</tt><tt class="descname">to_dxgmml</tt><big>(</big><em>C</em>, <em>path</em><big>)</big><a class="reference internal" href="_modules/tethne/writers/collection.html#to_dxgmml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.writers.collection.to_dxgmml" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes a <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to dynamic XGMML. Assumes that <cite>Graph</cite>
+<dd><p>Writes a <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to dynamic XGMML. Assumes that <cite>Graph</cite>
 indices are orderable points in time (e.g. years). The &#8220;start&#8221; and &#8220;end&#8221;
 of each node and edge are determined by periods of consecutive appearance
-in the <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . Node and edge attributes are defined for
-each <cite>Graph</cite>. in the <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</p>
+in the <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . Node and edge attributes are defined for
+each <cite>Graph</cite>. in the <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
 <blockquote>
-<div><p>The <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to be written to XGMML.</p>
+<div><p>The <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to be written to XGMML.</p>
 </div></blockquote>
 <p><strong>path</strong> : str</p>
 <blockquote class="last">

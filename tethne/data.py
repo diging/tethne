@@ -13,26 +13,28 @@ class Paper(object):
     Base class for Papers. Behaves just like a dict, but enforces a limited
     vocabulary of keys, and specific data types.
 
-    Notes
-    -----
     The following fields (and corresponding data types) are allowed:
-
-    * aulast (list) -- Authors' last name, as a list.
-    * auinit (list) -- Authors' first initial as a list.
-    * institution (dict) -- Institutions with which the authors are affiliated.
-    * atitle (str) -- Article title.
-    * jtitle (str) -- Journal title or abbreviated title.
-    * volume (str) -- Journal volume number.
-    * issue (str) -- Journal issue number.
-    * spage (str) -- Starting page of article in journal.
-    * epage (str) -- Ending page of article in journal.
-    * date (int) -- Article date of publication.
-    * country (dict) -- Author-Country mapping.
-    * citations (list) -- A list of :class:`.Paper` instances.
-    * ayjid (str) -- First author's name (last, fi), pub year, and journal.
-    * doi (str) -- Digital Object Identifier.
-    * pmid (str) -- PubMed ID.
-    * wosid (str) -- Web of Science UT fieldtag value.
+    
+    ===========     =====   ====================================================
+    Field           Type    Description
+    ===========     =====   ====================================================
+    aulast          list    Authors' last name, as a list.
+    auinit          list    Authors' first initial as a list.
+    institution     dict    Institutions with which the authors are affiliated.
+    atitle          str     Article title.
+    jtitle          str     Journal title or abbreviated title.
+    volume          str     Journal volume number.
+    issue           str     Journal issue number.
+    spage           str     Starting page of article in journal.
+    epage           str     Ending page of article in journal.
+    date            int     Article date of publication.
+    country         dict    Author-Country mapping.
+    citations       list    A list of :class:`.Paper` instances.
+    ayjid           str     First author's name (last fi), pubdate, and journal.
+    doi             str     Digital Object Identifier.
+    pmid            str     PubMed ID.
+    wosid           str     Web of Science UT fieldtag value.
+    ===========     =====   ====================================================
 
     None values are also allowed for all fields.
     """
@@ -126,8 +128,9 @@ class Paper(object):
 
 class GraphCollection(object):
     """
-    Collection of NetworkX Graph objects, organized by some index (e.g. time).
-    Provides analysis functions in NetworkX for entire collection of Graphs.
+    Collection of NetworkX :class:`nx.classes.graph.Graph` objects, 
+    organized by some index (e.g. time). Provides analysis functions in NetworkX
+    for entire collection of Graphs.
     """
 
     def __init__(self):
@@ -179,8 +182,9 @@ class GraphCollection(object):
 
     def nodes(self, overwrite=False):
         """
-        Return complete set of nodes for this :class:`.GraphCollection` . If
-        this method has been called previously for this
+        Return complete set of nodes for this :class:`.GraphCollection` . 
+
+        If this method has been called previously for this
         :class:`.GraphCollection` then will not recompute unless overwrite =
         True.
 
@@ -205,8 +209,9 @@ class GraphCollection(object):
 
     def edges(self, overwrite=False):   # [#61512528]
         """
-        Return complete set of edges for this :class:`.GraphCollection` . If
-        this method has been called previously for this
+        Return complete set of edges for this :class:`.GraphCollection` . 
+
+        If this method has been called previously for this
         :class:`.GraphCollection` then will not recompute unless overwrite =
         True.
 
@@ -230,8 +235,8 @@ class GraphCollection(object):
 
     def save(self,filepath):   #[61512528]
         """
-        Pickles (serializes) the GraphCollection and saves it to filepath.
-
+        Pickles (serializes) the :class:`.GraphCollection` .
+        
         Parameters
         ----------
         filepath :
@@ -258,12 +263,12 @@ class GraphCollection(object):
 
     def load(self, filepath):    #[61512528]
         """
-        Loads a pickled (serialized) GraphCollection from filepath.
+        Loads a pickled (serialized) :class:`.GraphCollection` from filepath.
 
         Parameters
         ----------
         filepath : string
-            Full path to pickled GraphCollection.
+            Full path to pickled :class:`.GraphCollection` .
 
         Raises
         -------
