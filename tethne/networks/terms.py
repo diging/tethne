@@ -1,6 +1,10 @@
 """
 Methods for building networks from terms in bibliographic records. This
 includes keywords, abstract terms, etc.
+
+.. autosummary::
+
+   keyword_cooccurrence
 """
 
 import numpy as np

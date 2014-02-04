@@ -9,6 +9,14 @@ tethne Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`builders` Module
+----------------------
+
+.. automodule:: tethne.builders
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`data` Module
 ------------------
 

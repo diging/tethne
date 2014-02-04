@@ -1,121 +1,32 @@
-"""Methods for generating networks in which papers are vertices."""
+"""
+Methods for generating networks in which papers are vertices.
+
+.. autosummary::
+
+   author_coupling
+   bibliographic_coupling
+   cocitation
+   direct_citation   
+"""
 
 import networkx as nx
 import tethne.utilities as util
-import tethne.data as ds
+import helpers as hp
 import operator
-
-def citation_count(papers, key='ayjid', verbose=False):
-    """Generates citation counts for all of the papers cited by papers.
-
-    Parameters
-    ----------
-    papers : list
-        A list of :class:`.Paper` instances.
-    key : str
-        Property to use as node key. Default is 'ayjid' (recommended).
-    verbose : bool
-        If True, prints status messages.
-
-    Returns
-    -------
-    counts : dict
-        Citation counts for all papers cited by papers.
-    """
-
-    if verbose:
-        print "Generating citation counts for "+str(len(papers))+" papers..."
-
-    counts = {}
-    for P in papers:
-        if P['citations'] is not None:
-            for p in P['citations']:
-                try:
-                    counts[p[key]] += 1
-                except KeyError:
-                    counts[p[key]] = 1
-
-    return counts
-
-def top_cited(papers, topn=20, verbose=False):
-    """Generates a list of the topn most cited papers.
-
-    Parameters
-    ----------
-    papers : list
-        A list of :class:`.Paper` instances.
-    topn : int
-        Number of top-cited papers to return.
-    verbose : bool
-        If True, prints status messages.
-
-    Returns
-    -------
-    top : list
-        A list of 'ayjid' keys for the topn most cited papers.
-    counts : dict
-        Citation counts for all papers cited by papers.
-    """
-
-    if verbose:
-        print "Finding top "+str(topn)+" most cited papers..."
-
-    counts = citation_count(papers, verbose=verbose)
-    top = dict(sorted(counts.iteritems(),
-                       key=operator.itemgetter(1),
-                       reverse=True)[:topn]).keys()
-
-    return top, counts
-
-def top_parents(papers, topn=20, verbose=False):
-    """Returns a list of :class:`.Paper` objects that cite the topn most cited
-    papers.
-    
-    Parameters    
-    ----------
-    papers : list
-        A list of :class:`.Paper` objects.
-    topn : int
-        Number of top-cited papers to return.
-    verbose : bool
-        If True, prints status messages.    
-
-    Returns
-    -------
-    papers : list
-        A list of :class:`.Paper` objects.
-    top : list
-        A list of 'ayjid' keys for the topn most cited papers.
-    counts : dict
-        Citation counts for all papers cited by papers.
-    """
-
-    if verbose:
-        print "Getting parents of top "+str(topn)+" most cited papers."
-
-    top, counts = top_cited(papers, topn=topn, verbose=verbose)
-    papers = [ P for P in papers if P['citations'] is not None ]
-    parents = [ P for P in papers if len(
-                    set([ c['ayjid'] for c in P['citations'] ]) &
-                    set(top) ) > 0 ]
-
-    if verbose:
-        print "Found " + str(len(parents)) + " parents."
-       
-    return parents, top, counts
-
 
 def direct_citation(doc_list, node_id='ayjid', *node_attribs):
     """
     Create a NetworkX directed graph based on citation records.
 
-    **Nodes** -- documents represented by the value of :class:`.Paper`
-    [node_id].
-
-    **Edges** -- from one document to its citation.
-
-    **Edge attributes** -- date (year) of citation
-
+    ==============     =========================================================
+    Element            Description
+    ==============     =========================================================
+    Node               Documents represented by the value of node_id in 
+                       :class:`.Paper` 
+    Edge               From a document to a cited reference.
+    Edge Attribute     Publication date of the citing document.
+    ==============     =========================================================
+    
     Parameters
     ----------
     doc_list : list
@@ -139,13 +50,6 @@ def direct_citation(doc_list, node_id='ayjid', *node_attribs):
     Raises
     ------
     KeyError : If node_id is not present in the meta_list.
-
-    Notes
-    -----
-    Should we allow for node attribute definition?
-    Perhaps a function that makes use of the :class:`.Paper` keys and produces
-    an edge_attribute value is in order, similar to the bibliographic
-    coupling networks.
     """
     citation_network = nx.DiGraph(type='citations')
     citation_network_internal = nx.DiGraph(type='citations')
@@ -205,19 +109,20 @@ def direct_citation(doc_list, node_id='ayjid', *node_attribs):
     else:
         return citation_network, citation_network_internal
 
-def bibliographic_coupling(doc_list, citation_id='ayjid', threshold='1',
+def bibliographic_coupling(doc_list, citation_id='ayjid', threshold=1,
                            node_id='ayjid', weighted=False, *node_attribs):
     """
     Generate a bibliographic coupling network.
 
-    **Nodes** -- papers represented by node_id and node attributes defined by
-    node_attribs (in :class:`.Paper` keys).
-
-    **Edges** -- (a,b) in E(G) if a and b share x citations where x >=
-    threshold.
-
-    **Edge attributes** -- overlap, the number of citations shared
-
+    ===============    =========================================================
+    Element            Description
+    ===============    =========================================================
+    Node               Papers represented by node_id.
+    Node Attributes    node_attribs in :class:`.Paper`
+    Edge               (a,b) in E(G) if a and b share x citations where x >=
+                       threshold.
+    Edge Attributes    overlap: the number of citations shared
+    ===============    =========================================================
 
     Parameters
     ----------
@@ -273,7 +178,7 @@ def bibliographic_coupling(doc_list, citation_id='ayjid', threshold='1',
 
         # ...and construct that document's node.
         node_i_attribs = util.subdict(doc_list[i], node_attribs)
-        #print node_i_attribs
+
         for j in xrange(i+1, len(doc_list)):
             # Make a list of citation_id's for each document...
             j_list = []
@@ -283,7 +188,7 @@ def bibliographic_coupling(doc_list, citation_id='ayjid', threshold='1',
 
             # ...and construct that document's node.
             node_j_attribs = util.subdict(doc_list[j], node_attribs)
-            #print "n j ", node_j_attribs
+
             # Add nodes and edge if the citation overlap is sufficiently high.
             overlap = util.overlap(i_list, j_list)
             
@@ -315,14 +220,14 @@ def cocitation(papers, threshold, topn=None, verbose=False):
     separate networkx Graph in which vertices are the _cited_ papers. Separate
     graphs allows to analyze each timeslice separately.
 
-    **Nodes** -- papers
-
-    **Node attributes** -- None
-
-    **Edges** -- (a, b) if a and b are cited by the same paper.
-
-    **Edge attributes** -- 'weight', number of times two papers are co-cited
-    together.
+    ===============    =========================================================
+    Element            Description
+    ===============    =========================================================
+    Node               Cited papers represented by :class:`.Paper` ayjid.
+    Edge               (a, b) if a and b are cited by the same paper.
+    Edge Attributes    weight: number of times two papers are co-cited
+                       together.
+    ===============    =========================================================
 
     Parameters
     ----------
@@ -359,10 +264,10 @@ def cocitation(papers, threshold, topn=None, verbose=False):
     # 61670334: networks.citations.cocitation should have a "top cited"
     #  parameter.
     if topn is not None:
-        parents, include, citations_count = top_parents(papers, topn=topn)
+        parents, include, citations_count = hp.top_parents(papers, topn=topn)
         N = len(include)
     else:
-        citations_count = citation_count(papers)
+        citations_count = hp.citation_count(papers)
         N = len(citations_count.keys())
 
     if verbose:
@@ -419,11 +324,14 @@ def author_coupling(doc_list, threshold, node_id, *node_attribs):
     Generate a simple author coupling network, where vertices are papers and
     an edge indicates that two papers share a common author.
 
-    **Nodes** -- Papers.
-
-    **Edges** -- (a,b) in E(G) if a and b share x authors and x >= threshold
-
-    **Edge attributes** -- overlap, the value of x (above).
+    ===============    =========================================================
+    Element            Description
+    ===============    =========================================================
+    Node               Documents, represented by node_id.
+    Edge               (a,b) in E(G) if a and b share x authors and x >= 
+                       threshold
+    Edge Attributes    overlap: the value of x (above).
+    ===============    =========================================================
 
     Parameters
     ----------
