@@ -61,7 +61,7 @@
 <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
-<div class="viewcode-block" id="Paper"><a class="viewcode-back" href="../../tethne.html#tethne.data.Paper">[docs]</a><span class="k">class</span> <span class="nc">Paper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Paper"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.Paper">[docs]</a><span class="k">class</span> <span class="nc">Paper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for Papers. Behaves just like a dict, but enforces a limited</span>
 <span class="sd">    vocabulary of keys, and specific data types.</span>
@@ -166,20 +166,20 @@
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Paper.keys"><a class="viewcode-back" href="../../tethne.html#tethne.data.Paper.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Paper.keys"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.Paper.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the keys of the :class:`.Paper`&#39;s metadata fields.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Paper.values"><a class="viewcode-back" href="../../tethne.html#tethne.data.Paper.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Paper.values"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.Paper.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the values of the :class:`.Paper`&#39;s metadata fields.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Paper.iteritems"><a class="viewcode-back" href="../../tethne.html#tethne.data.Paper.iteritems">[docs]</a>    <span class="k">def</span> <span class="nf">iteritems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Paper.iteritems"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.Paper.iteritems">[docs]</a>    <span class="k">def</span> <span class="nf">iteritems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns an iterator for the :class:`.Paper`&#39;s metadata fields&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
 
 </div></div>
-<div class="viewcode-block" id="GraphCollection"><a class="viewcode-back" href="../../tethne.html#tethne.data.GraphCollection">[docs]</a><span class="k">class</span> <span class="nc">GraphCollection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="GraphCollection"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.GraphCollection">[docs]</a><span class="k">class</span> <span class="nc">GraphCollection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Collection of NetworkX :class:`nx.classes.graph.Graph` objects, </span>
 <span class="sd">    organized by some index (e.g. time). Provides analysis functions in NetworkX</span>
@@ -233,7 +233,7 @@
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graphs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="GraphCollection.nodes"><a class="viewcode-back" href="../../tethne.html#tethne.data.GraphCollection.nodes">[docs]</a>    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="GraphCollection.nodes"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.GraphCollection.nodes">[docs]</a>    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return complete set of nodes for this :class:`.GraphCollection` . </span>
 
@@ -260,7 +260,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_list</span>
 </div>
-<div class="viewcode-block" id="GraphCollection.edges"><a class="viewcode-back" href="../../tethne.html#tethne.data.GraphCollection.edges">[docs]</a>    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>   <span class="c"># [#61512528]</span>
+<div class="viewcode-block" id="GraphCollection.edges"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.GraphCollection.edges">[docs]</a>    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>   <span class="c"># [#61512528]</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return complete set of edges for this :class:`.GraphCollection` . </span>
 
@@ -286,7 +286,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">edge_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_list</span>
 </div>
-<div class="viewcode-block" id="GraphCollection.save"><a class="viewcode-back" href="../../tethne.html#tethne.data.GraphCollection.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filepath</span><span class="p">):</span>   <span class="c">#[61512528]</span>
+<div class="viewcode-block" id="GraphCollection.save"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.GraphCollection.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filepath</span><span class="p">):</span>   <span class="c">#[61512528]</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Pickles (serializes) the :class:`.GraphCollection` .</span>
 <span class="sd">        </span>
@@ -314,7 +314,7 @@
             <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;File does not exist, or cannot be opened.&quot;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="GraphCollection.load"><a class="viewcode-back" href="../../tethne.html#tethne.data.GraphCollection.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">):</span>    <span class="c">#[61512528]</span>
+<div class="viewcode-block" id="GraphCollection.load"><a class="viewcode-back" href="../../tethne.data.html#tethne.data.GraphCollection.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">):</span>    <span class="c">#[61512528]</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads a pickled (serialized) :class:`.GraphCollection` from filepath.</span>
 
