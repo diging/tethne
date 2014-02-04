@@ -126,8 +126,9 @@ class Paper(object):
 
 class GraphCollection(object):
     """
-    Collection of NetworkX Graph objects, organized by some index (e.g. time).
-    Provides analysis functions in NetworkX for entire collection of Graphs.
+    Collection of NetworkX :class:`nx.classes.graph.Graph` objects, 
+    organized by some index (e.g. time). Provides analysis functions in NetworkX
+    for entire collection of Graphs.
     """
 
     def __init__(self):
@@ -179,8 +180,9 @@ class GraphCollection(object):
 
     def nodes(self, overwrite=False):
         """
-        Return complete set of nodes for this :class:`.GraphCollection` . If
-        this method has been called previously for this
+        Return complete set of nodes for this :class:`.GraphCollection` . 
+
+        If this method has been called previously for this
         :class:`.GraphCollection` then will not recompute unless overwrite =
         True.
 
@@ -205,8 +207,9 @@ class GraphCollection(object):
 
     def edges(self, overwrite=False):   # [#61512528]
         """
-        Return complete set of edges for this :class:`.GraphCollection` . If
-        this method has been called previously for this
+        Return complete set of edges for this :class:`.GraphCollection` . 
+
+        If this method has been called previously for this
         :class:`.GraphCollection` then will not recompute unless overwrite =
         True.
 
@@ -230,8 +233,8 @@ class GraphCollection(object):
 
     def save(self,filepath):   #[61512528]
         """
-        Pickles (serializes) the GraphCollection and saves it to filepath.
-
+        Pickles (serializes) the :class:`.GraphCollection` .
+        
         Parameters
         ----------
         filepath :
@@ -258,12 +261,12 @@ class GraphCollection(object):
 
     def load(self, filepath):    #[61512528]
         """
-        Loads a pickled (serialized) GraphCollection from filepath.
+        Loads a pickled (serialized) :class:`.GraphCollection` from filepath.
 
         Parameters
         ----------
         filepath : string
-            Full path to pickled GraphCollection.
+            Full path to pickled :class:`.GraphCollection` .
 
         Raises
         -------
