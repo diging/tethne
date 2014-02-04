@@ -19,6 +19,13 @@ def read(datapath):
     """
     Yields :class:`.Paper` s from JSTOR DfR package.
 
+    **Usage**
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> papers = rd.dfr.read("/Path/to/DfR")
+
     Parameters
     ----------
     filepath : string
@@ -44,29 +51,36 @@ def read(datapath):
 def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
     """
     Yields N-grams from a JSTOR DfR dataset.
-    
+
+    **Usage**
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> trigrams = rd.dfr.ngrams("/Path/to/DfR", N='tri')
+
     Parameters
     ----------
     filepath : string
-        Filepath to unzipped JSTOR DfR folder containing N-grams (e.g. 
+        Filepath to unzipped JSTOR DfR folder containing N-grams (e.g.
         'bigrams').
     N : string
         'bi', 'tri', or 'quad'
     ignore_hash : bool
         If True, will exclude all N-grams that contain the hash '#' character.
     apply_stoplist : bool
-        If True, will exclude all N-grams that contain words in the NLTK 
+        If True, will exclude all N-grams that contain words in the NLTK
         stoplist.
-    
+
     Returns
     -------
     ngrams : dict
         Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
     """
-    
+
     gram_path = datapath + "/" + N + "grams"
     ngrams = {}
-    
+
     for file in os.listdir(gram_path):
         if file.split('.')[-1] == 'XML':
             root = ET.parse(gram_path + "/" + file).getroot()
@@ -74,7 +88,7 @@ def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
             grams = [ (gram.text.strip(), int(gram.attrib['weight']) )
                        for gram in root.findall(N + 'gram') # v Hashes v
                        if not ignore_hash or '#' not in list(gram.text) ]
-                       
+
             if apply_stoplist:
                 stoplist = stoplist.words()
                 grams_ = []
@@ -83,9 +97,9 @@ def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
                         if w not in stoplist:
                             grams_.append( (g,c) )
                 grams = grams_
-                
+
             ngrams[doi] = grams
-            
+
     return ngrams
 
 def _handle_paper(article):
