@@ -40,6 +40,13 @@ def read(filepath):
     See the following hyperlinks regarding possible structures of XML:
     * http://www.ncbi.nlm.nih.gov/pmc/pmcdoc/tagging-guidelines/citations/v2/citationtags.html#2Articlewithmorethan10authors%28listthefirst10andaddetal%29
     * http://dtd.nlm.nih.gov/publishing/
+    
+    **Usage**
+    
+    .. code-block:: python
+    
+       >>> import tethne.readers as rd
+       >>> papers = rd.pubmed.read("/Path/to/PubMedData.xml")
 
     Parameters
     ----------
