@@ -1,5 +1,13 @@
 """
 Reader for Web of Science field-tagged bibliographic data.
+
+.. autosummary::
+
+   convert
+   from_dir
+   parse
+   read
+
 """
 
 import tethne.data as ds
@@ -523,7 +531,7 @@ def convert(wos_data):
 
 def read(datapath):
     """
-    Yields :class:`.Paper`s from a Web of Science data file.
+    Yields a list of :class:`.Paper` instances from a Web of Science data file.
 
     Parameters
     ----------
@@ -533,7 +541,8 @@ def read(datapath):
     Returns
     -------
     papers : list
-        A list of :class:`.Paper` objects.
+        A list of :class:`.Paper` instances.
+      
     """
 
     wl = parse(datapath)

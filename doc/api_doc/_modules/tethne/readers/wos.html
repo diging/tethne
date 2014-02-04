@@ -54,6 +54,14 @@
   <h1>Source code for tethne.readers.wos</h1><div class="highlight"><pre>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Reader for Web of Science field-tagged bibliographic data.</span>
+
+<span class="sd">.. autosummary::</span>
+
+<span class="sd">   convert</span>
+<span class="sd">   from_dir</span>
+<span class="sd">   parse</span>
+<span class="sd">   read</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">ds</span>
@@ -577,7 +585,7 @@
 </div>
 <div class="viewcode-block" id="read"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Yields :class:`.Paper`s from a Web of Science data file.</span>
+<span class="sd">    Yields a list of :class:`.Paper` instances from a Web of Science data file.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -587,7 +595,8 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    papers : list</span>
-<span class="sd">        A list of :class:`.Paper` objects.</span>
+<span class="sd">        A list of :class:`.Paper` instances.</span>
+<span class="sd">      </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">wl</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>

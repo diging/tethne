@@ -1,6 +1,11 @@
 """
 Methods for working with PubMed data are still under development. Please use
 with care.
+
+.. autosummary::
+
+   read
+
 """
 
 import tethne.data as ds

@@ -1,4 +1,14 @@
-"""Methods for generating networks in which authors are vertices."""
+"""
+Methods for generating networks in which authors are vertices.
+
+.. autosummary::
+
+   author_cocitation
+   author_coinstitution
+   author_institution
+   author_papers
+   coauthors
+"""
 
 import networkx as nx
 import tethne.utilities as util
