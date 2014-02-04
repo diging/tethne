@@ -7,7 +7,7 @@ Tethne: Bibliographic Network Analysis in Python
 ================================================
 
 .. image:: images/logo.jpeg
-   :width: 1078
+   :width: 100%
 
 Tethne provides tools for easily parsing and analyzing bibliographic data in Python.
 The primary emphasis is on working with data from the ISI Web of Science database, and
