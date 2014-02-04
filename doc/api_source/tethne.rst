@@ -31,6 +31,7 @@ Subpackages
 .. toctree::
 
     tethne.analyze
+    tethne.matrices
     tethne.networks
     tethne.readers
     tethne.utilities
