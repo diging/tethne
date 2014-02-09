@@ -6,6 +6,7 @@ systematic access to algorithms in NetworkX.
 
 import networkx as nx
 import types
+import graphs
 
 def algorithm(C, method, **kwargs):
     """
@@ -233,3 +234,16 @@ def edge_history(C, source, target, attribute, verbose=False):
             if verbose: print "No such edge in Graph " + str(k)
 
     return history
+
+def node_global_closeness_centrality(C, node):
+    """
+    Calculates global closeness centrality for node in each graph in 
+    :class:`.GraphCollection` C.
+    
+    """
+    
+    results = {}
+    for key, g in C.graphs.iteritems():
+        results[key] = graphs.node_global_closeness_centrality(g, node)
+    
+    return results
