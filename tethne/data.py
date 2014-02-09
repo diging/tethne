@@ -696,6 +696,10 @@ class GraphCollection(object):
 
         except IOError: # File does not exist, or couldn't be read.
             raise IOError("File does not exist, or cannot be read.")
+        
+        # Preserving the object with unpickled data
+        if(obj_read):
+            self.__dict__ = obj_read.__dict__
 
         return obj_read
         
