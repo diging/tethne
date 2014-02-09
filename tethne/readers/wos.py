@@ -15,6 +15,7 @@ import xml.etree.ElementTree as ET
 import tethne.utilities as util
 import os
 import re
+import uuid
 
 # MACRO for printing the 'print' statement values.
 # 0 prints nothing in the console.
@@ -132,13 +133,6 @@ def parse(filepath):
     """
     Parse Web of Science field-tagged data.
 
-    **Usage**
-
-    .. code-block:: python
-
-       >>> import tethne.readers as rd
-       >>> wos_list = rd.wos.parse("/Path/to/data.txt")
-
     Parameters
     ----------
     filepath : string
@@ -157,6 +151,14 @@ def parse(filepath):
     KeyError : Key value which needs to be converted to an 'int' is not present.
     AttributeError :
     IOError : File at filepath not found, not readable, or empty.
+
+    Examples
+    --------
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> wos_list = rd.wos.parse("/Path/to/data.txt")
 
     Notes
     -----
@@ -424,17 +426,13 @@ def _parse_institutions(ref):
 
 def convert(wos_data):
     """
+    Convert parsed field-tagged data to :class:`.Paper` instances.
+
     Convert a dictionary or list of dictionaries with keys from the
     Web of Science field tags into a :class:`.Paper` instance or list of
     :class:`.Paper` instances, the standard for Tethne.
-
-    **Usage**
-
-    .. code-block:: python
-
-       >>> import tethne.readers as rd
-       >>> wos_list = rd.wos.parse("/Path/to/data.txt")
-       >>> papers = rd.wos.convert(wos_list)
+    
+    Each :class:`.Paper` is tagged with an accession id for this conversion.
 
     Parameters
     ----------
@@ -446,6 +444,15 @@ def convert(wos_data):
     wos_meta : list
         A list of :class:`.Paper` instances.
 
+    Examples
+    --------
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> wos_list = rd.wos.parse("/Path/to/data.txt")
+       >>> papers = rd.wos.convert(wos_list)
+
     Notes
     -----
     Need to handle author name anomolies (case, blank spaces, etc.) that may
@@ -453,6 +460,9 @@ def convert(wos_data):
     important for any graph with authors as nodes.
 
     """
+    
+    accession = str(uuid.uuid4())
+    
     #create a Paper for each wos_dict and append to this list
     wos_meta = []
 
@@ -550,6 +560,8 @@ def convert(wos_data):
                 #print 'meta_cr_list' , meta_cr_list
             paper['citations'] = meta_cr_list
 
+        paper['accession'] = accession
+        
         wos_meta.append(paper)
     # End wos_dict for loop.
 
@@ -558,13 +570,6 @@ def convert(wos_data):
 def read(datapath):
     """
     Yields a list of :class:`.Paper` instances from a Web of Science data file.
-
-    **Usage**
-
-    .. code-block:: python
-
-       >>> import tethne.readers as rd
-       >>> papers = rd.wos.read("/Path/to/data.txt")
 
     Parameters
     ----------
@@ -575,6 +580,14 @@ def read(datapath):
     -------
     papers : list
         A list of :class:`.Paper` instances.
+        
+    Examples
+    --------
+    
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> papers = rd.wos.read("/Path/to/data.txt")
 
     """
 
@@ -587,13 +600,6 @@ def from_dir(path):
     """
     Convenience function for generating a list of :class:`Paper` from a
     directory of Web of Science field-tagged data files.
-
-    **Usage**
-
-    .. code-block:: python
-
-       >>> import tethne.readers as rd
-       >>> papers = rd.wos.from_dir("/Path/to/datadir")
 
     Parameters
     ----------
@@ -608,6 +614,14 @@ def from_dir(path):
     ------
     IOError
         Invalid path.
+        
+    Examples
+    --------
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> papers = rd.wos.from_dir("/Path/to/datadir")        
 
     """
 

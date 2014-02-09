@@ -1,4 +1,6 @@
 """
+Methods for parsing bibliographic datasets.
+
 .. autosummary::
 
    dfr
@@ -66,16 +68,6 @@ def merge(P1, P2, fields=['ayjid']):
     list, and attempts to merge papers with matching fields. Where there are
     conflicts, values from :class:`.Paper` in P1 will be preferred.
 
-    **Usage**
-
-    .. code-block:: python
-
-       >>> import tethne.readers as rd
-       >>> P1 = rd.wos.read("/Path/to/data1.txt")
-       >>> P2 = rd.dfr.read("/Path/to/DfR")
-       >>> papers = rd.merge(P1, P2, ['ayjid'])
-
-
     Parameters
     ----------
     P1 : list
@@ -89,6 +81,16 @@ def merge(P1, P2, fields=['ayjid']):
     -------
     combined : list
         A list of :class:`.Paper` instances.
+        
+    Examples
+    --------
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> P1 = rd.wos.read("/Path/to/data1.txt")
+       >>> P2 = rd.dfr.read("/Path/to/DfR")
+       >>> papers = rd.merge(P1, P2, ['ayjid'])        
     """
 
     combined = []

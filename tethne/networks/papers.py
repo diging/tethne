@@ -13,8 +13,9 @@ import networkx as nx
 import tethne.utilities as util
 import helpers as hp
 import operator
+import tethne.data as ds
 
-def direct_citation(doc_list, node_id='ayjid', *node_attribs):
+def direct_citation(doc_list, node_id='ayjid', node_attribs=['date']):
     """
     Create a NetworkX directed graph based on citation records.
 
@@ -110,7 +111,8 @@ def direct_citation(doc_list, node_id='ayjid', *node_attribs):
         return citation_network, citation_network_internal
 
 def bibliographic_coupling(doc_list, citation_id='ayjid', threshold=1,
-                           node_id='ayjid', weighted=False, *node_attribs):
+                           node_id='ayjid', node_attribs=['date'], 
+                           weighted=False):
     """
     Generate a bibliographic coupling network.
 
@@ -211,7 +213,7 @@ def bibliographic_coupling(doc_list, citation_id='ayjid', threshold=1,
                                    similarity=similarity)
     return bcoupling
 
-def cocitation(papers, threshold, topn=None, verbose=False):
+def cocitation(papers, threshold, node_id='ayjid', topn=None, verbose=False):
     """
     A cocitation network is a network in which vertices are papers, and edges
     indicate that two papers were cited by the same third paper. Should slice
@@ -319,7 +321,7 @@ def cocitation(papers, threshold, topn=None, verbose=False):
 
     return cocitation_graph
 
-def author_coupling(doc_list, threshold, node_id, *node_attribs):
+def author_coupling(doc_list, threshold, node_attribs, node_id='ayjid'):
     """
     Generate a simple author coupling network, where vertices are papers and
     an edge indicates that two papers share a common author.

@@ -25,11 +25,3 @@ analyze Package
     :undoc-members:
     :show-inheritance:
 
-:mod:`workflow` Module
-----------------------
-
-.. automodule:: tethne.analyze.workflow
-    :members:
-    :undoc-members:
-    :show-inheritance:
-

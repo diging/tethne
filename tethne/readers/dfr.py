@@ -14,17 +14,14 @@ import xml.etree.ElementTree as ET
 import re
 from tethne.utilities import dict_from_node, strip_non_ascii
 from nltk.corpus import stopwords
+import uuid
 
 def read(datapath):
     """
     Yields :class:`.Paper` s from JSTOR DfR package.
-
-    **Usage**
-
-    .. code-block:: python
-
-       >>> import tethne.readers as rd
-       >>> papers = rd.dfr.read("/Path/to/DfR")
+    
+    Each :class:`.Paper` is tagged with an accession id for this 
+    read/conversion.    
 
     Parameters
     ----------
@@ -35,6 +32,14 @@ def read(datapath):
     -------
     papers : list
         A list of :class:`.Paper` objects.
+
+    Examples
+    --------
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> papers = rd.dfr.read("/Path/to/DfR")        
     """
 
     try:
@@ -42,22 +47,19 @@ def read(datapath):
     except IOError:
         raise IOError(datapath+"citations.XML not found.")
 
+    accession = str(uuid.uuid4())
+
     papers = []
     for article in root:
-        papers.append(_handle_paper(article))
+        paper = _handle_paper(article)
+        paper['accession'] = accession
+        papers.append(paper)
 
     return papers
 
 def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
     """
     Yields N-grams from a JSTOR DfR dataset.
-
-    **Usage**
-
-    .. code-block:: python
-
-       >>> import tethne.readers as rd
-       >>> trigrams = rd.dfr.ngrams("/Path/to/DfR", N='tri')
 
     Parameters
     ----------
@@ -76,6 +78,14 @@ def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
     -------
     ngrams : dict
         Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
+
+    Examples
+    --------
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> trigrams = rd.dfr.ngrams("/Path/to/DfR", N='tri')        
     """
 
     gram_path = datapath + "/" + N + "grams"

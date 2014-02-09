@@ -1,8 +1,14 @@
 """
-Contains methods for analyizing graphs and graph collections, as well as other
-analyses specific to bibliographic datasets.
+Methods for analyizing graphs and graph collections
+
+Includes some other analyses specific to bibliographic datasets.
+
+.. autosummary::
+
+   collection
+   graph
+
 """
 
 import tethne.analyze.collection
 import tethne.analyze.graph
-import tethne.analyze.workflow
