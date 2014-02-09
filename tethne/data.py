@@ -1,5 +1,5 @@
 """
-Tethne uses a small number of special classes for handling data.
+Special classes for handling bibliographic data.
 """
 
 import networkx as nx
@@ -144,7 +144,7 @@ class DataCollection(object):
     
     The :class:`.DataCollection` is initialized with some data, which is indexed
     by a key in :class:`.Paper` (default is wosid). The :class:`.DataCollection`
-    can then by sliced ( :func:`.DataCollection.slice` ) by other keys in
+    can then be sliced ( :func:`DataCollection.slice` ) by other keys in
     :class:`.Paper` .
     
     **Usage**
@@ -325,7 +325,20 @@ class DataCollection(object):
         """
         
         return self.data.keys()
+    
+    def papers(self):
+        """
+        Yield the complete set of :class:`.Paper` instances in this
+        :class:`.DataCollection` .
         
+        Returns
+        -------
+        papers : list
+            A list of :class:`.Paper`
+        """
+        
+        return self.data.values()
+    
     def get_slices(self, key, papers=False):
         """
         Yields slices for key.
@@ -342,8 +355,16 @@ class DataCollection(object):
             Keys are slice indices. If papers is True, values are lists of
             :class:`.Paper` instances; otherwise returns paper indices (e.g.
             'wosid').
+
+        Raises
+        ------
+        RuntimeError : DataCollection has not been sliced.
+        KeyError : Data has not been sliced by [key] 
+                    
         """
-        
+
+        if len(self.axes) == 0:
+            raise(RuntimeError("DataCollection has not been sliced."))        
         if key not in self.axes.keys():
             raise(KeyError("Data has not been sliced by " + str(key)))
         
@@ -372,8 +393,17 @@ class DataCollection(object):
         slice : list
             List of paper indices in this :class:`.DataCollection` , or (if
             papers is True) a list of :class:`.Paper` instances.
-        """
+
+        Raises
+        ------
+        RuntimeError : DataCollection has not been sliced.
+        KeyError : Data has not been sliced by [key] 
+        KeyError : [index] not a valid index for [key]
         
+        """
+
+        if len(self.axes) == 0:
+            raise(RuntimeError("DataCollection has not been sliced."))        
         if key not in self.axes.keys():
             raise(KeyError("Data has not been sliced by " + str(key)))
         if index not in self.axes[key].keys():
@@ -400,8 +430,15 @@ class DataCollection(object):
         -------
         plist : list
             A list of paper indices, or :class:`.Paper` instances.
+        
+        Raises
+        ------
+        RuntimeError : DataCollection has not been sliced.
 
         """
+
+        if len(self.axes) == 0:
+            raise(RuntimeError("DataCollection has not been sliced."))
         
         slices = []
         for k,i in key_indices:
@@ -446,7 +483,21 @@ class DataCollection(object):
         
         WARNING: expensive for a :class:`.DataCollection` with many axes or
         long axes. Consider using :func:`.distribution_2d` .
+        
+        Returns
+        -------
+        dist : Numpy array
+            An N-dimensional array. Axes are given by 
+            :func:`DataCollection.get_axes` and values are the number of
+            :class:`.Paper` at that slice-coordinate.
+            
+        Raises
+        ------
+        RuntimeError : DataCollection has not been sliced.
         """
+        
+        if len(self.axes) == 0:
+            raise(RuntimeError("DataCollection has not been sliced."))
         
         shape = tuple( len(v) for v in self.axes.values() )
         dist = np.zeros(shape)
@@ -461,7 +512,23 @@ class DataCollection(object):
         """
         Returns a Numpy array describing the number of :class:`.Paper`
         associated with each slice-coordinate, for x and y axes spcified.
+
+        Returns
+        -------
+        dist : Numpy array
+            A 2-dimensional array. Values are the number of
+            :class:`.Paper` at that slice-coordinate.
+            
+        Raises
+        ------
+        RuntimeError : DataCollection has not been sliced.
+        KeyError: Invalid slice axes for this DataCollection.
         """
+        
+        if len(self.axes) == 0:
+            raise(RuntimeError("DataCollection has not been sliced."))
+        if x_axis not in self.get_axes() or y_axis not in self.get_axes():
+            raise(KeyError("Invalid slice axes for this DataCollection."))
         
         x_size = len(self.axes[x_axis])
         y_size = len(self.axes[y_axis])
@@ -470,23 +537,9 @@ class DataCollection(object):
         
         for i in xrange(x_size):
             for j in xrange(y_size):
-                dist[i, j] = len(self._get_by_i( [ (x_axis, i), (y_axis, j) ] ))
+                dist[i, j] = len(self._get_by_i([(x_axis, i),(y_axis, j)]))
         
         return dist
-        
-    def subslices(self, papers=False):
-        """
-        Generator for paper indices (or :class:`.Paper` instances) for each 
-        subslice in the :class:`.DataCollection` .
-        
-        Parameters
-        ----------
-        papers : bool
-            If True, yields :class:`.Paper` instances instead of indices.
-        """
-        
-        pass
-        
 
 class GraphCollection(object):
     """

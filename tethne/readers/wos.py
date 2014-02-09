@@ -132,13 +132,6 @@ def parse(filepath):
     """
     Parse Web of Science field-tagged data.
 
-    **Usage**
-
-    .. code-block:: python
-
-       >>> import tethne.readers as rd
-       >>> wos_list = rd.wos.parse("/Path/to/data.txt")
-
     Parameters
     ----------
     filepath : string
@@ -157,6 +150,14 @@ def parse(filepath):
     KeyError : Key value which needs to be converted to an 'int' is not present.
     AttributeError :
     IOError : File at filepath not found, not readable, or empty.
+
+    Examples
+    --------
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> wos_list = rd.wos.parse("/Path/to/data.txt")
 
     Notes
     -----
@@ -422,14 +423,6 @@ def convert(wos_data):
     
     Each :class:`.Paper` is tagged with an accession id for this conversion.
 
-    **Usage**
-
-    .. code-block:: python
-
-       >>> import tethne.readers as rd
-       >>> wos_list = rd.wos.parse("/Path/to/data.txt")
-       >>> papers = rd.wos.convert(wos_list)
-
     Parameters
     ----------
     wos_data : list
@@ -439,6 +432,15 @@ def convert(wos_data):
     -------
     wos_meta : list
         A list of :class:`.Paper` instances.
+
+    Examples
+    --------
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> wos_list = rd.wos.parse("/Path/to/data.txt")
+       >>> papers = rd.wos.convert(wos_list)
 
     Notes
     -----
@@ -558,13 +560,6 @@ def read(datapath):
     """
     Yields a list of :class:`.Paper` instances from a Web of Science data file.
 
-    **Usage**
-
-    .. code-block:: python
-
-       >>> import tethne.readers as rd
-       >>> papers = rd.wos.read("/Path/to/data.txt")
-
     Parameters
     ----------
     datapath : string
@@ -574,6 +569,14 @@ def read(datapath):
     -------
     papers : list
         A list of :class:`.Paper` instances.
+        
+    Examples
+    --------
+    
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> papers = rd.wos.read("/Path/to/data.txt")
 
     """
 
@@ -588,13 +591,6 @@ def from_dir(path):
     Convenience function for generating a list of :class:`Paper` from a
     directory of Web of Science field-tagged data files.
 
-    **Usage**
-
-    .. code-block:: python
-
-       >>> import tethne.readers as rd
-       >>> papers = rd.wos.from_dir("/Path/to/datadir")
-
     Parameters
     ----------
     path : string
@@ -608,6 +604,14 @@ def from_dir(path):
     ------
     IOError
         Invalid path.
+        
+    Examples
+    --------
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> papers = rd.wos.from_dir("/Path/to/datadir")        
 
     """
 

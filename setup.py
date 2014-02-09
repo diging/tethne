@@ -10,7 +10,8 @@ URL = 'https://github.com/erickpeirson/tethne'
 VERSION = '0.2'
 LONG_DESCRIPTION = open('README.md').read()
 PACKAGES = [ 'tethne','tethne.analyze','tethne.networks','tethne.readers', \
-             'tethne.utilities', 'tethne.writers','testsuite' ]
+             'tethne.utilities', 'tethne.writers', 'tethne.matrices',
+             'testsuite' ]
 
 setup(name=DISTNAME,
       maintainer=MAINTAINER,
