@@ -54,6 +54,326 @@
 <h2><tt class="xref py py-mod docutils literal"><span class="pre">data</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <span class="target" id="module-tethne.data"></span><p>Tethne uses a small number of special classes for handling data.</p>
 <dl class="class">
+<dt id="tethne.data.DataCollection">
+<em class="property">class </em><tt class="descclassname">tethne.data.</tt><tt class="descname">DataCollection</tt><big>(</big><em>data</em>, <em>index_by='wosid'</em><big>)</big><a class="headerlink" href="#tethne.data.DataCollection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>A <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> organizes <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> data for analysis.</p>
+<p>The <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> is initialized with some data, which is indexed
+by a key in <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> (default is wosid). The <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a>
+can then by sliced ( <tt class="xref py py-func docutils literal"><span class="pre">DataCollection.slice()</span></tt> ) by other keys in
+<a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> .</p>
+<p><strong>Usage</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/Path/to/wos/data.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">+=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/Path/to/wos/data2.txt&quot;</span><span class="p">)</span>    <span class="c"># Two accessions.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.data</span> <span class="kn">import</span> <span class="n">DataCollection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">DataCollection</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="c"># Indexed by wosid, by default.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;time_window&#39;</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="s">&#39;accession&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span>
+<span class="go">&lt;tethne.data.DataCollection at 0x10af0ef50&gt;</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.DataCollection.N_axes" title="tethne.data.DataCollection.N_axes"><tt class="xref py py-obj docutils literal"><span class="pre">N_axes</span></tt></a>()</td>
+<td>Returns the number of slice axes for this <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> .</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.data.DataCollection.distribution" title="tethne.data.DataCollection.distribution"><tt class="xref py py-obj docutils literal"><span class="pre">distribution</span></tt></a>()</td>
+<td>Returns a Numpy array describing the number of <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.DataCollection.distribution_2d" title="tethne.data.DataCollection.distribution_2d"><tt class="xref py py-obj docutils literal"><span class="pre">distribution_2d</span></tt></a>(x_axis,&nbsp;y_axis)</td>
+<td>Returns a Numpy array describing the number of <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.data.DataCollection.get_axes" title="tethne.data.DataCollection.get_axes"><tt class="xref py py-obj docutils literal"><span class="pre">get_axes</span></tt></a>()</td>
+<td>Returns a list of all slice axes for this <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> .</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.DataCollection.get_by" title="tethne.data.DataCollection.get_by"><tt class="xref py py-obj docutils literal"><span class="pre">get_by</span></tt></a>(key_indices[,&nbsp;papers])</td>
+<td>Given a set of (key, index) tuples, return the corresponding subset of</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.data.DataCollection.get_slice" title="tethne.data.DataCollection.get_slice"><tt class="xref py py-obj docutils literal"><span class="pre">get_slice</span></tt></a>(key,&nbsp;index[,&nbsp;papers])</td>
+<td>Yields a specific slice.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.DataCollection.get_slices" title="tethne.data.DataCollection.get_slices"><tt class="xref py py-obj docutils literal"><span class="pre">get_slices</span></tt></a>(key[,&nbsp;papers])</td>
+<td>Yields slices for key.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.data.DataCollection.indices" title="tethne.data.DataCollection.indices"><tt class="xref py py-obj docutils literal"><span class="pre">indices</span></tt></a>()</td>
+<td>Yields a list of indices of all papers in this <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.DataCollection.slice" title="tethne.data.DataCollection.slice"><tt class="xref py py-obj docutils literal"><span class="pre">slice</span></tt></a>(key[,&nbsp;method])</td>
+<td>Slices data by key, using method (if applicable).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.data.DataCollection.subslices" title="tethne.data.DataCollection.subslices"><tt class="xref py py-obj docutils literal"><span class="pre">subslices</span></tt></a>([papers])</td>
+<td>Generator for paper indices (or <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances) for each</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.DataCollection.union" title="tethne.data.DataCollection.union"><tt class="xref py py-obj docutils literal"><span class="pre">union</span></tt></a>()</td>
+<td>Yields the union of all dataslices.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="tethne.data.DataCollection.N_axes">
+<tt class="descname">N_axes</tt><big>(</big><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.N_axes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of slice axes for this <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> .</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.data.DataCollection.distribution">
+<tt class="descname">distribution</tt><big>(</big><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a Numpy array describing the number of <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>
+associated with each slice-coordinate.</p>
+<p>WARNING: expensive for a <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> with many axes or
+long axes. Consider using <tt class="xref py py-func docutils literal"><span class="pre">distribution_2d()</span></tt> .</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.data.DataCollection.distribution_2d">
+<tt class="descname">distribution_2d</tt><big>(</big><em>x_axis</em>, <em>y_axis</em><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.distribution_2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a Numpy array describing the number of <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>
+associated with each slice-coordinate, for x and y axes spcified.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.data.DataCollection.get_axes">
+<tt class="descname">get_axes</tt><big>(</big><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.get_axes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all slice axes for this <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> .</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.data.DataCollection.get_by">
+<tt class="descname">get_by</tt><big>(</big><em>key_indices</em>, <em>papers=False</em><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.get_by" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a set of (key, index) tuples, return the corresponding subset of
+<a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> indices (or <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances themselves, if 
+papers is True).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>key_indices</strong> : list</p>
+<blockquote>
+<div><p>A list of (key, index) tuples.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>plist</strong> : list</p>
+<blockquote class="last">
+<div><p>A list of paper indices, or <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.data.DataCollection.get_slice">
+<tt class="descname">get_slice</tt><big>(</big><em>key</em>, <em>index</em>, <em>papers=False</em><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.get_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yields a specific slice.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>key</strong> : str</p>
+<blockquote>
+<div><p>Key from <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> that has previously been used to slice data
+in this <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> .</p>
+</div></blockquote>
+<p><strong>index</strong> : str or int</p>
+<blockquote>
+<div><p>Slice index for key (e.g. 1999 for &#8216;date&#8217;).</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>slice</strong> : list</p>
+<blockquote class="last">
+<div><p>List of paper indices in this <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> , or (if
+papers is True) a list of <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.data.DataCollection.get_slices">
+<tt class="descname">get_slices</tt><big>(</big><em>key</em>, <em>papers=False</em><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.get_slices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yields slices for key.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>key</strong> : str</p>
+<blockquote>
+<div><p>Key from <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> that has previously been used to slice data
+in this <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> .</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>slices</strong> : dict</p>
+<blockquote class="last">
+<div><p>Keys are slice indices. If papers is True, values are lists of
+<a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances; otherwise returns paper indices (e.g.
+&#8216;wosid&#8217;).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.data.DataCollection.indices">
+<tt class="descname">indices</tt><big>(</big><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yields a list of indices of all papers in this <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>list</strong> :</p>
+<blockquote class="last">
+<div><p>List of indices.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.data.DataCollection.slice">
+<tt class="descname">slice</tt><big>(</big><em>key</em>, <em>method=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Slices data by key, using method (if applicable).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>key</strong> : str</p>
+<blockquote>
+<div><p>key in <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> by which to slice data.</p>
+</div></blockquote>
+<p><strong>method</strong> : str (optional)</p>
+<blockquote>
+<div><p>Dictates how data should be sliced. See table for available methods.
+If key is &#8216;date&#8217;, default method is time_period with window_size and
+step_size of 1.</p>
+</div></blockquote>
+<p><strong>kwargs</strong> : kwargs</p>
+<blockquote class="last">
+<div><p>See methods table, below.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Methods available for slicing DataCollections:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="48%" />
+<col width="12%" />
+<col width="22%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Method</th>
+<th class="head">Description</th>
+<th class="head">Key</th>
+<th class="head">kwargs</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>time_window</td>
+<td>Slices data using a sliding
+time-window. Dataslices are
+indexed by the start of the
+time-window.</td>
+<td>date</td>
+<td>window_size</td>
+</tr>
+<tr class="row-odd"><td>time_period</td>
+<td>Slices data into time periods
+of equal length. Dataslices
+are indexed by the start of
+the time period.</td>
+<td>date</td>
+<td>window_size</td>
+</tr>
+</tbody>
+</table>
+<p>Avilable kwargs:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="9%" />
+<col width="74%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>window_size</td>
+<td>int</td>
+<td>Size of time-window or period, in years
+(default = 1).</td>
+</tr>
+<tr class="row-odd"><td>step_size</td>
+<td>int</td>
+<td>Amount to advance time-window or period in each
+step (ignored for time_period).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.data.DataCollection.subslices">
+<tt class="descname">subslices</tt><big>(</big><em>papers=False</em><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.subslices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator for paper indices (or <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances) for each 
+subslice in the <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> .</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>papers</strong> : bool</p>
+<blockquote class="last">
+<div><p>If True, yields <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances instead of indices.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.data.DataCollection.union">
+<tt class="descname">union</tt><big>(</big><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.union" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yields the union of all dataslices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>list</strong> :</p>
+<blockquote class="last">
+<div><p>List of <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="tethne.data.GraphCollection">
 <em class="property">class </em><tt class="descclassname">tethne.data.</tt><tt class="descname">GraphCollection</tt><a class="reference internal" href="_modules/tethne/data.html#GraphCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.GraphCollection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
@@ -67,20 +387,45 @@ for entire collection of Graphs.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.GraphCollection.edges" title="tethne.data.GraphCollection.edges"><tt class="xref py py-obj docutils literal"><span class="pre">edges</span></tt></a>([overwrite])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.GraphCollection.compose" title="tethne.data.GraphCollection.compose"><tt class="xref py py-obj docutils literal"><span class="pre">compose</span></tt></a>()</td>
+<td>Returns the simple union of all <tt class="xref py py-class docutils literal"><span class="pre">Graph</span></tt> in the</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.data.GraphCollection.edges" title="tethne.data.GraphCollection.edges"><tt class="xref py py-obj docutils literal"><span class="pre">edges</span></tt></a>([overwrite])</td>
 <td>Return complete set of edges for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.data.GraphCollection.load" title="tethne.data.GraphCollection.load"><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt></a>(filepath)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.GraphCollection.load" title="tethne.data.GraphCollection.load"><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt></a>(filepath)</td>
 <td>Loads a pickled (serialized) <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> from filepath.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.GraphCollection.nodes" title="tethne.data.GraphCollection.nodes"><tt class="xref py py-obj docutils literal"><span class="pre">nodes</span></tt></a>([overwrite])</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.data.GraphCollection.nodes" title="tethne.data.GraphCollection.nodes"><tt class="xref py py-obj docutils literal"><span class="pre">nodes</span></tt></a>([overwrite])</td>
 <td>Return complete set of nodes for this <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.data.GraphCollection.save" title="tethne.data.GraphCollection.save"><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt></a>(filepath)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.GraphCollection.save" title="tethne.data.GraphCollection.save"><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt></a>(filepath)</td>
 <td>Pickles (serializes) the <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="tethne.data.GraphCollection.compose">
+<tt class="descname">compose</tt><big>(</big><big>)</big><a class="headerlink" href="#tethne.data.GraphCollection.compose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the simple union of all <tt class="xref py py-class docutils literal"><span class="pre">Graph</span></tt> in the 
+<a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>composed</strong> : <tt class="xref py py-class docutils literal"><span class="pre">Graph</span></tt></p>
+<blockquote class="last">
+<div><p>Simple union of all <tt class="xref py py-class docutils literal"><span class="pre">Graph</span></tt> in the 
+<a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Node or edge attributes that vary over slices should be ignored.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="tethne.data.GraphCollection.edges">
 <tt class="descname">edges</tt><big>(</big><em>overwrite=False</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#GraphCollection.edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.GraphCollection.edges" title="Permalink to this definition">¶</a></dt>
@@ -266,6 +611,10 @@ vocabulary of keys, and specific data types.</p>
 <td>str</td>
 <td>Web of Science UT fieldtag value.</td>
 </tr>
+<tr class="row-even"><td>accession</td>
+<td>str</td>
+<td>Identifier for data conversion accession.</td>
+</tr>
 </tbody>
 </table>
 <p>None values are also allowed for all fields.</p>
@@ -276,17 +625,26 @@ vocabulary of keys, and specific data types.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.Paper.iteritems" title="tethne.data.Paper.iteritems"><tt class="xref py py-obj docutils literal"><span class="pre">iteritems</span></tt></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.Paper.authors" title="tethne.data.Paper.authors"><tt class="xref py py-obj docutils literal"><span class="pre">authors</span></tt></a>()</td>
+<td>Returns a list of author names (FI LAST).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.data.Paper.iteritems" title="tethne.data.Paper.iteritems"><tt class="xref py py-obj docutils literal"><span class="pre">iteritems</span></tt></a>()</td>
 <td>Returns an iterator for the <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>&#8216;s metadata fields</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.data.Paper.keys" title="tethne.data.Paper.keys"><tt class="xref py py-obj docutils literal"><span class="pre">keys</span></tt></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.Paper.keys" title="tethne.data.Paper.keys"><tt class="xref py py-obj docutils literal"><span class="pre">keys</span></tt></a>()</td>
 <td>Returns the keys of the <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>&#8216;s metadata fields.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.data.Paper.values" title="tethne.data.Paper.values"><tt class="xref py py-obj docutils literal"><span class="pre">values</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.data.Paper.values" title="tethne.data.Paper.values"><tt class="xref py py-obj docutils literal"><span class="pre">values</span></tt></a>()</td>
 <td>Returns the values of the <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>&#8216;s metadata fields.</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="tethne.data.Paper.authors">
+<tt class="descname">authors</tt><big>(</big><big>)</big><a class="headerlink" href="#tethne.data.Paper.authors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of author names (FI LAST).</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="tethne.data.Paper.iteritems">
 <tt class="descname">iteritems</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/data.html#Paper.iteritems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.Paper.iteritems" title="Permalink to this definition">¶</a></dt>
