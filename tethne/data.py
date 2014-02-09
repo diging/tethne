@@ -7,6 +7,7 @@ import pickle as pk
 from cStringIO import StringIO
 from pprint import pprint
 import sys
+import numpy as np
 
 class Paper(object):
     """
@@ -34,6 +35,7 @@ class Paper(object):
     doi             str     Digital Object Identifier.
     pmid            str     PubMed ID.
     wosid           str     Web of Science UT fieldtag value.
+    accession       str     Identifier for data conversion accession.
     ===========     =====   ====================================================
 
     None values are also allowed for all fields.
@@ -60,7 +62,8 @@ class Paper(object):
                             'doi':None,
                             'pmid':None,
                             'wosid':None,
-                            'abstract':None    }
+                            'abstract':None,
+                            'accession':None    }
 
         self.list_fields = [ 'aulast',
                              'auinit',
@@ -76,7 +79,8 @@ class Paper(object):
                                'doi',
                                'pmid',
                                'wosid',
-                               'abstract' ]
+                               'abstract',
+                               'accession' ]
 
         self.int_fields = [ 'date' ]
 
@@ -124,7 +128,365 @@ class Paper(object):
     def iteritems(self):
         """Returns an iterator for the :class:`.Paper`'s metadata fields"""
         return self.internal.iteritems()
+    
+    def authors(self):
+        """Returns a list of author names (FI LAST)."""
+        
+        auths = []
+        for i in xrange(len(self.internal['aulast'])):
+            au = self.internal['auinit'][i] + ' ' +  self.internal['aulast'][i]
+            auths.append( au.upper() )
+        return auths
 
+class DataCollection(object):
+    """
+    A :class:`.DataCollection` organizes :class:`.Paper` data for analysis.
+    
+    The :class:`.DataCollection` is initialized with some data, which is indexed
+    by a key in :class:`.Paper` (default is wosid). The :class:`.DataCollection`
+    can then by sliced ( :func:`.DataCollection.slice` ) by other keys in
+    :class:`.Paper` .
+    
+    **Usage**
+    
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> data = rd.wos.read("/Path/to/wos/data.txt")
+       >>> data += rd.wos.read("/Path/to/wos/data2.txt")    # Two accessions.
+       >>> from tethne.data import DataCollection
+       >>> D = DataCollection(data) # Indexed by wosid, by default.
+       >>> D.slice('date', 'time_window', window_size=4)
+       >>> D.slice('accession')
+       >>> D
+       <tethne.data.DataCollection at 0x10af0ef50>
+        
+    """
+    
+    def __init__(self, data, index_by='wosid'):
+        self.axes = {}
+        self.index_by = index_by
+        self.datakeys = data[0].keys()
+        
+        if type(data[0]) is not Paper:
+            raise(ValueError("Data must contain tethne.data.Paper objects."))
+
+        if index_by not in self.datakeys:
+            raise(KeyError(str(index_by) + " not a valid key in data."))
+        
+        self.data = { p[index_by]:p for p in data }
+    
+    def slice(self, key, method=None, **kwargs):
+        """
+        Slices data by key, using method (if applicable).
+        
+        Parameters
+        ----------
+        key : str
+            key in :class:`.Paper` by which to slice data.
+        method : str (optional)
+            Dictates how data should be sliced. See table for available methods.
+            If key is 'date', default method is time_period with window_size and
+            step_size of 1.
+        kwargs : kwargs
+            See methods table, below.
+            
+        Notes
+        -----
+
+        Methods available for slicing DataCollections:
+
+        ===========    =============================    =======    =============
+        Method         Description                      Key        kwargs
+        ===========    =============================    =======    =============
+        time_window    Slices data using a sliding      date       window_size
+                       time-window. Dataslices are 
+                       indexed by the start of the 
+                       time-window.
+        time_period    Slices data into time periods    date       window_size
+                       of equal length. Dataslices
+                       are indexed by the start of
+                       the time period.
+        ===========    =============================    =======    =============
+
+        Avilable kwargs:
+
+        ===========    ======   ================================================
+        Argument       Type     Description
+        ===========    ======   ================================================
+        window_size    int      Size of time-window or period, in years
+                                (default = 1).
+        step_size      int      Amount to advance time-window or period in each
+                                step (ignored for time_period).
+        ===========    ======   ================================================            
+        """
+        
+        if key == 'date':
+            if method == 'time_window':
+                kw = {  'window_size': kwargs.get('window_size', 1),
+                        'step_size': 1 }
+                self.axes[key] = self._time_slice(**kw)
+
+            elif method == 'time_period' or method is None:
+                kw = {  'window_size': kwargs.get('window_size', 1),
+                        'step_size': kwargs.get('window_size', 1) }
+
+                self.axes[key] = self._time_slice(**kw)
+            else:
+                raise(ValueError(str(method) + " not a valid slicing method."))
+            
+        elif key == 'author':
+            self.axes[key] = {}
+            for i,p in self.data.iteritems():
+                for a in p.authors():
+                    try:
+                        self.axes[key][a].append(i)
+                    except KeyError:
+                        self.axes[key][a] = [i]
+        elif key in self.datakeys: # e.g. 'jtitle'
+            self.axes[key] = {}
+            for i,p in self.data.iteritems():
+                try:
+                    self.axes[key][p[key]].append(i)
+                except KeyError:
+                    self.axes[key][p[key]] = [i]
+        else:
+            raise(KeyError(str(key) + " not a valid key in data."))
+        
+    def _time_slice(self, **kwargs):
+        """
+        Slices data by date.
+
+        If step_size = 1, this is a sliding time-window. If step_size =
+        window_size, this is a time period slice.
+        
+        Parameters
+        ----------
+        kwargs : kwargs
+            See table, below.
+            
+        Returns
+        -------
+        slices : dict
+            Keys are start date of time slice, values are :class:`.Paper`
+            indices (controlled by index_by argument in 
+            :func:`.DataCollection.__init__` )
+        
+        Notes
+        -----
+        
+        Avilable kwargs:
+
+        ===========    ======   ================================================
+        Argument       Type     Description
+        ===========    ======   ================================================
+        window_size    int      Size of time-window or period, in years
+                                (default = 1).
+        step_size      int      Amount to advance time-window or period in each
+                                step (ignored for time_period).
+        ===========    ======   ================================================           
+        
+        """
+
+        window_size = kwargs.get('window_size', 1)
+        step_size = kwargs.get('step_size', 1)
+        start = kwargs.get('start', min([ p['date'] 
+                                            for p in self.data.values() ]))
+        end = kwargs.get('start', max([ p['date'] 
+                                            for p in self.data.values() ]))
+
+        slices = {}
+        for i in xrange(start, end-window_size+2, step_size):
+            slices[i] = [ k for k,p in self.data.iteritems() 
+                           if i <= p['date'] < i + window_size ]
+
+        return slices
+        
+    def union(self):
+        """
+        Yields the union of all dataslices.
+        
+        Returns
+        -------
+        list
+            List of :class:`.Paper` instances
+        """
+        
+        return self.data.values()
+        
+    def indices(self):
+        """
+        Yields a list of indices of all papers in this :class:`.DataCollection`
+        
+        Returns
+        -------
+        list
+            List of indices.
+        """
+        
+        return self.data.keys()
+        
+    def get_slices(self, key, papers=False):
+        """
+        Yields slices for key.
+        
+        Parameters
+        ----------
+        key : str
+            Key from :class:`.Paper` that has previously been used to slice data
+            in this :class:`.DataCollection` .
+        
+        Returns
+        -------
+        slices : dict
+            Keys are slice indices. If papers is True, values are lists of
+            :class:`.Paper` instances; otherwise returns paper indices (e.g.
+            'wosid').
+        """
+        
+        if key not in self.axes.keys():
+            raise(KeyError("Data has not been sliced by " + str(key)))
+        
+        slices = self.axes[key]
+         
+        if papers:  # Retrieve Papers.
+            for k,v in slices.iteritems():
+                slices[k] = [ self.data[i] for i in v ]
+        
+        return slices
+
+    def get_slice(self, key, index, papers=False):
+        """
+        Yields a specific slice.
+        
+        Parameters
+        ----------
+        key : str
+            Key from :class:`.Paper` that has previously been used to slice data
+            in this :class:`.DataCollection` .
+        index : str or int
+            Slice index for key (e.g. 1999 for 'date').
+        
+        Returns
+        -------
+        slice : list
+            List of paper indices in this :class:`.DataCollection` , or (if
+            papers is True) a list of :class:`.Paper` instances.
+        """
+        
+        if key not in self.axes.keys():
+            raise(KeyError("Data has not been sliced by " + str(key)))
+        if index not in self.axes[key].keys():
+            raise(KeyError(str(index) + " not a valid index for " + str(key)))
+        
+        slice = self.axes[key][index]
+        
+        if papers:
+            return [ self.data[s] for s in slice ]
+        return slice
+    
+    def get_by(self, key_indices, papers=False):
+        """
+        Given a set of (key, index) tuples, return the corresponding subset of
+        :class:`.Paper` indices (or :class:`.Paper` instances themselves, if 
+        papers is True).
+        
+        Parameters
+        ----------
+        key_indices : list
+            A list of (key, index) tuples.
+        
+        Returns
+        -------
+        plist : list
+            A list of paper indices, or :class:`.Paper` instances.
+
+        """
+        
+        slices = []
+        for k,i in key_indices:
+            slice = set(self.get_slice(k,i))
+            slices.append(slice)
+
+        plist = list( set.intersection(*slices) )
+        
+        if papers:
+            return [ self.data[s] for s in plist ]
+        return plist
+    
+    def _get_slice_i(self, key, i):
+        return self.axes[key].values()[i]
+        
+    def _get_by_i(self, key_indices):
+        slices = []
+        for k, i in key_indices:
+            slice = set(self._get_slice_i(k, i))
+            slices.append(slice)
+        
+        return list( set.intersection(*slices) )
+    
+    def get_axes(self):
+        """
+        Returns a list of all slice axes for this :class:`.DataCollection` .
+        """
+        
+        return self.axes.keys()
+    
+    def N_axes(self):
+        """
+        Returns the number of slice axes for this :class:`.DataCollection` .
+        """
+        
+        return len(self.axes.keys())
+    
+    def distribution(self):
+        """
+        Returns a Numpy array describing the number of :class:`.Paper`
+        associated with each slice-coordinate.
+        
+        WARNING: expensive for a :class:`.DataCollection` with many axes or
+        long axes. Consider using :func:`.distribution_2d` .
+        """
+        
+        shape = tuple( len(v) for v in self.axes.values() )
+        dist = np.zeros(shape)
+        axes = self.get_axes()
+
+        for indices in np.ndindex(shape):
+            dist[indices] = len( self._get_by_i(zip(axes, indices)))
+            
+        return dist
+            
+    def distribution_2d(self, x_axis, y_axis):
+        """
+        Returns a Numpy array describing the number of :class:`.Paper`
+        associated with each slice-coordinate, for x and y axes spcified.
+        """
+        
+        x_size = len(self.axes[x_axis])
+        y_size = len(self.axes[y_axis])
+        shape = (x_size, y_size)
+        dist = np.zeros(shape)
+        
+        for i in xrange(x_size):
+            for j in xrange(y_size):
+                dist[i, j] = len(self._get_by_i( [ (x_axis, i), (y_axis, j) ] ))
+        
+        return dist
+        
+    def subslices(self, papers=False):
+        """
+        Generator for paper indices (or :class:`.Paper` instances) for each 
+        subslice in the :class:`.DataCollection` .
+        
+        Parameters
+        ----------
+        papers : bool
+            If True, yields :class:`.Paper` instances instead of indices.
+        """
+        
+        pass
+        
 
 class GraphCollection(object):
     """
@@ -141,7 +503,7 @@ class GraphCollection(object):
 
         return
 
-    def __setitem__(self, index, value):
+    def __setitem__(self, index, graph, metadata=None):
         """
         The value param can be either a Graph, or a (Graph, metadata) tuple.
         Metadata can be anything, but is probably most profitably a dictionary.
@@ -150,26 +512,19 @@ class GraphCollection(object):
         ----------
         index
             This can be anything used to refer to the graph.
-        value : :class:`.nx.classes.graph.Graph` or :type:`tuple`
-            If a tuple, value[0] must be of type
-            :class:`.nx.classes.graph.Graph`. tuple[1] should contain metadata.
+        graph : :class:`.nx.classes.graph.Graph`
 
         Raises
         ------
         ValueError : Graph must be of type networkx.classes.graph.Graph
-            Provided value (or value[0]) is not a Graph.
+            If value is not a Graph.
         """
 
-        if type(value) is tuple:
-            g, metadata = value
-            self.metadata[index] = metadata
-        else:
-            g = value
-
-        if type(g) is not nx.classes.graph.Graph:
+        if type(graph) is not nx.classes.graph.Graph:
             raise(ValueError("Graph must be type networkx.classes.graph.Graph"))
 
-        self.graphs[index] = value
+        self.graphs[index] = graph
+        self.metadata[index] = metadata
 
     def __getitem__(self, key):
         return self.graphs[key]
@@ -290,3 +645,27 @@ class GraphCollection(object):
             raise IOError("File does not exist, or cannot be read.")
 
         return obj_read
+        
+    def compose(self):
+        """
+        Returns the simple union of all :class:`.Graph` in the 
+        :class:`.GraphCollection` .
+        
+        Returns
+        -------
+        composed : :class:`.Graph`
+            Simple union of all :class:`.Graph` in the 
+            :class:`.GraphCollection` .
+            
+        Notes
+        -----
+        
+        Node or edge attributes that vary over slices should be ignored.
+        
+        """
+        
+        composed = nx.Graph()
+        for k, G in self.graphs.iteritems():
+            composed = nx.compose(composed, G)
+        
+        return composed
