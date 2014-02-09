@@ -3,13 +3,13 @@ from pprint import pprint
 
 #filepath = "../testsuite/testin/instituitions_2_types_input.txt"
 filepath = "../testsuite/testin/iptraffic.txt"
-wos_list = rd.wos.parse_wos(filepath)
-meta_list=rd.wos.wos2meta(wos_list)
+wos_list = rd.wos.parse(filepath)
+meta_list=rd.wos.convert(wos_list)
 
 import tethne.data as ds
 g1 = ds.GraphCollection()
 g2 = ds.GraphCollection()
-
+g3 = ds.GraphCollection()
 
 # DiGraph and MultiGraph so these cannot be used as a parameter
 # to GraphCollection
@@ -35,8 +35,8 @@ g2.__setitem__('ayjid',author_coup)
 
 
 # g1.__getitem__('ayjid')
-#print g1.nodes()
-#print g1.edges()
+# print g1.nodes()
+# print g1.edges()
 
 # Append 2 objects to
 
@@ -45,9 +45,9 @@ g2.save\
          ("../testsuite/testout/graphcollections.txt")
 
 g1.save\
-    ("../testsuite/testout/graphcollections.txt")
-
-loaded= \
-    g1.load("../testsuite/testout/graphcollections.txt")
+       ("../testsuite/testout/graphcollections.txt")
 
 
+g3.load("../testsuite/testout/graphcollections.txt")
+
+#print "G3::::", g3.edges()
