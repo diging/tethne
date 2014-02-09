@@ -15,6 +15,7 @@ import xml.etree.ElementTree as ET
 import tethne.utilities as util
 import os
 import re
+import uuid
 
 # MACRO for printing the 'print' statement values.
 # 0 prints nothing in the console.
@@ -413,9 +414,13 @@ def _parse_institutions(ref):
 
 def convert(wos_data):
     """
+    Convert parsed field-tagged data to :class:`.Paper` instances.
+
     Convert a dictionary or list of dictionaries with keys from the
     Web of Science field tags into a :class:`.Paper` instance or list of
     :class:`.Paper` instances, the standard for Tethne.
+    
+    Each :class:`.Paper` is tagged with an accession id for this conversion.
 
     **Usage**
 
@@ -442,6 +447,9 @@ def convert(wos_data):
     important for any graph with authors as nodes.
 
     """
+    
+    accession = str(uuid.uuid4())
+    
     #create a Paper for each wos_dict and append to this list
     wos_meta = []
 
@@ -539,6 +547,8 @@ def convert(wos_data):
                 #print 'meta_cr_list' , meta_cr_list
             paper['citations'] = meta_cr_list
 
+        paper['accession'] = accession
+        
         wos_meta.append(paper)
     # End wos_dict for loop.
 

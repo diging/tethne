@@ -14,10 +14,14 @@ import xml.etree.ElementTree as ET
 import re
 from tethne.utilities import dict_from_node, strip_non_ascii
 from nltk.corpus import stopwords
+import uuid
 
 def read(datapath):
     """
     Yields :class:`.Paper` s from JSTOR DfR package.
+    
+    Each :class:`.Paper` is tagged with an accession id for this 
+    read/conversion.    
 
     **Usage**
 
@@ -42,9 +46,13 @@ def read(datapath):
     except IOError:
         raise IOError(datapath+"citations.XML not found.")
 
+    accession = str(uuid.uuid4())
+
     papers = []
     for article in root:
-        papers.append(_handle_paper(article))
+        paper = _handle_paper(article)
+        paper['accession'] = accession
+        papers.append(paper)
 
     return papers
 
