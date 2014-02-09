@@ -20,21 +20,23 @@ from collections import defaultdict
 # 1 prints all print statements in the console.
 DEBUG = 0
 
-def author_papers(doc_list, paper_id, *paper_attribs):
+def author_papers(papers, paper_id, paper_attribs=[]):
     """
     Generate an author_papers network NetworkX directed graph.
 
-    **Nodes** -- Two kinds of nodes with distinguishing "type" attributes.
-        * type = paper    - a paper in doc_list
-        * type = person   - a person in doc_list
-
-    Papers also have node attributes defined by paper_attribs.
-
-    **Edges** -- Directed, Author -> his/her Paper
+    ==============     =========================================================
+    Element            Description
+    ==============     =========================================================
+    Node               Two kinds of nodes with distinguishing "type" attributes:
+                       * type = paper    - a paper in papers
+                       * type = person   - a person in papers
+                       Papers node attributes defined by paper_attribs.
+    Edge               Directed, Author -> his/her Paper.
+    ==============     =========================================================
 
     Parameters
     ----------
-    doc_list : list
+    papers : list
         A list of wos_objects.
     paper_id : string
         A key from :class:`.Paper` used to identify the nodes.
@@ -61,7 +63,7 @@ def author_papers(doc_list, paper_id, *paper_attribs):
     if paper_id not in meta_keys:
         raise KeyError('paper_id' + paper_id + ' cannot be used to identify' +
                        ' papers.')
-    for entry in doc_list:
+    for entry in papers:
         # Define paper_attribute dictionary.
         paper_attrib_dict = util.subdict(entry, paper_attribs)
         paper_attrib_dict['type'] = 'paper'
@@ -78,15 +80,16 @@ def author_papers(doc_list, paper_id, *paper_attribs):
 
     return author_papers_graph
 
-def coauthors(papers, *edge_attribs):
+def coauthors(papers, edge_attribs=[]):
     """
     Generate a co-author network.
 
-    **Nodes** -- author names
-
-    **Node attributes** -- none
-
-    **Edges** -- (a,b) in E(G) if a and b are coauthors on the same paper.
+    ==============     =========================================================
+    Element            Description
+    ==============     =========================================================
+    Node               Author name.
+    Edges              (a,b) in E(G) if a and b are coauthors on the same paper.
+    ==============     =========================================================
 
     Parameters
     ----------
@@ -180,17 +183,18 @@ def coauthors(papers, *edge_attribs):
 
     return coauthors_graph
 
-def author_institution(Papers, *edge_attribs):
+def author_institution(Papers, edge_attribs=[]):
     """
     Generate a bi-partite graph with people and institutions as vertices, and
     edges indicating affiliation. This may be slightly ambiguous for WoS data
     where num authors != num institutions.
 
-    **Nodes** -- author names
-
-    **Node attributes** -- none
-
-    **Edges** -- (a,b) in E(G) if a and b are authors on the same paper.
+    ==============     =========================================================
+    Element            Description
+    ==============     =========================================================
+    Node               Author name.
+    Edge               (a,b) in E(G) if a and b are authors on the same paper.
+    ==============     =========================================================
 
     Parameters
     ----------
@@ -239,13 +243,15 @@ def author_coinstitution(Papers, threshold):
     with the same institution. This may be slightly ambiguous for WoS data
     where num authors != num institutions.
 
-    **Nodes** -- Authors.
-
-    **Node attributes** -- type (string). 'author' or 'institution'.
-
-    **Edges** -- (a, b) where a and b are affiliated with the same institution.
-
-    **Edge attributes** - overlap (int). number of shared institutions.
+    ==============     =========================================================
+    Element            Description
+    ==============     =========================================================
+    Node               Authors.
+    Node Attribute     type (string). 'author' or 'institution'.
+    Edges              (a, b) where a and b are affiliated with the same 
+                       institution.
+    Edge attribute     overlap (int). number of shared institutions.
+    ==============     =========================================================
 
     Parameters
     ----------
@@ -301,40 +307,33 @@ def author_coinstitution(Papers, threshold):
 
     return coinstitution
 
-def author_cocitation(meta_list, threshold):
+def author_cocitation(papers, threshold):
     """
     Creates an author cocitation network. Vertices are authors, and an edge
     implies that two authors have been cited (via their publications) by in at
     least one paper in the dataset.
 
-    **Nodes** -- Authors
-
-    **Node attributes** -- None
-
-    **Edges** -- (a, b) if a and b are referenced by the same paper in the
-    meta_list
-
-    **Edge attributes** -- 'weight', the number of papers that co-cite two
-    authors.
+    ==============     =========================================================
+    Element            Description
+    ==============     =========================================================
+    Nodes              Author name.
+    Edge               (a, b) if a and b are referenced by the same paper in
+                       papers
+    Edge attribute     'weight', the number of papers that co-cite a and b.
+    ==============     =========================================================
 
     Parameters
     ----------
-    meta_list : list
+    papers : list
         a list of :class:`.Paper` objects.
-
     threshold : int
-        A random value provided by the user. If its greater than zero two nodes
-        should share something common.
-
+        Minimum number of co-citations required to create an edge between 
+        authors.
+        
     Returns
     -------
-    cocitation : networkx.Graph
+    cocitation : :class:`.networkx.Graph`
         A cocitation network.
-
-    Notes
-    -----
-    Should be able to specify a threshold -- number of co-citations required to
-    draw an edge.
 
     """
 
@@ -346,8 +345,7 @@ def author_cocitation(meta_list, threshold):
     cocitations = {}
     delim = ' '
 
-    for paper in meta_list:
-        #print '----New paper---'
+    for paper in papers:
         # Some papers don't have citations.
         if paper['citations'] is not None:
             # n is the number of papers in the provided list of Papers.
@@ -364,16 +362,9 @@ def author_cocitation(meta_list, threshold):
                     # ai_i_str is the author i's first name
                     # converting list to str
 
-                    # commented the following line
-                    # because of some issues in MAP.
-                    # Now uncommenting back as issue is handled in wos.py
                     ai_i_str = \
                         ''.join(map(str,(paper['citations'][i]['auinit'])))
-                    #-------------------------------------------------
-                    # last_name_list = paper['citations'][i]['auinit']
-                    # Last name of author i, converted to str.
-                    # ai_i_str = str(last_name_list).strip('[]')
-                    #-------------------------------------------------
+
                     # Making it a tuple,that it becomes key for cocitations dict
                     author_i_str = al_i_str + delim + ai_i_str
 
@@ -388,16 +379,8 @@ def author_cocitation(meta_list, threshold):
                         # ai_j_str is the author j's first name
                         # converting list to str
 
-                        # commented the following line \
-                        # because of some issues in MAP.
-                        # Now uncommenting back as issue is handled in wos.py
                         ai_j_str = ''.join(map(str, \
                                            (paper['citations'][j]['auinit'])))
-                        #-------------------------------------------------
-                        # last_name_list = paper['citations'][j]['auinit']
-                        # last name of author i, converted to str.
-                        # ai_j_str = str(last_name_list).strip('[]')
-                        #-------------------------------------------------
 
                         # Making it a tuple so that it becomes the key for
                         # cocitations dict
