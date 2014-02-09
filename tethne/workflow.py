@@ -3,7 +3,7 @@ Methods for network analysis.
 """
 
 from tethne.data import DataCollection, GraphCollection
-from tethne.builders import graphCollectionBuilder
+from tethne.builders import authorCollectionBuilder
 import tethne.analyze as az
 
 # [#60463184]

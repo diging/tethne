@@ -1,3 +1,14 @@
+"""
+Classes for building a :class:`.GraphCollection` . 
+
+.. autosummary::
+
+   builder
+   authorCollectionBuilder
+   paperCollectionBuilder
+
+"""
+
 import networkx as nx
 import tethne.networks as nt
 from tethne.data import GraphCollection
@@ -31,8 +42,8 @@ class paperCollectionBuilder(builder):
            >>> from tethne.data import DataCollection
            >>> D = DataCollection(data) # Indexed by wosid, by default.
            >>> D.slice('date', 'time_window', window_size=4)
-           >>> from tethne.builders import graphCollectionBuilder
-           >>> builder = graphCollectionBuilder(D)
+           >>> from tethne.builders import paperCollectionBuilder
+           >>> builder = paperCollectionBuilder(D)
            >>> C = builder.build('date', 'bibliographic_coupling', threshold=2)
            >>> C
            <tethne.data.GraphCollection at 0x104ed3550>
@@ -74,8 +85,8 @@ class authorCollectionBuilder(builder):
            >>> from tethne.data import DataCollection
            >>> D = DataCollection(data) # Indexed by wosid, by default.
            >>> D.slice('date', 'time_window', window_size=4)
-           >>> from tethne.builders import graphCollectionBuilder
-           >>> builder = graphCollectionBuilder(D)
+           >>> from tethne.builders import authorCollectionBuilder
+           >>> builder = authorCollectionBuilder(D)
            >>> C = builder.build('date', 'coauthors')
            >>> C
            <tethne.data.GraphCollection at 0x104ed3550>

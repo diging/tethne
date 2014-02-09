@@ -23,13 +23,6 @@ def read(datapath):
     Each :class:`.Paper` is tagged with an accession id for this 
     read/conversion.    
 
-    **Usage**
-
-    .. code-block:: python
-
-       >>> import tethne.readers as rd
-       >>> papers = rd.dfr.read("/Path/to/DfR")
-
     Parameters
     ----------
     filepath : string
@@ -39,6 +32,14 @@ def read(datapath):
     -------
     papers : list
         A list of :class:`.Paper` objects.
+
+    Examples
+    --------
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> papers = rd.dfr.read("/Path/to/DfR")        
     """
 
     try:
@@ -60,13 +61,6 @@ def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
     """
     Yields N-grams from a JSTOR DfR dataset.
 
-    **Usage**
-
-    .. code-block:: python
-
-       >>> import tethne.readers as rd
-       >>> trigrams = rd.dfr.ngrams("/Path/to/DfR", N='tri')
-
     Parameters
     ----------
     filepath : string
@@ -84,6 +78,14 @@ def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
     -------
     ngrams : dict
         Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
+
+    Examples
+    --------
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> trigrams = rd.dfr.ngrams("/Path/to/DfR", N='tri')        
     """
 
     gram_path = datapath + "/" + N + "grams"

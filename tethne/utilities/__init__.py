@@ -1,5 +1,5 @@
 """
-Contains utilities for building networks in networks.py
+Helper functions for :mod:`tethne.networks` .
 """
 def contains(l, f):
     """
