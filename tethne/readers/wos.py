@@ -24,6 +24,7 @@ DEBUG = 0
 
 # general functions
 
+
 def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     """
     Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid
@@ -168,6 +169,8 @@ def parse(filepath):
 
     paper_start_key = 'PT'
     paper_end_key = 'ER'
+    stop_flag = 0
+    
 
     # Try to read filepath
     line_list = []
@@ -179,26 +182,33 @@ def parse(filepath):
 
     if len(line_list) is 0:
         raise IOError("Unable to read filepath or filepath is empty.")
-
     # Convert the data in the file to a usable list of dictionaries.
     # Note: first two lines of file are not related to any paper therein.
     last_field_tag = paper_start_key #initialize to something.
     for line in line_list[2:]:
         line = util.strip_non_ascii(line)
         field_tag = line[:2]
+        
+        if field_tag == ' ':
+            print " NULL"
+        
         if field_tag == paper_start_key:
             # Then prepare for next paper.
             wos_dict = _new_wos_dict()
 
         if field_tag == paper_end_key:
             # Then add paper to our list.
-            wos_list.append(wos_dict)
+            wos_list.append(wos_dict)  
 
         # Handle keys like AU,AF,CR that continue over many lines.
         if field_tag == '  ':
             field_tag = last_field_tag
+           
+            
+
 
         # Add value for the key to the wos_dict: the rest of the line.
+    
         try:
             if field_tag in ['AU', 'AF', 'CR', 'C1']:
                 # These unique fields use the new line delimiter to distinguish
@@ -209,7 +219,8 @@ def parse(filepath):
             else:
                 wos_dict[field_tag] += ' ' + str(line[3:])
         except (KeyError, TypeError, UnboundLocalError):
-            wos_dict[field_tag] = str(line[3:])
+                wos_dict[field_tag] = str(line[3:])
+
 
         last_field_tag = field_tag
     # End line loop.
@@ -584,7 +595,6 @@ def read(datapath):
     papers = convert(wl)
     return papers
 
-
 # [#60462784]
 def from_dir(path):
     """
@@ -619,16 +629,18 @@ def from_dir(path):
 
     try:
         files = os.listdir(path)
+        # print " Current Working directory is : ", os.getcwd()
     except IOError:
         raise IOError("Invalid path.")
-
+            
     for f in files:
-        try:
-            print "Loaded " + f
-            wos_list += parse(path + "/" + f)
-        except (IOError, DataError): # Ignore files that don't contain WoS data.
-            print "Could not load " + f
-            pass
+        if not f.startswith('.'): # Hidden Files ignore
+            try:
+                # print "Loading " + f
+                wos_list += parse(path + "/" + f)
+            except (IOError,UnboundLocalError): # Ignore files that don't contain WoS data.
+                # print  "::::" + "Could not load " + f
+                pass
 
     return convert(wos_list)
 
@@ -748,3 +760,7 @@ def _wos2paper_map():
                     'AB':'abstract'    }
 
     return translator
+
+#Custom Error Defined
+class DataError(Exception):
+    pass
