@@ -1,122 +1,105 @@
+"""
+Classes for building a :class:`.GraphCollection` . 
+
+.. autosummary::
+
+   builder
+   authorCollectionBuilder
+   paperCollectionBuilder
+
+"""
+
 import networkx as nx
 import tethne.networks as nt
-import tethne.data as dt
+from tethne.data import GraphCollection
 import types
 
 class builder(object):
     """Base class for builders."""
 
-    def __init__(self, data):
-        self.data = data
+    def __init__(self, D):
+        self.D = D
 
-class graphCollectionBuilder(builder):
+class paperCollectionBuilder(builder):
     """
-    Builds a :class:`.GraphCollection` from a list of :class:`.Paper`
-    instances.
+    Builds a :class:`.GraphCollection` with method in 
+    :mod:`tethne.networks.papers` from a :class:`.DataCollection` .
     """
 
-    def build(self, method, graph_type, graph_args={}, **kwargs):
+    def build(self, graph_axis, graph_type, **kwargs):
         """
-        Yields a :class:`.GraphCollection` .
-
+        Generates graphs for each slice along graph_axis in
+        :class:`.DataCollection` D.
+        
+        Other axes in D are treated as attributes.
+        
         **Usage**
-
+    
         .. code-block:: python
 
            >>> import tethne.readers as rd
-           >>> from tethne.builders import graphCollectionBuilder
-           >>> data = rd.wos.read("/Path/to/data.txt")
-           >>> builder = bd.graphCollectionBuilder(data)
-           >>> C = builder.build()
-
-
-        Parameters
-        ----------
-        method : string
-            See table below for available methods (to be extended).
-        graph_type : string
-            The name of a method from :mod:`tethne.networks.papers`
-        graph_args : dict
-            Arguments passed to graph_type method as kwargs.
-        kwargs : kwargs
-            See methods table, below.
-
-        Returns
-        -------
-        C : :class:`.GraphCollection`
-
-        Notes
-        -----
-
-        Methods available for building GraphCollections:
-
-        ===========    ========================================    =============
-        Method         Description                                 kwargs
-        ===========    ========================================    =============
-        time_window    Slices data using a sliding time-window,    window_size
-                       and builds a
-                       :class:`.nx.classes.graph.Graph` from
-                       each slice. Graphs are indexed using the
-                       start of the time-window.
-        time_period    Slices data into time periods of equal      window_size
-                       length, and builds a                        step_size
-                       :class:`.nx.classes.graph.Graph` from
-                       each slice. Graphs are indexed using the
-                       start of the time period.
-        ===========    ========================================    =============
-
-        Avilable kwargs:
-
-        ===========    ======   ================================================
-        Argument       Type     Description
-        ===========    ======   ================================================
-        window_size    int      Size of time-window or period, in years
-                                (default = 1).
-        step_size      int      Amount to advance time-window or period in each
-                                step (ignored for time_period).
-        ===========    ======   ================================================
-
-        """
-
-        # Does the graph method exist?
-        if type(nt.papers.__dict__[graph_type]) is not types.FunctionType:
-            raise ValueError("No such function in tethne.networks.papers")
-
-        C = dt.GraphCollection()
-
-        # Slice the data using specified method.
-        if method == 'time_window':
-            kw = {  'window_size': kwargs.get('window_size', 1),
-                    'step_size': 1 }
-
-            self._time_slice(**kw)
-
-        elif method == 'time_period':
-            kw = {  'window_size': kwargs.get('window_size', 1),
-                    'step_size': kwargs.get('window_size', 1) }
-
-            self._time_slice(**kw)
-
+           >>> data = rd.wos.read("/Path/to/wos/data.txt")
+           >>> from tethne.data import DataCollection
+           >>> D = DataCollection(data) # Indexed by wosid, by default.
+           >>> D.slice('date', 'time_window', window_size=4)
+           >>> from tethne.builders import paperCollectionBuilder
+           >>> builder = paperCollectionBuilder(D)
+           >>> C = builder.build('date', 'bibliographic_coupling', threshold=2)
+           >>> C
+           <tethne.data.GraphCollection at 0x104ed3550>
+           
+           """
+        
+        # TODO: Check to make sure we have the right stuff.
+        
+        C = GraphCollection()
+        
         # Build a Graph for each slice.
-        for key, data in self.slices.iteritems():
-            C[key] = nt.papers.__dict__[graph_type](data, **graph_args)
+        for key, pids in self.D.axes[graph_axis].iteritems():
+            data = [ self.D.data[p] for p in pids ]
+            kwargs['node_attribs'] = self.D.get_axes()
+            kwargs['node_id'] = self.D.index_by
+            C[key] = nt.papers.__dict__[graph_type](data, **kwargs)
 
         return C
 
-    def _time_slice(self, **kwargs):
+class authorCollectionBuilder(builder):
+    """
+    Builds a :class:`.GraphCollection` with method in 
+    :mod:`tethne.networks.authors` from a :class:`.DataCollection` .
+    """
+    
+    def build(self, graph_axis, graph_type, **kwargs):
         """
-        Slices data into subsets by date.
+        Generates graphs for each slice along graph_axis in
+        :class:`.DataCollection` D.
+        
+        Other axes in D are treated as attributes.
+        
+        **Usage**
+    
+        .. code-block:: python
 
-        If step_size = 1, this is a sliding time-window. If step_size =
-        window_size, this is a time period slice.
-        """
+           >>> import tethne.readers as rd
+           >>> data = rd.wos.read("/Path/to/wos/data.txt")
+           >>> from tethne.data import DataCollection
+           >>> D = DataCollection(data) # Indexed by wosid, by default.
+           >>> D.slice('date', 'time_window', window_size=4)
+           >>> from tethne.builders import authorCollectionBuilder
+           >>> builder = authorCollectionBuilder(D)
+           >>> C = builder.build('date', 'coauthors')
+           >>> C
+           <tethne.data.GraphCollection at 0x104ed3550>
+           
+           """
+        
+        # TODO: Check to make sure we have the right stuff.
+        
+        C = GraphCollection()
+        
+        # Build a Graph for each slice.
+        for key, pids in self.D.axes[graph_axis].iteritems():
+            data = [ self.D.data[p] for p in pids ]
+            C[key] = nt.authors.__dict__[graph_type](data, **kwargs)
 
-        window_size = kwargs.get('window_size', 1)
-        step_size = kwargs.get('step_size', 1)
-        start = kwargs.get('start', min([ p['date'] for p in self.data ]))
-        end = kwargs.get('start', max([ p['date'] for p in self.data ]))
-
-        self.slices = {}
-        for i in xrange(start, end-window_size+2, step_size):
-            self.slices[i] = [ p for p in self.data
-                                if i <= p['date'] < i + window_size ]
+        return C    

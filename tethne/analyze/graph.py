@@ -27,7 +27,6 @@ def node_global_closeness_centrality(g, node, normalize=True):
         Global closeness centrality of node.
     """
 
-    g = nt.authors.coauthors(slice)
     c = 0
     try:
         for pl in nx.shortest_path_length(g, node).values():

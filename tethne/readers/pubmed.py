@@ -10,6 +10,7 @@ with care.
 
 import tethne.data as ds
 import xml.etree.ElementTree as ET
+import uuid
 
 
 # PubMed functions
@@ -41,6 +42,9 @@ def read(filepath):
     * http://www.ncbi.nlm.nih.gov/pmc/pmcdoc/tagging-guidelines/citations/v2/citationtags.html#2Articlewithmorethan10authors%28listthefirst10andaddetal%29
     * http://dtd.nlm.nih.gov/publishing/
     
+    Each :class:`.Paper` is tagged with an accession id for this 
+    read/conversion.  
+    
     **Usage**
     
     .. code-block:: python
@@ -67,6 +71,8 @@ def read(filepath):
     except IOError: # File does not exist, or couldn't be read.
         raise IOError("File does not exist, or cannot be read.")
 
+    accession = str(uuid.uuid4())
+
     # define location of simple article meta data relative to xml tree rooted
     # at 'article'
     meta_loc = {'atitle':'./front/article-meta/title-group/article-title',
@@ -87,25 +93,25 @@ def read(filepath):
 
     meta_list = []
     for article in root.iter('article'):
-        meta_dict = ds.Paper()
+        paper = ds.Paper()
 
         # collect information from the 'front' section of the article
         # collect the simple data
         for key in meta_loc.iterkeys():
             key_data = article.find(meta_loc[key])
             if key_data is not None:
-                meta_dict[key] = key_data.text
+                paper[key] = key_data.text
             else:
-                meta_dict[key] = None
+                paper[key] = None
 
         # collect doi and pmid
         id_list = article.findall('./front/article-meta/article-id')
         for identifier in id_list:
             id_type = identifier.get('pub-id-type')
             if id_type == 'doi':
-                meta_dict['doi'] = identifier.text
+                paper['doi'] = identifier.text
             elif id_type == 'pmid':
-                meta_dict['pmid'] = identifier.text
+                paper['pmid'] = identifier.text
             else:
                 # if never found, remain at None from initialization
                 pass
@@ -132,8 +138,8 @@ def read(filepath):
                     auinit.append(given_name.text[0])
                 else:
                     auinit.append(None)
-        meta_dict['aulast'] = aulast
-        meta_dict['auinit'] = auinit
+        paper['aulast'] = aulast
+        paper['auinit'] = auinit
 
         # collect date
         pub_dates = article.findall('./front/article-meta/pub-date')
@@ -145,14 +151,14 @@ def read(filepath):
                 year = pub_date.find('./year')
                 if year is not None:
                     # then it was found
-                    meta_dict['date'] = year.text
+                    paper['date'] = year.text
                 else:
-                    meta_dict['date'] = None
+                    paper['date'] = None
 
-        meta_list.append(meta_dict)
+        meta_list.append(paper)
 
         # construct ayjid
-        meta_dict['ayjid'] = create_ayjid(**meta_dict)
+        paper['ayjid'] = create_ayjid(**paper)  # THIS IS BROKEN.
 
         # citations
         citations_list = []
@@ -166,9 +172,9 @@ def read(filepath):
             for key in cit_meta_loc.iterkeys():
                 key_data = cite.find(cit_meta_loc[key])
                 if key_data is not None:
-                    meta_dict[key] = key_data.text
+                    paper[key] = key_data.text
                 else:
-                    meta_dict[key] = None
+                    paper[key] = None
 
             # doi and pmid
             pub_id = cite.find('./pub-id')
@@ -223,9 +229,11 @@ def read(filepath):
             citations_list.append(cite_dict)
         # end cite loop
 
-        meta_dict['citations'] = citations_list
+        paper['citations'] = citations_list
 
-        meta_list.append(meta_dict)
+        paper['accession'] = accession
+
+        meta_list.append(paper)
     # end article loop
 
     return meta_list

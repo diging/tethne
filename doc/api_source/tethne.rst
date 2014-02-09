@@ -25,6 +25,14 @@ tethne Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`workflow` Module
+----------------------
+
+.. automodule:: tethne.workflow
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 

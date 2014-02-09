@@ -1,7 +1,7 @@
 """
 Methods for generating matrices from :class:`.Paper` objects and other data.
 
-.. autsummary::
+.. autosummary::
 
    dfr
    

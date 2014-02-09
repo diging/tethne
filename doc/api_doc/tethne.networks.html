@@ -62,7 +62,8 @@
 <h1>networks Package<a class="headerlink" href="#networks-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
 <h2><tt class="xref py py-mod docutils literal"><span class="pre">networks</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-tethne.networks"></span><p>Each network relies on certain meta data in the <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> associated with
+<span class="target" id="module-tethne.networks"></span><p>Methods for building networks from bibliographic data.</p>
+<p>Each network relies on certain meta data in the <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> associated with
 each document. Often we wish to construct a network with nodes representing
 these documents and edges representing relationships between those documents,
 but this is not always the case.</p>
@@ -72,7 +73,7 @@ benefits. If the documents to be networked come from a single database source
 such as the Web of Science, wosid is most appropriate. If not, using doi
 will result in a more accurate, but also more sparse network; while ayjid
 will result in a less accurate, but more complete network.</p>
-<p>Any type of meta data from the <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> may be used as an identifier,
+<p>Any type of meta data from the <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> may be used as an identifier,
 however.</p>
 <p>We use &#8220;head&#8221; and &#8220;tail&#8221; nomenclature to refer to the members of a directed
 edge (x,y), x -&gt; y, xy, etc. by calling x the &#8220;tail&#8221; and y the &#8220;head&#8221;.</p>
@@ -106,51 +107,68 @@ edge (x,y), x -&gt; y, xy, etc. by calling x the &#8220;tail&#8221; and y the &#
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.authors.author_cocitation" title="tethne.networks.authors.author_cocitation"><tt class="xref py py-obj docutils literal"><span class="pre">author_cocitation</span></tt></a>(meta_list,&nbsp;threshold)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.authors.author_cocitation" title="tethne.networks.authors.author_cocitation"><tt class="xref py py-obj docutils literal"><span class="pre">author_cocitation</span></tt></a>(papers,&nbsp;threshold)</td>
 <td>Creates an author cocitation network.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.networks.authors.author_coinstitution" title="tethne.networks.authors.author_coinstitution"><tt class="xref py py-obj docutils literal"><span class="pre">author_coinstitution</span></tt></a>(Papers,&nbsp;threshold)</td>
 <td>Create a graph with people as vertices, and edges indicating affiliation with the same institution.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.authors.author_institution" title="tethne.networks.authors.author_institution"><tt class="xref py py-obj docutils literal"><span class="pre">author_institution</span></tt></a>(Papers,&nbsp;*edge_attribs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.authors.author_institution" title="tethne.networks.authors.author_institution"><tt class="xref py py-obj docutils literal"><span class="pre">author_institution</span></tt></a>(Papers[,&nbsp;edge_attribs])</td>
 <td>Generate a bi-partite graph with people and institutions as vertices, and edges indicating affiliation.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.networks.authors.author_papers" title="tethne.networks.authors.author_papers"><tt class="xref py py-obj docutils literal"><span class="pre">author_papers</span></tt></a>(doc_list,&nbsp;paper_id,&nbsp;*paper_attribs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.networks.authors.author_papers" title="tethne.networks.authors.author_papers"><tt class="xref py py-obj docutils literal"><span class="pre">author_papers</span></tt></a>(papers,&nbsp;paper_id[,&nbsp;paper_attribs])</td>
 <td>Generate an author_papers network NetworkX directed graph.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.authors.coauthors" title="tethne.networks.authors.coauthors"><tt class="xref py py-obj docutils literal"><span class="pre">coauthors</span></tt></a>(papers,&nbsp;*edge_attribs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.authors.coauthors" title="tethne.networks.authors.coauthors"><tt class="xref py py-obj docutils literal"><span class="pre">coauthors</span></tt></a>(papers[,&nbsp;edge_attribs])</td>
 <td>Generate a co-author network.</td>
 </tr>
 </tbody>
 </table>
 <dl class="function">
 <dt id="tethne.networks.authors.author_cocitation">
-<tt class="descclassname">tethne.networks.authors.</tt><tt class="descname">author_cocitation</tt><big>(</big><em>meta_list</em>, <em>threshold</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/authors.html#author_cocitation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.authors.author_cocitation" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">tethne.networks.authors.</tt><tt class="descname">author_cocitation</tt><big>(</big><em>papers</em>, <em>threshold</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/authors.html#author_cocitation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.authors.author_cocitation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates an author cocitation network. Vertices are authors, and an edge
 implies that two authors have been cited (via their publications) by in at
 least one paper in the dataset.</p>
-<p><strong>Nodes</strong> &#8211; Authors</p>
-<p><strong>Node attributes</strong> &#8211; None</p>
-<p><strong>Edges</strong> &#8211; (a, b) if a and b are referenced by the same paper in the
-meta_list</p>
-<p><strong>Edge attributes</strong> &#8211; &#8216;weight&#8217;, the number of papers that co-cite two
-authors.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Element</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Nodes</td>
+<td>Author name.</td>
+</tr>
+<tr class="row-odd"><td>Edge</td>
+<td>(a, b) if a and b are referenced by the same paper in
+papers</td>
+</tr>
+<tr class="row-even"><td>Edge attribute</td>
+<td>&#8216;weight&#8217;, the number of papers that co-cite a and b.</td>
+</tr>
+</tbody>
+</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>meta_list</strong> : list</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
 <blockquote>
-<div><p>a list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects.</p>
+<div><p>a list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects.</p>
 </div></blockquote>
 <p><strong>threshold</strong> : int</p>
 <blockquote>
-<div><p>A random value provided by the user. If its greater than zero two nodes
-should share something common.</p>
+<div><p>Minimum number of co-citations required to create an edge between 
+authors.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>cocitation</strong> : networkx.Graph</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>cocitation</strong> : <tt class="xref py py-class docutils literal"><span class="pre">networkx.Graph</span></tt></p>
 <blockquote class="last">
 <div><p>A cocitation network.</p>
 </div></blockquote>
@@ -158,9 +176,6 @@ should share something common.</p>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Notes</p>
-<p>Should be able to specify a threshold &#8211; number of co-citations required to
-draw an edge.</p>
 </dd></dl>
 
 <dl class="function">
@@ -169,10 +184,32 @@ draw an edge.</p>
 <dd><p>Create a graph with people as vertices, and edges indicating affiliation
 with the same institution. This may be slightly ambiguous for WoS data
 where num authors != num institutions.</p>
-<p><strong>Nodes</strong> &#8211; Authors.</p>
-<p><strong>Node attributes</strong> &#8211; type (string). &#8216;author&#8217; or &#8216;institution&#8217;.</p>
-<p><strong>Edges</strong> &#8211; (a, b) where a and b are affiliated with the same institution.</p>
-<p><strong>Edge attributes</strong> - overlap (int). number of shared institutions.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Element</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Node</td>
+<td>Authors.</td>
+</tr>
+<tr class="row-odd"><td>Node Attribute</td>
+<td>type (string). &#8216;author&#8217; or &#8216;institution&#8217;.</td>
+</tr>
+<tr class="row-even"><td>Edges</td>
+<td>(a, b) where a and b are affiliated with the same
+institution.</td>
+</tr>
+<tr class="row-odd"><td>Edge attribute</td>
+<td>overlap (int). number of shared institutions.</td>
+</tr>
+</tbody>
+</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -198,26 +235,42 @@ should share something common.</p>
 
 <dl class="function">
 <dt id="tethne.networks.authors.author_institution">
-<tt class="descclassname">tethne.networks.authors.</tt><tt class="descname">author_institution</tt><big>(</big><em>Papers</em>, <em>*edge_attribs</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/authors.html#author_institution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.authors.author_institution" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">tethne.networks.authors.</tt><tt class="descname">author_institution</tt><big>(</big><em>Papers</em>, <em>edge_attribs=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="_modules/tethne/networks/authors.html#author_institution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.authors.author_institution" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a bi-partite graph with people and institutions as vertices, and
 edges indicating affiliation. This may be slightly ambiguous for WoS data
 where num authors != num institutions.</p>
-<p><strong>Nodes</strong> &#8211; author names</p>
-<p><strong>Node attributes</strong> &#8211; none</p>
-<p><strong>Edges</strong> &#8211; (a,b) in E(G) if a and b are authors on the same paper.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Element</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Node</td>
+<td>Author name.</td>
+</tr>
+<tr class="row-odd"><td>Edge</td>
+<td>(a,b) in E(G) if a and b are authors on the same paper.</td>
+</tr>
+</tbody>
+</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Papers</strong> : list</p>
 <blockquote>
-<div><p>A list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
+<div><p>A list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
 </div></blockquote>
 <p><strong>edge_attribs</strong> : list</p>
 <blockquote>
-<div><p>List of edge_attributes specifying which <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> keys (from the
+<div><p>List of edge_attributes specifying which <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> keys (from the
 authored paper) to use as edge attributes. For example, the &#8216;date&#8217; key
-in <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> .</p>
+in <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> .</p>
 </div></blockquote>
 </td>
 </tr>
@@ -233,29 +286,41 @@ in <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title
 
 <dl class="function">
 <dt id="tethne.networks.authors.author_papers">
-<tt class="descclassname">tethne.networks.authors.</tt><tt class="descname">author_papers</tt><big>(</big><em>doc_list</em>, <em>paper_id</em>, <em>*paper_attribs</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/authors.html#author_papers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.authors.author_papers" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">tethne.networks.authors.</tt><tt class="descname">author_papers</tt><big>(</big><em>papers</em>, <em>paper_id</em>, <em>paper_attribs=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="_modules/tethne/networks/authors.html#author_papers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.authors.author_papers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate an author_papers network NetworkX directed graph.</p>
-<dl class="docutils">
-<dt><strong>Nodes</strong> &#8211; Two kinds of nodes with distinguishing &#8220;type&#8221; attributes.</dt>
-<dd><ul class="first last simple">
-<li>type = paper    - a paper in doc_list</li>
-<li>type = person   - a person in doc_list</li>
-</ul>
-</dd>
-</dl>
-<p>Papers also have node attributes defined by paper_attribs.</p>
-<p><strong>Edges</strong> &#8211; Directed, Author -&gt; his/her Paper</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Element</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Node</td>
+<td>Two kinds of nodes with distinguishing &#8220;type&#8221; attributes:
+* type = paper    - a paper in papers
+* type = person   - a person in papers
+Papers node attributes defined by paper_attribs.</td>
+</tr>
+<tr class="row-odd"><td>Edge</td>
+<td>Directed, Author -&gt; his/her Paper.</td>
+</tr>
+</tbody>
+</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>doc_list</strong> : list</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
 <blockquote>
 <div><p>A list of wos_objects.</p>
 </div></blockquote>
 <p><strong>paper_id</strong> : string</p>
 <blockquote>
-<div><p>A key from <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> used to identify the nodes.</p>
+<div><p>A key from <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> used to identify the nodes.</p>
 </div></blockquote>
 <p><strong>paper_attribs</strong> : list</p>
 <blockquote>
@@ -279,11 +344,27 @@ positional arguments.</p>
 
 <dl class="function">
 <dt id="tethne.networks.authors.coauthors">
-<tt class="descclassname">tethne.networks.authors.</tt><tt class="descname">coauthors</tt><big>(</big><em>papers</em>, <em>*edge_attribs</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/authors.html#coauthors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.authors.coauthors" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">tethne.networks.authors.</tt><tt class="descname">coauthors</tt><big>(</big><em>papers</em>, <em>edge_attribs=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="_modules/tethne/networks/authors.html#coauthors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.authors.coauthors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a co-author network.</p>
-<p><strong>Nodes</strong> &#8211; author names</p>
-<p><strong>Node attributes</strong> &#8211; none</p>
-<p><strong>Edges</strong> &#8211; (a,b) in E(G) if a and b are coauthors on the same paper.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Element</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Node</td>
+<td>Author name.</td>
+</tr>
+<tr class="row-odd"><td>Edges</td>
+<td>(a,b) in E(G) if a and b are coauthors on the same paper.</td>
+</tr>
+</tbody>
+</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -294,7 +375,7 @@ positional arguments.</p>
 </div></blockquote>
 <p><strong>edge_attribs</strong> : list</p>
 <blockquote>
-<div><p>List of edge_attributes specifying which <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> keys (from the
+<div><p>List of edge_attributes specifying which <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> keys (from the
 co-authored paper) to use as edge attributes.</p>
 </div></blockquote>
 </td>
@@ -308,7 +389,7 @@ co-authored paper) to use as edge attributes.</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>TODO: Check whether papers contains <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances, and raise
+<p>TODO: Check whether papers contains <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances, and raise
 an exception if not.</p>
 </dd></dl>
 
@@ -332,7 +413,7 @@ an exception if not.</p>
 <td>Generates a list of the topn most cited papers.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.networks.helpers.top_parents" title="tethne.networks.helpers.top_parents"><tt class="xref py py-obj docutils literal"><span class="pre">top_parents</span></tt></a>(papers[,&nbsp;topn,&nbsp;verbose])</td>
-<td>Returns a list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects that cite the topn most cited</td>
+<td>Returns a list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects that cite the topn most cited</td>
 </tr>
 </tbody>
 </table>
@@ -346,7 +427,7 @@ an exception if not.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
 <blockquote>
-<div><p>A list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
+<div><p>A list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
 </div></blockquote>
 <p><strong>key</strong> : str</p>
 <blockquote>
@@ -408,7 +489,7 @@ corresponding to the earliest and latest &#8216;date&#8217; values for that edge
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
 <blockquote>
-<div><p>A list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
+<div><p>A list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
 </div></blockquote>
 <p><strong>topn</strong> : int</p>
 <blockquote>
@@ -437,7 +518,7 @@ corresponding to the earliest and latest &#8216;date&#8217; values for that edge
 <dl class="function">
 <dt id="tethne.networks.helpers.top_parents">
 <tt class="descclassname">tethne.networks.helpers.</tt><tt class="descname">top_parents</tt><big>(</big><em>papers</em>, <em>topn=20</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/helpers.html#top_parents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.helpers.top_parents" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects that cite the topn most cited
+<dd><p>Returns a list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects that cite the topn most cited
 papers.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -445,7 +526,7 @@ papers.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
 <blockquote>
-<div><p>A list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects.</p>
+<div><p>A list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects.</p>
 </div></blockquote>
 <p><strong>topn</strong> : int</p>
 <blockquote>
@@ -459,7 +540,7 @@ papers.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
 <blockquote>
-<div><p>A list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects.</p>
+<div><p>A list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects.</p>
 </div></blockquote>
 <p><strong>top</strong> : list</p>
 <blockquote>
@@ -485,23 +566,23 @@ papers.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.papers.author_coupling" title="tethne.networks.papers.author_coupling"><tt class="xref py py-obj docutils literal"><span class="pre">author_coupling</span></tt></a>(doc_list,&nbsp;threshold,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.papers.author_coupling" title="tethne.networks.papers.author_coupling"><tt class="xref py py-obj docutils literal"><span class="pre">author_coupling</span></tt></a>(doc_list,&nbsp;threshold,&nbsp;...[,&nbsp;...])</td>
 <td>Generate a simple author coupling network, where vertices are papers and an edge indicates that two papers share a common author.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.networks.papers.bibliographic_coupling" title="tethne.networks.papers.bibliographic_coupling"><tt class="xref py py-obj docutils literal"><span class="pre">bibliographic_coupling</span></tt></a>(doc_list[,&nbsp;...])</td>
 <td>Generate a bibliographic coupling network.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.papers.cocitation" title="tethne.networks.papers.cocitation"><tt class="xref py py-obj docutils literal"><span class="pre">cocitation</span></tt></a>(papers,&nbsp;threshold[,&nbsp;topn,&nbsp;verbose])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.papers.cocitation" title="tethne.networks.papers.cocitation"><tt class="xref py py-obj docutils literal"><span class="pre">cocitation</span></tt></a>(papers,&nbsp;threshold[,&nbsp;node_id,&nbsp;...])</td>
 <td>A cocitation network is a network in which vertices are papers, and edges indicate that two papers were cited by the same third paper.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.networks.papers.direct_citation" title="tethne.networks.papers.direct_citation"><tt class="xref py py-obj docutils literal"><span class="pre">direct_citation</span></tt></a>(doc_list[,&nbsp;node_id])</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.networks.papers.direct_citation" title="tethne.networks.papers.direct_citation"><tt class="xref py py-obj docutils literal"><span class="pre">direct_citation</span></tt></a>(doc_list[,&nbsp;node_id,&nbsp;...])</td>
 <td>Create a NetworkX directed graph based on citation records.</td>
 </tr>
 </tbody>
 </table>
 <dl class="function">
 <dt id="tethne.networks.papers.author_coupling">
-<tt class="descclassname">tethne.networks.papers.</tt><tt class="descname">author_coupling</tt><big>(</big><em>doc_list</em>, <em>threshold</em>, <em>node_id</em>, <em>*node_attribs</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/papers.html#author_coupling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.papers.author_coupling" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">tethne.networks.papers.</tt><tt class="descname">author_coupling</tt><big>(</big><em>doc_list</em>, <em>threshold</em>, <em>node_attribs</em>, <em>node_id='ayjid'</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/papers.html#author_coupling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.papers.author_coupling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a simple author coupling network, where vertices are papers and
 an edge indicates that two papers share a common author.</p>
 <table border="1" class="docutils">
@@ -542,11 +623,11 @@ authors.</p>
 </div></blockquote>
 <p><strong>node_id</strong> : string</p>
 <blockquote>
-<div><p>Field in <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> used to identify nodes.</p>
+<div><p>Field in <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> used to identify nodes.</p>
 </div></blockquote>
 <p><strong>node_attribs</strong> : list</p>
 <blockquote>
-<div><p>List of fields in <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> to include as node attributes in
+<div><p>List of fields in <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> to include as node attributes in
 graph.</p>
 </div></blockquote>
 </td>
@@ -563,7 +644,7 @@ graph.</p>
 
 <dl class="function">
 <dt id="tethne.networks.papers.bibliographic_coupling">
-<tt class="descclassname">tethne.networks.papers.</tt><tt class="descname">bibliographic_coupling</tt><big>(</big><em>doc_list</em>, <em>citation_id='ayjid'</em>, <em>threshold=1</em>, <em>node_id='ayjid'</em>, <em>weighted=False</em>, <em>*node_attribs</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/papers.html#bibliographic_coupling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.papers.bibliographic_coupling" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">tethne.networks.papers.</tt><tt class="descname">bibliographic_coupling</tt><big>(</big><em>doc_list, citation_id='ayjid', threshold=1, node_id='ayjid', node_attribs=['date'], weighted=False</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/papers.html#bibliographic_coupling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.papers.bibliographic_coupling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a bibliographic coupling network.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -580,7 +661,7 @@ graph.</p>
 <td>Papers represented by node_id.</td>
 </tr>
 <tr class="row-odd"><td>Node Attributes</td>
-<td>node_attribs in <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a></td>
+<td>node_attribs in <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a></td>
 </tr>
 <tr class="row-even"><td>Edge</td>
 <td>(a,b) in E(G) if a and b share x citations where x &gt;=
@@ -601,7 +682,7 @@ threshold.</td>
 </div></blockquote>
 <p><strong>citation_id: string</strong> :</p>
 <blockquote>
-<div><p>A key from <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> to identify the citation overlaps.  Default
+<div><p>A key from <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> to identify the citation overlaps.  Default
 is &#8216;ayjid&#8217;.</p>
 </div></blockquote>
 <p><strong>threshold</strong> : int</p>
@@ -610,11 +691,11 @@ is &#8216;ayjid&#8217;.</p>
 </div></blockquote>
 <p><strong>node_id</strong> : string</p>
 <blockquote>
-<div><p>Field in <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> used to identify the nodes. Default is &#8216;ayjid&#8217;.</p>
+<div><p>Field in <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> used to identify the nodes. Default is &#8216;ayjid&#8217;.</p>
 </div></blockquote>
 <p><strong>node_attribs</strong> : list</p>
 <blockquote>
-<div><p>List of fields in <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> to include as node attributes in
+<div><p>List of fields in <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> to include as node attributes in
 graph.</p>
 </div></blockquote>
 </td>
@@ -637,7 +718,7 @@ nodes cannot be none.</p>
 
 <dl class="function">
 <dt id="tethne.networks.papers.cocitation">
-<tt class="descclassname">tethne.networks.papers.</tt><tt class="descname">cocitation</tt><big>(</big><em>papers</em>, <em>threshold</em>, <em>topn=None</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/papers.html#cocitation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.papers.cocitation" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">tethne.networks.papers.</tt><tt class="descname">cocitation</tt><big>(</big><em>papers</em>, <em>threshold</em>, <em>node_id='ayjid'</em>, <em>topn=None</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/papers.html#cocitation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.papers.cocitation" title="Permalink to this definition">¶</a></dt>
 <dd><p>A cocitation network is a network in which vertices are papers, and edges
 indicate that two papers were cited by the same third paper. Should slice
 the dataset into timeslices (as indicated) based on the publication date of
@@ -656,7 +737,7 @@ graphs allows to analyze each timeslice separately.</p>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>Node</td>
-<td>Cited papers represented by <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> ayjid.</td>
+<td>Cited papers represented by <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> ayjid.</td>
 </tr>
 <tr class="row-odd"><td>Edge</td>
 <td>(a, b) if a and b are cited by the same paper.</td>
@@ -673,7 +754,7 @@ together.</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
 <blockquote>
-<div><p>a list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects.</p>
+<div><p>a list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects.</p>
 </div></blockquote>
 <p><strong>threshold</strong> : int</p>
 <blockquote>
@@ -705,7 +786,7 @@ draw an edge.</p>
 
 <dl class="function">
 <dt id="tethne.networks.papers.direct_citation">
-<tt class="descclassname">tethne.networks.papers.</tt><tt class="descname">direct_citation</tt><big>(</big><em>doc_list</em>, <em>node_id='ayjid'</em>, <em>*node_attribs</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/papers.html#direct_citation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.papers.direct_citation" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">tethne.networks.papers.</tt><tt class="descname">direct_citation</tt><big>(</big><em>doc_list, node_id='ayjid', node_attribs=['date']</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/papers.html#direct_citation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.papers.direct_citation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a NetworkX directed graph based on citation records.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -720,7 +801,7 @@ draw an edge.</p>
 <tbody valign="top">
 <tr class="row-even"><td>Node</td>
 <td>Documents represented by the value of node_id in
-<a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a></td>
+<a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a></td>
 </tr>
 <tr class="row-odd"><td>Edge</td>
 <td>From a document to a cited reference.</td>
@@ -736,11 +817,11 @@ draw an edge.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>doc_list</strong> : list</p>
 <blockquote>
-<div><p>A list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
+<div><p>A list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances.</p>
 </div></blockquote>
 <p><strong>node_id</strong> : int</p>
 <blockquote>
-<div><p>A key from <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> to identify the nodes. Default is &#8216;ayjid&#8217;.</p>
+<div><p>A key from <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> to identify the nodes. Default is &#8216;ayjid&#8217;.</p>
 </div></blockquote>
 <p><strong>node_attribs</strong> : list</p>
 <blockquote>
@@ -793,7 +874,7 @@ includes keywords, abstract terms, etc.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
 <blockquote>
-<div><p>A list of <a class="reference internal" href="tethne.data.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects.</p>
+<div><p>A list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects.</p>
 </div></blockquote>
 <p><strong>threshold</strong> : int</p>
 <blockquote>

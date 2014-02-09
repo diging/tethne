@@ -1,4 +1,6 @@
 """
+Methods for building networks from bibliographic data.
+
 Each network relies on certain meta data in the :class:`.Paper` associated with
 each document. Often we wish to construct a network with nodes representing
 these documents and edges representing relationships between those documents,

@@ -58,35 +58,58 @@
 <h1>analyze Package<a class="headerlink" href="#analyze-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
 <h2><tt class="xref py py-mod docutils literal"><span class="pre">analyze</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-tethne.analyze"></span><p>Contains methods for analyizing graphs and graph collections, as well as other
-analyses specific to bibliographic datasets.</p>
+<span class="target" id="module-tethne.analyze"></span><p>Methods for analyizing graphs and graph collections</p>
+<p>Includes some other analyses specific to bibliographic datasets.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#module-tethne.analyze.collection" title="tethne.analyze.collection"><tt class="xref py py-obj docutils literal"><span class="pre">collection</span></tt></a></td>
+<td>Methods for analyzing <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> objects.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#module-tethne.analyze.graph" title="tethne.analyze.graph"><tt class="xref py py-obj docutils literal"><span class="pre">graph</span></tt></a></td>
+<td>Methods for network analysis.</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="module-tethne.analyze.collection">
 <span id="collection-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">collection</span></tt> Module<a class="headerlink" href="#module-tethne.analyze.collection" title="Permalink to this headline">¶</a></h2>
-<p>This module provides methods for analyzing <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> objects,
-conventionally denoted as <strong>C</strong>. In large part, these methods simply provide
-systematic access to algorithms in NetworkX.</p>
+<p>Methods for analyzing <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> objects.</p>
+<p>For the most part, these methods simply provide systematic access to algorithms 
+in NetworkX.</p>
 <dl class="function">
 <dt id="tethne.analyze.collection.algorithm">
 <tt class="descclassname">tethne.analyze.collection.</tt><tt class="descname">algorithm</tt><big>(</big><em>C</em>, <em>method</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/collection.html#algorithm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.collection.algorithm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Passes kwargs to specified NetworkX method for each Graph, and returns
 a dictionary of results as:</p>
-<dl class="docutils">
+<ul>
+<li><dl class="first docutils">
 <dt>results</dt>
-<dd><div class="first last line-block">
-<div class="line">elem (node or edge)
-| graph index (e.g. year)</div>
-</div>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>elem (node or edge)</dt>
+<dd><ul class="first last simple">
+<li>graph index (e.g. year)</li>
+</ul>
 </dd>
 </dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
 <blockquote>
-<div><p>The <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to analyze. The specified method will be
-applied to each <tt class="xref py py-class docutils literal"><span class="pre">graph</span></tt> in <strong>C</strong>.</p>
+<div><p>The <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to analyze. The specified method will be
+applied to each <tt class="xref py py-class docutils literal"><span class="pre">Graph</span></tt> in <strong>C</strong>.</p>
 </div></blockquote>
 <p><strong>method</strong> : string</p>
 <blockquote>
@@ -116,31 +139,22 @@ index.</p>
 </table>
 <p class="rubric">Examples</p>
 <p><em>Betweenness centrality:</em></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">ds</span>
-<span class="kn">import</span> <span class="nn">tethne.analyze</span> <span class="kn">as</span> <span class="nn">az</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="n">collection</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GraphCollection</span><span class="p">()</span>
-<span class="n">N</span> <span class="o">=</span> <span class="mi">100</span>
-<span class="k">for</span> <span class="n">graph_index</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span> <span class="mi">2004</span><span class="p">):</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
-    <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.8</span><span class="p">:</span>
-                <span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
-    <span class="n">collection</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="n">graph_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
-
-<span class="n">results</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="s">&#39;betweenness_centrality&#39;</span><span class="p">,</span>
-                                  <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>Should produce something like:</p>
-<div class="highlight-text"><div class="highlight"><pre>{1999: 0.010101651117889644,
-2000: 0.0008689093723107329,
-2001: 0.010504898852426189,
-2002: 0.009338654511194512,
-2003: 0.007519105636349891}
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">ds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.analyze</span> <span class="kn">as</span> <span class="nn">az</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GraphCollection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Generate some random graphs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">graph_index</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span> <span class="mi">2004</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">random_regular_graph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">C</span><span class="p">[</span><span class="n">graph_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Analyze the GraphCollection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="s">&#39;betweenness_centrality&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">{1999: 0.010101651117889644,</span>
+<span class="go">2000: 0.0008689093723107329,</span>
+<span class="go">2001: 0.010504898852426189,</span>
+<span class="go">2002: 0.009338654511194512,</span>
+<span class="go">2003: 0.007519105636349891}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -154,10 +168,10 @@ collection.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
 <blockquote>
-<div><p>The <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to analyze. The specified method will be
-applied to each <tt class="xref py py-class docutils literal"><span class="pre">graph</span></tt> in <strong>C</strong>.</p>
+<div><p>The <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to analyze. The specified method will be
+applied to each <tt class="xref py py-class docutils literal"><span class="pre">Graph</span></tt> in <strong>C</strong>.</p>
 </div></blockquote>
 <p><strong>method</strong> : string</p>
 <blockquote>
@@ -184,30 +198,21 @@ applied to each <tt class="xref py py-class docutils literal"><span class="pre">
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">ds</span>
-<span class="kn">import</span> <span class="nn">tethne.analyze</span> <span class="kn">as</span> <span class="nn">az</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="n">collection</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GraphCollection</span><span class="p">()</span>
-<span class="n">N</span> <span class="o">=</span> <span class="mi">100</span>
-<span class="k">for</span> <span class="n">graph_index</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span> <span class="mi">2004</span><span class="p">):</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
-    <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.8</span><span class="p">:</span>
-                <span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
-    <span class="n">collection</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="n">graph_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
-
-<span class="n">results</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">connected</span><span class="p">(</span><span class="s">&#39;connected&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">results</span>
-</pre></div>
-</div>
-<p>Should produce something like:</p>
-<div class="highlight-text"><div class="highlight"><pre>{1999: False,
-2000: False,
-2001: False,
-2002: False,
-2003: False }
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">ds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.analyze</span> <span class="kn">as</span> <span class="nn">az</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GraphCollection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Generate some random graphs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">graph_index</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span> <span class="mi">2004</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">random_regular_graph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">C</span><span class="p">[</span><span class="n">graph_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">connected</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="s">&#39;connected&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">results</span>
+<span class="go">{1999: False,</span>
+<span class="go">2000: False,</span>
+<span class="go">2001: False,</span>
+<span class="go">2002: False,</span>
+<span class="go">2003: False }</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -221,7 +226,7 @@ edge.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
 <p><strong>source</strong> : str</p>
 <blockquote>
 <div><p>Identifier for source node.</p>
@@ -251,6 +256,13 @@ edge.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="tethne.analyze.collection.node_global_closeness_centrality">
+<tt class="descclassname">tethne.analyze.collection.</tt><tt class="descname">node_global_closeness_centrality</tt><big>(</big><em>C</em>, <em>node</em><big>)</big><a class="headerlink" href="#tethne.analyze.collection.node_global_closeness_centrality" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates global closeness centrality for node in each graph in 
+<a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> C.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="tethne.analyze.collection.node_history">
 <tt class="descclassname">tethne.analyze.collection.</tt><tt class="descname">node_history</tt><big>(</big><em>C</em>, <em>node</em>, <em>attribute</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/collection.html#node_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.collection.node_history" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a dictionary of attribute values for each Graph in C for a single
@@ -259,7 +271,7 @@ node.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.data.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
 <p><strong>node</strong> : str</p>
 <blockquote>
 <div><p>The node of interest.</p>
@@ -351,56 +363,6 @@ length. Default is True.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-tethne.analyze.workflow">
-<span id="workflow-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">workflow</span></tt> Module<a class="headerlink" href="#module-tethne.analyze.workflow" title="Permalink to this headline">¶</a></h2>
-<p>Methods for network analysis.</p>
-<dl class="function">
-<dt id="tethne.analyze.workflow.closeness_introgression">
-<tt class="descclassname">tethne.analyze.workflow.</tt><tt class="descname">closeness_introgression</tt><big>(</big><em>papers</em>, <em>node</em>, <em>start</em>, <em>end</em>, <em>chunk</em>, <em>normalize=False</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/workflow.html#closeness_introgression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.workflow.closeness_introgression" title="Permalink to this definition">¶</a></dt>
-<dd><p>Analyzes the global closeness centrality of a node over time.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
-<blockquote>
-<div><p>A list of <tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt> instances.</p>
-</div></blockquote>
-<p><strong>node</strong> : any</p>
-<blockquote>
-<div><p>Handle of the node to analyze.</p>
-</div></blockquote>
-<p><strong>start</strong> : int</p>
-<blockquote>
-<div><p>Year to start analysis.</p>
-</div></blockquote>
-<p><strong>end</strong> : int</p>
-<blockquote>
-<div><p>Start year of final time-window.</p>
-</div></blockquote>
-<p><strong>chunk</strong> : int</p>
-<blockquote>
-<div><p>Size of time-window.</p>
-</div></blockquote>
-<p><strong>normalize</strong> : bool</p>
-<blockquote>
-<div><p>If True, normalizes global closeness centrality for each year against
-the average closeness centrality for that year. This will require
-substantially more processing time, and values will usually be &gt;&gt; 0.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>trajectory</strong> : list</p>
-<blockquote class="last">
-<div><p>Global closeness centrality for node over specified period.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
 </div>
 
 
@@ -415,7 +377,6 @@ substantially more processing time, and values will usually be &gt;&gt; 0.</p>
 <li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">analyze</span></tt> Package</a></li>
 <li><a class="reference internal" href="#module-tethne.analyze.collection"><tt class="docutils literal"><span class="pre">collection</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.analyze.graph"><tt class="docutils literal"><span class="pre">graph</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-tethne.analyze.workflow"><tt class="docutils literal"><span class="pre">workflow</span></tt> Module</a></li>
 </ul>
 </li>
 </ul>

@@ -1,26 +1,28 @@
 """
-This module provides methods for analyzing :class:`.GraphCollection` objects,
-conventionally denoted as **C**. In large part, these methods simply provide
-systematic access to algorithms in NetworkX.
+Methods for analyzing :class:`.GraphCollection` objects.
+
+For the most part, these methods simply provide systematic access to algorithms 
+in NetworkX.
 """
 
 import networkx as nx
 import types
+import graph
 
 def algorithm(C, method, **kwargs):
     """
     Passes kwargs to specified NetworkX method for each Graph, and returns
     a dictionary of results as:
 
-    results
-        | elem (node or edge)
-            | graph index (e.g. year)
+    * results
+        * elem (node or edge)
+            * graph index (e.g. year)
 
     Parameters
     ----------
     C : :class:`.GraphCollection`
         The :class:`.GraphCollection` to analyze. The specified method will be
-        applied to each :class:`graph` in **C**.
+        applied to each :class:`.Graph` in **C**.
     method : string
         Name of a method in NetworkX to execute on graph collection.
     **kwargs
@@ -45,28 +47,17 @@ def algorithm(C, method, **kwargs):
 
     .. code-block:: python
 
-        import tethne.data as ds
-        import tethne.analyze as az
-        import numpy as np
-        collection = ds.GraphCollection()
-        N = 100
-        for graph_index in xrange(1999, 2004):
-            d = np.random.random((N, N))
-            g = nx.Graph()
-            for i in xrange(N):
-                for j in xrange(i+1, N):
-                    if d[i, j] > 0.8:
-                        g.add_edge(i, j)
-            collection.graphs[graph_index] = g
-
-        results = az.collection.algorithm(collection, 'betweenness_centrality',
-                                          k=None)
-        print results[0]
-
-    Should produce something like:
-
-    .. code-block:: text
-
+        >>> import tethne.data as ds
+        >>> import tethne.analyze as az
+        >>> import networkx as nx
+        >>> C = ds.GraphCollection()
+        >>> # Generate some random graphs
+        >>> for graph_index in xrange(1999, 2004):
+        >>>     g = nx.random_regular_graph(4, 100)
+        >>>     C[graph_index] = g
+        >>> # Analyze the GraphCollection
+        >>> results = az.collection.algorithm(C, 'betweenness_centrality',
+        >>> print results[0]
         {1999: 0.010101651117889644,
         2000: 0.0008689093723107329,
         2001: 0.010504898852426189,
@@ -102,7 +93,7 @@ def connected(C, method, **kwargs):
     ----------
     C : :class:`.GraphCollection`
         The :class:`.GraphCollection` to analyze. The specified method will be
-        applied to each :class:`graph` in **C**.
+        applied to each :class:`.Graph` in **C**.
     method : string
         Name of method in networkx.connected.
     **kwargs : kwargs
@@ -123,27 +114,16 @@ def connected(C, method, **kwargs):
 
     .. code-block:: python
 
-        import tethne.data as ds
-        import tethne.analyze as az
-        import numpy as np
-        collection = ds.GraphCollection()
-        N = 100
-        for graph_index in xrange(1999, 2004):
-            d = np.random.random((N, N))
-            g = nx.Graph()
-            for i in xrange(N):
-                for j in xrange(i+1, N):
-                    if d[i, j] > 0.8:
-                        g.add_edge(i, j)
-            collection.graphs[graph_index] = g
-
-        results = az.collection.connected('connected', k=None)
-        print results
-
-    Should produce something like:
-
-    .. code-block:: text
-
+        >>> import tethne.data as ds
+        >>> import tethne.analyze as az
+        >>> import networkx as nx
+        >>> C = ds.GraphCollection()
+        >>> # Generate some random graphs
+        >>> for graph_index in xrange(1999, 2004):
+        >>>     g = nx.random_regular_graph(4, 100)
+        >>>     C[graph_index] = g
+        >>> results = az.collection.connected(C, 'connected', k=None)
+        >>> print results
         {1999: False,
         2000: False,
         2001: False,
@@ -233,3 +213,16 @@ def edge_history(C, source, target, attribute, verbose=False):
             if verbose: print "No such edge in Graph " + str(k)
 
     return history
+
+def node_global_closeness_centrality(C, node):
+    """
+    Calculates global closeness centrality for node in each graph in 
+    :class:`.GraphCollection` C.
+    
+    """
+    
+    results = {}
+    for key, g in C.graphs.iteritems():
+        results[key] = graph.node_global_closeness_centrality(g, node)
+    
+    return results
