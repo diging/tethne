@@ -590,9 +590,13 @@ def read(datapath):
        >>> papers = rd.wos.read("/Path/to/data.txt")
 
     """
+    # Added Try Except 
+    try:
+        wl = parse(datapath)
+        papers = convert(wl)
+    except IOError:
+        raise IOError("Invalid path.")
 
-    wl = parse(datapath)
-    papers = convert(wl)
     return papers
 
 # [#60462784]
