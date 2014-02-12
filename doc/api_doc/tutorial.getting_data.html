@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Getting Data from the Web of Science &mdash; tethne  documentation</title>
+    <title>Getting Bibliographic Data &mdash; tethne  documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,9 +24,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="tethne  documentation" href="index.html" />
     <link rel="up" title="Tutorial" href="tutorial.html" />
-    <link rel="next" title="Parsing Bibliographic Data" href="tutorial.readers.html" />
+    <link rel="next" title="Creating Networks from Bibliographic Data" href="tutorial.networks.html" />
     <link rel="prev" title="Tutorial" href="tutorial.html" /> 
   </head>
   <body>
@@ -43,7 +44,7 @@
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorial.readers.html" title="Parsing Bibliographic Data"
+          <a href="tutorial.networks.html" title="Creating Networks from Bibliographic Data"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="tutorial.html" title="Tutorial"
@@ -58,8 +59,13 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="getting-data-from-the-web-of-science">
-<h1>Getting Data from the Web of Science<a class="headerlink" href="#getting-data-from-the-web-of-science" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="getting-bibliographic-data">
+<h1>Getting Bibliographic Data<a class="headerlink" href="#getting-bibliographic-data" title="Permalink to this headline">¶</a></h1>
+<p>The current version of Tethne supports bibliographic data from the ISI Web of Science
+and JSTOR&#8217;s Data-for-Research portal. Future releases will support data from PubMed and
+Scopus.</p>
+<div class="section" id="getting-data-from-the-web-of-science">
+<h2>Getting Data from the Web of Science<a class="headerlink" href="#getting-data-from-the-web-of-science" title="Permalink to this headline">¶</a></h2>
 <p>The ISI Web of Science is a proprietary database owned by Thompson Reuters.
 If you are affiliated with an academic institution, you may have access to
 this database via an institutional license.</p>
@@ -84,11 +90,12 @@ data file called &#8220;savedrecs.txt&#8221;. Put this in a location on your fil
 you can find it later; this is the input for Tethne&#8217;s WoS reader methods.</p>
 <img alt="_images/getting.4.png" src="_images/getting.4.png" style="width: 600px;" />
 <div class="section" id="structure-of-the-wos-field-tagged-data-file">
-<h2>Structure of the WoS Field-Tagged Data File<a class="headerlink" href="#structure-of-the-wos-field-tagged-data-file" title="Permalink to this headline">¶</a></h2>
-<p>If you open the text file returned by the WoS database (usually named &#8216;savedrecs.txt&#8217;), you should see a whole bunch of
-field-tagged data. &#8220;Field-tagged&#8221; means that each metadata field is denoted by a &#8220;tag&#8221; (a two-letter code), followed by
-values for that field. A complete list of WoS field tags can be found <a class="reference external" href="http://images.webofknowledge.com/WOKRS53B4/help/WOS/hs_wos_fieldtags.html">here</a>. For best results, you should avoid making
-changes to the contents of WoS data files.</p>
+<h3>Structure of the WoS Field-Tagged Data File<a class="headerlink" href="#structure-of-the-wos-field-tagged-data-file" title="Permalink to this headline">¶</a></h3>
+<p>If you open the text file returned by the WoS database (usually named &#8216;savedrecs.txt&#8217;),
+you should see a whole bunch of field-tagged data. &#8220;Field-tagged&#8221; means that each metadata
+field is denoted by a &#8220;tag&#8221; (a two-letter code), followed by values for that field. A
+complete list of WoS field tags can be found <a class="reference external" href="http://images.webofknowledge.com/WOKRS53B4/help/WOS/hs_wos_fieldtags.html">here</a>. For best results, you should avoid
+making changes to the contents of WoS data files.</p>
 <p>The metadata record for each paper in your data file should begin with:</p>
 <div class="highlight-none"><div class="highlight"><pre>PT J
 </pre></div>
@@ -96,8 +103,9 @@ changes to the contents of WoS data files.</p>
 <p>...and end with:</p>
 <div class="highlight-none:"><pre>ER</pre>
 </div>
-<p>There are two author fields: the AU field is always provided, and values take the form &#8220;Last, FI&#8221;. AF is provided if
-author full-names are available, and values take the form &#8220;Last, First Middle&#8221;. For example:</p>
+<p>There are two author fields: the AU field is always provided, and values take the form
+&#8220;Last, FI&#8221;. AF is provided if author full-names are available, and values take the form
+&#8220;Last, First Middle&#8221;. For example:</p>
 <div class="highlight-none"><div class="highlight"><pre>AU Dauvin, JC
    Grimes, S
    Bakalem, A
@@ -116,7 +124,46 @@ AF Dauvin, Jean-Claude
    Zenetos A, 2005, MEDITERR MAR SCI, V6, P63
    Zenetos A, 2004, CIESM ATLAS EXOTIC S, V3</pre>
 </div>
-<p>For more information about WoS field tags, see a list on the Thompson Reuters website, <a class="reference external" href="http://images.webofknowledge.com/WOKRS53B4/help/WOS/hs_wos_fieldtags.html">here</a>.</p>
+<p>For more information about WoS field tags, see a list on the Thompson Reuters website,
+<a class="reference external" href="http://images.webofknowledge.com/WOKRS53B4/help/WOS/hs_wos_fieldtags.html">here</a>.</p>
+</div>
+</div>
+<div class="section" id="getting-data-from-jstor-data-for-research">
+<h2>Getting Data from JSTOR Data-for-Research<a class="headerlink" href="#getting-data-from-jstor-data-for-research" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="http://dfr.jstor.org/?&amp;helpview=about_dfr">JSTOR Data-for-Research (DfR) portal</a>
+gives researchers access to bibliographic data and N-grams for the entire JSTOR database.
+Tethne can use DfR data to generate coauthorship networks, and to improve metadata for Web
+of Science records. Increasingly, Tethne is also able to use N-gram counts to add
+information to networks, and can generate corpora for common topic modeling tools (coming
+soon!).</p>
+<p>Access the DfR portal at
+<a class="reference external" href="http://dfr.jstor.org/">http://dfr.jstor.org/</a> If you don&#8217;t already have an account,
+you will need to <a class="reference external" href="http://dfr.jstor.org/accounts/register/">create a new account</a>.</p>
+<p>After you&#8217;ve logged in, perform a search using whatever criteria you please. When you have
+achieved the result that you desire, create a new dataset request. Under the &#8220;Dataset
+Request&#8221; menu in the upper-right corner of the page, click &#8220;Submit new request&#8221;.</p>
+<img alt="_images/getting.5.png" src="_images/getting.5.png" style="width: 600px;" />
+<p>On the <strong>Download Options</strong> page, select your desired <strong>Data Type</strong>. If you do not intend
+to make use of the contents of the papers themselves, then &#8220;Citations Only&#8221; is sufficient.
+Otherwise, choose word counts, bigrams, etc.</p>
+<p><strong>Output Format</strong> should be set to <strong>XML</strong>.</p>
+<p>Give your request a title, and set the maximum number of articles. <em>Note that the maximum
+documents allowed per request is 1,000. Setting **Maximum Articles*</em> to a value less than
+the number of search results will yield a random sample of your results.*</p>
+<img alt="_images/getting.6.png" src="_images/getting.6.png" style="width: 600px;" />
+<p>Your request should now appear in your list of <strong>Data Requests</strong>. When your request is
+ready (hours to days later), you will receive an e-mail with a download link. When
+downloading from the <strong>Data Requests</strong> list, be sure to use the link in the
+<strong>full dataset</strong> column.</p>
+<img alt="_images/getting.7.png" src="_images/getting.7.png" style="width: 600px;" />
+<p>When your dataset download is complete, unzip it. The contents should look something like
+those shown below.</p>
+<img alt="_images/getting.8.png" src="_images/getting.8.png" style="width: 600px;" />
+<p><cite>citations.XML</cite> contains bibliographic data in XML format. The <cite>bigrams</cite>, <cite>trigrams</cite>,
+<cite>wordcounts</cite> folders contain N-gram counts for each document.</p>
+<p>In the example above, the path this dataset is
+<cite>/Users/erickpeirson/Downloads/DfR/ecology_1960-64</cite>. This is the path used in
+<a class="reference internal" href="tethne.readers.html#tethne.readers.dfr.read" title="tethne.readers.dfr.read"><tt class="xref py py-func docutils literal"><span class="pre">tethne.readers.dfr.read()</span></tt></a> .</p>
 </div>
 </div>
 
@@ -128,8 +175,12 @@ AF Dauvin, Jean-Claude
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Getting Data from the Web of Science</a><ul>
+<li><a class="reference internal" href="#">Getting Bibliographic Data</a><ul>
+<li><a class="reference internal" href="#getting-data-from-the-web-of-science">Getting Data from the Web of Science</a><ul>
 <li><a class="reference internal" href="#structure-of-the-wos-field-tagged-data-file">Structure of the WoS Field-Tagged Data File</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-data-from-jstor-data-for-research">Getting Data from JSTOR Data-for-Research</a></li>
 </ul>
 </li>
 </ul>
@@ -138,8 +189,8 @@ AF Dauvin, Jean-Claude
   <p class="topless"><a href="tutorial.html"
                         title="previous chapter">Tutorial</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="tutorial.readers.html"
-                        title="next chapter">Parsing Bibliographic Data</a></p>
+  <p class="topless"><a href="tutorial.networks.html"
+                        title="next chapter">Creating Networks from Bibliographic Data</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/tutorial.getting_data.txt"
@@ -175,7 +226,7 @@ AF Dauvin, Jean-Claude
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorial.readers.html" title="Parsing Bibliographic Data"
+          <a href="tutorial.networks.html" title="Creating Networks from Bibliographic Data"
              >next</a> |</li>
         <li class="right" >
           <a href="tutorial.html" title="Tutorial"

@@ -1,6 +1,9 @@
 """
 Methods for generating networks in which authors are vertices.
 
+Methods
+```````
+
 .. autosummary::
 
    author_cocitation
@@ -83,6 +86,20 @@ def author_papers(papers, paper_id, paper_attribs=[]):
 def coauthors(papers, edge_attribs=[]):
     """
     Generate a co-author network.
+    
+    As the name suggests, edges are drawn between two author-vertices in the 
+    case that those authors published a paper together. Co-authorship networks 
+    are popular models for studying patterns of collaboration in scientific 
+    communities. 
+
+    To generate a co-authorship network, use the 
+    :func:`.networks.authors.coauthors` method:
+
+    .. code-block:: python
+
+       >>> CA = nt.authors.coauthors(papers)
+       >>> CA
+       <networkx.classes.multigraph.MultiGraph object at 0x101705650>
 
     ==============     =========================================================
     Element            Description
@@ -237,11 +254,24 @@ def author_institution(Papers, edge_attribs=[]):
 
 
 def author_coinstitution(Papers, threshold):
-
     """
-    Create a graph with people as vertices, and edges indicating affiliation
-    with the same institution. This may be slightly ambiguous for WoS data
-    where num authors != num institutions.
+    Generate a co-institution graph, where edges indicate shared affiliation.
+    
+    Some bibliographic datasets, including data from the Web of Science, 
+    includes the institutional affiliations of authors. In a co-institution 
+    graph, two authors (vertices) have an edge between them if they share an 
+    institutional affiliation in the dataset. Note that data about institutional
+    affiliations varies in the WoS database so this will yield more reliable 
+    results for more recent publications.
+
+    To generate a co-institution network, use the 
+    :func:`.networks.authors.author_coinstitution` method:
+
+    .. code-block:: python
+
+       >>> ACI = nt.authors.author_coinstitution(papers)
+       >>> ACI
+       <networkx.classes.graph.Graph object at 0x106571190>
 
     ==============     =========================================================
     Element            Description
@@ -309,9 +339,18 @@ def author_coinstitution(Papers, threshold):
 
 def author_cocitation(papers, threshold):
     """
-    Creates an author cocitation network. Vertices are authors, and an edge
-    implies that two authors have been cited (via their publications) by in at
-    least one paper in the dataset.
+    Generates an author co-citation network; edges indicate co-citation of
+    authors' papers.
+    
+    Similar to :func:`.papers.cocitation`\, except that vertices are authors 
+    rather than papers. To generate an author co-citation network, use the 
+    :func:`.networks.authors.author_cocitation` method:
+
+    .. code-block:: python
+
+       >>> ACC = nt.authors.author_cocitation(papers)
+       >>> ACC
+       <networkx.classes.graph.Graph object at 0x106571190>
 
     ==============     =========================================================
     Element            Description
