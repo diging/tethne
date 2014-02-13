@@ -59,8 +59,9 @@
 <h1>analyze Package<a class="headerlink" href="#analyze-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
 <h2><tt class="xref py py-mod docutils literal"><span class="pre">analyze</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-tethne.analyze"></span><p>Methods for analyizing graphs and graph collections</p>
-<p>Includes some other analyses specific to bibliographic datasets.</p>
+<span class="target" id="module-tethne.analyze"></span><p>The <a class="reference internal" href="#module-tethne.analyze" title="tethne.analyze"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.analyze</span></tt></a> sub-package provides additional analysis methods not
+provided by NetworkX, as well as methods for using NetworkX algorithms on
+an entire <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -84,25 +85,10 @@ in NetworkX.</p>
 <dl class="function">
 <dt id="tethne.analyze.collection.algorithm">
 <tt class="descclassname">tethne.analyze.collection.</tt><tt class="descname">algorithm</tt><big>(</big><em>C</em>, <em>method</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/collection.html#algorithm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.collection.algorithm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Passes kwargs to specified NetworkX method for each Graph, and returns
-a dictionary of results as:</p>
-<ul>
-<li><dl class="first docutils">
-<dt>results</dt>
-<dd><ul class="first last">
-<li><dl class="first docutils">
-<dt>elem (node or edge)</dt>
-<dd><ul class="first last simple">
-<li>graph index (e.g. year)</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
+<dd><p>Apply NetworkX method to each <tt class="docutils literal"><span class="pre">Graph</span></tt> in <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</p>
+<p>Passes kwargs to specified NetworkX method for each Graph, and returns
+a dictionary of results indexed by element (node or edge) and graph index
+(e.g. <tt class="docutils literal"><span class="pre">date</span></tt>).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -140,17 +126,9 @@ index.</p>
 </table>
 <p class="rubric">Examples</p>
 <p><em>Betweenness centrality:</em></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">ds</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.analyze</span> <span class="kn">as</span> <span class="nn">az</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GraphCollection</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># Generate some random graphs</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">graph_index</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span> <span class="mi">2004</span><span class="p">):</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">random_regular_graph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">C</span><span class="p">[</span><span class="n">graph_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># Analyze the GraphCollection</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="s">&#39;betweenness_centrality&#39;</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.analyze</span> <span class="kn">as</span> <span class="nn">az</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="s">&#39;betweenness_centrality&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">BC</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">{1999: 0.010101651117889644,</span>
 <span class="go">2000: 0.0008689093723107329,</span>
 <span class="go">2001: 0.010504898852426189,</span>
@@ -304,10 +282,8 @@ node.</p>
 <dl class="function">
 <dt id="tethne.analyze.graph.global_closeness_centrality">
 <tt class="descclassname">tethne.analyze.graph.</tt><tt class="descname">global_closeness_centrality</tt><big>(</big><em>g</em>, <em>normalize=True</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/graph.html#global_closeness_centrality"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.graph.global_closeness_centrality" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates global closeness centrality for all nodes in the network. For
-connected graphs, equivalent to conventional betweenness centrality. For
-disconnected graphs, works around infinite path lengths between nodes in
-different components.</p>
+<dd><p>Calculates global closeness centrality for all nodes in the network.</p>
+<p>See <a class="reference internal" href="#tethne.analyze.graph.node_global_closeness_centrality" title="tethne.analyze.graph.node_global_closeness_centrality"><tt class="xref py py-func docutils literal"><span class="pre">node_global_closeness_centrality()</span></tt></a> for more information.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -333,10 +309,32 @@ length. Default is True.</p>
 <dl class="function">
 <dt id="tethne.analyze.graph.node_global_closeness_centrality">
 <tt class="descclassname">tethne.analyze.graph.</tt><tt class="descname">node_global_closeness_centrality</tt><big>(</big><em>g</em>, <em>node</em>, <em>normalize=True</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/graph.html#node_global_closeness_centrality"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.graph.node_global_closeness_centrality" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the global closeness centrality of a single node in the network.
-For connected graphs, equivalent to conventional betweenness centrality.
-For disconnected graphs, works around infinite path lengths between nodes
-in different components.</p>
+<dd><p>Calculates the global closeness centrality of a single node in the network.</p>
+<p>Closeness centrality is based on the average shortest path length
+between a focal node and all other nodes in the network. For multi-component
+graphs, conventional closeness centrality metrics fail because it is not
+possible to traverse between a given node and all other nodes in the graph.
+Global closeness centrality is calculated in a way that yields values even
+for multi-component graphs. For an example of how global closeness
+centrality can be used to analyze co-authorship networks, see the blog post 
+<a class="reference external" href="http://devo-evo.lab.asu.edu/node/459">here</a>.</p>
+<p>To calculate the global closeness centrality of a single node, try:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.analyze</span> <span class="kn">as</span> <span class="nn">az</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ngbc</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">node_global_closeness_centrality</span><span class="p">(</span><span class="n">BC</span><span class="p">,</span> <span class="s">&#39;LEE 1975 EVOLUTION&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ngbc</span>
+<span class="go">0.154245</span>
+</pre></div>
+</div>
+<p>You can calculate the global closeness centrality of all nodes in the 
+network using <a class="reference internal" href="#tethne.analyze.graph.global_closeness_centrality" title="tethne.analyze.graph.global_closeness_centrality"><tt class="xref py py-func docutils literal"><span class="pre">global_closeness_centrality()</span></tt></a> .</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">GBC</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">global_closeness_centrality</span><span class="p">(</span><span class="n">BC</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">GBC</span>
+<span class="go">{&#39;a&#39;: 0.0, &#39;c&#39;: 0.0, &#39;b&#39;: 0.6666666666666666, &#39;d&#39;: 0.0}</span>
+</pre></div>
+</div>
+<p>For connected graphs, this is equivalent to conventional betweenness 
+centrality. For disconnected graphs, works around infinite path lengths 
+between nodes in different components.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

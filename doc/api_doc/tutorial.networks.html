@@ -103,7 +103,7 @@ recommended namespace convention.</p>
 </div>
 <p>There are two main ways of using network-building methods:</p>
 <div class="section" id="generating-a-single-network-directly-from-a-list-of-paper-objects">
-<h3>1. Generating a single network directly from a list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects<a class="headerlink" href="#generating-a-single-network-directly-from-a-list-of-paper-objects" title="Permalink to this headline">¶</a></h3>
+<h3>Generating a single network directly from a list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects<a class="headerlink" href="#generating-a-single-network-directly-from-a-list-of-paper-objects" title="Permalink to this headline">¶</a></h3>
 <p>All methods in <a class="reference internal" href="tethne.networks.html#module-tethne.networks" title="tethne.networks"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.networks</span></tt></a> take lists of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> as arguments. For
 example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
@@ -114,7 +114,7 @@ example:</p>
 </div>
 </div>
 <div class="section" id="generating-a-graphcollection-from-a-datacollection">
-<h3>2. Generating a <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> from a <a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a><a class="headerlink" href="#generating-a-graphcollection-from-a-datacollection" title="Permalink to this headline">¶</a></h3>
+<span id="generate-graphcollection"></span><h3>Generating a <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> from a <a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a><a class="headerlink" href="#generating-a-graphcollection-from-a-datacollection" title="Permalink to this headline">¶</a></h3>
 <p>This is useful in cases where you want to evaluate the evolution of network structure
 over time, or compare networks generated using subsets of your data.</p>
 <p>To generate a time-variant <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>, slice your
@@ -226,8 +226,8 @@ for example, you could slice using the <tt class="docutils literal"><span class=
 <li><a class="reference internal" href="#">Creating Networks from Bibliographic Data</a><ul>
 <li><a class="reference internal" href="#parsing-data">Parsing Data</a></li>
 <li><a class="reference internal" href="#creating-networks">Creating Networks</a><ul>
-<li><a class="reference internal" href="#generating-a-single-network-directly-from-a-list-of-paper-objects">1. Generating a single network directly from a list of <tt class="docutils literal"><span class="pre">Paper</span></tt> objects</a></li>
-<li><a class="reference internal" href="#generating-a-graphcollection-from-a-datacollection">2. Generating a <tt class="docutils literal"><span class="pre">GraphCollection</span></tt> from a <tt class="docutils literal"><span class="pre">DataCollection</span></tt></a></li>
+<li><a class="reference internal" href="#generating-a-single-network-directly-from-a-list-of-paper-objects">Generating a single network directly from a list of <tt class="docutils literal"><span class="pre">Paper</span></tt> objects</a></li>
+<li><a class="reference internal" href="#generating-a-graphcollection-from-a-datacollection">Generating a <tt class="docutils literal"><span class="pre">GraphCollection</span></tt> from a <tt class="docutils literal"><span class="pre">DataCollection</span></tt></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#networks-of-documents">Networks of Documents</a></li>
