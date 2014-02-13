@@ -68,7 +68,7 @@ using networkx.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="tethne.analyze.html#module-tethne.analyze" title="tethne.analyze"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.analyze</span></tt></a></td>
-<td>Methods for analyizing graphs and graph collections</td>
+<td>The <a class="reference internal" href="tethne.analyze.html#module-tethne.analyze" title="tethne.analyze"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.analyze</span></tt></a> sub-package provides additional analysis methods not</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#module-tethne.builders" title="tethne.builders"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.builders</span></tt></a></td>
 <td>Classes for building a <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</td>
@@ -578,8 +578,10 @@ step (ignored for time_period).</td>
 <em class="property">class </em><tt class="descclassname">tethne.data.</tt><tt class="descname">GraphCollection</tt><a class="reference internal" href="_modules/tethne/data.html#GraphCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.GraphCollection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>Collection of NetworkX <tt class="xref py py-class docutils literal"><span class="pre">nx.classes.graph.Graph</span></tt> objects, 
-organized by some index (e.g. time). Provides analysis functions in NetworkX
-for entire collection of Graphs.</p>
+organized by some index (e.g. time).</p>
+<p>A <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> can be generated using classes in the
+<a class="reference internal" href="#module-tethne.builders" title="tethne.builders"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.builders</span></tt></a> module. See 
+<a class="reference internal" href="tutorial.networks.html#generate-graphcollection"><em>Generating a GraphCollection from a DataCollection</em></a> for details.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>

@@ -55,8 +55,8 @@ recommended namespace convention.
 
 There are two main ways of using network-building methods:
 
-1. Generating a single network directly from a list of :class:`.Paper` objects
-``````````````````````````````````````````````````````````````````````````````
+Generating a single network directly from a list of :class:`.Paper` objects
+```````````````````````````````````````````````````````````````````````````
 
 All methods in :mod:`tethne.networks` take lists of :class:`.Paper` as arguments. For
 example:
@@ -67,9 +67,11 @@ example:
    >>> papers = rd.wos.read("/Path/to/savedrecs.txt")
    >>> import tethne.networks as nt
    >>> BC = nt.papers.bibliographic_coupling(papers, threshold=2)
-   
-2. Generating a :class:`.GraphCollection` from a :class:`.DataCollection` 
-`````````````````````````````````````````````````````````````````````````
+
+.. _generate-graphcollection:
+
+Generating a :class:`.GraphCollection` from a :class:`.DataCollection` 
+``````````````````````````````````````````````````````````````````````
 
 This is useful in cases where you want to evaluate the evolution of network structure
 over time, or compare networks generated using subsets of your data.
