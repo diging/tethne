@@ -3,10 +3,14 @@
 {% block content %}
   <form method="post" class="form">
     <h3 class="form-heading">Register <a href="{{ url_for('home') }}" title="Back to homepage"><i class="icon icon-home pull-right"></i></a></h3>
-    {{ form.name(class_ = 'form-control first-input', placeholder = form.name.label.text, required = true, autofocus = true) }}
+    {{ form.name(class_ = 'form-control first-input', placeholder = "Username", required = true, autofocus = true) }}
     {{ form.email(class_ = 'form-control', placeholder = form.email.label.text, required = true) }}
     {{ form.password(class_ = 'form-control', placeholder = form.password.label.text, required = true) }}
     {{ form.confirm(class_ = 'form-control last-input', placeholder = form.confirm.label.text, required = true) }}
+    {{ form.institution(class_ = 'form-control', placeholder = form.institution.label.text, required = true) }}
+	{{ form.security_question(class_ = 'form-control', placeholder = form.security_question.label.text, required = true) }}
+	{{ form.security_answer(class_ = 'form-control', placeholder = form.security_answer.label.text, required = true) }}
+    
     <p class="pull-left"><a href="{{ url_for('login') }}">Login</a></p>
     <input type="submit" value="Register" class="btn btn-primary btn-lg btn-block">
   </form>

@@ -7,20 +7,45 @@ from forms import *
 app = Flask(__name__)
 app.config.from_object('config')
 
+#from flaskext.zodb import ZODB
+#db = ZODB(app)
 
+# @app.before_request
+# def set_db_defaults():
+#     if 'entries' not in db:
+#         db['entries'] = List()
+        
+        
+        
+# @app.route('/logout')
+# def logout():
+#     session.pop('logged_in', None)
+#     flash('You were logged out')
+#     return redirect(url_for('show_entries'))
+            
 
-@app.route('/')
+@app.route('/', methods=['GET','POST'])
 def home():
-    return render_template('pages/placeholder.home.html')
+    form = LoginForm(request.form)
+    return render_template('forms/login.html', form = form)
 
-@app.route('/index')
-def index():
-    return render_template('pages/placeholder.home.html')
 
-@app.route('/about')
-def about():
-    return render_template('pages/placeholder.about.html')
+@app.route('/login', methods=['GET','POST'])
+def login():
+	flash('Welcome to Tethne Website')
+	form = LoginForm(request.form)
+	return render_template('forms/login.html', form = form)
+    
+    
+@app.route('/register',methods=['GET','POST'])
+def register():
+    form = RegisterForm(request.form)
+    return render_template('forms/register.html', form = form)
 
+@app.route('/forgot',methods=['GET','POST'])
+def forgot():
+    form = ForgotForm(request.form)
+    return render_template('forms/forgot.html', form = form)    
 
 # Error handlers.
 
