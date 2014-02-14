@@ -1,6 +1,9 @@
 """
 Methods for generating networks in which papers are vertices.
 
+Methods
+```````
+
 .. autosummary::
 
    author_coupling
@@ -17,7 +20,30 @@ import tethne.data as ds
 
 def direct_citation(doc_list, node_id='ayjid', node_attribs=['date']):
     """
-    Create a NetworkX directed graph based on citation records.
+    Create a traditional directed citation network.
+
+    Direct-citation graphs are `directed acyclic graphs`__ in which vertices are
+    documents, and each (directed) edge represents a citation of the target 
+    paper by the source paper. The :func:`.networks.papers.direct_citation` 
+    method generates both a global citation graph, which includes all cited and 
+    citing papers, and an internal citation graph that describes only citations 
+    among papers in the original dataset.
+
+    .. _dag: http://en.wikipedia.org/wiki/Directed_acyclic_graph
+
+    __ dag_
+
+    To generate direct-citation graphs, use the 
+    :func:`.networks.papers.direct_citation` method. Note the size difference 
+    between the global and internal citation graphs.
+
+    .. code-block:: python
+
+       >>> gDC, iDC = nt.papers.direct_citation(papers)
+       >>> len(gDC)
+       5998
+       >>> len(iDC)
+       163
 
     ==============     =========================================================
     Element            Description
@@ -115,6 +141,30 @@ def bibliographic_coupling(doc_list, citation_id='ayjid', threshold=1,
                            weighted=False):
     """
     Generate a bibliographic coupling network.
+    
+    Two papers are **bibliographically coupled** when they both cite the same, 
+    third, paper. You can generate a bibliographic coupling network using the 
+    :func:`.networks.papers.bibliographic_coupling` method.
+
+    .. code-block:: python
+
+       >>> BC = nt.papers.bibliographic_coupling(papers)
+       >>> BC
+       <networkx.classes.graph.Graph object at 0x102eec710>
+
+    Especially when working with large datasets, or disciplinarily narrow 
+    literatures, it is usually helpful to set a minimum number of shared 
+    citations required for two papers to be coupled. You can do this by setting 
+    the **`threshold`** parameter.
+
+    .. code-block:: python
+
+       >>> BC = nt.papers.bibliographic_coupling(papers, threshold=1)
+       >>> len(BC.edges())
+       1216
+       >>> BC = nt.papers.bibliographic_coupling(papers, threshold=2)
+       >>> len(BC.edges())
+       542
 
     ===============    =========================================================
     Element            Description
@@ -124,7 +174,8 @@ def bibliographic_coupling(doc_list, citation_id='ayjid', threshold=1,
     Edge               (a,b) in E(G) if a and b share x citations where x >=
                        threshold.
     Edge Attributes    overlap: the number of citations shared
-    ===============    =========================================================
+    ===============    ========================================================= 
+    
 
     Parameters
     ----------
@@ -140,6 +191,12 @@ def bibliographic_coupling(doc_list, citation_id='ayjid', threshold=1,
     node_attribs : list
         List of fields in :class:`.Paper` to include as node attributes in
         graph.
+    weighted : bool
+        If True, edge attribute `overlap` is a float in {0-1} calculated as
+        :math:`\cfrac{N_{ij}}{\sqrt{N_{i}N_{j}}}` where :math:`N_{i}` and 
+        :math:`N_{j}` are the number of references in :class:`.Paper` *i* and 
+        *j*, respectively, and :math:`N_{ij}` is the number of references 
+        shared by papers *i* and *j*.
 
     Returns
     -------
@@ -215,12 +272,41 @@ def bibliographic_coupling(doc_list, citation_id='ayjid', threshold=1,
 
 def cocitation(papers, threshold, node_id='ayjid', topn=None, verbose=False):
     """
-    A cocitation network is a network in which vertices are papers, and edges
-    indicate that two papers were cited by the same third paper. Should slice
-    the dataset into timeslices (as indicated) based on the publication date of
-    the citing papers in the dataset. Each time-slice should result in a
-    separate networkx Graph in which vertices are the _cited_ papers. Separate
-    graphs allows to analyze each timeslice separately.
+    Generate a cocitation network.
+    
+    A **cocitation network** is a network in which vertices are papers, and 
+    edges indicate that two papers were cited by the same third paper. 
+    `CiteSpace <http://cluster.cis.drexel.edu/~cchen/citespace/doc/jasist2006.pdf>`_
+    is a popular desktop application for co-citation analysis, and you can read 
+    about the theory behind it 
+    `here <http://cluster.cis.drexel.edu/~cchen/citespace/>`_. Co-citation
+    analysis is generally performed with a temporal component, so building a
+    :class:`.GraphCollection` from a :class`.DataCollection` sliced by ``date``
+    is recommended.
+
+    You can generate a co-citation network using the 
+    :func:`.networks.papers.cocitation` method:
+
+    .. code-block:: python
+
+       >>> CC = nt.papers.cocitation(papers)
+       >>> CC
+       <networkx.classes.graph.Graph object at 0x102eec790>
+
+    For large datasets, you may wish to set a minimum number of co-citations 
+    required for an edge between two papers Keep in mind that all of the 
+    references in a single paper are co-cited once, so a threshold of at least 
+    2 is prudent. Note the dramatic decrease in the number of edges when the 
+    threshold is changed from 2 to 3.
+
+    .. code-block:: python
+
+       >>> CC = nt.papers.cocitation(papers, threshold=2)
+       >>> len(CC.edges())
+       8889
+       >>> CC = nt.papers.cocitation(papers, threshold=3)
+       >>> len(CC.edges())
+       1493    
 
     ===============    =========================================================
     Element            Description
@@ -323,8 +409,7 @@ def cocitation(papers, threshold, node_id='ayjid', topn=None, verbose=False):
 
 def author_coupling(doc_list, threshold, node_attribs, node_id='ayjid'):
     """
-    Generate a simple author coupling network, where vertices are papers and
-    an edge indicates that two papers share a common author.
+    Vertices are papers and edges indicates shared authorship.
 
     ===============    =========================================================
     Element            Description

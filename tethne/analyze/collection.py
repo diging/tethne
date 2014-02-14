@@ -11,12 +11,11 @@ import graph
 
 def algorithm(C, method, **kwargs):
     """
+    Apply NetworkX method to each ``Graph`` in :class:`.GraphCollection`\.
+    
     Passes kwargs to specified NetworkX method for each Graph, and returns
-    a dictionary of results as:
-
-    * results
-        * elem (node or edge)
-            * graph index (e.g. year)
+    a dictionary of results indexed by element (node or edge) and graph index
+    (e.g. ``date``).
 
     Parameters
     ----------
@@ -47,22 +46,14 @@ def algorithm(C, method, **kwargs):
 
     .. code-block:: python
 
-        >>> import tethne.data as ds
-        >>> import tethne.analyze as az
-        >>> import networkx as nx
-        >>> C = ds.GraphCollection()
-        >>> # Generate some random graphs
-        >>> for graph_index in xrange(1999, 2004):
-        >>>     g = nx.random_regular_graph(4, 100)
-        >>>     C[graph_index] = g
-        >>> # Analyze the GraphCollection
-        >>> results = az.collection.algorithm(C, 'betweenness_centrality',
-        >>> print results[0]
-        {1999: 0.010101651117889644,
-        2000: 0.0008689093723107329,
-        2001: 0.010504898852426189,
-        2002: 0.009338654511194512,
-        2003: 0.007519105636349891}
+       >>> import tethne.analyze as az
+       >>> BC = az.collection.algorithm(C, 'betweenness_centrality')
+       >>> print BC[0]
+       {1999: 0.010101651117889644,
+       2000: 0.0008689093723107329,
+       2001: 0.010504898852426189,
+       2002: 0.009338654511194512,
+       2003: 0.007519105636349891}
 
     """
 

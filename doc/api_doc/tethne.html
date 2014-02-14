@@ -24,6 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="tethne  documentation" href="index.html" />
     <link rel="prev" title="Analyzing Bibliographic Networks" href="tutorial.analyze.html" /> 
   </head>
@@ -67,7 +68,7 @@ using networkx.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="tethne.analyze.html#module-tethne.analyze" title="tethne.analyze"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.analyze</span></tt></a></td>
-<td>Methods for analyizing graphs and graph collections</td>
+<td>The <a class="reference internal" href="tethne.analyze.html#module-tethne.analyze" title="tethne.analyze"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.analyze</span></tt></a> sub-package provides additional analysis methods not</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#module-tethne.builders" title="tethne.builders"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.builders</span></tt></a></td>
 <td>Classes for building a <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</td>
@@ -410,9 +411,10 @@ in this <a class="reference internal" href="#tethne.data.DataCollection" title="
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dict</strong> : Keys are slice indices. If papers is True, values are lists of</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>slices</strong> : dict</p>
 <blockquote>
-<div><p><a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances; otherwise returns paper indices (e.g.
+<div><p>Keys are slice indices. If papers is True, values are lists of
+<a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances; otherwise returns paper indices (e.g.
 &#8216;wosid&#8217;).</p>
 </div></blockquote>
 </td>
@@ -576,8 +578,10 @@ step (ignored for time_period).</td>
 <em class="property">class </em><tt class="descclassname">tethne.data.</tt><tt class="descname">GraphCollection</tt><a class="reference internal" href="_modules/tethne/data.html#GraphCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.GraphCollection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>Collection of NetworkX <tt class="xref py py-class docutils literal"><span class="pre">nx.classes.graph.Graph</span></tt> objects, 
-organized by some index (e.g. time). Provides analysis functions in NetworkX
-for entire collection of Graphs.</p>
+organized by some index (e.g. time).</p>
+<p>A <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> can be generated using classes in the
+<a class="reference internal" href="#module-tethne.builders" title="tethne.builders"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.builders</span></tt></a> module. See 
+<a class="reference internal" href="tutorial.networks.html#generate-graphcollection"><em>Generating a GraphCollection from a DataCollection</em></a> for details.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -922,10 +926,19 @@ substantially more processing time, and values will usually be &gt;&gt; 0.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tethne.networks.html">networks Package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tethne.networks.html#id1"><tt class="docutils literal"><span class="pre">networks</span></tt> Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.networks.html#module-tethne.networks.authors"><tt class="docutils literal"><span class="pre">authors</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.networks.html#id1"><tt class="docutils literal"><span class="pre">networks</span></tt> Package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tethne.networks.html#modules">Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.networks.html#module-tethne.networks.authors"><tt class="docutils literal"><span class="pre">authors</span></tt> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tethne.networks.html#methods">Methods</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.networks.html#module-tethne.networks.helpers"><tt class="docutils literal"><span class="pre">helpers</span></tt> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.networks.html#module-tethne.networks.papers"><tt class="docutils literal"><span class="pre">papers</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.networks.html#module-tethne.networks.papers"><tt class="docutils literal"><span class="pre">papers</span></tt> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tethne.networks.html#id2">Methods</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.networks.html#module-tethne.networks.terms"><tt class="docutils literal"><span class="pre">terms</span></tt> Module</a></li>
 </ul>
 </li>
@@ -933,7 +946,12 @@ substantially more processing time, and values will usually be &gt;&gt; 0.</p>
 <li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#id1"><tt class="docutils literal"><span class="pre">readers</span></tt> Package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#module-tethne.readers.dfr"><tt class="docutils literal"><span class="pre">dfr</span></tt> Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#module-tethne.readers.pubmed"><tt class="docutils literal"><span class="pre">pubmed</span></tt> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#module-tethne.readers.wos"><tt class="docutils literal"><span class="pre">wos</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#module-tethne.readers.wos"><tt class="docutils literal"><span class="pre">wos</span></tt> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tethne.readers.html#one-step-parsing">One-step Parsing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tethne.readers.html#two-step-parsing">Two-step Parsing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tethne.readers.html#methods">Methods</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tethne.utilities.html">utilities Package</a><ul>

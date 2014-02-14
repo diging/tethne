@@ -24,8 +24,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="tethne  documentation" href="index.html" />
-    <link rel="next" title="Getting Data from the Web of Science" href="tutorial.getting_data.html" />
+    <link rel="next" title="Getting Bibliographic Data" href="tutorial.getting_data.html" />
     <link rel="prev" title="Tethne: Bibliographic Network Analysis in Python" href="index.html" /> 
   </head>
   <body>
@@ -42,7 +43,7 @@
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorial.getting_data.html" title="Getting Data from the Web of Science"
+          <a href="tutorial.getting_data.html" title="Getting Bibliographic Data"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Tethne: Bibliographic Network Analysis in Python"
@@ -71,27 +72,34 @@
 <h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
 <p>After starting Python, import Tethne modules with:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.networks</span> <span class="kn">as</span> <span class="nn">nt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.analyze</span> <span class="kn">as</span> <span class="nn">az</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
 </pre></div>
 </div>
-<p>To parse some data from the Web of Science, use the tethne.readers.wos module.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/Path/To/Data.txt&quot;</span><span class="p">)</span>
+<p>To parse some data from the Web of Science, use the <a class="reference internal" href="tethne.readers.html#module-tethne.readers.wos" title="tethne.readers.wos"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.readers.wos</span></tt></a> module. See
+the <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> class for more information about what Tethne extracts from your WoS
+data.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/Path/To/FirstDataSet.txt&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">&lt;tethne.data.Paper instance at 0x1015ed200&gt;</span>
 </pre></div>
 </div>
-<p>You can then generate a network using methods from the tethne.networks
-subpackage. For example, to build a bibliographic coupling network:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">citations</span><span class="o">.</span><span class="n">bibliographic_coupling</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+<p>You can either generate a network directly from your data using the methods in
+<tt class="xref py py-mod docutils literal"><span class="pre">tethne.networks.wos</span></tt> , or you can package your data in a <a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a>
+for comparative or longitudinal analysis. If you want to generate a dynamic network, then
+use a <a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> .</p>
+<div class="section" id="simple-networks">
+<h3>Simple Networks<a class="headerlink" href="#simple-networks" title="Permalink to this headline">¶</a></h3>
+<p>To generate a single network directly from your data, use the <tt class="xref py py-mod docutils literal"><span class="pre">tethne.networks.wos</span></tt>
+module. For example, to build a bibliographic coupling network:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.networks</span> <span class="kn">as</span> <span class="nn">nt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">citations</span><span class="o">.</span><span class="n">bibliographic_coupling</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span>
 <span class="go">&lt;networkx.classes.graph.Graph object at 0x101b4fe50&gt;</span>
 </pre></div>
 </div>
-<p>NetworkX provides <a class="reference external" href="http://networkx.github.io/documentation/networkx-1.7/reference/algorithms.html">algorithms</a> for graph analysis. To generate
-betweenness-centrality values for each node, try:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">networks</span> <span class="kn">as</span> <span class="nn">nx</span>
+<p>NetworkX provides
+<a class="reference external" href="http://networkx.github.io/documentation/networkx-1.7/reference/algorithms.html">algorithms</a>
+for graph analysis. To generate betweenness-centrality values for each node, try:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">b_centrality</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">betweenness_centrality</span><span class="p">(</span><span class="n">BC</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">BC</span><span class="p">,</span> <span class="s">&#39;betweenness&#39;</span><span class="p">,</span> <span class="n">b_centrality</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -99,44 +107,72 @@ betweenness-centrality values for each node, try:</p>
 </pre></div>
 </div>
 <p>You can then export your network for visualization using one of the methods
-in tethne.writers. For example, to generate a simple interaction file (SIF):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">to_sif</span><span class="p">(</span><span class="n">BC</span><span class="p">,</span> <span class="s">&#39;/Path/to/Output/File&#39;</span><span class="p">)</span>
+in <a class="reference internal" href="tethne.writers.html#module-tethne.writers" title="tethne.writers"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.writers</span></tt></a> . For example, to generate a simple interaction file (SIF):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">to_sif</span><span class="p">(</span><span class="n">BC</span><span class="p">,</span> <span class="s">&#39;/Path/to/Output/File&#39;</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="sliced-networks-for-comparative-or-longitudinal-analysis">
+<h3>Sliced Networks for Comparative or Longitudinal Analysis<a class="headerlink" href="#sliced-networks-for-comparative-or-longitudinal-analysis" title="Permalink to this headline">¶</a></h3>
+<p>Especially if you want to create a dynamic network (a network that changes over time), use
+a <a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> to organize your data.</p>
+<p>To create a <a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.data</span> <span class="kn">import</span> <span class="n">DataCollection</span><span class="p">,</span> <span class="n">GraphCollection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">DataCollection</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can then use the <a class="reference internal" href="tethne.html#tethne.data.DataCollection.slice" title="tethne.data.DataCollection.slice"><tt class="xref py py-func docutils literal"><span class="pre">tethne.data.DataCollection.slice()</span></tt></a> method to slice your data,
+e.g. by publication date. To use a 4-year sliding time-window:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">D</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;time_window&#39;</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create a <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to manage your graphs. <a class="reference internal" href="tethne.html#module-tethne.builders" title="tethne.builders"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.builders</span></tt></a> provides
+some helpful classes for creating a <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> from a
+<a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> . For example <a class="reference internal" href="tethne.html#tethne.builders.authorCollectionBuilder" title="tethne.builders.authorCollectionBuilder"><tt class="xref py py-class docutils literal"><span class="pre">authorCollectionBuilder</span></tt></a> build a
+<a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> using an author-based network (e.g. coauthorship networks) in
+<a class="reference internal" href="tethne.networks.html#module-tethne.networks.authors" title="tethne.networks.authors"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.networks.authors</span></tt></a> :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.builders</span> <span class="kn">import</span> <span class="n">authorCollectionBuilder</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">builder</span> <span class="o">=</span> <span class="n">authorCollectionBuilder</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;coauthors&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To write <a class="reference external" href="https://code.google.com/p/dynnetwork/wiki/DynamicXGMML">dynamic XGMML</a>
+for visualization in <a class="reference external" href="http://cytoscape.org">Cytoscape</a>, use the writing methods in
+<a class="reference internal" href="tethne.writers.html#module-tethne.writers.collection" title="tethne.writers.collection"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.writers.collection</span></tt></a> :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">to_dxgmml</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="s">&#39;/Path/to/Network.xgmml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="step-by-step-guide">
 <h2>Step-By-Step Guide<a class="headerlink" href="#step-by-step-guide" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.getting_data.html">Getting Data from the Web of Science</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial.getting_data.html#structure-of-the-wos-field-tagged-data-file">Structure of the WoS Field-Tagged Data File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.getting_data.html">Getting Bibliographic Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.getting_data.html#getting-data-from-the-web-of-science">Getting Data from the Web of Science</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.getting_data.html#structure-of-the-wos-field-tagged-data-file">Structure of the WoS Field-Tagged Data File</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.readers.html">Parsing Bibliographic Data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial.readers.html#web-of-science">Web of Science</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.getting_data.html#getting-data-from-jstor-data-for-research">Getting Data from JSTOR Data-for-Research</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.networks.html">Creating Bibliographic Networks</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial.networks.html#networks-of-documents">Networks of Documents</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tutorial.networks.html#direct-citation-graphs">Direct-Citation Graphs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorial.networks.html#bibliographic-coupling">Bibliographic Coupling</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorial.networks.html#co-citation-networks">Co-Citation Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.networks.html">Creating Networks from Bibliographic Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.networks.html#parsing-data">Parsing Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.networks.html#creating-networks">Creating Networks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.networks.html#generating-a-single-network-directly-from-a-list-of-paper-objects">Generating a single network directly from a list of <tt class="docutils literal"><span class="pre">Paper</span></tt> objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.networks.html#generating-a-graphcollection-from-a-datacollection">Generating a <tt class="docutils literal"><span class="pre">GraphCollection</span></tt> from a <tt class="docutils literal"><span class="pre">DataCollection</span></tt></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial.networks.html#networks-of-authors">Networks of Authors</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tutorial.networks.html#co-authorship-networks">Co-Authorship Networks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorial.networks.html#author-co-institution-networks">Author Co-Institution Networks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorial.networks.html#author-co-citation-networks">Author Co-Citation Networks</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.networks.html#networks-of-documents">Networks of Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.networks.html#networks-of-authors">Networks of Authors</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.analyze.html">Analyzing Bibliographic Networks</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial.analyze.html#tethne-analyze-subpackage">tethne.analyze subpackage</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tutorial.analyze.html#tethne-analyze-graph-module">tethne.analyze.graph module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tutorial.analyze.html#global-closeness-centrality">Global Closeness Centrality</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.analyze.html#analyzing-individual-networks">Analyzing individual networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.analyze.html#analyzing-a-graphcollection">Analyzing a <tt class="docutils literal"><span class="pre">GraphCollection</span></tt></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.analyze.html#methods">Methods</a></li>
 </ul>
 </li>
 </ul>
@@ -156,7 +192,11 @@ in tethne.writers. For example, to generate a simple interaction file (SIF):</p>
   <ul>
 <li><a class="reference internal" href="#">Tutorial</a><ul>
 <li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li><a class="reference internal" href="#quickstart">Quickstart</a><ul>
+<li><a class="reference internal" href="#simple-networks">Simple Networks</a></li>
+<li><a class="reference internal" href="#sliced-networks-for-comparative-or-longitudinal-analysis">Sliced Networks for Comparative or Longitudinal Analysis</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#step-by-step-guide">Step-By-Step Guide</a><ul>
 </ul>
 </li>
@@ -169,7 +209,7 @@ in tethne.writers. For example, to generate a simple interaction file (SIF):</p>
                         title="previous chapter">Tethne: Bibliographic Network Analysis in Python</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="tutorial.getting_data.html"
-                        title="next chapter">Getting Data from the Web of Science</a></p>
+                        title="next chapter">Getting Bibliographic Data</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/tutorial.txt"
@@ -205,7 +245,7 @@ in tethne.writers. For example, to generate a simple interaction file (SIF):</p>
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorial.getting_data.html" title="Getting Data from the Web of Science"
+          <a href="tutorial.getting_data.html" title="Getting Bibliographic Data"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Tethne: Bibliographic Network Analysis in Python"

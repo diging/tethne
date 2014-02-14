@@ -1,6 +1,68 @@
 """
 Reader for Web of Science field-tagged bibliographic data.
 
+Tethne parses Web of Science field-tagged data into a list of :class:`.Paper` 
+objects. This is a two-step process: data are first parsed into a list of 
+dictionaries with field-tags as keys, and then each dictionary is converted to a
+:class:`.Paper` . :func:`.readers.wos.read` performs both steps in sequence.
+
+One-step Parsing
+````````````````
+
+The method :func:`.readers.wos.read` performs both :func:`.readers.wos.parse` 
+and :func:`.readers.wos.convert` . This is the preferred (simplest) approach in
+most cases.
+
+.. code-block:: python
+
+   >>> papers = rd.wos.read("/Path/to/savedrecs.txt")
+   >>> papers[0]
+   <tethne.data.Paper instance at 0x101b575a8>
+
+Alternatively, if you have many data files saved in the same directory, you can 
+use :func:`.readers.wos.from_dir` :
+
+.. code-block:: python
+
+   >>> papers = rd.wos.parse_from_dir("/Path/to")
+
+Two-step Parsing
+````````````````
+
+Use the two-step approach if you need to access fields not included in 
+:class:`.Paper`\, or if you wish to perform some intermediate manipulation on
+the raw parsed data.
+
+First import the :mod:`.readers.wos` module:
+
+.. code-block:: python
+
+   >>> import tethne.readers as rd
+
+Then parse the WoS data to a list of field-tagged dictionaries using 
+:func:`.readers.wos.parse` :
+
+.. code-block:: python
+
+   >>> wos_list = rd.wos.parse("/Path/to/savedrecs.txt")
+   >>> wos_list[0].keys()
+   ['EM', '', 'CL', 'AB', 'WC', 'GA', 'DI', 'IS', 'DE', 'VL', 'CY', 'AU', 'JI', 
+    'AF', 'CR', 'DT', 'TC', 'EP', 'CT', 'PG', 'PU', 'PI', 'RP', 'J9', 'PT', 
+    'LA', 'UT', 'PY', 'ID', 'SI', 'PA', 'SO', 'Z9', 'PD', 'TI', 'SC', 'BP', 
+    'C1', 'NR', 'RI', 'ER', 'SN']
+
+Convert those field-tagged dictionaries to :class:`.Paper` objects using 
+:func:`.readers.wos.convert` :
+
+.. code-block:: python
+
+   >>> papers = rd.wos.convert(wos_list)
+   >>> papers[0]
+   <tethne.data.Paper instance at 0x101b575a8>
+
+Methods
+```````
+
 .. autosummary::
 
    convert
@@ -590,9 +652,13 @@ def read(datapath):
        >>> papers = rd.wos.read("/Path/to/data.txt")
 
     """
+    # Added Try Except 
+    try:
+        wl = parse(datapath)
+        papers = convert(wl)
+    except IOError:
+        raise IOError("Invalid path.")
 
-    wl = parse(datapath)
-    papers = convert(wl)
     return papers
 
 # [#60462784]

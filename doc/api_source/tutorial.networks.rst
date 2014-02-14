@@ -1,155 +1,151 @@
-Creating Bibliographic Networks
-===============================
+Creating Networks from Bibliographic Data
+=========================================
 
 .. sidebar:: Ready to Proceed?
 
-   Once you have collected_ and parsed_ 
+   Once you have collected_  
    your bibliographic data, you're ready 
-   to build networks.
+   to start building networks.
 
-There are many different network models that can be used to describe bibliographic data. These can be
-roughly divided into two categories: networks that describe relationships among documents, 
-and networks that describe relationships among the authors of those documents. Each of these is
-described in turn, below.
+Parsing Data
+------------
+
+Methods for parsing bibliographic data are contained in the :mod:`.readers` module. 
+Tethne parses bibliographic data into a list of :class:`.Paper` objects that can then
+be used to generate networks.
+
+Many (but not all) of the networks that Tethne can generate require citation data. The
+current version of Tethne only supports citation data from the Web of Science, which can
+be parsed using the :mod:`.readers.wos` module. For example:
+
+.. code-block:: python
+
+   >>> import tethne.readers as rd
+   >>> papers = rd.wos.read("/Path/to/savedrecs.txt")
+
+Tethne can also parse data from `JSTOR's
+Data-for-Research portal <http://dfr.jstor.org>`_, using the :mod:`.readers.dfr` module.
+Those data can be merged with a WoS dataset (see :func:`.readers.merge`\), or
+used on their own to generate coauthor networks, with
+:func:`.networks.authors.coauthors`\.
+
+.. code-block:: python
+
+   >>> import tethne.readers as rd
+   >>> papers = rd.dfr.read("/Path/to/DfR")
+
+Creating Networks
+-----------------
+
+There are many different network models that can be used to describe bibliographic data. 
+These can be roughly divided into two categories: networks that describe relationships 
+among documents, and networks that describe relationships among the authors of those 
+documents. For specific methods, see :ref:`networks-of-documents` and 
+:ref:`networks-of-authors`.
 
 .. _collected: tutorial.getting_data.html
 .. _parsed: tutorial.readers.html
 
-First, import the :mod:`.networks` module.
+All network-building methods can be found in the :mod:`.networks` module. ``nt`` is the
+recommended namespace convention.
 
 .. code-block:: python
 
    >>> import tethne.networks as nt
 
+There are two main ways of using network-building methods:
+
+Generating a single network directly from a list of :class:`.Paper` objects
+```````````````````````````````````````````````````````````````````````````
+
+All methods in :mod:`tethne.networks` take lists of :class:`.Paper` as arguments. For
+example:
+
+.. code-block:: python
+
+   >>> import tethne.readers as rd
+   >>> papers = rd.wos.read("/Path/to/savedrecs.txt")
+   >>> import tethne.networks as nt
+   >>> BC = nt.papers.bibliographic_coupling(papers, threshold=2)
+
+.. _generate-graphcollection:
+
+Generating a :class:`.GraphCollection` from a :class:`.DataCollection` 
+``````````````````````````````````````````````````````````````````````
+
+This is useful in cases where you want to evaluate the evolution of network structure
+over time, or compare networks generated using subsets of your data.
+
+To generate a time-variant :class:`.GraphCollection`\, slice your 
+:class:`.DataCollection` using the ``date`` field. In the example below, data are sliced
+using a 4-year sliding time-window (for details about slicing, see 
+:func:`tethne.data.DataCollection.slice`\).
+
+.. code-block:: python
+
+   >>> # Parse data.
+   >>> import tethne.readers as rd
+   >>> papers = rd.wos.read("/Path/To/FirstDataSet.txt")
+   
+   >>> # Create a DataCollection, and slice it.
+   >>> from tethne.data import DataCollection, GraphCollection
+   >>> D = DataCollection(papers)
+   >>> D.slice('date', 'time_window', window_size=4)
+   
+   >>> # Build a GraphCollection using a network from tethne.networks.
+   >>> from tethne.builders import authorCollectionBuilder
+   >>> builder = authorCollectionBuilder(D)
+   >>> C = builder.build('date', 'coauthors')
+   
+``C.keys()`` should now yield a list of publication dates in the original dataset.
+
+A :class:`.DataCollection` can be sliced using any ``int`` or ``str`` field in the
+:class:`.Paper` class. If you wish to compare networks generated from two WoS downloads,
+for example, you could slice using the ``accession`` id:
+
+   >>> # Parse data.
+   >>> import tethne.readers as rd
+   >>> papers = rd.wos.read("/Path/To/FirstDataSet.txt")
+   >>> papers += rd.wos.read("/Path/To/SecondDataSet.txt")
+   
+   >>> # Create a DataCollection, and slice it.
+   >>> from tethne.data import DataCollection, GraphCollection
+   >>> D = DataCollection(papers)
+   >>> D.slice('accession')
+   
+   >>> # Build a GraphCollection using a network from tethne.networks.
+   >>> from tethne.builders import authorCollectionBuilder
+   >>> builder = paperCollectionBuilder(D)
+   >>> C = builder.build('date', 'cocitation', threshold=2)
+   
+``C.keys()`` should now yield two values, each an accession UUID.
+
+.. _networks-of-documents:
+
 Networks of Documents
 ---------------------
 
-Methods for building networks in which vertices represent documents are provided in the :mod:`.networks.papers` module. 
+Methods for building networks in which vertices represent documents are provided in the 
+:mod:`.networks.papers` module. 
 
-Direct-Citation Graphs
-``````````````````````
+.. autosummary::
 
-Direct-citation graphs are `directed acyclic graphs`__ in which vertices are documents, and each 
-(directed) edge represents a citation of the target paper by the source paper. The 
-:func:`.networks.papers.direct_citation` method generates both a global citation graph, which 
-includes all cited and citing papers, and an internal citation graph that describes only citations 
-among papers in the original dataset.
+   tethne.networks.papers.author_coupling
+   tethne.networks.papers.bibliographic_coupling
+   tethne.networks.papers.cocitation
+   tethne.networks.papers.direct_citation
 
-.. _dag: http://en.wikipedia.org/wiki/Directed_acyclic_graph
-
-__ dag_
-
-To generate direct-citation graphs, use the :func:`.networks.papers.direct_citation` method.
-Note the size difference between the global and internal citation graphs.
-
-.. code-block:: python
-
-   >>> gDC, iDC = nt.papers.direct_citation(papers)
-   >>> len(gDC)
-   5998
-   >>> len(iDC)
-   163
-
-Bibliographic Coupling
-``````````````````````
-
-Two papers are **bibliographically coupled** when they both cite the same, third, paper. You 
-can generate a bibliographic coupling network using the :func:`.networks.papers.bibliographic_coupling`
-method.
-
-.. code-block:: python
-
-   >>> BC = nt.papers.bibliographic_coupling(papers)
-   >>> BC
-   <networkx.classes.graph.Graph object at 0x102eec710>
-
-Especially when working with large datasets, or disciplinarily narrow literatures, it is 
-usually helpful to set a minimum number of shared citations required for two papers to be 
-coupled. You can do this by setting the **threshold** parameter.
-
-.. code-block:: python
-
-   >>> BC = nt.papers.bibliographic_coupling(papers, threshold=1)
-   >>> len(BC.edges())
-   1216
-   >>> BC = nt.papers.bibliographic_coupling(papers, threshold=2)
-   >>> len(BC.edges())
-   542
-
-Co-Citation Networks
-````````````````````
-
-A **cocitation network** is a network in which vertices are papers, and edges indicate that two papers were cited 
-by the same third paper. CiteSpace_ is a popular desktop application for co-citation analysis, and you can read 
-about the theory behind it here_.
-
-.. _CiteSpace: http://cluster.cis.drexel.edu/~cchen/citespace/
-.. _here: http://cluster.cis.drexel.edu/~cchen/citespace/doc/jasist2006.pdf
-
-You can generate a co-citation network using the :func:`.networks.papers.cocitation` method:
-
-.. code-block:: python
-
-   >>> CC = nt.papers.cocitation(papers)
-   >>> CC
-   <networkx.classes.graph.Graph object at 0x102eec790>
-
-For large datasets, you may wish to set a minimum number of co-citations required for an edge between two papers.
-Keep in mind that all of the references in a single paper are co-cited once, so a threshold of at least 2 is
-prudent. Note the dramatic decrease in the number of edges when the threshold is changed from 2 to 3.
-
-.. code-block:: python
-
-   >>> CC = nt.papers.cocitation(papers, threshold=2)
-   >>> len(CC.edges())
-   8889
-   >>> CC = nt.papers.cocitation(papers, threshold=3)
-   >>> len(CC.edges())
-   1493
+.. _networks-of-authors:
 
 Networks of Authors
 -------------------
 
 Methods for building networks in which vertices represent authors are provided in the :mod:`.networks.authors` module. 
 
-Co-Authorship Networks
-``````````````````````
+.. autosummary::
 
-As the name suggests, edges are drawn between two author-vertices in the case that those authors published a paper together. 
-Co-authorship networks are popular models for studying patterns of collaboration in scientific communities. 
-
-To generate a co-authorship network, use the :func:`.networks.authors.coauthors` method:
-
-.. code-block:: python
-
-   >>> CA = nt.authors.coauthors(papers)
-   >>> CA
-   <networkx.classes.multigraph.MultiGraph object at 0x101705650>
-
-Author Co-Institution Networks
-``````````````````````````````
-
-Some bibliographic datasets, including data from the Web of Science, includes the institutional affiliations of authors.
-In a co-institution graph, two authors (vertices) have an edge between them if they share an institutional affiliation
-in the dataset.
-
-To generate a co-institution network, use the :func:`.networks.authors.author_coinstitution` method:
-
-.. code-block:: python
-
-   >>> ACI = nt.authors.author_coinstitution(papers)
-   >>> ACI
-   <networkx.classes.graph.Graph object at 0x106571190>
-
-Author Co-Citation Networks
-```````````````````````````
-
-Similar to `co-citation networks`_, except that vertices are authors rather than papers. To generate an author
-co-citation network, use the :func:`.networks.authors.author_cocitation` method:
-
-.. code-block:: python
-
-   >>> ACC = nt.authors.author_cocitation(papers)
-   >>> ACC
-   <networkx.classes.graph.Graph object at 0x106571190>
-
+   tethne.networks.authors.author_cocitation
+   tethne.networks.authors.author_coinstitution
+   tethne.networks.authors.author_institution
+   tethne.networks.authors.author_papers
+   tethne.networks.authors.coauthors
