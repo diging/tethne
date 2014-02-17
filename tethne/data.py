@@ -730,3 +730,36 @@ class GraphCollection(object):
             composed = nx.compose(composed, G)
         
         return composed
+
+class LDAModel(object):
+    """
+    Organizes parsed output from MALLET's LDA modeling algorithm.
+    
+    Used by :mod:`.readers.mallet`\.
+    """
+    
+    def __init__(self, doc_topic, top_word, top_keys, metadata):
+        """
+        Initialize the :class:`.LDAModel`\.
+        
+        Parameters
+        ----------
+        doc_top : Numpy matrix
+            Rows are documents, columns are topics. Values indicate the 
+            contribution of a topic to a document, such that all rows sum to 
+            1.0.
+        top_word : Numpy matrix
+            Rows are topics, columns are words. Values indicate the normalized
+            contribution of each word to a topic, such that rows sum to 1.0.
+        top_keys : dict
+            Maps matrix indices for topics onto the top words in that topic.
+        metadata : dict
+            Maps matrix indices for documents onto a :class:`.Paper` key.
+        """
+        
+        self.doc_topic = doc_topic
+        self.top_word = top_word
+        self.top_keys = top_keys
+        self.metadata = metadata
+    
+    
