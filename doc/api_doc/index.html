@@ -24,6 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="tethne  documentation" href="#" />
     <link rel="next" title="Tutorial" href="tutorial.html" /> 
   </head>
@@ -63,8 +64,8 @@ versions will include support for PubMed, Scopus, and other databases.</p>
 data, (2) network <a class="reference external" href="tutorial.networks.html">construction</a>, (3) <a class="reference external" href="tutorial.analyze.html">analysis</a>, and (4) <a class="reference external" href="tutorial.writers.html">writing</a> network data files for
 visualization using software like <a class="reference external" href="http://www.cytoscape.org/">Cytoscape</a> or <a class="reference external" href="https://gephi.org/">Gephi</a>. Methods are also provided for
 generating corpus objects that can be analyzed in the InPhO Vector Space Model (<a class="reference external" href="https://github.com/inpho/vsm">VSM</a>)
-Framework. Tethne relies on <a class="reference external" href="http://networkx.github.io/">NetworkX</a> for graph classes, and leverages its network analysis
-algorithms.</p>
+Framework. Tethne relies on <a class="reference external" href="http://networkx.github.io/">NetworkX</a> for graph classes, and leverages its network
+analysis algorithms.</p>
 <p>To get started, consult the Tutorial. For support, visit our GitHub <a class="reference external" href="https://github.com/diging/tethne">repository</a>.</p>
 <div class="section" id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
@@ -72,11 +73,14 @@ algorithms.</p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorial.html#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial.html#quickstart">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#quickstart">Quickstart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.html#simple-networks">Simple Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.html#sliced-networks-for-comparative-or-longitudinal-analysis">Sliced Networks for Comparative or Longitudinal Analysis</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial.html#step-by-step-guide">Step-By-Step Guide</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tutorial.getting_data.html">Getting Data from the Web of Science</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorial.readers.html">Parsing Bibliographic Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorial.networks.html">Creating Bibliographic Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.getting_data.html">Getting Bibliographic Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.networks.html">Creating Networks from Bibliographic Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tutorial.analyze.html">Analyzing Bibliographic Networks</a></li>
 </ul>
 </li>
@@ -109,7 +113,9 @@ algorithms.</p>
 <h2>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h2>
 <p>Tethne is developed by the ASU Digital Innovation Group (<a class="reference external" href="http://devo-evo.lab.asu.edu/diging">DigInG</a>), part of the Laubichler
 Lab in the Center for Biology &amp; Society, School of Life Sciences.</p>
-<p>This material is based upon work supported by the National Science Foundation Graduate Research Fellowship Program under Grant No. 2011131209, and NSF Doctoral Dissertation Research Improvement Grant No. 1256752.</p>
+<p>This material is based upon work supported by the National Science Foundation Graduate
+Research Fellowship Program under Grant No. 2011131209, and NSF Doctoral Dissertation
+Research Improvement Grant No. 1256752.</p>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
