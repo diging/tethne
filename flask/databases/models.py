@@ -7,7 +7,9 @@ from persistent import Persistent as Object
 from persistent.list import PersistentList as List
 from persistent.mapping import PersistentMapping as Dict
 
-class User(Object):
+class User(Object) :
+
+# Change this as an interface and have two classes extending them.
     
     """
     User Class
@@ -17,17 +19,17 @@ class User(Object):
     def __init__(self):
         pass
     
-    def register(self,user, email, password,emailid,que,ans):
+    def register(self, email, password,emailid,que,ans):
         self.email = email
         self.passwordHash = sha256(password).hexdigest()
         self.id = email
         self.secretque = que
         self.secretans = answerpass
     
-    def login(self,UserObject):
+    def login(self, ):
         pass
    
-    def list_users(self):
+    def list_users(self,user, email):
         pass
     
     def edit_users(self,UserObject):
