@@ -6,7 +6,7 @@
 Tethne: Bibliographic Network Analysis in Python
 ================================================
 
-.. image:: images/logo.jpeg
+.. image:: _static/images/logo.jpeg
    :width: 100%
 
 Tethne provides tools for easily parsing and analyzing bibliographic data in Python.
@@ -18,8 +18,8 @@ Tethne's four main workflow components are (1) parsing_ bibliographic
 data, (2) network construction_, (3) analysis_, and (4) writing_ network data files for
 visualization using software like Cytoscape_ or Gephi_. Methods are also provided for
 generating corpus objects that can be analyzed in the InPhO Vector Space Model (VSM_) 
-Framework. Tethne relies on NetworkX_ for graph classes, and leverages its network analysis
-algorithms.
+Framework. Tethne relies on NetworkX_ for graph classes, and leverages its network 
+analysis algorithms.
 
 .. _NetworkX: http://networkx.github.io/
 .. _parsing: tutorial.readers.html
@@ -51,7 +51,9 @@ Lab in the Center for Biology & Society, School of Life Sciences.
 
 .. _DigInG: http://devo-evo.lab.asu.edu/diging
 
-This material is based upon work supported by the National Science Foundation Graduate Research Fellowship Program under Grant No. 2011131209, and NSF Doctoral Dissertation Research Improvement Grant No. 1256752.
+This material is based upon work supported by the National Science Foundation Graduate 
+Research Fellowship Program under Grant No. 2011131209, and NSF Doctoral Dissertation 
+Research Improvement Grant No. 1256752.
 
 Indices and tables
 ==================

@@ -73,13 +73,17 @@ def to_dxgmml(C, path): # [#61510094]
                 edges[e_key][k][attr] = value
 
     # Write graph to XGMML.
+    nst = '\t<node label="{0}" id="{0}" start="{1}" end="{2}">\n'
+    ast = '\t\t<att name="{0}" type="{1}" value="{2}" start="{3}" end="{4}"/>\n'
+    
     with open(path, "w") as f:
         f.write('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n')
         f.write('<graph>\n')
         for n in nodes.keys():
             for period in nodes[n]['periods']:
                 label = str(n).replace("&", "&amp;").replace('"', '')
-                f.write('\t<node label="'+label+'" id="'+label+'" start="'+ str(period['start']) + '" end="' + str(period['end']+1) + '">\n')
+                
+                f.write(nst.format(label, period['start'], period['end']+1)
 
                 for i in sorted(nodes[n].keys()):
                     if period['start'] <= i <= period['end']:
@@ -89,7 +93,7 @@ def to_dxgmml(C, path): # [#61510094]
                             if type(value) is int: dtype = 'integer'
                             if type(value) is float: dtype = 'real'
                             attr = str(attr).replace("&", "&amp;")
-                            f.write('\t\t<att name="'+attr+'" type="'+dtype+'" value="'+str(value)+'" start="'+str(i)+'" end="'+str(i+1)+'" />\n')
+                            f.write(ast.format(attr, dtype, value, i, i+1))
                 f.write('\t</node>\n')
 
         for e in edges.keys():

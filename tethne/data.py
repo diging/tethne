@@ -544,8 +544,12 @@ class DataCollection(object):
 class GraphCollection(object):
     """
     Collection of NetworkX :class:`nx.classes.graph.Graph` objects, 
-    organized by some index (e.g. time). Provides analysis functions in NetworkX
-    for entire collection of Graphs.
+    organized by some index (e.g. time). 
+    
+    A :class:`.GraphCollection` can be generated using classes in the
+    :mod:`tethne.builders` module. See 
+    :ref:`generate-graphcollection` for details.
+    
     """
 
     def __init__(self):

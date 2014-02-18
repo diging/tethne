@@ -24,6 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="tethne  documentation" href="index.html" />
     <link rel="up" title="tethne Package" href="tethne.html" />
     <link rel="next" title="utilities Package" href="tethne.utilities.html" />
@@ -379,6 +380,55 @@ read/conversion.</p>
 <div class="section" id="module-tethne.readers.wos">
 <span id="wos-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">wos</span></tt> Module<a class="headerlink" href="#module-tethne.readers.wos" title="Permalink to this headline">¶</a></h2>
 <p>Reader for Web of Science field-tagged bibliographic data.</p>
+<p>Tethne parses Web of Science field-tagged data into a list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> 
+objects. This is a two-step process: data are first parsed into a list of 
+dictionaries with field-tags as keys, and then each dictionary is converted to a
+<a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> . <a class="reference internal" href="#tethne.readers.wos.read" title="tethne.readers.wos.read"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.read()</span></tt></a> performs both steps in sequence.</p>
+<div class="section" id="one-step-parsing">
+<h3>One-step Parsing<a class="headerlink" href="#one-step-parsing" title="Permalink to this headline">¶</a></h3>
+<p>The method <a class="reference internal" href="#tethne.readers.wos.read" title="tethne.readers.wos.read"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.read()</span></tt></a> performs both <a class="reference internal" href="#tethne.readers.wos.parse" title="tethne.readers.wos.parse"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.parse()</span></tt></a> 
+and <a class="reference internal" href="#tethne.readers.wos.convert" title="tethne.readers.wos.convert"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.convert()</span></tt></a> . This is the preferred (simplest) approach in
+most cases.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/Path/to/savedrecs.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">&lt;tethne.data.Paper instance at 0x101b575a8&gt;</span>
+</pre></div>
+</div>
+<p>Alternatively, if you have many data files saved in the same directory, you can 
+use <a class="reference internal" href="#tethne.readers.wos.from_dir" title="tethne.readers.wos.from_dir"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.from_dir()</span></tt></a> :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">parse_from_dir</span><span class="p">(</span><span class="s">&quot;/Path/to&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="two-step-parsing">
+<h3>Two-step Parsing<a class="headerlink" href="#two-step-parsing" title="Permalink to this headline">¶</a></h3>
+<p>Use the two-step approach if you need to access fields not included in 
+<a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>, or if you wish to perform some intermediate manipulation on
+the raw parsed data.</p>
+<p>First import the <a class="reference internal" href="#module-tethne.readers.wos" title="tethne.readers.wos"><tt class="xref py py-mod docutils literal"><span class="pre">readers.wos</span></tt></a> module:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
+</pre></div>
+</div>
+<p>Then parse the WoS data to a list of field-tagged dictionaries using 
+<a class="reference internal" href="#tethne.readers.wos.parse" title="tethne.readers.wos.parse"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.parse()</span></tt></a> :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wos_list</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&quot;/Path/to/savedrecs.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wos_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[&#39;EM&#39;, &#39;&#39;, &#39;CL&#39;, &#39;AB&#39;, &#39;WC&#39;, &#39;GA&#39;, &#39;DI&#39;, &#39;IS&#39;, &#39;DE&#39;, &#39;VL&#39;, &#39;CY&#39;, &#39;AU&#39;, &#39;JI&#39;, </span>
+<span class="go"> &#39;AF&#39;, &#39;CR&#39;, &#39;DT&#39;, &#39;TC&#39;, &#39;EP&#39;, &#39;CT&#39;, &#39;PG&#39;, &#39;PU&#39;, &#39;PI&#39;, &#39;RP&#39;, &#39;J9&#39;, &#39;PT&#39;, </span>
+<span class="go"> &#39;LA&#39;, &#39;UT&#39;, &#39;PY&#39;, &#39;ID&#39;, &#39;SI&#39;, &#39;PA&#39;, &#39;SO&#39;, &#39;Z9&#39;, &#39;PD&#39;, &#39;TI&#39;, &#39;SC&#39;, &#39;BP&#39;, </span>
+<span class="go"> &#39;C1&#39;, &#39;NR&#39;, &#39;RI&#39;, &#39;ER&#39;, &#39;SN&#39;]</span>
+</pre></div>
+</div>
+<p>Convert those field-tagged dictionaries to <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects using 
+<a class="reference internal" href="#tethne.readers.wos.convert" title="tethne.readers.wos.convert"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.convert()</span></tt></a> :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">wos_list</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">&lt;tethne.data.Paper instance at 0x101b575a8&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -399,6 +449,12 @@ read/conversion.</p>
 </tr>
 </tbody>
 </table>
+<dl class="exception">
+<dt id="tethne.readers.wos.DataError">
+<em class="property">exception </em><tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">DataError</tt><a class="headerlink" href="#tethne.readers.wos.DataError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+</dd></dl>
+
 <dl class="function">
 <dt id="tethne.readers.wos.convert">
 <tt class="descclassname">tethne.readers.wos.</tt><tt class="descname">convert</tt><big>(</big><em>wos_data</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/wos.html#convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.convert" title="Permalink to this definition">¶</a></dt>
@@ -540,6 +596,7 @@ defined by the list_keys and int_keys variables.</p>
 
 </div>
 </div>
+</div>
 
 
           </div>
@@ -553,7 +610,12 @@ defined by the list_keys and int_keys variables.</p>
 <li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">readers</span></tt> Package</a></li>
 <li><a class="reference internal" href="#module-tethne.readers.dfr"><tt class="docutils literal"><span class="pre">dfr</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.readers.pubmed"><tt class="docutils literal"><span class="pre">pubmed</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-tethne.readers.wos"><tt class="docutils literal"><span class="pre">wos</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-tethne.readers.wos"><tt class="docutils literal"><span class="pre">wos</span></tt> Module</a><ul>
+<li><a class="reference internal" href="#one-step-parsing">One-step Parsing</a></li>
+<li><a class="reference internal" href="#two-step-parsing">Two-step Parsing</a></li>
+<li><a class="reference internal" href="#methods">Methods</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

@@ -8,9 +8,37 @@ import tethne.networks as nt
 def node_global_closeness_centrality(g, node, normalize=True):
     """
     Calculates the global closeness centrality of a single node in the network.
-    For connected graphs, equivalent to conventional betweenness centrality.
-    For disconnected graphs, works around infinite path lengths between nodes
-    in different components.
+    
+    Closeness centrality is based on the average shortest path length
+    between a focal node and all other nodes in the network. For multi-component
+    graphs, conventional closeness centrality metrics fail because it is not
+    possible to traverse between a given node and all other nodes in the graph.
+    Global closeness centrality is calculated in a way that yields values even
+    for multi-component graphs. For an example of how global closeness
+    centrality can be used to analyze co-authorship networks, see the blog post 
+    `here <http://devo-evo.lab.asu.edu/node/459>`_.
+
+    To calculate the global closeness centrality of a single node, try:
+
+    .. code-block:: python
+        
+       >>> import tethne.analyze as az
+       >>> ngbc = az.node_global_closeness_centrality(BC, 'LEE 1975 EVOLUTION')
+       >>> ngbc
+       0.154245
+       
+    You can calculate the global closeness centrality of all nodes in the 
+    network using :func:`.global_closeness_centrality` . 
+
+    .. code-block:: python
+
+       >>> GBC = az.global_closeness_centrality(BC)
+       >>> GBC
+       {'a': 0.0, 'c': 0.0, 'b': 0.6666666666666666, 'd': 0.0}
+   
+    For connected graphs, this is equivalent to conventional betweenness 
+    centrality. For disconnected graphs, works around infinite path lengths 
+    between nodes in different components.
 
     Parameters
     ----------
@@ -48,10 +76,9 @@ def node_global_closeness_centrality(g, node, normalize=True):
 
 def global_closeness_centrality(g, normalize=True):
     """
-    Calculates global closeness centrality for all nodes in the network. For
-    connected graphs, equivalent to conventional betweenness centrality. For
-    disconnected graphs, works around infinite path lengths between nodes in
-    different components.
+    Calculates global closeness centrality for all nodes in the network. 
+    
+    See :func:`.node_global_closeness_centrality` for more information.
 
     Parameters
     ----------
