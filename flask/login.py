@@ -7,8 +7,15 @@ from forms import *
 app = Flask(__name__)
 app.config.from_object('config')
 
-#from flaskext.zodb import ZODB
-#db = ZODB(app)
+from ZODB.FileStorage import FileStorage
+from ZODB.DB import DB
+storage = FileStorage('Data.fs')
+db = DB(storage)
+connection = db.open()
+root = connection.root()
+
+# from flaskext.zodb import ZODB
+# db = ZODB(app)
 
 # @app.before_request
 # def set_db_defaults():
