@@ -2,7 +2,6 @@ from flask import current_app as app
 from flask.ext.zodb import Object, List, Dict
 from hashlib import sha256
 
-
 from BTrees.OOBTree import OOBTree as BTree
 from persistent import Persistent as Object
 from persistent.list import PersistentList as List
@@ -11,7 +10,7 @@ from persistent.mapping import PersistentMapping as Dict
 class User(Object):
     
     """
-    Users Class
+    User Class
     DocString to be added
     """
     
@@ -23,19 +22,26 @@ class User(Object):
         self.passwordHash = sha256(password).hexdigest()
         self.id = email
         self.secretque = que
-        self.secretque = answerpass
+        self.secretans = answerpass
     
-    def login_user(self,UserObject):
+    def login(self,UserObject):
+        pass
+   
+    def list_users(self):
         pass
     
-    def login_error(self):
+    def edit_users(self,UserObject):
         pass
+    
+    def del_users(self):
+        pass
+   
         
         
 class GraphCollection(Object):
     
     """
-    GraphCollections Class
+    GraphCollection Class
     DocString to be added
     """
     
@@ -43,17 +49,17 @@ class GraphCollection(Object):
         pass
     
     
-    def register(self,userObject):
-        self.email = email
-        self.passwordHash = sha256(password).hexdigest()
-        self.id = email
-        self.secretque = que
-        self.secretque = answerpass
+    def list_collections(self):
+        # List the existing Graph Collections
+        pass 
     
-    def login_user(self,UserObject):
-        pass
+    def create_collections(self,DataObjectsdict):
+        # List the existing Graph Collections
+        pass 
     
-    def login_error(self):
+    def analyze_collections(self,DataObject,method):
+        # Method : Betweenness centrality
+        # Call users class here
         pass
     
         
@@ -61,54 +67,38 @@ class GraphCollection(Object):
 class DataCollection(Object):
     
     """
-    Users Class
+    DataCollection Class
+    DocString to be added
+    """
+
+    
+    def __init__(self):
+        pass
+    
+    def list_datasets(self):
+        # Call Users class here and show the existing data sets collection
+        # List the existing data sets
+        pass 
+        
+    def create_datasets(self,input_type, network_category, network_type):
+        # Wos and Dfr type
+        pass
+    
+    def update_datasets(self,DatasetObject):
+        # Call Users Class here
+        # Editing the existing data collection here
+        pass
+            
+class SaveNetworks(object):
+    """
+    SaveNetworks Class
     DocString to be added
     """
     
-    def __init__(self):
-        pass
-    
-    def list_datasets(self):
-        # List the existing data sets
-        pass 
-        
-    def create_wosdatasets(self):
-        pass
-   
-    def create_dfrdatasets(self):
-        pass
-     
-    def update_wosdatasets(self):
-        # Call Users Class here
-        pass
-    def update_dfrdatasets(self):
-        # Call Users Class here
-        pass
-       
-    def view_datasets(self):
-        # Call users class here
-        pass    
-    
-    
-class Networks(object):
-  """
-    Users Class
-    DocString to be added
-  """
-    
-    def __init__(self):
-        pass
-    
-    def list_datasets(self):
-        # List the existing data sets
-        pass 
-        
-    def create_wosdatasets(self):
-        pass
-    
-        
-                       
+    def __init__(self,type):
+        pass                       
 
+    
         
         
         
