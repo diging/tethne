@@ -9,10 +9,10 @@ app.config.from_object('config')
 
 from ZODB.FileStorage import FileStorage
 from ZODB.DB import DB
-storage = FileStorage('Data.fs')
-db = DB(storage)
-connection = db.open()
-root = connection.root()
+# storage = FileStorage('data.fs')
+# db = DB(storage)
+# connection = db.open()
+# root = connection.root()
 
 # from flaskext.zodb import ZODB
 # db = ZODB(app)
@@ -30,6 +30,15 @@ root = connection.root()
 #     flash('You were logged out')
 #     return redirect(url_for('show_entries'))
             
+            
+            
+@app.route('/', methods=['GET','POST'])
+def index():
+    form = LoginForm(request.form)
+    if 'username' in session:
+        return 'Logged in as %s' % escape(session['username'])
+    # return render_template('forms/register.html', form = form)
+    return 'You are not logged in'            
 
 @app.route('/', methods=['GET','POST'])
 def home():
@@ -41,6 +50,9 @@ def home():
 def login():
 	flash('Welcome to Tethne Website')
 	form = LoginForm(request.form)
+        if request.method == 'POST':
+            session['username'] = request.form['username']
+            return redirect(url_for('index'))
 	return render_template('forms/login.html', form = form)
     
     
