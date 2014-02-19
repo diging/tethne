@@ -83,7 +83,7 @@ def to_dxgmml(C, path): # [#61510094]
             for period in nodes[n]['periods']:
                 label = str(n).replace("&", "&amp;").replace('"', '')
                 
-                f.write(nst.format(label, period['start'], period['end']+1)
+                f.write(nst.format(label, period['start'], period['end']+1))
 
                 for i in sorted(nodes[n].keys()):
                     if period['start'] <= i <= period['end']:
