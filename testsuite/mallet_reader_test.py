@@ -1,5 +1,6 @@
 import unittest
 import tethne.readers as rd
+from tethne.data import Paper
 import os
 import numpy as np
 
@@ -46,6 +47,33 @@ class TestLoad(unittest.TestCase):
         
     def tearDown(self):
         pass
+
+class TestRead(unittest.TestCase):
+
+    def setUp(self):
+        td_path = "./testin/mallet/top_doc"
+        wt_path = "./testin/mallet/word_top"
+        tk_path = "./testin/mallet/topic_keys"
+        m_path = "./testin/mallet/metadata"
+        
+        Z = 100
+
+        self.L = rd.mallet.load(td_path, wt_path, tk_path, Z, m_path)        
+        self.papers = rd.mallet.read(td_path, wt_path, tk_path, Z, m_path)
+    
+    def test_num_papers(self):
+        """
+        Each document in the LDAModel should yield a :class:`.Paper`\.
+        """
+        
+        self.assertEqual(self.L.doc_topic.shape[0], len(self.papers))
+    
+    def test_papers_content(self):
+        """
+        Should return :class:`.Paper` objects.
+        """
+        
+        self.assertIsInstance(self.papers[0], Paper)
 
 if __name__ == '__main__':
     unittest.main()
