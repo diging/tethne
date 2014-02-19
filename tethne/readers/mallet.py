@@ -1,14 +1,13 @@
 """
 Reader for output from LDA modeling with MALLET.
-
-
 """
+
 import csv
 import numpy as np
 from tethne.data import LDAModel
 
 
-def read(top_doc, word_top, topic_keys, Z, metadata=None, metadata_key='doi'):
+def load(top_doc, word_top, topic_keys, Z, metadata=None, metadata_key='doi'):
     """
     Parse results from LDA modeling with MALLET.
     
@@ -38,18 +37,24 @@ def read(top_doc, word_top, topic_keys, Z, metadata=None, metadata_key='doi'):
     
     td = _handle_top_doc(top_doc, Z)
     wt = _handle_word_top(word_top, Z)
-    tk = _handle_topic_keys(topic_keys, Z)
+    tk = _handle_topic_keys(topic_keys)
     
     if metadata is not None:
         md = _handle_metadata(metadata)
     else:
         md = None
 
-    ldamodel = LDAModel(dt, wt, tk, md)
+    ldamodel = LDAModel(td, wt, tk, md)
     
-    return document_topic, topic_word, metadata
+    return ldamodel
 
 def _handle_top_doc(path, Z):
+    """
+    Returns
+    -------
+    td : Numpy array
+        Rows are documents, columns are topics. Rows sum to ~1.
+    """
     documents = {}
 
     with open(path, "rb") as f:
@@ -60,24 +65,32 @@ def _handle_top_doc(path, Z):
             tops = []
             for i in xrange(0,len(t)-1,2):
                 tops.append( (int(t[i]), float(t[i+1])) )
-                topics.add(int(t[i]))
+                #topics.add(int(t[i]))
             documents[int(line[0])] = (line[1], tops)
     
-    dt = np.zeros( (len(documents), Z) )
+    td = np.zeros( (len(documents), Z) )
             
     for d, value in documents.iteritems():
         for t,p in value[1]:
-            dt[d,t] = p
+            td[d,t] = p
 
-    return dt
+    return td
 
 def _handle_word_top(path, Z):
+    """
+    Returns
+    -------
+    wt : Numpy array
+        Rows are topics, columns are words. Rows sum to ~1.
+    """
+    words = {}
     topics = set()
     
     with open(path, "rb") as f:
         reader = csv.reader(f, delimiter=' ')
         for line in reader:
-            tc = { int(tuple(l.split(':'))[0]):float(tuple(l.split(':'))[1]) for l in line[2:] }
+            tc = { int(tuple(l.split(':'))[0]):float(tuple(l.split(':'))[1]) \
+                    for l in line[2:] }
             words[int(line[0])] = ( line[1], tc )
 
     wt = np.zeros((Z, len(words)))
@@ -90,12 +103,57 @@ def _handle_word_top(path, Z):
     for t in xrange(Z):
         wt[t,:] /= np.sum(wt[t,:])
     
-    retun wt
+    return wt
         
 def _handle_topic_keys(path):
-
+    """
+    Returns
+    -------
+    tk : dict
+        Keys are topic indices, values are (P, terms) tuples, where terms is a
+        list of strings and P is float.
+    """
+    tk = {}
+    
+    with open(path, "rb") as f:
+        reader = csv.reader(f, delimiter='\t')
+        for l in reader:
+            tk[int(l[0])] = (float(l[1]), l[2].split())
+    
     return tk
     
 def _handle_metadata(path):
-
+    """
+    Returns
+    -------
+    md : dict
+        Keys are document indices, values are identifiers from a :class:`.Paper`
+        property.
+    """
+    md = {}
+    
+    with open(path, "rU") as f:
+        reader = csv.reader(f, delimiter='\t')
+        lines = [ l for l in reader ][1:]
+        for l in lines:
+            md[int(l[0])] = l[1]
+            
     return md
+    
+if __name__ == '__main__':
+
+    import numpy as np
+    
+    top_doc = "/Users/erickpeirson/Downloads/mallet-2.0.7/doc_top"
+    word_top = "/Users/erickpeirson/Downloads/mallet-2.0.7/word-topic"
+    topic_keys = "/Users/erickpeirson/Downloads/mallet-2.0.7/topic-keys"
+    m = "/Users/erickpeirson/Dropbox/DigitalHPS/Scripts/tethne/testsuite/testin/mallet/metadata"
+    
+#    print np.mean(_handle_top_doc(top_doc, 100))
+#    print np.mean(_handle_word_top(word_top, 100))
+#    print _handle_topic_keys(topic_keys)
+#    print _handle_metadata(m)
+    
+    l = load(top_doc, word_top, topic_keys, 100)
+    print l
+    
