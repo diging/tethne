@@ -18,12 +18,12 @@ import helpers as hp
 import operator
 import tethne.data as ds
 
-def direct_citation(doc_list, node_id='ayjid', node_attribs=['date']):
+def direct_citation(papers, node_id='ayjid', node_attribs=['date']):
     """
     Create a traditional directed citation network.
 
     Direct-citation graphs are `directed acyclic graphs`__ in which vertices are
-    documents, and each (directed) edge represents a citation of the target 
+    papers, and each (directed) edge represents a citation of the target 
     paper by the source paper. The :func:`.networks.papers.direct_citation` 
     method generates both a global citation graph, which includes all cited and 
     citing papers, and an internal citation graph that describes only citations 
@@ -48,15 +48,14 @@ def direct_citation(doc_list, node_id='ayjid', node_attribs=['date']):
     ==============     =========================================================
     Element            Description
     ==============     =========================================================
-    Node               Documents represented by the value of node_id in 
-                       :class:`.Paper` 
-    Edge               From a document to a cited reference.
-    Edge Attribute     Publication date of the citing document.
+    Node               Papers, represented by node_id.
+    Edge               From a paper to a cited reference.
+    Edge Attribute     Publication date of the citing paper.
     ==============     =========================================================
     
     Parameters
     ----------
-    doc_list : list
+    papers : list
         A list of :class:`.Paper` instances.
 
     node_id : int
@@ -88,7 +87,7 @@ def direct_citation(doc_list, node_id='ayjid', node_attribs=['date']):
         raise KeyError('node_id:' + node_id + 'is not in the set of' +
                        'meta_keys')
 
-    for entry in doc_list:
+    for entry in papers:
         # Check the head.
         head_has_id = True
         if entry[node_id] is None:
@@ -120,7 +119,7 @@ def direct_citation(doc_list, node_id='ayjid', node_attribs=['date']):
                                               date=entry['date'])
 
                     # And check if it can be added to the internal network, too.
-                    if (util.contains (doc_list,
+                    if (util.contains (papers,
                                        lambda wos_obj:
                                        wos_obj[node_id] == citation[node_id])):
                         citation_network_internal.add_edge(
@@ -136,7 +135,7 @@ def direct_citation(doc_list, node_id='ayjid', node_attribs=['date']):
     else:
         return citation_network, citation_network_internal
 
-def bibliographic_coupling(doc_list, citation_id='ayjid', threshold=1,
+def bibliographic_coupling(papers, citation_id='ayjid', threshold=1,
                            node_id='ayjid', node_attribs=['date'], 
                            weighted=False):
     """
@@ -179,7 +178,7 @@ def bibliographic_coupling(doc_list, citation_id='ayjid', threshold=1,
 
     Parameters
     ----------
-    doc_list : list
+    papers : list
         A list of wos_objects.
     citation_id: string
         A key from :class:`.Paper` to identify the citation overlaps.  Default
@@ -228,25 +227,25 @@ def bibliographic_coupling(doc_list, citation_id='ayjid', threshold=1,
                        ' key or otherwise cannot be used to detect citation' +
                        ' overlap.')
 
-    for i in xrange(len(doc_list)):
-        # Make a list of citation_id's for each document...
+    for i in xrange(len(papers)):
+        # Make a list of citation_id's for each paper...
         i_list = []
-        if doc_list[i]['citations'] is not None:
-            for citation in doc_list[i]['citations']:
+        if papers[i]['citations'] is not None:
+            for citation in papers[i]['citations']:
                 i_list.append(citation[citation_id])
 
-        # ...and construct that document's node.
-        node_i_attribs = util.subdict(doc_list[i], node_attribs)
+        # ...and construct that paper's node.
+        node_i_attribs = util.subdict(papers[i], node_attribs)
 
-        for j in xrange(i+1, len(doc_list)):
-            # Make a list of citation_id's for each document...
+        for j in xrange(i+1, len(papers)):
+            # Make a list of citation_id's for each paper...
             j_list = []
-            if doc_list[j]['citations'] is not None:
-                for citation in doc_list[j]['citations']:
+            if papers[j]['citations'] is not None:
+                for citation in papers[j]['citations']:
                     j_list.append(citation[citation_id])
 
-            # ...and construct that document's node.
-            node_j_attribs = util.subdict(doc_list[j], node_attribs)
+            # ...and construct that paper's node.
+            node_j_attribs = util.subdict(papers[j], node_attribs)
 
             # Add nodes and edge if the citation overlap is sufficiently high.
             overlap = util.overlap(i_list, j_list)
@@ -261,12 +260,12 @@ def bibliographic_coupling(doc_list, citation_id='ayjid', threshold=1,
                 similarity = len(overlap)
                 
             if similarity >= threshold:
-                bcoupling.add_node(doc_list[i][node_id], node_i_attribs)
-                bcoupling.add_node(doc_list[j][node_id], node_j_attribs)
+                bcoupling.add_node(papers[i][node_id], node_i_attribs)
+                bcoupling.add_node(papers[j][node_id], node_j_attribs)
                 #nx.set_node_attributes(bcoupling,"",node_i_attribs)
 
-                bcoupling.add_edge(doc_list[i][node_id],
-                                   doc_list[j][node_id],
+                bcoupling.add_edge(papers[i][node_id],
+                                   papers[j][node_id],
                                    similarity=similarity)
     return bcoupling
 
@@ -407,14 +406,14 @@ def cocitation(papers, threshold, node_id='ayjid', topn=None, verbose=False):
 
     return cocitation_graph
 
-def author_coupling(doc_list, threshold, node_attribs, node_id='ayjid'):
+def author_coupling(papers, threshold, node_attribs, node_id='ayjid'):
     """
     Vertices are papers and edges indicates shared authorship.
 
     ===============    =========================================================
     Element            Description
     ===============    =========================================================
-    Node               Documents, represented by node_id.
+    Node               Papers, represented by node_id.
     Edge               (a,b) in E(G) if a and b share x authors and x >= 
                        threshold
     Edge Attributes    overlap: the value of x (above).
@@ -422,8 +421,8 @@ def author_coupling(doc_list, threshold, node_attribs, node_id='ayjid'):
 
     Parameters
     ----------
-    doc_list : list
-        A list of wos_objects.
+    papers : list
+        A list of :class:`.Paper`
     threshold : int
         Minimum number of co-citations required to draw an edge between two
         authors.
@@ -441,32 +440,84 @@ def author_coupling(doc_list, threshold, node_attribs, node_id='ayjid'):
     """
     acoupling = nx.Graph(type='author_coupling')
 
-    for i in xrange(len(doc_list)):
-        #define last name first initial name lists for each document
-        name_list_i = util.concat_list(doc_list[i]['aulast'],
-                                       doc_list[i]['auinit'],
+    for i in xrange(len(papers)):
+        #define last name first initial name lists for each paper
+        name_list_i = util.concat_list(papers[i]['aulast'],
+                                       papers[i]['auinit'],
                                        ' ')
 
         #create nodes
-        node_attrib_dict = util.subdict(doc_list[i], node_attribs)
+        node_attrib_dict = util.subdict(papers[i], node_attribs)
 
-        acoupling.add_node(doc_list[i][node_id], node_attrib_dict)
+        acoupling.add_node(papers[i][node_id], node_attrib_dict)
 
-        for j in xrange(i+1, len(doc_list)):
-            #define last name first initial name lists for each document
-            name_list_j = util.concat_list(doc_list[j]['aulast'],
-                                           doc_list[j]['auinit'],
+        for j in xrange(i+1, len(papers)):
+            #define last name first initial name lists for each paper
+            name_list_j = util.concat_list(papers[j]['aulast'],
+                                           papers[j]['auinit'],
                                            ' ')
 
             #create nodes
-            node_attrib_dict = util.subdict(doc_list[j], node_attribs)
-            acoupling.add_node(doc_list[j][node_id], node_attrib_dict)
+            node_attrib_dict = util.subdict(papers[j], node_attribs)
+            acoupling.add_node(papers[j][node_id], node_attrib_dict)
 
             #draw edges as appropriate
             overlap = util.overlap(name_list_i, name_list_j)
 
             if len(overlap) >= threshold:
-                acoupling.add_edge(doc_list[i][node_id],
-                                   doc_list[j][node_id],
+                acoupling.add_edge(papers[i][node_id],
+                                   papers[j][node_id],
                                    overlap=len(overlap))
     return acoupling
+    
+def topic_coupling(papers, threshold=0.7, node_id='ayjid'):
+    """
+    Two papers are coupled if they both contain a shared topic above threshold.
+
+    ===============    =========================================================
+    Element            Description
+    ===============    =========================================================
+    Node               Papers, represented by node_id.
+    Edge               (a,b) in E(G) if a and b share >= 1 topics with
+                       proportion >= threshold in both a and b.
+    Edge Attributes    weight: combined mean proportion of each shared topic.
+                       topics: list of shared topics.
+    ===============    =========================================================
+    
+    Parameters
+    ----------
+    papers : list
+        A list of :class:`.Paper`
+    threshold : float
+        Minimum representation of a topic in each paper.
+    node_id : string
+        Field in :class:`.Paper` used to identify nodes.
+        
+    Returns
+    -------
+    tc : networkx.Graph
+        A topic-coupling network.
+    """
+    for i in xrange(len(papers)):
+        t_i = papers[i]['topics'][0]    # Topic vector for i.
+        for j in xrange(i+1,len(papers)):
+            t_j = papers[i]['topics'][0]    # Topic vector for j.
+            
+            Z = t_i.shape[0]
+            for z in xrange(Z):
+                if t_i[z] >= threshold and t_j[z] >= threshold:
+                    try:  # Add topic and mean of representation in i and j.
+                        edges[(i,j)].append( (z,t_i[z]*t_j[z]/2) )
+                    except KeyError:
+                        edges[(i,j)] = [ (z,t_i[z]*t_j[z]/2) ]
+
+    tc = nx.Graph()
+                            
+    # Combine means of representations into a single edge weight in {0-1}.
+    for e, topics in edges.iteritems():
+        weight = sum([ t[1] for t in topics ] ) / t_i.shape[0]
+        i_id = papers[e[0]][node_id]
+        j_id = papers[e[1]][node_id]
+        tc.add_edge(i_id, j_id, weight=weight, topics=[t[0] for t in topics])
+    
+    return tc
