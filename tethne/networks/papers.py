@@ -9,7 +9,9 @@ Methods
    author_coupling
    bibliographic_coupling
    cocitation
-   direct_citation   
+   direct_citation
+   topic_coupling
+   
 """
 
 import networkx as nx
@@ -507,9 +509,9 @@ def topic_coupling(papers, threshold=0.7, node_id='ayjid'):
             for z in xrange(Z):
                 if t_i[z] >= threshold and t_j[z] >= threshold:
                     try:  # Add topic and mean of representation in i and j.
-                        edges[(i,j)].append( (z,t_i[z]*t_j[z]/2) )
+                        edges[(i,j)].append( (z,(t_i[z]+t_j[z])/2) )
                     except KeyError:
-                        edges[(i,j)] = [ (z,t_i[z]*t_j[z]/2) ]
+                        edges[(i,j)] = [ (z,(t_i[z]+t_j[z])/2) ]
 
     tc = nx.Graph()
                             
