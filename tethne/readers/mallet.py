@@ -5,6 +5,7 @@ Reader for output from topic modeling with MALLET.
 import csv
 import numpy as np
 from tethne.data import LDAModel, Paper
+from tethne.utilities import Dictionary
 
 
 def load(top_doc, word_top, topic_keys, Z, metadata=None, metadata_key='doi'):
@@ -36,7 +37,7 @@ def load(top_doc, word_top, topic_keys, Z, metadata=None, metadata_key='doi'):
     """
     
     td = _handle_top_doc(top_doc, Z)
-    wt = _handle_word_top(word_top, Z)
+    wt,vocabulary = _handle_word_top(word_top, Z)
     tk = _handle_topic_keys(topic_keys)
     
     if metadata is not None:
@@ -44,7 +45,7 @@ def load(top_doc, word_top, topic_keys, Z, metadata=None, metadata_key='doi'):
     else:
         md = None
 
-    ldamodel = LDAModel(td, wt, tk, md)
+    ldamodel = LDAModel(td, wt, tk, md, vocabulary)
     
     return ldamodel
 
@@ -81,7 +82,7 @@ def read(top_doc, word_top, topic_keys, Z, metadata=None, metadata_key='doi'):
     for d in xrange(D):
         p = Paper()
         p[metadata_key] = ldamodel.metadata[d]  # e.g. doi, wosid
-        p['topics'] = ldamodel.doc_topic[d,:]    # Topic vector
+        p['topics'] = (ldamodel.doc_topic[d,:], ldamodel.top_keys)
         papers.append(p)
     
     return papers
@@ -120,6 +121,8 @@ def _handle_word_top(path, Z):
     -------
     wt : Numpy array
         Rows are topics, columns are words. Rows sum to ~1.
+    vocabulary : :class:`.Dictionary`
+        Maps words to word-indices in wt.        
     """
     words = {}
     topics = set()
@@ -141,7 +144,12 @@ def _handle_word_top(path, Z):
     for t in xrange(Z):
         wt[t,:] /= np.sum(wt[t,:])
     
-    return wt
+    # Build vocabulary
+    vocabulary = Dictionary()
+    for k,v in words.iteritems():
+        vocabulary[k] = v[0]
+    
+    return wt, vocabulary
         
 def _handle_topic_keys(path):
     """
