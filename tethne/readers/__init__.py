@@ -4,6 +4,7 @@ Methods for parsing bibliographic datasets.
 .. autosummary::
 
    dfr
+   mallet
    pubmed
    wos
 

@@ -28,6 +28,7 @@ Modules
    helpers
    papers
    terms
+   topics
    
 """
 
@@ -42,3 +43,4 @@ import tethne.networks.papers
 import tethne.networks.authors
 import tethne.networks.helpers
 import tethne.networks.terms
+import tethne.networks.topics
