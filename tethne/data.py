@@ -63,7 +63,8 @@ class Paper(object):
                             'pmid':None,
                             'wosid':None,
                             'abstract':None,
-                            'accession':None    }
+                            'accession':None,
+                            'topics':None    }
 
         self.list_fields = [ 'aulast',
                              'auinit',

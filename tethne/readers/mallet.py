@@ -1,10 +1,10 @@
 """
-Reader for output from LDA modeling with MALLET.
+Reader for output from topic modeling with MALLET.
 """
 
 import csv
 import numpy as np
-from tethne.data import LDAModel
+from tethne.data import LDAModel, Paper
 
 
 def load(top_doc, word_top, topic_keys, Z, metadata=None, metadata_key='doi'):
@@ -47,6 +47,44 @@ def load(top_doc, word_top, topic_keys, Z, metadata=None, metadata_key='doi'):
     ldamodel = LDAModel(td, wt, tk, md)
     
     return ldamodel
+
+def read(top_doc, word_top, topic_keys, Z, metadata=None, metadata_key='doi'):
+    """
+    Generates :class:`.Paper` objects from Mallet output.
+    
+    Each :class:`.Paper` is assigned a topic vector.
+    
+    Parameters
+    ----------
+    top_doc : string
+        Path to topic-document datafile generated with --output-doc-topics.
+    word_top : string
+        Path to word-topic datafile generated with --word-topic-counts-file.
+    topic_keys : string
+        Path to topic-keys datafile generated with --output-topic-keys.
+    Z : int
+        Number of topics.
+    metadata : string (optional)
+        Path to tab-separated metadata file with IDs and :class:`.Paper` keys.
+        
+    Returns
+    -------
+    papers : list
+        List of :class:`.Paper`
+    """
+    
+    ldamodel = load(top_doc, word_top, topic_keys, Z, metadata, metadata_key)
+    D = ldamodel.doc_topic.shape[0]
+    
+    papers = []
+    
+    for d in xrange(D):
+        p = Paper()
+        p[metadata_key] = ldamodel.metadata[d]  # e.g. doi, wosid
+        p['topics'] = ldamodel.doc_topic[d,:]    # Topic vector
+        papers.append(p)
+    
+    return papers
 
 def _handle_top_doc(path, Z):
     """
@@ -139,21 +177,3 @@ def _handle_metadata(path):
             md[int(l[0])] = l[1]
             
     return md
-    
-if __name__ == '__main__':
-
-    import numpy as np
-    
-    top_doc = "/Users/erickpeirson/Downloads/mallet-2.0.7/doc_top"
-    word_top = "/Users/erickpeirson/Downloads/mallet-2.0.7/word-topic"
-    topic_keys = "/Users/erickpeirson/Downloads/mallet-2.0.7/topic-keys"
-    m = "/Users/erickpeirson/Dropbox/DigitalHPS/Scripts/tethne/testsuite/testin/mallet/metadata"
-    
-#    print np.mean(_handle_top_doc(top_doc, 100))
-#    print np.mean(_handle_word_top(word_top, 100))
-#    print _handle_topic_keys(topic_keys)
-#    print _handle_metadata(m)
-    
-    l = load(top_doc, word_top, topic_keys, 100)
-    print l
-    
