@@ -480,7 +480,7 @@ def topic_coupling(papers, threshold=0.7, node_id='ayjid'):
     Node               Papers, represented by node_id.
     Edge               (a,b) in E(G) if a and b share >= 1 topics with
                        proportion >= threshold in both a and b.
-    Edge Attributes    weight: combined mean proportion of each topic.
+    Edge Attributes    weight: combined mean proportion of each shared topic.
                        topics: list of shared topics.
     ===============    =========================================================
     
