@@ -5,6 +5,7 @@ includes keywords, abstract terms, etc.
 .. autosummary::
 
    keyword_cooccurrence
+   topic_coupling
 """
 
 import numpy as np
@@ -111,9 +112,9 @@ def topic_coupling(model, threshold=0.005):
                 p_i = model.top_word[z,w_i]
                 p_j = model.top_word[z,w_j]                    
                 try:
-                    edges[(w_i,w_j)].append((z, p_i*p_j/2))
+                    edges[(w_i,w_j)].append((z, (p_i+p_j)/2))
                 except KeyError:
-                    edges[(w_i,w_j)] = [(z, p_i*p_j/2)]
+                    edges[(w_i,w_j)] = [(z, (p_i+p_j)/2)]
     tc = nx.Graph()
     
     for e, topics in edges.iteritems():
