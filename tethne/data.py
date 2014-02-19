@@ -8,7 +8,7 @@ from cStringIO import StringIO
 from pprint import pprint
 import sys
 import numpy as np
-from tethne.utilities import Dictionary
+
 
 class Paper(object):
     """
