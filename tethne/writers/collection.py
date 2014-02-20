@@ -1,6 +1,10 @@
 """
-Methods for writing :class:`.GraphCollection` to commonly-used network file
-formats. Many methods simply leverage equivalent methods in NetworkX.
+Write :class:`.GraphCollection` to a structured data format.
+
+.. autosummary::
+
+   to_dxgmml
+   
 """
 
 import networkx as nx
@@ -8,12 +12,39 @@ import pickle as pk
 
 def to_dxgmml(C, path): # [#61510094]
     """
-    Writes a :class:`.GraphCollection` to dynamic XGMML. Assumes that `Graph`
-    indices are orderable points in time (e.g. years). The "start" and "end"
-    of each node and edge are determined by periods of consecutive appearance
-    in the :class:`.GraphCollection` . Node and edge attributes are defined for
-    each `Graph`. in the :class:`.GraphCollection`.
+    Writes a :class:`.GraphCollection` to 
+    `dynamic XGMML. <https://code.google.com/p/dynnetwork/wiki/DynamicXGMML>`_.
+    
+    Dynamic XGMML is a schema for describing dynamic networks in Cytoscape 3.0.
+    This method assumes that `Graph` indices are orderable points in time 
+    (e.g. years). The "start" and "end" of each node and edge are determined by 
+    periods of consecutive appearance in the :class:`.GraphCollection` . Node 
+    and edge attributes are defined for each `Graph`. in the 
+    :class:`.GraphCollection`.
+    
+    For example, to build and visualize an evolving co-citation network:
+    
+    .. code-block:: python
 
+       >>> # Load some data.
+       >>> import tethne.readers as rd
+       >>> papers = rd.wos.read(datapath)
+
+       >>> # Build a DataCollection, and slice it temporally using a
+       >>> #  4-year sliding time-window.
+       >>> from tethne.data import DataCollection, GraphCollection
+       >>> D = DataCollection(papers)
+       >>> D.slice('date', 'time_window', window_size=4)
+
+       >>> # Generate a GraphCollection of co-citation graphs.
+       >>> from tethne.builders import paperCollectionBuilder
+       >>> builder = paperCollectionBuilder(D)
+       >>> C = builder.build('date', 'cocitation', threshold=2)
+
+       >>> # Write the GraphCollection as a dynamic network.
+       >>> import tethne.writers as wr
+       >>> wr.collection.to_dxgmml(C, "/path/to/network.xgmml")
+    
     Parameters
     ----------
     C : :class:`.GraphCollection`

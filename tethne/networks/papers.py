@@ -271,7 +271,8 @@ def bibliographic_coupling(papers, citation_id='ayjid', threshold=1,
                                    similarity=similarity)
     return bcoupling
 
-def cocitation(papers, threshold, node_id='ayjid', topn=None, verbose=False):
+def cocitation(papers, threshold, node_id='ayjid', topn=None, verbose=False, \
+                node_attribs=['date']):
     """
     Generate a cocitation network.
     
@@ -324,9 +325,11 @@ def cocitation(papers, threshold, node_id='ayjid', topn=None, verbose=False):
         a list of :class:`.Paper` objects.
     threshold : int
         Minimum number of co-citations required to create an edge.
-    topn : int or None
-        If provided, only the topn most cited papers will be included in the
-        cocitation network. Otherwise includes all cited papers.
+    topn : int or float, or None
+        If provided, only the topn (int) or topn percent (float) most cited 
+        papers will be included in the cocitation network. If None (default),
+        network will include all cited papers (NOTE: this can cause severe
+        memory consumption for even moderately-sized datasets).
     verbose : bool
         If True, prints status messages.
 
@@ -335,18 +338,12 @@ def cocitation(papers, threshold, node_id='ayjid', topn=None, verbose=False):
     cocitation : networkx.Graph
         A cocitation network.
 
-    Notes
-    -----
-    should be able to specify a threshold -- number of co-citations required to
-    draw an edge.
-
     """
 
     cocitation_graph = nx.Graph(type='cocitation')
 
     # We'll use tuples as keys. Values are the number of times each pair
     #  of papers is co-cited.
-
     cocitations = {}
     citations_count = {}
 
