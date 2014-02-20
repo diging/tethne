@@ -1,5 +1,12 @@
 """
-Export networks to commonly-used formats (e.g. XGMML, GraphML, etc).
+Export networks to structured and unstructured formats, for visualization.
+
+.. autosummary::
+
+   collection
+   graph
+   matrix
+   
 """
 
 import tethne.writers.graph
