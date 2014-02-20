@@ -17,6 +17,14 @@ readers Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`mallet` Module
+--------------------
+
+.. automodule:: tethne.readers.mallet
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`pubmed` Module
 --------------------
 

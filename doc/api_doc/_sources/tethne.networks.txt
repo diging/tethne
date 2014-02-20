@@ -41,3 +41,11 @@ networks Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`topics` Module
+--------------------
+
+.. automodule:: tethne.networks.topics
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
