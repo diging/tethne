@@ -73,10 +73,13 @@
 <tr class="row-odd"><td><a class="reference internal" href="#module-tethne.readers.dfr" title="tethne.readers.dfr"><tt class="xref py py-obj docutils literal"><span class="pre">dfr</span></tt></a></td>
 <td>Methods for parsing JSTOR Data-for-Research datasets.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#module-tethne.readers.pubmed" title="tethne.readers.pubmed"><tt class="xref py py-obj docutils literal"><span class="pre">pubmed</span></tt></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#module-tethne.readers.mallet" title="tethne.readers.mallet"><tt class="xref py py-obj docutils literal"><span class="pre">mallet</span></tt></a></td>
+<td>Reader for output from topic modeling with MALLET.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#module-tethne.readers.pubmed" title="tethne.readers.pubmed"><tt class="xref py py-obj docutils literal"><span class="pre">pubmed</span></tt></a></td>
 <td>Methods for working with PubMed data are still under development. Please use</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#module-tethne.readers.wos" title="tethne.readers.wos"><tt class="xref py py-obj docutils literal"><span class="pre">wos</span></tt></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#module-tethne.readers.wos" title="tethne.readers.wos"><tt class="xref py py-obj docutils literal"><span class="pre">wos</span></tt></a></td>
 <td>Reader for Web of Science field-tagged bibliographic data.</td>
 </tr>
 </tbody>
@@ -324,6 +327,92 @@ read/conversion.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">dfr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/Path/to/DfR&quot;</span><span class="p">)</span>        
 </pre></div>
 </div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tethne.readers.mallet">
+<span id="mallet-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">mallet</span></tt> Module<a class="headerlink" href="#module-tethne.readers.mallet" title="Permalink to this headline">¶</a></h2>
+<p>Reader for output from topic modeling with MALLET.</p>
+<dl class="function">
+<dt id="tethne.readers.mallet.load">
+<tt class="descclassname">tethne.readers.mallet.</tt><tt class="descname">load</tt><big>(</big><em>top_doc</em>, <em>word_top</em>, <em>topic_keys</em>, <em>Z</em>, <em>metadata=None</em>, <em>metadata_key='doi'</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/mallet.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.mallet.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse results from LDA modeling with MALLET.</p>
+<p>MALLET&#8217;s LDA topic modeling algorithm produces a collection of output files.
+<a class="reference internal" href="#tethne.readers.mallet.read" title="tethne.readers.mallet.read"><tt class="xref py py-func docutils literal"><span class="pre">read()</span></tt></a> takes the topic-document and (sparse) word-topic matrices, as
+tab-separated value files, along with a metadata file that maps
+each MALLET document id to a <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>, using the <cite>metadata_key</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>top_doc</strong> : string</p>
+<blockquote>
+<div><p>Path to topic-document datafile generated with &#8211;output-doc-topics.</p>
+</div></blockquote>
+<p><strong>word_top</strong> : string</p>
+<blockquote>
+<div><p>Path to word-topic datafile generated with &#8211;word-topic-counts-file.</p>
+</div></blockquote>
+<p><strong>topic_keys</strong> : string</p>
+<blockquote>
+<div><p>Path to topic-keys datafile generated with &#8211;output-topic-keys.</p>
+</div></blockquote>
+<p><strong>Z</strong> : int</p>
+<blockquote>
+<div><p>Number of topics.</p>
+</div></blockquote>
+<p><strong>metadata</strong> : string (optional)</p>
+<blockquote>
+<div><p>Path to tab-separated metadata file with IDs and <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> keys.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>ldamodel</strong> : <a class="reference internal" href="tethne.html#tethne.data.LDAModel" title="tethne.data.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.readers.mallet.read">
+<tt class="descclassname">tethne.readers.mallet.</tt><tt class="descname">read</tt><big>(</big><em>top_doc</em>, <em>word_top</em>, <em>topic_keys</em>, <em>Z</em>, <em>metadata=None</em>, <em>metadata_key='doi'</em><big>)</big><a class="reference internal" href="_modules/tethne/readers/mallet.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.mallet.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects from Mallet output.</p>
+<p>Each <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> is assigned a topic vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>top_doc</strong> : string</p>
+<blockquote>
+<div><p>Path to topic-document datafile generated with &#8211;output-doc-topics.</p>
+</div></blockquote>
+<p><strong>word_top</strong> : string</p>
+<blockquote>
+<div><p>Path to word-topic datafile generated with &#8211;word-topic-counts-file.</p>
+</div></blockquote>
+<p><strong>topic_keys</strong> : string</p>
+<blockquote>
+<div><p>Path to topic-keys datafile generated with &#8211;output-topic-keys.</p>
+</div></blockquote>
+<p><strong>Z</strong> : int</p>
+<blockquote>
+<div><p>Number of topics.</p>
+</div></blockquote>
+<p><strong>metadata</strong> : string (optional)</p>
+<blockquote>
+<div><p>Path to tab-separated metadata file with IDs and <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> keys.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
+<blockquote class="last">
+<div><p>List of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a></p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -609,6 +698,7 @@ defined by the list_keys and int_keys variables.</p>
 <li><a class="reference internal" href="#">readers Package</a><ul>
 <li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">readers</span></tt> Package</a></li>
 <li><a class="reference internal" href="#module-tethne.readers.dfr"><tt class="docutils literal"><span class="pre">dfr</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-tethne.readers.mallet"><tt class="docutils literal"><span class="pre">mallet</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.readers.pubmed"><tt class="docutils literal"><span class="pre">pubmed</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.readers.wos"><tt class="docutils literal"><span class="pre">wos</span></tt> Module</a><ul>
 <li><a class="reference internal" href="#one-step-parsing">One-step Parsing</a></li>

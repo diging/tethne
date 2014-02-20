@@ -12,6 +12,7 @@ Many methods simply invoke equivalent methods in NetworkX.
 """
 
 import networkx as nx
+import csv
 
 def to_sif(graph, output_path):
     """
@@ -186,53 +187,82 @@ def to_graphml(graph, output_path):
     
     nx.write_graphml(graph, output_path + ".graphml")
 
-def to_csv(file, delim=","):
-    '''
-    Parameters
-    ----------
-    file : string
-        Path to output file (will be created).
-    delim : string
-        String to use as field delimiter (default is ',').
+#def to_csv(file, delim=","):
+#    '''
+#    Parameters
+#    ----------
+#    file : string
+#        Path to output file (will be created).
+#    delim : string
+#        String to use as field delimiter (default is ',').
+#
+#    Notes
+#    -----
+#    TODO: should operate on a (provided) graph. Still uses old library approach.
+#    '''
+#    
+#    graph = _strip_list_attributes(graph)
+#    
+#    f = open(file, "w")
+#
+#    # Headers
+#    f.write("Identifier" + delim + "Title" + delim + "Authors" +
+#            delim + "WoS Identifier" + delim + "Journal" + delim +
+#            "Volume" + delim + "Page" + delim + "DOI" + delim +
+#            "Num Authors\n")
+#    for entry in self.library:
+#        # Authors are separated by a colon -> : <-
+#        authors = ""
+#        for author in entry.meta['AU']:
+#            authors += ":" + author
+#        authors = authors[1:]
+#        datum = (entry.identifier + delim + entry.meta['TI'][0] +
+#                 delim + authors + delim + entry.wosid + delim +
+#                 entry.meta['SO'][0])
+#        if 'VL' in entry.meta:
+#            datum += delim + entry.meta['VL'][0]
+#            if 'BP' in entry.meta:
+#                datum += delim + entry.meta['BP'][0]
+#            else:
+#                datum += delim
+#        else:
+#            datum += delim + delim
+#        if 'DI' in entry.meta:
+#            datum += delim + entry.meta['DI'][0]
+#        else:
+#            datum += delim
+#        datum += delim + str(entry.meta['num_authors'])
+#        f.write(datum + "\n")
+#    f.close()
 
-    Notes
-    -----
-    TODO: should operate on a (provided) graph. Still uses old library approach.
-    '''
-    
+def to_table(graph, path):
+
     graph = _strip_list_attributes(graph)
-    
-    f = open(file, "w")
 
-    # Headers
-    f.write("Identifier" + delim + "Title" + delim + "Authors" +
-            delim + "WoS Identifier" + delim + "Journal" + delim +
-            "Volume" + delim + "Page" + delim + "DOI" + delim +
-            "Num Authors\n")
-    for entry in self.library:
-        # Authors are separated by a colon -> : <-
-        authors = ""
-        for author in entry.meta['AU']:
-            authors += ":" + author
-        authors = authors[1:]
-        datum = (entry.identifier + delim + entry.meta['TI'][0] +
-                 delim + authors + delim + entry.wosid + delim +
-                 entry.meta['SO'][0])
-        if 'VL' in entry.meta:
-            datum += delim + entry.meta['VL'][0]
-            if 'BP' in entry.meta:
-                datum += delim + entry.meta['BP'][0]
-            else:
-                datum += delim
-        else:
-            datum += delim + delim
-        if 'DI' in entry.meta:
-            datum += delim + entry.meta['DI'][0]
-        else:
-            datum += delim
-        datum += delim + str(entry.meta['num_authors'])
-        f.write(datum + "\n")
-    f.close()
+    # Edge list.
+    with open(path + "_edges.csv", "wb") as f:
+        edges = graph.edges(data=True)
+        writer = csv.writer(f, delimiter='\t')
+        
+        # Header.
+        writer.writerow(['source','target'] + [ k for k in edges[0][2].keys() ])
+        
+        # Values.
+        for e in edges:
+            writer.writerow([ e[0], e[1]] + [ v for v in e[2].values() ] )
+            
+    # Node attributes.
+    with open(path + "_nodes.csv", "wb") as f:
+        nodes = graph.nodes(data=True)
+        writer = csv.writer(f, delimiter='\t')
+        
+        # Header.
+        writer.writerow(['node'] + [ k for k in nodes[0][1].keys() ])
+        
+        # Values.
+        for n in nodes:
+            writer.writerow([ n[0] ] + [ v for v in n[1].values() ])
+
 
 def _strip_list_attributes(G):
     for n in G.nodes(data=True):
