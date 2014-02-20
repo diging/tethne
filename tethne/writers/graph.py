@@ -35,6 +35,9 @@ def to_sif(graph, output_path):
         ./graphFolder/graphFile.sif, and corresponding .eda and .noa files.
 
     """
+    
+    graph = _strip_list_attributes(graph)
+    
     if output_path[-4:] == ".sif":
         output_path = output_path[:-4]
 
@@ -159,6 +162,8 @@ def to_gexf(graph, output_path):
         e.g. using "./graphFolder/graphFile" will result in a GEXF file at
         ./graphFolder/graphFile.gexf.
     """
+    graph = _strip_list_attributes(graph)
+    
     nx.write_gexf(graph, output_path + ".gexf")
 
 
@@ -177,6 +182,8 @@ def to_graphml(graph, output_path):
         e.g. using "./graphFolder/graphFile" will result in a GraphML file at
         ./graphFolder/graphFile.graphml.
     """
+    graph = _strip_list_attributes(graph)
+    
     nx.write_graphml(graph, output_path + ".graphml")
 
 def to_csv(file, delim=","):
@@ -192,6 +199,9 @@ def to_csv(file, delim=","):
     -----
     TODO: should operate on a (provided) graph. Still uses old library approach.
     '''
+    
+    graph = _strip_list_attributes(graph)
+    
     f = open(file, "w")
 
     # Headers
@@ -223,5 +233,17 @@ def to_csv(file, delim=","):
         datum += delim + str(entry.meta['num_authors'])
         f.write(datum + "\n")
     f.close()
+
+def _strip_list_attributes(G):
+    for n in G.nodes(data=True):
+        for k,v in n[1].iteritems():
+            if type(v) is list:
+                G.node[n[0]][k] = str(v)
+    for e in G.edges(data=True):
+        for k,v in e[2].iteritems():
+            if type(v) is list:
+                G.edge[e[0]][e[1]][k] = str(v)
+
+    return G
 
 
