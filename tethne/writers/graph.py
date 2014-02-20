@@ -1,30 +1,39 @@
 """
-Methods for writing graphs to commonly-used network file formats. Many methods
-simply invoke equivalent methods in NetworkX.
+Write NetworkX graphs to structured and unstructured network file formats.
+
+Many methods simply invoke equivalent methods in NetworkX.
+
+.. autosummary::
+
+   to_gexf
+   to_graphml
+   to_sif
+
 """
 
 import networkx as nx
 
 def to_sif(graph, output_path):
     """
-    Generates SIF output file from provided graph.
+    Generates Simple Interaction Format output file from provided graph.
 
-    See http://wiki.cytoscape.org/Cytoscape_User_Manual/Network_Formats at
-    SIF Format for more details
+    The SIF specification is described 
+    `here <http://wiki.cytoscape.org/Cytoscape_User_Manual/Network_Formats>`_.
 
-    Edge attribute files appended with .eda contain the values of any edge
-    attributes even though the .sif file does not (edge "weights" are
-    not supported by .sif)
+    :func:`.to_sif` will generate a .sif file describing the network, and a few
+    .eda and .noa files containing edge and node attributes, respectively. These
+    are equivalent to tab-delimited tables, and can be imported as such in
+    Cytoscape 3.0.
+    
+    Parameters
+    ----------
+    graph : networkx.Graph
+        The Graph to be exported to SIF.
+    output_path : str
+        Full path, including filename (without suffix).
+        e.g. using "./graphFolder/graphFile" will result in a SIF file at
+        ./graphFolder/graphFile.sif, and corresponding .eda and .noa files.
 
-    Interaction types in the .sif format allow for edge attributes
-    that belong to that interaction type. Simple graphs in
-    networkx do not support this kind of edge nesting, but multigraphs do.
-
-    If the graph is a simple graph, it is assumed to have only one interaction
-    type named 'rel' short for 'related to' or 'relation'. If the graph is a
-    multigraph, each edge has a key which is used as the interaction type
-    and has an attribute dictionary associated to that key which is used
-    as the interaction type's edge attributes.
     """
     if output_path[-4:] == ".sif":
         output_path = output_path[:-4]
@@ -136,144 +145,39 @@ def to_sif(graph, output_path):
                                 g.write(eda_line)
 
 def to_gexf(graph, output_path):
-    """Writes the provided graph to a GEXF-format network file."""
+    """Writes graph to `GEXF <http://gexf.net>`_.
+    
+    Uses the NetworkX method
+    `write_gexf <http://networkx.lanl.gov/reference/generated/networkx.readwrite.gexf.write_gexf.html>`_.
+    
+    Parameters
+    ----------
+    graph : networkx.Graph
+        The Graph to be exported to GEXF.
+    output_path : str
+        Full path, including filename (without suffix).
+        e.g. using "./graphFolder/graphFile" will result in a GEXF file at
+        ./graphFolder/graphFile.gexf.
+    """
     nx.write_gexf(graph, output_path + ".gexf")
 
 
 def to_graphml(graph, output_path):
-    """Writes the provided graph to a GraphML-format network file."""
-    nx.write_graphml(graph, output_path + ".graphml")
-
-
-def to_xgmml(graph, name, output_path, dynamic=True, nodeattack=0, \
-                    nodedecay=0, edgeattack=0, edgedecay=0):
-    """
-    Generates dynamic XGMML output from provided graph.
+    """Writes graph to `GraphML <http://graphml.graphdrawing.org/>`_.
+    
+    Uses the NetworkX method 
+    `write_graphml <http://networkx.lanl.gov/reference/generated/networkx.readwrite.graphml.write_graphml.html>`_.
 
     Parameters
     ----------
-    graph : Networkx Graph
-    name : string
-        Name of the graph.
-    output_path : string
-        Path to output file, including name ('.xgmml' will be appended).
-    dynamic : bool
-        If True, will try to include start and end date for nodes and edges.
-    nodeattack : int
-        For dynamic networks, number of years to prepend to display start.
-    nodedecay : int
-        For dynamic networks, additional number of years to display node.
-    edgeattack : int
-        For dynamic networks, number of years to prepend to display start.
-    edgedecay : int
-        For dynamic networks, additional number of years to display edge.
-
-    Raises
-    ------
-    ValueError
-        Raised when dynamic=True and 'date' is not a valid edge attribute in
-        graph.
-
-
+    graph : networkx.Graph
+        The Graph to be exported to GraphML.
+    output_path : str
+        Full path, including filename (without suffix).
+        e.g. using "./graphFolder/graphFile" will result in a GraphML file at
+        ./graphFolder/graphFile.graphml.
     """
-    f = open(output_path + ".xgmml", "w")
-    f.write('<?xml version="1.0" encoding="UTF-8" \
-            standalone="yes"?>\n<graph directed="0" \
-            xmlns:dc="http://purl.org/dc/elements/1.1/" \
-            xmlns:xlink="http://www.w3.org/1999/xlink" \
-            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" \
-            xmlns="http://www.cs.rpi.edu/XGMML">\n\t<att name="selected" \
-            value="1" type="boolean" />\n\t<att name="name" value="{0}" \
-            type="string"/>\n\t<att name="shared name" value="{0}" \
-            type="string"/>\n'.format(name))
-
-    if dynamic:
-        node_dates = {}
-        date = None
-
-    for edge in graph.edges(data=True):
-        if dynamic:
-            # Update node start/end values.
-            if edge[0] not in node_dates.keys():
-                node_dates[edge[0]] = { 'start': 3000, 'end': 0 }
-            if edge[1] not in node_dates.keys():
-                node_dates[edge[1]] = { 'start': 3000, 'end': 0 }
-
-
-            try:    # First look for explicit start and end dates.
-                start = edge[2]['start']
-                end = edge[2]['end']
-            except KeyError:
-                try:
-                    start = edge[2]['date']
-                    end = edge[2]['date']
-                except KeyError:
-                    raise ValueError("Missing 'date' in graph edge attributes. \
-                                     Required when dynamic=True.")
-
-            if start < node_dates[edge[0]]['start']:
-                node_dates[edge[0]]['start'] = start
-            if end > node_dates[edge[0]]['end']:
-                node_dates[edge[0]]['end'] = end
-
-
-            if start < node_dates[edge[1]]['start']:
-                node_dates[edge[1]]['start'] = start
-            if end > node_dates[edge[1]]['end']:
-                node_dates[edge[1]]['end'] = end
-
-        try:
-            f.write ('\t<edge source="{src}" target="{tgt}" start="{start}" \
-                end="{end}">\n'.format(src=edge[0], tgt=edge[1], \
-                start=start-edgeattack, end=end+edgedecay).replace('&','&amp;'))
-            for key, value in edge[2].iteritems():
-                if (type (value).__name__ == "str"):
-                    v_type = "string"
-                elif (type (value).__name__ == "int"):
-                    v_type = "integer"
-
-                f.write('\t\t<att name="{}" value="{}" \
-                type="{}" />\n'.format(key, value, v_type).replace('&','&amp;'))
-            f.write('\t</edge>\n')
-        except:
-            print edge
-
-    for node in graph.nodes(data=True):
-        id = node[0]
-        node_attributes = dict(node[1])
-        if 'label' in node_attributes:
-            label = node_attributes['label']
-            del node_attributes['label']
-        else:
-            label = id
-
-        if dynamic:
-            try:
-                start = node_dates[id]['start']
-                end = node_dates[id]['end']
-            except:
-                start = end = 0
-        else:
-            start = end = 0
-#        try:
-        f.write('\t<node id="{id}" label="{label}" start="{start}" \
-                end="{end}">\n'.format(id=id, label=label, \
-                start=start-nodeattack, end=end+nodedecay).replace('&','&amp;'))
-        for key, value in node_attributes.iteritems():
-            if (type (value).__name__ == "str"):
-                v_type = "string"
-            elif (type (value).__name__ == "int"):
-                v_type = "integer"
-            f.write('\t\t<att name="{}" value="{}" \
-                type="{}" />\n'.format(key, value, v_type).replace('&','&amp;'))
-        f.write('\t</node>\n')
-#        except:
-#            print node
-
-    f.write('</graph>')
-
-    f.close()
-
+    nx.write_graphml(graph, output_path + ".graphml")
 
 def to_csv(file, delim=","):
     '''
