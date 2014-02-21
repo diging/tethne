@@ -11,6 +11,8 @@ Helper functions for generating networks.
 """
 
 import networkx as nx
+import operator
+import numpy as np
 #import tethne.utilities as util  # Pylint Warnings
 #import tethne.data as ds
 
@@ -126,12 +128,12 @@ def top_cited(papers, topn=20, verbose=False):
     if verbose:
         print "Finding top "+str(topn)+" most cited papers..."
 
-    counts = hp.citation_count(papers, verbose=verbose)
+    counts = citation_count(papers, verbose=verbose)
     
     if type(topn) is int:
         n = topn
     elif type(topn) is float:
-        n = topn*len(counts)
+        n = int(np.around(topn*len(counts), decimals=-1))
     top = dict(sorted(counts.iteritems(),
                        key=operator.itemgetter(1),
                        reverse=True)[:n]).keys()
