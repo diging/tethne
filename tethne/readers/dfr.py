@@ -324,14 +324,3 @@ def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
         ayj = 'Unknown paper'
 
     return ayj.upper()
-
-
-if __name__ == "__main__":
-    from pprint import pprint
-
-    path = "/Users/erickpeirson/Downloads/DfR/ecology_1960-64"
-#    papers = read(path)
-    bigrams = ngrams(path)
-
-    print bigrams.keys()[0]
-    pprint(bigrams.values()[0])

@@ -265,14 +265,10 @@ def parse(filepath):
         # Handle keys like AU,AF,CR that continue over many lines.
         if field_tag == '  ':
             field_tag = last_field_tag
-           
-            
-
 
         # Add value for the key to the wos_dict: the rest of the line.
-    
         try:
-            if field_tag in ['AU', 'AF', 'CR', 'C1']:
+            if field_tag in ['AU', 'AF', 'CR', 'C1', 'CA']:
                 # These unique fields use the new line delimiter to distinguish
                 # their list elements below.
                 # The field C1 can be either in multiple lines or in a single
@@ -283,18 +279,18 @@ def parse(filepath):
         except (KeyError, TypeError, UnboundLocalError):
                 wos_dict[field_tag] = str(line[3:])
 
-
         last_field_tag = field_tag
     # End line loop.
 
     # Define keys that should be lists instead of default string.
-    list_keys = ['AU', 'AF', 'DE', 'ID', 'CR', 'C1']
+    list_keys = ['AU', 'AF', 'DE', 'ID', 'CR', 'C1', 'CA']
     delims = {'AU':'\n',
               'AF':'\n',
               'DE':';',
               'ID':';',
               'C1':'\n',
-              'CR':'\n'}
+              'CR':'\n',
+              'CA':'\n'}
 
     # And convert the data at those keys into lists.
     for wos_dict in wos_list:
@@ -540,8 +536,10 @@ def convert(wos_data):
     if not status:
         #raise Error
         pass
+
     # Define the direct relationships between WoS fieldtags and Paper keys.
     translator = _wos2paper_map()
+    
     # Perform the key convertions
     for wos_dict in wos_data:
         paper = ds.Paper()
@@ -549,25 +547,18 @@ def convert(wos_data):
         #direct translations
         for key in translator.iterkeys():
             paper[translator[key]] = wos_dict[key]
+            
+        # Group authors ('CA') are treated as personal authors.
+        if 'CA' in wos_dict.keys():
+            try: wos_dict['AU'] += wos_dict['CA']
+            except TypeError: wos_dict['AU'] = wos_dict['CA']
+            try: wos_dict['AF'] += wos_dict['CA']
+            except KeyError: wos_dict['AF'] = wos_dict['CA']
+    
         # more complicated translations
         # FIXME: not robust to all names, organziation authors, etc.
         if wos_dict['AU'] is not None:
-            aulast_list = []
-            auinit_list = []
-            for name in wos_dict['AU']:
-                name_tokens = name.split(',')
-                aulast = name_tokens[0].upper().strip()
-                try:
-                    # 1 for 'aulast, aufirst'
-                    auinit = name_tokens[1][1].upper().strip()
-                except IndexError:
-                    # then no first initial character
-                    # preserve parallel name lists with empty string
-                    auinit = ''
-                aulast_list.append(aulast)
-                auinit_list.append(auinit)
-            paper['aulast'] = aulast_list
-            paper['auinit'] = auinit_list
+            paper['aulast'], paper['auinit'] = _handle_authors(wos_dict)
 
         #construct ayjid
         ayjid = _create_ayjid(paper['aulast'], paper['auinit'],
@@ -575,44 +566,8 @@ def convert(wos_data):
         paper['ayjid'] = ayjid
 
         # Parse author-institution affiliations. #60216226, #57746858.
-        # pattern = re.compile('\[(.*?)\]') # pylint
-        pattern = re.compile(r'\[(.*?)\]')
-        author_institutions = {}
-
         if wos_dict['C1'] is not None:
-            for c1_str in wos_dict['C1']:   # One C1 line for each institution.
-
-                match = pattern.search(c1_str)
-                if match:   # Explicit author-institution mappings are provided.
-                    authors = c1_str[match.start()+1:match.end()-1].split('; ')
-                    institution = c1_str[match.end():].strip().split(', ')
-                    for author in authors:
-                        # The A-I mapping (in data) uses the AF representation
-                        #  of author names. But we use the AU representation
-                        #  as our mapping key to ensure consistency with older
-                        #  datasets.
-                        author_index = wos_dict['AF'].index(author)
-                        #e.g."WU, ZD"
-                        author_au = wos_dict['AU'][author_index].upper()
-                        inst_name = institution[0]
-
-                        try:
-                            author_institutions[author_au].append(inst_name)
-                        except KeyError:
-                            author_institutions[author_au] = [inst_name]
-
-                else:   # Author-institution mappings are not provided. We
-                        #  therefore map all authors to all institutions.
-                    for author_au in wos_dict['AU']:
-                        institution = c1_str.strip().split(', ')
-                        inst_name = institution[0]
-
-                        try:
-                            author_institutions[author_au].append(inst_name)
-                        except KeyError:
-                            author_institutions[author_au] = [inst_name]
-
-            paper['institutions'] = author_institutions
+            paper['institutions'] = _handle_author_institutions(wos_dict)
 
         # Convert CR references into paper format
         if wos_dict['CR'] is not None:
@@ -628,6 +583,64 @@ def convert(wos_data):
     # End wos_dict for loop.
 
     return wos_meta
+    
+def _handle_authors(wos_dict):
+
+    aulast_list = []
+    auinit_list = []
+    for name in wos_dict['AU']:
+        name_tokens = name.split(',')
+        aulast = name_tokens[0].upper().strip()
+        try:
+            # 1 for 'aulast, aufirst'
+            auinit = name_tokens[1][1].upper().strip()
+        except IndexError:
+            # then no first initial character
+            # preserve parallel name lists with empty string
+            auinit = ''
+        aulast_list.append(aulast)
+        auinit_list.append(auinit)
+    
+    return aulast_list, auinit_list
+
+def _handle_author_institutions(wos_dict):
+    pattern = re.compile(r'\[(.*?)\]')
+    author_institutions = {}
+    for c1_str in wos_dict['C1']:   # One C1 line for each institution.
+
+        match = pattern.search(c1_str)
+        if match:   # Explicit author-institution mappings are provided.
+            authors = c1_str[match.start()+1:match.end()-1].split('; ')
+            institution = c1_str[match.end():].strip().split(', ')
+            for author in authors:
+                # The A-I mapping (in data) uses the AF representation
+                #  of author names. But we use the AU representation
+                #  as our mapping key to ensure consistency with older
+                #  datasets.
+                author_index = wos_dict['AF'].index(author)
+                #e.g."WU, ZD"
+                author_au = wos_dict['AU'][author_index].upper()
+                inst_name = institution[0]
+
+                try:
+                    author_institutions[author_au].append(inst_name)
+                except KeyError:
+                    author_institutions[author_au] = [inst_name]
+
+        else:   # Author-institution mappings are not provided. We
+                #  therefore map all authors to all institutions.
+            for author_au in wos_dict['AU']:
+                institution = c1_str.strip().split(', ')
+                inst_name = institution[0]
+
+                # Use sets here to avoid duplicates.
+                try:
+                    author_institutions[author_au].add(inst_name)
+                except KeyError:
+                    author_institutions[author_au] = set([inst_name])
+
+    # Convert values back to lists before returning.
+    return { k:list(v) for k,v in author_institutions.iteritems() }
 
 def read(datapath):
     """
