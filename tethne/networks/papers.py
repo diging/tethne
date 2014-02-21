@@ -405,7 +405,7 @@ def cocitation(papers, threshold, node_id='ayjid', topn=None, verbose=False, \
 
     return cocitation_graph
 
-def author_coupling(papers, threshold, node_attribs, node_id='ayjid'):
+def author_coupling(papers, threshold, node_attribs, node_id='ayjid', **kwargs):
     """
     Vertices are papers and edges indicates shared authorship.
 
