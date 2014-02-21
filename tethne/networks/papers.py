@@ -16,7 +16,7 @@ Methods
 
 import networkx as nx
 import tethne.utilities as util
-import helpers as hp
+import helpers
 import operator
 import tethne.data as ds
 
@@ -271,7 +271,7 @@ def bibliographic_coupling(papers, citation_id='ayjid', threshold=1,
                                    similarity=similarity)
     return bcoupling
 
-def cocitation(papers, threshold, node_id='ayjid', topn=None, verbose=False, \
+def cocitation(papers, threshold=1, node_id='ayjid', topn=None, verbose=False,\
                 node_attribs=['date'], **kwargs):
     """
     Generate a cocitation network.
@@ -350,10 +350,10 @@ def cocitation(papers, threshold, node_id='ayjid', topn=None, verbose=False, \
     # 61670334: networks.citations.cocitation should have a "top cited"
     #  parameter.
     if topn is not None:
-        parents, include, citations_count = hp.top_parents(papers, topn=topn)
+        parents,include,citations_count = helpers.top_parents(papers, topn=topn)
         N = len(include)
     else:
-        citations_count = hp.citation_count(papers)
+        citations_count = helpers.citation_count(papers)
         N = len(citations_count.keys())
 
     if verbose:
@@ -405,7 +405,8 @@ def cocitation(papers, threshold, node_id='ayjid', topn=None, verbose=False, \
 
     return cocitation_graph
 
-def author_coupling(papers, threshold, node_attribs, node_id='ayjid', **kwargs):
+def author_coupling(papers, threshold=1, node_attribs=['date'], 
+                                                     node_id='ayjid', **kwargs):
     """
     Vertices are papers and edges indicates shared authorship.
 

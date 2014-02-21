@@ -1,3 +1,20 @@
+def isfloat(x):
+    try:
+        a = float(x)
+    except ValueError:
+        return False
+    else:
+        return True
+
+def isint(x):
+    try:
+        a = float(x)
+        b = int(a)
+    except ValueError:
+        return False
+    else:
+        return a == b
+
 if __name__ == "__main__":
     
     import csv
@@ -300,9 +317,11 @@ if __name__ == "__main__":
         # Build kwargs.
         kwargs = {}
         if options.threshold is not None:
-            kwargs['threshold'] = options.threshold
+            kwargs['threshold'] = int(options.threshold)
         if options.topn is not None:
-            kwargs['topn'] = options.topn
+            if isint(options.topn): topn = int(options.topn)
+            elif isfloat(options.topn): topn = float(options.topn)
+            kwargs['topn'] = topn
         if options.node_attr is not None:
             kwargs['node_attribs'] = options.node_attr.split(',')
         if options.edge_attr is not None:
@@ -325,15 +344,14 @@ if __name__ == "__main__":
                 builder = authorCollectionBuilder(D)
 
             C = builder.build(a, options.graph_type, **kwargs)
+
         else:   # Generate a single Graph from all of the papers in 
                 #  DataCollection, D.
             method = nt.__dict__[options.node_type+'s'] \
                        .__dict__[options.graph_type]
             
             G = method(D.papers(), **kwargs)
-        
         sys.stdout.write("done in {0} seconds.\n"
                                                 .format(time.time()-start_time))
-        
         if options.node_type == 'term':
             sys.exit('Term graphs not yet implemented. Coming soon!\n')
