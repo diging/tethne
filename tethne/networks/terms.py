@@ -11,7 +11,7 @@ includes keywords, abstract terms, etc.
 import numpy as np
 import networkx as nx
 
-def keyword_cooccurrence(papers, threshold, connected=False):
+def keyword_cooccurrence(papers, threshold, connected=False, **kwargs):
     """
     Generates a keyword cooccurrence network.
 
@@ -79,7 +79,7 @@ def keyword_cooccurrence(papers, threshold, connected=False):
     else:
         return G    # Return the whole graph.
         
-def topic_coupling(model, threshold=0.005):
+def topic_coupling(model, threshold=0.005, **kwargs):
     """
     Creates a network of words connected by implication in a common topic(s).
     
