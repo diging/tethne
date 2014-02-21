@@ -252,7 +252,7 @@ def parse(filepath):
         field_tag = line[:2]
         
         if field_tag == ' ':
-            print " NULL"
+            pass
         
         if field_tag == paper_start_key:
             # Then prepare for next paper.
