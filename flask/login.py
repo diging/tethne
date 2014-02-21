@@ -2,26 +2,37 @@ from flask import * # do not use '*'; actually input the dependencies.
 import logging
 from logging import Formatter, FileHandler
 from forms import *
-
+import ZODB.config
 
 app = Flask(__name__)
 app.config.from_object('config')
 
 from ZODB.FileStorage import FileStorage
 from ZODB.DB import DB
-# storage = FileStorage('data.fs')
-# db = DB(storage)
+
+storage = FileStorage('./storage/users.fs')
+db = DB(storage)
+connection = db.open()
+dbroot = connection.root()
+
+
+
+# db = ZODB.config.databaseFromURL('zodb.conf')
 # connection = db.open()
 # root = connection.root()
 
+
+# 
 # from flaskext.zodb import ZODB
 # db = ZODB(app)
 
+
+# # setting the defaults 
 # @app.before_request
 # def set_db_defaults():
-#     if 'entries' not in db:
-#         db['entries'] = List()
-        
+#     if 'userdb' not in db:
+#         db['userdb'] = List()
+         
         
         
 # @app.route('/logout')
@@ -29,10 +40,16 @@ from ZODB.DB import DB
 #     session.pop('logged_in', None)
 #     flash('You were logged out')
 #     return redirect(url_for('show_entries'))
+
+
+# Ensure that a 'userdb' key is present
+# in the root
+if not dbroot.has_key('userdb'):
+    from BTrees.OOBTree import OOBTree
+    dbroot['userdb'] = OOBTree()
+userdb = dbroot['userdb']            
             
-            
-            
-@app.route('/', methods=['GET','POST'])
+@app.route('/index', methods=['GET','POST'])
 def index():
     form = LoginForm(request.form)
     if 'username' in session:
@@ -40,12 +57,23 @@ def index():
     # return render_template('forms/register.html', form = form)
     return 'You are not logged in'            
 
+
 @app.route('/', methods=['GET','POST'])
 def home():
     form = LoginForm(request.form)
     return render_template('forms/login.html', form = form)
 
 
+
+@app.route('/add', methods=['POST'])
+def add_entry():
+    if not session.get('logged_in'):
+        abort(401)
+    db['userdb'].append(request.form)
+    flash('New entry was successfully posted')
+    
+    
+    return redirect(url_for('show_entries'))
 @app.route('/login', methods=['GET','POST'])
 def login():
 	flash('Welcome to Tethne Website')
@@ -53,12 +81,16 @@ def login():
         if request.method == 'POST':
             session['username'] = request.form['username']
             return redirect(url_for('index'))
+        else :
+            return redirect(url_for('register'))
+        
 	return render_template('forms/login.html', form = form)
     
     
 @app.route('/register',methods=['GET','POST'])
 def register():
     form = RegisterForm(request.form)
+    flash('Registered successfuly')
     return render_template('forms/register.html', form = form)
 
 @app.route('/forgot',methods=['GET','POST'])
