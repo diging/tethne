@@ -7,6 +7,7 @@ body {
   max-width: 330px;
   padding: 15px;
   margin: 0 auto;
+  align: center;
 }
 .form-only-page .form .form-heading,
 .form-only-page .form .checkbox {

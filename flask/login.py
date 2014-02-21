@@ -13,14 +13,15 @@ from ZODB.DB import DB
 storage = FileStorage('./storage/users.fs')
 db = DB(storage)
 connection = db.open()
-dbroot = connection.root()
+# dbroot is a dict like structure.
+dbroot = connection.root()  # retrieving the root of the tree
 
 
+# ZEO commented as of now.
 
 # db = ZODB.config.databaseFromURL('zodb.conf')
 # connection = db.open()
 # root = connection.root()
-
 
 # 
 # from flaskext.zodb import ZODB
@@ -47,7 +48,10 @@ dbroot = connection.root()
 if not dbroot.has_key('userdb'):
     from BTrees.OOBTree import OOBTree
     dbroot['userdb'] = OOBTree()
-userdb = dbroot['userdb']            
+
+# userdb is a <BTrees.OOBTree.OOBTree object at some location>
+userdb = dbroot['userdb']           
+print userdb
             
 @app.route('/index', methods=['GET','POST'])
 def index():
@@ -90,7 +94,15 @@ def login():
 @app.route('/register',methods=['GET','POST'])
 def register():
     form = RegisterForm(request.form)
-    flash('Registered successfuly')
+    print "form OBJECT:::", form
+    if request.method == 'POST':
+            #session['username'] = request.form['username']
+            if 'Register' in request.form:
+                print " inside if"
+            else:
+                print " else", request.form
+                db['userdb'] = request.form['username']
+            flash('Registered successfuly')
     return render_template('forms/register.html', form = form)
 
 @app.route('/forgot',methods=['GET','POST'])
