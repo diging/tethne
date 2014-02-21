@@ -677,7 +677,7 @@ def read(datapath):
 # [#60462784]
 def from_dir(path):
     """
-    Convenience function for generating a list of :class:`Paper` from a
+    Convenience function for generating a list of :class:`.Paper` from a
     directory of Web of Science field-tagged data files.
 
     Parameters
@@ -687,7 +687,8 @@ def from_dir(path):
 
     Returns
     -------
-    list : A list of :class:`Paper` objects.
+    papers : list
+        A list of :class:`.Paper` objects.
 
     Raises
     ------
@@ -708,20 +709,17 @@ def from_dir(path):
 
     try:
         files = os.listdir(path)
-        # print " Current Working directory is : ", os.getcwd()
     except IOError:
         raise IOError("Invalid path.")
             
     for f in files:
-        if not f.startswith('.'): # Hidden Files ignore
+        if not f.startswith('.'): # Ignore hidden files.
             try:
-                # print "Loading " + f
                 wos_list += parse(path + "/" + f)
-            except (IOError,UnboundLocalError): # Ignore files that don't contain WoS data.
-                # print  "::::" + "Could not load " + f
-                pass
-
-    return convert(wos_list)
+            except (IOError,UnboundLocalError): # Ignore files that don't 
+                pass                            #  contain WoS data.
+    papers = convert(wos_list)
+    return papers
 
 # [62809724]
 def _validate(wos_data):

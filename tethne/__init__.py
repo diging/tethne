@@ -16,4 +16,3 @@ using networkx.
    tethne.writers
    
 """
-
