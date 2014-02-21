@@ -83,7 +83,7 @@ if __name__ == "__main__":
     
     (options, args) = parser.parse_args()
     
-    # Read data from file.
+    # Read data from file or directory.
     if options.read_f or options.read_d:
     
         # Must specify path.
@@ -122,20 +122,7 @@ if __name__ == "__main__":
         sys.stdout.write("Done.\n")
         sys.stdout.write("Read {0} papers in {1} seconds. Accession: {2}.\n"
                                                                .format(N, t, a))
-    # Read data from a directory.
-    elif options.read_d:
-    
-        # Must specify path.
-        if options.datapath is None:    
-            sys.exit('Specify path to data with --data-path=/path/to/data_dir')
-                    
-        # Must specify format.
-        if options.format is None:      
-            sys.exit('Specify data format with --format argument.')
-        
-        # Must select a supported format.
-        if options.format not in ['WOS', 'DFR']:
-            sys.exit('Data format must be one of: WOS, DFR.')
+
             
         
         
