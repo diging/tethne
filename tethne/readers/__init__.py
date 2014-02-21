@@ -4,6 +4,7 @@ Methods for parsing bibliographic datasets.
 .. autosummary::
 
    dfr
+   mallet
    pubmed
    wos
 
@@ -54,6 +55,7 @@ Missing data here also results in the above keys being set to None.
 import wos
 import pubmed
 import dfr
+import mallet
 import tethne.data as dt
 
 class DataError(Exception):
