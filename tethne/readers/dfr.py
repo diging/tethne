@@ -43,7 +43,9 @@ def read(datapath):
     """
 
     try:
-        root = ET.parse(datapath + "/citations.XML").getroot()
+        with open(datapath + "/citations.XML", 'rb') as f:
+            data = f.read().replace('&', '&amp;')
+            root = ET.fromstring(data)
     except IOError:
         raise IOError(datapath+"citations.XML not found.")
 
@@ -96,9 +98,10 @@ def from_dir(path):
     
     for f in files:
         if not f.startswith('.') and os.path.isdir(path + "/" + f):
-            papers += parse(path + "/" + f)
-        except (IOError, UnboundLocalError):    # Ignore directories that don't
-            pass                                #  contain DfR data.
+            try:
+                papers += read(path + "/" + f)
+            except (IOError, UnboundLocalError):    # Ignore directories that
+                pass                                #  don't contain DfR data.
             
     return papers
 
