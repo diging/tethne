@@ -193,6 +193,8 @@ if __name__ == "__main__":
     parser.add_option_group(sliceGroup)
     parser.add_option_group(graphReqGroup)
     parser.add_option_group(graphGroup)
+    parser.add_option_group(analyzeGroup)
+    parser.add_option_group(writeGroup)
     
     (options, args) = parser.parse_args()
     
