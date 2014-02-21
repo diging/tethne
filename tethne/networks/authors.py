@@ -24,7 +24,7 @@ from collections import defaultdict
 # 1 prints all print statements in the console.
 DEBUG = 0
 
-def author_papers(papers, paper_id, paper_attribs=[]):
+def author_papers(papers, node_id='ayjid', paper_attribs=[], **kwargs):
     """
     Generate an author_papers network NetworkX directed graph.
 
@@ -42,7 +42,7 @@ def author_papers(papers, paper_id, paper_attribs=[]):
     ----------
     papers : list
         A list of wos_objects.
-    paper_id : string
+    node_id : string
         A key from :class:`.Paper` used to identify the nodes.
     paper_attribs : list
         List of user-provided optional arguments apart from the provided
@@ -55,36 +55,36 @@ def author_papers(papers, paper_id, paper_attribs=[]):
 
     Raises
     ------
-    KeyError : Raised when paper_id is not present in Papers.
+    KeyError : Raised when node_id is not present in Papers.
 
     """
     author_papers_graph = nx.DiGraph(type='author_papers')
 
-    # Validate paper_id.
+    # Validate node_id.
     meta_dict = ds.Paper()
     meta_keys = meta_dict.keys()
     meta_keys.remove('citations')
-    if paper_id not in meta_keys:
-        raise KeyError('paper_id' + paper_id + ' cannot be used to identify' +
+    if node_id not in meta_keys:
+        raise KeyError('node_id' + node_id + ' cannot be used to identify' +
                        ' papers.')
     for entry in papers:
         # Define paper_attribute dictionary.
         paper_attrib_dict = util.subdict(entry, paper_attribs)
         paper_attrib_dict['type'] = 'paper'
         # Add paper node with attributes.
-        author_papers_graph.add_node(entry[paper_id], paper_attrib_dict)
+        author_papers_graph.add_node(entry[node_id], paper_attrib_dict)
 
         authors = util.concat_list(entry['aulast'], entry['auinit'], ' ')
         for i in xrange(len(authors)):
             # Add person node.
             author_papers_graph.add_node(authors[i], type="person")
             # Draw edges.
-            author_papers_graph.add_edge(authors[i], entry[paper_id],
+            author_papers_graph.add_edge(authors[i], entry[node_id],
                                    date=entry['date'])
 
     return author_papers_graph
 
-def coauthors(papers, threshold=1, edge_attribs=['ayjid']):
+def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
     """
     Generate a co-author network.
     
@@ -173,7 +173,7 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid']):
 
     return coauthors_graph
 
-def author_institution(Papers, edge_attribs=[]):
+def author_institution(Papers, edge_attribs=[], **kwargs):
     """
     Generate a bi-partite graph with people and institutions as vertices, and
     edges indicating affiliation. This may be slightly ambiguous for WoS data
@@ -225,8 +225,7 @@ def author_institution(Papers, edge_attribs=[]):
 
     return author_institution_graph
 
-
-def author_coinstitution(Papers, threshold):
+def author_coinstitution(Papers, threshold=1, **kwargs):
     """
     Generate a co-institution graph, where edges indicate shared affiliation.
     
@@ -259,10 +258,9 @@ def author_coinstitution(Papers, threshold):
     Parameters
     ----------
     Papers : list
-    a list of wos_objects.
-    threshold : A random value provided by the user.
-                If its greater than zero,two nodes
-                should share something common.
+        A list of wos_objects.
+    threshold : int
+        Minimum institutional overlap required for an edge.
 
     Returns
     -------
@@ -310,7 +308,7 @@ def author_coinstitution(Papers, threshold):
 
     return coinstitution
 
-def author_cocitation(papers, threshold):
+def author_cocitation(papers, threshold=1, **kwargs):
     """
     Generates an author co-citation network; edges indicate co-citation of
     authors' papers.

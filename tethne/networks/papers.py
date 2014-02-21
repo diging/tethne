@@ -20,7 +20,7 @@ import helpers as hp
 import operator
 import tethne.data as ds
 
-def direct_citation(papers, node_id='ayjid', node_attribs=['date']):
+def direct_citation(papers, node_id='ayjid', node_attribs=['date'], **kwargs):
     """
     Create a traditional directed citation network.
 
@@ -139,7 +139,7 @@ def direct_citation(papers, node_id='ayjid', node_attribs=['date']):
 
 def bibliographic_coupling(papers, citation_id='ayjid', threshold=1,
                            node_id='ayjid', node_attribs=['date'], 
-                           weighted=False):
+                           weighted=False, **kwargs):
     """
     Generate a bibliographic coupling network.
     
@@ -272,7 +272,7 @@ def bibliographic_coupling(papers, citation_id='ayjid', threshold=1,
     return bcoupling
 
 def cocitation(papers, threshold, node_id='ayjid', topn=None, verbose=False, \
-                node_attribs=['date']):
+                node_attribs=['date'], **kwargs):
     """
     Generate a cocitation network.
     
@@ -469,7 +469,7 @@ def author_coupling(papers, threshold, node_attribs, node_id='ayjid'):
                                    overlap=len(overlap))
     return acoupling
     
-def topic_coupling(papers, threshold=0.7, node_id='ayjid'):
+def topic_coupling(papers, threshold=0.7, node_id='ayjid', **kwargs):
     """
     Two papers are coupled if they both contain a shared topic above threshold.
 
