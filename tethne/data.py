@@ -322,7 +322,7 @@ class DataCollection(object):
             if cumulative:
                 try:
                     slices[i] += slices[i-1]
-                except IndexError:
+                except KeyError:
                     pass
 
         return slices
