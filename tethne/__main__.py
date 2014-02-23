@@ -297,12 +297,15 @@ if __name__ == "__main__":
             sys.stdout.flush()
             
             if a == 'date':
-                step_size = options.step_size
-                window_size = options.window_size
-                if step_size is not None:
-                    step_size = int(step_size)
-                if window_size is not None:
-                    window_size = int(window_size)
+                if options.step_size is not None:
+                    step_size = int(options.step_size)
+                else:
+                    step_size = 1
+
+                if options.window_size is not None:
+                    window_size = int(options.window_size)
+                else:
+                    window_size = 1
 
                     
                 D.slice(a, method=options.slice_method, 

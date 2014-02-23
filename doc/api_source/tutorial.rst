@@ -22,6 +22,93 @@ Tethne is primarily developed as a Python package, but can also be invoked from 
 command-line (Mac OSX, Linux; untested for Windows). See 
 `Step-By-Step Guide (Command-line)`_.
 
+
+Quickstart (Command-line)
+-------------------------
+
+Use the following sequence of commands to generate a dynamic co-authorship network using
+data from the ISI Web of Science database.
+
+1. `Read`_
+
+.. code-block:: bash
+
+   $ python ./tethne -I example_data -O ./ --read-file \
+   > -P /Users/erickpeirson/Desktop/savedrecs (101).txt -F WOS
+   
+   ----------------------------------------
+	   Workflow step: Read
+   ----------------------------------------
+   Reading WOS data from file /Users/erickpeirson/Desktop/savedrecs.txt...done.
+   Read 500 papers in 1.42379593849 seconds. Accession: 90a0e7fe-c081-4749-9e7c-43534d9b9558.
+   Generating a new DataCollection...done.
+   Saving DataCollection to /tmp/example_data_DataCollection.pickle...done.
+
+2. `Slice`_
+
+.. code-block:: bash
+
+   $ python ./tethne -I example_data -O ./ --slice -S date,jtitle -M time_period \
+   > --slice-window-size=2 --cumulative
+
+   ----------------------------------------
+	   Workflow step: Slice
+   ----------------------------------------
+   Loading DataCollection from /tmp/example_data_DataCollection.pickle...done.
+   Slicing DataCollection by date...done.
+   Slicing DataCollection by jtitle...done.
+   Saving slice distribution to .//example_data_sliceDistribution.csv...done.
+   Saving sliced DataCollection to /tmp/example_data_DataCollection_sliced.pickle...done.
+
+3. `Graph`_
+
+.. code-block:: bash
+   
+   $ python ./tethne -I example_data -O ./ --graph -N author -T coauthors \
+   > --edge-attr=date,jtitle,ayjid
+
+   ----------------------------------------
+	   Workflow step: Graph
+   ----------------------------------------
+   Loading DataCollection with slices from /tmp/example_data_DataCollection_sliced.pickle...done.
+   Using first slice in DataCollection: date.
+   Building author graph using coauthors method...done in 1.90734863281e-05 seconds.
+   Saving GraphCollection to /tmp/example_data_GraphCollection.pickle...done.
+   Writing graph summaries to .//example_data_graphs.csv...done.
+
+4. `Analyze`_
+
+.. code-block:: bash
+
+   $ python ./tethne -I example_data -O ./ --analyze -A betweenness_centrality
+
+   ----------------------------------------
+	   Workflow step: Analyze
+   ----------------------------------------
+   Loading GraphCollection from /tmp/example_data_GraphCollection.pickle...done.
+   Analyzing GraphCollection with betweenness_centrality...done.
+   Writing graph analysis results to .//example_data_betweenness_centrality_analysis.csv...done.
+   Saving GraphCollection to /tmp/example_data_GraphCollection.pickle...done.
+   
+5. `Write`_
+
+.. code-block:: bash
+   
+   $ python ./tethne -I example_data -O ./ --write -W xgmml
+   
+   ----------------------------------------
+	   Workflow step: Write
+   ----------------------------------------
+   Loading GraphCollection from /tmp/example_data_GraphCollection.pickle...done.
+   Writing graphs to ./ with format xgmml...done.
+   
+The resulting graph might look something like (edge width <- N coauthored papers):
+
+.. image:: _static/images/tutorial/cytoscape.png
+   :width: 60%
+
+For detailed descriptions of each workflow step, see `Step-By-Step Guide (Command-line)`_.
+
 Quickstart (Python)
 -------------------
 
@@ -119,25 +206,7 @@ for visualization in `Cytoscape <http://cytoscape.org>`_, use the writing method
    >>> import tethne.writers as wr
    >>> wr.collection.to_dxgmml(C, '/Path/to/Network.xgmml')
 
-Quickstart (Command-line)
--------------------------
-
-Use the following sequence of commands to generate a dynamic co-authorship network using
-data from the ISI Web of Science database.
-
-.. code-block:: bash
-
-   $ python ./tethne -I example_data -O ./ --read-file \
-   > -P /Users/erickpeirson/Desktop/savedrecs (101).txt -F WOS
-   
-   ----------------------------------------
-	   Workflow step: Read
-   ----------------------------------------
-   Reading WOS data from file /Users/erickpeirson/Desktop/savedrecs.txt...done.
-   Read 500 papers in 1.42379593849 seconds. Accession: 90a0e7fe-c081-4749-9e7c-43534d9b9558.
-   Generating a new DataCollection...done.
-   Saving DataCollection to /tmp/example_data_DataCollection.pickle...done.
-
+For a more detailed walkthrough, see `Step-By-Step Guide (Python)`_.
 
 Step-By-Step Guide (Command-line)
 ---------------------------------
@@ -343,7 +412,7 @@ The following arguments should be used:
 ====================  =========================  =========================================
 Argument              Alternative                Description
 ====================  =========================  =========================================
-``-N NODE_TYPE        ``--node-type=TYPE``       Must be one of: ``author``, ``paper``.
+``-N NODE_TYPE``      ``--node-type=TYPE``       Must be one of: ``author``, ``paper``.
 ``-T GRAPH_TYPE``     ``--graph-type=TYPE``      Name of a network-builing method. Can be
                                                  one of any of the methods listed in 
                                                  :mod:`.networks`\. e.g. if ``-n`` is 
@@ -551,6 +620,11 @@ And generating the following files in ``~/results``: ::
    -rw-r--r--  1 erickpeirson  staff  427821 Feb 23 10:52 fundata01_graph_2006.graphml
    -rw-r--r--  1 erickpeirson  staff  515779 Feb 23 10:52 fundata01_graph_2007.graphml
    -rw-r--r--  1 erickpeirson  staff  418702 Feb 23 10:52 fundata01_graph_2008.graphml
+
+Opening ``fundata01_graph_2007.graphml`` in Cytoscape yields something like:
+
+.. image:: _static/images/tutorial/cytoscape2.png
+   :width: 60%
 
 
 Step-By-Step Guide (Python)
