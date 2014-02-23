@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>analyze Package &mdash; tethne  documentation</title>
+    <title>analyze Package &mdash; tethne 0.3.0-alpha documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '',
+        VERSION:     '0.3.0-alpha',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="tethne  documentation" href="index.html" />
+    <link rel="top" title="tethne 0.3.0-alpha documentation" href="index.html" />
     <link rel="up" title="tethne Package" href="tethne.html" />
     <link rel="next" title="matrices Package" href="tethne.matrices.html" /> 
   </head>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="tethne.matrices.html" title="matrices Package"
              accesskey="N">next</a> |</li>
-        <li><a href="index.html">tethne  documentation</a> &raquo;</li>
+        <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
           <li><a href="tethne.html" accesskey="U">tethne Package</a> &raquo;</li> 
       </ul>
     </div>  
@@ -80,7 +80,7 @@ an entire <a class="reference internal" href="tethne.html#tethne.data.GraphColle
 <div class="section" id="module-tethne.analyze.collection">
 <span id="collection-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">collection</span></tt> Module<a class="headerlink" href="#module-tethne.analyze.collection" title="Permalink to this headline">¶</a></h2>
 <p>Methods for analyzing <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> objects.</p>
-<p>For the most part, these methods simply provide systematic access to algorithms 
+<p>For the most part, these methods simply provide systematic access to algorithms
 in NetworkX.</p>
 <dl class="function">
 <dt id="tethne.analyze.collection.algorithm">
@@ -237,7 +237,7 @@ edge.</p>
 <dl class="function">
 <dt id="tethne.analyze.collection.node_global_closeness_centrality">
 <tt class="descclassname">tethne.analyze.collection.</tt><tt class="descname">node_global_closeness_centrality</tt><big>(</big><em>C</em>, <em>node</em><big>)</big><a class="headerlink" href="#tethne.analyze.collection.node_global_closeness_centrality" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates global closeness centrality for node in each graph in 
+<dd><p>Calculates global closeness centrality for node in each graph in
 <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> C.</p>
 </dd></dl>
 
@@ -316,7 +316,7 @@ graphs, conventional closeness centrality metrics fail because it is not
 possible to traverse between a given node and all other nodes in the graph.
 Global closeness centrality is calculated in a way that yields values even
 for multi-component graphs. For an example of how global closeness
-centrality can be used to analyze co-authorship networks, see the blog post 
+centrality can be used to analyze co-authorship networks, see the blog post
 <a class="reference external" href="http://devo-evo.lab.asu.edu/node/459">here</a>.</p>
 <p>To calculate the global closeness centrality of a single node, try:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.analyze</span> <span class="kn">as</span> <span class="nn">az</span>
@@ -325,15 +325,15 @@ centrality can be used to analyze co-authorship networks, see the blog post
 <span class="go">0.154245</span>
 </pre></div>
 </div>
-<p>You can calculate the global closeness centrality of all nodes in the 
+<p>You can calculate the global closeness centrality of all nodes in the
 network using <a class="reference internal" href="#tethne.analyze.graph.global_closeness_centrality" title="tethne.analyze.graph.global_closeness_centrality"><tt class="xref py py-func docutils literal"><span class="pre">global_closeness_centrality()</span></tt></a> .</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">GBC</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">global_closeness_centrality</span><span class="p">(</span><span class="n">BC</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">GBC</span>
 <span class="go">{&#39;a&#39;: 0.0, &#39;c&#39;: 0.0, &#39;b&#39;: 0.6666666666666666, &#39;d&#39;: 0.0}</span>
 </pre></div>
 </div>
-<p>For connected graphs, this is equivalent to conventional betweenness 
-centrality. For disconnected graphs, works around infinite path lengths 
+<p>For connected graphs, this is equivalent to conventional betweenness
+centrality. For disconnected graphs, works around infinite path lengths
 between nodes in different components.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -420,7 +420,7 @@ length. Default is True.</p>
         <li class="right" >
           <a href="tethne.matrices.html" title="matrices Package"
              >next</a> |</li>
-        <li><a href="index.html">tethne  documentation</a> &raquo;</li>
+        <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
           <li><a href="tethne.html" >tethne Package</a> &raquo;</li> 
       </ul>
     </div>

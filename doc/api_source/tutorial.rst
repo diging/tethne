@@ -4,6 +4,12 @@ Tutorial
 Installation
 ------------
 
+You'll need to install the following software (if you don't already have them):
+
+* `Python 2.7 <http://www.python.org/>`_
+* Numpy (`Anaconda <http://continuum.io/downloads>`_ is recommended)
+* `NetworkX <http://networkx.github.io/`_
+
 Download & install the latest version of Tethne from our GitHub repository:
 
 .. code-block:: bash
@@ -11,9 +17,13 @@ Download & install the latest version of Tethne from our GitHub repository:
    $ git clone https://github.com/diging/tethne.git
    $ cd tethne
    $ pip install ./tethne
+   
+Tethne is primarily developed as a Python package, but can also be invoked from the
+command-line (Mac OSX, Linux; untested for Windows). See 
+`Step-By-Step Guide (Command-line)`_.
 
-Quickstart
-----------
+Quickstart (Python)
+-------------------
 
 After starting Python, import Tethne modules with:
 
@@ -50,7 +60,8 @@ module. For example, to build a bibliographic coupling network:
    <networkx.classes.graph.Graph object at 0x101b4fe50>
 
 NetworkX provides 
-`algorithms <http://networkx.github.io/documentation/networkx-1.7/reference/algorithms.html>`_ 
+`algorithms 
+<http://networkx.github.io/documentation/networkx-1.7/reference/algorithms.html>`_ 
 for graph analysis. To generate betweenness-centrality values for each node, try:
 
 .. code-block:: python
@@ -108,8 +119,246 @@ for visualization in `Cytoscape <http://cytoscape.org>`_, use the writing method
    >>> import tethne.writers as wr
    >>> wr.collection.to_dxgmml(C, '/Path/to/Network.xgmml')
 
-Step-By-Step Guide
-------------------
+Step-By-Step Guide (Command-line)
+---------------------------------
+
+Navigate to the directory where you unpacked/cloned Tethne. If you unpacked Tethne as
+``~/Downloads/tethne-python``, inside you will find the subdirectory ``tethne``. Call this
+directory directly, as if it were a Python script. For example:
+
+.. code-block:: bash
+
+   $ python ~/Downloads/tethne-python/tethne
+
+To see a list of all command-line arguments, use:
+
+.. code-block:: bash
+
+   $ python ~/Downloads/tethne-python/tethne --help
+
+Universal arguments
+```````````````````
+
+The following arguments should be included each time you run Tethne. Tethne uses 
+``--dataset-id`` to track your dataset through the workflow, so it should remain the same
+in each workflow step.
+
+=================   ===========================     ======================================
+Argument            Alternative                     Description
+=================   ===========================     ======================================
+``-I DATASET_ID``   ``--dataset-id=DATASET_ID``     Unique ID (required).
+``-t TEMP_DIR``     ``--temp-dir=TEMP_DIR``         Directory for storing temporary files 
+                                                    (optional; default is /tmp).
+``-O OUTPATH``      ``--outpath=OUTPATH``           Path to save workflow output. Some 
+                                                    workflow steps will generate summary 
+                                                    statistics or other output.
+=================   ===========================     ======================================
+
+A base pattern for calling Tethne might look like:
+
+.. code-block:: bash
+
+   $ python ~/Downloads/tethne-python/tethne -I fundata01 -O ~/results
+   
+This will cause all output to be saved in the ``results`` folder inside your home 
+directory.
+
+Workflow steps
+``````````````
+There are 5 steps in the workflow, each with a distinct set of arguments. These should be 
+called sequentially (only the ``--analyze`` step can be skipped).
+
+Read
+^^^^
+
+Parses bibliographic data. There are two ways to do this:
+
+=================   ======================================================================
+Argument            Description
+=================   ======================================================================
+``--read-file``     Read from a single data file. Requires ``--data-path`` and
+                    ``--data-format``.
+``--read-dir``      Read from a directory containing multiple data files. Requires 
+                    ``--data-path`` and ``--data-format``.
+=================   ======================================================================
+
+The following arguments are also required:
+
+=================   ============================     =====================================
+Argument            Alternative                      Description
+=================   ============================     =====================================
+``-P DATAPATH``     ``--data-path=DATAPATH``         Full path to dataset.
+``-F DATAFORMAT``   ``--data-format=DATAFORMAT``     Format of input dataset (WOS, DFR).
+=================   ============================     =====================================
+
+For example:
+
+.. code-block:: bash
+
+   $ python ~/Downloads/tethne-python/tethne -I fundata01 -O ~/results --read-file \
+   > -P /path/to/your\ data/download.txt -F WOS
+
+Resulting in something like: ::
+   
+   ----------------------------------------
+   	   Workflow step: Read
+   ----------------------------------------
+   Reading WOS data from file /path/to/your data/download.txt...done.
+   Read 500 papers in 1.69956803 seconds. Accession: 19825ab7-6176-4742-8cf2-0093d751b5f3.
+   Generating a new DataCollection...done.
+   Saving DataCollection to /tmp/fundata01_DataCollection.pickle...done.
+   
+
+**WOS:** Web of Science field-tagged format; **DFR:** JSTOR Data-for-Research dataset in 
+XML format.
+
+Slice
+^^^^^
+
+Slicing divides your dataset up along one or more axes (a key in the :class:`.Paper`
+class) for analysis.  This prepared your dataset for comparative analysis in later steps.
+You might wish to, for example, analyze your dataset diachronically by slicing by 
+``date``, or you might wish to compare data from different journals by slicing by 
+``jtitle``. Use ``accession`` if you wish to compare data from different data files.
+
+As of ``v.0.3``, slicing is limited to ``date``, ``jtitle``, and ``accession``.
+
+=================   ======================================================================
+Argument            Description
+=================   ======================================================================
+``--slice``         Slice your dataset for comparison along a key axis.
+                        Requires ``--slice-axis``. If ``--outpath`` is set, produces a
+                        table with binned paper frequencies in
+                        ``[OUTPATH]/[DATASET_ID]_slices.csv``.
+=================   ======================================================================
+
+The following arguments are required:
+
+====================  =========================  =========================================
+Argument              Alternative                Description
+====================  =========================  =========================================
+``-S SLICE_AXIS``     ``--slice-axis=AXIS``      Key along which to slice the dataset. 
+                                                 This can be any of the fields 
+                                                 listed in :class:`.Paper`\.
+``-M SLICE_METHOD``   ``--slice-method=METHOD``  Method used to slice 
+                                                 :class:`.DataCollection`\. Available 
+                                                 methods: ``time_window``, 
+                                                 ``time_period``. For details, see
+                                                 :func:`.DataCollection.slice`. Default is 
+                                                 time_period.
+====================  =========================  =========================================
+
+The following arguments are optional:
+                                                 
+============================   ===========================================================
+Argument                       Description
+============================   ===========================================================
+``--slice-window-size=SIZE``    Size of slice time-window or period, in years. Default: 1.
+``--slice-step-size=SIZE``      Amount to advance time-window in each step (ignored for 
+                                time-period).
+``--cumulative``                If True, the data from each successive slice includes the 
+                                data from all preceding slices.                                      
+============================   ===========================================================
+
+For example:
+
+.. code-block:: bash
+
+   $ python ~/Downloads/tethne-python/tethne -I fundata01 -O ~/results --slice \
+   >  -S date -M time_window --slice-window-size=4 --slice-step-size=1 --cumulative
+
+Build Graph(s)
+
+    --graph             Generate a graph (or collection of graphs). If
+                        --outpath is set, produces a table with the number of
+                        nodes and edges per graph in
+                        [OUTPATH]/[DATASET_ID]_graphs.csv.
+
+The following arguments should be used:
+
+    -N NODE_TYPE, --node-type=NODE_TYPE
+                        Must be one of: author, paper, term.
+    -T GRAPH_TYPE, --graph-type=GRAPH_TYPE
+                        Name of a network-builing method. Can be one of any of
+                        the methods listed in the API documentation:
+                        ./doc/api/tethne.networks.html#module-tethne.networks.
+                        e.g. if '-n' is 'author', '-t' could be 'coauthors'
+
+Possible values:
+
+--node-type: paper (should be default), author
+--graph-type: depends on --node-type...
+if  --node-type=paper then:
+author_coupling
+bibliographic_coupling
+cocitation
+direct_citation
+if  --node-type=author then:
+author_cocitation
+author_coinstitution
+author_institution
+author_papers
+coauthors
+Here are some additional optional arguments that should be available for this workflow step:
+
+    --merged            Ignore DataCollection slicing, and build a single
+                        graph from all Papers. 
+Applies to ALL
+
+    --threshold=THRESHOLD
+                        Set the 'threshold' argument. 
+Applies to ALL except: direct_citation, author_institution, author_papers
+
+    --topn=TOPN         Set the 'topn' argument.
+Applies to: cocitation
+
+    --node-attr=NODE_ATTR
+                        List of attributes to include for each node. e.g.
+                        --node-attr=date,atitle,jtitle
+Applies to ALL
+
+    --edge-attr=EDGE_ATTR
+                        List of attributes to include for each edge. e.g.
+Applies to ALL
+                        --edge-attr=ayjid,atitle,date
+    --node-id=NODE_ID   Field to use as node id (for papers graphs). e.g.
+                        --node-id=ayjid
+Applies to all papers networks (not authors); see above.
+
+    --weighted          Trigger the 'weighted' argument.
+Applies to: bibliographic_coupling
+
+Analyze graph(s)
+
+    --analyze           Analyze a graph (or collection of graphs). If
+                        --outpath is set, produces a table with the mean and
+                        variance of the algorithm result for each graph, in
+                        [OUTPATH]/[DATASET_ID]_[ALGORITHM]_analysis.csv.
+
+This is required:
+
+    -A ALGORITHM, --algorithm=ALGORITHM
+                        Name of a NetworkX graph analysis algorithm.
+Values are the method names from (for now): http://networkx.github.io/documentation/latest/reference/algorithms.centrality.html
+
+Write graph(s)
+
+    --write             Write a graph (or collection of graphs) to a
+                        structured format, in [OUTPATH].
+
+This is required:
+    -W WRITE_FORMAT, --write-format=WRITE_FORMAT
+                        Output format for graph(s). If a static graph format
+                        is chosen (e.g. graphml), each slice in the
+                        GraphCollection will result in a separate file.
+                        Supported writers: (static) graphml, gexf; (dynamic)
+                        xgmml
+Possible values:
+grapml (static graphs)
+xgmml (dynamic graphs)
+
+Step-By-Step Guide (Python)
+---------------------------
 
 .. toctree::
 

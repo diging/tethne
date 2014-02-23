@@ -313,6 +313,7 @@ class DataCollection(object):
                                                  for p in self.data.values() ]))
         end = kwargs.get('start', max([ p['date'] 
                                                  for p in self.data.values() ]))
+        cumulative = kwargs.get('cumulative', False)
 
         slices = {}
         for i in xrange(start, end-window_size+2, step_size):
