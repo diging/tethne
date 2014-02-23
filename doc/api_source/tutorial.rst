@@ -119,6 +119,26 @@ for visualization in `Cytoscape <http://cytoscape.org>`_, use the writing method
    >>> import tethne.writers as wr
    >>> wr.collection.to_dxgmml(C, '/Path/to/Network.xgmml')
 
+Quickstart (Command-line)
+-------------------------
+
+Use the following sequence of commands to generate a dynamic co-authorship network using
+data from the ISI Web of Science database.
+
+.. code-block:: bash
+
+   $ python ./tethne -I example_data -O ./ --read-file \
+   > -P /Users/erickpeirson/Desktop/savedrecs (101).txt -F WOS
+   
+   ----------------------------------------
+	   Workflow step: Read
+   ----------------------------------------
+   Reading WOS data from file /Users/erickpeirson/Desktop/savedrecs.txt...done.
+   Read 500 papers in 1.42379593849 seconds. Accession: 90a0e7fe-c081-4749-9e7c-43534d9b9558.
+   Generating a new DataCollection...done.
+   Saving DataCollection to /tmp/example_data_DataCollection.pickle...done.
+
+
 Step-By-Step Guide (Command-line)
 ---------------------------------
 
@@ -167,6 +187,12 @@ Workflow steps
 ``````````````
 There are 5 steps in the workflow, each with a distinct set of arguments. These should be 
 called sequentially (only the ``--analyze`` step can be skipped).
+
+* `Read`_
+* `Slice`_
+* `Graph`_
+* `Analyze`_
+* `Write`_
 
 Read
 ^^^^
@@ -265,97 +291,267 @@ For example:
 .. code-block:: bash
 
    $ python ~/Downloads/tethne-python/tethne -I fundata01 -O ~/results --slice \
-   >  -S date -M time_window --slice-window-size=4 --slice-step-size=1 --cumulative
+   >  -S date,jtitle -M time_window --slice-window-size=4 --slice-step-size=1 --cumulative
 
-Build Graph(s)
+Resulting in something like: ::
 
-    --graph             Generate a graph (or collection of graphs). If
-                        --outpath is set, produces a table with the number of
-                        nodes and edges per graph in
-                        [OUTPATH]/[DATASET_ID]_graphs.csv.
+   ----------------------------------------
+       Workflow step: Slice
+   ----------------------------------------
+   Loading DataCollection from /tmp/fundata01_DataCollection.pickle...done.
+   Slicing DataCollection by date...done.
+   Slicing DataCollection by jtitle...done.
+   Saving slice distribution to ~/results/fundata01_sliceDistribution.csv...done.
+   Saving sliced DataCollection to /tmp/fundata01_DataCollection_sliced.pickle...done.
+
+``~/results/fundata01_sliceDistribution.csv`` contains a comma-separated table with the
+distribution of papers across ``date`` and ``jtitle``. For example:
+
+.. csv-table:: ``fundata01_sliceDistribution.csv``
+
+   ,2003,2004,2005,2006,2007,2008
+   ENVIRONMENTAL BIOLOGY OF FISHES,0.0,0.0,0.0,1.0,1.0,1.0
+   SCIENTIA MARINA,0.0,0.0,0.0,0.0,1.0,1.0
+   ACTA OECOLOGICA-INTERNATIONAL JOURNAL OF ECOLOGY,3.0,3.0,3.0,4.0,2.0,2.0
+   JOURNAL OF CHEMICAL ECOLOGY,2.0,2.0,1.0,1.0,0.0,0.0
+   ACTA THERIOLOGICA,0.0,0.0,0.0,0.0,1.0,1.0
+   TREE GENETICS & GENOMES,0.0,0.0,1.0,1.0,1.0,1.0
+   ENVIRONMENTAL POLLUTION,1.0,1.0,1.0,1.0,0.0,0.0
+   NEUROGASTROENTEROLOGY AND MOTILITY,0.0,0.0,1.0,1.0,1.0,1.0
+   FIELD CROPS RESEARCH,1.0,1.0,1.0,1.0,1.0,1.0
+   PLOS GENETICS,0.0,1.0,1.0,1.0,1.0,0.0
+   ONCOGENE,1.0,1.0,1.0,0.0,1.0,1.0
+   
+You can easily visualize these data using your favorite spreadsheet software.
+
+.. image:: _static/images/tutorial/slice.png
+   :width: 60%
+
+Graph
+^^^^^
+
+=================   ======================================================================
+Argument            Description
+=================   ======================================================================
+``--graph``         Generate a graph (or collection of graphs). If ``--outpath`` is set, 
+                    produces a table with the number of nodes and edges per graph in
+                    ``[OUTPATH]/[DATASET_ID]_graphs.csv``.
+=================   ======================================================================
 
 The following arguments should be used:
 
-    -N NODE_TYPE, --node-type=NODE_TYPE
-                        Must be one of: author, paper, term.
-    -T GRAPH_TYPE, --graph-type=GRAPH_TYPE
-                        Name of a network-builing method. Can be one of any of
-                        the methods listed in the API documentation:
-                        ./doc/api/tethne.networks.html#module-tethne.networks.
-                        e.g. if '-n' is 'author', '-t' could be 'coauthors'
+====================  =========================  =========================================
+Argument              Alternative                Description
+====================  =========================  =========================================
+``-N NODE_TYPE        ``--node-type=TYPE``       Must be one of: ``author``, ``paper``.
+``-T GRAPH_TYPE``     ``--graph-type=TYPE``      Name of a network-builing method. Can be
+                                                 one of any of the methods listed in 
+                                                 :mod:`.networks`\. e.g. if ``-n`` is 
+                                                 ``author``, ``-t`` could be 
+                                                 ``coauthors``.
+====================  =========================  =========================================
 
-Possible values:
+Available network-building methods (as of v0.3.0-alpha)
 
---node-type: paper (should be default), author
---graph-type: depends on --node-type...
-if  --node-type=paper then:
-author_coupling
-bibliographic_coupling
-cocitation
-direct_citation
-if  --node-type=author then:
-author_cocitation
-author_coinstitution
-author_institution
-author_papers
-coauthors
-Here are some additional optional arguments that should be available for this workflow step:
+===========  ==========================  =====================================================
+Node Type    Graph Type                  Method
+===========  ==========================  =====================================================
+``paper``    ``author_coupling``         :func:`tethne.networks.papers.author_coupling`
+``paper``    ``bibliographic_coupling``  :func:`tethne.networks.papers.bibliographic_coupling`
+``paper``    ``cocitation``              :func:`tethne.networks.papers.cocitation`
+``paper``    ``direct_citation``         :func:`tethne.networks.papers.direct_citation`
+``author``   ``author_cocitation``       :func:`tethne.networks.authors.author_cocitation`
+``author``   ``author_coinstitution``    :func:`tethne.networks.authors.author_coinstitution`
+``author``   ``author_papers``           :func:`tethne.networks.authors.author_papers`
+``author``   ``coauthors``               :func:`tethne.networks.authors.coauthors`
+===========  ==========================  =====================================================
 
-    --merged            Ignore DataCollection slicing, and build a single
-                        graph from all Papers. 
-Applies to ALL
+If you have sliced your data in a previous step, but wish to generate a network based on
+the entire dataset, you may use:
 
-    --threshold=THRESHOLD
-                        Set the 'threshold' argument. 
-Applies to ALL except: direct_citation, author_institution, author_papers
+=================   ======================================================================
+Argument            Description
+=================   ======================================================================
+``--merged``        Ignore DataCollection slicing, and build a single
+                    graph from all Papers. 
+=================   ======================================================================
 
-    --topn=TOPN         Set the 'topn' argument.
-Applies to: cocitation
+Some methods use additional keyword arguments that affect the resulting graph. The
+following arguments can be used to set common keyword arguments. The meaning of these
+arguments varies between methods; consult :mod:`.networks` for descriptions of each
+network-building method.
 
-    --node-attr=NODE_ATTR
-                        List of attributes to include for each node. e.g.
-                        --node-attr=date,atitle,jtitle
-Applies to ALL
+=========================   ==============================================================
+Argument                    Description
+=========================   ==============================================================
+``--threshold=THRESHOLD``   Set the 'threshold' argument. Applies to all except: 
+                            ``direct_citation``, ``author_institution``, 
+                            ``author_papers``.
+``--topn=TOPN``             Set the 'topn' argument. Applies to: ``cocitation``.
+``--node-attr=NODE_ATTR``   List of attributes to include for each node. e.g.
+                            ``--node-attr=date,atitle,jtitle``. Applies to: all.
+``--edge-attr=EDGE_ATTR``   List of attributes to include for each edge. e.g. 
+                            ``--edge-attr=ayjid,atitle,date``. Applies to: all.
+``--node-id=NODE_ID``       Field to use as node id (for papers graphs). e.g.
+                            ``--node-id=ayjid``. Applies to: all ``paper`` methods.
+``--weighted``              Trigger the 'weighted' argument. Applies to:
+                            ``bibliographic_coupling``.
+=========================   ==============================================================
 
-    --edge-attr=EDGE_ATTR
-                        List of attributes to include for each edge. e.g.
-Applies to ALL
-                        --edge-attr=ayjid,atitle,date
-    --node-id=NODE_ID   Field to use as node id (for papers graphs). e.g.
-                        --node-id=ayjid
-Applies to all papers networks (not authors); see above.
+For example:
 
-    --weighted          Trigger the 'weighted' argument.
-Applies to: bibliographic_coupling
+.. code-block:: bash
 
-Analyze graph(s)
+   $ python ~/Downloads/tethne-python/tethne -I fundata01 -O ~/results --graph \
+   > -N author -T coauthors --edge-attr=ayjid,date,jtitle
 
-    --analyze           Analyze a graph (or collection of graphs). If
-                        --outpath is set, produces a table with the mean and
-                        variance of the algorithm result for each graph, in
-                        [OUTPATH]/[DATASET_ID]_[ALGORITHM]_analysis.csv.
+Resulting in something like: ::
 
-This is required:
+   ----------------------------------------
+	   Workflow step: Graph
+   ----------------------------------------
+   Loading DataCollection with slices from /tmp/fundata01_DataCollection_sliced.pickle...done.
+   Using first slice in DataCollection: date.
+   Building author graph using coauthors method...done in 0.426736116409 seconds.
+   Saving GraphCollection to /tmp/fundata01_GraphCollection.pickle...done.
+   Writing graph summaries to ~/results/fundata01_graphs.csv...done.
 
-    -A ALGORITHM, --algorithm=ALGORITHM
-                        Name of a NetworkX graph analysis algorithm.
-Values are the method names from (for now): http://networkx.github.io/documentation/latest/reference/algorithms.centrality.html
+``~/results/fundata01_graphs.csv`` contains a comma-separated table with the
+number of nodes and edges per graph (indexed by ``date``, in this case). For example:
 
-Write graph(s)
+.. csv-table:: ``fundata01_graphs.csv``
 
-    --write             Write a graph (or collection of graphs) to a
-                        structured format, in [OUTPATH].
+   index,nodes,edges
+   2003,402,630
+   2004,576,978
+   2005,666,1199
+   2006,781,1420
+   2007,907,1764
+   2008,739,1436
 
-This is required:
-    -W WRITE_FORMAT, --write-format=WRITE_FORMAT
-                        Output format for graph(s). If a static graph format
-                        is chosen (e.g. graphml), each slice in the
-                        GraphCollection will result in a separate file.
-                        Supported writers: (static) graphml, gexf; (dynamic)
-                        xgmml
-Possible values:
-grapml (static graphs)
-xgmml (dynamic graphs)
+You can easily visualize these data using your favorite spreadsheet software.
+
+.. image:: _static/images/tutorial/graph.png
+   :width: 60%
+
+Analyze
+^^^^^^^
+
+The analysis workflow step is optional. As of v0.3.0-alpha, ``--analyze`` triggers
+:func:`.analyze.collection.algorithm`\, which calls a graph analysis algorithm in 
+NetworkX. So far this has been tested for `centrality algorithms 
+<http://networkx.github.io/documentation/latest/reference/algorithms.centrality.html>`_
+only.
+
+=================   ======================================================================
+Argument            Description
+=================   ======================================================================
+``--analyze``       Analyze a graph (or collection of graphs). If ``--outpath`` is set, 
+                    produces a table with the mean and variance of the algorithm result 
+                    for each graph, in 
+                    ``[OUTPATH]/[DATASET_ID]_[ALGORITHM]_analysis.csv``.
+=================   ======================================================================
+
+Use the ``--algorithm`` argument to select an algorithm. This should be the name of an
+method in the `NetworkX centrality algorithm methods
+<http://networkx.github.io/documentation/latest/reference/algorithms.centrality.html>`+_.
+
+====================  =========================  =========================================
+Argument              Alternative                Description
+====================  =========================  =========================================
+``-A ALGORITHM``      ``--algorithm=ALGORITHM``  Name of a NetworkX graph analysis 
+                                                 algorithm.
+====================  =========================  =========================================
+
+For example:
+
+.. code-block:: bash
+
+   $ python ~/Downloads/tethne-python/tethne -I fundata01 -O ~/results --analyze \
+   > -A betweenness_centrality
+   
+Resulting in something like: ::
+
+   ----------------------------------------
+	   Workflow step: Analyze
+   ----------------------------------------
+   Loading GraphCollection from /tmp/fundata01_GraphCollection.pickle...done.
+   Analyzing GraphCollection with betweenness_centrality...done.
+   Writing graph analysis results to ~/results/fundata01_betweenness_centrality_analysis.csv...done.
+   Saving GraphCollection to /tmp/fundata01_GraphCollection.pickle...done.
+
+``~/results/fundata01_betweenness_centrality_analysis.csv`` contains a comma-separated 
+table with the mean and variance of per-node betweenness-centrality for each graph
+(indexed by ``date``, in this case). For example:
+
+.. csv-table:: ``fundata01_betweenness_centrality_analysis.csv``
+
+   index,mean,variance
+   2003,4.8696666294462848e-06,5.8521060847378354e-10
+   2004,3.7662643707182407e-06,5.0172975473198493e-10
+   2005,3.2576284954217712e-06,4.8988211004664643e-10
+   2006,1.749020895995168e-06,1.5297987419477807e-10
+   2007,3.6252321590741106e-06,1.4535627363876269e-09
+   2008,2.5476025127262327e-06,1.0268407559417709e-09
+
+You can easily visualize these data using your favorite spreadsheet software.
+
+.. image:: _static/images/tutorial/analyze.png
+   :width: 60%
+   
+Write
+^^^^^
+
+You can visualize networks using software like `Cytoscape <http://www.cytoscape.org>`_
+or `Gephi <http://www.gephi.org>`_. The writing workflow step involves converting a
+collection of NetworkX graphs into a structured graph file. Tethne can generate both
+static and dynamic networks. If a static network format is chosen, each graph in the
+collection will be written to a separate file.
+
+=================   ======================================================================
+Argument            Description
+=================   ======================================================================
+``--write``         Write a graph (or collection of graphs) to a structured format, in 
+                    ``[OUTPATH]``.
+=================   ======================================================================
+
+The ``--write-format`` argument is required:
+
+====================  =========================  =========================================
+Argument              Alternative                Description
+====================  =========================  =========================================
+-W WRITE_FORMAT       --write-format=FORMAT      Output format for graph(s). If a static 
+                                                 graph format is chosen (e.g. graphml), 
+                                                 each slice in the GraphCollection will 
+                                                 result in a separate file. Supported 
+                                                 writers: (static) graphml; (dynamic) 
+                                                 xgmml.
+====================  =========================  =========================================
+
+For example:
+
+.. code-block:: python
+
+   $ python ~/Downloads/tethne-python/tethne -I fundata01 -O ~/results --write \
+   > -W graphml
+
+Resulting in something like: ::
+
+   ----------------------------------------
+	   Workflow step: Write
+   ----------------------------------------
+   Loading GraphCollection from /tmp/fundata01_GraphCollection.pickle...done.
+   Writing graphs to ~/results with format graphml...done.
+   
+And generating the following files in ``~/results``: ::
+
+   -rw-r--r--  1 erickpeirson  staff  196686 Feb 23 10:52 fundata01_graph_2003.graphml
+   -rw-r--r--  1 erickpeirson  staff  299885 Feb 23 10:52 fundata01_graph_2004.graphml
+   -rw-r--r--  1 erickpeirson  staff  359992 Feb 23 10:52 fundata01_graph_2005.graphml
+   -rw-r--r--  1 erickpeirson  staff  427821 Feb 23 10:52 fundata01_graph_2006.graphml
+   -rw-r--r--  1 erickpeirson  staff  515779 Feb 23 10:52 fundata01_graph_2007.graphml
+   -rw-r--r--  1 erickpeirson  staff  418702 Feb 23 10:52 fundata01_graph_2008.graphml
+
 
 Step-By-Step Guide (Python)
 ---------------------------
