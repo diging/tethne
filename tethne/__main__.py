@@ -298,8 +298,8 @@ if __name__ == "__main__":
             
             if a == 'date':
                 D.slice(a, method=options.slice_method, 
-                           window_size=options.window_size,
-                           step_size=options.step_size,
+                           window_size=int(options.window_size),
+                           step_size=int(options.step_size),
                            cumulative=options.cumulative )
             else:
                 D.slice(a)
