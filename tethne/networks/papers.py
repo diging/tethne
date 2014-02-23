@@ -11,7 +11,7 @@ Methods
    cocitation
    direct_citation
    topic_coupling
-   
+
 """
 
 import networkx as nx
@@ -25,18 +25,18 @@ def direct_citation(papers, node_id='ayjid', node_attribs=['date'], **kwargs):
     Create a traditional directed citation network.
 
     Direct-citation graphs are `directed acyclic graphs`__ in which vertices are
-    papers, and each (directed) edge represents a citation of the target 
-    paper by the source paper. The :func:`.networks.papers.direct_citation` 
-    method generates both a global citation graph, which includes all cited and 
-    citing papers, and an internal citation graph that describes only citations 
+    papers, and each (directed) edge represents a citation of the target
+    paper by the source paper. The :func:`.networks.papers.direct_citation`
+    method generates both a global citation graph, which includes all cited and
+    citing papers, and an internal citation graph that describes only citations
     among papers in the original dataset.
 
     .. _dag: http://en.wikipedia.org/wiki/Directed_acyclic_graph
 
     __ dag_
 
-    To generate direct-citation graphs, use the 
-    :func:`.networks.papers.direct_citation` method. Note the size difference 
+    To generate direct-citation graphs, use the
+    :func:`.networks.papers.direct_citation` method. Note the size difference
     between the global and internal citation graphs.
 
     .. code-block:: python
@@ -54,7 +54,7 @@ def direct_citation(papers, node_id='ayjid', node_attribs=['date'], **kwargs):
     Edge               From a paper to a cited reference.
     Edge Attribute     Publication date of the citing paper.
     ==============     =========================================================
-    
+
     Parameters
     ----------
     papers : list
@@ -138,13 +138,13 @@ def direct_citation(papers, node_id='ayjid', node_attribs=['date'], **kwargs):
         return citation_network, citation_network_internal
 
 def bibliographic_coupling(papers, citation_id='ayjid', threshold=1,
-                           node_id='ayjid', node_attribs=['date'], 
+                           node_id='ayjid', node_attribs=['date'],
                            weighted=False, **kwargs):
     """
     Generate a bibliographic coupling network.
-    
-    Two papers are **bibliographically coupled** when they both cite the same, 
-    third, paper. You can generate a bibliographic coupling network using the 
+
+    Two papers are **bibliographically coupled** when they both cite the same,
+    third, paper. You can generate a bibliographic coupling network using the
     :func:`.networks.papers.bibliographic_coupling` method.
 
     .. code-block:: python
@@ -153,9 +153,9 @@ def bibliographic_coupling(papers, citation_id='ayjid', threshold=1,
        >>> BC
        <networkx.classes.graph.Graph object at 0x102eec710>
 
-    Especially when working with large datasets, or disciplinarily narrow 
-    literatures, it is usually helpful to set a minimum number of shared 
-    citations required for two papers to be coupled. You can do this by setting 
+    Especially when working with large datasets, or disciplinarily narrow
+    literatures, it is usually helpful to set a minimum number of shared
+    citations required for two papers to be coupled. You can do this by setting
     the **`threshold`** parameter.
 
     .. code-block:: python
@@ -175,8 +175,8 @@ def bibliographic_coupling(papers, citation_id='ayjid', threshold=1,
     Edge               (a,b) in E(G) if a and b share x citations where x >=
                        threshold.
     Edge Attributes    overlap: the number of citations shared
-    ===============    ========================================================= 
-    
+    ===============    =========================================================
+
 
     Parameters
     ----------
@@ -194,9 +194,9 @@ def bibliographic_coupling(papers, citation_id='ayjid', threshold=1,
         graph.
     weighted : bool
         If True, edge attribute `overlap` is a float in {0-1} calculated as
-        :math:`\cfrac{N_{ij}}{\sqrt{N_{i}N_{j}}}` where :math:`N_{i}` and 
-        :math:`N_{j}` are the number of references in :class:`.Paper` *i* and 
-        *j*, respectively, and :math:`N_{ij}` is the number of references 
+        :math:`\cfrac{N_{ij}}{\sqrt{N_{i}N_{j}}}` where :math:`N_{i}` and
+        :math:`N_{j}` are the number of references in :class:`.Paper` *i* and
+        *j*, respectively, and :math:`N_{ij}` is the number of references
         shared by papers *i* and *j*.
 
     Returns
@@ -251,7 +251,7 @@ def bibliographic_coupling(papers, citation_id='ayjid', threshold=1,
 
             # Add nodes and edge if the citation overlap is sufficiently high.
             overlap = util.overlap(i_list, j_list)
-            
+
             if weighted:
                 if len(overlap) > 0:
                     w = (float(len(i_list)) * float(len(j_list)))**0.5
@@ -260,7 +260,7 @@ def bibliographic_coupling(papers, citation_id='ayjid', threshold=1,
                     similarity = 0
             else:
                 similarity = len(overlap)
-                
+
             if similarity >= threshold:
                 bcoupling.add_node(papers[i][node_id], node_i_attribs)
                 bcoupling.add_node(papers[j][node_id], node_j_attribs)
@@ -275,18 +275,18 @@ def cocitation(papers, threshold=1, node_id='ayjid', topn=None, verbose=False,\
                 node_attribs=['date'], **kwargs):
     """
     Generate a cocitation network.
-    
-    A **cocitation network** is a network in which vertices are papers, and 
-    edges indicate that two papers were cited by the same third paper. 
+
+    A **cocitation network** is a network in which vertices are papers, and
+    edges indicate that two papers were cited by the same third paper.
     `CiteSpace <http://cluster.cis.drexel.edu/~cchen/citespace/doc/jasist2006.pdf>`_
-    is a popular desktop application for co-citation analysis, and you can read 
-    about the theory behind it 
+    is a popular desktop application for co-citation analysis, and you can read
+    about the theory behind it
     `here <http://cluster.cis.drexel.edu/~cchen/citespace/>`_. Co-citation
     analysis is generally performed with a temporal component, so building a
     :class:`.GraphCollection` from a :class`.DataCollection` sliced by ``date``
     is recommended.
 
-    You can generate a co-citation network using the 
+    You can generate a co-citation network using the
     :func:`.networks.papers.cocitation` method:
 
     .. code-block:: python
@@ -295,10 +295,10 @@ def cocitation(papers, threshold=1, node_id='ayjid', topn=None, verbose=False,\
        >>> CC
        <networkx.classes.graph.Graph object at 0x102eec790>
 
-    For large datasets, you may wish to set a minimum number of co-citations 
-    required for an edge between two papers Keep in mind that all of the 
-    references in a single paper are co-cited once, so a threshold of at least 
-    2 is prudent. Note the dramatic decrease in the number of edges when the 
+    For large datasets, you may wish to set a minimum number of co-citations
+    required for an edge between two papers Keep in mind that all of the
+    references in a single paper are co-cited once, so a threshold of at least
+    2 is prudent. Note the dramatic decrease in the number of edges when the
     threshold is changed from 2 to 3.
 
     .. code-block:: python
@@ -308,7 +308,7 @@ def cocitation(papers, threshold=1, node_id='ayjid', topn=None, verbose=False,\
        8889
        >>> CC = nt.papers.cocitation(papers, threshold=3)
        >>> len(CC.edges())
-       1493    
+       1493
 
     ===============    =========================================================
     Element            Description
@@ -326,7 +326,7 @@ def cocitation(papers, threshold=1, node_id='ayjid', topn=None, verbose=False,\
     threshold : int
         Minimum number of co-citations required to create an edge.
     topn : int or float, or None
-        If provided, only the topn (int) or topn percent (float) most cited 
+        If provided, only the topn (int) or topn percent (float) most cited
         papers will be included in the cocitation network. If None (default),
         network will include all cited papers (NOTE: this can cause severe
         memory consumption for even moderately-sized datasets).
@@ -405,7 +405,7 @@ def cocitation(papers, threshold=1, node_id='ayjid', topn=None, verbose=False,\
 
     return cocitation_graph
 
-def author_coupling(papers, threshold=1, node_attribs=['date'], 
+def author_coupling(papers, threshold=1, node_attribs=['date'],
                                                      node_id='ayjid', **kwargs):
     """
     Vertices are papers and edges indicates shared authorship.
@@ -414,7 +414,7 @@ def author_coupling(papers, threshold=1, node_attribs=['date'],
     Element            Description
     ===============    =========================================================
     Node               Papers, represented by node_id.
-    Edge               (a,b) in E(G) if a and b share x authors and x >= 
+    Edge               (a,b) in E(G) if a and b share x authors and x >=
                        threshold
     Edge Attributes    overlap: the value of x (above).
     ===============    =========================================================
@@ -469,7 +469,7 @@ def author_coupling(papers, threshold=1, node_attribs=['date'],
                                    papers[j][node_id],
                                    overlap=len(overlap))
     return acoupling
-    
+
 def topic_coupling(papers, threshold=0.7, node_id='ayjid', **kwargs):
     """
     Two papers are coupled if they both contain a shared topic above threshold.
@@ -483,7 +483,7 @@ def topic_coupling(papers, threshold=0.7, node_id='ayjid', **kwargs):
     Edge Attributes    weight: combined mean proportion of each shared topic.
                        topics: list of shared topics.
     ===============    =========================================================
-    
+
     Parameters
     ----------
     papers : list
@@ -492,7 +492,7 @@ def topic_coupling(papers, threshold=0.7, node_id='ayjid', **kwargs):
         Minimum representation of a topic in each paper.
     node_id : string
         Field in :class:`.Paper` used to identify nodes.
-        
+
     Returns
     -------
     tc : networkx.Graph
@@ -502,7 +502,7 @@ def topic_coupling(papers, threshold=0.7, node_id='ayjid', **kwargs):
         t_i = papers[i]['topics'][0]    # Topic vector for i.
         for j in xrange(i+1,len(papers)):
             t_j = papers[i]['topics'][0]    # Topic vector for j.
-            
+
             Z = t_i.shape[0]
             for z in xrange(Z):
                 if t_i[z] >= threshold and t_j[z] >= threshold:
@@ -512,12 +512,12 @@ def topic_coupling(papers, threshold=0.7, node_id='ayjid', **kwargs):
                         edges[(i,j)] = [ (z,(t_i[z]+t_j[z])/2) ]
 
     tc = nx.Graph()
-                            
+
     # Combine means of representations into a single edge weight in {0-1}.
     for e, topics in edges.iteritems():
         weight = sum([ t[1] for t in topics ] ) / t_i.shape[0]
         i_id = papers[e[0]][node_id]
         j_id = papers[e[1]][node_id]
         tc.add_edge(i_id, j_id, weight=weight, topics=[t[0] for t in topics])
-    
+
     return tc

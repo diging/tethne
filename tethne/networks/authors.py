@@ -87,13 +87,13 @@ def author_papers(papers, node_id='ayjid', paper_attribs=[], **kwargs):
 def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
     """
     Generate a co-author network.
-    
-    As the name suggests, edges are drawn between two author-vertices in the 
-    case that those authors published a paper together. Co-authorship networks 
-    are popular models for studying patterns of collaboration in scientific 
-    communities. 
 
-    To generate a co-authorship network, use the 
+    As the name suggests, edges are drawn between two author-vertices in the
+    case that those authors published a paper together. Co-authorship networks
+    are popular models for studying patterns of collaboration in scientific
+    communities.
+
+    To generate a co-authorship network, use the
     :func:`.networks.authors.coauthors` method:
 
     .. code-block:: python
@@ -125,10 +125,10 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
         A co-authorship network.
 
     """
-    
+
     # TODO: Check whether papers contains :class:`.Paper` instances, and raise
     #  an exception if not.
-    
+
     coauthors_graph = nx.Graph(type='coauthors')
     edge_att = {}
     #edge_listdict={}
@@ -228,15 +228,15 @@ def author_institution(Papers, edge_attribs=[], **kwargs):
 def author_coinstitution(Papers, threshold=1, **kwargs):
     """
     Generate a co-institution graph, where edges indicate shared affiliation.
-    
-    Some bibliographic datasets, including data from the Web of Science, 
-    includes the institutional affiliations of authors. In a co-institution 
-    graph, two authors (vertices) have an edge between them if they share an 
+
+    Some bibliographic datasets, including data from the Web of Science,
+    includes the institutional affiliations of authors. In a co-institution
+    graph, two authors (vertices) have an edge between them if they share an
     institutional affiliation in the dataset. Note that data about institutional
-    affiliations varies in the WoS database so this will yield more reliable 
+    affiliations varies in the WoS database so this will yield more reliable
     results for more recent publications.
 
-    To generate a co-institution network, use the 
+    To generate a co-institution network, use the
     :func:`.networks.authors.author_coinstitution` method:
 
     .. code-block:: python
@@ -250,7 +250,7 @@ def author_coinstitution(Papers, threshold=1, **kwargs):
     ==============     =========================================================
     Node               Authors.
     Node Attribute     type (string). 'author' or 'institution'.
-    Edges              (a, b) where a and b are affiliated with the same 
+    Edges              (a, b) where a and b are affiliated with the same
                        institution.
     Edge attribute     overlap (int). number of shared institutions.
     ==============     =========================================================
@@ -312,9 +312,9 @@ def author_cocitation(papers, threshold=1, **kwargs):
     """
     Generates an author co-citation network; edges indicate co-citation of
     authors' papers.
-    
-    Similar to :func:`.papers.cocitation`\, except that vertices are authors 
-    rather than papers. To generate an author co-citation network, use the 
+
+    Similar to :func:`.papers.cocitation`\, except that vertices are authors
+    rather than papers. To generate an author co-citation network, use the
     :func:`.networks.authors.author_cocitation` method:
 
     .. code-block:: python
@@ -337,9 +337,9 @@ def author_cocitation(papers, threshold=1, **kwargs):
     papers : list
         a list of :class:`.Paper` objects.
     threshold : int
-        Minimum number of co-citations required to create an edge between 
+        Minimum number of co-citations required to create an edge between
         authors.
-        
+
     Returns
     -------
     cocitation : :class:`.networkx.Graph`

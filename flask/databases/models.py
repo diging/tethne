@@ -7,15 +7,13 @@ from persistent import Persistent as Object
 from persistent.list import PersistentList as List
 from persistent.mapping import PersistentMapping as Dict
 
-class User(Object) :
-
-# Change this as an interface and have two classes extending them.
-    
+class User(Persistent):
+        
     """
     User Class
     DocString to be added
     """
-    
+        
     def __init__(self):
         pass
     

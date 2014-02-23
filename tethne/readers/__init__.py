@@ -83,7 +83,7 @@ def merge(P1, P2, fields=['ayjid']):
     -------
     combined : list
         A list of :class:`.Paper` instances.
-        
+
     Examples
     --------
 
@@ -92,7 +92,7 @@ def merge(P1, P2, fields=['ayjid']):
        >>> import tethne.readers as rd
        >>> P1 = rd.wos.read("/Path/to/data1.txt")
        >>> P2 = rd.dfr.read("/Path/to/DfR")
-       >>> papers = rd.merge(P1, P2, ['ayjid'])        
+       >>> papers = rd.merge(P1, P2, ['ayjid'])
     """
 
     combined = []

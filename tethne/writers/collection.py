@@ -69,7 +69,7 @@ def to_dxgmml(C, path): # [#61510094]
     # Build node list.
     current = []
     for k in sorted(C.graphs.keys()):
-        G = C[k]
+        G = _strip_list_attributes(C[k])
         preceding = current
         current = []
         for n in G.nodes(data=True):
@@ -87,7 +87,7 @@ def to_dxgmml(C, path): # [#61510094]
     # Build edge list.
     current = []
     for k in sorted(C.graphs.keys()):
-        G = C[k]
+        G = _strip_list_attributes(C[k])
         preceding = current
         current = []
         for e in G.edges(data=True):
@@ -101,6 +101,8 @@ def to_dxgmml(C, path): # [#61510094]
 
             edges[e_key][k] = {}
             for attr, value in e[2].iteritems():
+                if type(value) is str:
+                    value = value.replace("&", "&amp;").replace('"', '')
                 edges[e_key][k][attr] = value
 
     # Write graph to XGMML.
@@ -149,3 +151,15 @@ def to_dxgmml(C, path): # [#61510094]
                                     +str(i+1)+'" />\n'.replace("&", "&amp;"))
                 f.write('\t</edge>\n')
         f.write('</graph>')
+        
+def _strip_list_attributes(G):
+    for n in G.nodes(data=True):
+        for k,v in n[1].iteritems():
+            if type(v) is list:
+                G.node[n[0]][k] = str(v)
+    for e in G.edges(data=True):
+        for k,v in e[2].iteritems():
+            if type(v) is list:
+                G.edge[e[0]][e[1]][k] = str(v)
+
+    return G        
