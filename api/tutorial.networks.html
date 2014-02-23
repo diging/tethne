@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Creating Networks from Bibliographic Data &mdash; tethne  documentation</title>
+    <title>Creating Networks from Bibliographic Data &mdash; tethne 0.3.0-alpha documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '',
+        VERSION:     '0.3.0-alpha',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="tethne  documentation" href="index.html" />
+    <link rel="top" title="tethne 0.3.0-alpha documentation" href="index.html" />
     <link rel="up" title="Tutorial" href="tutorial.html" />
     <link rel="next" title="Analyzing Bibliographic Networks" href="tutorial.analyze.html" />
     <link rel="prev" title="Getting Bibliographic Data" href="tutorial.getting_data.html" /> 
@@ -49,7 +49,7 @@
         <li class="right" >
           <a href="tutorial.getting_data.html" title="Getting Bibliographic Data"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">tethne  documentation</a> &raquo;</li>
+        <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
           <li><a href="tutorial.html" accesskey="U">Tutorial</a> &raquo;</li> 
       </ul>
     </div>  
@@ -171,16 +171,16 @@ for example, you could slice using the <tt class="docutils literal"><span class=
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="tethne.networks.html#tethne.networks.papers.author_coupling" title="tethne.networks.papers.author_coupling"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.networks.papers.author_coupling</span></tt></a>(...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="tethne.networks.html#tethne.networks.papers.author_coupling" title="tethne.networks.papers.author_coupling"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.networks.papers.author_coupling</span></tt></a>(papers)</td>
 <td>Vertices are papers and edges indicates shared authorship.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.networks.html#tethne.networks.papers.bibliographic_coupling" title="tethne.networks.papers.bibliographic_coupling"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.networks.papers.bibliographic_coupling</span></tt></a>(...)</td>
+<tr class="row-even"><td><a class="reference internal" href="tethne.networks.html#tethne.networks.papers.bibliographic_coupling" title="tethne.networks.papers.bibliographic_coupling"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.networks.papers.bibliographic_coupling</span></tt></a>(papers)</td>
 <td>Generate a bibliographic coupling network.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="tethne.networks.html#tethne.networks.papers.cocitation" title="tethne.networks.papers.cocitation"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.networks.papers.cocitation</span></tt></a>(papers,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="tethne.networks.html#tethne.networks.papers.cocitation" title="tethne.networks.papers.cocitation"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.networks.papers.cocitation</span></tt></a>(papers[,&nbsp;...])</td>
 <td>Generate a cocitation network.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.networks.html#tethne.networks.papers.direct_citation" title="tethne.networks.papers.direct_citation"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.networks.papers.direct_citation</span></tt></a>(doc_list)</td>
+<tr class="row-even"><td><a class="reference internal" href="tethne.networks.html#tethne.networks.papers.direct_citation" title="tethne.networks.papers.direct_citation"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.networks.papers.direct_citation</span></tt></a>(papers)</td>
 <td>Create a traditional directed citation network.</td>
 </tr>
 </tbody>
@@ -195,16 +195,16 @@ for example, you could slice using the <tt class="docutils literal"><span class=
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="tethne.networks.html#tethne.networks.authors.author_cocitation" title="tethne.networks.authors.author_cocitation"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.networks.authors.author_cocitation</span></tt></a>(...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="tethne.networks.html#tethne.networks.authors.author_cocitation" title="tethne.networks.authors.author_cocitation"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.networks.authors.author_cocitation</span></tt></a>(papers)</td>
 <td>Generates an author co-citation network; edges indicate co-citation of authors&#8217; papers.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.networks.html#tethne.networks.authors.author_coinstitution" title="tethne.networks.authors.author_coinstitution"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.networks.authors.author_coinstitution</span></tt></a>(...)</td>
+<tr class="row-even"><td><a class="reference internal" href="tethne.networks.html#tethne.networks.authors.author_coinstitution" title="tethne.networks.authors.author_coinstitution"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.networks.authors.author_coinstitution</span></tt></a>(Papers)</td>
 <td>Generate a co-institution graph, where edges indicate shared affiliation.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="tethne.networks.html#tethne.networks.authors.author_institution" title="tethne.networks.authors.author_institution"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.networks.authors.author_institution</span></tt></a>(Papers)</td>
 <td>Generate a bi-partite graph with people and institutions as vertices, and edges indicating affiliation.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.networks.html#tethne.networks.authors.author_papers" title="tethne.networks.authors.author_papers"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.networks.authors.author_papers</span></tt></a>(...[,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="tethne.networks.html#tethne.networks.authors.author_papers" title="tethne.networks.authors.author_papers"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.networks.authors.author_papers</span></tt></a>(papers)</td>
 <td>Generate an author_papers network NetworkX directed graph.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="tethne.networks.html#tethne.networks.authors.coauthors" title="tethne.networks.authors.coauthors"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.networks.authors.coauthors</span></tt></a>(papers[,&nbsp;...])</td>
@@ -282,7 +282,7 @@ for example, you could slice using the <tt class="docutils literal"><span class=
         <li class="right" >
           <a href="tutorial.getting_data.html" title="Getting Bibliographic Data"
              >previous</a> |</li>
-        <li><a href="index.html">tethne  documentation</a> &raquo;</li>
+        <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
           <li><a href="tutorial.html" >Tutorial</a> &raquo;</li> 
       </ul>
     </div>

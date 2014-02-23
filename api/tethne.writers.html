@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>writers Package &mdash; tethne  documentation</title>
+    <title>writers Package &mdash; tethne 0.3.0-alpha documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '',
+        VERSION:     '0.3.0-alpha',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="tethne  documentation" href="index.html" />
+    <link rel="top" title="tethne 0.3.0-alpha documentation" href="index.html" />
     <link rel="up" title="tethne Package" href="tethne.html" />
     <link rel="prev" title="utilities Package" href="tethne.utilities.html" /> 
   </head>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="tethne.utilities.html" title="utilities Package"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">tethne  documentation</a> &raquo;</li>
+        <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
           <li><a href="tethne.html" accesskey="U">tethne Package</a> &raquo;</li> 
       </ul>
     </div>  
@@ -59,20 +59,71 @@
 <h1>writers Package<a class="headerlink" href="#writers-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
 <h2><tt class="xref py py-mod docutils literal"><span class="pre">writers</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-tethne.writers"></span><p>Export networks to commonly-used formats (e.g. XGMML, GraphML, etc).</p>
+<span class="target" id="module-tethne.writers"></span><p>Export networks to structured and unstructured formats, for visualization.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#module-tethne.writers.collection" title="tethne.writers.collection"><tt class="xref py py-obj docutils literal"><span class="pre">collection</span></tt></a></td>
+<td>Write <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to a structured data format.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#module-tethne.writers.graph" title="tethne.writers.graph"><tt class="xref py py-obj docutils literal"><span class="pre">graph</span></tt></a></td>
+<td>Write NetworkX graphs to structured and unstructured network file formats.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#module-tethne.writers.matrix" title="tethne.writers.matrix"><tt class="xref py py-obj docutils literal"><span class="pre">matrix</span></tt></a></td>
+<td>Methods for writing matrices to commonly-used file formats, for external visualization and analysis.</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="module-tethne.writers.collection">
 <span id="collection-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">collection</span></tt> Module<a class="headerlink" href="#module-tethne.writers.collection" title="Permalink to this headline">¶</a></h2>
-<p>Methods for writing <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to commonly-used network file
-formats. Many methods simply leverage equivalent methods in NetworkX.</p>
+<p>Write <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to a structured data format.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.writers.collection.to_dxgmml" title="tethne.writers.collection.to_dxgmml"><tt class="xref py py-obj docutils literal"><span class="pre">to_dxgmml</span></tt></a>(C,&nbsp;path)</td>
+<td>Writes a <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to</td>
+</tr>
+</tbody>
+</table>
 <dl class="function">
 <dt id="tethne.writers.collection.to_dxgmml">
 <tt class="descclassname">tethne.writers.collection.</tt><tt class="descname">to_dxgmml</tt><big>(</big><em>C</em>, <em>path</em><big>)</big><a class="reference internal" href="_modules/tethne/writers/collection.html#to_dxgmml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.writers.collection.to_dxgmml" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes a <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to dynamic XGMML. Assumes that <cite>Graph</cite>
-indices are orderable points in time (e.g. years). The &#8220;start&#8221; and &#8220;end&#8221;
-of each node and edge are determined by periods of consecutive appearance
-in the <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . Node and edge attributes are defined for
-each <cite>Graph</cite>. in the <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</p>
+<dd><p>Writes a <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to 
+<a class="reference external" href="https://code.google.com/p/dynnetwork/wiki/DynamicXGMML">dynamic XGMML.</a>.</p>
+<p>Dynamic XGMML is a schema for describing dynamic networks in Cytoscape 3.0.
+This method assumes that <cite>Graph</cite> indices are orderable points in time 
+(e.g. years). The &#8220;start&#8221; and &#8220;end&#8221; of each node and edge are determined by 
+periods of consecutive appearance in the <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> . Node 
+and edge attributes are defined for each <cite>Graph</cite>. in the 
+<a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</p>
+<p>For example, to build and visualize an evolving co-citation network:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Load some data.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Build a DataCollection, and slice it temporally using a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#  4-year sliding time-window.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.data</span> <span class="kn">import</span> <span class="n">DataCollection</span><span class="p">,</span> <span class="n">GraphCollection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">DataCollection</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;time_window&#39;</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Generate a GraphCollection of co-citation graphs.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.builders</span> <span class="kn">import</span> <span class="n">paperCollectionBuilder</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">builder</span> <span class="o">=</span> <span class="n">paperCollectionBuilder</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;cocitation&#39;</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Write the GraphCollection as a dynamic network.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">to_dxgmml</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="s">&quot;/path/to/network.xgmml&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -97,111 +148,111 @@ dates are exclusive. Hence +1 is added to all end dates when writing XGMML.</p>
 </div>
 <div class="section" id="module-tethne.writers.graph">
 <span id="graph-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">graph</span></tt> Module<a class="headerlink" href="#module-tethne.writers.graph" title="Permalink to this headline">¶</a></h2>
-<p>Methods for writing graphs to commonly-used network file formats. Many methods
-simply invoke equivalent methods in NetworkX.</p>
+<p>Write NetworkX graphs to structured and unstructured network file formats.</p>
+<p>Many methods simply invoke equivalent methods in NetworkX.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.writers.graph.to_gexf" title="tethne.writers.graph.to_gexf"><tt class="xref py py-obj docutils literal"><span class="pre">to_gexf</span></tt></a>(graph,&nbsp;output_path)</td>
+<td>Writes graph to <a class="reference external" href="http://gexf.net">GEXF</a>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.writers.graph.to_graphml" title="tethne.writers.graph.to_graphml"><tt class="xref py py-obj docutils literal"><span class="pre">to_graphml</span></tt></a>(graph,&nbsp;output_path)</td>
+<td>Writes graph to <a class="reference external" href="http://graphml.graphdrawing.org/">GraphML</a>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.writers.graph.to_sif" title="tethne.writers.graph.to_sif"><tt class="xref py py-obj docutils literal"><span class="pre">to_sif</span></tt></a>(graph,&nbsp;output_path)</td>
+<td>Generates Simple Interaction Format output file from provided graph.</td>
+</tr>
+</tbody>
+</table>
 <dl class="function">
-<dt id="tethne.writers.graph.to_csv">
-<tt class="descclassname">tethne.writers.graph.</tt><tt class="descname">to_csv</tt><big>(</big><em>file</em>, <em>delim='</em>, <em>'</em><big>)</big><a class="reference internal" href="_modules/tethne/writers/graph.html#to_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.writers.graph.to_csv" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dt id="tethne.writers.graph.to_gexf">
+<tt class="descclassname">tethne.writers.graph.</tt><tt class="descname">to_gexf</tt><big>(</big><em>graph</em>, <em>output_path</em><big>)</big><a class="reference internal" href="_modules/tethne/writers/graph.html#to_gexf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.writers.graph.to_gexf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes graph to <a class="reference external" href="http://gexf.net">GEXF</a>.</p>
+<p>Uses the NetworkX method
+<a class="reference external" href="http://networkx.lanl.gov/reference/generated/networkx.readwrite.gexf.write_gexf.html">write_gexf</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>file</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>graph</strong> : networkx.Graph</p>
 <blockquote>
-<div><p>Path to output file (will be created).</p>
+<div><p>The Graph to be exported to GEXF.</p>
 </div></blockquote>
-<p><strong>delim</strong> : string</p>
+<p><strong>output_path</strong> : str</p>
 <blockquote class="last">
-<div><p>String to use as field delimiter (default is &#8216;,&#8217;).</p>
+<div><p>Full path, including filename (without suffix).
+e.g. using &#8221;./graphFolder/graphFile&#8221; will result in a GEXF file at
+./graphFolder/graphFile.gexf.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Notes</p>
-<p>TODO: should operate on a (provided) graph. Still uses old library approach.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="tethne.writers.graph.to_gexf">
-<tt class="descclassname">tethne.writers.graph.</tt><tt class="descname">to_gexf</tt><big>(</big><em>graph</em>, <em>output_path</em><big>)</big><a class="reference internal" href="_modules/tethne/writers/graph.html#to_gexf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.writers.graph.to_gexf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes the provided graph to a GEXF-format network file.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="tethne.writers.graph.to_graphml">
 <tt class="descclassname">tethne.writers.graph.</tt><tt class="descname">to_graphml</tt><big>(</big><em>graph</em>, <em>output_path</em><big>)</big><a class="reference internal" href="_modules/tethne/writers/graph.html#to_graphml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.writers.graph.to_graphml" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes the provided graph to a GraphML-format network file.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="tethne.writers.graph.to_sif">
-<tt class="descclassname">tethne.writers.graph.</tt><tt class="descname">to_sif</tt><big>(</big><em>graph</em>, <em>output_path</em><big>)</big><a class="reference internal" href="_modules/tethne/writers/graph.html#to_sif"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.writers.graph.to_sif" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates SIF output file from provided graph.</p>
-<p>See <a class="reference external" href="http://wiki.cytoscape.org/Cytoscape_User_Manual/Network_Formats">http://wiki.cytoscape.org/Cytoscape_User_Manual/Network_Formats</a> at
-SIF Format for more details</p>
-<p>Edge attribute files appended with .eda contain the values of any edge
-attributes even though the .sif file does not (edge &#8220;weights&#8221; are
-not supported by .sif)</p>
-<p>Interaction types in the .sif format allow for edge attributes
-that belong to that interaction type. Simple graphs in
-networkx do not support this kind of edge nesting, but multigraphs do.</p>
-<p>If the graph is a simple graph, it is assumed to have only one interaction
-type named &#8216;rel&#8217; short for &#8216;related to&#8217; or &#8216;relation&#8217;. If the graph is a
-multigraph, each edge has a key which is used as the interaction type
-and has an attribute dictionary associated to that key which is used
-as the interaction type&#8217;s edge attributes.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="tethne.writers.graph.to_xgmml">
-<tt class="descclassname">tethne.writers.graph.</tt><tt class="descname">to_xgmml</tt><big>(</big><em>graph</em>, <em>name</em>, <em>output_path</em>, <em>dynamic=True</em>, <em>nodeattack=0</em>, <em>nodedecay=0</em>, <em>edgeattack=0</em>, <em>edgedecay=0</em><big>)</big><a class="reference internal" href="_modules/tethne/writers/graph.html#to_xgmml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.writers.graph.to_xgmml" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates dynamic XGMML output from provided graph.</p>
+<dd><p>Writes graph to <a class="reference external" href="http://graphml.graphdrawing.org/">GraphML</a>.</p>
+<p>Uses the NetworkX method 
+<a class="reference external" href="http://networkx.lanl.gov/reference/generated/networkx.readwrite.graphml.write_graphml.html">write_graphml</a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>graph</strong> : Networkx Graph</p>
-<p><strong>name</strong> : string</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>graph</strong> : networkx.Graph</p>
 <blockquote>
-<div><p>Name of the graph.</p>
+<div><p>The Graph to be exported to GraphML.</p>
 </div></blockquote>
-<p><strong>output_path</strong> : string</p>
-<blockquote>
-<div><p>Path to output file, including name (&#8216;.xgmml&#8217; will be appended).</p>
-</div></blockquote>
-<p><strong>dynamic</strong> : bool</p>
-<blockquote>
-<div><p>If True, will try to include start and end date for nodes and edges.</p>
-</div></blockquote>
-<p><strong>nodeattack</strong> : int</p>
-<blockquote>
-<div><p>For dynamic networks, number of years to prepend to display start.</p>
-</div></blockquote>
-<p><strong>nodedecay</strong> : int</p>
-<blockquote>
-<div><p>For dynamic networks, additional number of years to display node.</p>
-</div></blockquote>
-<p><strong>edgeattack</strong> : int</p>
-<blockquote>
-<div><p>For dynamic networks, number of years to prepend to display start.</p>
-</div></blockquote>
-<p><strong>edgedecay</strong> : int</p>
-<blockquote>
-<div><p>For dynamic networks, additional number of years to display edge.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises :</th><td class="field-body"><p class="first"><strong>ValueError</strong> :</p>
+<p><strong>output_path</strong> : str</p>
 <blockquote class="last">
-<div><p>Raised when dynamic=True and &#8216;date&#8217; is not a valid edge attribute in
-graph.</p>
+<div><p>Full path, including filename (without suffix).
+e.g. using &#8221;./graphFolder/graphFile&#8221; will result in a GraphML file at
+./graphFolder/graphFile.graphml.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="function">
+<dt id="tethne.writers.graph.to_sif">
+<tt class="descclassname">tethne.writers.graph.</tt><tt class="descname">to_sif</tt><big>(</big><em>graph</em>, <em>output_path</em><big>)</big><a class="reference internal" href="_modules/tethne/writers/graph.html#to_sif"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.writers.graph.to_sif" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates Simple Interaction Format output file from provided graph.</p>
+<p>The SIF specification is described 
+<a class="reference external" href="http://wiki.cytoscape.org/Cytoscape_User_Manual/Network_Formats">here</a>.</p>
+<p><a class="reference internal" href="#tethne.writers.graph.to_sif" title="tethne.writers.graph.to_sif"><tt class="xref py py-func docutils literal"><span class="pre">to_sif()</span></tt></a> will generate a .sif file describing the network, and a few
+.eda and .noa files containing edge and node attributes, respectively. These
+are equivalent to tab-delimited tables, and can be imported as such in
+Cytoscape 3.0.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>graph</strong> : networkx.Graph</p>
+<blockquote>
+<div><p>The Graph to be exported to SIF.</p>
+</div></blockquote>
+<p><strong>output_path</strong> : str</p>
+<blockquote class="last">
+<div><p>Full path, including filename (without suffix).
+e.g. using &#8221;./graphFolder/graphFile&#8221; will result in a SIF file at
+./graphFolder/graphFile.sif, and corresponding .eda and .noa files.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.writers.graph.to_table">
+<tt class="descclassname">tethne.writers.graph.</tt><tt class="descname">to_table</tt><big>(</big><em>graph</em>, <em>path</em><big>)</big><a class="headerlink" href="#tethne.writers.graph.to_table" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-tethne.writers.matrix">
@@ -268,7 +319,7 @@ visualization and analysis. Not yet implemented.</p>
         <li class="right" >
           <a href="tethne.utilities.html" title="utilities Package"
              >previous</a> |</li>
-        <li><a href="index.html">tethne  documentation</a> &raquo;</li>
+        <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
           <li><a href="tethne.html" >tethne Package</a> &raquo;</li> 
       </ul>
     </div>
