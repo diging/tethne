@@ -1,5 +1,13 @@
 """
-Special classes for handling bibliographic data.
+Classes for handling bibliographic data.
+
+.. autosummary::
+
+   Paper
+   DataCollection
+   GraphCollection
+   LDAModel
+   
 """
 
 import networkx as nx
@@ -12,8 +20,10 @@ import numpy as np
 
 class Paper(object):
     """
-    Base class for Papers. Behaves just like a dict, but enforces a limited
-    vocabulary of keys, and specific data types.
+    Base class for Papers. 
+    
+    Behaves just like a dict, but enforces a limited vocabulary of keys, and 
+    specific data types.
 
     The following fields (and corresponding data types) are allowed:
     
@@ -142,7 +152,7 @@ class Paper(object):
 
 class DataCollection(object):
     """
-    A :class:`.DataCollection` organizes :class:`.Paper` data for analysis.
+    A :class:`.DataCollection` organizes :class:`.Paper`\s for analysis.
     
     The :class:`.DataCollection` is initialized with some data, which is indexed
     by a key in :class:`.Paper` (default is wosid). The :class:`.DataCollection`
@@ -202,7 +212,7 @@ class DataCollection(object):
         Method         Description                      Key        kwargs
         ===========    =============================    =======    =============
         time_window    Slices data using a sliding      date       window_size
-                       time-window. Dataslices are 
+                       time-window. Dataslices are                 step_size
                        indexed by the start of the 
                        time-window.
         time_period    Slices data into time periods    date       window_size
@@ -220,6 +230,9 @@ class DataCollection(object):
                                 (default = 1).
         step_size      int      Amount to advance time-window or period in each
                                 step (ignored for time_period).
+        cumulative     bool     If True, the data from each successive slice 
+                                includes the data from all preceding slices.
+                                Only applies if key is 'date' (default = False).
         ===========    ======   ================================================            
         """
         
@@ -231,7 +244,8 @@ class DataCollection(object):
 
             elif method == 'time_period' or method is None:
                 kw = {  'window_size': kwargs.get('window_size', 1),
-                        'step_size': kwargs.get('window_size', 1) }
+                        'step_size': kwargs.get('window_size', 1),
+                        'cumulative': kwargs.get('cumulative', False) }
 
                 self.axes[key] = self._time_slice(**kw)
             else:
@@ -286,6 +300,9 @@ class DataCollection(object):
                                 (default = 1).
         step_size      int      Amount to advance time-window or period in each
                                 step (ignored for time_period).
+        cumulative     bool     If True, the data from each successive slice 
+                                includes the data from all preceding slices.
+                                Only applies if key is 'date' (default = False).                                
         ===========    ======   ================================================           
         
         """
@@ -293,28 +310,21 @@ class DataCollection(object):
         window_size = kwargs.get('window_size', 1)
         step_size = kwargs.get('step_size', 1)
         start = kwargs.get('start', min([ p['date'] 
-                                            for p in self.data.values() ]))
+                                                 for p in self.data.values() ]))
         end = kwargs.get('start', max([ p['date'] 
-                                            for p in self.data.values() ]))
+                                                 for p in self.data.values() ]))
 
         slices = {}
         for i in xrange(start, end-window_size+2, step_size):
             slices[i] = [ k for k,p in self.data.iteritems() 
                            if i <= p['date'] < i + window_size ]
+            if cumulative:
+                try:
+                    slices[i] += slices[i-1]
+                except IndexError:
+                    pass
 
         return slices
-        
-    def union(self):
-        """
-        Yields the union of all dataslices.
-        
-        Returns
-        -------
-        list
-            List of :class:`.Paper` instances
-        """
-        
-        return self.data.values()
         
     def indices(self):
         """

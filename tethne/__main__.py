@@ -38,25 +38,25 @@ if __name__ == "__main__":
     # Only one of the following workflow steps will be carried out per 
     #  script execution.
     workflowGroup = OptionGroup(parser, "Workflow Steps",
-                            "Choose one workflow step per script execution."+ \
-                            " Each workflow step requires a different set of"+ \
+                            "Choose one workflow step per script execution."  +\
+                            " Each workflow step requires a different set of" +\
                             " additional options.")
 
     workflowGroup.add_option("--read-file",
                              action="store_true", dest="read_f", default=False,
-                             help="Read from a single data file. Requires" +\
+                             help="Read from a single data file. Requires"    +\
                                   " --data-path and --data-format.")
     workflowGroup.add_option("--read-dir",
                              action="store_true", dest="read_d", default=False,
-                             help="Read from a directory containing multiple"+\
-                                  " data files. Requires --data-path and" +\
+                             help="Read from a directory containing multiple" +\
+                                  " data files. Requires --data-path and"     +\
                                   " --data-format.")
     workflowGroup.add_option("--slice",
                              action="store_true", dest="slice", default=False,
                              help="Slice your dataset for comparison along a" +\
-                                  " key axis. Requires --slice-axis. If" +\
-                                  " --outpath is set, produces a table with" +\
-                                  " binned paper frequencies in [OUTPATH]/" +\
+                                  " key axis. Requires --slice-axis. If"      +\
+                                  " --outpath is set, produces a table with"  +\
+                                  " binned paper frequencies in [OUTPATH]/"   +\
                                   "[DATASET_ID]_slices.csv.")
     workflowGroup.add_option("--graph",
                              action="store_true", dest="graph", default=False,
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     sliceGroup.add_option("-M", "--slice-method", dest="slice_method",
                default="time_period",
                help="Method used to slice DataCollection. Available methods:" +\
-                    " time_window, time_period, cumulative. For details, see" +\
+                    " time_window, time_period. For details, see"             +\
                     " ./doc/api/tethne.html#tethne.data.DataCollection.slice."+\
                     " Default is time_period.")
                     
@@ -116,6 +116,11 @@ if __name__ == "__main__":
     sliceGroup.add_option("--slice-step-size", dest="step_size",
                           help="Amount to advance time-window in each step" +\
                                " (ignored for time-period).")
+    
+    sliceGroup.add_option("--cumulative",
+                          action="store_true", dest="cumulative", default=False,
+                          help="If True, the data from each successive slice" +\
+                                " includes the data from all preceding slices.")
 
     # Required arguments for network-building.
     graphReqGroup = OptionGroup(parser, "Required options for graph workflow" +\
@@ -294,7 +299,8 @@ if __name__ == "__main__":
             if a == 'date':
                 D.slice(a, method=options.slice_method, 
                            window_size=options.window_size,
-                           step_size=options.step_size)
+                           step_size=options.step_size,
+                           cumulative=options.cumulative )
             else:
                 D.slice(a)
             sys.stdout.write("done.\n")
