@@ -8,7 +8,7 @@ You'll need to install the following software (if you don't already have them):
 
 * `Python 2.7 <http://www.python.org/>`_
 * Numpy (`Anaconda <http://continuum.io/downloads>`_ is recommended)
-* `NetworkX <http://networkx.github.io/`_
+* `NetworkX <http://networkx.github.io/>`_
 
 Download & install the latest version of Tethne from our GitHub repository:
 
