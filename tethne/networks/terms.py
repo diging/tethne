@@ -78,26 +78,26 @@ def keyword_cooccurrence(papers, threshold, connected=False, **kwargs):
         return nx.connected_component_subgraphs(G)[0]
     else:
         return G    # Return the whole graph.
-        
+
 def topic_coupling(model, threshold=0.005, **kwargs):
     """
     Creates a network of words connected by implication in a common topic(s).
-    
+
     Parameters
     ----------
     model : :class:`.LDAModel`
     threshold : float
         Minimum P(W|T) for coupling.
-    
+
     Returns
     -------
     tc : networkx.Graph
         A topic-coupling graph, where nodes are terms.
     """
-    
+
     Z = model.top_word.shape[0]
     W = model.top_word.shape[1]
-    
+
     edges = {}
     for z in xrange(Z):
         word_sub = []
@@ -110,17 +110,17 @@ def topic_coupling(model, threshold=0.005, **kwargs):
                 w_i = word_sub[i]
                 w_j = word_sub[j]
                 p_i = model.top_word[z,w_i]
-                p_j = model.top_word[z,w_j]                    
+                p_j = model.top_word[z,w_j]
                 try:
                     edges[(w_i,w_j)].append((z, (p_i+p_j)/2))
                 except KeyError:
                     edges[(w_i,w_j)] = [(z, (p_i+p_j)/2)]
     tc = nx.Graph()
-    
+
     for e, topics in edges.iteritems():
         weight = sum( [ t[1] for t in topics ] ) / Z
         i_id = model.vocabulary[e[0]]
         j_id = model.vocabulary[e[1]]
         tc.add_edge(i_id, j_id, weight=weight, topics=[t[0] for t in topics])
-    
+
     return tc
