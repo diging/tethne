@@ -19,9 +19,9 @@ import uuid
 def read(datapath):
     """
     Yields :class:`.Paper` s from JSTOR DfR package.
-    
-    Each :class:`.Paper` is tagged with an accession id for this 
-    read/conversion.    
+
+    Each :class:`.Paper` is tagged with an accession id for this
+    read/conversion.
 
     Parameters
     ----------
@@ -39,7 +39,7 @@ def read(datapath):
     .. code-block:: python
 
        >>> import tethne.readers as rd
-       >>> papers = rd.dfr.read("/Path/to/DfR")        
+       >>> papers = rd.dfr.read("/Path/to/DfR")
     """
 
     try:
@@ -61,14 +61,14 @@ def read(datapath):
 
 def from_dir(path):
     """
-    Convenience function for generating a list of :class:`.Paper` from a 
+    Convenience function for generating a list of :class:`.Paper` from a
     directory of JSTOR DfR datasets.
-    
+
     Parameters
     ----------
     path : string
         Path to directory containing DfR dataset directories.
-        
+
     Returns
     -------
     papers : list
@@ -78,31 +78,31 @@ def from_dir(path):
     ------
     IOError
         Invalid path.
-    
+
     Examples
     --------
 
     .. code-block:: python
 
        >>> import tethne.readers as rd
-       >>> papers = rd.dfr.from_dir("/Path/to/datadir")     
+       >>> papers = rd.dfr.from_dir("/Path/to/datadir")
 
     """
-    
+
     papers = []
-    
+
     try:
         files = os.listdir(path)
     except IOError:
         raise IOError("Invalid path.")  # Ignore hidden files.
-    
+
     for f in files:
         if not f.startswith('.') and os.path.isdir(path + "/" + f):
             try:
                 papers += read(path + "/" + f)
             except (IOError, UnboundLocalError):    # Ignore directories that
                 pass                                #  don't contain DfR data.
-            
+
     return papers
 
 def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
@@ -133,7 +133,7 @@ def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
     .. code-block:: python
 
        >>> import tethne.readers as rd
-       >>> trigrams = rd.dfr.ngrams("/Path/to/DfR", N='tri')        
+       >>> trigrams = rd.dfr.ngrams("/Path/to/DfR", N='tri')
     """
 
     gram_path = datapath + "/" + N + "grams"
@@ -372,14 +372,3 @@ def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
         ayj = 'Unknown paper'
 
     return ayj.upper()
-
-
-if __name__ == "__main__":
-    from pprint import pprint
-
-    path = "/Users/erickpeirson/Downloads/DfR/ecology_1960-64"
-#    papers = read(path)
-    bigrams = ngrams(path)
-
-    print bigrams.keys()[0]
-    pprint(bigrams.values()[0])

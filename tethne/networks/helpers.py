@@ -129,7 +129,7 @@ def top_cited(papers, topn=20, verbose=False):
         print "Finding top "+str(topn)+" most cited papers..."
 
     counts = citation_count(papers, verbose=verbose)
-    
+
     if type(topn) is int:
         n = topn
     elif type(topn) is float:
@@ -143,15 +143,15 @@ def top_cited(papers, topn=20, verbose=False):
 def top_parents(papers, topn=20, verbose=False):
     """
     Returns a list of :class:`.Paper` that cite the topn most cited papers.
-    
-    Parameters    
+
+    Parameters
     ----------
     papers : list
         A list of :class:`.Paper` objects.
     topn : int or float {0.-1.}
         Number (int) or percentage (float) of top-cited papers.
     verbose : bool
-        If True, prints status messages.    
+        If True, prints status messages.
 
     Returns
     -------
@@ -174,5 +174,5 @@ def top_parents(papers, topn=20, verbose=False):
 
     if verbose:
         print "Found " + str(len(parents)) + " parents."
-       
-    return parents, top, counts    
+
+    return parents, top, counts

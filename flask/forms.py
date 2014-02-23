@@ -12,6 +12,8 @@ class RegisterForm(Form):
     security_question= TextField('Security Question', validators = [Required(), Length(min=10, max=40)])
     security_answer  = TextField('Security Answer', validators = [Required(), Length(min=6, max=40)])
 
+    
+
 class LoginForm(Form):
     name        = TextField('Username', [Required()])
     password    = PasswordField('Password', [Required()])

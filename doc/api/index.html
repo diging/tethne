@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Tethne: Bibliographic Network Analysis in Python &mdash; tethne  documentation</title>
+    <title>Tethne: Bibliographic Network Analysis in Python &mdash; tethne 0.3.0-alpha documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '',
+        VERSION:     '0.3.0-alpha',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="tethne  documentation" href="#" />
+    <link rel="top" title="tethne 0.3.0-alpha documentation" href="#" />
     <link rel="next" title="Tutorial" href="tutorial.html" /> 
   </head>
   <body>
@@ -44,7 +44,7 @@
         <li class="right" >
           <a href="tutorial.html" title="Tutorial"
              accesskey="N">next</a> |</li>
-        <li><a href="#">tethne  documentation</a> &raquo;</li> 
+        <li><a href="#">tethne 0.3.0-alpha documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -60,25 +60,30 @@
 The primary emphasis is on working with data from the ISI Web of Science database, and
 providing efficient methods for modeling and analyzing citation-based networks. Future
 versions will include support for PubMed, Scopus, and other databases.</p>
-<p>Tethne&#8217;s four main workflow components are (1) <a class="reference external" href="tutorial.readers.html">parsing</a> bibliographic
-data, (2) network <a class="reference external" href="tutorial.networks.html">construction</a>, (3) <a class="reference external" href="tutorial.analyze.html">analysis</a>, and (4) <a class="reference external" href="tutorial.writers.html">writing</a> network data files for
-visualization using software like <a class="reference external" href="http://www.cytoscape.org/">Cytoscape</a> or <a class="reference external" href="https://gephi.org/">Gephi</a>. Methods are also provided for
-generating corpus objects that can be analyzed in the InPhO Vector Space Model (<a class="reference external" href="https://github.com/inpho/vsm">VSM</a>)
-Framework. Tethne relies on <a class="reference external" href="http://networkx.github.io/">NetworkX</a> for graph classes, and leverages its network
-analysis algorithms.</p>
-<p>To get started, consult the Tutorial. For support, visit our GitHub <a class="reference external" href="https://github.com/diging/tethne">repository</a>.</p>
+<p>As of v0.3, Tethne is beginning to include methods for incorporating data from the <a class="reference external" href="http://dfr.jstor.org">JSTOR
+Data-for-Research service</a>, and <a class="reference external" href="http://mallet.cs.umass.edu/topics.php">MALLET topic modeling</a>.</p>
+<p>Tethne relies on <a class="reference external" href="http://networkx.github.io/">NetworkX</a> for graph classes, and leverages its network
+analysis algorithms. You can visualize networks produced with Tethne in <a class="reference external" href="http://www.cytoscape.org/">Cytoscape</a> or <a class="reference external" href="https://gephi.org/">Gephi</a>.</p>
+<p>To get started, consult the <a class="reference external" href="tutorial.html">tutorial</a>. For support, visit our <a class="reference external" href="https://github.com/diging/tethne/issues">GitHub
+repository</a>.</p>
 <div class="section" id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<span id="repository"></span><h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorial.html#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial.html#quickstart">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#quickstart-command-line">Quickstart (Command-line)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#quickstart-python">Quickstart (Python)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tutorial.html#simple-networks">Simple Networks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tutorial.html#sliced-networks-for-comparative-or-longitudinal-analysis">Sliced Networks for Comparative or Longitudinal Analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial.html#step-by-step-guide">Step-By-Step Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#step-by-step-guide-command-line">Step-By-Step Guide (Command-line)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.html#universal-arguments">Universal arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.html#workflow-steps">Workflow steps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#step-by-step-guide-python">Step-By-Step Guide (Python)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tutorial.getting_data.html">Getting Bibliographic Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tutorial.networks.html">Creating Networks from Bibliographic Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tutorial.analyze.html">Analyzing Bibliographic Networks</a></li>
@@ -185,7 +190,7 @@ Research Improvement Grant No. 1256752.</p>
         <li class="right" >
           <a href="tutorial.html" title="Tutorial"
              >next</a> |</li>
-        <li><a href="#">tethne  documentation</a> &raquo;</li> 
+        <li><a href="#">tethne 0.3.0-alpha documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
