@@ -606,21 +606,41 @@ def _handle_authors(wos_dict):
 def _handle_author_institutions(wos_dict):
     pattern = re.compile(r'\[(.*?)\]')
     author_institutions = {}
+    print "-"*40
 
     for c1_str in wos_dict['C1']:   # One C1 line for each institution.
+        print c1_str
+    
         match = pattern.search(c1_str)
         if match:   # Explicit author-institution mappings are provided.
+            # For example:
+            #
+            # [Lin, Bing-Sian; Lee, Chon-Lin] Natl Sun Yat Sen Univ, Dept 
+            #   Marine Environm & Engn, Kaohsiung 80424, Taiwan.
+            # [Brimblecombe, Peter] Univ E Anglia, Sch Environm Sci, Norwich NR4
+            #   7TJ, Norfolk, England.
+            # [Lee, Chon-Lin] Natl Sun Yat Sen Univ, Asia Pacific Ocean Res Ctr,
+            #   Kuroshio Res Grp, Kaohsiung 80424, Taiwan.
+            # [Lee, Chon-Lin] Natl Sun Yat Sen Univ, Ctr Emerging Contaminants 
+            #   Res, Kaohsiung 80424, Taiwan.
+            # [Liu, James T.] Natl Sun Yat Sen Univ, Inst Marine Geol & Chem, 
+            #   Kaohsiung 80424, Taiwan.
+
             authors = c1_str[match.start()+1:match.end()-1].split('; ')
-            institution = c1_str[match.end():].strip().split(', ')
+            institution = c1_str[match.end():].upper()      \
+                                              .strip()      \
+                                              .strip('.')   \
+                                              .split(', ')
+            
             for author in authors:
                 # The A-I mapping (in data) uses the AF representation
                 #  of author names. But we use the AU representation
                 #  as our mapping key to ensure consistency with older
                 #  datasets.
                 author_index = wos_dict['AF'].index(author)
-                #e.g."WU, ZD"
-                author_au = wos_dict['AU'][author_index].upper().strip(',')
-                inst_name = institution[0]
+                author_au = wos_dict['AU'][author_index].upper()    \
+                                                        .strip(',')
+                inst_name = ', '.join([institution[0], institution[-1]])
 
                 try:
                     author_institutions[author_au].add(inst_name)
@@ -629,11 +649,16 @@ def _handle_author_institutions(wos_dict):
 
         else:   # Author-institution mappings are not provided. We
                 #  therefore map all authors to all institutions.
-            for author_au in wos_dict['AU']:
-                author_au = author_au.upper().strip(',')
             
-                institution = c1_str.strip().split(', ')
-                inst_name = institution[0]
+            for author_au in wos_dict['AU']:
+                author_au = author_au.upper()       \
+                                     .strip(',')
+            
+                institution = c1_str.upper()        \
+                                    .strip()        \
+                                    .strip('.')     \
+                                    .split(',')
+                inst_name = ', '.join([institution[0], institution[-1]])
 
                 # Use sets here to avoid duplicates.
                 try:
@@ -847,3 +872,6 @@ class DataError(Exception):
 
 if __name__ == '__main__':
     p = read("/Users/erickpeirson/Downloads/savedrecs.txt")
+#    for paper in p:
+#        print paper['institutions']
+        
