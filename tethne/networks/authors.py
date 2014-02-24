@@ -170,6 +170,8 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
     for key, val in coauthor_dict.iteritems():
         if val['weight'] >= threshold:
             coauthors_graph.add_edge(key[0], key[1], attr_dict=val)
+    
+    # Include institutional affiliations as node attributes.
 
     return coauthors_graph
 
