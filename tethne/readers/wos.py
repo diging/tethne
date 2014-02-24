@@ -642,6 +642,7 @@ def _handle_author_institutions(wos_dict):
                                                         .strip(',')
                 inst_name = ', '.join([institution[0], institution[-1]])
 
+                # Use sets here to avoid duplicates.
                 try:
                     author_institutions[author_au].add(inst_name)
                 except KeyError:
@@ -649,6 +650,10 @@ def _handle_author_institutions(wos_dict):
 
         else:   # Author-institution mappings are not provided. We
                 #  therefore map all authors to all institutions.
+            # For example:
+            #
+            # UN, Environm Programme, Nairobi, Kenya.
+            # Univ Haifa, Dept Geog, IL-31095 Haifa, Israel.
             
             for author_au in wos_dict['AU']:
                 author_au = author_au.upper()       \
