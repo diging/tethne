@@ -95,6 +95,9 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
 
     To generate a co-authorship network, use the
     :func:`.networks.authors.coauthors` method:
+    
+    Author institutional affiliation is included as a node attribute, if 
+    possible.
 
     .. code-block:: python
 
@@ -171,7 +174,16 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
         if val['weight'] >= threshold:
             coauthors_graph.add_edge(key[0], key[1], attr_dict=val)
     
-    # Include institutional affiliations as node attributes.
+    # Include institutional affiliations as node attributes, if possible.
+    for entry in papers:
+        anames = zip(entry['aulast'], entry['auinit'])
+        for a in anames:
+            name = ", ".join(a)
+            try:
+                institution = entry['institutions'][name]
+                coauthors_graph.node[name][1]['institution'] = institution
+            except (KeyError, TypeError):   # 'institutions' might be None.
+                pass
 
     return coauthors_graph
 

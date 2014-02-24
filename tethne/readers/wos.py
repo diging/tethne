@@ -454,7 +454,7 @@ def _parse_institutions(ref):
     addr_dict = ds.Paper()
     #tokens of form:
     tokens = ref.split(',')
-    print 'tokens inside parse_institutions : \n', tokens
+
     try:
 
         name = tokens[0]
@@ -479,7 +479,7 @@ def _parse_institutions(ref):
     auinsid = _create_ayjid(addr_dict['aulast'], addr_dict['auinit'],
                          addr_dict['date'], addr_dict['jtitle'])
     addr_dict['auinsid'] = auinsid
-    print 'auinsid', auinsid
+
     return addr_dict
 
 def convert(wos_data):
@@ -606,8 +606,8 @@ def _handle_authors(wos_dict):
 def _handle_author_institutions(wos_dict):
     pattern = re.compile(r'\[(.*?)\]')
     author_institutions = {}
-    for c1_str in wos_dict['C1']:   # One C1 line for each institution.
 
+    for c1_str in wos_dict['C1']:   # One C1 line for each institution.
         match = pattern.search(c1_str)
         if match:   # Explicit author-institution mappings are provided.
             authors = c1_str[match.start()+1:match.end()-1].split('; ')
@@ -619,17 +619,19 @@ def _handle_author_institutions(wos_dict):
                 #  datasets.
                 author_index = wos_dict['AF'].index(author)
                 #e.g."WU, ZD"
-                author_au = wos_dict['AU'][author_index].upper()
+                author_au = wos_dict['AU'][author_index].upper().strip(',')
                 inst_name = institution[0]
 
                 try:
-                    author_institutions[author_au].append(inst_name)
+                    author_institutions[author_au].add(inst_name)
                 except KeyError:
-                    author_institutions[author_au] = [inst_name]
+                    author_institutions[author_au] = set([inst_name])
 
         else:   # Author-institution mappings are not provided. We
                 #  therefore map all authors to all institutions.
             for author_au in wos_dict['AU']:
+                author_au = author_au.upper().strip(',')
+            
                 institution = c1_str.strip().split(', ')
                 inst_name = institution[0]
 
@@ -841,3 +843,7 @@ def _wos2paper_map():
 #Custom Error Defined
 class DataError(Exception):
     pass
+
+
+if __name__ == '__main__':
+    p = read("/Users/erickpeirson/Downloads/savedrecs.txt")
