@@ -318,18 +318,13 @@ def author_coinstitution(Papers, threshold=1, **kwargs):
                     author_institutions[key] = value
         authors = author_institutions.keys()
         for i in xrange(len(authors)):
-            #coinstitution.add_node(authors[i],type ='author')
             for j in xrange(len(authors)):
                 if i != j:
-                     #compare 2 author dict elements
+                    # Compare 2 author dict elements.
                     overlap = (set(author_institutions[authors[i]])
                                 &
                                 set(author_institutions[authors[j]]))
                     if len(overlap) >= threshold:
-                        #commented these because 'add_edge' adds nodes aswell.
-                        #coinstitution.add_node(authors[i],type ='author')
-                        #coinstitution.add_node(authors[j],type ='author')
-                        #print authors[i] + "->" + authors[j]
                         coinstitution.add_edge(authors[i], authors[j], \
                                                overlap=len(overlap))
                     else :
@@ -474,13 +469,3 @@ def author_cocitation(papers, threshold=1, **kwargs):
             author_cocitations.add_edge(key[0], key[1], weight=val)
 
     return author_cocitations
-    
-if __name__ == "__main__":
-
-    import tethne.readers as rd
-    papers = rd.wos.read("/Users/erickpeirson/Downloads/savedrecs.txt")
-    
-    G = author_institution(papers)
-    
-    print G.edges(data=True)
-    
