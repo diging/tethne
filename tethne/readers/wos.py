@@ -606,10 +606,8 @@ def _handle_authors(wos_dict):
 def _handle_author_institutions(wos_dict):
     pattern = re.compile(r'\[(.*?)\]')
     author_institutions = {}
-    print "-"*40
 
     for c1_str in wos_dict['C1']:   # One C1 line for each institution.
-        print c1_str
     
         match = pattern.search(c1_str)
         if match:   # Explicit author-institution mappings are provided.
@@ -873,10 +871,4 @@ def _wos2paper_map():
 #Custom Error Defined
 class DataError(Exception):
     pass
-
-
-if __name__ == '__main__':
-    p = read("/Users/erickpeirson/Downloads/savedrecs.txt")
-#    for paper in p:
-#        print paper['institutions']
         
