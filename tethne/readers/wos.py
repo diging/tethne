@@ -593,7 +593,7 @@ def _handle_authors(wos_dict):
         aulast = name_tokens[0].upper().strip()
         try:
             # 1 for 'aulast, aufirst'
-            auinit = name_tokens[1][1].upper().strip()
+            auinit = name_tokens[1][1:].upper().strip()
         except IndexError:
             # then no first initial character
             # preserve parallel name lists with empty string
