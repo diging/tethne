@@ -17,7 +17,7 @@ Methods
 import networkx as nx
 import tethne.utilities as util
 import tethne.data as ds
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 # MACRO for printing the 'print' statement values.
 # 0 prints nothing in the console.
@@ -124,7 +124,7 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
 
     Returns
     -------
-    coauthors_graph : networkx.MultiGraph
+    G : networkx.Graph
         A co-authorship network.
 
     """
@@ -132,10 +132,13 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
     # TODO: Check whether papers contains :class:`.Paper` instances, and raise
     #  an exception if not.
 
-    coauthors_graph = nx.Graph(type='coauthors')
+    G = nx.Graph(type='coauthors')
     edge_att = {}
     #edge_listdict={}
     coauthor_dict = {}
+
+    author_inst = {}
+    
     for entry in papers:
         if entry['aulast'] is not None:
             # edge_att dictionary has the atributes given by user input
@@ -146,6 +149,19 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
                                           entry['auinit'],
                                           ' ')
             for a in xrange(len(full_names)):
+                # Update global author-institution mappings.
+                n = full_names[a]
+                if entry['institutions'] is not None:
+                    try:
+                        inst = entry['institutions'][n]
+                        try:
+                            author_inst[n] += inst
+                        except KeyError:
+                            author_inst[n] = inst
+
+                    except KeyError:
+                        pass
+                    
                 for b in xrange(a+1 , len(entry['aulast'])):
                     # (author_a,author_b) tuple is key for coauthor_dict.
                     authors = full_names[a], full_names[b]
@@ -172,20 +188,21 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
     # Add edges with specified edge attributes.
     for key, val in coauthor_dict.iteritems():
         if val['weight'] >= threshold:
-            coauthors_graph.add_edge(key[0], key[1], attr_dict=val)
+            G.add_edge(key[0], key[1], attr_dict=val)
     
     # Include institutional affiliations as node attributes, if possible.
-    for entry in papers:
-        anames = zip(entry['aulast'], entry['auinit'])
-        for a in anames:
-            name = ", ".join(a)
-            try:
-                institution = entry['institutions'][name]
-                coauthors_graph.node[name][1]['institution'] = institution
-            except (KeyError, TypeError):   # 'institutions' might be None.
-                pass
+    
+    # Find most likely institution for each author. This won't work well if the
+    #  author only occurs once in the dataset and there was no explicit
+    #  author-instituion mapping.
+    for k,v in author_inst.iteritems():
+        top_inst = max(Counter(v))
+        try:    # If an author has no coauthors, they will not appear in G.
+            G.node[k]['institution'] = top_inst
+        except KeyError:
+            pass
 
-    return coauthors_graph
+    return G
 
 def author_institution(Papers, edge_attribs=[], **kwargs):
     """
@@ -453,3 +470,13 @@ def author_cocitation(papers, threshold=1, **kwargs):
             author_cocitations.add_edge(key[0], key[1], weight=val)
 
     return author_cocitations
+    
+if __name__ == "__main__":
+
+    import tethne.readers as rd
+    papers = rd.wos.read("/Users/erickpeirson/Downloads/savedrecs.txt")
+    
+    G = coauthors(papers)
+    
+    print G.nodes(data=True)
+    

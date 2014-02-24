@@ -499,7 +499,7 @@ def convert(wos_data):
 
     Returns
     -------
-    wos_meta : list
+    papers : list
         A list of :class:`.Paper` instances.
 
     Examples
@@ -522,7 +522,7 @@ def convert(wos_data):
     accession = str(uuid.uuid4())
     
     #create a Paper for each wos_dict and append to this list
-    wos_meta = []
+    papers = []
 
     #handle dict inputs by converting to a 1-item list
     if type(wos_data) is dict:
@@ -530,7 +530,7 @@ def convert(wos_data):
         #print 'wos data \n' , wos_data
 
 
-    # Calling the validate function here, before even building wos_meta list
+    # Calling the validate function here, before even building papers list
     # [62809724]
     status = _validate(wos_data)
     if not status:
@@ -579,10 +579,10 @@ def convert(wos_data):
 
         paper['accession'] = accession
         
-        wos_meta.append(paper)
+        papers.append(paper)
     # End wos_dict for loop.
 
-    return wos_meta
+    return papers
     
 def _handle_authors(wos_dict):
 
@@ -637,14 +637,15 @@ def _handle_author_institutions(wos_dict):
                 #  datasets.
                 author_index = wos_dict['AF'].index(author)
                 author_au = wos_dict['AU'][author_index].upper()    \
-                                                        .strip(',')
-                inst_name = ', '.join([institution[0], institution[-1]])
+                                                        .replace(',','')
+                inst_name = ', '.join([institution[0], institution[-1].strip()])
 
-                # Use sets here to avoid duplicates.
+                # Use lists, so we can tally 'votes' for most likely
+                #  institution.
                 try:
-                    author_institutions[author_au].add(inst_name)
+                    author_institutions[author_au].append(inst_name)
                 except KeyError:
-                    author_institutions[author_au] = set([inst_name])
+                    author_institutions[author_au] = [inst_name]
 
         else:   # Author-institution mappings are not provided. We
                 #  therefore map all authors to all institutions.
@@ -655,19 +656,20 @@ def _handle_author_institutions(wos_dict):
             
             for author_au in wos_dict['AU']:
                 author_au = author_au.upper()       \
-                                     .strip(',')
+                                     .replace(',','')
             
                 institution = c1_str.upper()        \
                                     .strip()        \
                                     .strip('.')     \
                                     .split(',')
-                inst_name = ', '.join([institution[0], institution[-1]])
+                inst_name = ', '.join([institution[0], institution[-1].strip()])
 
-                # Use sets here to avoid duplicates.
+                # Use lists, so we can tally 'votes' for most likely
+                #  institution.
                 try:
-                    author_institutions[author_au].add(inst_name)
+                    author_institutions[author_au].append(inst_name)
                 except KeyError:
-                    author_institutions[author_au] = set([inst_name])
+                    author_institutions[author_au] = [inst_name]
 
     # Convert values back to lists before returning.
     return { k:list(v) for k,v in author_institutions.iteritems() }
