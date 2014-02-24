@@ -206,9 +206,12 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
 
 def author_institution(Papers, edge_attribs=[], **kwargs):
     """
-    Generate a bi-partite graph with people and institutions as vertices, and
-    edges indicating affiliation. This may be slightly ambiguous for WoS data
-    where num authors != num institutions.
+    Generate a bi-partite graph connecting authors and their institutions.
+    
+    This may be slightly ambiguous for WoS data where there is no explicit
+    author-institution mapping. Edge weights are the number of co-associations
+    between an author and an institution, which should help resolve this
+    ambiguity (the more data the better).
 
     ==============     =========================================================
     Element            Description
@@ -244,14 +247,15 @@ def author_institution(Papers, edge_attribs=[], **kwargs):
             for au in authors:
                 #add node of type 'author'
                 author_institution_graph.add_node(au, type='author')
-                ins_list = auth_inst[au]
-                for ins_str in ins_list:
-                  #add node of type 'institutions'
+                ins_list = Counter(auth_inst[au])
+                for ins_str,count in ins_list.iteritems():
+                  # Add node of type 'institutions'.
                     author_institution_graph.add_node(ins_str, \
                                                       type='institution')
-                  #print au ,'---->' , ins_str
+
                     author_institution_graph.add_edge(au, ins_str, \
-                                              attr_dict=edge_attrib_dict)
+                                              attr_dict=edge_attrib_dict, \
+                                              weight=count )
 
 
     return author_institution_graph
@@ -476,7 +480,7 @@ if __name__ == "__main__":
     import tethne.readers as rd
     papers = rd.wos.read("/Users/erickpeirson/Downloads/savedrecs.txt")
     
-    G = coauthors(papers)
+    G = author_institution(papers)
     
-    print G.nodes(data=True)
+    print G.edges(data=True)
     
