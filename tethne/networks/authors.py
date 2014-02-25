@@ -249,7 +249,7 @@ def author_institution(Papers, edge_attribs=[], **kwargs):
                 author_institution_graph.add_node(au, type='author')
                 ins_list = Counter(auth_inst[au])
                 for ins_str,count in ins_list.iteritems():
-                  # Add node of type 'institutions'.
+                    # Add node of type 'institutions'.
                     author_institution_graph.add_node(ins_str, \
                                                       type='institution')
 

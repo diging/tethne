@@ -84,9 +84,6 @@ import uuid
 # 1 prints all print statements in the console.
 DEBUG = 0
 
-# general functions
-
-
 def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     """
     Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid
