@@ -1,7 +1,7 @@
 """
 Methods for analyzing :class:`.GraphCollection` objects.
 
-For the most part, these methods simply provide systematic access to algorithms 
+For the most part, these methods simply provide systematic access to algorithms
 in NetworkX.
 """
 
@@ -12,7 +12,7 @@ import graph
 def algorithm(C, method, **kwargs):
     """
     Apply NetworkX method to each ``Graph`` in :class:`.GraphCollection`\.
-    
+
     Passes kwargs to specified NetworkX method for each Graph, and returns
     a dictionary of results indexed by element (node or edge) and graph index
     (e.g. ``date``).
@@ -207,13 +207,13 @@ def edge_history(C, source, target, attribute, verbose=False):
 
 def node_global_closeness_centrality(C, node):
     """
-    Calculates global closeness centrality for node in each graph in 
+    Calculates global closeness centrality for node in each graph in
     :class:`.GraphCollection` C.
-    
+
     """
-    
+
     results = {}
     for key, g in C.graphs.iteritems():
         results[key] = graph.node_global_closeness_centrality(g, node)
-    
+
     return results

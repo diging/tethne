@@ -11,6 +11,8 @@ Helper functions for generating networks.
 """
 
 import networkx as nx
+import operator
+import numpy as np
 #import tethne.utilities as util  # Pylint Warnings
 #import tethne.data as ds
 
@@ -104,14 +106,14 @@ def citation_count(papers, key='ayjid', verbose=False):
 
 def top_cited(papers, topn=20, verbose=False):
     """
-    Generates a list of the topn most cited papers.
+    Generates a list of the topn (or topn%) most cited papers.
 
     Parameters
     ----------
     papers : list
         A list of :class:`.Paper` instances.
-    topn : int
-        Number of top-cited papers to return.
+    topn : int or float {0.-1.}
+        Number (int) or percentage (float) of top-cited papers to return.
     verbose : bool
         If True, prints status messages.
 
@@ -126,26 +128,30 @@ def top_cited(papers, topn=20, verbose=False):
     if verbose:
         print "Finding top "+str(topn)+" most cited papers..."
 
-    counts = hp.citation_count(papers, verbose=verbose)
+    counts = citation_count(papers, verbose=verbose)
+
+    if type(topn) is int:
+        n = topn
+    elif type(topn) is float:
+        n = int(np.around(topn*len(counts), decimals=-1))
     top = dict(sorted(counts.iteritems(),
                        key=operator.itemgetter(1),
-                       reverse=True)[:topn]).keys()
+                       reverse=True)[:n]).keys()
 
     return top, counts
 
 def top_parents(papers, topn=20, verbose=False):
     """
-    Returns a list of :class:`.Paper` objects that cite the topn most cited
-    papers.
-    
-    Parameters    
+    Returns a list of :class:`.Paper` that cite the topn most cited papers.
+
+    Parameters
     ----------
     papers : list
         A list of :class:`.Paper` objects.
-    topn : int
-        Number of top-cited papers to return.
+    topn : int or float {0.-1.}
+        Number (int) or percentage (float) of top-cited papers.
     verbose : bool
-        If True, prints status messages.    
+        If True, prints status messages.
 
     Returns
     -------
@@ -168,5 +174,5 @@ def top_parents(papers, topn=20, verbose=False):
 
     if verbose:
         print "Found " + str(len(parents)) + " parents."
-       
-    return parents, top, counts    
+
+    return parents, top, counts

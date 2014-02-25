@@ -19,9 +19,9 @@ import uuid
 def read(datapath):
     """
     Yields :class:`.Paper` s from JSTOR DfR package.
-    
-    Each :class:`.Paper` is tagged with an accession id for this 
-    read/conversion.    
+
+    Each :class:`.Paper` is tagged with an accession id for this
+    read/conversion.
 
     Parameters
     ----------
@@ -39,11 +39,13 @@ def read(datapath):
     .. code-block:: python
 
        >>> import tethne.readers as rd
-       >>> papers = rd.dfr.read("/Path/to/DfR")        
+       >>> papers = rd.dfr.read("/Path/to/DfR")
     """
 
     try:
-        root = ET.parse(datapath + "/citations.XML").getroot()
+        with open(datapath + "/citations.XML", 'rb') as f:
+            data = f.read().replace('&', '&amp;')
+            root = ET.fromstring(data)
     except IOError:
         raise IOError(datapath+"citations.XML not found.")
 
@@ -54,6 +56,52 @@ def read(datapath):
         paper = _handle_paper(article)
         paper['accession'] = accession
         papers.append(paper)
+
+    return papers
+
+def from_dir(path):
+    """
+    Convenience function for generating a list of :class:`.Paper` from a
+    directory of JSTOR DfR datasets.
+
+    Parameters
+    ----------
+    path : string
+        Path to directory containing DfR dataset directories.
+
+    Returns
+    -------
+    papers : list
+        A list of :class:`.Paper` objects.
+
+    Raises
+    ------
+    IOError
+        Invalid path.
+
+    Examples
+    --------
+
+    .. code-block:: python
+
+       >>> import tethne.readers as rd
+       >>> papers = rd.dfr.from_dir("/Path/to/datadir")
+
+    """
+
+    papers = []
+
+    try:
+        files = os.listdir(path)
+    except IOError:
+        raise IOError("Invalid path.")  # Ignore hidden files.
+
+    for f in files:
+        if not f.startswith('.') and os.path.isdir(path + "/" + f):
+            try:
+                papers += read(path + "/" + f)
+            except (IOError, UnboundLocalError):    # Ignore directories that
+                pass                                #  don't contain DfR data.
 
     return papers
 
@@ -85,7 +133,7 @@ def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
     .. code-block:: python
 
        >>> import tethne.readers as rd
-       >>> trigrams = rd.dfr.ngrams("/Path/to/DfR", N='tri')        
+       >>> trigrams = rd.dfr.ngrams("/Path/to/DfR", N='tri')
     """
 
     gram_path = datapath + "/" + N + "grams"

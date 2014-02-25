@@ -39,9 +39,9 @@ class Map(object):
 def array(data, normalize=False, verbose=False):
     """
     Yields a Numpy array, along with feature-index and document-index mappings.
-    
+
     **Usage**
-    
+
     .. code-block:: python
 
        >>> import tethne.readers as rd
@@ -65,7 +65,7 @@ def array(data, normalize=False, verbose=False):
         Maps column indices to document identifiers (keys of provided data).
     feature_index : :class:`.Map`
         Maps row indices to features.
-        
+
     """
     document_index, feature_index = _index_data(data, verbose)
     N_docs = len(document_index)
@@ -107,7 +107,7 @@ def matrix(data, normalize=False, verbose=False):
     Yields a Numpy matrix, along with feature-index and document-index mappings.
 
     **Usage**
-    
+
     .. code-block:: python
 
        >>> import tethne.readers as rd
