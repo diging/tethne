@@ -1,23 +1,13 @@
-#from flask import * # do not use '*'; actually input the dependencies.
-#This will create an error
-
-from flask_wtf import Form
-from wtforms import TextField
-from wtforms.validators import DataRequired
+from flask import * # do not use '*'; actually input the dependencies.
 import logging
 from logging import Formatter, FileHandler
-<<<<<<< HEAD:flask/login.py
 from forms import *
 import ZODB.config
 import transaction
-from hashlib import sha256
-=======
-#from ZODB import *
-from flask import Flask,render_template,url_for
->>>>>>> python:flask/login copy.py
+
 
 app = Flask(__name__)
-#app.config.from_object('config')
+app.config.from_object('config')
 
 from ZODB.FileStorage import FileStorage
 from ZODB.DB import DB
@@ -25,6 +15,8 @@ import models as mod
 
 storage = FileStorage('./storage/users.fs')
 db = DB(storage)
+print db, type(db)
+db.database_name = 'userdb'
 connection = db.open()
 # dbroot is a dict like structure.
 dbroot = connection.root()  # retrieving the root of the tree
@@ -60,8 +52,8 @@ if not dbroot.has_key('userdb'):
     from BTrees.OOBTree import OOBTree
     dbroot['userdb'] = OOBTree()
     # userdb is a <BTrees.OOBTree.OOBTree object at some location>
-userdb1 = dbroot['userdb']           
-print userdb1
+userdb = dbroot['userdb']           
+print "user db init:",userdb, type(userdb)
             
 @app.route('/index', methods=['GET','POST'])
 def index():
@@ -92,18 +84,11 @@ def add_entry():
 def login():
 	flash('Welcome to Tethne Website')
 	form = LoginForm(request.form)
-        if request.method == 'GET':
-        	username = form.name.data
-        	print "form:", form.name.data, form.password.data
-        	if session[username] == userdb[username]:
-        		print db, type(db)
-        		return redirect(url_for('index'))
-        	else:
-        		print "error" 
-            	
-        else:
-        	print "comes in else"
-        	return redirect(url_for('register'))
+        if request.method == 'POST':
+            session['username'] = request.form['username']
+            return redirect(url_for('index'))
+        else :
+            return redirect(url_for('register'))
         
 	return render_template('forms/login.html', form = form)
     
@@ -120,28 +105,16 @@ def register():
                 print " else", request.form
                 u=mod.User()
                 print "User:", u
-<<<<<<< HEAD:flask/login.py
-                u.name = form.name.data
-                u.email = form.email.data
-                u.password = sha256(form.password.data).hexdigest()
-                #u.password = form.password.data
-              	u.confirm = form.confirm.data
-              	u.institution = form.institution.data
-              	u.security_question = form.security_question.data
-              	u.security_answer = form.security_answer.data
+                u.name = "Ramki"
+                u.email = "rsubra13z@asu.edu"
                 userdb[u.name]=u
-                session['username'] = u.name
                 transaction.commit()
-                print "db now",db,type(db),db.__str__(),db.__getattribute__('databases'),"next",db.databases,db.database_name   
-                flash('Registered successfuly')
-            	return redirect(url_for('login'))
-=======
-                u.name = request.form['username']
-                #db['userdb'] = request.form['username']
-                print " user name",request.form['username']
+                #u.name = request.form['username']
+                print "db now",db,type(db),db.objectCount(),db.__str__(),db.__getattribute__('databases'),"next",db.databases,db.database_name   
+                print "stuck here", userdb,userdb.has_key('u.name')
+                #print " user name",request.form['username']
                 
             flash('Registered successfuly')
->>>>>>> python:flask/login copy.py
     return render_template('forms/register.html', form = form)
 
 @app.route('/forgot',methods=['GET','POST'])
