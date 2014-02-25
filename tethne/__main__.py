@@ -209,7 +209,6 @@ if __name__ == "__main__":
     if options.local:
         lpath = os.path.dirname(os.path.abspath(__file__))
         sys.path.append(lpath + "/..")
-        print sys.path
     
     if options.dataset_id is None:
         sys.exit('Must specify --dataset-id')
