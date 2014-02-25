@@ -201,8 +201,7 @@ if __name__ == "__main__":
     if options.local:
         lpath = os.path.dirname(os.path.abspath(__file__))
         sys.path.append(lpath + "/..")
-        print sys.path
-    
+            
     import numpy as np
     
     import tethne.readers as rd
