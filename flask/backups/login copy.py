@@ -4,7 +4,7 @@ from logging import Formatter, FileHandler
 from forms import *
 import ZODB.config
 import transaction
-from hashlib import sha256
+
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -84,18 +84,11 @@ def add_entry():
 def login():
 	flash('Welcome to Tethne Website')
 	form = LoginForm(request.form)
-        if request.method == 'GET':
-        	username = form.name.data
-        	print "form:", form.name.data, form.password.data
-        	if session[username] == userdb[username]:
-        		print db, type(db)
-        		return redirect(url_for('index'))
-        	else:
-        		print "error" 
-            	
-        else:
-        	print "comes in else"
-        	return redirect(url_for('register'))
+        if request.method == 'POST':
+            session['username'] = request.form['username']
+            return redirect(url_for('index'))
+        else :
+            return redirect(url_for('register'))
         
 	return render_template('forms/login.html', form = form)
     
@@ -112,20 +105,16 @@ def register():
                 print " else", request.form
                 u=mod.User()
                 print "User:", u
-                u.name = form.name.data
-                u.email = form.email.data
-                u.password = sha256(form.password.data).hexdigest()
-                #u.password = form.password.data
-              	u.confirm = form.confirm.data
-              	u.institution = form.institution.data
-              	u.security_question = form.security_question.data
-              	u.security_answer = form.security_answer.data
+                u.name = "Ramki"
+                u.email = "rsubra13z@asu.edu"
                 userdb[u.name]=u
-                session['username'] = u.name
                 transaction.commit()
-                print "db now",db,type(db),db.__str__(),db.__getattribute__('databases'),"next",db.databases,db.database_name   
-                flash('Registered successfuly')
-            	return redirect(url_for('login'))
+                #u.name = request.form['username']
+                print "db now",db,type(db),db.objectCount(),db.__str__(),db.__getattribute__('databases'),"next",db.databases,db.database_name   
+                print "stuck here", userdb,userdb.has_key('u.name')
+                #print " user name",request.form['username']
+                
+            flash('Registered successfuly')
     return render_template('forms/register.html', form = form)
 
 @app.route('/forgot',methods=['GET','POST'])
