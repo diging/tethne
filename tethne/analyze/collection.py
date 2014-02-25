@@ -223,16 +223,17 @@ def attachment_probability(C):
     Calculates the observed attachment probability for each node at each
     time-step.
     
+    
     Attachment probability is calculated based on the observed new edges in the
     next time-step. So if a node acquires new edges at time t, this will accrue
     to the node's attachment probability at time t-1. Thus at a given time,
     one can ask whether degree and attachment probability are related.
-    
+
     Parameters
     ----------
     C : :class:`.GraphCollection`
         Must be sliced by 'date'. See :func:`.GraphCollection.slice`\.
-     
+    
     Returns
     -------
     probs : dict
@@ -242,8 +243,9 @@ def attachment_probability(C):
     probs = {}
     G_ = None
     for k,G in C.graphs.iteritems():
+        print k
         new_edges = {}
-
+        print len(G.nodes())
         if G_ is not None: 
             for n in G.nodes():
                 try:
@@ -265,5 +267,5 @@ def attachment_probability(C):
             nx.set_node_attributes(C.graphs[k_], 'attachment', probs[k])
         G_ = G
         k_ = k
-
+    
     return C
