@@ -9,6 +9,7 @@ app.config.from_object('config')
 
 from ZODB.FileStorage import FileStorage
 from ZODB.DB import DB
+import models as mod
 
 storage = FileStorage('./storage/users.fs')
 db = DB(storage)
@@ -33,9 +34,7 @@ dbroot = connection.root()  # retrieving the root of the tree
 # def set_db_defaults():
 #     if 'userdb' not in db:
 #         db['userdb'] = List()
-         
-        
-        
+              
 # @app.route('/logout')
 # def logout():
 #     session.pop('logged_in', None)
@@ -43,15 +42,14 @@ dbroot = connection.root()  # retrieving the root of the tree
 #     return redirect(url_for('show_entries'))
 
 
-# Ensure that a 'userdb' key is present
-# in the root
+#Ensure that a 'userdb' key is present
+#in the root
 if not dbroot.has_key('userdb'):
     from BTrees.OOBTree import OOBTree
     dbroot['userdb'] = OOBTree()
-
-# userdb is a <BTrees.OOBTree.OOBTree object at some location>
-userdb = dbroot['userdb']           
-print userdb
+    # userdb is a <BTrees.OOBTree.OOBTree object at some location>
+userdb1 = dbroot['userdb']           
+print userdb1
             
 @app.route('/index', methods=['GET','POST'])
 def index():
@@ -101,7 +99,12 @@ def register():
                 print " inside if"
             else:
                 print " else", request.form
-                db['userdb'] = request.form['username']
+                u=mod.User()
+                print "User:", u
+                u.name = request.form['username']
+                #db['userdb'] = request.form['username']
+                print " user name",request.form['username']
+                
             flash('Registered successfuly')
     return render_template('forms/register.html', form = form)
 
@@ -111,7 +114,6 @@ def forgot():
     return render_template('forms/forgot.html', form = form)    
 
 # Error handlers.
-
 @app.errorhandler(500)
 def internal_error(error):
     #db_session.rollback()
