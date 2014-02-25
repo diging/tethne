@@ -217,3 +217,53 @@ def node_global_closeness_centrality(C, node):
         results[key] = graph.node_global_closeness_centrality(g, node)
 
     return results
+    
+def attachment_probability(C):
+    """
+    Calculates the observed attachment probability for each node at each
+    time-step.
+    """
+    
+    probs = {}
+    G_ = None
+    for k,G in C.graphs.iteritems():
+        print k
+        new_edges = {}
+        print len(G.nodes())
+        if G_ is not None: 
+            for n in G.nodes():
+                try:
+                    old_neighbors = set(G_[n].keys())
+                    new_neighbors = set(G[n].keys()) - old_neighbors
+                    new_edges[n] = float(len(new_neighbors))
+                except KeyError:
+                    pass
+                    
+        N = sum( new_edges.values() )
+        if N > 0.:
+            probs[k] = { k:v/N for k,v in new_edges.iteritems() }
+        else:
+            probs[k] = None
+        if probs[k] is not None:
+            nx.set_node_attributes(C.graphs[k], 'attachment', probs[k])
+        G_ = G
+    return C, probs
+
+
+if __name__ == '__main__':
+
+    import tethne.readers as rd
+    from tethne.data import DataCollection
+    from tethne.builders import authorCollectionBuilder
+    import tethne.writers as wr
+    
+    papers = rd.wos.read("/Users/erickpeirson/Dropbox/Research/Phenotypic Plasticity/Web of Science/20110219_WoS_full record/download1.txt")
+    
+    D = DataCollection(papers)
+    D.slice('date', method='time_period', cumulative=True)
+    
+    builder = authorCollectionBuilder(D)
+    C = builder.build('date', 'coauthors')
+    C, probs = attachment_probability(C)
+    
+    wr.collection.to_dxgmml(C, '/Users/erickpeirson/Desktop/test.xgmml')
