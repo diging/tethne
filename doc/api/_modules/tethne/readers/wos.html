@@ -1,0 +1,809 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tethne.readers.wos &mdash; tethne 0.3.0-alpha documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.3.0-alpha',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="tethne 0.3.0-alpha documentation" href="../../../index.html" />
+    <link rel="up" title="tethne.readers" href="../readers.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../readers.html" accesskey="U">tethne.readers</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for tethne.readers.wos</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Reader for Web of Science field-tagged bibliographic data.</span>
+
+<span class="sd">.. autosummary::</span>
+
+<span class="sd">   convert</span>
+<span class="sd">   from_dir</span>
+<span class="sd">   parse</span>
+<span class="sd">   read</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">ds</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">as</span> <span class="nn">ET</span>
+<span class="kn">import</span> <span class="nn">tethne.utilities</span> <span class="kn">as</span> <span class="nn">util</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="c"># MACRO for printing the &#39;print&#39; statement values.</span>
+<span class="c"># 0 prints nothing in the console.</span>
+<span class="c"># 1 prints all print statements in the console.</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c"># general functions</span>
+
+<span class="k">def</span> <span class="nf">_create_ayjid</span><span class="p">(</span><span class="n">aulast</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">auinit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">date</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">jtitle</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid</span>
+<span class="sd">    Returns &#39;Unknown paper&#39; if all id components are missing (None).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Kwargs : dict</span>
+<span class="sd">        A dictionary of keyword arguments.</span>
+<span class="sd">    aulast : string</span>
+<span class="sd">        Author surname.</span>
+<span class="sd">    auinit: string</span>
+<span class="sd">        Author initial(s).</span>
+<span class="sd">    date : string</span>
+<span class="sd">        Four-digit year.</span>
+<span class="sd">    jtitle : string</span>
+<span class="sd">        Title of the journal.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ayj : string</span>
+<span class="sd">        Fuzzy identifier ayjid, or &#39;Unknown paper&#39; if all id components are</span>
+<span class="sd">        missing (None).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">aulast</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">aulast</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aulast</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">aulast</span> <span class="o">=</span> <span class="n">aulast</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">auinit</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">auinit</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">auinit</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">auinit</span> <span class="o">=</span> <span class="n">auinit</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">date</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="n">jtitle</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">jtitle</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+
+    <span class="n">ayj</span> <span class="o">=</span> <span class="n">aulast</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">auinit</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">date</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">jtitle</span>
+
+    <span class="k">if</span> <span class="n">ayj</span> <span class="o">==</span> <span class="s">&#39;   &#39;</span><span class="p">:</span>
+        <span class="n">ayj</span> <span class="o">=</span> <span class="s">&#39;Unknown paper&#39;</span>
+
+    <span class="k">return</span> <span class="n">ayj</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">_create_ainstid</span><span class="p">(</span><span class="n">aulast</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">auinit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">addr1</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> \
+                   <span class="n">addr2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">country</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function is to create an fuzzy identifier ainstid.</span>
+<span class="sd">    Convert aulast, auinit, and jtitle into the fuzzy identifier ainstid.</span>
+<span class="sd">    Returns &#39;Unknown Institution&#39; if all id components are missing (None).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Kwargs : dict</span>
+<span class="sd">        A dictionary of keyword arguments.</span>
+<span class="sd">    aulast : string</span>
+<span class="sd">        Author surname.</span>
+<span class="sd">    auinit : string</span>
+<span class="sd">        Author initial(s).</span>
+<span class="sd">    address1 : string</span>
+<span class="sd">        Address of the Institution.</span>
+<span class="sd">    address2 : string</span>
+<span class="sd">        Address of the Institution.</span>
+<span class="sd">    country : string</span>
+<span class="sd">        Country of affiliation</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ainstid : string</span>
+<span class="sd">        Fuzzy identifier ainstid, or &#39;Unknown Institution&#39; if all id components</span>
+<span class="sd">        are missing (None).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">aulast</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">aulast</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aulast</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">aulast</span> <span class="o">=</span> <span class="n">aulast</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">auinit</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">auinit</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">auinit</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">auinit</span> <span class="o">=</span> <span class="n">auinit</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">addr1</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">addr1</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+
+    <span class="k">if</span>  <span class="n">addr2</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">addr2</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="k">if</span>  <span class="n">country</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">country</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+
+    <span class="n">ainstid</span> <span class="o">=</span> <span class="n">aulast</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">auinit</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">addr1</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">addr2</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">country</span>
+
+    <span class="k">if</span> <span class="n">ainstid</span> <span class="o">==</span> <span class="s">&#39; &#39;</span><span class="p">:</span>
+        <span class="n">ainstid</span> <span class="o">=</span> <span class="s">&#39;Unknown Institution&#39;</span>
+
+    <span class="k">return</span> <span class="n">ainstid</span>
+
+
+<span class="c"># Web of Science functions</span>
+<div class="viewcode-block" id="parse"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.parse">[docs]</a><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse Web of Science field-tagged data.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filepath : string</span>
+<span class="sd">        Filepath to the Web of Science plain text file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    wos_list : list</span>
+<span class="sd">        A list of dictionaries each associated with a paper from the Web of</span>
+<span class="sd">        Science with keys from docs/fieldtags.txt as encountered in the file;</span>
+<span class="sd">        most values associated with keys are strings with special exceptions</span>
+<span class="sd">        defined by the list_keys and int_keys variables.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    KeyError : Key value which needs to be converted to an &#39;int&#39; is not present.</span>
+<span class="sd">    AttributeError :</span>
+<span class="sd">    IOError : File at filepath not found, not readable, or empty.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Unknown keys: RI, OI, Z9</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wos_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">paper_start_key</span> <span class="o">=</span> <span class="s">&#39;PT&#39;</span>
+    <span class="n">paper_end_key</span> <span class="o">=</span> <span class="s">&#39;ER&#39;</span>
+
+    <span class="c"># Try to read filepath</span>
+    <span class="n">line_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">line_list</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span> <span class="c"># File does not exist, or couldn&#39;t be read.</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;File does not exist, or cannot be read.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line_list</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;Unable to read filepath or filepath is empty.&quot;</span><span class="p">)</span>
+
+    <span class="c"># Convert the data in the file to a usable list of dictionaries.</span>
+    <span class="c"># Note: first two lines of file are not related to any paper therein.</span>
+    <span class="n">last_field_tag</span> <span class="o">=</span> <span class="n">paper_start_key</span> <span class="c">#initialize to something.</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">line_list</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">strip_non_ascii</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">field_tag</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">field_tag</span> <span class="o">==</span> <span class="n">paper_start_key</span><span class="p">:</span>
+            <span class="c"># Then prepare for next paper.</span>
+            <span class="n">wos_dict</span> <span class="o">=</span> <span class="n">_new_wos_dict</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">field_tag</span> <span class="o">==</span> <span class="n">paper_end_key</span><span class="p">:</span>
+            <span class="c"># Then add paper to our list.</span>
+            <span class="n">wos_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wos_dict</span><span class="p">)</span>
+
+        <span class="c"># Handle keys like AU,AF,CR that continue over many lines.</span>
+        <span class="k">if</span> <span class="n">field_tag</span> <span class="o">==</span> <span class="s">&#39;  &#39;</span><span class="p">:</span>
+            <span class="n">field_tag</span> <span class="o">=</span> <span class="n">last_field_tag</span>
+
+        <span class="c"># Add value for the key to the wos_dict: the rest of the line.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field_tag</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">,</span> <span class="s">&#39;AF&#39;</span><span class="p">,</span> <span class="s">&#39;CR&#39;</span><span class="p">,</span> <span class="s">&#39;C1&#39;</span><span class="p">]:</span>
+                <span class="c"># These unique fields use the new line delimiter to distinguish</span>
+                <span class="c"># their list elements below.</span>
+                <span class="c"># The field C1 can be either in multiple lines or in a single</span>
+                <span class="c"># line -- It is the address/institutions of the author.</span>
+                <span class="n">wos_dict</span><span class="p">[</span><span class="n">field_tag</span><span class="p">]</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">wos_dict</span><span class="p">[</span><span class="n">field_tag</span><span class="p">]</span> <span class="o">+=</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="ne">UnboundLocalError</span><span class="p">):</span>
+            <span class="n">wos_dict</span><span class="p">[</span><span class="n">field_tag</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
+
+        <span class="n">last_field_tag</span> <span class="o">=</span> <span class="n">field_tag</span>
+    <span class="c"># End line loop.</span>
+
+    <span class="c"># Define keys that should be lists instead of default string.</span>
+    <span class="n">list_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">,</span> <span class="s">&#39;AF&#39;</span><span class="p">,</span> <span class="s">&#39;DE&#39;</span><span class="p">,</span> <span class="s">&#39;ID&#39;</span><span class="p">,</span> <span class="s">&#39;CR&#39;</span><span class="p">,</span> <span class="s">&#39;C1&#39;</span><span class="p">]</span>
+    <span class="n">delims</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;AU&#39;</span><span class="p">:</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span>
+              <span class="s">&#39;AF&#39;</span><span class="p">:</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span>
+              <span class="s">&#39;DE&#39;</span><span class="p">:</span><span class="s">&#39;;&#39;</span><span class="p">,</span>
+              <span class="s">&#39;ID&#39;</span><span class="p">:</span><span class="s">&#39;;&#39;</span><span class="p">,</span>
+              <span class="s">&#39;C1&#39;</span><span class="p">:</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span>
+              <span class="s">&#39;CR&#39;</span><span class="p">:</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">}</span>
+
+    <span class="c"># And convert the data at those keys into lists.</span>
+    <span class="k">for</span> <span class="n">wos_dict</span> <span class="ow">in</span> <span class="n">wos_list</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">list_keys</span><span class="p">:</span>
+            <span class="n">delim</span> <span class="o">=</span> <span class="n">delims</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">key_contents</span> <span class="o">=</span> <span class="n">wos_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">delim</span> <span class="o">!=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">:</span>
+                    <span class="n">wos_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">key_contents</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">delim</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">wos_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">key_contents</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="c"># One of the keys to be converted to a list didn&#39;t exist.</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="c"># Again a key didn&#39;t exist but it belonged to the wos</span>
+                <span class="c"># data_struct set of keys; can&#39;t split a None.</span>
+                <span class="k">pass</span>
+
+    <span class="c"># Similarly convert some data from string to int.</span>
+    <span class="n">int_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;PY&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">wos_dict</span> <span class="ow">in</span> <span class="n">wos_list</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">int_keys</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">wos_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">wos_dict</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="c"># One of the keys to be converted to an int didn&#39;t exist.</span>
+                <span class="k">pass</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="c"># Again a key didn&#39;t exist but it belonged to the wos</span>
+                <span class="c"># data_struct set of keys; can&#39;t convert None to an int.</span>
+                <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">wos_list</span>
+</div>
+<span class="k">def</span> <span class="nf">_parse_cr</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Supports the Web of Science reader by converting the strings found</span>
+<span class="sd">    at the CR field tag of a record into a minimum :class:`.Paper` instance.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ref : str</span>
+<span class="sd">        CR field tag data from a plain text Web of Science file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    paper : :class:`.Paper`</span>
+<span class="sd">        A :class:`.Paper` instance.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    IndexError</span>
+<span class="sd">        When input &#39;ref&#39; has less number of tokens than necessary ones.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        Gets input with mismacthed inputtype. Ex: getting no numbers for a date</span>
+<span class="sd">        field.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Needs a sophisticated name parser, would like to use an open source resource</span>
+<span class="sd">    for this.</span>
+
+<span class="sd">    If WoS is missing a field in the middle of the list there are NOT commas</span>
+<span class="sd">    indicating that; the following example does NOT occur:</span>
+
+<span class="sd">        Doe J, ,, Some Journal</span>
+
+<span class="sd">    instead</span>
+
+<span class="sd">        Doe J, Some Journal</span>
+
+<span class="sd">    This threatens the integrity of WoS data; should we address it?</span>
+
+<span class="sd">    Another threat: if WoS is unsure of the DOI number there will be multiple</span>
+<span class="sd">    DOI numbers in a list of form [doi1, doi2, ...], address this?</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">paper</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Paper</span><span class="p">()</span>
+    <span class="c">#tokens of form: aulast auinit, date, jtitle, volume, spage, doi</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c">#FIXME: needs better name parser</span>
+        <span class="c"># Checking for few parsers, in the meantime trying out few things.</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c"># Temp Solution for #62809724</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;\[(.*?)\]&#39;</span><span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="c"># remove the [] and make it a proper one.</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">DEBUG</span> <span class="p">:</span>
+                <span class="k">print</span>  <span class="s">&#39;stripped name: &#39;</span><span class="p">,</span> <span class="n">name</span>
+
+        <span class="n">name_tokens</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">name_tokens</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="c"># name_tokens.append(&#39;None&#39;)</span>
+            <span class="n">name_tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+
+        <span class="n">paper</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">name_tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">name_tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Final Meta Dicts&quot;</span><span class="p">,</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">]</span>
+
+        <span class="c"># Temp Solution for #62809724</span>
+        <span class="k">if</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;None&#39;</span> <span class="ow">or</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;None&#39;</span> <span class="p">:</span>
+            <span class="k">raise</span> <span class="p">(</span><span class="s">&quot;The Cited References field is not in the expeceted format&quot;</span><span class="p">)</span>
+
+        <span class="c">#strip initial characters based on the field (spaces, &#39;V&#39;, &#39;DOI&#39;)</span>
+        <span class="n">paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="n">paper</span><span class="p">[</span><span class="s">&#39;jtitle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">paper</span><span class="p">[</span><span class="s">&#39;volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">2</span><span class="p">:]</span>
+        <span class="n">paper</span><span class="p">[</span><span class="s">&#39;spage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">2</span><span class="p">:]</span>
+        <span class="n">paper</span><span class="p">[</span><span class="s">&#39;doi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">5</span><span class="p">][</span><span class="mi">5</span><span class="p">:]</span>
+    <span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">E</span><span class="p">:</span>     <span class="c"># ref did not have the full set of tokens</span>
+        <span class="k">pass</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">E</span><span class="p">:</span>     <span class="c"># This occurs when the program expects a date</span>
+        <span class="k">pass</span>                    <span class="c">#  but gets a string with no numbers. We leave</span>
+                                <span class="c">#  the field incomplete because chances are the</span>
+                                <span class="c">#  CR string is too sparse to use anyway.</span>
+
+    <span class="n">ayjid</span> <span class="o">=</span> <span class="n">_create_ayjid</span><span class="p">(</span><span class="n">paper</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">],</span>
+                         <span class="n">paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;jtitle&#39;</span><span class="p">])</span>
+    <span class="n">paper</span><span class="p">[</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ayjid</span>
+
+    <span class="k">return</span> <span class="n">paper</span>
+
+<span class="k">def</span> <span class="nf">_parse_institutions</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Supports the Web of Science reader by converting the strings found at the C1</span>
+<span class="sd">    fieldtag of a record into a minimum :class:`.Paper` instance.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ref : str</span>
+<span class="sd">        &#39;C1&#39; field tag data from a plain text Web of Science file which contains</span>
+<span class="sd">        Author First and Last names, Institution affiliated, and the</span>
+<span class="sd">        location/city where they are affiliated to.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    addr_dict : :class:`.Paper`</span>
+<span class="sd">        A :class:`.Paper` instance.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    IndexError</span>
+<span class="sd">        When input &#39;ref&#39; has less number of tokens than necessary ones.</span>
+
+<span class="sd">    ValueError</span>
+<span class="sd">        Gets input with mismacthed inputtype. Ex: getting no numbers for a date</span>
+<span class="sd">        field.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Needs to check many test cases to check various input types.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">addr_dict</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Paper</span><span class="p">()</span>
+    <span class="c">#tokens of form:</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;tokens inside parse_institutions : </span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">tokens</span>
+    <span class="k">try</span><span class="p">:</span>
+
+        <span class="n">name</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">name_tokens</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+        <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name_tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name_tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c">#strip initial characters based on the field (spaces, &#39;V&#39;, &#39;DOI&#39;)</span>
+        <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;addr2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;addr3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;country&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">2</span><span class="p">:]</span>
+
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="c">#ref did not have the full set of tokens</span>
+        <span class="k">pass</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="c">#this occurs when the program expects a date but gets a string with</span>
+        <span class="c">#no numbers, we leave the field incomplete because chances are</span>
+        <span class="c">#the CR string is too sparse to use anyway</span>
+        <span class="k">pass</span>
+
+    <span class="n">auinsid</span> <span class="o">=</span> <span class="n">_create_ayjid</span><span class="p">(</span><span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">],</span> <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">],</span>
+                         <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">],</span> <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;jtitle&#39;</span><span class="p">])</span>
+    <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;auinsid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auinsid</span>
+    <span class="k">print</span> <span class="s">&#39;auinsid&#39;</span><span class="p">,</span> <span class="n">auinsid</span>
+    <span class="k">return</span> <span class="n">addr_dict</span>
+
+<div class="viewcode-block" id="convert"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.convert">[docs]</a><span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">wos_data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a dictionary or list of dictionaries with keys from the</span>
+<span class="sd">    Web of Science field tags into a :class:`.Paper` instance or list of</span>
+<span class="sd">    :class:`.Paper` instances, the standard for Tethne.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    wos_data : list</span>
+<span class="sd">        A list of dictionaries with keys from the WoS field tags.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    wos_meta : list</span>
+<span class="sd">        A list of :class:`.Paper` instances.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Need to handle author name anomolies (case, blank spaces, etc.) that may</span>
+<span class="sd">    make the same author appear to be two different authors in Networkx; this is</span>
+<span class="sd">    important for any graph with authors as nodes.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c">#create a Paper for each wos_dict and append to this list</span>
+    <span class="n">wos_meta</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c">#handle dict inputs by converting to a 1-item list</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">wos_data</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">wos_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">wos_data</span><span class="p">]</span>
+        <span class="c">#print &#39;wos data \n&#39; , wos_data</span>
+
+
+    <span class="c"># Calling the validate function here, before even building wos_meta list</span>
+    <span class="c"># [62809724]</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">_validate</span><span class="p">(</span><span class="n">wos_data</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="p">:</span>
+        <span class="c">#raise Error</span>
+        <span class="k">pass</span>
+    <span class="c"># Define the direct relationships between WoS fieldtags and Paper keys.</span>
+    <span class="n">translator</span> <span class="o">=</span> <span class="n">_wos2paper_map</span><span class="p">()</span>
+    <span class="c"># Perform the key convertions</span>
+    <span class="k">for</span> <span class="n">wos_dict</span> <span class="ow">in</span> <span class="n">wos_data</span><span class="p">:</span>
+        <span class="n">paper</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Paper</span><span class="p">()</span>
+
+        <span class="c">#direct translations</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">translator</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">():</span>
+            <span class="n">paper</span><span class="p">[</span><span class="n">translator</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">=</span> <span class="n">wos_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="c"># more complicated translations</span>
+        <span class="c"># FIXME: not robust to all names, organziation authors, etc.</span>
+        <span class="k">if</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">aulast_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">auinit_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">]:</span>
+                <span class="n">name_tokens</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+                <span class="n">aulast</span> <span class="o">=</span> <span class="n">name_tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c"># 1 for &#39;aulast, aufirst&#39;</span>
+                    <span class="n">auinit</span> <span class="o">=</span> <span class="n">name_tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                    <span class="c"># then no first initial character</span>
+                    <span class="c"># preserve parallel name lists with empty string</span>
+                    <span class="n">auinit</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+                <span class="n">aulast_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aulast</span><span class="p">)</span>
+                <span class="n">auinit_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">auinit</span><span class="p">)</span>
+            <span class="n">paper</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aulast_list</span>
+            <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auinit_list</span>
+
+        <span class="c">#construct ayjid</span>
+        <span class="n">ayjid</span> <span class="o">=</span> <span class="n">_create_ayjid</span><span class="p">(</span><span class="n">paper</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">],</span>
+                             <span class="n">paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;jtitle&#39;</span><span class="p">])</span>
+        <span class="n">paper</span><span class="p">[</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ayjid</span>
+
+        <span class="c"># Parse author-institution affiliations. #60216226, #57746858.</span>
+        <span class="c"># pattern = re.compile(&#39;\[(.*?)\]&#39;) # pylint</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;\[(.*?)\]&#39;</span><span class="p">)</span>
+        <span class="n">author_institutions</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;C1&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">c1_str</span> <span class="ow">in</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;C1&#39;</span><span class="p">]:</span>   <span class="c"># One C1 line for each institution.</span>
+
+                <span class="n">match</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">c1_str</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">match</span><span class="p">:</span>   <span class="c"># Explicit author-institution mappings are provided.</span>
+                    <span class="n">authors</span> <span class="o">=</span> <span class="n">c1_str</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;; &#39;</span><span class="p">)</span>
+                    <span class="n">institution</span> <span class="o">=</span> <span class="n">c1_str</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">():]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;, &#39;</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">authors</span><span class="p">:</span>
+                        <span class="c"># The A-I mapping (in data) uses the AF representation</span>
+                        <span class="c">#  of author names. But we use the AU representation</span>
+                        <span class="c">#  as our mapping key to ensure consistency with older</span>
+                        <span class="c">#  datasets.</span>
+                        <span class="n">author_index</span> <span class="o">=</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AF&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">author</span><span class="p">)</span>
+                        <span class="c">#e.g.&quot;WU, ZD&quot;</span>
+                        <span class="n">author_au</span> <span class="o">=</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">][</span><span class="n">author_index</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+                        <span class="n">inst_name</span> <span class="o">=</span> <span class="n">institution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">author_institutions</span><span class="p">[</span><span class="n">author_au</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst_name</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                            <span class="n">author_institutions</span><span class="p">[</span><span class="n">author_au</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">inst_name</span><span class="p">]</span>
+
+                <span class="k">else</span><span class="p">:</span>   <span class="c"># Author-institution mappings are not provided. We</span>
+                        <span class="c">#  therefore map all authors to all institutions.</span>
+                    <span class="k">for</span> <span class="n">author_au</span> <span class="ow">in</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">]:</span>
+                        <span class="n">institution</span> <span class="o">=</span> <span class="n">c1_str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;, &#39;</span><span class="p">)</span>
+                        <span class="n">inst_name</span> <span class="o">=</span> <span class="n">institution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">author_institutions</span><span class="p">[</span><span class="n">author_au</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst_name</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                            <span class="n">author_institutions</span><span class="p">[</span><span class="n">author_au</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">inst_name</span><span class="p">]</span>
+
+            <span class="n">paper</span><span class="p">[</span><span class="s">&#39;institutions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">author_institutions</span>
+
+        <span class="c"># Convert CR references into paper format</span>
+        <span class="k">if</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;CR&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">meta_cr_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;CR&#39;</span><span class="p">]:</span>
+                <span class="n">meta_cr_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_parse_cr</span><span class="p">(</span><span class="n">ref</span><span class="p">))</span>
+                <span class="c">#print &#39;meta_cr_list&#39; , meta_cr_list</span>
+            <span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">meta_cr_list</span>
+
+        <span class="n">wos_meta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paper</span><span class="p">)</span>
+    <span class="c"># End wos_dict for loop.</span>
+
+    <span class="k">return</span> <span class="n">wos_meta</span>
+</div>
+<div class="viewcode-block" id="read"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Yields a list of :class:`.Paper` instances from a Web of Science data file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    datapath : string</span>
+<span class="sd">        Filepath to the Web of Science field-tagged data file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    papers : list</span>
+<span class="sd">        A list of :class:`.Paper` instances.</span>
+<span class="sd">      </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">wl</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
+    <span class="n">papers</span> <span class="o">=</span> <span class="n">convert</span><span class="p">(</span><span class="n">wl</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">papers</span>
+
+
+<span class="c"># [#60462784]</span></div>
+<div class="viewcode-block" id="from_dir"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.from_dir">[docs]</a><span class="k">def</span> <span class="nf">from_dir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convenience function for generating a list of :class:`Paper` from a</span>
+<span class="sd">    directory of Web of Science field-tagged data files.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : string</span>
+<span class="sd">        Path to directory of field-tagged data files.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list : A list of :class:`Paper` objects.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    IOError</span>
+<span class="sd">        Invalid path.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">wos_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;Invalid path.&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Loaded &quot;</span> <span class="o">+</span> <span class="n">f</span>
+            <span class="n">wos_list</span> <span class="o">+=</span> <span class="n">parse</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="n">f</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">IOError</span><span class="p">,</span> <span class="n">DataError</span><span class="p">):</span> <span class="c"># Ignore files that don&#39;t contain WoS data.</span>
+            <span class="k">print</span> <span class="s">&quot;Could not load &quot;</span> <span class="o">+</span> <span class="n">f</span>
+            <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">convert</span><span class="p">(</span><span class="n">wos_list</span><span class="p">)</span>
+
+<span class="c"># [62809724]</span></div>
+<span class="k">def</span> <span class="nf">_validate</span><span class="p">(</span><span class="n">wos_data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines the fucntion to check the input data validation.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool - True or false</span>
+<span class="sd">    if the data is in expected format (True)</span>
+<span class="sd">    if the respective field is not in expected format (False)</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError - according to the severity of the issue,</span>
+<span class="sd">    whether the wrong format will affect the further processing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">wos_data</span>
+
+
+    <span class="c"># Create a translator dict whose keys are the fields which needs to be</span>
+    <span class="c"># validated from the input.</span>
+    <span class="c"># Any new field which needs validation in the future</span>
+    <span class="n">translator</span> <span class="o">=</span> <span class="n">_new_wos_dict</span><span class="p">()</span>
+
+    <span class="c"># Now all these input fields needs to be validated as per requirements.</span>
+
+    <span class="k">for</span> <span class="n">wos_dict</span> <span class="ow">in</span> <span class="n">wos_data</span><span class="p">:</span>
+        <span class="c">#direct translations</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">translator</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">DEBUG</span> <span class="p">:</span>
+                <span class="k">print</span> <span class="n">wos_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="c"># Validate for &#39;CR&#39; field</span>
+            <span class="k">if</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;CR&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">cr</span> <span class="ow">in</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;CR&#39;</span><span class="p">]:</span>
+                    <span class="c"># check if the CR field is populated correctly</span>
+                    <span class="k">pass</span>
+            <span class="k">if</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;C1&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">cr</span> <span class="ow">in</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;C1&#39;</span><span class="p">]:</span>
+                    <span class="c"># check if the C1 field is populated correctly</span>
+                    <span class="k">pass</span>
+
+    <span class="n">status</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">status</span>
+
+<span class="k">def</span> <span class="nf">_new_query_dict</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Declares only those keys of the :class:`.Paper`&#39;s metadata that are</span>
+<span class="sd">    queryable through CrossRef.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">q_dict</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s">&#39;aulast&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;auinit&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;atitle&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;address&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;jtitle&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;volume&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;issue&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;spage&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;epage&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                <span class="s">&#39;date&#39;</span><span class="p">:</span><span class="bp">None</span>     <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">q_dict</span>
+
+
+<span class="k">def</span> <span class="nf">_new_wos_dict</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines the set of field tags that will try to be converted, and intializes</span>
+<span class="sd">    them to &#39;None&#39;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    wos_dict : dict</span>
+<span class="sd">        A wos_list dictionary with &#39;None&#39; as default values for all keys.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wos_dict</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&#39;DI&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;AU&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;C1&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;TI&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;SO&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;VL&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;IS&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;BP&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;EP&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;PY&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;UT&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;CR&#39;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span>
+                    <span class="s">&#39;AB&#39;</span><span class="p">:</span><span class="bp">None</span>   <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">wos_dict</span>
+
+<span class="k">def</span> <span class="nf">_wos2paper_map</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines the direct relationships between the wos_dict and :class:`.Paper`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    translator : dict</span>
+<span class="sd">        A &#39;translator&#39; dictionary.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">translator</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&#39;DI&#39;</span><span class="p">:</span><span class="s">&#39;doi&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;TI&#39;</span><span class="p">:</span><span class="s">&#39;atitle&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;SO&#39;</span><span class="p">:</span><span class="s">&#39;jtitle&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;VL&#39;</span><span class="p">:</span><span class="s">&#39;volume&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;IS&#39;</span><span class="p">:</span><span class="s">&#39;issue&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;BP&#39;</span><span class="p">:</span><span class="s">&#39;spage&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;EP&#39;</span><span class="p">:</span><span class="s">&#39;epage&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;PY&#39;</span><span class="p">:</span><span class="s">&#39;date&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;UT&#39;</span><span class="p">:</span><span class="s">&#39;wosid&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;AB&#39;</span><span class="p">:</span><span class="s">&#39;abstract&#39;</span>    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">translator</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../readers.html" >tethne.readers</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, ASU Digital Innovation Group.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

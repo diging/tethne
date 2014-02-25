@@ -11,19 +11,20 @@ Methods
    author_institution
    author_papers
    coauthors
+
 """
 
 import networkx as nx
 import tethne.utilities as util
 import tethne.data as ds
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 # MACRO for printing the 'print' statement values.
 # 0 prints nothing in the console.
 # 1 prints all print statements in the console.
 DEBUG = 0
 
-def author_papers(papers, paper_id, paper_attribs=[]):
+def author_papers(papers, node_id='ayjid', paper_attribs=[], **kwargs):
     """
     Generate an author_papers network NetworkX directed graph.
 
@@ -41,7 +42,7 @@ def author_papers(papers, paper_id, paper_attribs=[]):
     ----------
     papers : list
         A list of wos_objects.
-    paper_id : string
+    node_id : string
         A key from :class:`.Paper` used to identify the nodes.
     paper_attribs : list
         List of user-provided optional arguments apart from the provided
@@ -54,46 +55,49 @@ def author_papers(papers, paper_id, paper_attribs=[]):
 
     Raises
     ------
-    KeyError : Raised when paper_id is not present in Papers.
+    KeyError : Raised when node_id is not present in Papers.
 
     """
     author_papers_graph = nx.DiGraph(type='author_papers')
 
-    # Validate paper_id.
+    # Validate node_id.
     meta_dict = ds.Paper()
     meta_keys = meta_dict.keys()
     meta_keys.remove('citations')
-    if paper_id not in meta_keys:
-        raise KeyError('paper_id' + paper_id + ' cannot be used to identify' +
+    if node_id not in meta_keys:
+        raise KeyError('node_id' + node_id + ' cannot be used to identify' +
                        ' papers.')
     for entry in papers:
         # Define paper_attribute dictionary.
         paper_attrib_dict = util.subdict(entry, paper_attribs)
         paper_attrib_dict['type'] = 'paper'
         # Add paper node with attributes.
-        author_papers_graph.add_node(entry[paper_id], paper_attrib_dict)
+        author_papers_graph.add_node(entry[node_id], paper_attrib_dict)
 
         authors = util.concat_list(entry['aulast'], entry['auinit'], ' ')
         for i in xrange(len(authors)):
             # Add person node.
             author_papers_graph.add_node(authors[i], type="person")
             # Draw edges.
-            author_papers_graph.add_edge(authors[i], entry[paper_id],
+            author_papers_graph.add_edge(authors[i], entry[node_id],
                                    date=entry['date'])
 
     return author_papers_graph
 
-def coauthors(papers, edge_attribs=[]):
+def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
     """
     Generate a co-author network.
-    
-    As the name suggests, edges are drawn between two author-vertices in the 
-    case that those authors published a paper together. Co-authorship networks 
-    are popular models for studying patterns of collaboration in scientific 
-    communities. 
 
-    To generate a co-authorship network, use the 
+    As the name suggests, edges are drawn between two author-vertices in the
+    case that those authors published a paper together. Co-authorship networks
+    are popular models for studying patterns of collaboration in scientific
+    communities.
+
+    To generate a co-authorship network, use the
     :func:`.networks.authors.coauthors` method:
+    
+    Author institutional affiliation is included as a node attribute, if 
+    possible.
 
     .. code-block:: python
 
@@ -112,99 +116,102 @@ def coauthors(papers, edge_attribs=[]):
     ----------
     papers : list
         A list of :class:`Paper` instances.
+    threshold : int
+        Minimum number of co-citations required for an edge. (default: 1)
     edge_attribs : list
         List of edge_attributes specifying which :class:`.Paper` keys (from the
-        co-authored paper) to use as edge attributes.
+        co-authored paper) to use as edge attributes. (default: ['ayjid'])
 
     Returns
     -------
-    coauthors_graph : networkx.MultiGraph
+    G : networkx.Graph
         A co-authorship network.
 
-    Notes
-    -----
-    TODO: Check whether papers contains :class:`.Paper` instances, and raise
-    an exception if not.
-
     """
-    coauthors_graph = nx.Graph(type='coauthors')
+
+    # TODO: Check whether papers contains :class:`.Paper` instances, and raise
+    #  an exception if not.
+
+    G = nx.Graph(type='coauthors')
     edge_att = {}
     #edge_listdict={}
     coauthor_dict = {}
+
+    author_inst = {}
+    
     for entry in papers:
         if entry['aulast'] is not None:
-            # edge_att dictionary has the atributes given by user input \
-            # for any edges that get added
+            # edge_att dictionary has the atributes given by user input
+            #  for any edges that get added
             edge_att = util.subdict(entry, edge_attribs)
             # make a new list of aulast, auinit names
             full_names = util.concat_list(entry['aulast'],
                                           entry['auinit'],
                                           ' ')
             for a in xrange(len(full_names)):
+                # Update global author-institution mappings.
+                n = full_names[a]
+                if entry['institutions'] is not None:
+                    try:
+                        inst = entry['institutions'][n]
+                        try:
+                            author_inst[n] += inst
+                        except KeyError:
+                            author_inst[n] = inst
+
+                    except KeyError:
+                        pass
+                    
                 for b in xrange(a+1 , len(entry['aulast'])):
-                    #Create tuples of authors names and authors names inverse \
-                    #They will be the keys of coauthor_dict.
+                    # (author_a,author_b) tuple is key for coauthor_dict.
                     authors = full_names[a], full_names[b]
                     authors_inv = full_names[b], full_names[a]
-                    #To check if the authors are already in the 'dict' keys
-                    if(authors in coauthor_dict.keys()):
-                        # Now create a dict of lists
-                        # i.e., append the current values of edge attributes\
-                        # to values of same author pair if already present.
-                        # use the defaultdict python module
-                        edge_listdict = defaultdict(list)
-                        for combined_dict in (coauthor_dict[authors], edge_att):
-                            for key, val in combined_dict.iteritems():
-                                edge_listdict[key].append(val)
-                        # To check if authors keys are in same order
-                        try:
-                            coauthor_dict[authors] = edge_listdict
-                        except KeyError:
-                            coauthor_dict[authors] = edge_att
 
-                    # Checking if the authors names in the dict keys are in \
-                    # inverse order. This is not handled in the aforegiven \
-                    # loop for some specific reason.
-                    elif(authors_inv in coauthor_dict.keys()):
-                        # Now create a list of dicts
-                        # i.e., append the current values of edge attributes\
-                        # to the edge attribs of same author pair
-                        # if already present.
-                        # use the defaultdict python module
-                        edge_listdict = defaultdict(list)
-                        for combined_dict in (coauthor_dict[authors_inv], \
-                                              edge_att):
-                            for key, val in combined_dict.iteritems():
-                                edge_listdict[key].append(val)
-                        # To check if authors_inv keys are in same order
-                        try:
-                            coauthor_dict[authors_inv] = edge_listdict
-                        except KeyError:
-                            coauthor_dict[authors_inv] = edge_att
-                    #if the authors or authors_inv are already not keys of \
-                    # coauhor dict, then add them.
+                    if authors in coauthor_dict.keys():
+                        for key,value in edge_att.iteritems():
+                            coauthor_dict[authors][key].append(value)
+                        coauthor_dict[authors]['weight'] += 1
+
+                    # Author names may be in inverse order.
+                    elif authors_inv in coauthor_dict.keys():
+                        for key,value in edge_att.iteritems():
+                            coauthor_dict[authors_inv][key].append(value)
+                        coauthor_dict[authors_inv]['weight'] += 1
+
+                    # First encounter for this author-pair.
                     else:
-                        try:
-                            coauthor_dict[authors] = edge_att
-                        except KeyError:
-                            try:
-                                coauthor_dict[authors_inv] = edge_att
-                            except KeyError:
-                                coauthor_dict[authors] = edge_att
-    #add edges with specified edge attributes
+                        coauthor_dict[authors] = { k:[v]
+                                                    for k,v
+                                                    in edge_att.iteritems() }
+                        coauthor_dict[authors]['weight'] = 1
+
+    # Add edges with specified edge attributes.
     for key, val in coauthor_dict.iteritems():
-        #print "Starting the Map:",key , "---- >" ,val
-        coauthors_graph.add_edge(key[0],
-        key[1],
-        attr_dict =  val)
+        if val['weight'] >= threshold:
+            G.add_edge(key[0], key[1], attr_dict=val)
+    
+    # Include institutional affiliations as node attributes, if possible.
+    
+    # Find most likely institution for each author. This won't work well if the
+    #  author only occurs once in the dataset and there was no explicit
+    #  author-instituion mapping.
+    for k,v in author_inst.iteritems():
+        top_inst = max(Counter(v))
+        try:    # If an author has no coauthors, they will not appear in G.
+            G.node[k]['institution'] = top_inst
+        except KeyError:
+            pass
 
-    return coauthors_graph
+    return G
 
-def author_institution(Papers, edge_attribs=[]):
+def author_institution(Papers, edge_attribs=[], **kwargs):
     """
-    Generate a bi-partite graph with people and institutions as vertices, and
-    edges indicating affiliation. This may be slightly ambiguous for WoS data
-    where num authors != num institutions.
+    Generate a bi-partite graph connecting authors and their institutions.
+    
+    This may be slightly ambiguous for WoS data where there is no explicit
+    author-institution mapping. Edge weights are the number of co-associations
+    between an author and an institution, which should help resolve this
+    ambiguity (the more data the better).
 
     ==============     =========================================================
     Element            Description
@@ -240,31 +247,31 @@ def author_institution(Papers, edge_attribs=[]):
             for au in authors:
                 #add node of type 'author'
                 author_institution_graph.add_node(au, type='author')
-                ins_list = auth_inst[au]
-                for ins_str in ins_list:
-                  #add node of type 'institutions'
+                ins_list = Counter(auth_inst[au])
+                for ins_str,count in ins_list.iteritems():
+                  # Add node of type 'institutions'.
                     author_institution_graph.add_node(ins_str, \
                                                       type='institution')
-                  #print au ,'---->' , ins_str
+
                     author_institution_graph.add_edge(au, ins_str, \
-                                              attr_dict=edge_attrib_dict)
+                                              attr_dict=edge_attrib_dict, \
+                                              weight=count )
 
 
     return author_institution_graph
 
-
-def author_coinstitution(Papers, threshold):
+def author_coinstitution(Papers, threshold=1, **kwargs):
     """
     Generate a co-institution graph, where edges indicate shared affiliation.
-    
-    Some bibliographic datasets, including data from the Web of Science, 
-    includes the institutional affiliations of authors. In a co-institution 
-    graph, two authors (vertices) have an edge between them if they share an 
+
+    Some bibliographic datasets, including data from the Web of Science,
+    includes the institutional affiliations of authors. In a co-institution
+    graph, two authors (vertices) have an edge between them if they share an
     institutional affiliation in the dataset. Note that data about institutional
-    affiliations varies in the WoS database so this will yield more reliable 
+    affiliations varies in the WoS database so this will yield more reliable
     results for more recent publications.
 
-    To generate a co-institution network, use the 
+    To generate a co-institution network, use the
     :func:`.networks.authors.author_coinstitution` method:
 
     .. code-block:: python
@@ -278,7 +285,7 @@ def author_coinstitution(Papers, threshold):
     ==============     =========================================================
     Node               Authors.
     Node Attribute     type (string). 'author' or 'institution'.
-    Edges              (a, b) where a and b are affiliated with the same 
+    Edges              (a, b) where a and b are affiliated with the same
                        institution.
     Edge attribute     overlap (int). number of shared institutions.
     ==============     =========================================================
@@ -286,10 +293,9 @@ def author_coinstitution(Papers, threshold):
     Parameters
     ----------
     Papers : list
-    a list of wos_objects.
-    threshold : A random value provided by the user.
-                If its greater than zero,two nodes
-                should share something common.
+        A list of wos_objects.
+    threshold : int
+        Minimum institutional overlap required for an edge.
 
     Returns
     -------
@@ -312,18 +318,13 @@ def author_coinstitution(Papers, threshold):
                     author_institutions[key] = value
         authors = author_institutions.keys()
         for i in xrange(len(authors)):
-            #coinstitution.add_node(authors[i],type ='author')
             for j in xrange(len(authors)):
                 if i != j:
-                     #compare 2 author dict elements
+                    # Compare 2 author dict elements.
                     overlap = (set(author_institutions[authors[i]])
                                 &
                                 set(author_institutions[authors[j]]))
                     if len(overlap) >= threshold:
-                        #commented these because 'add_edge' adds nodes aswell.
-                        #coinstitution.add_node(authors[i],type ='author')
-                        #coinstitution.add_node(authors[j],type ='author')
-                        #print authors[i] + "->" + authors[j]
                         coinstitution.add_edge(authors[i], authors[j], \
                                                overlap=len(overlap))
                     else :
@@ -337,13 +338,13 @@ def author_coinstitution(Papers, threshold):
 
     return coinstitution
 
-def author_cocitation(papers, threshold):
+def author_cocitation(papers, threshold=1, **kwargs):
     """
     Generates an author co-citation network; edges indicate co-citation of
     authors' papers.
-    
-    Similar to :func:`.papers.cocitation`\, except that vertices are authors 
-    rather than papers. To generate an author co-citation network, use the 
+
+    Similar to :func:`.papers.cocitation`\, except that vertices are authors
+    rather than papers. To generate an author co-citation network, use the
     :func:`.networks.authors.author_cocitation` method:
 
     .. code-block:: python
@@ -366,9 +367,9 @@ def author_cocitation(papers, threshold):
     papers : list
         a list of :class:`.Paper` objects.
     threshold : int
-        Minimum number of co-citations required to create an edge between 
+        Minimum number of co-citations required to create an edge between
         authors.
-        
+
     Returns
     -------
     cocitation : :class:`.networkx.Graph`

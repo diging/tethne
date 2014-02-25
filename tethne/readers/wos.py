@@ -252,7 +252,7 @@ def parse(filepath):
         field_tag = line[:2]
         
         if field_tag == ' ':
-            print " NULL"
+            pass
         
         if field_tag == paper_start_key:
             # Then prepare for next paper.
@@ -454,7 +454,7 @@ def _parse_institutions(ref):
     addr_dict = ds.Paper()
     #tokens of form:
     tokens = ref.split(',')
-    print 'tokens inside parse_institutions : \n', tokens
+
     try:
 
         name = tokens[0]
@@ -479,7 +479,7 @@ def _parse_institutions(ref):
     auinsid = _create_ayjid(addr_dict['aulast'], addr_dict['auinit'],
                          addr_dict['date'], addr_dict['jtitle'])
     addr_dict['auinsid'] = auinsid
-    print 'auinsid', auinsid
+
     return addr_dict
 
 def convert(wos_data):
@@ -499,7 +499,7 @@ def convert(wos_data):
 
     Returns
     -------
-    wos_meta : list
+    papers : list
         A list of :class:`.Paper` instances.
 
     Examples
@@ -522,7 +522,7 @@ def convert(wos_data):
     accession = str(uuid.uuid4())
     
     #create a Paper for each wos_dict and append to this list
-    wos_meta = []
+    papers = []
 
     #handle dict inputs by converting to a 1-item list
     if type(wos_data) is dict:
@@ -530,7 +530,7 @@ def convert(wos_data):
         #print 'wos data \n' , wos_data
 
 
-    # Calling the validate function here, before even building wos_meta list
+    # Calling the validate function here, before even building papers list
     # [62809724]
     status = _validate(wos_data)
     if not status:
@@ -579,10 +579,10 @@ def convert(wos_data):
 
         paper['accession'] = accession
         
-        wos_meta.append(paper)
+        papers.append(paper)
     # End wos_dict for loop.
 
-    return wos_meta
+    return papers
     
 def _handle_authors(wos_dict):
 
@@ -593,7 +593,7 @@ def _handle_authors(wos_dict):
         aulast = name_tokens[0].upper().strip()
         try:
             # 1 for 'aulast, aufirst'
-            auinit = name_tokens[1][1].upper().strip()
+            auinit = name_tokens[1][1:].upper().strip()
         except IndexError:
             # then no first initial character
             # preserve parallel name lists with empty string
@@ -606,22 +606,42 @@ def _handle_authors(wos_dict):
 def _handle_author_institutions(wos_dict):
     pattern = re.compile(r'\[(.*?)\]')
     author_institutions = {}
-    for c1_str in wos_dict['C1']:   # One C1 line for each institution.
 
+    for c1_str in wos_dict['C1']:   # One C1 line for each institution.
+    
         match = pattern.search(c1_str)
         if match:   # Explicit author-institution mappings are provided.
+            # For example:
+            #
+            # [Lin, Bing-Sian; Lee, Chon-Lin] Natl Sun Yat Sen Univ, Dept 
+            #   Marine Environm & Engn, Kaohsiung 80424, Taiwan.
+            # [Brimblecombe, Peter] Univ E Anglia, Sch Environm Sci, Norwich NR4
+            #   7TJ, Norfolk, England.
+            # [Lee, Chon-Lin] Natl Sun Yat Sen Univ, Asia Pacific Ocean Res Ctr,
+            #   Kuroshio Res Grp, Kaohsiung 80424, Taiwan.
+            # [Lee, Chon-Lin] Natl Sun Yat Sen Univ, Ctr Emerging Contaminants 
+            #   Res, Kaohsiung 80424, Taiwan.
+            # [Liu, James T.] Natl Sun Yat Sen Univ, Inst Marine Geol & Chem, 
+            #   Kaohsiung 80424, Taiwan.
+
             authors = c1_str[match.start()+1:match.end()-1].split('; ')
-            institution = c1_str[match.end():].strip().split(', ')
+            institution = c1_str[match.end():].upper()      \
+                                              .strip()      \
+                                              .strip('.')   \
+                                              .split(', ')
+            
             for author in authors:
                 # The A-I mapping (in data) uses the AF representation
                 #  of author names. But we use the AU representation
                 #  as our mapping key to ensure consistency with older
                 #  datasets.
                 author_index = wos_dict['AF'].index(author)
-                #e.g."WU, ZD"
-                author_au = wos_dict['AU'][author_index].upper()
-                inst_name = institution[0]
+                author_au = wos_dict['AU'][author_index].upper()    \
+                                                        .replace(',','')
+                inst_name = ', '.join([institution[0], institution[-1].strip()])
 
+                # Use lists, so we can tally 'votes' for most likely
+                #  institution.
                 try:
                     author_institutions[author_au].append(inst_name)
                 except KeyError:
@@ -629,15 +649,27 @@ def _handle_author_institutions(wos_dict):
 
         else:   # Author-institution mappings are not provided. We
                 #  therefore map all authors to all institutions.
+            # For example:
+            #
+            # UN, Environm Programme, Nairobi, Kenya.
+            # Univ Haifa, Dept Geog, IL-31095 Haifa, Israel.
+            
             for author_au in wos_dict['AU']:
-                institution = c1_str.strip().split(', ')
-                inst_name = institution[0]
+                author_au = author_au.upper()       \
+                                     .replace(',','')
+            
+                institution = c1_str.upper()        \
+                                    .strip()        \
+                                    .strip('.')     \
+                                    .split(',')
+                inst_name = ', '.join([institution[0], institution[-1].strip()])
 
-                # Use sets here to avoid duplicates.
+                # Use lists, so we can tally 'votes' for most likely
+                #  institution.
                 try:
-                    author_institutions[author_au].add(inst_name)
+                    author_institutions[author_au].append(inst_name)
                 except KeyError:
-                    author_institutions[author_au] = set([inst_name])
+                    author_institutions[author_au] = [inst_name]
 
     # Convert values back to lists before returning.
     return { k:list(v) for k,v in author_institutions.iteritems() }
@@ -677,7 +709,7 @@ def read(datapath):
 # [#60462784]
 def from_dir(path):
     """
-    Convenience function for generating a list of :class:`Paper` from a
+    Convenience function for generating a list of :class:`.Paper` from a
     directory of Web of Science field-tagged data files.
 
     Parameters
@@ -687,7 +719,8 @@ def from_dir(path):
 
     Returns
     -------
-    list : A list of :class:`Paper` objects.
+    papers : list
+        A list of :class:`.Paper` objects.
 
     Raises
     ------
@@ -708,20 +741,17 @@ def from_dir(path):
 
     try:
         files = os.listdir(path)
-        # print " Current Working directory is : ", os.getcwd()
     except IOError:
         raise IOError("Invalid path.")
             
     for f in files:
-        if not f.startswith('.'): # Hidden Files ignore
+        if not f.startswith('.'): # Ignore hidden files.
             try:
-                # print "Loading " + f
                 wos_list += parse(path + "/" + f)
-            except (IOError,UnboundLocalError): # Ignore files that don't contain WoS data.
-                # print  "::::" + "Could not load " + f
-                pass
-
-    return convert(wos_list)
+            except (IOError,UnboundLocalError): # Ignore files that don't 
+                pass                            #  contain WoS data.
+    papers = convert(wos_list)
+    return papers
 
 # [62809724]
 def _validate(wos_data):
@@ -843,3 +873,4 @@ def _wos2paper_map():
 #Custom Error Defined
 class DataError(Exception):
     pass
+        

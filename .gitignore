@@ -46,3 +46,5 @@ data/*
 *.xcodeproj
 
 play.py
+
+.DS_Store
