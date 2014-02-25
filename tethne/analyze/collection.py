@@ -262,7 +262,7 @@ def attachment_probability(C):
             if N > 0.:
                 for n in C.nodes():
                     try:
-                        probs[k][n] = new_edges[n]/N
+                        probs[k_][n] = new_edges[n]/N
                     except KeyError:
                         pass
 
