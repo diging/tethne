@@ -1,11 +1,16 @@
-from flask import * # do not use '*'; actually input the dependencies.
+#from flask import * # do not use '*'; actually input the dependencies.
+#This will create an error
+
+from flask_wtf import Form
+from wtforms import TextField
+from wtforms.validators import DataRequired
 import logging
 from logging import Formatter, FileHandler
-from forms import *
-import ZODB.config
+#from ZODB import *
+from flask import Flask,render_template,url_for
 
 app = Flask(__name__)
-app.config.from_object('config')
+#app.config.from_object('config')
 
 from ZODB.FileStorage import FileStorage
 from ZODB.DB import DB
