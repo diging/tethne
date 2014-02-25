@@ -180,12 +180,10 @@ if __name__ == "__main__":
                                        " step.")
     
     analyzeGroup.add_option("-A", "--algorithm", dest="algorithm",
-                            help="Name of a NetworkX graph analysis"          +\
-                                 " algorithm, or an algorithm in"             +\
-                                 " tethne.analyze.collection.")
+                            help="Name of a NetworkX graph analysis algorithm.")
                             
     # Required arguments for graph writing.
-    writeGroup = OptionGroup(parser, "Required options for write workflow " +\
+    writeGroup = OptionGroup(parser, "Required options for write workflow "   +\
                                      "step.")
     writeGroup.add_option("-W", "--write-format", dest="write_format",
                           help="Output format for graph(s). If a static graph"+\
@@ -481,10 +479,7 @@ if __name__ == "__main__":
                                                      .format(options.algorithm))
         sys.stdout.flush()
         
-        if options.algorithm in az.collection.__dict__.keys():
-            r = az.collection.__dict__[options.algorithm](C)
-        else:
-            r = az.collection.algorithm(C, options.algorithm)
+        r = az.collection.algorithm(C, options.algorithm)
         sys.stdout.write("done.\n")
         
         if options.outpath is not None:
