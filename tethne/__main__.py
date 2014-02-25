@@ -24,14 +24,6 @@ if __name__ == "__main__":
     import math
     import pickle
     from optparse import OptionParser, OptionGroup
-    import numpy as np
-    
-    import tethne.readers as rd
-    import tethne.networks as nt
-    import tethne.analyze as az
-    import tethne.writers as wr
-    from tethne.data import DataCollection, GraphCollection
-    from tethne.builders import authorCollectionBuilder, paperCollectionBuilder
     
     parser = OptionParser()
 
@@ -209,6 +201,16 @@ if __name__ == "__main__":
     if options.local:
         lpath = os.path.dirname(os.path.abspath(__file__))
         sys.path.append(lpath + "/..")
+        print sys.path
+    
+    import numpy as np
+    
+    import tethne.readers as rd
+    import tethne.networks as nt
+    import tethne.analyze as az
+    import tethne.writers as wr
+    from tethne.data import DataCollection, GraphCollection
+    from tethne.builders import authorCollectionBuilder, paperCollectionBuilder
     
     if options.dataset_id is None:
         sys.exit('Must specify --dataset-id')
