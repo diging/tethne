@@ -82,6 +82,8 @@ def to_dxgmml(C, path): # [#61510094]
 
             nodes[n[0]][k] = {}
             for attr, value in n[1].iteritems():
+                if type(value) is str:
+                    value = value.replace("&", "&amp;").replace('"', '')
                 nodes[n[0]][k][attr] = value
 
     # Build edge list.
