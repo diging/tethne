@@ -24,14 +24,6 @@ if __name__ == "__main__":
     import math
     import pickle
     from optparse import OptionParser, OptionGroup
-    import numpy as np
-    
-    import tethne.readers as rd
-    import tethne.networks as nt
-    import tethne.analyze as az
-    import tethne.writers as wr
-    from tethne.data import DataCollection, GraphCollection
-    from tethne.builders import authorCollectionBuilder, paperCollectionBuilder
     
     parser = OptionParser()
 
@@ -83,6 +75,9 @@ if __name__ == "__main__":
     parser.add_option("-O", "--outpath", dest="outpath",
                       help="Path to save workflow output. Some workflow steps"+\
                            " will generate summary statistics or other output.")
+
+    parser.add_option("-L", "--local",
+                      action="store_true", dest="local", default=False)
 
     # Options for read workflow step.
     readGroup = OptionGroup(parser, "Options for read workflow step")
@@ -180,12 +175,10 @@ if __name__ == "__main__":
                                        " step.")
     
     analyzeGroup.add_option("-A", "--algorithm", dest="algorithm",
-                            help="Name of a NetworkX graph analysis"          +\
-                                 " algorithm, or an algorithm in"             +\
-                                 " tethne.analyze.collection.")
+                            help="Name of a NetworkX graph analysis algorithm.")
                             
     # Required arguments for graph writing.
-    writeGroup = OptionGroup(parser, "Required options for write workflow " +\
+    writeGroup = OptionGroup(parser, "Required options for write workflow "   +\
                                      "step.")
     writeGroup.add_option("-W", "--write-format", dest="write_format",
                           help="Output format for graph(s). If a static graph"+\
@@ -205,6 +198,18 @@ if __name__ == "__main__":
     
     (options, args) = parser.parse_args()
     
+    if options.local:
+        lpath = os.path.dirname(os.path.abspath(__file__))
+        sys.path.append(lpath + "/..")
+            
+    import numpy as np
+    
+    import tethne.readers as rd
+    import tethne.networks as nt
+    import tethne.analyze as az
+    import tethne.writers as wr
+    from tethne.data import DataCollection, GraphCollection
+    from tethne.builders import authorCollectionBuilder, paperCollectionBuilder
     
     if options.dataset_id is None:
         sys.exit('Must specify --dataset-id')
@@ -481,10 +486,7 @@ if __name__ == "__main__":
                                                      .format(options.algorithm))
         sys.stdout.flush()
         
-        if options.algorithm in az.collection.__dict__.keys():
-            r = az.collection.__dict__[options.algorithm](C)
-        else:
-            r = az.collection.algorithm(C, options.algorithm)
+        r = az.collection.algorithm(C, options.algorithm)
         sys.stdout.write("done.\n")
         
         if options.outpath is not None:
