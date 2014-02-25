@@ -3,6 +3,8 @@ import logging
 from logging import Formatter, FileHandler
 from forms import *
 import ZODB.config
+import transaction
+
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -13,6 +15,8 @@ import models as mod
 
 storage = FileStorage('./storage/users.fs')
 db = DB(storage)
+print db, type(db)
+db.database_name = 'userdb'
 connection = db.open()
 # dbroot is a dict like structure.
 dbroot = connection.root()  # retrieving the root of the tree
@@ -48,8 +52,8 @@ if not dbroot.has_key('userdb'):
     from BTrees.OOBTree import OOBTree
     dbroot['userdb'] = OOBTree()
     # userdb is a <BTrees.OOBTree.OOBTree object at some location>
-userdb1 = dbroot['userdb']           
-print userdb1
+userdb = dbroot['userdb']           
+print "user db init:",userdb, type(userdb)
             
 @app.route('/index', methods=['GET','POST'])
 def index():
@@ -101,9 +105,14 @@ def register():
                 print " else", request.form
                 u=mod.User()
                 print "User:", u
-                u.name = request.form['username']
-                #db['userdb'] = request.form['username']
-                print " user name",request.form['username']
+                u.name = "Ramki"
+                u.email = "rsubra13z@asu.edu"
+                userdb[u.name]=u
+                transaction.commit()
+                #u.name = request.form['username']
+                print "db now",db,type(db),db.objectCount(),db.__str__(),db.__getattribute__('databases'),"next",db.databases,db.database_name   
+                print "stuck here", userdb,userdb.has_key('u.name')
+                #print " user name",request.form['username']
                 
             flash('Registered successfuly')
     return render_template('forms/register.html', form = form)
