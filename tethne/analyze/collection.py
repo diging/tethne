@@ -222,6 +222,16 @@ def attachment_probability(C):
     """
     Calculates the observed attachment probability for each node at each
     time-step.
+
+    Parameters
+    ----------
+    C : :class:`.GraphCollection`
+        Must be sliced by 'date'. See :func:`.GraphCollection.slice`\.
+    
+    Returns
+    -------
+    probs : dict
+        Keyed by index in C.graphs, and then by node.
     """
     
     probs = {}
@@ -247,23 +257,5 @@ def attachment_probability(C):
         if probs[k] is not None:
             nx.set_node_attributes(C.graphs[k], 'attachment', probs[k])
         G_ = G
-    return C, probs
-
-
-if __name__ == '__main__':
-
-    import tethne.readers as rd
-    from tethne.data import DataCollection
-    from tethne.builders import authorCollectionBuilder
-    import tethne.writers as wr
     
-    papers = rd.wos.read("/Users/erickpeirson/Dropbox/Research/Phenotypic Plasticity/Web of Science/20110219_WoS_full record/download1.txt")
-    
-    D = DataCollection(papers)
-    D.slice('date', method='time_period', cumulative=True)
-    
-    builder = authorCollectionBuilder(D)
-    C = builder.build('date', 'coauthors')
-    C, probs = attachment_probability(C)
-    
-    wr.collection.to_dxgmml(C, '/Users/erickpeirson/Desktop/test.xgmml')
+    return probs
