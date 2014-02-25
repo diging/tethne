@@ -7,33 +7,63 @@ from persistent import Persistent as Object
 from persistent.list import PersistentList as List
 from persistent.mapping import PersistentMapping as Dict
 
-class User(Persistent):
+class User(Object):
         
     """
     User Class
     DocString to be added
+    
     """
-        
+#     self.name = name
+#     self.email = email
+#     self.passwordHash = sha256(password).hexdigest()
+#     self.id = email
+#     self.secretque = que
+#     self.secretans = answerpass
+#     # set it to normal user as default. 
+#     # can change according to session.
+#     self.role = 1  
+#     self._p_changed = 1 # for mutable objects
+
     def __init__(self):
-        pass
+        self.name = None
+        self.email = None
+        self.passwordHash = None
+        self.id = None
+        self.secretque = None 
+        self.secretans = None
+        # set it to normal user as default. 
+        # can change according to session.
+        self.role = 1  
+        self._p_changed = 1 # for mutable objects
+
     
-    def register(self, email, password,emailid,que,ans):
-        self.email = email
-        self.passwordHash = sha256(password).hexdigest()
-        self.id = email
-        self.secretque = que
-        self.secretans = answerpass
-    
-    def login(self, ):
+    def register(self, name, email, password,emailid,que,ans):
+#         self.name = name
+#         self.email = email
+#         self.passwordHash = sha256(password).hexdigest()
+#         self.id = email
+#         self.secretque = que
+#         self.secretans = answerpass
+#         # set it to normal user as default. 
+#         # can change according to session.
+#         self.role = 1  
+          pass
+        
+    def login(self):
+        #pass the User Object and retrieve the user details
         pass
    
     def list_users(self,user, email):
+        # only for admin - whose role is "0"
         pass
     
     def edit_users(self,UserObject):
+        # only for admin
         pass
     
     def del_users(self):
+        # only for admin
         pass
    
         
