@@ -222,6 +222,12 @@ def attachment_probability(C):
     """
     Calculates the observed attachment probability for each node at each
     time-step.
+    
+    
+    Attachment probability is calculated based on the observed new edges in the
+    next time-step. So if a node acquires new edges at time t, this will accrue
+    to the node's attachment probability at time t-1. Thus at a given time,
+    one can ask whether degree and attachment probability are related.
 
     Parameters
     ----------
@@ -244,8 +250,11 @@ def attachment_probability(C):
             for n in G.nodes():
                 try:
                     old_neighbors = set(G_[n].keys())
-                    new_neighbors = set(G[n].keys()) - old_neighbors
-                    new_edges[n] = float(len(new_neighbors))
+                    if len(old_neighbors) > 0:
+                        new_neighbors = set(G[n].keys()) - old_neighbors
+                        new_edges[n] = float(len(new_neighbors))
+                    else:
+                        new_edges[n] = 0.
                 except KeyError:
                     pass
                     
@@ -255,7 +264,8 @@ def attachment_probability(C):
         else:
             probs[k] = None
         if probs[k] is not None:
-            nx.set_node_attributes(C.graphs[k], 'attachment', probs[k])
+            nx.set_node_attributes(C.graphs[k_], 'attachment', probs[k])
         G_ = G
+        k_ = k
     
-    return probs
+    return C
