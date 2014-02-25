@@ -242,10 +242,9 @@ def attachment_probability(C):
     
     probs = {}
     G_ = None
+    k_ = None
     for k,G in C.graphs.iteritems():
-        print k
         new_edges = {}
-        print len(G.nodes())
         if G_ is not None: 
             for n in G.nodes():
                 try:
@@ -257,15 +256,25 @@ def attachment_probability(C):
                         new_edges[n] = 0.
                 except KeyError:
                     pass
-                    
-        N = sum( new_edges.values() )
-        if N > 0.:
-            probs[k] = { k:v/N for k,v in new_edges.iteritems() }
-        else:
-            probs[k] = None
-        if probs[k] is not None:
-            nx.set_node_attributes(C.graphs[k_], 'attachment', probs[k])
+    
+            N = sum( new_edges.values() )
+            probs[k_] = { n:0. for n in G_.nodes() }
+            if N > 0.:
+                for n in C.nodes():
+                    try:
+                        probs[k][n] = new_edges[n]/N
+                    except KeyError:
+                        pass
+
+            if probs[k_] is not None:
+                nx.set_node_attributes(C.graphs[k_], 'attachment_probability', probs[k_])
+    
         G_ = G
         k_ = k
-    
-    return C
+
+    # Handle last graph (no values).
+    key = C.graphs.keys()[-1]
+    zprobs = { n:0. for n in C.graphs[key].nodes() }
+    nx.set_node_attributes(C.graphs[key], 'attachment_probability', zprobs)
+
+    return probs
