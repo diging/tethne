@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>&lt;no title&gt; &mdash; tethne 0.3.0-alpha documentation</title>
+    <title>Command-line Options &mdash; tethne 0.3.0-alpha documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -25,7 +25,10 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="tethne 0.3.0-alpha documentation" href="index.html" /> 
+    <link rel="top" title="tethne 0.3.0-alpha documentation" href="index.html" />
+    <link rel="up" title="Tutorial" href="tutorial.html" />
+    <link rel="next" title="API Documentation" href="tethne.html" />
+    <link rel="prev" title="Analyzing Bibliographic Networks" href="tutorial.analyze.html" /> 
   </head>
   <body>
     <div class="related">
@@ -40,7 +43,14 @@
         <li class="right" >
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="tethne.html" title="API Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.analyze.html" title="Analyzing Bibliographic Networks"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
+          <li><a href="tutorial.html" accesskey="U">Tutorial</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -49,13 +59,774 @@
         <div class="bodywrapper">
           <div class="body">
             
-  
+  <div class="section" id="command-line-options">
+<h1>Command-line Options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h1>
+<p>Navigate to the directory where you unpacked/cloned Tethne. If you unpacked Tethne as
+<tt class="docutils literal"><span class="pre">~/Downloads/tethne-python</span></tt>, inside you will find the subdirectory <tt class="docutils literal"><span class="pre">tethne</span></tt>. Call this
+directory directly, as if it were a Python script. For example:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python ~/Downloads/tethne-python/tethne
+</pre></div>
+</div>
+<p>To see a list of all command-line arguments, use:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python ~/Downloads/tethne-python/tethne --help
+</pre></div>
+</div>
+<div class="section" id="universal-arguments">
+<h2>Universal arguments<a class="headerlink" href="#universal-arguments" title="Permalink to this headline">¶</a></h2>
+<p>The following arguments should be included each time you run Tethne. Tethne uses
+<tt class="docutils literal"><span class="pre">--dataset-id</span></tt> to track your dataset through the workflow, so it should remain the same
+in each workflow step.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="33%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Alternative</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-I</span> <span class="pre">DATASET_ID</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--dataset-id=DATASET_ID</span></tt></td>
+<td>Unique ID (required).</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-t</span> <span class="pre">TEMP_DIR</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--temp-dir=TEMP_DIR</span></tt></td>
+<td>Directory for storing temporary files
+(optional; default is /tmp).</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-O</span> <span class="pre">OUTPATH</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--outpath=OUTPATH</span></tt></td>
+<td>Path to save workflow output. Some
+workflow steps will generate summary
+statistics or other output.</td>
+</tr>
+</tbody>
+</table>
+<p>A base pattern for calling Tethne might look like:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python ~/Downloads/tethne-python/tethne -I fundata01 -O ~/results
+</pre></div>
+</div>
+<p>This will cause all output to be saved in the <tt class="docutils literal"><span class="pre">results</span></tt> folder inside your home
+directory.</p>
+</div>
+<div class="section" id="workflow-steps">
+<h2>Workflow steps<a class="headerlink" href="#workflow-steps" title="Permalink to this headline">¶</a></h2>
+<p>There are 5 steps in the workflow, each with a distinct set of arguments. These should be
+called sequentially (only the <tt class="docutils literal"><span class="pre">--analyze</span></tt> step can be skipped).</p>
+<ul class="simple">
+<li><a class="reference internal" href="#read">Read</a></li>
+<li><a class="reference internal" href="#slice">Slice</a></li>
+<li><a class="reference internal" href="#graph">Graph</a></li>
+<li><a class="reference internal" href="#analyze">Analyze</a></li>
+<li><a class="reference internal" href="#write">Write</a></li>
+</ul>
+<div class="section" id="read">
+<h3>Read<a class="headerlink" href="#read" title="Permalink to this headline">¶</a></h3>
+<p>Parses bibliographic data. There are two ways to do this:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">--read-file</span></tt></td>
+<td>Read from a single data file. Requires <tt class="docutils literal"><span class="pre">--data-path</span></tt> and
+<tt class="docutils literal"><span class="pre">--data-format</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">--read-dir</span></tt></td>
+<td>Read from a directory containing multiple data files. Requires
+<tt class="docutils literal"><span class="pre">--data-path</span></tt> and <tt class="docutils literal"><span class="pre">--data-format</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<p>The following arguments are also required:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="34%" />
+<col width="45%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Alternative</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-P</span> <span class="pre">DATAPATH</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--data-path=DATAPATH</span></tt></td>
+<td>Full path to dataset.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-F</span> <span class="pre">DATAFORMAT</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--data-format=DATAFORMAT</span></tt></td>
+<td>Format of input dataset (WOS, DFR).</td>
+</tr>
+</tbody>
+</table>
+<p>For example:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python ~/Downloads/tethne-python/tethne -I fundata01 -O ~/results --read-file <span class="se">\</span>
+&gt; -P /path/to/your<span class="se">\ </span>data/download.txt -F WOS
+</pre></div>
+</div>
+<p>Resulting in something like:</p>
+<div class="highlight-python"><pre>----------------------------------------
+        Workflow step: Read
+----------------------------------------
+Reading WOS data from file /path/to/your data/download.txt...done.
+Read 500 papers in 1.69956803 seconds. Accession: 19825ab7-6176-4742-8cf2-0093d751b5f3.
+Generating a new DataCollection...done.
+Saving DataCollection to /tmp/fundata01_DataCollection.pickle...done.</pre>
+</div>
+<p><strong>WOS:</strong> Web of Science field-tagged format; <strong>DFR:</strong> JSTOR Data-for-Research dataset in
+XML format.</p>
+</div>
+<div class="section" id="slice">
+<h3>Slice<a class="headerlink" href="#slice" title="Permalink to this headline">¶</a></h3>
+<p>Slicing divides your dataset up along one or more axes (a key in the <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>
+class) for analysis.  This prepared your dataset for comparative analysis in later steps.
+You might wish to, for example, analyze your dataset diachronically by slicing by
+<tt class="docutils literal"><span class="pre">date</span></tt>, or you might wish to compare data from different journals by slicing by
+<tt class="docutils literal"><span class="pre">jtitle</span></tt>. Use <tt class="docutils literal"><span class="pre">accession</span></tt> if you wish to compare data from different data files.</p>
+<p>As of <tt class="docutils literal"><span class="pre">v.0.3</span></tt>, slicing is limited to <tt class="docutils literal"><span class="pre">date</span></tt>, <tt class="docutils literal"><span class="pre">jtitle</span></tt>, and <tt class="docutils literal"><span class="pre">accession</span></tt>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">--slice</span></tt></td>
+<td><dl class="first last docutils">
+<dt>Slice your dataset for comparison along a key axis.</dt>
+<dd>Requires <tt class="docutils literal"><span class="pre">--slice-axis</span></tt>. If <tt class="docutils literal"><span class="pre">--outpath</span></tt> is set, produces a
+table with binned paper frequencies in
+<tt class="docutils literal"><span class="pre">[OUTPATH]/[DATASET_ID]_slices.csv</span></tt>.</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The following arguments are required:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="29%" />
+<col width="48%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Alternative</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-S</span> <span class="pre">SLICE_AXIS</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--slice-axis=AXIS</span></tt></td>
+<td>Key along which to slice the dataset.
+This can be any of the fields
+listed in <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-M</span> <span class="pre">SLICE_METHOD</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--slice-method=METHOD</span></tt></td>
+<td>Method used to slice
+<a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a>. Available
+methods: <tt class="docutils literal"><span class="pre">time_window</span></tt>,
+<tt class="docutils literal"><span class="pre">time_period</span></tt>. For details, see
+<tt class="xref py py-func docutils literal"><span class="pre">DataCollection.slice()</span></tt>. Default is
+time_period.</td>
+</tr>
+</tbody>
+</table>
+<p>The following arguments are optional:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">--slice-window-size=SIZE</span></tt></td>
+<td>Size of slice time-window or period, in years. Default: 1.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">--slice-step-size=SIZE</span></tt></td>
+<td>Amount to advance time-window in each step (ignored for
+time-period).</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">--cumulative</span></tt></td>
+<td>If True, the data from each successive slice includes the
+data from all preceding slices.</td>
+</tr>
+</tbody>
+</table>
+<p>For example:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python ~/Downloads/tethne-python/tethne -I fundata01 -O ~/results --slice <span class="se">\</span>
+&gt;  -S date,jtitle -M time_window --slice-window-size<span class="o">=</span>4 --slice-step-size<span class="o">=</span>1 --cumulative
+</pre></div>
+</div>
+<p>Resulting in something like:</p>
+<div class="highlight-python"><pre>----------------------------------------
+    Workflow step: Slice
+----------------------------------------
+Loading DataCollection from /tmp/fundata01_DataCollection.pickle...done.
+Slicing DataCollection by date...done.
+Slicing DataCollection by jtitle...done.
+Saving slice distribution to ~/results/fundata01_sliceDistribution.csv...done.
+Saving sliced DataCollection to /tmp/fundata01_DataCollection_sliced.pickle...done.</pre>
+</div>
+<p><tt class="docutils literal"><span class="pre">~/results/fundata01_sliceDistribution.csv</span></tt> contains a comma-separated table with the
+distribution of papers across <tt class="docutils literal"><span class="pre">date</span></tt> and <tt class="docutils literal"><span class="pre">jtitle</span></tt>. For example:</p>
+<table border="1" class="docutils">
+<caption><tt class="docutils literal"><span class="pre">fundata01_sliceDistribution.csv</span></tt></caption>
+<colgroup>
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+<col width="14%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>&nbsp;</td>
+<td>2003</td>
+<td>2004</td>
+<td>2005</td>
+<td>2006</td>
+<td>2007</td>
+<td>2008</td>
+</tr>
+<tr class="row-even"><td>ENVIRONMENTAL BIOLOGY OF FISHES</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>SCIENTIA MARINA</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1.0</td>
+</tr>
+<tr class="row-even"><td>ACTA OECOLOGICA-INTERNATIONAL JOURNAL OF ECOLOGY</td>
+<td>3.0</td>
+<td>3.0</td>
+<td>3.0</td>
+<td>4.0</td>
+<td>2.0</td>
+<td>2.0</td>
+</tr>
+<tr class="row-odd"><td>JOURNAL OF CHEMICAL ECOLOGY</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="row-even"><td>ACTA THERIOLOGICA</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>TREE GENETICS &amp; GENOMES</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+</tr>
+<tr class="row-even"><td>ENVIRONMENTAL POLLUTION</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="row-odd"><td>NEUROGASTROENTEROLOGY AND MOTILITY</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+</tr>
+<tr class="row-even"><td>FIELD CROPS RESEARCH</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>PLOS GENETICS</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>0.0</td>
+</tr>
+<tr class="row-even"><td>ONCOGENE</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+<p>You can easily visualize these data using your favorite spreadsheet software.</p>
+<img alt="_images/slice.png" src="_images/slice.png" style="width: 60%;" />
+</div>
+<div class="section" id="graph">
+<h3>Graph<a class="headerlink" href="#graph" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">--graph</span></tt></td>
+<td>Generate a graph (or collection of graphs). If <tt class="docutils literal"><span class="pre">--outpath</span></tt> is set,
+produces a table with the number of nodes and edges per graph in
+<tt class="docutils literal"><span class="pre">[OUTPATH]/[DATASET_ID]_graphs.csv</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<p>The following arguments should be used:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="29%" />
+<col width="48%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Alternative</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-N</span> <span class="pre">NODE_TYPE</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--node-type=TYPE</span></tt></td>
+<td>Must be one of: <tt class="docutils literal"><span class="pre">author</span></tt>, <tt class="docutils literal"><span class="pre">paper</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">-T</span> <span class="pre">GRAPH_TYPE</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--graph-type=TYPE</span></tt></td>
+<td>Name of a network-builing method. Can be
+one of any of the methods listed in
+<a class="reference internal" href="tethne.networks.html#module-tethne.networks" title="tethne.networks"><tt class="xref py py-mod docutils literal"><span class="pre">networks</span></tt></a>. e.g. if <tt class="docutils literal"><span class="pre">-n</span></tt> is
+<tt class="docutils literal"><span class="pre">author</span></tt>, <tt class="docutils literal"><span class="pre">-t</span></tt> could be
+<tt class="docutils literal"><span class="pre">coauthors</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<p>Available network-building methods (as of v0.3.0-alpha)</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="29%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Node Type</th>
+<th class="head">Graph Type</th>
+<th class="head">Method</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">paper</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">author_coupling</span></tt></td>
+<td><a class="reference internal" href="tethne.networks.html#tethne.networks.papers.author_coupling" title="tethne.networks.papers.author_coupling"><tt class="xref py py-func docutils literal"><span class="pre">tethne.networks.papers.author_coupling()</span></tt></a></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">paper</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">bibliographic_coupling</span></tt></td>
+<td><a class="reference internal" href="tethne.networks.html#tethne.networks.papers.bibliographic_coupling" title="tethne.networks.papers.bibliographic_coupling"><tt class="xref py py-func docutils literal"><span class="pre">tethne.networks.papers.bibliographic_coupling()</span></tt></a></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">paper</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">cocitation</span></tt></td>
+<td><a class="reference internal" href="tethne.networks.html#tethne.networks.papers.cocitation" title="tethne.networks.papers.cocitation"><tt class="xref py py-func docutils literal"><span class="pre">tethne.networks.papers.cocitation()</span></tt></a></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">paper</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">direct_citation</span></tt></td>
+<td><a class="reference internal" href="tethne.networks.html#tethne.networks.papers.direct_citation" title="tethne.networks.papers.direct_citation"><tt class="xref py py-func docutils literal"><span class="pre">tethne.networks.papers.direct_citation()</span></tt></a></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">author</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">author_cocitation</span></tt></td>
+<td><a class="reference internal" href="tethne.networks.html#tethne.networks.authors.author_cocitation" title="tethne.networks.authors.author_cocitation"><tt class="xref py py-func docutils literal"><span class="pre">tethne.networks.authors.author_cocitation()</span></tt></a></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">author</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">author_coinstitution</span></tt></td>
+<td><a class="reference internal" href="tethne.networks.html#tethne.networks.authors.author_coinstitution" title="tethne.networks.authors.author_coinstitution"><tt class="xref py py-func docutils literal"><span class="pre">tethne.networks.authors.author_coinstitution()</span></tt></a></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">author</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">author_papers</span></tt></td>
+<td><a class="reference internal" href="tethne.networks.html#tethne.networks.authors.author_papers" title="tethne.networks.authors.author_papers"><tt class="xref py py-func docutils literal"><span class="pre">tethne.networks.authors.author_papers()</span></tt></a></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">author</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">coauthors</span></tt></td>
+<td><a class="reference internal" href="tethne.networks.html#tethne.networks.authors.coauthors" title="tethne.networks.authors.coauthors"><tt class="xref py py-func docutils literal"><span class="pre">tethne.networks.authors.coauthors()</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+<p>If you have sliced your data in a previous step, but wish to generate a network based on
+the entire dataset, you may use:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">--merged</span></tt></td>
+<td>Ignore DataCollection slicing, and build a single
+graph from all Papers.</td>
+</tr>
+</tbody>
+</table>
+<p>Some methods use additional keyword arguments that affect the resulting graph. The
+following arguments can be used to set common keyword arguments. The meaning of these
+arguments varies between methods; consult <a class="reference internal" href="tethne.networks.html#module-tethne.networks" title="tethne.networks"><tt class="xref py py-mod docutils literal"><span class="pre">networks</span></tt></a> for descriptions of each
+network-building method.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">--threshold=THRESHOLD</span></tt></td>
+<td>Set the &#8216;threshold&#8217; argument. Applies to all except:
+<tt class="docutils literal"><span class="pre">direct_citation</span></tt>, <tt class="docutils literal"><span class="pre">author_institution</span></tt>,
+<tt class="docutils literal"><span class="pre">author_papers</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">--topn=TOPN</span></tt></td>
+<td>Set the &#8216;topn&#8217; argument. Applies to: <tt class="docutils literal"><span class="pre">cocitation</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">--node-attr=NODE_ATTR</span></tt></td>
+<td>List of attributes to include for each node. e.g.
+<tt class="docutils literal"><span class="pre">--node-attr=date,atitle,jtitle</span></tt>. Applies to: all.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">--edge-attr=EDGE_ATTR</span></tt></td>
+<td>List of attributes to include for each edge. e.g.
+<tt class="docutils literal"><span class="pre">--edge-attr=ayjid,atitle,date</span></tt>. Applies to: all.</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">--node-id=NODE_ID</span></tt></td>
+<td>Field to use as node id (for papers graphs). e.g.
+<tt class="docutils literal"><span class="pre">--node-id=ayjid</span></tt>. Applies to: all <tt class="docutils literal"><span class="pre">paper</span></tt> methods.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">--weighted</span></tt></td>
+<td>Trigger the &#8216;weighted&#8217; argument. Applies to:
+<tt class="docutils literal"><span class="pre">bibliographic_coupling</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<p>For example:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python ~/Downloads/tethne-python/tethne -I fundata01 -O ~/results --graph <span class="se">\</span>
+&gt; -N author -T coauthors --edge-attr<span class="o">=</span>ayjid,date,jtitle
+</pre></div>
+</div>
+<p>Resulting in something like:</p>
+<div class="highlight-python"><pre>----------------------------------------
+        Workflow step: Graph
+----------------------------------------
+Loading DataCollection with slices from /tmp/fundata01_DataCollection_sliced.pickle...done.
+Using first slice in DataCollection: date.
+Building author graph using coauthors method...done in 0.426736116409 seconds.
+Saving GraphCollection to /tmp/fundata01_GraphCollection.pickle...done.
+Writing graph summaries to ~/results/fundata01_graphs.csv...done.</pre>
+</div>
+<p><tt class="docutils literal"><span class="pre">~/results/fundata01_graphs.csv</span></tt> contains a comma-separated table with the
+number of nodes and edges per graph (indexed by <tt class="docutils literal"><span class="pre">date</span></tt>, in this case). For example:</p>
+<table border="1" class="docutils">
+<caption><tt class="docutils literal"><span class="pre">fundata01_graphs.csv</span></tt></caption>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>index</td>
+<td>nodes</td>
+<td>edges</td>
+</tr>
+<tr class="row-even"><td>2003</td>
+<td>402</td>
+<td>630</td>
+</tr>
+<tr class="row-odd"><td>2004</td>
+<td>576</td>
+<td>978</td>
+</tr>
+<tr class="row-even"><td>2005</td>
+<td>666</td>
+<td>1199</td>
+</tr>
+<tr class="row-odd"><td>2006</td>
+<td>781</td>
+<td>1420</td>
+</tr>
+<tr class="row-even"><td>2007</td>
+<td>907</td>
+<td>1764</td>
+</tr>
+<tr class="row-odd"><td>2008</td>
+<td>739</td>
+<td>1436</td>
+</tr>
+</tbody>
+</table>
+<p>You can easily visualize these data using your favorite spreadsheet software.</p>
+<img alt="_images/graph.png" src="_images/graph.png" style="width: 60%;" />
+</div>
+<div class="section" id="analyze">
+<h3>Analyze<a class="headerlink" href="#analyze" title="Permalink to this headline">¶</a></h3>
+<p>The analysis workflow step is optional. As of v0.3.0-alpha, <tt class="docutils literal"><span class="pre">--analyze</span></tt> triggers
+<a class="reference internal" href="tethne.analyze.html#tethne.analyze.collection.algorithm" title="tethne.analyze.collection.algorithm"><tt class="xref py py-func docutils literal"><span class="pre">analyze.collection.algorithm()</span></tt></a>, which calls a graph analysis algorithm in
+NetworkX. So far this has been tested for <a class="reference external" href="http://networkx.github.io/documentation/latest/reference/algorithms.centrality.html">centrality algorithms</a>
+only.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">--analyze</span></tt></td>
+<td>Analyze a graph (or collection of graphs). If <tt class="docutils literal"><span class="pre">--outpath</span></tt> is set,
+produces a table with the mean and variance of the algorithm result
+for each graph, in
+<tt class="docutils literal"><span class="pre">[OUTPATH]/[DATASET_ID]_[ALGORITHM]_analysis.csv</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<p>Use the <tt class="docutils literal"><span class="pre">--algorithm</span></tt> argument to select an algorithm. This should be the name of an
+method in the <a href="#id1"><span class="problematic" id="id2">`</span></a>NetworkX centrality algorithm methods
+&lt;<a class="reference external" href="http://networkx.github.io/documentation/latest/reference/algorithms.centrality.html">http://networkx.github.io/documentation/latest/reference/algorithms.centrality.html</a>&gt;`+_.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="29%" />
+<col width="48%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Alternative</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">-A</span> <span class="pre">ALGORITHM</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">--algorithm=ALGORITHM</span></tt></td>
+<td>Name of a NetworkX graph analysis
+algorithm.</td>
+</tr>
+</tbody>
+</table>
+<p>For example:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python ~/Downloads/tethne-python/tethne -I fundata01 -O ~/results --analyze <span class="se">\</span>
+&gt; -A betweenness_centrality
+</pre></div>
+</div>
+<p>Resulting in something like:</p>
+<div class="highlight-python"><pre>----------------------------------------
+        Workflow step: Analyze
+----------------------------------------
+Loading GraphCollection from /tmp/fundata01_GraphCollection.pickle...done.
+Analyzing GraphCollection with betweenness_centrality...done.
+Writing graph analysis results to ~/results/fundata01_betweenness_centrality_analysis.csv...done.
+Saving GraphCollection to /tmp/fundata01_GraphCollection.pickle...done.</pre>
+</div>
+<p><tt class="docutils literal"><span class="pre">~/results/fundata01_betweenness_centrality_analysis.csv</span></tt> contains a comma-separated
+table with the mean and variance of per-node betweenness-centrality for each graph
+(indexed by <tt class="docutils literal"><span class="pre">date</span></tt>, in this case). For example:</p>
+<table border="1" class="docutils">
+<caption><tt class="docutils literal"><span class="pre">fundata01_betweenness_centrality_analysis.csv</span></tt></caption>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>index</td>
+<td>mean</td>
+<td>variance</td>
+</tr>
+<tr class="row-even"><td>2003</td>
+<td>4.8696666294462848e-06</td>
+<td>5.8521060847378354e-10</td>
+</tr>
+<tr class="row-odd"><td>2004</td>
+<td>3.7662643707182407e-06</td>
+<td>5.0172975473198493e-10</td>
+</tr>
+<tr class="row-even"><td>2005</td>
+<td>3.2576284954217712e-06</td>
+<td>4.8988211004664643e-10</td>
+</tr>
+<tr class="row-odd"><td>2006</td>
+<td>1.749020895995168e-06</td>
+<td>1.5297987419477807e-10</td>
+</tr>
+<tr class="row-even"><td>2007</td>
+<td>3.6252321590741106e-06</td>
+<td>1.4535627363876269e-09</td>
+</tr>
+<tr class="row-odd"><td>2008</td>
+<td>2.5476025127262327e-06</td>
+<td>1.0268407559417709e-09</td>
+</tr>
+</tbody>
+</table>
+<p>You can easily visualize these data using your favorite spreadsheet software.</p>
+<img alt="_images/analyze.png" src="_images/analyze.png" style="width: 60%;" />
+</div>
+<div class="section" id="write">
+<h3>Write<a class="headerlink" href="#write" title="Permalink to this headline">¶</a></h3>
+<p>You can visualize networks using software like <a class="reference external" href="http://www.cytoscape.org">Cytoscape</a>
+or <a class="reference external" href="http://www.gephi.org">Gephi</a>. The writing workflow step involves converting a
+collection of NetworkX graphs into a structured graph file. Tethne can generate both
+static and dynamic networks. If a static network format is chosen, each graph in the
+collection will be written to a separate file.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">--write</span></tt></td>
+<td>Write a graph (or collection of graphs) to a structured format, in
+<tt class="docutils literal"><span class="pre">[OUTPATH]</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<p>The <tt class="docutils literal"><span class="pre">--write-format</span></tt> argument is required:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="29%" />
+<col width="48%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Alternative</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>-W WRITE_FORMAT</td>
+<td>&#8211;write-format=FORMAT</td>
+<td>Output format for graph(s). If a static
+graph format is chosen (e.g. graphml),
+each slice in the GraphCollection will
+result in a separate file. Supported
+writers: (static) graphml; (dynamic)
+xgmml.</td>
+</tr>
+</tbody>
+</table>
+<p>For example:</p>
+<div class="highlight-python"><pre>$ python ~/Downloads/tethne-python/tethne -I fundata01 -O ~/results --write \
+&gt; -W graphml</pre>
+</div>
+<p>Resulting in something like:</p>
+<div class="highlight-python"><pre>----------------------------------------
+        Workflow step: Write
+----------------------------------------
+Loading GraphCollection from /tmp/fundata01_GraphCollection.pickle...done.
+Writing graphs to ~/results with format graphml...done.</pre>
+</div>
+<p>And generating the following files in <tt class="docutils literal"><span class="pre">~/results</span></tt>:</p>
+<div class="highlight-python"><pre>-rw-r--r--  1 erickpeirson  staff  196686 Feb 23 10:52 fundata01_graph_2003.graphml
+-rw-r--r--  1 erickpeirson  staff  299885 Feb 23 10:52 fundata01_graph_2004.graphml
+-rw-r--r--  1 erickpeirson  staff  359992 Feb 23 10:52 fundata01_graph_2005.graphml
+-rw-r--r--  1 erickpeirson  staff  427821 Feb 23 10:52 fundata01_graph_2006.graphml
+-rw-r--r--  1 erickpeirson  staff  515779 Feb 23 10:52 fundata01_graph_2007.graphml
+-rw-r--r--  1 erickpeirson  staff  418702 Feb 23 10:52 fundata01_graph_2008.graphml</pre>
+</div>
+<p>Opening <tt class="docutils literal"><span class="pre">fundata01_graph_2007.graphml</span></tt> in Cytoscape yields something like:</p>
+<img alt="_images/cytoscape2.png" src="_images/cytoscape2.png" style="width: 60%;" />
+</div>
+</div>
+</div>
+
 
           </div>
         </div>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Command-line Options</a><ul>
+<li><a class="reference internal" href="#universal-arguments">Universal arguments</a></li>
+<li><a class="reference internal" href="#workflow-steps">Workflow steps</a><ul>
+<li><a class="reference internal" href="#read">Read</a></li>
+<li><a class="reference internal" href="#slice">Slice</a></li>
+<li><a class="reference internal" href="#graph">Graph</a></li>
+<li><a class="reference internal" href="#analyze">Analyze</a></li>
+<li><a class="reference internal" href="#write">Write</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial.analyze.html"
+                        title="previous chapter">Analyzing Bibliographic Networks</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tethne.html"
+                        title="next chapter">API Documentation</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/tutorial.commandline.txt"
@@ -90,7 +861,14 @@
         <li class="right" >
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="tethne.html" title="API Documentation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.analyze.html" title="Analyzing Bibliographic Networks"
+             >previous</a> |</li>
+        <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
+          <li><a href="tutorial.html" >Tutorial</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

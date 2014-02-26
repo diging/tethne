@@ -50,7 +50,7 @@ Analyzing a :class:`GraphCollection`
 ------------------------------------
 
 The :mod:`.analyze.collection` sub-package provides mechanisms for analyzing an entire
-:class:`.GraphCollection`\. Most NetworkX algorithems are accessible via
+:class:`.GraphCollection`\. Most NetworkX algorithms are accessible via
 :func:`.analyze.collection.algorithm`\. To calculate betweenness centrality for an
 entire :class:`.GraphCollection`\, for example, use:
 

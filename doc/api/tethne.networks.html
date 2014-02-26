@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="tethne 0.3.0-alpha documentation" href="index.html" />
-    <link rel="up" title="tethne Package" href="tethne.html" />
+    <link rel="up" title="API Documentation" href="tethne.html" />
     <link rel="next" title="readers Package" href="tethne.readers.html" />
     <link rel="prev" title="matrices Package" href="tethne.matrices.html" /> 
   </head>
@@ -50,7 +50,7 @@
           <a href="tethne.matrices.html" title="matrices Package"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
-          <li><a href="tethne.html" accesskey="U">tethne Package</a> &raquo;</li> 
+          <li><a href="tethne.html" accesskey="U">API Documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -123,7 +123,7 @@ edge (x,y), x -&gt; y, xy, etc. by calling x the &#8220;tail&#8221; and y the &#
 <td>Generate a co-institution graph, where edges indicate shared affiliation.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.authors.author_institution" title="tethne.networks.authors.author_institution"><tt class="xref py py-obj docutils literal"><span class="pre">author_institution</span></tt></a>(Papers[,&nbsp;edge_attribs])</td>
-<td>Generate a bi-partite graph with people and institutions as vertices, and edges indicating affiliation.</td>
+<td>Generate a bi-partite graph connecting authors and their institutions.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.networks.authors.author_papers" title="tethne.networks.authors.author_papers"><tt class="xref py py-obj docutils literal"><span class="pre">author_papers</span></tt></a>(papers[,&nbsp;node_id,&nbsp;paper_attribs])</td>
 <td>Generate an author_papers network NetworkX directed graph.</td>
@@ -264,9 +264,11 @@ institution.</td>
 <dl class="function">
 <dt id="tethne.networks.authors.author_institution">
 <tt class="descclassname">tethne.networks.authors.</tt><tt class="descname">author_institution</tt><big>(</big><em>Papers</em>, <em>edge_attribs=</em><span class="optional">[</span><span class="optional">]</span>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/authors.html#author_institution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.authors.author_institution" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a bi-partite graph with people and institutions as vertices, and
-edges indicating affiliation. This may be slightly ambiguous for WoS data
-where num authors != num institutions.</p>
+<dd><p>Generate a bi-partite graph connecting authors and their institutions.</p>
+<p>This may be slightly ambiguous for WoS data where there is no explicit
+author-institution mapping. Edge weights are the number of co-associations
+between an author and an institution, which should help resolve this
+ambiguity (the more data the better).</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="20%" />
@@ -380,6 +382,8 @@ are popular models for studying patterns of collaboration in scientific
 communities.</p>
 <p>To generate a co-authorship network, use the
 <a class="reference internal" href="#tethne.networks.authors.coauthors" title="tethne.networks.authors.coauthors"><tt class="xref py py-func docutils literal"><span class="pre">networks.authors.coauthors()</span></tt></a> method:</p>
+<p>Author institutional affiliation is included as a node attribute, if 
+possible.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">CA</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">coauthors</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">CA</span>
 <span class="go">&lt;networkx.classes.multigraph.MultiGraph object at 0x101705650&gt;</span>
@@ -423,7 +427,7 @@ co-authored paper) to use as edge attributes. (default: [&#8216;ayjid&#8217;])</
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>coauthors_graph</strong> : networkx.MultiGraph</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>G</strong> : networkx.Graph</p>
 <blockquote class="last">
 <div><p>A co-authorship network.</p>
 </div></blockquote>
@@ -1183,7 +1187,7 @@ includes keywords, abstract terms, etc.</p>
           <a href="tethne.matrices.html" title="matrices Package"
              >previous</a> |</li>
         <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
-          <li><a href="tethne.html" >tethne Package</a> &raquo;</li> 
+          <li><a href="tethne.html" >API Documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

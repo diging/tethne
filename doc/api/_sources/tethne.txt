@@ -1,5 +1,5 @@
-tethne Package
-==============
+API Documentation
+=================
 
 :mod:`tethne` Package
 ---------------------
