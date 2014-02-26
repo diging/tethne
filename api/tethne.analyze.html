@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="tethne 0.3.0-alpha documentation" href="index.html" />
-    <link rel="up" title="tethne Package" href="tethne.html" />
+    <link rel="up" title="API Documentation" href="tethne.html" />
     <link rel="next" title="matrices Package" href="tethne.matrices.html" /> 
   </head>
   <body>
@@ -46,7 +46,7 @@
           <a href="tethne.matrices.html" title="matrices Package"
              accesskey="N">next</a> |</li>
         <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
-          <li><a href="tethne.html" accesskey="U">tethne Package</a> &raquo;</li> 
+          <li><a href="tethne.html" accesskey="U">API Documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -136,6 +136,35 @@ index.</p>
 <span class="go">2003: 0.007519105636349891}</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.analyze.collection.attachment_probability">
+<tt class="descclassname">tethne.analyze.collection.</tt><tt class="descname">attachment_probability</tt><big>(</big><em>C</em><big>)</big><a class="headerlink" href="#tethne.analyze.collection.attachment_probability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the observed attachment probability for each node at each
+time-step.</p>
+<p>Attachment probability is calculated based on the observed new edges in the
+next time-step. So if a node acquires new edges at time t, this will accrue
+to the node&#8217;s attachment probability at time t-1. Thus at a given time,
+one can ask whether degree and attachment probability are related.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
+<blockquote>
+<div><p>Must be sliced by &#8216;date&#8217;. See <tt class="xref py py-func docutils literal"><span class="pre">GraphCollection.slice()</span></tt>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>probs</strong> : dict</p>
+<blockquote class="last">
+<div><p>Keyed by index in C.graphs, and then by node.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -421,7 +450,7 @@ length. Default is True.</p>
           <a href="tethne.matrices.html" title="matrices Package"
              >next</a> |</li>
         <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
-          <li><a href="tethne.html" >tethne Package</a> &raquo;</li> 
+          <li><a href="tethne.html" >API Documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
