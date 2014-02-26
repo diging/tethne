@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Coauthorship Networks &mdash; tethne 0.3.0-alpha documentation</title>
+    <title>Coauthorship Networks &mdash; tethne 0.3.1-alpha documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.0-alpha',
+        VERSION:     '0.3.1-alpha',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="tethne 0.3.0-alpha documentation" href="index.html" />
+    <link rel="top" title="tethne 0.3.1-alpha documentation" href="index.html" />
     <link rel="up" title="Tutorial" href="tutorial.html" />
     <link rel="next" title="Creating Networks from Bibliographic Data" href="tutorial.networks.html" />
     <link rel="prev" title="Quickstart (Python)" href="tutorial.quickstart.python.html" /> 
@@ -49,7 +49,7 @@
         <li class="right" >
           <a href="tutorial.quickstart.python.html" title="Quickstart (Python)"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
+        <li><a href="index.html">tethne 0.3.1-alpha documentation</a> &raquo;</li>
           <li><a href="tutorial.html" accesskey="U">Tutorial</a> &raquo;</li> 
       </ul>
     </div>  
@@ -66,7 +66,7 @@ research communities, due in no small part to the ease with which coauthorship n
 can be generated.</p>
 <p>In this tutorial, we will generate a coauthorship network using data from the ISI Web of
 Science database. See <a class="reference internal" href="tutorial.getting_data.html#gettingdata"><em>Getting Bibliographic Data</em></a>.</p>
-<p>Each step includes instructions for both the Tethne command-line and the TethneGUI.
+<p>Each step includes instructions for the Tethne command-line, the TethneGUI, and Python.
 Command-line steps assume that you have created an <a class="reference internal" href="install.html#alias"><em>Alias</em></a> for Tethne.</p>
 <p><strong>If you run into problems</strong>, don&#8217;t panic. Tethne is under active development, and there
 are certainly bugs to be found. Please report any problems on our
@@ -121,6 +121,22 @@ done reading your data, you should see messages like those depicted in the image
 <img alt="_images/coauthors.1.png" src="_images/coauthors.1.png" style="width: 80%;" />
 <p>If your data are read successfully, click <tt class="docutils literal"><span class="pre">Next</span> <span class="pre">&gt;</span></tt>.</p>
 </div>
+<div class="section" id="python">
+<h3>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h3>
+<p>First import the <a class="reference internal" href="tethne.readers.html#module-tethne.readers" title="tethne.readers"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.readers</span></tt></a> module, then use the <a class="reference internal" href="tethne.readers.html#tethne.readers.wos.read" title="tethne.readers.wos.read"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.read()</span></tt></a>
+method to create a list of <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances. You can use
+<a class="reference internal" href="tethne.readers.html#tethne.readers.wos.from_dir" title="tethne.readers.wos.from_dir"><tt class="xref py py-func docutils literal"><span class="pre">readers.wos.from_dir()</span></tt></a> to import all of the WoS datafiles in a directory.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Parse data.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/Path/To/FirstDataSet.txt&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then create a new <a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> to organize your data.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.data</span> <span class="kn">import</span> <span class="n">DataCollection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">DataCollection</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="slicing-wos-data">
 <h2>Slicing WoS Data<a class="headerlink" href="#slicing-wos-data" title="Permalink to this headline">¶</a></h2>
@@ -156,13 +172,20 @@ slicing should be complete; click <tt class="docutils literal"><span class="pre"
 </div>
 <div class="section" id="slice-distribution">
 <h3>Slice Distribution<a class="headerlink" href="#slice-distribution" title="Permalink to this headline">¶</a></h3>
-<p>Tethne automatically generates a comma-separated values (CSV) file describing the number
-of records in each data slice. In your output folder look for a file called
-<tt class="docutils literal"><span class="pre">[DATASET_ID]_sliceDistribution.csv</span></tt>.</p>
+<p>Tethne command-line (and TethneGUI) automatically generates a comma-separated values (CSV)
+file describing the number of records in each data slice. In your output folder look for a
+file called <tt class="docutils literal"><span class="pre">[DATASET_ID]_sliceDistribution.csv</span></tt>.</p>
 <img alt="_images/coauthors.3.png" src="_images/coauthors.3.png" style="width: 60%;" />
 <p>You can use your favorite spreadsheet software (e.g. Excel, Numbers, OpenOffice) to chart
 these data.</p>
 <img alt="_images/coauthors.4.png" src="_images/coauthors.4.png" style="width: 60%;" />
+</div>
+<div class="section" id="id3">
+<h3>Python<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>Use the <a class="reference internal" href="tethne.html#tethne.data.DataCollection.slice" title="tethne.data.DataCollection.slice"><tt class="xref py py-func docutils literal"><span class="pre">tethne.data.DataCollection.slice()</span></tt></a> method to slice your data.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">D</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;time_window&#39;</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cumulative</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="building-the-coauthor-graph">
@@ -175,8 +198,8 @@ look at how the network evolves over time.</p>
 <p>To generate a coauthorship network, we will tell Tethne to use authors for nodes,
 and use the <tt class="docutils literal"><span class="pre">coauthors</span></tt> graph type. For a complete list of graph types available in
 Tethne, see <a class="reference internal" href="tethne.networks.html#module-tethne.networks" title="tethne.networks"><tt class="xref py py-mod docutils literal"><span class="pre">networks</span></tt></a>.</p>
-<div class="section" id="id3">
-<h3>Command-line<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h3>Command-line<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash"><div class="highlight"><pre>tethne -I exampleID -O /Users/erickpeirson/exampleOutput --graph --merged --node-type<span class="o">=</span>author --graph-type<span class="o">=</span>coauthors
 ----------------------------------------
         Workflow step: Graph
@@ -188,13 +211,22 @@ Writing graph summaries to /Users/erickpeirson/exampleOutput/exampleID_graphs.cs
 </pre></div>
 </div>
 </div>
-<div class="section" id="id4">
-<h3>TethneGUI<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h3>TethneGUI<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <p>Select <tt class="docutils literal"><span class="pre">author</span></tt> from the <tt class="docutils literal"><span class="pre">Node</span> <span class="pre">type</span></tt> menu, and <tt class="docutils literal"><span class="pre">coauthors</span></tt> from the <tt class="docutils literal"><span class="pre">Graph</span> <span class="pre">type</span></tt>
 menu. Check the <tt class="docutils literal"><span class="pre">Ignore</span> <span class="pre">DataCollection</span> <span class="pre">slicing</span></tt> option, then click <tt class="docutils literal"><span class="pre">Build</span> <span class="pre">graph</span></tt>.</p>
 <img alt="_images/coauthors.5.png" src="_images/coauthors.5.png" style="width: 80%;" />
 <p>Once the graph is built, click <tt class="docutils literal"><span class="pre">Next</span> <span class="pre">&gt;</span></tt>. For now, we&#8217;ll skip the analysis step. Click
 <tt class="docutils literal"><span class="pre">Next</span> <span class="pre">&gt;</span></tt> again to reach <tt class="docutils literal"><span class="pre">Step</span> <span class="pre">5:</span> <span class="pre">Write</span> <span class="pre">graph(s)</span></tt>.</p>
+</div>
+<div class="section" id="id6">
+<h3>Python<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>To generate a single graph from your <a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a>, call the
+<a class="reference internal" href="tethne.networks.html#tethne.networks.authors.coauthors" title="tethne.networks.authors.coauthors"><tt class="xref py py-func docutils literal"><span class="pre">coauthors()</span></tt></a> method directly from the <a class="reference internal" href="tethne.networks.html#module-tethne.networks.authors" title="tethne.networks.authors"><tt class="xref py py-mod docutils literal"><span class="pre">networks.authors</span></tt></a> module.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.networks</span> <span class="kn">as</span> <span class="nn">nt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ca_graph</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">coauthors</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">papers</span><span class="p">())</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="write-the-graph-to-graphml">
@@ -204,8 +236,8 @@ We will write our graph to GraphML for visualization in Cytoscape.</p>
 <p>This step should generate a file in your output folder called
 <tt class="docutils literal"><span class="pre">[DATASET_ID]_graph_all.graphml</span></tt>.</p>
 <img alt="_images/coauthors.6.png" src="_images/coauthors.6.png" style="width: 80%;" />
-<div class="section" id="id5">
-<h3>Command-line<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>Command-line<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tethne -I exampleID -O /Users/erickpeirson/exampleOutput --write --write-format graphml
 ----------------------------------------
         Workflow step: Write
@@ -215,10 +247,20 @@ Writing graphs to /Users/erickpeirson/exampleOutput with format graphml...done.
 </pre></div>
 </div>
 </div>
-<div class="section" id="id6">
-<h3>TethneGUI<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h3>TethneGUI<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
 <p>Select <tt class="docutils literal"><span class="pre">graphml</span></tt> from the <tt class="docutils literal"><span class="pre">Output</span> <span class="pre">format</span> <span class="pre">for</span> <span class="pre">graph(s)</span></tt> menu, then click
 <tt class="docutils literal"><span class="pre">Write</span> <span class="pre">graph(s)</span></tt>.</p>
+</div>
+<div class="section" id="id9">
+<h3>Python<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<p>Use the <a class="reference internal" href="tethne.writers.html#tethne.writers.graph.to_graphml" title="tethne.writers.graph.to_graphml"><tt class="xref py py-func docutils literal"><span class="pre">to_graphml()</span></tt></a> method in <a class="reference internal" href="tethne.writers.html#module-tethne.writers.collection" title="tethne.writers.collection"><tt class="xref py py-mod docutils literal"><span class="pre">writers.collection</span></tt></a> to create a GraphML
+data file.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">to_graphml</span><span class="p">(</span><span class="n">ca_graph</span><span class="p">,</span> <span class="s">&quot;[OUTPUT_PATH]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">[OUTPUT_PATH]</span></tt> should be a path to the GraphML file that Tethne will create.</p>
 </div>
 </div>
 <div class="section" id="visualizing-the-merged-network-in-cytoscape">
@@ -290,9 +332,9 @@ attributes. You should see institutions listed in the Node Table.</p>
 <ol class="arabic simple">
 <li>Go to the VizMapper.</li>
 <li>Find <tt class="docutils literal"><span class="pre">Node</span> <span class="pre">Fill</span> <span class="pre">Color</span></tt> in the unused visual properties, and double-click to activate.</li>
-<li>Click to the right of <a href="#id7"><span class="problematic" id="id8">``</span></a>Node Fill Color&#8217;&#8217; and select <a href="#id9"><span class="problematic" id="id10">``</span></a>institution&#8217;&#8216;.</li>
-<li>Set the <a href="#id11"><span class="problematic" id="id12">``</span></a>Mapping Type&#8217;&#8217; to <a href="#id13"><span class="problematic" id="id14">``</span></a>Discrete Mapping.&#8217;&#8217; A list of institutions should appear
-below <a href="#id15"><span class="problematic" id="id16">``</span></a>Mapping Type.&#8217;&#8216;</li>
+<li>Click to the right of <a href="#id10"><span class="problematic" id="id11">``</span></a>Node Fill Color&#8217;&#8217; and select <a href="#id12"><span class="problematic" id="id13">``</span></a>institution&#8217;&#8216;.</li>
+<li>Set the <a href="#id14"><span class="problematic" id="id15">``</span></a>Mapping Type&#8217;&#8217; to <a href="#id16"><span class="problematic" id="id17">``</span></a>Discrete Mapping.&#8217;&#8217; A list of institutions should appear
+below <a href="#id18"><span class="problematic" id="id19">``</span></a>Mapping Type.&#8217;&#8216;</li>
 <li>Right-click on <tt class="docutils literal"><span class="pre">Discrete</span> <span class="pre">Mapping'',</span> <span class="pre">and</span> <span class="pre">select</span>
 <span class="pre">``Mapping</span> <span class="pre">Value</span> <span class="pre">Generators</span> <span class="pre">&gt;</span> <span class="pre">Random</span> <span class="pre">Color</span></tt>.</li>
 </ol>
@@ -359,7 +401,7 @@ After a few seconds the graph should be spread out; click <tt class="docutils li
 <li>Open the <tt class="docutils literal"><span class="pre">Partition</span></tt> window: select <tt class="docutils literal"><span class="pre">Window</span> <span class="pre">&gt;</span> <span class="pre">Partition</span></tt>. You may need to drag the
 window to the left-hand area of the Gephi workspace.</li>
 <li>In the <tt class="docutils literal"><span class="pre">Partition</span></tt> window, you should be on the <tt class="docutils literal"><span class="pre">Nodes</span></tt> tab by default. Click the
-green <a href="#id17"><span class="problematic" id="id18">``</span></a>refresh’’ button, then select <a href="#id19"><span class="problematic" id="id20">``</span></a>institution’’ from the drop-down menu. You
+green <a href="#id20"><span class="problematic" id="id21">``</span></a>refresh’’ button, then select <a href="#id22"><span class="problematic" id="id23">``</span></a>institution’’ from the drop-down menu. You
 should see a list of all institutions.</li>
 <li>To color nodes by institution, click the <tt class="docutils literal"><span class="pre">Apply</span></tt> button.</li>
 </ol>
@@ -397,8 +439,126 @@ corner of the Gephi workspace.</p>
 </div>
 <div class="section" id="coauthorship-network-evolution">
 <h2>Coauthorship network evolution<a class="headerlink" href="#coauthorship-network-evolution" title="Permalink to this headline">¶</a></h2>
-<p><strong>FORTHCOMING</strong>: <em>This section will describe how to generate a dynamic network with
-Tethne, and visualize that network in Cytoscape.</em></p>
+<p>This section describes how to generate a dynamic network with Tethne, and visualize that
+network in Cytoscape. Dynamic networks allow us to go beyond analyzing the final structure
+of a network, and ask how the structure of a network changes over time. In this case,
+we will use a dynamic network to see how a coauthorship network grows over time.</p>
+<p>Since we used the <tt class="docutils literal"><span class="pre">--cumulative</span></tt> option when slicing our data, our dynamic network
+will only involve the addition of nodes and edges: older coauthorship relationships will
+not &#8220;expire.&#8221;</p>
+<p>A seemingly ubiquitous property of social networks is that they tend to be &#8220;scale-free&#8221;.
+That is, the degree distribution follows a power-law: there are a few very
+highly-connected actors, and a very large number of poorly-connected actors.
+The intuitive interpretation of this behavior is that &#8220;the rich get richer.&#8221; In other
+words, if you&#8217;re already popular then you&#8217;re more likely to make new friends.</p>
+<p>In this tutorial, we will visualize the impact of degree centrality on edge acquisition
+by using the <a class="reference internal" href="tethne.analyze.html#tethne.analyze.collection.attachment_probability" title="tethne.analyze.collection.attachment_probability"><tt class="xref py py-func docutils literal"><span class="pre">analyze.collection.attachment_probability()</span></tt></a> algorithm in Tethne.</p>
+<div class="section" id="id24">
+<h3>Command-line<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<p>Run the <tt class="docutils literal"><span class="pre">graph</span></tt> step again, but this time remove the <tt class="docutils literal"><span class="pre">--merged</span></tt> flag. This will
+create a separate graph from each of the data subsets created in the <tt class="docutils literal"><span class="pre">slice</span></tt> step.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tethne -I exampleID -O /Users/erickpeirson/exampleOutput --graph --node-type<span class="o">=</span>author --graph-type<span class="o">=</span>coauthors
+----------------------------------------
+        Workflow step: Graph
+----------------------------------------
+Loading DataCollection with slices from /tmp/exampleID_DataCollection_sliced.pickle...done.
+Using first slice in DataCollection: date.
+Building author graph using coauthors method...done in 0.291323900223 seconds.
+Saving GraphCollection to /tmp/exampleID_GraphCollection.pickle...done.
+Writing graph summaries to /Users/erickpeirson/exampleOutput/exampleID_graphs.csv...done.
+</pre></div>
+</div>
+<p>Use the <tt class="docutils literal"><span class="pre">-A</span> <span class="pre">attachment_probability</span></tt> argument in the <tt class="docutils literal"><span class="pre">--analyze</span></tt> step.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tethne -I exampleID -O /Users/erickpeirson/exampleOutput --analyze -A attachment_probability
+----------------------------------------
+        Workflow step: Analyze
+----------------------------------------
+Loading GraphCollection from /tmp/exampleID_GraphCollection.pickle...done.
+Analyzing GraphCollection with attachment_probability...done.
+Writing graph analysis results to /Users/erickpeirson/exampleOutput/exampleID_attachment_probability_analysis.csv...done.
+Saving GraphCollection to /tmp/exampleID_GraphCollection.pickle...done.
+</pre></div>
+</div>
+<p>Use <tt class="docutils literal"><span class="pre">--write-format</span> <span class="pre">xgmml</span></tt> to select the dynamic XGMML export option.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tethne -I exampleID -O /Users/erickpeirson/exampleOutput --write --write-format xgmml
+----------------------------------------
+        Workflow step: Write
+----------------------------------------
+Loading GraphCollection from /tmp/exampleID_GraphCollection.pickle...done.
+Writing graphs to /Users/erickpeirson/exampleOutput with format xgmml...done.
+</pre></div>
+</div>
+<p>This should create a new file called <tt class="docutils literal"><span class="pre">[DATASET_ID]_graph_dynamic.xgmml</span></tt> in your output
+folder.</p>
+</div>
+<div class="section" id="id25">
+<h3>TethneGUI<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h3>
+<p>Use the <tt class="docutils literal"><span class="pre">&lt;</span> <span class="pre">Back</span></tt> button to return to <tt class="docutils literal"><span class="pre">Step</span> <span class="pre">3:</span> <span class="pre">Build</span> <span class="pre">Graphs</span></tt>. Uncheck the
+<tt class="docutils literal"><span class="pre">Ignore</span> <span class="pre">DataCollection</span> <span class="pre">slicing</span></tt> option, and then click the <tt class="docutils literal"><span class="pre">Build</span> <span class="pre">graph</span></tt> button
+again. Then click <tt class="docutils literal"><span class="pre">Next</span> <span class="pre">&gt;</span></tt>.</p>
+<img alt="_images/coauthors.31.png" src="_images/coauthors.31.png" style="width: 90%;" />
+<p>At the <tt class="docutils literal"><span class="pre">analysis</span></tt> step, select <tt class="docutils literal"><span class="pre">attachment_probability</span></tt> from the <tt class="docutils literal"><span class="pre">Graph</span> <span class="pre">analysis</span>
+<span class="pre">algorithm</span></tt> menu, and click the <tt class="docutils literal"><span class="pre">Analyze</span> <span class="pre">graph(s)</span></tt> button. Then click <tt class="docutils literal"><span class="pre">Next</span> <span class="pre">&gt;</span></tt>.</p>
+<img alt="_images/coauthors.32.png" src="_images/coauthors.32.png" style="width: 90%;" />
+<p>Finally, select <tt class="docutils literal"><span class="pre">xgmml</span></tt> in the <tt class="docutils literal"><span class="pre">Output</span> <span class="pre">format</span></tt> menu, and click <tt class="docutils literal"><span class="pre">Write</span> <span class="pre">graph(s)</span></tt>.
+This should create a new file called <tt class="docutils literal"><span class="pre">[DATASET_ID]_graph_dynamic.xgmml</span></tt> in your output
+folder.</p>
+<img alt="_images/coauthors.33.png" src="_images/coauthors.33.png" style="width: 90%;" />
+</div>
+<div class="section" id="id26">
+<h3>Python<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h3>
+<p>Use the <a class="reference internal" href="tethne.html#tethne.builders.authorCollectionBuilder" title="tethne.builders.authorCollectionBuilder"><tt class="xref py py-class docutils literal"><span class="pre">authorCollectionBuilder</span></tt></a> to build a <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> from your
+<a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.builders</span> <span class="kn">import</span> <span class="n">authorCollectionBuilder</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">builder</span> <span class="o">=</span> <span class="n">authorCollectionBuilder</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;coauthors&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="tethne.analyze.html#tethne.analyze.collection.attachment_probability" title="tethne.analyze.collection.attachment_probability"><tt class="xref py py-func docutils literal"><span class="pre">analyze.collection.attachment_probability()</span></tt></a> method automatically updates node
+attributes in your <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.analyze</span> <span class="kn">as</span> <span class="nn">az</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">az</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">attachment_probability</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Use the <a class="reference internal" href="tethne.writers.html#tethne.writers.collection.to_dxgmml" title="tethne.writers.collection.to_dxgmml"><tt class="xref py py-func docutils literal"><span class="pre">writers.collection.to_dxgmml()</span></tt></a> method to create dynamic XGMML.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">to_dxgmml</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="s">&quot;[OUTPUT_PATH]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">[OUTPUT_PATH]</span></tt> should be a path to the XGMML file that Tethne will create.</p>
+</div>
+<div class="section" id="visualizing-a-dynamic-network-in-cytoscape">
+<h3>Visualizing a dynamic network in Cytoscape<a class="headerlink" href="#visualizing-a-dynamic-network-in-cytoscape" title="Permalink to this headline">¶</a></h3>
+<p>In Cytoscape, import your .xgmml file by selecting
+<tt class="docutils literal"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Import</span> <span class="pre">&gt;</span> <span class="pre">Dynamic</span> <span class="pre">Network</span> <span class="pre">&gt;</span> <span class="pre">XGMML</span> <span class="pre">File...</span></tt>. Apply a force-directed or
+spring-embedded layout.</p>
+<img alt="_images/coauthors.34.png" src="_images/coauthors.34.png" style="width: 70%;" />
+<p>In the VizMapper, map <tt class="docutils literal"><span class="pre">Node</span> <span class="pre">Size</span></tt> to <tt class="docutils literal"><span class="pre">attachment_probability</span></tt>.</p>
+<img alt="_images/coauthors.35.png" src="_images/coauthors.35.png" style="width: 40%;" />
+<p>Double-click on the function icon next to <tt class="docutils literal"><span class="pre">Current</span> <span class="pre">Mapping</span></tt> to edit the <tt class="docutils literal"><span class="pre">Node</span> <span class="pre">Size</span></tt>
+mapping function.</p>
+<ol class="arabic simple">
+<li>Click the <tt class="docutils literal"><span class="pre">Min/Max</span></tt> button, and set the maximum value to <tt class="docutils literal"><span class="pre">1.0</span></tt>.</li>
+<li>Slick on the <tt class="docutils literal"><span class="pre">Add</span></tt> button to create a new handle at an intermediate value. Drag
+the red open box up, and drag the corresponding black arrow left and right to alter
+the mapping function.</li>
+<li>Click <tt class="docutils literal"><span class="pre">OK</span></tt>.</li>
+</ol>
+<img alt="_images/coauthors.36.png" src="_images/coauthors.36.png" style="width: 60%;" />
+<p>In the Control Panel, select the <tt class="docutils literal"><span class="pre">Dynamic</span> <span class="pre">Network</span></tt> tab.</p>
+<ol class="arabic simple">
+<li>Set the time resolution to roughly match the time-range of your network. In the
+example below, the network covers about 35 years, so a resolution of 1/50 was selected.</li>
+<li>Set <tt class="docutils literal"><span class="pre">Time</span> <span class="pre">smoothness</span></tt> to <tt class="docutils literal"><span class="pre">0</span> <span class="pre">ms</span></tt>.</li>
+<li>Use the slider to move through the states of your dynamic network. To view all states
+in succession, use the <tt class="docutils literal"><span class="pre">&lt;&lt;</span> <span class="pre">Play</span></tt> and <tt class="docutils literal"><span class="pre">Play</span> <span class="pre">&gt;&gt;</span></tt> buttons.</li>
+</ol>
+<img alt="_images/coauthors.37.png" src="_images/coauthors.37.png" style="width: 90%;" />
+<p>The size of each node should reflect the relative probability that a node will accrue a
+new neighbor in the next time slice. Try zooming in on a particular region of your
+network, and move between two successive states to verify that this is the case.</p>
+<img alt="_images/coauthors.38.png" src="_images/coauthors.38.png" style="width: 90%;" />
+</div>
 </div>
 </div>
 
@@ -418,22 +578,26 @@ Tethne, and visualize that network in Cytoscape.</em></p>
 <li><a class="reference internal" href="#reading-wos-data">Reading WoS Data</a><ul>
 <li><a class="reference internal" href="#command-line">Command-line</a></li>
 <li><a class="reference internal" href="#tethnegui">TethneGUI</a></li>
+<li><a class="reference internal" href="#python">Python</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#slicing-wos-data">Slicing WoS Data</a><ul>
 <li><a class="reference internal" href="#id1">Command-line</a></li>
 <li><a class="reference internal" href="#id2">TethneGUI</a></li>
 <li><a class="reference internal" href="#slice-distribution">Slice Distribution</a></li>
+<li><a class="reference internal" href="#id3">Python</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#building-the-coauthor-graph">Building the Coauthor Graph</a><ul>
-<li><a class="reference internal" href="#id3">Command-line</a></li>
-<li><a class="reference internal" href="#id4">TethneGUI</a></li>
+<li><a class="reference internal" href="#id4">Command-line</a></li>
+<li><a class="reference internal" href="#id5">TethneGUI</a></li>
+<li><a class="reference internal" href="#id6">Python</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#write-the-graph-to-graphml">Write the Graph to GraphML</a><ul>
-<li><a class="reference internal" href="#id5">Command-line</a></li>
-<li><a class="reference internal" href="#id6">TethneGUI</a></li>
+<li><a class="reference internal" href="#id7">Command-line</a></li>
+<li><a class="reference internal" href="#id8">TethneGUI</a></li>
+<li><a class="reference internal" href="#id9">Python</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#visualizing-the-merged-network-in-cytoscape">Visualizing the Merged Network in Cytoscape</a><ul>
@@ -447,7 +611,13 @@ Tethne, and visualize that network in Cytoscape.</em></p>
 <li><a class="reference internal" href="#partition-by-institution">Partition by institution</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#coauthorship-network-evolution">Coauthorship network evolution</a></li>
+<li><a class="reference internal" href="#coauthorship-network-evolution">Coauthorship network evolution</a><ul>
+<li><a class="reference internal" href="#id24">Command-line</a></li>
+<li><a class="reference internal" href="#id25">TethneGUI</a></li>
+<li><a class="reference internal" href="#id26">Python</a></li>
+<li><a class="reference internal" href="#visualizing-a-dynamic-network-in-cytoscape">Visualizing a dynamic network in Cytoscape</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -498,7 +668,7 @@ Tethne, and visualize that network in Cytoscape.</em></p>
         <li class="right" >
           <a href="tutorial.quickstart.python.html" title="Quickstart (Python)"
              >previous</a> |</li>
-        <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
+        <li><a href="index.html">tethne 0.3.1-alpha documentation</a> &raquo;</li>
           <li><a href="tutorial.html" >Tutorial</a> &raquo;</li> 
       </ul>
     </div>

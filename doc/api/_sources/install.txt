@@ -14,6 +14,15 @@ releases, you should watch our GitHub repository.
 2. Click the **Watch** button in the upper-right corner of the page, and select
    **Watching**.
 
+How to get help
+---------------
+
+Tethne is under active development, so you will most certainly run into bugs and hiccups.
+If you run into trouble, please create a new issue in our 
+<a href="https://github.com/diging/tethne/issues?state=open" target="_blank">issue 
+tracker</a>. This will help us to track down problems, and will ensure that you get
+updates as we work to solve those problems.
+
 Requirements
 ------------
 
@@ -222,10 +231,13 @@ Add the following line to ``~/.bash_profile``: ::
    $ tethne
    Must specify --dataset-id
 
-Tethne GUI
-----------
+TethneGUI
+---------
+A demonstration graphical user interface was created for teaching purposes only. This is
+not intended for extensive use. It provides a very basic interface to the Tethne 
+command-line workflow.
 
-You can find the most recent build of the Tethne GUI on the `Neotoma phenax SourceForge
+You can find the most recent build of the TethneGUI on the `Neotoma phenax SourceForge
 repository <http://sourceforge.net/projects/neotomaphenax/?source=directory>`_. 
 
 .. image:: _static/images/tutorial/install.1.png
