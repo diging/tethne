@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Tethne by diging</title>
+    <title>Tethne by ASU Digital Innovation Group</title>
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -32,45 +32,44 @@
       <section>
         <div id="title">
           <h1>Tethne</h1>
-          <p>Python module for parsing &amp; bibliographic data analysis</p>
+          <p>Integrated bibliographic network analysis in Python</p>
           <img src="api/_images/logo.jpeg" width="100%" />
           <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/diging">diging</a></span>
+          <span class="credits left">Project maintained by <a href="https://github.com/diging">ASU Digital Innovation Group</a></span>
           <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
         </div>
 
         <h3>
 <a name="tethne" class="anchor" href="#tethne"><span class="octicon octicon-link"></span></a>Tethne</h3>
 
-<p>Tethne is a Python module for working with Web of Science data, currently under development by the <a href="http://devo-evo.lab.asu.edu/diging">ASU Digital Innovation Group</a>. To start using Tethne, download and install it:</p>
+<p>Tethne provides tools for easily parsing and analyzing bibliographic data in Python. The primary emphasis is on working with data from the ISI Web of Science database, and providing efficient methods for modeling and analyzing citation-based networks. Future versions will include support for PubMed, Scopus, and other databases.</p>
 
-<pre><code>$ git clone https://github.com/diging/tethne.git
-$ cd tethne
-$ python setup.py install
-</code></pre>
+<p>As of v0.3, Tethne is beginning to include methods for incorporating data from the <a href="http://dfr.jstor.org/" target="_blank">JSTOR Data-for-Research</a> service, and <a href="http://mallet.cs.umass.edu/topics.php" target="_blank">MALLET topic modeling</a>.</p>
 
-<p>You can then import Tethne as you would any other module. We recommend the following namespace conventions:</p>
+<p>Tethne relies on <a href="http://networkx.github.io/" target="_blank">NetworkX</a>, and leverages its network analysis algorithms. You can visualize networks produced with Tethne in <a href="http://www.cytoscape.org" target="_blank">Cytoscape</a> or <a href="http://www.gephi.org">Gephi</a>.</p>
 
-<div class="highlight highlight-python"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">tethne.networks</span> <span class="kn">as</span> <span class="nn">nt</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">tethne.analyze</span> <span class="kn">as</span> <span class="nn">an</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
-</pre></div>
+<p>To get started, consult the <a href="http://diging.github.io/tethne/api/tutorial.html">tutorial</a>.</p>
+
+<p>A demo GUI was developed for teaching purposes, and can be found in the <em><a href="http://sourceforge.net/projects/neotomaphenax/" target="_blank">Neotoma phenax</a></em> SourceForge repository.</p>
 
 <h3>
-<a name="api-documentation" class="anchor" href="#api-documentation"><span class="octicon octicon-link"></span></a>API Documentation</h3>
+<a name="api-documentation" class="anchor" href="#api-documentation"><span class="octicon octicon-link"></span></a>Documentation</h3>
 
-<p>Documentation for Tethne is a work in progress, as is the software itself. You can find the most recent build of our documentation <a href="http://diging.github.io/tethne/api">here</a>.</p>
+<p>We are developing a series of <a href="http://diging.github.io/tethne/api/tutorial.html">tutorials</a> for using Tethne as a Python library, from the command-line, and via the TethneGUI.</p>
+
+<p>The latest build of the API documentation can be found <a href="http://diging.github.io/tethne/api/tethne.html">here</a>.</p>
 
 <h3>
 <a name="contributors" class="anchor" href="#contributors"><span class="octicon octicon-link"></span></a>Contributors</h3>
 
-<p>Tethne is developed by the Digital Innovation Group (<a href="https://github.com/diging" class="user-mention">@diging</a>), and was initially developed by Erick Peirson (<a href="https://github.com/erickpeirson" class="user-mention">@erickpeirson</a>). Aaron Baker (<a href="https://github.com/aabaker99" class="user-mention">@aabaker99</a>) made some major structural improvements, and Ramki Subramanian (<a href="https://github.com/rsubra13" class="user-mention">@rsubra13</a>) is working on adding functionality.</p>
+<p>Tethne is developed by the  <a href="http://devo-evo.lab.asu.edu/diging">ASU Digital Innovation Group</a>, and was initially developed by Erick Peirson (<a href="https://github.com/erickpeirson" class="user-mention">@erickpeirson</a>). Aaron Baker (<a href="https://github.com/aabaker99" class="user-mention">@aabaker99</a>) made some major structural improvements, and Ramki Subramanian (<a href="https://github.com/rsubra13" class="user-mention">@rsubra13</a>) is working on a web-based interface.</p>
 
 <h3>
 <a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
 
-<p>Open a <a href="https://github.com/diging/tethne/issues">new issue</a>, or contact Erick (<a href="https://github.com/erickpeirson" class="user-mention">@erickpeirson</a>).</p>
+<p>If you run into problems, don’t panic! Tethne is under active development, and there are certainly bugs to be found. Please report any problems by opening a new issue <a href="https://github.com/diging/tethne/issues">here</a>.</p>
+
+<p>For more information, contact <a href="http://gradinfo.cbs.asu.edu/?page_id=49" target="_blank">Erick Peirson</a>.</p>
 
 <h3>
 <a name="disclosure" class="anchor" href="#disclosure"><span class="octicon octicon-link"></span></a>Disclosure</h3>
