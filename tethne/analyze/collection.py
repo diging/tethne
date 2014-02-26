@@ -217,3 +217,64 @@ def node_global_closeness_centrality(C, node):
         results[key] = graph.node_global_closeness_centrality(g, node)
 
     return results
+    
+def attachment_probability(C):
+    """
+    Calculates the observed attachment probability for each node at each
+    time-step.
+    
+    
+    Attachment probability is calculated based on the observed new edges in the
+    next time-step. So if a node acquires new edges at time t, this will accrue
+    to the node's attachment probability at time t-1. Thus at a given time,
+    one can ask whether degree and attachment probability are related.
+
+    Parameters
+    ----------
+    C : :class:`.GraphCollection`
+        Must be sliced by 'date'. See :func:`.GraphCollection.slice`\.
+    
+    Returns
+    -------
+    probs : dict
+        Keyed by index in C.graphs, and then by node.
+    """
+    
+    probs = {}
+    G_ = None
+    k_ = None
+    for k,G in C.graphs.iteritems():
+        new_edges = {}
+        if G_ is not None: 
+            for n in G.nodes():
+                try:
+                    old_neighbors = set(G_[n].keys())
+                    if len(old_neighbors) > 0:
+                        new_neighbors = set(G[n].keys()) - old_neighbors
+                        new_edges[n] = float(len(new_neighbors))
+                    else:
+                        new_edges[n] = 0.
+                except KeyError:
+                    pass
+    
+            N = sum( new_edges.values() )
+            probs[k_] = { n:0. for n in G_.nodes() }
+            if N > 0.:
+                for n in C.nodes():
+                    try:
+                        probs[k_][n] = new_edges[n]/N
+                    except KeyError:
+                        pass
+
+            if probs[k_] is not None:
+                nx.set_node_attributes(C.graphs[k_], 'attachment_probability', probs[k_])
+    
+        G_ = G
+        k_ = k
+
+    # Handle last graph (no values).
+    key = C.graphs.keys()[-1]
+    zprobs = { n:0. for n in C.graphs[key].nodes() }
+    nx.set_node_attributes(C.graphs[key], 'attachment_probability', zprobs)
+
+    return probs
