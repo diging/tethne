@@ -1,8 +1,13 @@
-from flask.ext.wtf import Form, TextField, PasswordField
-from flask.ext.wtf import Required, EqualTo, validators, Length
-from flask import * # do not use '*'; actually input the dependencies.
+from flask_wtf import Form
+from wtforms import TextField
+from wtforms.validators import DataRequired
+#TextField, PasswordField
+#from flask.ext.wtf import Required, EqualTo, validators, Length
+#from flask import * # do not use '*'; actually input the dependencies.
 from ZODB import FileStorage, DB
 import models as mod
+
+
 # Set your classes here.
 
 # storage = FileStorage('users.fs')

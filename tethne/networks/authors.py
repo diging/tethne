@@ -17,7 +17,7 @@ Methods
 import networkx as nx
 import tethne.utilities as util
 import tethne.data as ds
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 # MACRO for printing the 'print' statement values.
 # 0 prints nothing in the console.
@@ -95,6 +95,9 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
 
     To generate a co-authorship network, use the
     :func:`.networks.authors.coauthors` method:
+    
+    Author institutional affiliation is included as a node attribute, if 
+    possible.
 
     .. code-block:: python
 
@@ -121,7 +124,7 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
 
     Returns
     -------
-    coauthors_graph : networkx.MultiGraph
+    G : networkx.Graph
         A co-authorship network.
 
     """
@@ -129,10 +132,13 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
     # TODO: Check whether papers contains :class:`.Paper` instances, and raise
     #  an exception if not.
 
-    coauthors_graph = nx.Graph(type='coauthors')
+    G = nx.Graph(type='coauthors')
     edge_att = {}
     #edge_listdict={}
     coauthor_dict = {}
+
+    author_inst = {}
+    
     for entry in papers:
         if entry['aulast'] is not None:
             # edge_att dictionary has the atributes given by user input
@@ -143,6 +149,19 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
                                           entry['auinit'],
                                           ' ')
             for a in xrange(len(full_names)):
+                # Update global author-institution mappings.
+                n = full_names[a]
+                if entry['institutions'] is not None:
+                    try:
+                        inst = entry['institutions'][n]
+                        try:
+                            author_inst[n] += inst
+                        except KeyError:
+                            author_inst[n] = inst
+
+                    except KeyError:
+                        pass
+                    
                 for b in xrange(a+1 , len(entry['aulast'])):
                     # (author_a,author_b) tuple is key for coauthor_dict.
                     authors = full_names[a], full_names[b]
@@ -169,15 +188,30 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
     # Add edges with specified edge attributes.
     for key, val in coauthor_dict.iteritems():
         if val['weight'] >= threshold:
-            coauthors_graph.add_edge(key[0], key[1], attr_dict=val)
+            G.add_edge(key[0], key[1], attr_dict=val)
+    
+    # Include institutional affiliations as node attributes, if possible.
+    
+    # Find most likely institution for each author. This won't work well if the
+    #  author only occurs once in the dataset and there was no explicit
+    #  author-instituion mapping.
+    for k,v in author_inst.iteritems():
+        top_inst = max(Counter(v))
+        try:    # If an author has no coauthors, they will not appear in G.
+            G.node[k]['institution'] = top_inst
+        except KeyError:
+            pass
 
-    return coauthors_graph
+    return G
 
 def author_institution(Papers, edge_attribs=[], **kwargs):
     """
-    Generate a bi-partite graph with people and institutions as vertices, and
-    edges indicating affiliation. This may be slightly ambiguous for WoS data
-    where num authors != num institutions.
+    Generate a bi-partite graph connecting authors and their institutions.
+    
+    This may be slightly ambiguous for WoS data where there is no explicit
+    author-institution mapping. Edge weights are the number of co-associations
+    between an author and an institution, which should help resolve this
+    ambiguity (the more data the better).
 
     ==============     =========================================================
     Element            Description
@@ -213,14 +247,15 @@ def author_institution(Papers, edge_attribs=[], **kwargs):
             for au in authors:
                 #add node of type 'author'
                 author_institution_graph.add_node(au, type='author')
-                ins_list = auth_inst[au]
-                for ins_str in ins_list:
-                  #add node of type 'institutions'
+                ins_list = Counter(auth_inst[au])
+                for ins_str,count in ins_list.iteritems():
+                    # Add node of type 'institutions'.
                     author_institution_graph.add_node(ins_str, \
                                                       type='institution')
-                  #print au ,'---->' , ins_str
+
                     author_institution_graph.add_edge(au, ins_str, \
-                                              attr_dict=edge_attrib_dict)
+                                              attr_dict=edge_attrib_dict, \
+                                              weight=count )
 
 
     return author_institution_graph
@@ -283,18 +318,13 @@ def author_coinstitution(Papers, threshold=1, **kwargs):
                     author_institutions[key] = value
         authors = author_institutions.keys()
         for i in xrange(len(authors)):
-            #coinstitution.add_node(authors[i],type ='author')
             for j in xrange(len(authors)):
                 if i != j:
-                     #compare 2 author dict elements
+                    # Compare 2 author dict elements.
                     overlap = (set(author_institutions[authors[i]])
                                 &
                                 set(author_institutions[authors[j]]))
                     if len(overlap) >= threshold:
-                        #commented these because 'add_edge' adds nodes aswell.
-                        #coinstitution.add_node(authors[i],type ='author')
-                        #coinstitution.add_node(authors[j],type ='author')
-                        #print authors[i] + "->" + authors[j]
                         coinstitution.add_edge(authors[i], authors[j], \
                                                overlap=len(overlap))
                     else :
