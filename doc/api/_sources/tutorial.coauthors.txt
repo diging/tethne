@@ -8,7 +8,7 @@ can be generated.
 In this tutorial, we will generate a coauthorship network using data from the ISI Web of
 Science database. See :ref:`gettingdata`.
 
-Each step includes instructions for both the Tethne command-line and the TethneGUI.
+Each step includes instructions for the Tethne command-line, the TethneGUI, and Python.
 Command-line steps assume that you have created an :ref:`alias` for Tethne.
 
 **If you run into problems**, don't panic. Tethne is under active development, and there
@@ -76,6 +76,25 @@ done reading your data, you should see messages like those depicted in the image
    
 If your data are read successfully, click ``Next >``.
 
+Python
+``````
+First import the :mod:`tethne.readers` module, then use the :func:`.readers.wos.read`
+method to create a list of :class:`.Paper` instances. You can use 
+:func:`.readers.wos.from_dir` to import all of the WoS datafiles in a directory.
+
+.. code-block:: python
+
+	>>> # Parse data.
+	>>> import tethne.readers as rd
+	>>> papers = rd.wos.read("/Path/To/FirstDataSet.txt")
+	
+Then create a new :class:`.DataCollection` to organize your data.
+
+.. code-block:: python
+
+   >>> from tethne.data import DataCollection
+   >>> D = DataCollection(papers)
+
 Slicing WoS Data
 ----------------
 In this tutorial, we will analyze the evolution of a coauthorship network over time. To do
@@ -116,9 +135,9 @@ slicing should be complete; click ``Next >``.
 
 Slice Distribution
 ``````````````````
-Tethne automatically generates a comma-separated values (CSV) file describing the number
-of records in each data slice. In your output folder look for a file called
-``[DATASET_ID]_sliceDistribution.csv``.
+Tethne command-line (and TethneGUI) automatically generates a comma-separated values (CSV)
+file describing the number of records in each data slice. In your output folder look for a
+file called ``[DATASET_ID]_sliceDistribution.csv``.
 
 .. image:: _static/images/tutorial/coauthors.3.png
    :width: 60%
@@ -128,6 +147,14 @@ these data.
 
 .. image:: _static/images/tutorial/coauthors.4.png
    :width: 60%
+   
+Python
+``````
+Use the :func:`tethne.data.DataCollection.slice` method to slice your data. 
+
+.. code-block:: python
+
+   >>> D.slice('date', 'time_window', window_size=1, cumulative=True)
 
 Building the Coauthor Graph
 ---------------------------
@@ -167,6 +194,16 @@ menu. Check the ``Ignore DataCollection slicing`` option, then click ``Build gra
 Once the graph is built, click ``Next >``. For now, we'll skip the analysis step. Click
 ``Next >`` again to reach ``Step 5: Write graph(s)``.
 
+Python
+``````
+To generate a single graph from your :class:`.DataCollection`\, call the
+:func:`.coauthors` method directly from the :mod:`.networks.authors` module.
+
+.. code-block:: python
+
+   >>> import tethne.networks as nt
+   >>> ca_graph = nt.authors.coauthors(D.papers())
+
 Write the Graph to GraphML
 --------------------------
 `GraphML <http://graphml.graphdrawing.org>`_ is a widely-used static network data format.
@@ -194,6 +231,18 @@ TethneGUI
 `````````
 Select ``graphml`` from the ``Output format for graph(s)`` menu, then click 
 ``Write graph(s)``.
+
+Python
+``````
+Use the :func:`.to_graphml` method in :mod:`.writers.collection` to create a GraphML
+data file.
+
+.. code-block:: python
+
+   >>> import tethne.writers as wr
+   >>> wr.graph.to_graphml(ca_graph, "[OUTPUT_PATH]")
+   
+``[OUTPUT_PATH]`` should be a path to the GraphML file that Tethne will create.
 
 Visualizing the Merged Network in Cytoscape
 -------------------------------------------
@@ -438,5 +487,163 @@ corner of the Gephi workspace.
 Coauthorship network evolution
 ------------------------------
 
-**FORTHCOMING**: *This section will describe how to generate a dynamic network with 
-Tethne, and visualize that network in Cytoscape.*
+This section describes how to generate a dynamic network with Tethne, and visualize that 
+network in Cytoscape. Dynamic networks allow us to go beyond analyzing the final structure
+of a network, and ask how the structure of a network changes over time. In this case, 
+we will use a dynamic network to see how a coauthorship network grows over time.
+
+Since we used the ``--cumulative`` option when slicing our data, our dynamic network
+will only involve the addition of nodes and edges: older coauthorship relationships will
+not "expire."
+
+A seemingly ubiquitous property of social networks is that they tend to be "scale-free".
+That is, the degree distribution follows a power-law: there are a few very 
+highly-connected actors, and a very large number of poorly-connected actors. 
+The intuitive interpretation of this behavior is that "the rich get richer." In other 
+words, if you're already popular then you're more likely to make new friends. 
+
+In this tutorial, we will visualize the impact of degree centrality on edge acquisition
+by using the :func:`.analyze.collection.attachment_probability` algorithm in Tethne.
+
+Command-line
+````````````
+
+Run the ``graph`` step again, but this time remove the ``--merged`` flag. This will
+create a separate graph from each of the data subsets created in the ``slice`` step.
+
+.. code-block:: bash
+
+   $ tethne -I exampleID -O /Users/erickpeirson/exampleOutput --graph --node-type=author --graph-type=coauthors
+   ----------------------------------------
+	   Workflow step: Graph
+   ----------------------------------------
+   Loading DataCollection with slices from /tmp/exampleID_DataCollection_sliced.pickle...done.
+   Using first slice in DataCollection: date.
+   Building author graph using coauthors method...done in 0.291323900223 seconds.
+   Saving GraphCollection to /tmp/exampleID_GraphCollection.pickle...done.
+   Writing graph summaries to /Users/erickpeirson/exampleOutput/exampleID_graphs.csv...done.
+   
+Use the ``-A attachment_probability`` argument in the ``--analyze`` step.
+
+.. code-block:: bash
+
+   $ tethne -I exampleID -O /Users/erickpeirson/exampleOutput --analyze -A attachment_probability
+   ----------------------------------------
+	   Workflow step: Analyze
+   ----------------------------------------
+   Loading GraphCollection from /tmp/exampleID_GraphCollection.pickle...done.
+   Analyzing GraphCollection with attachment_probability...done.
+   Writing graph analysis results to /Users/erickpeirson/exampleOutput/exampleID_attachment_probability_analysis.csv...done.
+   Saving GraphCollection to /tmp/exampleID_GraphCollection.pickle...done.
+
+Use ``--write-format xgmml`` to select the dynamic XGMML export option.
+
+.. code-block:: bash
+
+   $ tethne -I exampleID -O /Users/erickpeirson/exampleOutput --write --write-format xgmml
+   ----------------------------------------
+	   Workflow step: Write
+   ----------------------------------------
+   Loading GraphCollection from /tmp/exampleID_GraphCollection.pickle...done.
+   Writing graphs to /Users/erickpeirson/exampleOutput with format xgmml...done.
+
+This should create a new file called ``[DATASET_ID]_graph_dynamic.xgmml`` in your output
+folder.
+
+TethneGUI
+`````````
+
+Use the ``< Back`` button to return to ``Step 3: Build Graphs``. Uncheck the
+``Ignore DataCollection slicing`` option, and then click the ``Build graph`` button
+again. Then click ``Next >``.
+
+.. image:: _static/images/tutorial/coauthors.31.png
+   :width: 90%
+   
+At the ``analysis`` step, select ``attachment_probability`` from the ``Graph analysis
+algorithm`` menu, and click the ``Analyze graph(s)`` button. Then click ``Next >``.
+
+.. image:: _static/images/tutorial/coauthors.32.png
+   :width: 90%
+   
+Finally, select ``xgmml`` in the ``Output format`` menu, and click ``Write graph(s)``.
+This should create a new file called ``[DATASET_ID]_graph_dynamic.xgmml`` in your output
+folder.
+
+.. image:: _static/images/tutorial/coauthors.33.png
+   :width: 90%
+
+Python
+``````
+Use the :class:`.authorCollectionBuilder` to build a :class:`.GraphCollection` from your
+:class:`.DataCollection`\. 
+
+.. code-block:: python
+
+   >>> from tethne.builders import authorCollectionBuilder
+   >>> builder = authorCollectionBuilder(D)
+   >>> C = builder.build('date', 'coauthors')
+
+The :func:`.analyze.collection.attachment_probability` method automatically updates node
+attributes in your :class:`.GraphCollection`\.
+
+.. code-block:: python
+
+   >>> import tethne.analyze as az
+   >>> az.collection.attachment_probability(C)
+
+Use the :func:`.writers.collection.to_dxgmml` method to create dynamic XGMML.
+
+.. code-block:: python
+
+   >>> import tethne.writers as wr
+   >>> wr.collection.to_dxgmml(C, "[OUTPUT_PATH]")
+   
+``[OUTPUT_PATH]`` should be a path to the XGMML file that Tethne will create.
+
+Visualizing a dynamic network in Cytoscape
+``````````````````````````````````````````
+
+In Cytoscape, import your .xgmml file by selecting 
+``File > Import > Dynamic Network > XGMML File...``. Apply a force-directed or 
+spring-embedded layout.
+
+.. image:: _static/images/tutorial/coauthors.34.png
+   :width: 70%
+
+In the VizMapper, map ``Node Size`` to ``attachment_probability``.
+
+.. image:: _static/images/tutorial/coauthors.35.png
+   :width: 40%
+   
+Double-click on the function icon next to ``Current Mapping`` to edit the ``Node Size``
+mapping function.
+
+1. Click the ``Min/Max`` button, and set the maximum value to ``1.0``.
+2. Slick on the ``Add`` button to create a new handle at an intermediate value. Drag
+   the red open box up, and drag the corresponding black arrow left and right to alter
+   the mapping function.
+3. Click ``OK``.
+
+.. image:: _static/images/tutorial/coauthors.36.png
+   :width: 60%
+
+In the Control Panel, select the ``Dynamic Network`` tab.
+
+1. Set the time resolution to roughly match the time-range of your network. In the
+   example below, the network covers about 35 years, so a resolution of 1/50 was selected.
+
+2. Set ``Time smoothness`` to ``0 ms``.
+
+3. Use the slider to move through the states of your dynamic network. To view all states
+   in succession, use the ``<< Play`` and ``Play >>`` buttons.
+
+.. image:: _static/images/tutorial/coauthors.37.png
+   :width: 90%
+   
+The size of each node should reflect the relative probability that a node will accrue a
+new neighbor in the next time slice. Try zooming in on a particular region of your
+network, and move between two successive states to verify that this is the case.
+
+.. image:: _static/images/tutorial/coauthors.38.png
+   :width: 90%
