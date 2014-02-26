@@ -27,7 +27,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="tethne 0.3.0-alpha documentation" href="index.html" />
     <link rel="up" title="Tutorial" href="tutorial.html" />
-    <link rel="next" title="Creating Networks from Bibliographic Data" href="tutorial.networks.html" />
+    <link rel="next" title="Quickstart (Command-line)" href="tutorial.quickstart.commandline.html" />
     <link rel="prev" title="Tutorial" href="tutorial.html" /> 
   </head>
   <body>
@@ -44,7 +44,7 @@
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorial.networks.html" title="Creating Networks from Bibliographic Data"
+          <a href="tutorial.quickstart.commandline.html" title="Quickstart (Command-line)"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="tutorial.html" title="Tutorial"
@@ -60,37 +60,53 @@
           <div class="body">
             
   <div class="section" id="getting-bibliographic-data">
-<h1>Getting Bibliographic Data<a class="headerlink" href="#getting-bibliographic-data" title="Permalink to this headline">¶</a></h1>
+<span id="gettingdata"></span><h1>Getting Bibliographic Data<a class="headerlink" href="#getting-bibliographic-data" title="Permalink to this headline">¶</a></h1>
 <p>The current version of Tethne supports bibliographic data from the ISI Web of Science
 and JSTOR&#8217;s Data-for-Research portal. Future releases will support data from PubMed and
 Scopus.</p>
-<div class="section" id="getting-data-from-the-web-of-science">
-<h2>Getting Data from the Web of Science<a class="headerlink" href="#getting-data-from-the-web-of-science" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="web-of-science">
+<h2>Web of Science<a class="headerlink" href="#web-of-science" title="Permalink to this headline">¶</a></h2>
 <p>The ISI Web of Science is a proprietary database owned by Thompson Reuters.
 If you are affiliated with an academic institution, you may have access to
 this database via an institutional license.</p>
 <p>To access the Web of Science database via the Arizona State University library,
 find the Web of Science <a class="reference external" href="http://library.lib.asu.edu/record=e1000458">entry</a> in the library&#8217;s online catalog. You may be prompted
 to log in to the University&#8217;s Central Authentication System.</p>
-<img alt="_images/getting.0.png" src="_images/getting.0.png" style="width: 600px;" />
+<img alt="_images/getting.0.png" src="_images/getting.0.png" style="width: 60%;" />
 <p>Perform a search for literature of interest using the interface provided.</p>
-<img alt="_images/getting.1.png" src="_images/getting.1.png" style="width: 600px;" />
-<p>Once you have found the papers that you are interested in, find the &#8220;Send to:&#8221; menu
+<p>Your search criteria will be informed by the objectives of your research project. If you
+are attempting to characterize the development of a research field, for example, you
+should choose terms that pick out that field as uniquely as possible (consider using the
+<tt class="docutils literal"><span class="pre">Publication</span> <span class="pre">Name</span></tt> search field). You can also pick out literatures originating from
+particular institutions, by using the <tt class="docutils literal"><span class="pre">Organization-Enhanced</span></tt> search field.</p>
+<img alt="_images/getting.1.png" src="_images/getting.1.png" style="width: 60%;" />
+<p>Note also that you can restrict your research to one of three indexes in the Web of Science Core Collection:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Science Citation Index Expanded is the largest index, containing scientific
+publications from 1900 onward.</li>
+<li>Social Sciences Citation Index covers 1956 onward.</li>
+<li>Arts &amp; Humanities Citation Index is the smallest index, containing publications from
+1975 onward.</li>
+</ul>
+</div></blockquote>
+<img alt="_images/getting.1.2.png" src="_images/getting.1.2.png" style="width: 60%;" />
+<p>Once you have found the papers that you are interested in, find the <tt class="docutils literal"><span class="pre">Send</span> <span class="pre">to:</span></tt> menu
 at the top of the list of results. Click the small orange down-arrow, and select
-&#8220;Other File Formats&#8221;.</p>
-<img alt="_images/getting.2.png" src="_images/getting.2.png" style="width: 600px;" />
+<tt class="docutils literal"><span class="pre">Other</span> <span class="pre">File</span> <span class="pre">Formats</span></tt>.</p>
+<img alt="_images/getting.2.png" src="_images/getting.2.png" style="width: 60%;" />
 <p>A small in-browser window should open in the foreground. Specify the range of
 records that you wish to download. <strong>Note that you can only download 500 records
 at a time</strong>, so you may have to make multiple download requests. Be sure to specify
-&#8220;Full Record and Cited References&#8221; in the <em>Record Content</em> field, and &#8220;Plain Text&#8221;
-in the <em>File Format</em> field. Then click &#8220;Send&#8221;.</p>
-<img alt="_images/getting.3.png" src="_images/getting.3.png" style="width: 600px;" />
+<tt class="docutils literal"><span class="pre">Full</span> <span class="pre">Record</span> <span class="pre">and</span> <span class="pre">Cited</span> <span class="pre">References</span></tt> in the <em>Record Content</em> field, and <tt class="docutils literal"><span class="pre">Plain</span> <span class="pre">Text</span></tt>
+in the <em>File Format</em> field. Then click <tt class="docutils literal"><span class="pre">Send</span></tt>.</p>
+<img alt="_images/getting.3.png" src="_images/getting.3.png" style="width: 60%;" />
 <p>After a few moments, a download should begin. WoS usually returns a field-tagged
-data file called &#8220;savedrecs.txt&#8221;. Put this in a location on your filesystem where
+data file called <tt class="docutils literal"><span class="pre">savedrecs.txt</span></tt>. Put this in a location on your filesystem where
 you can find it later; this is the input for Tethne&#8217;s WoS reader methods.</p>
-<img alt="_images/getting.4.png" src="_images/getting.4.png" style="width: 600px;" />
+<img alt="_images/getting.4.png" src="_images/getting.4.png" style="width: 60%;" />
 <div class="section" id="structure-of-the-wos-field-tagged-data-file">
-<h3>Structure of the WoS Field-Tagged Data File<a class="headerlink" href="#structure-of-the-wos-field-tagged-data-file" title="Permalink to this headline">¶</a></h3>
+<span id="fieldtagged"></span><h3>Structure of the WoS Field-Tagged Data File<a class="headerlink" href="#structure-of-the-wos-field-tagged-data-file" title="Permalink to this headline">¶</a></h3>
 <p>If you open the text file returned by the WoS database (usually named &#8216;savedrecs.txt&#8217;),
 you should see a whole bunch of field-tagged data. &#8220;Field-tagged&#8221; means that each metadata
 field is denoted by a &#8220;tag&#8221; (a two-letter code), followed by values for that field. A
@@ -124,12 +140,19 @@ AF Dauvin, Jean-Claude
    Zenetos A, 2005, MEDITERR MAR SCI, V6, P63
    Zenetos A, 2004, CIESM ATLAS EXOTIC S, V3</pre>
 </div>
+<p>More recent records also include the institutional affiliations of authors in the C1
+block.</p>
+<div class="highlight-none:"><pre>C1 [Wang, Changlin; Washida, Haruhiko; Crofts, Andrew J.; Hamada, Shigeki;
+Katsube-Tanaka, Tomoyuki; Kim, Dongwook; Choi, Sang-Bong; Modi, Mahendra; Singh,
+Salvinder; Okita, Thomas W.] Washington State Univ, Inst Biol Chem, Pullman, WA 99164
+USA.</pre>
+</div>
 <p>For more information about WoS field tags, see a list on the Thompson Reuters website,
 <a class="reference external" href="http://images.webofknowledge.com/WOKRS53B4/help/WOS/hs_wos_fieldtags.html">here</a>.</p>
 </div>
 </div>
-<div class="section" id="getting-data-from-jstor-data-for-research">
-<h2>Getting Data from JSTOR Data-for-Research<a class="headerlink" href="#getting-data-from-jstor-data-for-research" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="jstor-data-for-research">
+<h2>JSTOR Data-for-Research<a class="headerlink" href="#jstor-data-for-research" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference external" href="http://dfr.jstor.org/?&amp;helpview=about_dfr">JSTOR Data-for-Research (DfR) portal</a>
 gives researchers access to bibliographic data and N-grams for the entire JSTOR database.
 Tethne can use DfR data to generate coauthorship networks, and to improve metadata for Web
@@ -142,7 +165,7 @@ you will need to <a class="reference external" href="http://dfr.jstor.org/accoun
 <p>After you&#8217;ve logged in, perform a search using whatever criteria you please. When you have
 achieved the result that you desire, create a new dataset request. Under the &#8220;Dataset
 Request&#8221; menu in the upper-right corner of the page, click &#8220;Submit new request&#8221;.</p>
-<img alt="_images/getting.5.png" src="_images/getting.5.png" style="width: 600px;" />
+<img alt="_images/getting.5.png" src="_images/getting.5.png" style="width: 60%;" />
 <p>On the <strong>Download Options</strong> page, select your desired <strong>Data Type</strong>. If you do not intend
 to make use of the contents of the papers themselves, then &#8220;Citations Only&#8221; is sufficient.
 Otherwise, choose word counts, bigrams, etc.</p>
@@ -150,17 +173,17 @@ Otherwise, choose word counts, bigrams, etc.</p>
 <p>Give your request a title, and set the maximum number of articles. <em>Note that the maximum
 documents allowed per request is 1,000. Setting **Maximum Articles*</em> to a value less than
 the number of search results will yield a random sample of your results.*</p>
-<img alt="_images/getting.6.png" src="_images/getting.6.png" style="width: 600px;" />
+<img alt="_images/getting.6.png" src="_images/getting.6.png" style="width: 60%;" />
 <p>Your request should now appear in your list of <strong>Data Requests</strong>. When your request is
 ready (hours to days later), you will receive an e-mail with a download link. When
 downloading from the <strong>Data Requests</strong> list, be sure to use the link in the
 <strong>full dataset</strong> column.</p>
-<img alt="_images/getting.7.png" src="_images/getting.7.png" style="width: 600px;" />
+<img alt="_images/getting.7.png" src="_images/getting.7.png" style="width: 60%;" />
 <p>When your dataset download is complete, unzip it. The contents should look something like
 those shown below.</p>
-<img alt="_images/getting.8.png" src="_images/getting.8.png" style="width: 600px;" />
-<p><cite>citations.XML</cite> contains bibliographic data in XML format. The <cite>bigrams</cite>, <cite>trigrams</cite>,
-<cite>wordcounts</cite> folders contain N-gram counts for each document.</p>
+<img alt="_images/getting.8.png" src="_images/getting.8.png" style="width: 40%;" />
+<p><tt class="docutils literal"><span class="pre">citations.XML</span></tt> contains bibliographic data in XML format. The <tt class="docutils literal"><span class="pre">bigrams</span></tt>, <tt class="docutils literal"><span class="pre">trigrams</span></tt>,
+<tt class="docutils literal"><span class="pre">wordcounts</span></tt> folders contain N-gram counts for each document.</p>
 <p>In the example above, the path this dataset is
 <cite>/Users/erickpeirson/Downloads/DfR/ecology_1960-64</cite>. This is the path used in
 <a class="reference internal" href="tethne.readers.html#tethne.readers.dfr.read" title="tethne.readers.dfr.read"><tt class="xref py py-func docutils literal"><span class="pre">tethne.readers.dfr.read()</span></tt></a> .</p>
@@ -176,11 +199,11 @@ those shown below.</p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Getting Bibliographic Data</a><ul>
-<li><a class="reference internal" href="#getting-data-from-the-web-of-science">Getting Data from the Web of Science</a><ul>
+<li><a class="reference internal" href="#web-of-science">Web of Science</a><ul>
 <li><a class="reference internal" href="#structure-of-the-wos-field-tagged-data-file">Structure of the WoS Field-Tagged Data File</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#getting-data-from-jstor-data-for-research">Getting Data from JSTOR Data-for-Research</a></li>
+<li><a class="reference internal" href="#jstor-data-for-research">JSTOR Data-for-Research</a></li>
 </ul>
 </li>
 </ul>
@@ -189,8 +212,8 @@ those shown below.</p>
   <p class="topless"><a href="tutorial.html"
                         title="previous chapter">Tutorial</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="tutorial.networks.html"
-                        title="next chapter">Creating Networks from Bibliographic Data</a></p>
+  <p class="topless"><a href="tutorial.quickstart.commandline.html"
+                        title="next chapter">Quickstart (Command-line)</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/tutorial.getting_data.txt"
@@ -226,7 +249,7 @@ those shown below.</p>
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorial.networks.html" title="Creating Networks from Bibliographic Data"
+          <a href="tutorial.quickstart.commandline.html" title="Quickstart (Command-line)"
              >next</a> |</li>
         <li class="right" >
           <a href="tutorial.html" title="Tutorial"
