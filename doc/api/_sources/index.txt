@@ -33,9 +33,11 @@ Contents
 --------
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
+   install
    tutorial
+   commandline
    tethne
 
 About

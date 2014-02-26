@@ -1,0 +1,235 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Quickstart (Command-line) &mdash; tethne 0.3.0-alpha documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3.0-alpha',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="tethne 0.3.0-alpha documentation" href="index.html" />
+    <link rel="up" title="Tutorial" href="tutorial.html" />
+    <link rel="next" title="Quickstart (Python)" href="tutorial.quickstart.python.html" />
+    <link rel="prev" title="Getting Bibliographic Data" href="tutorial.getting_data.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.quickstart.python.html" title="Quickstart (Python)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.getting_data.html" title="Getting Bibliographic Data"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
+          <li><a href="tutorial.html" accesskey="U">Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="quickstart-command-line">
+<h1>Quickstart (Command-line)<a class="headerlink" href="#quickstart-command-line" title="Permalink to this headline">¶</a></h1>
+<p>Use the following sequence of commands to generate a dynamic co-authorship network using
+data from the ISI Web of Science database. The examples below are from the Mac
+terminal, but should work on the Windows command-prompt as well.</p>
+<p>For detailed documentation of command-line options, see <a class="reference internal" href="commandline.html#commandline-options"><em>Command-line Options</em></a>.</p>
+<p>Tethne is invoked using <tt class="docutils literal"><span class="pre">python</span> <span class="pre">./tethne</span></tt>, where <tt class="docutils literal"><span class="pre">./tethne</span></tt> is the path to the Tethne</p>
+<ol class="arabic simple">
+<li><a class="reference internal" href="commandline.html#cl-read"><em>Read</em></a></li>
+</ol>
+<p>Tethne can parse data from the Web of Science, JSTOR Data-for-Research, and a few other
+sources.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python ./tethne -I example_data -O ./ --read-file <span class="se">\</span>
+&gt; -P /Users/erickpeirson/Desktop/savedrecs <span class="o">(</span>101<span class="o">)</span>.txt -F WOS
+
+----------------------------------------
+        Workflow step: Read
+----------------------------------------
+Reading WOS data from file /Users/erickpeirson/Desktop/savedrecs.txt...done.
+Read 500 papers in 1.42379593849 seconds. Accession: 90a0e7fe-c081-4749-9e7c-43534d9b9558.
+Generating a new DataCollection...done.
+Saving DataCollection to /tmp/example_data_DataCollection.pickle...done.
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">-I</span> <span class="pre">example_data</span></tt> tells Tethne to use the ID <tt class="docutils literal"><span class="pre">example_data</span></tt> for this dataset. This
+should be used for each workflow step. <tt class="docutils literal"><span class="pre">-O</span> <span class="pre">./</span></tt> tells Tethne to save output (e.g.
+statistics and networks) to the current working directory.</p>
+<p><tt class="docutils literal"><span class="pre">-F</span> <span class="pre">WOS</span></tt> tells Tethne that the data is in Web of Science field-tagged format.</p>
+<ol class="arabic simple" start="2">
+<li><a class="reference internal" href="commandline.html#cl-slice"><em>Slice</em></a></li>
+</ol>
+<p>The <tt class="docutils literal"><span class="pre">slice</span></tt> step tells Tethne how to partition your dataset for analysis.</p>
+<p>If you are studying network evolution over time, your first slice axis will almost always
+be <tt class="docutils literal"><span class="pre">date</span></tt>. In the example below, <tt class="docutils literal"><span class="pre">-S</span> <span class="pre">date,jtitle</span></tt> tells Tethne to slice first by
+<tt class="docutils literal"><span class="pre">date</span></tt>, then by <tt class="docutils literal"><span class="pre">jtitle</span></tt>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python ./tethne -I example_data -O ./ --slice -S date,jtitle -M time_period <span class="se">\</span>
+&gt; --slice-window-size<span class="o">=</span>2 --cumulative
+
+----------------------------------------
+        Workflow step: Slice
+----------------------------------------
+Loading DataCollection from /tmp/example_data_DataCollection.pickle...done.
+Slicing DataCollection by date...done.
+Slicing DataCollection by jtitle...done.
+Saving slice distribution to .//example_data_sliceDistribution.csv...done.
+Saving sliced DataCollection to /tmp/example_data_DataCollection_sliced.pickle...done.
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">-M</span> <span class="pre">time_period</span> <span class="pre">--slice-window-size=2</span></tt> tells Tethne to divide the dataset
+up into two-year time-periods. <tt class="docutils literal"><span class="pre">--cumulative</span></tt> means that each time-period will include
+data from all of the earlier time-periods.</p>
+<ol class="arabic simple" start="3">
+<li><a class="reference internal" href="commandline.html#cl-graph"><em>Graph</em></a></li>
+</ol>
+<p>The <tt class="docutils literal"><span class="pre">graph</span></tt> step generates networks from your data (one network per slice).</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python ./tethne -I example_data -O ./ --graph -N author -T coauthors <span class="se">\</span>
+&gt; --edge-attr<span class="o">=</span>date,jtitle,ayjid
+
+----------------------------------------
+        Workflow step: Graph
+----------------------------------------
+Loading DataCollection with slices from /tmp/example_data_DataCollection_sliced.pickle...done.
+Using first slice in DataCollection: date.
+Building author graph using coauthors method...done in 1.90734863281e-05 seconds.
+Saving GraphCollection to /tmp/example_data_GraphCollection.pickle...done.
+Writing graph summaries to .//example_data_graphs.csv...done.
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">-N</span> <span class="pre">author</span> <span class="pre">-T</span> <span class="pre">coauthors</span></tt> tells
+Tethne to generate a coauthorship network, where nodes are authors.
+<tt class="docutils literal"><span class="pre">--edge-attr=date,jtitle</span></tt> tells Tethne to add the publication date and journal to each
+coauthorship edge.</p>
+<p>Adding <tt class="docutils literal"><span class="pre">--merged</span></tt> would tell Tethne to ignore slicing and create a single network from
+the whole dataset.</p>
+<ol class="arabic simple" start="4">
+<li><a class="reference internal" href="commandline.html#cl-analyze"><em>Analyze</em></a></li>
+</ol>
+<p>The <tt class="docutils literal"><span class="pre">analyze</span></tt> step is optional. This uses methods from NetworkX and the
+<a class="reference internal" href="tethne.analyze.html#module-tethne.analyze" title="tethne.analyze"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.analyze</span></tt></a> module to analyze your networks.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python ./tethne -I example_data -O ./ --analyze -A betweenness_centrality
+
+----------------------------------------
+        Workflow step: Analyze
+----------------------------------------
+Loading GraphCollection from /tmp/example_data_GraphCollection.pickle...done.
+Analyzing GraphCollection with betweenness_centrality...done.
+Writing graph analysis results to .//example_data_betweenness_centrality_analysis.csv...done.
+Saving GraphCollection to /tmp/example_data_GraphCollection.pickle...done.
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">-A</span> <span class="pre">betweenness_centrality</span></tt> tells Tethne to calculate the betweenness centrality of each
+node in each network, and save those values as node attributes.</p>
+<ol class="arabic simple" start="5">
+<li><a class="reference internal" href="commandline.html#cl-write"><em>Write</em></a></li>
+</ol>
+<p>Tethne can write networks to a few different formats for visualization in
+<a class="reference external" href="http://www.cytoscape.org">Cytoscape</a> or <a class="reference external" href="http://www.gephi.org">Gephi</a>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python ./tethne -I example_data -O ./ --write -W xgmml
+
+----------------------------------------
+        Workflow step: Write
+----------------------------------------
+Loading GraphCollection from /tmp/example_data_GraphCollection.pickle...done.
+Writing graphs to ./ with format xgmml...done.
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">-W</span> <span class="pre">xgmml</span></tt> tells Tethne to generate a <a class="reference external" href="https://code.google.com/p/dynnetwork/wiki/DynamicXGMML">dynamic network in XGMML format</a>.</p>
+<p>The resulting graph might look something like (edge width &lt;- N coauthored papers):</p>
+<img alt="_images/cytoscape.png" src="_images/cytoscape.png" style="width: 60%;" />
+<p>For detailed descriptions of each workflow step, see <a href="#id1"><span class="problematic" id="id2">`Step-By-Step Guide (Command-line)`_</span></a>.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial.getting_data.html"
+                        title="previous chapter">Getting Bibliographic Data</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tutorial.quickstart.python.html"
+                        title="next chapter">Quickstart (Python)</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tutorial.quickstart.commandline.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.quickstart.python.html" title="Quickstart (Python)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.getting_data.html" title="Getting Bibliographic Data"
+             >previous</a> |</li>
+        <li><a href="index.html">tethne 0.3.0-alpha documentation</a> &raquo;</li>
+          <li><a href="tutorial.html" >Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, ASU Digital Innovation Group.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

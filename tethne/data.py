@@ -316,15 +316,13 @@ class DataCollection(object):
         cumulative = kwargs.get('cumulative', False)
 
         slices = {}
+        last = None
         for i in xrange(start, end-window_size+2, step_size):
             slices[i] = [ k for k,p in self.data.iteritems() 
                            if i <= p['date'] < i + window_size ]
-            if cumulative:
-                try:
-                    slices[i] += slices[i-1]
-                except KeyError:
-                    pass
-
+            if cumulative and last is not None:
+                slices[i] += last
+            last = slices[i]
         return slices
         
     def indices(self):
