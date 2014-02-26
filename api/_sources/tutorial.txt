@@ -6,7 +6,8 @@ command-line (Mac OSX, Linux; untested for Windows).
 
 
 .. toctree::
-
+   :maxdepth: 2
+   
    tutorial.getting_data
    tutorial.quickstart.commandline
    tutorial.quickstart.python
