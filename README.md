@@ -9,7 +9,7 @@ analyze a variety of networks, such as bibliographic coupling, citation, author-
 and co-author networks, using [NetworkX](http://networkx.github.io/).
 
 For more information, see the Tethne [website](https://github.com/diging/tethne) and
-(documentation)[http://diging.github.io/tethne/api/] (under development).
+[documentation](http://diging.github.io/tethne/api/) (under development).
 
 ## Requirements
 * [Python 2.7](http://www.python.org/)
