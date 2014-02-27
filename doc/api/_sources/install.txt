@@ -19,19 +19,19 @@ How to get help
 
 Tethne is under active development, so you will most certainly run into bugs and hiccups.
 If you run into trouble, please create a new issue in our 
-<a href="https://github.com/diging/tethne/issues?state=open" target="_blank">issue 
-tracker</a>. This will help us to track down problems, and will ensure that you get
-updates as we work to solve those problems.
+`issue tracker <https://github.com/diging/tethne/issues?state=open>`_. This will help us
+to hunt down problems, and will ensure that you get updates as we work to solve those 
+problems.
 
 Requirements
 ------------
 
 Tethne requires the following software and packages.:
 
-* `Python 2.7`_
-* `NumPy`_
-* `NLTK`_
-* `NetworkX`_
+* :ref:`python`
+* :ref:`numpy`
+* :ref:`nltk`
+* :ref:`nx`
 
 Anaconda
 ````````
@@ -40,6 +40,8 @@ We recommend installing `Anaconda <http://continuum.io/downloads>`_, which will 
 Python, Numpy, NLTK, and a variety of other useful libraries. Installation instructions 
 for Anaconda can be found `here <http://docs.continuum.io/anaconda/install.html>`_. This
 may be a good idea *even if you already have Python installed on your system*.
+
+.. _python:
 
 Python 2.7
 ``````````
@@ -69,6 +71,8 @@ latest versions of Python `here <http://www.python.org/downloads/>`_.
 
 **Windows users** should use the 32-bit version of Python. Look for the ``Windows x86 MSI Installer``. For details about installing Python on Windows, see `Installing Python on Windows <http://python-guide.readthedocs.org/en/latest/starting/install/win/>`_.
 
+.. _numpy:
+
 NumPy
 `````
 
@@ -81,12 +85,16 @@ find an installer for your operating system on the
 Mac users should download and install ``numpy-1.8.0-py2.7-python.org-macosx10.6.dmg``.
 Windows users should download and install ``numpy-1.8.0-win32-superpack-python2.7.exe``.
 
+.. _nltk:
+
 NLTK
 ````
 
 NLTK stands for Natural Language ToolKit. **If you installed** `Anaconda`_, **NLTK should 
 already be installed.** For installation instructions, see the
 `NLTK documentation <http://www.nltk.org/install.html>`_.
+
+.. _nx:
 
 NetworkX
 ````````
@@ -236,6 +244,9 @@ TethneGUI
 A demonstration graphical user interface was created for teaching purposes only. This is
 not intended for extensive use. It provides a very basic interface to the Tethne 
 command-line workflow.
+
+TethneGUI comes bundled with most of the things that it needs to run. On **Windows** 
+systems, however, you will need to install NumPy independently. See :ref:`numpy`\, above.
 
 You can find the most recent build of the TethneGUI on the `Neotoma phenax SourceForge
 repository <http://sourceforge.net/projects/neotomaphenax/?source=directory>`_. 
