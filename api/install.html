@@ -74,18 +74,18 @@ releases, you should watch our GitHub repository.</p>
 <h2>How to get help<a class="headerlink" href="#how-to-get-help" title="Permalink to this headline">¶</a></h2>
 <p>Tethne is under active development, so you will most certainly run into bugs and hiccups.
 If you run into trouble, please create a new issue in our
-<a class="reference external" href="https://github.com/diging/tethne/issues?state=open">issue
-tracker</a>. This will help us to track down problems, and will ensure that you get
-updates as we work to solve those problems.</p>
+<a class="reference external" href="https://github.com/diging/tethne/issues?state=open">issue tracker</a>. This will help us
+to hunt down problems, and will ensure that you get updates as we work to solve those
+problems.</p>
 </div>
 <div class="section" id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <p>Tethne requires the following software and packages.:</p>
 <ul class="simple">
-<li><a class="reference internal" href="#python-2-7">Python 2.7</a></li>
-<li><a class="reference internal" href="#numpy">NumPy</a></li>
-<li><a class="reference internal" href="#nltk">NLTK</a></li>
-<li><a class="reference external" href="http://networkx.github.io/">NetworkX</a></li>
+<li><a class="reference internal" href="#python"><em>Python 2.7</em></a></li>
+<li><a class="reference internal" href="#numpy"><em>NumPy</em></a></li>
+<li><a class="reference internal" href="#nltk"><em>NLTK</em></a></li>
+<li><a class="reference internal" href="#nx"><em>NetworkX</em></a></li>
 </ul>
 <div class="section" id="anaconda">
 <h3>Anaconda<a class="headerlink" href="#anaconda" title="Permalink to this headline">¶</a></h3>
@@ -95,7 +95,7 @@ for Anaconda can be found <a class="reference external" href="http://docs.contin
 may be a good idea <em>even if you already have Python installed on your system</em>.</p>
 </div>
 <div class="section" id="python-2-7">
-<h3>Python 2.7<a class="headerlink" href="#python-2-7" title="Permalink to this headline">¶</a></h3>
+<span id="python"></span><h3>Python 2.7<a class="headerlink" href="#python-2-7" title="Permalink to this headline">¶</a></h3>
 <p>Tethne requires Python 2.7; Python 3 is not fully backwards-compatible, and Tethne will
 not work properly with that version. <strong>If you installed</strong> <a class="reference external" href="http://continuum.io/downloads">Anaconda</a>, <strong>Python 2.7 should
 already be installed.</strong></p>
@@ -117,7 +117,7 @@ latest versions of Python <a class="reference external" href="http://www.python.
 <p><strong>Windows users</strong> should use the 32-bit version of Python. Look for the <tt class="docutils literal"><span class="pre">Windows</span> <span class="pre">x86</span> <span class="pre">MSI</span> <span class="pre">Installer</span></tt>. For details about installing Python on Windows, see <a class="reference external" href="http://python-guide.readthedocs.org/en/latest/starting/install/win/">Installing Python on Windows</a>.</p>
 </div>
 <div class="section" id="numpy">
-<h3>NumPy<a class="headerlink" href="#numpy" title="Permalink to this headline">¶</a></h3>
+<span id="id3"></span><h3>NumPy<a class="headerlink" href="#numpy" title="Permalink to this headline">¶</a></h3>
 <p>NumPy stands for Numerical Python. NumPy is a Python library that provides functionality
 for scientific computing.</p>
 <p><strong>If you installed</strong> <a class="reference external" href="http://continuum.io/downloads">Anaconda</a>, <strong>NumPy should already be installed</strong>. Otherwise, you can
@@ -127,13 +127,13 @@ Mac users should download and install <tt class="docutils literal"><span class="
 Windows users should download and install <tt class="docutils literal"><span class="pre">numpy-1.8.0-win32-superpack-python2.7.exe</span></tt>.</p>
 </div>
 <div class="section" id="nltk">
-<h3>NLTK<a class="headerlink" href="#nltk" title="Permalink to this headline">¶</a></h3>
+<span id="id4"></span><h3>NLTK<a class="headerlink" href="#nltk" title="Permalink to this headline">¶</a></h3>
 <p>NLTK stands for Natural Language ToolKit. <strong>If you installed</strong> <a class="reference external" href="http://continuum.io/downloads">Anaconda</a>, <strong>NLTK should
 already be installed.</strong> For installation instructions, see the
 <a class="reference external" href="http://www.nltk.org/install.html">NLTK documentation</a>.</p>
 </div>
 <div class="section" id="networkx">
-<h3>NetworkX<a class="headerlink" href="#networkx" title="Permalink to this headline">¶</a></h3>
+<span id="nx"></span><h3>NetworkX<a class="headerlink" href="#networkx" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="http://networkx.github.io/">NetworkX</a> is a Python package for network analysis. The
 easiest way to install NetworkX is to use <tt class="docutils literal"><span class="pre">pip</span></tt>. <tt class="docutils literal"><span class="pre">pip</span></tt> installs Python packages from
 the <a class="reference external" href="https://pypi.python.org/pypi">Python Package Index</a>. You will need to be connected
@@ -220,7 +220,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 </div>
 </div>
 <div class="section" id="alias">
-<span id="id4"></span><h3>Alias<a class="headerlink" href="#alias" title="Permalink to this headline">¶</a></h3>
+<span id="id6"></span><h3>Alias<a class="headerlink" href="#alias" title="Permalink to this headline">¶</a></h3>
 <p>To make using Tethne from the command-line a bit easier, create a permanent alias.</p>
 <p><strong>Mac:</strong></p>
 <p>Add the following line to <tt class="docutils literal"><span class="pre">~/.bash_profile</span></tt>:</p>
@@ -266,6 +266,8 @@ Must specify --dataset-id
 <p>A demonstration graphical user interface was created for teaching purposes only. This is
 not intended for extensive use. It provides a very basic interface to the Tethne
 command-line workflow.</p>
+<p>TethneGUI comes bundled with most of the things that it needs to run. On <strong>Windows</strong>
+systems, however, you will need to install NumPy independently. See <a class="reference internal" href="#numpy"><em>NumPy</em></a>, above.</p>
 <p>You can find the most recent build of the TethneGUI on the <a class="reference external" href="http://sourceforge.net/projects/neotomaphenax/?source=directory">Neotoma phenax SourceForge
 repository</a>.</p>
 <img alt="_images/install.1.png" src="_images/install.1.png" style="width: 60%;" />
