@@ -59,11 +59,13 @@
 <span class="sd">.. autosummary::</span>
 
 <span class="sd">   keyword_cooccurrence</span>
+<span class="sd">   topic_coupling</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
 
-<div class="viewcode-block" id="keyword_cooccurrence"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.terms.keyword_cooccurrence">[docs]</a><span class="k">def</span> <span class="nf">keyword_cooccurrence</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">connected</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="keyword_cooccurrence"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.terms.keyword_cooccurrence">[docs]</a><span class="k">def</span> <span class="nf">keyword_cooccurrence</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">connected</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a keyword cooccurrence network.</span>
 
@@ -129,7 +131,53 @@
     <span class="k">if</span> <span class="n">connected</span><span class="p">:</span>   <span class="c"># Return only the first connected component.</span>
         <span class="k">return</span> <span class="n">nx</span><span class="o">.</span><span class="n">connected_component_subgraphs</span><span class="p">(</span><span class="n">G</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">G</span>    <span class="c"># Return the whole graph.</span></div>
+        <span class="k">return</span> <span class="n">G</span>    <span class="c"># Return the whole graph.</span>
+</div>
+<div class="viewcode-block" id="topic_coupling"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.terms.topic_coupling">[docs]</a><span class="k">def</span> <span class="nf">topic_coupling</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a network of words connected by implication in a common topic(s).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : :class:`.LDAModel`</span>
+<span class="sd">    threshold : float</span>
+<span class="sd">        Minimum P(W|T) for coupling.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tc : networkx.Graph</span>
+<span class="sd">        A topic-coupling graph, where nodes are terms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">top_word</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">top_word</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">edges</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">Z</span><span class="p">):</span>
+        <span class="n">word_sub</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">W</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">top_word</span><span class="p">[</span><span class="n">z</span><span class="p">,</span><span class="n">w</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">:</span>
+                <span class="n">word_sub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">word_sub</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">word_sub</span><span class="p">)):</span>
+                <span class="n">w_i</span> <span class="o">=</span> <span class="n">word_sub</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">w_j</span> <span class="o">=</span> <span class="n">word_sub</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">p_i</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">top_word</span><span class="p">[</span><span class="n">z</span><span class="p">,</span><span class="n">w_i</span><span class="p">]</span>
+                <span class="n">p_j</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">top_word</span><span class="p">[</span><span class="n">z</span><span class="p">,</span><span class="n">w_j</span><span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">edges</span><span class="p">[(</span><span class="n">w_i</span><span class="p">,</span><span class="n">w_j</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">z</span><span class="p">,</span> <span class="p">(</span><span class="n">p_i</span><span class="o">+</span><span class="n">p_j</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">edges</span><span class="p">[(</span><span class="n">w_i</span><span class="p">,</span><span class="n">w_j</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">z</span><span class="p">,</span> <span class="p">(</span><span class="n">p_i</span><span class="o">+</span><span class="n">p_j</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)]</span>
+    <span class="n">tc</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">e</span><span class="p">,</span> <span class="n">topics</span> <span class="ow">in</span> <span class="n">edges</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="n">weight</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span> <span class="p">[</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">topics</span> <span class="p">]</span> <span class="p">)</span> <span class="o">/</span> <span class="n">Z</span>
+        <span class="n">i_id</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">vocabulary</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">j_id</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">vocabulary</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">tc</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">i_id</span><span class="p">,</span> <span class="n">j_id</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span> <span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">topics</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">tc</span></div>
 </pre></div>
 
           </div>

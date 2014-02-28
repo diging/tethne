@@ -62,9 +62,37 @@
 <div class="viewcode-block" id="node_global_closeness_centrality"><a class="viewcode-back" href="../../../tethne.analyze.html#tethne.analyze.graph.node_global_closeness_centrality">[docs]</a><span class="k">def</span> <span class="nf">node_global_closeness_centrality</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the global closeness centrality of a single node in the network.</span>
-<span class="sd">    For connected graphs, equivalent to conventional betweenness centrality.</span>
-<span class="sd">    For disconnected graphs, works around infinite path lengths between nodes</span>
-<span class="sd">    in different components.</span>
+
+<span class="sd">    Closeness centrality is based on the average shortest path length</span>
+<span class="sd">    between a focal node and all other nodes in the network. For multi-component</span>
+<span class="sd">    graphs, conventional closeness centrality metrics fail because it is not</span>
+<span class="sd">    possible to traverse between a given node and all other nodes in the graph.</span>
+<span class="sd">    Global closeness centrality is calculated in a way that yields values even</span>
+<span class="sd">    for multi-component graphs. For an example of how global closeness</span>
+<span class="sd">    centrality can be used to analyze co-authorship networks, see the blog post</span>
+<span class="sd">    `here &lt;http://devo-evo.lab.asu.edu/node/459&gt;`_.</span>
+
+<span class="sd">    To calculate the global closeness centrality of a single node, try:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; import tethne.analyze as az</span>
+<span class="sd">       &gt;&gt;&gt; ngbc = az.node_global_closeness_centrality(BC, &#39;LEE 1975 EVOLUTION&#39;)</span>
+<span class="sd">       &gt;&gt;&gt; ngbc</span>
+<span class="sd">       0.154245</span>
+
+<span class="sd">    You can calculate the global closeness centrality of all nodes in the</span>
+<span class="sd">    network using :func:`.global_closeness_centrality` .</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; GBC = az.global_closeness_centrality(BC)</span>
+<span class="sd">       &gt;&gt;&gt; GBC</span>
+<span class="sd">       {&#39;a&#39;: 0.0, &#39;c&#39;: 0.0, &#39;b&#39;: 0.6666666666666666, &#39;d&#39;: 0.0}</span>
+
+<span class="sd">    For connected graphs, this is equivalent to conventional betweenness</span>
+<span class="sd">    centrality. For disconnected graphs, works around infinite path lengths</span>
+<span class="sd">    between nodes in different components.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -81,7 +109,6 @@
 <span class="sd">        Global closeness centrality of node.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">g</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">coauthors</span><span class="p">(</span><span class="nb">slice</span><span class="p">)</span>
     <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">pl</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">shortest_path_length</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
@@ -103,10 +130,9 @@
 </div>
 <div class="viewcode-block" id="global_closeness_centrality"><a class="viewcode-back" href="../../../tethne.analyze.html#tethne.analyze.graph.global_closeness_centrality">[docs]</a><span class="k">def</span> <span class="nf">global_closeness_centrality</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculates global closeness centrality for all nodes in the network. For</span>
-<span class="sd">    connected graphs, equivalent to conventional betweenness centrality. For</span>
-<span class="sd">    disconnected graphs, works around infinite path lengths between nodes in</span>
-<span class="sd">    different components.</span>
+<span class="sd">    Calculates global closeness centrality for all nodes in the network.</span>
+
+<span class="sd">    See :func:`.node_global_closeness_centrality` for more information.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
