@@ -1,0 +1,651 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tethne.__main__ &mdash; tethne 0.3.1-alpha documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3.1-alpha',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="tethne 0.3.1-alpha documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">tethne 0.3.1-alpha documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for tethne.__main__</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="isfloat"><a class="viewcode-back" href="../../tethne.html#tethne.__main__.isfloat">[docs]</a><span class="k">def</span> <span class="nf">isfloat</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="isint"><a class="viewcode-back" href="../../tethne.html#tethne.__main__.isint">[docs]</a><span class="k">def</span> <span class="nf">isint</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    
+    <span class="kn">import</span> <span class="nn">csv</span>
+    <span class="kn">import</span> <span class="nn">sys</span>
+    <span class="kn">import</span> <span class="nn">os</span>
+    <span class="kn">import</span> <span class="nn">time</span>
+    <span class="kn">import</span> <span class="nn">math</span>
+    <span class="kn">import</span> <span class="nn">pickle</span>
+    <span class="kn">from</span> <span class="nn">optparse</span> <span class="kn">import</span> <span class="n">OptionParser</span><span class="p">,</span> <span class="n">OptionGroup</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+    
+    <span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
+    <span class="kn">import</span> <span class="nn">tethne.networks</span> <span class="kn">as</span> <span class="nn">nt</span>
+    <span class="kn">import</span> <span class="nn">tethne.analyze</span> <span class="kn">as</span> <span class="nn">az</span>
+    <span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
+    <span class="kn">from</span> <span class="nn">tethne.data</span> <span class="kn">import</span> <span class="n">DataCollection</span><span class="p">,</span> <span class="n">GraphCollection</span>
+    <span class="kn">from</span> <span class="nn">tethne.builders</span> <span class="kn">import</span> <span class="n">authorCollectionBuilder</span><span class="p">,</span> <span class="n">paperCollectionBuilder</span>
+    
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">OptionParser</span><span class="p">()</span>
+
+    <span class="c"># Only one of the following workflow steps will be carried out per </span>
+    <span class="c">#  script execution.</span>
+    <span class="n">workflowGroup</span> <span class="o">=</span> <span class="n">OptionGroup</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="s">&quot;Workflow Steps&quot;</span><span class="p">,</span>
+                            <span class="s">&quot;Choose one workflow step per script execution.&quot;</span>  <span class="o">+</span>\
+                            <span class="s">&quot; Each workflow step requires a different set of&quot;</span> <span class="o">+</span>\
+                            <span class="s">&quot; additional options.&quot;</span><span class="p">)</span>
+
+    <span class="n">workflowGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--read-file&quot;</span><span class="p">,</span>
+                             <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;read_f&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                             <span class="n">help</span><span class="o">=</span><span class="s">&quot;Read from a single data file. Requires&quot;</span>    <span class="o">+</span>\
+                                  <span class="s">&quot; --data-path and --data-format.&quot;</span><span class="p">)</span>
+    <span class="n">workflowGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--read-dir&quot;</span><span class="p">,</span>
+                             <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;read_d&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                             <span class="n">help</span><span class="o">=</span><span class="s">&quot;Read from a directory containing multiple&quot;</span> <span class="o">+</span>\
+                                  <span class="s">&quot; data files. Requires --data-path and&quot;</span>     <span class="o">+</span>\
+                                  <span class="s">&quot; --data-format.&quot;</span><span class="p">)</span>
+    <span class="n">workflowGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--slice&quot;</span><span class="p">,</span>
+                             <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;slice&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                             <span class="n">help</span><span class="o">=</span><span class="s">&quot;Slice your dataset for comparison along a&quot;</span> <span class="o">+</span>\
+                                  <span class="s">&quot; key axis. Requires --slice-axis. If&quot;</span>      <span class="o">+</span>\
+                                  <span class="s">&quot; --outpath is set, produces a table with&quot;</span>  <span class="o">+</span>\
+                                  <span class="s">&quot; binned paper frequencies in [OUTPATH]/&quot;</span>   <span class="o">+</span>\
+                                  <span class="s">&quot;[DATASET_ID]_slices.csv.&quot;</span><span class="p">)</span>
+    <span class="n">workflowGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--graph&quot;</span><span class="p">,</span>
+                             <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;graph&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="s">&quot;Generate a graph (or collection of graphs).&quot;</span><span class="o">+</span>\
+                                 <span class="s">&quot; If --outpath is set, produces a table with&quot;</span><span class="o">+</span>\
+                                 <span class="s">&quot; the number of nodes and edges per graph in&quot;</span><span class="o">+</span>\
+                                 <span class="s">&quot; [OUTPATH]/[DATASET_ID]_graphs.csv/&quot;</span><span class="p">)</span>
+    <span class="n">workflowGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--analyze&quot;</span><span class="p">,</span>
+                             <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;analyze&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="s">&quot;Analyze a graph (or collection of graphs).&quot;</span> <span class="o">+</span>\
+                                 <span class="s">&quot; If --outpath is set, produces a table with&quot;</span><span class="o">+</span>\
+                                 <span class="s">&quot; the mean and variance of the algorithm&quot;</span>    <span class="o">+</span>\
+                                 <span class="s">&quot; result for each graph, in [OUTPATH]/&quot;</span>      <span class="o">+</span>\
+                                 <span class="s">&quot;[DATASET_ID]_[ALGORITHM]_analysis.csv.&quot;</span><span class="p">)</span>
+    <span class="n">workflowGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--write&quot;</span><span class="p">,</span>
+                             <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;write&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="s">&quot;Write a graph (or collection of graphs) to&quot;</span> <span class="o">+</span>\
+                                 <span class="s">&quot; a structured format, in [OUTPATH].&quot;</span><span class="p">)</span>
+    
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-I&quot;</span><span class="p">,</span> <span class="s">&quot;--dataset-id&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;dataset_id&quot;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s">&quot;Unique ID (required).&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-t&quot;</span><span class="p">,</span> <span class="s">&quot;--temp-dir&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;temp_dir&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&quot;/tmp&quot;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s">&quot;Directory for storing temporary files.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-O&quot;</span><span class="p">,</span> <span class="s">&quot;--outpath&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;outpath&quot;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s">&quot;Path to save workflow output. Some workflow steps&quot;</span><span class="o">+</span>\
+                           <span class="s">&quot; will generate summary statistics or other output.&quot;</span><span class="p">)</span>
+
+    <span class="c"># Options for read workflow step.</span>
+    <span class="n">readGroup</span> <span class="o">=</span> <span class="n">OptionGroup</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="s">&quot;Options for read workflow step&quot;</span><span class="p">)</span>
+    
+    <span class="n">readGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-P&quot;</span><span class="p">,</span> <span class="s">&quot;--data-path&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;datapath&quot;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s">&quot;Full path to dataset.&quot;</span><span class="p">)</span>
+                      
+    <span class="n">readGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-F&quot;</span><span class="p">,</span> <span class="s">&quot;--data-format&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;dataformat&quot;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s">&quot;Format of input dataset (WOS, DFR).&quot;</span><span class="p">)</span>
+
+    <span class="c"># Options for slice workflow step.</span>
+    <span class="n">sliceGroup</span> <span class="o">=</span> <span class="n">OptionGroup</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="s">&quot;Options for slice workflow step&quot;</span><span class="p">)</span>
+    
+    <span class="n">sliceGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-S&quot;</span><span class="p">,</span> <span class="s">&quot;--slice-axis&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;slice_axis&quot;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s">&quot;Key along which to slice the dataset. This can be&quot;</span><span class="o">+</span>\
+                           <span class="s">&quot; one of any of the fields listed in the API &quot;</span> <span class="o">+</span> \
+                           <span class="s">&quot; documentation: &quot;</span> <span class="o">+</span> \
+                           <span class="s">&quot;./doc/api/tethne.html#tethne.data.Paper .&quot;</span><span class="p">)</span>
+                           
+    <span class="n">sliceGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-M&quot;</span><span class="p">,</span> <span class="s">&quot;--slice-method&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;slice_method&quot;</span><span class="p">,</span>
+               <span class="n">default</span><span class="o">=</span><span class="s">&quot;time_period&quot;</span><span class="p">,</span>
+               <span class="n">help</span><span class="o">=</span><span class="s">&quot;Method used to slice DataCollection. Available methods:&quot;</span> <span class="o">+</span>\
+                    <span class="s">&quot; time_window, time_period. For details, see&quot;</span>             <span class="o">+</span>\
+                    <span class="s">&quot; ./doc/api/tethne.html#tethne.data.DataCollection.slice.&quot;</span><span class="o">+</span>\
+                    <span class="s">&quot; Default is time_period.&quot;</span><span class="p">)</span>
+                    
+    <span class="n">sliceGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--slice-window-size&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;window_size&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s">&quot;Size of slice time-window or period, in years.&quot;</span> <span class="o">+</span>\
+                             <span class="s">&quot; Default is 1.&quot;</span><span class="p">)</span>
+                             
+    <span class="n">sliceGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--slice-step-size&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;step_size&quot;</span><span class="p">,</span>
+                          <span class="n">help</span><span class="o">=</span><span class="s">&quot;Amount to advance time-window in each step&quot;</span> <span class="o">+</span>\
+                               <span class="s">&quot; (ignored for time-period).&quot;</span><span class="p">)</span>
+    
+    <span class="n">sliceGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--cumulative&quot;</span><span class="p">,</span>
+                          <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;cumulative&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                          <span class="n">help</span><span class="o">=</span><span class="s">&quot;If True, the data from each successive slice&quot;</span> <span class="o">+</span>\
+                                <span class="s">&quot; includes the data from all preceding slices.&quot;</span><span class="p">)</span>
+
+    <span class="c"># Required arguments for network-building.</span>
+    <span class="n">graphReqGroup</span> <span class="o">=</span> <span class="n">OptionGroup</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="s">&quot;Required options for graph workflow&quot;</span> <span class="o">+</span>\
+                                        <span class="s">&quot; step.&quot;</span><span class="p">)</span>
+                                    
+    <span class="n">graphReqGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-N&quot;</span><span class="p">,</span> <span class="s">&quot;--node-type&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;node_type&quot;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s">&quot;Must be one of: author, paper, term.&quot;</span><span class="p">)</span>
+                      
+    <span class="n">graphReqGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-T&quot;</span><span class="p">,</span> <span class="s">&quot;--graph-type&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;graph_type&quot;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s">&quot;Name of a network-builing method. Can be one of &quot;</span> <span class="o">+</span>\
+                           <span class="s">&quot;any of the methods listed in the API &quot;</span> <span class="o">+</span> \
+                           <span class="s">&quot;documentation: &quot;</span> <span class="o">+</span> \
+                           <span class="s">&quot;./doc/api/tethne.networks.html#module-tethne.&quot;</span><span class="o">+</span>\
+                           <span class="s">&quot;networks. e.g. if &#39;-n&#39; is &#39;author&#39;, &#39;-t&#39; could be&quot;</span><span class="o">+</span>\
+                           <span class="s">&quot; &#39;coauthors&#39;&quot;</span><span class="p">)</span>
+
+    <span class="c"># Optional arguments for network-building, for setting keyword arguments of</span>
+    <span class="c">#  methods in tethne.networks.</span>
+    <span class="n">graphGroup</span> <span class="o">=</span> <span class="n">OptionGroup</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="s">&quot;Optional network-building arguments&quot;</span><span class="p">,</span>
+                             <span class="s">&quot;Each network-building method takes some&quot;</span><span class="o">+</span>\
+                             <span class="s">&quot; optional arguments to control its output. See&quot;</span><span class="o">+</span>\
+                             <span class="s">&quot; ./doc/api/tethne.networks.html for &quot;</span><span class="o">+</span>\
+                             <span class="s">&quot; a complete description of each method and&quot;</span><span class="o">+</span>\
+                             <span class="s">&quot; available arguments. If the selected method&quot;</span><span class="o">+</span>\
+                             <span class="s">&quot; does not accept an argument from the list&quot;</span><span class="o">+</span>\
+                             <span class="s">&quot; below, it will be ignored.&quot;</span><span class="p">)</span>
+
+    <span class="n">graphGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--merged&quot;</span><span class="p">,</span>
+                          <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;merged&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                          <span class="n">help</span><span class="o">=</span><span class="s">&quot;Ignore DataCollection slicing, and build&quot;</span> <span class="o">+</span>\
+                               <span class="s">&quot; a single graph from all Papers.&quot;</span><span class="p">)</span>
+                             
+    <span class="n">graphGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--threshold&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;threshold&quot;</span><span class="p">,</span>
+                          <span class="n">help</span><span class="o">=</span><span class="s">&quot;Set the &#39;threshold&#39; argument.&quot;</span><span class="p">)</span>
+                          
+    <span class="n">graphGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--topn&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;topn&quot;</span><span class="p">,</span>
+                          <span class="n">help</span><span class="o">=</span><span class="s">&quot;Set the &#39;topn&#39; argument.&quot;</span><span class="p">)</span>
+                          
+    <span class="n">graphGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--node-attr&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;node_attr&quot;</span><span class="p">,</span>
+                          <span class="n">help</span><span class="o">=</span><span class="s">&quot;List of attributes to include for each node.&quot;</span> <span class="o">+</span>\
+                               <span class="s">&quot; e.g. --node-attr=date,atitle,jtitle&quot;</span><span class="p">)</span>
+                               
+    <span class="n">graphGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--edge-attr&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;edge_attr&quot;</span><span class="p">,</span>
+                          <span class="n">help</span><span class="o">=</span><span class="s">&quot;List of attributes to include for each edge.&quot;</span> <span class="o">+</span>\
+                               <span class="s">&quot; e.g. --edge-attr=ayjid,atitle,date&quot;</span><span class="p">)</span>
+                               
+    <span class="n">graphGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--node-id&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;node_id&quot;</span><span class="p">,</span>
+                          <span class="n">help</span><span class="o">=</span><span class="s">&quot;Field to use as node id (for papers graphs).&quot;</span> <span class="o">+</span>\
+                               <span class="s">&quot; e.g. --node-id=ayjid&quot;</span><span class="p">)</span>
+                               
+    <span class="n">graphGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--weighted&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;weighted&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span>
+                          <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                          <span class="n">help</span><span class="o">=</span><span class="s">&quot;Trigger the &#39;weighted&#39; argument.&quot;</span><span class="p">)</span>
+    
+    <span class="c"># Required arguments for graph analysis.</span>
+    <span class="n">analyzeGroup</span> <span class="o">=</span> <span class="n">OptionGroup</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="s">&quot;Required options for analyze workflow&quot;</span><span class="o">+</span>\
+                                       <span class="s">&quot; step.&quot;</span><span class="p">)</span>
+    
+    <span class="n">analyzeGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-A&quot;</span><span class="p">,</span> <span class="s">&quot;--algorithm&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;algorithm&quot;</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="s">&quot;Name of a NetworkX graph analysis algorithm.&quot;</span><span class="p">)</span>
+                            
+    <span class="c"># Required arguments for graph writing.</span>
+    <span class="n">writeGroup</span> <span class="o">=</span> <span class="n">OptionGroup</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="s">&quot;Required options for write workflow &quot;</span> <span class="o">+</span>\
+                                     <span class="s">&quot;step.&quot;</span><span class="p">)</span>
+    <span class="n">writeGroup</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-W&quot;</span><span class="p">,</span> <span class="s">&quot;--write-format&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;write_format&quot;</span><span class="p">,</span>
+                          <span class="n">help</span><span class="o">=</span><span class="s">&quot;Output format for graph(s). If a static graph&quot;</span><span class="o">+</span>\
+                               <span class="s">&quot; format is chosen (e.g. graphml), each slice&quot;</span> <span class="o">+</span>\
+                               <span class="s">&quot; in the GraphCollection will result in a&quot;</span>     <span class="o">+</span>\
+                               <span class="s">&quot; separate file. Supported writers: (static)&quot;</span>  <span class="o">+</span>\
+                               <span class="s">&quot; graphml, gexf; (dynamic) xgmml&quot;</span><span class="p">)</span>
+                               
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option_group</span><span class="p">(</span><span class="n">workflowGroup</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option_group</span><span class="p">(</span><span class="n">readGroup</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option_group</span><span class="p">(</span><span class="n">sliceGroup</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option_group</span><span class="p">(</span><span class="n">graphReqGroup</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option_group</span><span class="p">(</span><span class="n">graphGroup</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option_group</span><span class="p">(</span><span class="n">analyzeGroup</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option_group</span><span class="p">(</span><span class="n">writeGroup</span><span class="p">)</span>
+    
+    <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    
+    
+    <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">dataset_id</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;Must specify --dataset-id&#39;</span><span class="p">)</span>
+    
+    <span class="c">#############################</span>
+    <span class="c">#   Workflow step: Read     #</span>
+    <span class="c">#############################</span>
+    <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">read_f</span> <span class="ow">or</span> <span class="n">options</span><span class="o">.</span><span class="n">read_d</span><span class="p">:</span>
+    
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;-&quot;</span><span class="o">*</span><span class="mi">40</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\t</span><span class="s">Workflow step: Read</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;-&quot;</span><span class="o">*</span><span class="mi">40</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        
+        <span class="c"># Must specify path.</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">datapath</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>    
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;Specify path to data with --data-path&#39;</span><span class="p">)</span>
+            
+        <span class="c"># Must specify format.</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">dataformat</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>      
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;Specify data format with --format argument.&#39;</span><span class="p">)</span>
+        
+        <span class="c"># Must select a supported format.</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">dataformat</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;WOS&#39;</span><span class="p">,</span> <span class="s">&#39;DFR&#39;</span><span class="p">]:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;Data format must be one of: WOS, DFR.&#39;</span><span class="p">)</span>
+        
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Reading {0} data from file {1}...&quot;</span>
+                                  <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">dataformat</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">datapath</span><span class="p">))</span>
+
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">dataformat</span> <span class="o">==</span> <span class="s">&#39;WOS&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">read_f</span><span class="p">:</span>
+                <span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">datapath</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">read_d</span><span class="p">:</span>
+                <span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">from_dir</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">datapath</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">options</span><span class="o">.</span><span class="n">dataformat</span> <span class="o">==</span> <span class="s">&#39;DFR&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">read_f</span><span class="p">:</span>
+                <span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">dfr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">datapath</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">read_d</span><span class="p">:</span>
+                <span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">dfr</span><span class="o">.</span><span class="n">from_dir</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">datapath</span><span class="p">)</span>
+
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">papers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;accession&#39;</span><span class="p">]</span>
+
+        <span class="n">t</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Read {0} papers in {1} seconds. Accession: {2}.</span><span class="se">\n</span><span class="s">&quot;</span>
+                                                               <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">a</span><span class="p">))</span>
+
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Generating a new DataCollection...&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">dataformat</span> <span class="o">==</span> <span class="s">&#39;WOS&#39;</span><span class="p">:</span>
+            <span class="n">index_by</span> <span class="o">=</span> <span class="s">&#39;wosid&#39;</span>
+        <span class="k">elif</span> <span class="n">options</span><span class="o">.</span><span class="n">dataformat</span> <span class="o">==</span> <span class="s">&#39;DFR&#39;</span><span class="p">:</span>
+            <span class="n">index_by</span> <span class="o">=</span> <span class="s">&#39;doi&#39;</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">DataCollection</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="n">index_by</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+
+        <span class="c"># Save DataCollection for next workflow step.</span>
+        <span class="n">savepath</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">temp_dir</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> \
+                   <span class="n">options</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">+</span> <span class="s">&quot;_DataCollection.pickle&quot;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Saving DataCollection to {0}...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">savepath</span><span class="p">))</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">savepath</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        
+    <span class="c">#############################</span>
+    <span class="c">#   Workflow step: Slice    #</span>
+    <span class="c">#############################</span>
+    <span class="k">elif</span> <span class="n">options</span><span class="o">.</span><span class="n">slice</span><span class="p">:</span>
+    
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;-&quot;</span><span class="o">*</span><span class="mi">40</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\t</span><span class="s">Workflow step: Slice</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;-&quot;</span><span class="o">*</span><span class="mi">40</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        
+        <span class="c"># Must specify a slice axis.</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">slice_axis</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;Must specifify a slice axis with --slice-axis.&#39;</span><span class="p">)</span>
+        
+        <span class="c"># Load DataCollection.</span>
+        <span class="n">loadpath</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">temp_dir</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> \
+                   <span class="n">options</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">+</span> <span class="s">&quot;_DataCollection.pickle&quot;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Loading DataCollection from {0}...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loadpath</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+                
+        <span class="n">D</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">loadpath</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        
+        <span class="c"># Slice DataCollection</span>
+        <span class="n">axes</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">slice_axis</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Slicing DataCollection by {0}...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+            
+            <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="s">&#39;date&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">step_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">step_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">step_size</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">step_size</span> <span class="o">=</span> <span class="mi">1</span>
+
+                <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">window_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">window_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">window_size</span> <span class="o">=</span> <span class="mi">1</span>
+
+                    
+                <span class="n">D</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">slice_method</span><span class="p">,</span> 
+                           <span class="n">window_size</span><span class="o">=</span><span class="n">window_size</span><span class="p">,</span>
+                           <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+                           <span class="n">cumulative</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">cumulative</span> <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">D</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        
+        <span class="c"># Generate binned data. For now, only uses first two axes.</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">outpath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">summarypath</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">outpath</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> \
+                          <span class="n">options</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">+</span> <span class="s">&quot;_sliceDistribution.csv&quot;</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Saving slice distribution to {0}...&quot;</span>
+                                                           <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">summarypath</span><span class="p">))</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+                                                                       
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">summarypath</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c"># 2-dimensional slice binning.</span>
+                    <span class="n">A_indices</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                    <span class="n">B_indices</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s">&#39;&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">A_indices</span><span class="p">)</span>
+                    <span class="n">dist</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">distribution_2d</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                        <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">B_indices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">dist</span><span class="p">[:,</span><span class="n">i</span><span class="p">]))</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>    <span class="c"># 1-dimensional slice binning.</span>
+                    <span class="n">dist</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">distribution</span><span class="p">()</span>
+                    <span class="n">A_indices</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                        <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">A_indices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        
+        <span class="c"># Save sliced DataCollection for next workflow step.</span>
+        <span class="n">savepath</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">temp_dir</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> \
+                   <span class="n">options</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">+</span> <span class="s">&quot;_DataCollection_sliced.pickle&quot;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Saving sliced DataCollection to {0}...&quot;</span>
+                                                              <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">savepath</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>                                                              
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">savepath</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        
+    <span class="c">#############################</span>
+    <span class="c">#   Workflow step: Graph    #</span>
+    <span class="c">#############################</span>
+    <span class="k">elif</span> <span class="n">options</span><span class="o">.</span><span class="n">graph</span><span class="p">:</span>
+    
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;-&quot;</span><span class="o">*</span><span class="mi">40</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\t</span><span class="s">Workflow step: Graph</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;-&quot;</span><span class="o">*</span><span class="mi">40</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>    
+    
+        <span class="c"># Must specifiy node type.</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">node_type</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;Must specify node type with --node-type.&#39;</span><span class="p">)</span>
+        
+        <span class="c"># Must specify graph type.</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">graph_type</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;Must specifiy a graph type with --graph-type.&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">merged</span><span class="p">:</span>
+            <span class="n">loadpath</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">temp_dir</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> \
+                       <span class="n">options</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">+</span> <span class="s">&quot;_DataCollection.pickle&quot;</span>
+            <span class="n">qualifier</span> <span class="o">=</span> <span class="s">&quot;without&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">loadpath</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">temp_dir</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> \
+                       <span class="n">options</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">+</span> <span class="s">&quot;_DataCollection_sliced.pickle&quot;</span>
+            <span class="n">qualifier</span> <span class="o">=</span> <span class="s">&quot;with&quot;</span>
+            
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Loading DataCollection {0} slices from {1}...&quot;</span>
+                                                   <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">qualifier</span><span class="p">,</span> <span class="n">loadpath</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>                                                    
+        
+        <span class="n">D</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">loadpath</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">options</span><span class="o">.</span><span class="n">merged</span><span class="p">:</span>
+            <span class="c"># Uses the first axis only!</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Using first slice in DataCollection: {0}.</span><span class="se">\n</span><span class="s">&quot;</span>
+                                                                     <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+                                                                 
+        <span class="c"># Build kwargs.</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">threshold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;threshold&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">threshold</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">topn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">isint</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">topn</span><span class="p">):</span> <span class="n">topn</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">topn</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">isfloat</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">topn</span><span class="p">):</span> <span class="n">topn</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">topn</span><span class="p">)</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;topn&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">topn</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">node_attr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;node_attribs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">node_attr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">edge_attr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edge_attribs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">edge_attr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">node_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;node_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">node_id</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;weighted&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">weighted</span>
+        
+        <span class="c"># Build the graph(s).</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Building {0} graph using {1} method...&quot;</span>
+                                 <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">node_type</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">graph_type</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>        
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">options</span><span class="o">.</span><span class="n">merged</span><span class="p">:</span>  <span class="c"># Generate GraphCollection from DataCollection.</span>
+            <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">node_type</span> <span class="o">==</span> <span class="s">&#39;paper&#39;</span><span class="p">:</span>
+                <span class="n">builder</span> <span class="o">=</span> <span class="n">paperCollectionBuilder</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+                
+            <span class="k">elif</span> <span class="n">options</span><span class="o">.</span><span class="n">node_type</span> <span class="o">==</span> <span class="s">&#39;author&#39;</span><span class="p">:</span>
+                <span class="n">builder</span> <span class="o">=</span> <span class="n">authorCollectionBuilder</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+
+            <span class="n">C</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">graph_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>   <span class="c"># Generate a single Graph from all of the papers in </span>
+                <span class="c">#  DataCollection, D.</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">options</span><span class="o">.</span><span class="n">node_type</span><span class="o">+</span><span class="s">&#39;s&#39;</span><span class="p">]</span> \
+                       <span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">options</span><span class="o">.</span><span class="n">graph_type</span><span class="p">]</span>
+            
+            <span class="n">G</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">papers</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">C</span> <span class="o">=</span> <span class="n">GraphCollection</span><span class="p">()</span>
+            <span class="n">C</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="s">&#39;all&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">G</span>
+            
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done in {0} seconds.</span><span class="se">\n</span><span class="s">&quot;</span>
+                                                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start_time</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">node_type</span> <span class="o">==</span> <span class="s">&#39;term&#39;</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;Term graphs not yet implemented. Coming soon!</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+            
+        <span class="n">savepath</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">temp_dir</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> \
+                   <span class="n">options</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">+</span> <span class="s">&quot;_GraphCollection.pickle&quot;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Saving GraphCollection to {0}...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">savepath</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">savepath</span><span class="p">,</span> <span class="s">&quot;wb&quot;</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">outpath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">resultspath</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">outpath</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> \
+                          <span class="n">options</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">+</span> <span class="s">&quot;_graphs.csv&quot;</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Writing graph summaries to {0}...&quot;</span>
+                                                           <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">resultspath</span><span class="p">))</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+            
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">resultspath</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s">&#39;index&#39;</span><span class="p">,</span> <span class="s">&#39;nodes&#39;</span><span class="p">,</span> <span class="s">&#39;edges&#39;</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">g</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">graphs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">key</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">()),</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">())])</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        
+    <span class="c">#############################</span>
+    <span class="c">#   Workflow step: Analyze  #</span>
+    <span class="c">#############################            </span>
+
+    <span class="k">elif</span> <span class="n">options</span><span class="o">.</span><span class="n">analyze</span><span class="p">:</span>   <span class="c"># Only supports collection.algorithm, for now.</span>
+    
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;-&quot;</span><span class="o">*</span><span class="mi">40</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\t</span><span class="s">Workflow step: Analyze</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;-&quot;</span><span class="o">*</span><span class="mi">40</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>    
+        
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">algorithm</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;Must specify algorithm with --algorithm.&#39;</span><span class="p">)</span>
+        
+        <span class="n">loadpath</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">temp_dir</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> \
+                   <span class="n">options</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">+</span> <span class="s">&quot;_GraphCollection.pickle&quot;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Loading GraphCollection from {0}...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loadpath</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">loadpath</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Analyzing GraphCollection with {0}...&quot;</span>
+                                                     <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">algorithm</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        
+        <span class="n">r</span> <span class="o">=</span> <span class="n">az</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">algorithm</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">outpath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">resultspath</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">outpath</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="n">options</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">+</span> <span class="s">&quot;_&quot;</span> <span class="o">+</span> \
+                          <span class="n">options</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">+</span> <span class="s">&quot;_analysis.csv&quot;</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Writing graph analysis results to {0}...&quot;</span>
+                                                           <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">resultspath</span><span class="p">))</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+            
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">resultspath</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s">&#39;index&#39;</span><span class="p">,</span> <span class="s">&#39;mean&#39;</span><span class="p">,</span> <span class="s">&#39;variance&#39;</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">g</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">graphs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                    <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span> <span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">options</span><span class="o">.</span><span class="n">algorithm</span><span class="p">]</span> \
+                                                  <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">])</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">([</span> <span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">options</span><span class="o">.</span><span class="n">algorithm</span><span class="p">]</span> \
+                                                  <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">])</span>
+                    
+                    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">key</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">v</span><span class="p">])</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+
+        <span class="c"># Save GraphCollection (overwrites old GC).</span>
+        <span class="n">savepath</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">temp_dir</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> \
+                   <span class="n">options</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">+</span> <span class="s">&quot;_GraphCollection.pickle&quot;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Saving GraphCollection to {0}...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">savepath</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">savepath</span><span class="p">,</span> <span class="s">&quot;wb&quot;</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>            
+            
+    <span class="c">#############################</span>
+    <span class="c">#   Workflow step: Write    #</span>
+    <span class="c">#############################            </span>
+
+    <span class="k">elif</span> <span class="n">options</span><span class="o">.</span><span class="n">write</span><span class="p">:</span>   <span class="c"># Only supports collection.algorithm, for now.</span>
+    
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;-&quot;</span><span class="o">*</span><span class="mi">40</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\t</span><span class="s">Workflow step: Write</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;-&quot;</span><span class="o">*</span><span class="mi">40</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+
+        <span class="c"># Load GraphCollection.</span>
+        <span class="n">loadpath</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">temp_dir</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> \
+                   <span class="n">options</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">+</span> <span class="s">&quot;_GraphCollection.pickle&quot;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Loading GraphCollection from {0}...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loadpath</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">loadpath</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+                
+        <span class="c"># --write-format is required.</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">write_format</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;Must specify graph output format with --write-format.&#39;</span><span class="p">)</span>
+        
+        <span class="c"># --outpath is required.</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">outpath</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;Must specify output path with --outpath.&#39;</span><span class="p">)</span>
+        
+        
+        <span class="c"># Write the graphs!</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Writing graphs to {0} with format {1}...&quot;</span>
+                                 <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">outpath</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">write_format</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        
+        <span class="n">basepath</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">outpath</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="n">options</span><span class="o">.</span><span class="n">dataset_id</span> <span class="o">+</span> <span class="s">&quot;_graph_&quot;</span>
+                           
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">write_format</span> <span class="o">==</span> <span class="s">&#39;graphml&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">g</span> <span class="ow">in</span> <span class="n">C</span><span class="o">.</span><span class="n">graphs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                <span class="n">wr</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">to_graphml</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">basepath</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">options</span><span class="o">.</span><span class="n">write_format</span> <span class="o">==</span> <span class="s">&#39;xgmml&#39;</span><span class="p">:</span>
+            <span class="n">wr</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">to_dxgmml</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">basepath</span><span class="o">+</span><span class="s">&quot;dynamic.xgmml&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;done.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">tethne 0.3.1-alpha documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, ASU Digital Innovation Group.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

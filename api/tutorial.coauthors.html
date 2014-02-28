@@ -27,7 +27,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="tethne 0.3.1-alpha documentation" href="index.html" />
     <link rel="up" title="Tutorial" href="tutorial.html" />
-    <link rel="next" title="Creating Networks from Bibliographic Data" href="tutorial.networks.html" />
+    <link rel="next" title="Bibliographic Coupling" href="tutorial.bibliocoupling.html" />
     <link rel="prev" title="Quickstart (Python)" href="tutorial.quickstart.python.html" /> 
   </head>
   <body>
@@ -44,7 +44,7 @@
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorial.networks.html" title="Creating Networks from Bibliographic Data"
+          <a href="tutorial.bibliocoupling.html" title="Bibliographic Coupling"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="tutorial.quickstart.python.html" title="Quickstart (Python)"
@@ -60,7 +60,11 @@
           <div class="body">
             
   <div class="section" id="coauthorship-networks">
-<h1>Coauthorship Networks<a class="headerlink" href="#coauthorship-networks" title="Permalink to this headline">¶</a></h1>
+<span id="coauthorship"></span><h1>Coauthorship Networks<a class="headerlink" href="#coauthorship-networks" title="Permalink to this headline">¶</a></h1>
+<p><a href="#id1"><span class="problematic" id="id2">*</span></a>This tutorial was developed for the course <a class="reference external" href="http://devo-evo.lab.asu.edu/methods/">Introduction to Digital &amp; Computational
+Methods in the Humanities (HPS)</a>, created and
+taught by <a class="reference external" href="http://devo-evo.lab.asu.edu/?q=damerow">Julia Damerow</a>
+and <a class="reference external" href="http://gradinfo.cbs.asu.edu/?page_id=49">Erick Peirson</a>.</p>
 <p>Coauthorship networks are among the most popular models for studying the structure of
 research communities, due in no small part to the ease with which coauthorship networks
 can be generated.</p>
@@ -82,7 +86,7 @@ track of your data between workflow steps.</p>
 <p>When you first start TethneGUI, you should see a window like the one shown below. Click
 <tt class="docutils literal"><span class="pre">Select</span> <span class="pre">folder...</span></tt> to specify your output folder. A dataset ID should be automatically
 generated for you; you can change this if you wish.</p>
-<img alt="_images/install.3.png" src="_images/install.3.png" style="width: 80%;" />
+<img alt="_images/install.3.png" class="align-center" src="_images/install.3.png" style="width: 500px;" />
 <p>Once you&#8217;ve selected an output folder and a dataset ID, click the <tt class="docutils literal"><span class="pre">Run</span> <span class="pre">Tethne...</span></tt>
 button.</p>
 </div>
@@ -118,7 +122,7 @@ If you have multiple data files in their own folder, click <tt class="docutils l
 </ol>
 <p>Depending on the size of your dataset, this may take a minute or two. When TethneGUI is
 done reading your data, you should see messages like those depicted in the image below.</p>
-<img alt="_images/coauthors.1.png" src="_images/coauthors.1.png" style="width: 80%;" />
+<img alt="_images/coauthors.1.png" class="align-center" src="_images/coauthors.1.png" style="width: 500px;" />
 <p>If your data are read successfully, click <tt class="docutils literal"><span class="pre">Next</span> <span class="pre">&gt;</span></tt>.</p>
 </div>
 <div class="section" id="python">
@@ -149,8 +153,8 @@ and the window will advance by 1 year in each slice.</p>
 period will contain data from all of the previous time-periods. In other words, the 1957
 subset will contain data from 1957, and the 1958 subset will contain data from 1957 and
 1958.</p>
-<div class="section" id="id1">
-<h3>Command-line<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h3>Command-line<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tethne -I exampleID -O /Users/erickpeirson/exampleOutput --slice -S date <span class="se">\</span>
 &gt; -M time_period --cumulative
 ----------------------------------------
@@ -163,27 +167,27 @@ Saving sliced DataCollection to /tmp/exampleID_DataCollection_sliced.pickle...do
 </pre></div>
 </div>
 </div>
-<div class="section" id="id2">
-<h3>TethneGUI<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h3>TethneGUI<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <p>The slice axis should be set to <tt class="docutils literal"><span class="pre">date</span></tt> by default. If not, select it from the
 <tt class="docutils literal"><span class="pre">Slice</span> <span class="pre">axis</span></tt> drop-down menu. Then click the <tt class="docutils literal"><span class="pre">Slice</span> <span class="pre">files</span></tt> button. After a few minutes,
 slicing should be complete; click <tt class="docutils literal"><span class="pre">Next</span> <span class="pre">&gt;</span></tt>.</p>
-<img alt="_images/coauthors.2.png" src="_images/coauthors.2.png" style="width: 80%;" />
+<img alt="_images/coauthors.2.png" class="align-center" src="_images/coauthors.2.png" style="width: 500px;" />
 </div>
 <div class="section" id="slice-distribution">
 <h3>Slice Distribution<a class="headerlink" href="#slice-distribution" title="Permalink to this headline">¶</a></h3>
 <p>Tethne command-line (and TethneGUI) automatically generates a comma-separated values (CSV)
 file describing the number of records in each data slice. In your output folder look for a
 file called <tt class="docutils literal"><span class="pre">[DATASET_ID]_sliceDistribution.csv</span></tt>.</p>
-<img alt="_images/coauthors.3.png" src="_images/coauthors.3.png" style="width: 60%;" />
+<img alt="_images/coauthors.3.png" class="align-center" src="_images/coauthors.3.png" style="width: 400px;" />
 <p>You can use your favorite spreadsheet software (e.g. Excel, Numbers, OpenOffice) to chart
 these data.</p>
-<img alt="_images/coauthors.4.png" src="_images/coauthors.4.png" style="width: 60%;" />
+<img alt="_images/coauthors.4.png" class="align-center" src="_images/coauthors.4.png" style="width: 400px;" />
 </div>
-<div class="section" id="id3">
-<h3>Python<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h3>Python<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <p>Use the <a class="reference internal" href="tethne.html#tethne.data.DataCollection.slice" title="tethne.data.DataCollection.slice"><tt class="xref py py-func docutils literal"><span class="pre">tethne.data.DataCollection.slice()</span></tt></a> method to slice your data.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">D</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;time_window&#39;</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cumulative</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">D</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;time_period&#39;</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cumulative</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -198,9 +202,10 @@ look at how the network evolves over time.</p>
 <p>To generate a coauthorship network, we will tell Tethne to use authors for nodes,
 and use the <tt class="docutils literal"><span class="pre">coauthors</span></tt> graph type. For a complete list of graph types available in
 Tethne, see <a class="reference internal" href="tethne.networks.html#module-tethne.networks" title="tethne.networks"><tt class="xref py py-mod docutils literal"><span class="pre">networks</span></tt></a>.</p>
-<div class="section" id="id4">
-<h3>Command-line<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash"><div class="highlight"><pre>tethne -I exampleID -O /Users/erickpeirson/exampleOutput --graph --merged --node-type<span class="o">=</span>author --graph-type<span class="o">=</span>coauthors
+<div class="section" id="id6">
+<h3>Command-line<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tethne -I exampleID -O /Users/erickpeirson/exampleOutput --graph --merged <span class="se">\</span>
+&gt; --node-type<span class="o">=</span>author --graph-type<span class="o">=</span>coauthors
 ----------------------------------------
         Workflow step: Graph
 ----------------------------------------
@@ -211,16 +216,16 @@ Writing graph summaries to /Users/erickpeirson/exampleOutput/exampleID_graphs.cs
 </pre></div>
 </div>
 </div>
-<div class="section" id="id5">
-<h3>TethneGUI<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>TethneGUI<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <p>Select <tt class="docutils literal"><span class="pre">author</span></tt> from the <tt class="docutils literal"><span class="pre">Node</span> <span class="pre">type</span></tt> menu, and <tt class="docutils literal"><span class="pre">coauthors</span></tt> from the <tt class="docutils literal"><span class="pre">Graph</span> <span class="pre">type</span></tt>
 menu. Check the <tt class="docutils literal"><span class="pre">Ignore</span> <span class="pre">DataCollection</span> <span class="pre">slicing</span></tt> option, then click <tt class="docutils literal"><span class="pre">Build</span> <span class="pre">graph</span></tt>.</p>
-<img alt="_images/coauthors.5.png" src="_images/coauthors.5.png" style="width: 80%;" />
+<img alt="_images/coauthors.5.png" class="align-center" src="_images/coauthors.5.png" style="width: 500px;" />
 <p>Once the graph is built, click <tt class="docutils literal"><span class="pre">Next</span> <span class="pre">&gt;</span></tt>. For now, we&#8217;ll skip the analysis step. Click
 <tt class="docutils literal"><span class="pre">Next</span> <span class="pre">&gt;</span></tt> again to reach <tt class="docutils literal"><span class="pre">Step</span> <span class="pre">5:</span> <span class="pre">Write</span> <span class="pre">graph(s)</span></tt>.</p>
 </div>
-<div class="section" id="id6">
-<h3>Python<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h3>Python<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
 <p>To generate a single graph from your <a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a>, call the
 <a class="reference internal" href="tethne.networks.html#tethne.networks.authors.coauthors" title="tethne.networks.authors.coauthors"><tt class="xref py py-func docutils literal"><span class="pre">coauthors()</span></tt></a> method directly from the <a class="reference internal" href="tethne.networks.html#module-tethne.networks.authors" title="tethne.networks.authors"><tt class="xref py py-mod docutils literal"><span class="pre">networks.authors</span></tt></a> module.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.networks</span> <span class="kn">as</span> <span class="nn">nt</span>
@@ -235,9 +240,9 @@ menu. Check the <tt class="docutils literal"><span class="pre">Ignore</span> <sp
 We will write our graph to GraphML for visualization in Cytoscape.</p>
 <p>This step should generate a file in your output folder called
 <tt class="docutils literal"><span class="pre">[DATASET_ID]_graph_all.graphml</span></tt>.</p>
-<img alt="_images/coauthors.6.png" src="_images/coauthors.6.png" style="width: 80%;" />
-<div class="section" id="id7">
-<h3>Command-line<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<img alt="_images/coauthors.6.png" class="align-center" src="_images/coauthors.6.png" style="width: 500px;" />
+<div class="section" id="id9">
+<h3>Command-line<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tethne -I exampleID -O /Users/erickpeirson/exampleOutput --write --write-format graphml
 ----------------------------------------
         Workflow step: Write
@@ -247,13 +252,13 @@ Writing graphs to /Users/erickpeirson/exampleOutput with format graphml...done.
 </pre></div>
 </div>
 </div>
-<div class="section" id="id8">
-<h3>TethneGUI<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id10">
+<h3>TethneGUI<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
 <p>Select <tt class="docutils literal"><span class="pre">graphml</span></tt> from the <tt class="docutils literal"><span class="pre">Output</span> <span class="pre">format</span> <span class="pre">for</span> <span class="pre">graph(s)</span></tt> menu, then click
 <tt class="docutils literal"><span class="pre">Write</span> <span class="pre">graph(s)</span></tt>.</p>
 </div>
-<div class="section" id="id9">
-<h3>Python<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id11">
+<h3>Python<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
 <p>Use the <a class="reference internal" href="tethne.writers.html#tethne.writers.graph.to_graphml" title="tethne.writers.graph.to_graphml"><tt class="xref py py-func docutils literal"><span class="pre">to_graphml()</span></tt></a> method in <a class="reference internal" href="tethne.writers.html#module-tethne.writers.collection" title="tethne.writers.collection"><tt class="xref py py-mod docutils literal"><span class="pre">writers.collection</span></tt></a> to create a GraphML
 data file.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
@@ -281,10 +286,10 @@ very small components. For convenience, we will only look at the few largest com
 Select the largest connected components (click and drag to create a selection box). Then
 create a new network with those selected components: select
 <tt class="docutils literal"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">New</span> <span class="pre">&gt;</span> <span class="pre">Networks</span> <span class="pre">&gt;</span> <span class="pre">From</span> <span class="pre">selected</span> <span class="pre">nodes,</span> <span class="pre">all</span> <span class="pre">edges</span></tt>.</p>
-<img alt="_images/coauthors.7.png" src="_images/coauthors.7.png" style="width: 80%;" />
+<img alt="_images/coauthors.7.png" class="align-center" src="_images/coauthors.7.png" style="width: 500px;" />
 <p>You should now see a new graph in its own viewing window, containing only the components
 that you selected.</p>
-<img alt="_images/coauthors.8.png" src="_images/coauthors.8.png" style="width: 80%;" />
+<img alt="_images/coauthors.8.png" class="align-center" src="_images/coauthors.8.png" style="width: 500px;" />
 </div>
 <div class="section" id="betweenness-centrality">
 <h3>Betweenness Centrality<a class="headerlink" href="#betweenness-centrality" title="Permalink to this headline">¶</a></h3>
@@ -295,13 +300,13 @@ Formally, betweenness centrality is a measure of the number of shortest paths th
 through a particular node.</p>
 <p>Run Cytoscape&#8217;s network-analysis algorithm. Go to
 <tt class="docutils literal"><span class="pre">Tools</span> <span class="pre">&gt;</span> <span class="pre">NetworkAnalyzer</span> <span class="pre">&gt;</span> <span class="pre">Network</span> <span class="pre">Analysis</span> <span class="pre">&gt;</span> <span class="pre">Analyze</span> <span class="pre">Network</span></tt>.</p>
-<img alt="_images/coauthors.9.png" src="_images/coauthors.9.png" style="width: 70%;" />
+<img alt="_images/coauthors.9.png" class="align-center" src="_images/coauthors.9.png" style="width: 450px;" />
 <p>Cytoscape may ask you whether to interpret the network as directed or undirected. A
 coauthorship network is always undirected, since coauthorship is a symmetric relationship.</p>
-<img alt="_images/coauthors.10.png" src="_images/coauthors.10.png" style="width: 60%;" />
+<img alt="_images/coauthors.10.png" class="align-center" src="_images/coauthors.10.png" style="width: 400px;" />
 <p>Once network analysis is complete, a window titled <tt class="docutils literal"><span class="pre">Results</span> <span class="pre">Panel</span></tt> will appear. Close
 this window.</p>
-<img alt="_images/coauthors.11.png" src="_images/coauthors.11.png" style="width: 60%;" />
+<img alt="_images/coauthors.11.png" class="align-center" src="_images/coauthors.11.png" style="width: 400px;" />
 <p>To visualize the betweenness centrality of each node, create a new visual mapping.</p>
 <ol class="arabic simple">
 <li>Go to the VizMapper tab, in the left part of the Cytoscape workspace.</li>
@@ -310,43 +315,43 @@ this window.</p>
 <li>Click in the area to the right of <tt class="docutils literal"><span class="pre">Node</span> <span class="pre">Size</span></tt> and select <tt class="docutils literal"><span class="pre">BetweennessCentrality</span></tt>.</li>
 <li>Click in the area to the right of <tt class="docutils literal"><span class="pre">Mapping</span> <span class="pre">Type</span></tt> and select <tt class="docutils literal"><span class="pre">Continuous</span> <span class="pre">Mapping</span></tt>.</li>
 </ol>
-<img alt="_images/coauthors.12.png" src="_images/coauthors.12.png" style="width: 60%;" />
+<img alt="_images/coauthors.12.png" class="align-center" src="_images/coauthors.12.png" style="width: 400px;" />
 <p>To change the size - centrality mapping function, double-click on the figure to the right
 of <tt class="docutils literal"><span class="pre">Curent</span> <span class="pre">Mapping</span></tt>, and drag the red open boxes up and down to change the angle of the
 function.</p>
-<img alt="_images/coauthors.13.png" src="_images/coauthors.13.png" style="width: 60%;" />
+<img alt="_images/coauthors.13.png" class="align-center" src="_images/coauthors.13.png" style="width: 400px;" />
 <p>The largest nodes are the most central nodes in their respective connected components.
 These are the nodes most responsible for connecting disparate clusters in the network.</p>
 <p>To see a list of the most central nodes, set the Table Panel to show all nodes.</p>
-<img alt="_images/coauthors.14.png" src="_images/coauthors.14.png" style="width: 80%;" />
+<img alt="_images/coauthors.14.png" class="align-center" src="_images/coauthors.14.png" style="width: 500px;" />
 <p>Then sort by betweenness centrality by clicking on the column header in the Node Table
 (you may have to click twice to sort in descending order).</p>
-<img alt="_images/coauthors.15.png" src="_images/coauthors.15.png" style="width: 90%;" />
+<img alt="_images/coauthors.15.png" class="align-center" src="_images/coauthors.15.png" style="width: 550px;" />
 </div>
 <div class="section" id="institutional-affiliation">
 <h3>Institutional affiliation<a class="headerlink" href="#institutional-affiliation" title="Permalink to this headline">¶</a></h3>
 <p>Wherever possible, Tethne includes institutional affiliations for authors as node
 attributes. You should see institutions listed in the Node Table.</p>
-<img alt="_images/coauthors.16.png" src="_images/coauthors.16.png" style="width: 60%;" />
+<img alt="_images/coauthors.16.png" class="align-center" src="_images/coauthors.16.png" style="width: 400px;" />
 <p>Create a visual mapping for institutional affiliation.</p>
 <ol class="arabic simple">
 <li>Go to the VizMapper.</li>
 <li>Find <tt class="docutils literal"><span class="pre">Node</span> <span class="pre">Fill</span> <span class="pre">Color</span></tt> in the unused visual properties, and double-click to activate.</li>
-<li>Click to the right of <a href="#id10"><span class="problematic" id="id11">``</span></a>Node Fill Color&#8217;&#8217; and select <a href="#id12"><span class="problematic" id="id13">``</span></a>institution&#8217;&#8216;.</li>
-<li>Set the <a href="#id14"><span class="problematic" id="id15">``</span></a>Mapping Type&#8217;&#8217; to <a href="#id16"><span class="problematic" id="id17">``</span></a>Discrete Mapping.&#8217;&#8217; A list of institutions should appear
-below <a href="#id18"><span class="problematic" id="id19">``</span></a>Mapping Type.&#8217;&#8216;</li>
+<li>Click to the right of <a href="#id12"><span class="problematic" id="id13">``</span></a>Node Fill Color&#8217;&#8217; and select <a href="#id14"><span class="problematic" id="id15">``</span></a>institution&#8217;&#8216;.</li>
+<li>Set the <a href="#id16"><span class="problematic" id="id17">``</span></a>Mapping Type&#8217;&#8217; to <a href="#id18"><span class="problematic" id="id19">``</span></a>Discrete Mapping.&#8217;&#8217; A list of institutions should appear
+below <a href="#id20"><span class="problematic" id="id21">``</span></a>Mapping Type.&#8217;&#8216;</li>
 <li>Right-click on <tt class="docutils literal"><span class="pre">Discrete</span> <span class="pre">Mapping'',</span> <span class="pre">and</span> <span class="pre">select</span>
 <span class="pre">``Mapping</span> <span class="pre">Value</span> <span class="pre">Generators</span> <span class="pre">&gt;</span> <span class="pre">Random</span> <span class="pre">Color</span></tt>.</li>
 </ol>
-<img alt="_images/coauthors.17.png" src="_images/coauthors.17.png" style="width: 90%;" />
+<img alt="_images/coauthors.17.png" class="align-center" src="_images/coauthors.17.png" style="width: 550px;" />
 <p>Each node should now be colored according to its institutional affiliation.
 Inspecting the network yields an immediate impression of whether coauthorship clusters are
 due to affiliation with the same institution.</p>
-<img alt="_images/coauthors.18.png" src="_images/coauthors.18.png" style="width: 90%;" />
+<img alt="_images/coauthors.18.png" class="align-center" src="_images/coauthors.18.png" style="width: 550px;" />
 <p>Since some institutions may be colored quite similarly, select a cluster to view the
 specific institutional affiliation of each node. You may need to set the Node Table to
 <tt class="docutils literal"><span class="pre">show</span> <span class="pre">selected</span></tt> rather than <tt class="docutils literal"><span class="pre">show</span> <span class="pre">all</span></tt>.</p>
-<img alt="_images/coauthors.19.png" src="_images/coauthors.19.png" style="width: 70%;" />
+<img alt="_images/coauthors.19.png" class="align-center" src="_images/coauthors.19.png" style="width: 450px;" />
 <p>Circular layouts can also yield some insights into connectivity between different
 institutions. In the menu bar, select <tt class="docutils literal"><span class="pre">Layout</span> <span class="pre">&gt;</span> <span class="pre">Attribute</span> <span class="pre">Circle</span> <span class="pre">Layout</span> <span class="pre">&gt;</span> <span class="pre">institution</span></tt>.
 This should arrange the nodes in each connected component in a circle. Nodes that are
@@ -354,7 +359,7 @@ affiliated with the same institution should be adjacent to each other, so that t
 circumference of each circle can be divided into regions that correspond to single
 institutions. Edges crossing from one region to another should give a visual impression of
 the magnitude of linkages between institutions.</p>
-<img alt="_images/coauthors.20.png" src="_images/coauthors.20.png" style="width: 90%;" />
+<img alt="_images/coauthors.20.png" class="align-center" src="_images/coauthors.20.png" style="width: 550px;" />
 <p>A similar layout, the <tt class="docutils literal"><span class="pre">Degree</span> <span class="pre">Sorted</span> <span class="pre">Circle</span></tt> layout, can yield more information about
 the structure of the network. As the name suggests, this layout arranges nodes in
 ascending order of degree (the number of links that each node has with other nodes in the
@@ -364,7 +369,7 @@ In the network depicted below, there is extremely dense connectivity among the
 highest-degree nodes, while the rest of the graph is sparse by comparison. In other words,
 the most well-connected nodes are all highly connected to each other. This may be due in
 part to papers with a very large number of authors.</p>
-<img alt="_images/coauthors.21.png" src="_images/coauthors.21.png" style="width: 90%;" />
+<img alt="_images/coauthors.21.png" class="align-center" src="_images/coauthors.21.png" style="width: 550px;" />
 <p>To export an image of your network, select
 <tt class="docutils literal"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Export</span> <span class="pre">&gt;</span> <span class="pre">Current</span> <span class="pre">Network</span> <span class="pre">View</span> <span class="pre">as</span> <span class="pre">Graphics</span></tt>, and follow the prompts to save your
 image.</p>
@@ -383,17 +388,17 @@ so that we can see the magnitude of coauthorship activity between different inst
 <li>In Gephi, select <tt class="docutils literal"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Open...</span></tt> and select your GraphML network file.</li>
 <li>Click on the <tt class="docutils literal"><span class="pre">Preview</span></tt> tab.</li>
 </ol>
-<img alt="_images/coauthors.22.png" src="_images/coauthors.22.png" style="width: 60%;" />
+<img alt="_images/coauthors.22.png" class="align-center" src="_images/coauthors.22.png" style="width: 400px;" />
 <ol class="arabic simple" start="3">
 <li>Open the <tt class="docutils literal"><span class="pre">Graph</span></tt> window: select <tt class="docutils literal"><span class="pre">Window</span> <span class="pre">&gt;</span> <span class="pre">Graph</span></tt>.</li>
 </ol>
-<img alt="_images/coauthors.23.png" src="_images/coauthors.23.png" style="width: 60%;" />
+<img alt="_images/coauthors.23.png" class="align-center" src="_images/coauthors.23.png" style="width: 400px;" />
 <ol class="arabic simple" start="4">
 <li>Open the <tt class="docutils literal"><span class="pre">Layout</span></tt> window: select <tt class="docutils literal"><span class="pre">Window</span> <span class="pre">&gt;</span> <span class="pre">Layout</span></tt>.</li>
 <li>In the <tt class="docutils literal"><span class="pre">Layout</span></tt> window, select the <tt class="docutils literal"><span class="pre">Force</span> <span class="pre">Atlast</span> <span class="pre">2</span> <span class="pre">layout</span></tt>, then click <tt class="docutils literal"><span class="pre">Run</span></tt>.
 After a few seconds the graph should be spread out; click <tt class="docutils literal"><span class="pre">Stop</span></tt>.</li>
 </ol>
-<img alt="_images/coauthors.25.png" src="_images/coauthors.25.png" style="width: 90%;" />
+<img alt="_images/coauthors.25.png" class="align-center" src="_images/coauthors.25.png" style="width: 550px;" />
 </div>
 <div class="section" id="partition-by-institution">
 <h3>Partition by institution<a class="headerlink" href="#partition-by-institution" title="Permalink to this headline">¶</a></h3>
@@ -401,16 +406,16 @@ After a few seconds the graph should be spread out; click <tt class="docutils li
 <li>Open the <tt class="docutils literal"><span class="pre">Partition</span></tt> window: select <tt class="docutils literal"><span class="pre">Window</span> <span class="pre">&gt;</span> <span class="pre">Partition</span></tt>. You may need to drag the
 window to the left-hand area of the Gephi workspace.</li>
 <li>In the <tt class="docutils literal"><span class="pre">Partition</span></tt> window, you should be on the <tt class="docutils literal"><span class="pre">Nodes</span></tt> tab by default. Click the
-green <a href="#id20"><span class="problematic" id="id21">``</span></a>refresh’’ button, then select <a href="#id22"><span class="problematic" id="id23">``</span></a>institution’’ from the drop-down menu. You
+green <a href="#id22"><span class="problematic" id="id23">``</span></a>refresh’’ button, then select <a href="#id24"><span class="problematic" id="id25">``</span></a>institution’’ from the drop-down menu. You
 should see a list of all institutions.</li>
 <li>To color nodes by institution, click the <tt class="docutils literal"><span class="pre">Apply</span></tt> button.</li>
 </ol>
-<img alt="_images/coauthors.26.png" src="_images/coauthors.26.png" style="width: 50%;" />
+<img alt="_images/coauthors.26.png" class="align-center" src="_images/coauthors.26.png" style="width: 350px;" />
 <p>Zooming in on the network, you’ll notice that some clusters of nodes are comprised of one
 or a few colors, while other clusters are quite mixed. Just as in Cytoscape, this gives a
 visual impression of which research communities involve inter-institutional
 collaborations, and which are more internal to a particular institution.</p>
-<img alt="_images/coauthors.27.png" src="_images/coauthors.27.png" style="width: 90%;" />
+<img alt="_images/coauthors.27.png" class="align-center" src="_images/coauthors.27.png" style="width: 550px;" />
 <p>Gephi makes it easy to collapse individual author nodes into nodes corresponding to their
 institutions. Cytoscape has this feature as well, but not all of the bugs are completely
 worked out.</p>
@@ -427,14 +432,14 @@ institutions.</li>
 institutional information was available. You may wish to delete this node; right-click
 on the node and select <tt class="docutils literal"><span class="pre">Delete</span></tt>. When prompted, click <tt class="docutils literal"><span class="pre">Yes</span></tt>.</li>
 </ul>
-<img alt="_images/coauthors.28.png" src="_images/coauthors.28.png" style="width: 90%;" />
+<img alt="_images/coauthors.28.png" class="align-center" src="_images/coauthors.28.png" style="width: 550px;" />
 <p>To re-layout the network, go back to the <tt class="docutils literal"><span class="pre">Layout</span></tt> tab, and run the layout algorithm
 again. You may notice that the network contracts rapidly. You may find it useful to reduce
 the edge width and zoom in, to achieve a nice node-size : edge-weight ratio.</p>
-<img alt="_images/coauthors.29.png" src="_images/coauthors.29.png" style="width: 90%;" />
+<img alt="_images/coauthors.29.png" class="align-center" src="_images/coauthors.29.png" style="width: 550px;" />
 <p>To save an image of your network, click the <tt class="docutils literal"><span class="pre">SVG/PDF/PNG</span></tt> button in the lower-left
 corner of the Gephi workspace.</p>
-<img alt="_images/coauthors.30.png" src="_images/coauthors.30.png" style="width: 50%;" />
+<img alt="_images/coauthors.30.png" class="align-center" src="_images/coauthors.30.png" style="width: 350px;" />
 </div>
 </div>
 <div class="section" id="coauthorship-network-evolution">
@@ -453,8 +458,8 @@ The intuitive interpretation of this behavior is that &#8220;the rich get richer
 words, if you&#8217;re already popular then you&#8217;re more likely to make new friends.</p>
 <p>In this tutorial, we will visualize the impact of degree centrality on edge acquisition
 by using the <a class="reference internal" href="tethne.analyze.html#tethne.analyze.collection.attachment_probability" title="tethne.analyze.collection.attachment_probability"><tt class="xref py py-func docutils literal"><span class="pre">analyze.collection.attachment_probability()</span></tt></a> algorithm in Tethne.</p>
-<div class="section" id="id24">
-<h3>Command-line<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id26">
+<h3>Command-line<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h3>
 <p>Run the <tt class="docutils literal"><span class="pre">graph</span></tt> step again, but this time remove the <tt class="docutils literal"><span class="pre">--merged</span></tt> flag. This will
 create a separate graph from each of the data subsets created in the <tt class="docutils literal"><span class="pre">slice</span></tt> step.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tethne -I exampleID -O /Users/erickpeirson/exampleOutput --graph --node-type<span class="o">=</span>author --graph-type<span class="o">=</span>coauthors
@@ -491,22 +496,22 @@ Writing graphs to /Users/erickpeirson/exampleOutput with format xgmml...done.
 <p>This should create a new file called <tt class="docutils literal"><span class="pre">[DATASET_ID]_graph_dynamic.xgmml</span></tt> in your output
 folder.</p>
 </div>
-<div class="section" id="id25">
-<h3>TethneGUI<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id27">
+<h3>TethneGUI<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h3>
 <p>Use the <tt class="docutils literal"><span class="pre">&lt;</span> <span class="pre">Back</span></tt> button to return to <tt class="docutils literal"><span class="pre">Step</span> <span class="pre">3:</span> <span class="pre">Build</span> <span class="pre">Graphs</span></tt>. Uncheck the
 <tt class="docutils literal"><span class="pre">Ignore</span> <span class="pre">DataCollection</span> <span class="pre">slicing</span></tt> option, and then click the <tt class="docutils literal"><span class="pre">Build</span> <span class="pre">graph</span></tt> button
 again. Then click <tt class="docutils literal"><span class="pre">Next</span> <span class="pre">&gt;</span></tt>.</p>
-<img alt="_images/coauthors.31.png" src="_images/coauthors.31.png" style="width: 90%;" />
+<img alt="_images/coauthors.31.png" class="align-center" src="_images/coauthors.31.png" style="width: 550px;" />
 <p>At the <tt class="docutils literal"><span class="pre">analysis</span></tt> step, select <tt class="docutils literal"><span class="pre">attachment_probability</span></tt> from the <tt class="docutils literal"><span class="pre">Graph</span> <span class="pre">analysis</span>
 <span class="pre">algorithm</span></tt> menu, and click the <tt class="docutils literal"><span class="pre">Analyze</span> <span class="pre">graph(s)</span></tt> button. Then click <tt class="docutils literal"><span class="pre">Next</span> <span class="pre">&gt;</span></tt>.</p>
-<img alt="_images/coauthors.32.png" src="_images/coauthors.32.png" style="width: 90%;" />
+<img alt="_images/coauthors.32.png" class="align-center" src="_images/coauthors.32.png" style="width: 550px;" />
 <p>Finally, select <tt class="docutils literal"><span class="pre">xgmml</span></tt> in the <tt class="docutils literal"><span class="pre">Output</span> <span class="pre">format</span></tt> menu, and click <tt class="docutils literal"><span class="pre">Write</span> <span class="pre">graph(s)</span></tt>.
 This should create a new file called <tt class="docutils literal"><span class="pre">[DATASET_ID]_graph_dynamic.xgmml</span></tt> in your output
 folder.</p>
-<img alt="_images/coauthors.33.png" src="_images/coauthors.33.png" style="width: 90%;" />
+<img alt="_images/coauthors.33.png" class="align-center" src="_images/coauthors.33.png" style="width: 550px;" />
 </div>
-<div class="section" id="id26">
-<h3>Python<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id28">
+<h3>Python<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h3>
 <p>Use the <a class="reference internal" href="tethne.html#tethne.builders.authorCollectionBuilder" title="tethne.builders.authorCollectionBuilder"><tt class="xref py py-class docutils literal"><span class="pre">authorCollectionBuilder</span></tt></a> to build a <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> from your
 <a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.builders</span> <span class="kn">import</span> <span class="n">authorCollectionBuilder</span>
@@ -528,13 +533,13 @@ attributes in your <a class="reference internal" href="tethne.html#tethne.data.G
 <p><tt class="docutils literal"><span class="pre">[OUTPUT_PATH]</span></tt> should be a path to the XGMML file that Tethne will create.</p>
 </div>
 <div class="section" id="visualizing-a-dynamic-network-in-cytoscape">
-<h3>Visualizing a dynamic network in Cytoscape<a class="headerlink" href="#visualizing-a-dynamic-network-in-cytoscape" title="Permalink to this headline">¶</a></h3>
+<span id="dynanetwork"></span><h3>Visualizing a dynamic network in Cytoscape<a class="headerlink" href="#visualizing-a-dynamic-network-in-cytoscape" title="Permalink to this headline">¶</a></h3>
 <p>In Cytoscape, import your .xgmml file by selecting
 <tt class="docutils literal"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Import</span> <span class="pre">&gt;</span> <span class="pre">Dynamic</span> <span class="pre">Network</span> <span class="pre">&gt;</span> <span class="pre">XGMML</span> <span class="pre">File...</span></tt>. Apply a force-directed or
 spring-embedded layout.</p>
-<img alt="_images/coauthors.34.png" src="_images/coauthors.34.png" style="width: 70%;" />
+<img alt="_images/coauthors.34.png" class="align-center" src="_images/coauthors.34.png" style="width: 450px;" />
 <p>In the VizMapper, map <tt class="docutils literal"><span class="pre">Node</span> <span class="pre">Size</span></tt> to <tt class="docutils literal"><span class="pre">attachment_probability</span></tt>.</p>
-<img alt="_images/coauthors.35.png" src="_images/coauthors.35.png" style="width: 40%;" />
+<img alt="_images/coauthors.35.png" class="align-center" src="_images/coauthors.35.png" style="width: 300px;" />
 <p>Double-click on the function icon next to <tt class="docutils literal"><span class="pre">Current</span> <span class="pre">Mapping</span></tt> to edit the <tt class="docutils literal"><span class="pre">Node</span> <span class="pre">Size</span></tt>
 mapping function.</p>
 <ol class="arabic simple">
@@ -544,7 +549,7 @@ the red open box up, and drag the corresponding black arrow left and right to al
 the mapping function.</li>
 <li>Click <tt class="docutils literal"><span class="pre">OK</span></tt>.</li>
 </ol>
-<img alt="_images/coauthors.36.png" src="_images/coauthors.36.png" style="width: 60%;" />
+<img alt="_images/coauthors.36.png" class="align-center" src="_images/coauthors.36.png" style="width: 400px;" />
 <p>In the Control Panel, select the <tt class="docutils literal"><span class="pre">Dynamic</span> <span class="pre">Network</span></tt> tab.</p>
 <ol class="arabic simple">
 <li>Set the time resolution to roughly match the time-range of your network. In the
@@ -553,11 +558,11 @@ example below, the network covers about 35 years, so a resolution of 1/50 was se
 <li>Use the slider to move through the states of your dynamic network. To view all states
 in succession, use the <tt class="docutils literal"><span class="pre">&lt;&lt;</span> <span class="pre">Play</span></tt> and <tt class="docutils literal"><span class="pre">Play</span> <span class="pre">&gt;&gt;</span></tt> buttons.</li>
 </ol>
-<img alt="_images/coauthors.37.png" src="_images/coauthors.37.png" style="width: 90%;" />
+<img alt="_images/coauthors.37.png" class="align-center" src="_images/coauthors.37.png" style="width: 550px;" />
 <p>The size of each node should reflect the relative probability that a node will accrue a
 new neighbor in the next time slice. Try zooming in on a particular region of your
 network, and move between two successive states to verify that this is the case.</p>
-<img alt="_images/coauthors.38.png" src="_images/coauthors.38.png" style="width: 90%;" />
+<img alt="_images/coauthors.38.png" class="align-center" src="_images/coauthors.38.png" style="width: 550px;" />
 </div>
 </div>
 </div>
@@ -582,22 +587,22 @@ network, and move between two successive states to verify that this is the case.
 </ul>
 </li>
 <li><a class="reference internal" href="#slicing-wos-data">Slicing WoS Data</a><ul>
-<li><a class="reference internal" href="#id1">Command-line</a></li>
-<li><a class="reference internal" href="#id2">TethneGUI</a></li>
+<li><a class="reference internal" href="#id3">Command-line</a></li>
+<li><a class="reference internal" href="#id4">TethneGUI</a></li>
 <li><a class="reference internal" href="#slice-distribution">Slice Distribution</a></li>
-<li><a class="reference internal" href="#id3">Python</a></li>
+<li><a class="reference internal" href="#id5">Python</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#building-the-coauthor-graph">Building the Coauthor Graph</a><ul>
-<li><a class="reference internal" href="#id4">Command-line</a></li>
-<li><a class="reference internal" href="#id5">TethneGUI</a></li>
-<li><a class="reference internal" href="#id6">Python</a></li>
+<li><a class="reference internal" href="#id6">Command-line</a></li>
+<li><a class="reference internal" href="#id7">TethneGUI</a></li>
+<li><a class="reference internal" href="#id8">Python</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#write-the-graph-to-graphml">Write the Graph to GraphML</a><ul>
-<li><a class="reference internal" href="#id7">Command-line</a></li>
-<li><a class="reference internal" href="#id8">TethneGUI</a></li>
-<li><a class="reference internal" href="#id9">Python</a></li>
+<li><a class="reference internal" href="#id9">Command-line</a></li>
+<li><a class="reference internal" href="#id10">TethneGUI</a></li>
+<li><a class="reference internal" href="#id11">Python</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#visualizing-the-merged-network-in-cytoscape">Visualizing the Merged Network in Cytoscape</a><ul>
@@ -612,9 +617,9 @@ network, and move between two successive states to verify that this is the case.
 </ul>
 </li>
 <li><a class="reference internal" href="#coauthorship-network-evolution">Coauthorship network evolution</a><ul>
-<li><a class="reference internal" href="#id24">Command-line</a></li>
-<li><a class="reference internal" href="#id25">TethneGUI</a></li>
-<li><a class="reference internal" href="#id26">Python</a></li>
+<li><a class="reference internal" href="#id26">Command-line</a></li>
+<li><a class="reference internal" href="#id27">TethneGUI</a></li>
+<li><a class="reference internal" href="#id28">Python</a></li>
 <li><a class="reference internal" href="#visualizing-a-dynamic-network-in-cytoscape">Visualizing a dynamic network in Cytoscape</a></li>
 </ul>
 </li>
@@ -626,8 +631,8 @@ network, and move between two successive states to verify that this is the case.
   <p class="topless"><a href="tutorial.quickstart.python.html"
                         title="previous chapter">Quickstart (Python)</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="tutorial.networks.html"
-                        title="next chapter">Creating Networks from Bibliographic Data</a></p>
+  <p class="topless"><a href="tutorial.bibliocoupling.html"
+                        title="next chapter">Bibliographic Coupling</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/tutorial.coauthors.txt"
@@ -663,7 +668,7 @@ network, and move between two successive states to verify that this is the case.
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorial.networks.html" title="Creating Networks from Bibliographic Data"
+          <a href="tutorial.bibliocoupling.html" title="Bibliographic Coupling"
              >next</a> |</li>
         <li class="right" >
           <a href="tutorial.quickstart.python.html" title="Quickstart (Python)"
