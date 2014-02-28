@@ -52,127 +52,111 @@
           <div class="body">
             
   <h1>Source code for tethne.builders</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Classes for building a :class:`.GraphCollection` . </span>
+
+<span class="sd">.. autosummary::</span>
+
+<span class="sd">   builder</span>
+<span class="sd">   authorCollectionBuilder</span>
+<span class="sd">   paperCollectionBuilder</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">tethne.networks</span> <span class="kn">as</span> <span class="nn">nt</span>
-<span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">dt</span>
+<span class="kn">from</span> <span class="nn">tethne.data</span> <span class="kn">import</span> <span class="n">GraphCollection</span>
 <span class="kn">import</span> <span class="nn">types</span>
 
 <div class="viewcode-block" id="builder"><a class="viewcode-back" href="../../tethne.html#tethne.builders.builder">[docs]</a><span class="k">class</span> <span class="nc">builder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Base class for builders.&quot;&quot;&quot;</span>
-    
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
-        </div>
-<div class="viewcode-block" id="graphCollectionBuilder"><a class="viewcode-back" href="../../tethne.html#tethne.builders.graphCollectionBuilder">[docs]</a><span class="k">class</span> <span class="nc">graphCollectionBuilder</span><span class="p">(</span><span class="n">builder</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="n">D</span>
+</div>
+<div class="viewcode-block" id="paperCollectionBuilder"><a class="viewcode-back" href="../../tethne.html#tethne.builders.paperCollectionBuilder">[docs]</a><span class="k">class</span> <span class="nc">paperCollectionBuilder</span><span class="p">(</span><span class="n">builder</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Builds a :class:`.GraphCollection` from a list of :class:`.Paper`</span>
-<span class="sd">    instances.</span>
+<span class="sd">    Builds a :class:`.GraphCollection` with method in </span>
+<span class="sd">    :mod:`tethne.networks.papers` from a :class:`.DataCollection` .</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="paperCollectionBuilder.build"><a class="viewcode-back" href="../../tethne.html#tethne.builders.paperCollectionBuilder.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph_axis</span><span class="p">,</span> <span class="n">graph_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates graphs for each slice along graph_axis in</span>
+<span class="sd">        :class:`.DataCollection` D.</span>
+<span class="sd">        </span>
+<span class="sd">        Other axes in D are treated as attributes.</span>
+<span class="sd">        </span>
+<span class="sd">        **Usage**</span>
+<span class="sd">    </span>
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; import tethne.readers as rd</span>
+<span class="sd">           &gt;&gt;&gt; data = rd.wos.read(&quot;/Path/to/wos/data.txt&quot;)</span>
+<span class="sd">           &gt;&gt;&gt; from tethne.data import DataCollection</span>
+<span class="sd">           &gt;&gt;&gt; D = DataCollection(data) # Indexed by wosid, by default.</span>
+<span class="sd">           &gt;&gt;&gt; D.slice(&#39;date&#39;, &#39;time_window&#39;, window_size=4)</span>
+<span class="sd">           &gt;&gt;&gt; from tethne.builders import paperCollectionBuilder</span>
+<span class="sd">           &gt;&gt;&gt; builder = paperCollectionBuilder(D)</span>
+<span class="sd">           &gt;&gt;&gt; C = builder.build(&#39;date&#39;, &#39;bibliographic_coupling&#39;, threshold=2)</span>
+<span class="sd">           &gt;&gt;&gt; C</span>
+<span class="sd">           &lt;tethne.data.GraphCollection at 0x104ed3550&gt;</span>
+<span class="sd">           </span>
+<span class="sd">           &quot;&quot;&quot;</span>
+        
+        <span class="c"># TODO: Check to make sure we have the right stuff.</span>
+        
+        <span class="n">C</span> <span class="o">=</span> <span class="n">GraphCollection</span><span class="p">()</span>
+        
+        <span class="c"># Build a Graph for each slice.</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">pids</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">graph_axis</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pids</span> <span class="p">]</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;node_attribs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;node_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">index_by</span>
+            <span class="n">C</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">graph_type</span><span class="p">](</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">C</span>
+</div></div>
+<div class="viewcode-block" id="authorCollectionBuilder"><a class="viewcode-back" href="../../tethne.html#tethne.builders.authorCollectionBuilder">[docs]</a><span class="k">class</span> <span class="nc">authorCollectionBuilder</span><span class="p">(</span><span class="n">builder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Builds a :class:`.GraphCollection` with method in </span>
+<span class="sd">    :mod:`tethne.networks.authors` from a :class:`.DataCollection` .</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
-<div class="viewcode-block" id="graphCollectionBuilder.build"><a class="viewcode-back" href="../../tethne.html#tethne.builders.graphCollectionBuilder.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">graph_type</span><span class="p">,</span> <span class="n">graph_args</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="authorCollectionBuilder.build"><a class="viewcode-back" href="../../tethne.html#tethne.builders.authorCollectionBuilder.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph_axis</span><span class="p">,</span> <span class="n">graph_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Yields a :class:`.GraphCollection` .</span>
+<span class="sd">        Generates graphs for each slice along graph_axis in</span>
+<span class="sd">        :class:`.DataCollection` D.</span>
 <span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        method : string</span>
-<span class="sd">            See table below for available methods (to be extended).</span>
-<span class="sd">        graph_type : string</span>
-<span class="sd">            The name of a method from :mod:`tethne.networks.papers`</span>
-<span class="sd">        graph_args : dict</span>
-<span class="sd">            Arguments passed to graph_type method as kwargs.</span>
-<span class="sd">        kwargs : kwargs</span>
-<span class="sd">            See methods table, below.</span>
+<span class="sd">        Other axes in D are treated as attributes.</span>
+<span class="sd">        </span>
+<span class="sd">        **Usage**</span>
+<span class="sd">    </span>
+<span class="sd">        .. code-block:: python</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        C : :class:`.GraphCollection`</span>
-<span class="sd">        </span>
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        </span>
-<span class="sd">        Methods available for building GraphCollections:</span>
-<span class="sd">        </span>
-<span class="sd">        ===========    ========================================    =============</span>
-<span class="sd">        Method         Description                                 kwargs</span>
-<span class="sd">        ===========    ========================================    =============</span>
-<span class="sd">        time_window    Slices data using a sliding time-window,    window_size</span>
-<span class="sd">                       and builds a </span>
-<span class="sd">                       :class:`.nx.classes.graph.Graph` from </span>
-<span class="sd">                       each slice. Graphs are indexed using the </span>
-<span class="sd">                       start of the time-window.</span>
-<span class="sd">        time_period    Slices data into time periods of equal      window_size</span>
-<span class="sd">                       length, and builds a                        step_size</span>
-<span class="sd">                       :class:`.nx.classes.graph.Graph` from </span>
-<span class="sd">                       each slice. Graphs are indexed using the </span>
-<span class="sd">                       start of the time period. </span>
-<span class="sd">        ===========    ========================================    =============</span>
-<span class="sd">        </span>
-<span class="sd">        Avilable kwargs:</span>
-<span class="sd">        </span>
-<span class="sd">        ===========    ======   ================================================</span>
-<span class="sd">        Argument       Type     Description</span>
-<span class="sd">        ===========    ======   ================================================</span>
-<span class="sd">        window_size    int      Size of time-window or period, in years </span>
-<span class="sd">                                (default = 1).</span>
-<span class="sd">        step_size      int      Amount to advance time-window or period in each</span>
-<span class="sd">                                step (ignored for time_period).</span>
-<span class="sd">        ===========    ======   ================================================</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">           &gt;&gt;&gt; import tethne.readers as rd</span>
+<span class="sd">           &gt;&gt;&gt; data = rd.wos.read(&quot;/Path/to/wos/data.txt&quot;)</span>
+<span class="sd">           &gt;&gt;&gt; from tethne.data import DataCollection</span>
+<span class="sd">           &gt;&gt;&gt; D = DataCollection(data) # Indexed by wosid, by default.</span>
+<span class="sd">           &gt;&gt;&gt; D.slice(&#39;date&#39;, &#39;time_window&#39;, window_size=4)</span>
+<span class="sd">           &gt;&gt;&gt; from tethne.builders import authorCollectionBuilder</span>
+<span class="sd">           &gt;&gt;&gt; builder = authorCollectionBuilder(D)</span>
+<span class="sd">           &gt;&gt;&gt; C = builder.build(&#39;date&#39;, &#39;coauthors&#39;)</span>
+<span class="sd">           &gt;&gt;&gt; C</span>
+<span class="sd">           &lt;tethne.data.GraphCollection at 0x104ed3550&gt;</span>
+<span class="sd">           </span>
+<span class="sd">           &quot;&quot;&quot;</span>
         
-        <span class="c"># Does the graph method exist?</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">nt</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">graph_type</span><span class="p">])</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;No such function in tethne.networks.papers&quot;</span><span class="p">)</span>
-            
-        <span class="n">C</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">GraphCollection</span><span class="p">()</span>
+        <span class="c"># TODO: Check to make sure we have the right stuff.</span>
         
-        <span class="c"># Slice the data using specified method.</span>
-        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;time_window&#39;</span><span class="p">:</span>
-            <span class="n">kw</span> <span class="o">=</span> <span class="p">{</span>  <span class="s">&#39;window_size&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;window_size&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-                    <span class="s">&#39;step_size&#39;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">}</span>
-            
-            <span class="bp">self</span><span class="o">.</span><span class="n">_time_slice</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
-            
-        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;time_period&#39;</span><span class="p">:</span>
-            <span class="n">kw</span> <span class="o">=</span> <span class="p">{</span>  <span class="s">&#39;window_size&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;window_size&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-                    <span class="s">&#39;step_size&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;window_size&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">}</span>
-            
-            <span class="bp">self</span><span class="o">.</span><span class="n">_time_slice</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
-            
+        <span class="n">C</span> <span class="o">=</span> <span class="n">GraphCollection</span><span class="p">()</span>
+        
         <span class="c"># Build a Graph for each slice.</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">slices</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-            <span class="n">C</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">graph_type</span><span class="p">](</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">graph_args</span><span class="p">)</span>
-        
-        <span class="k">return</span> <span class="n">C</span>
-    </div>
-    <span class="k">def</span> <span class="nf">_time_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Slices data into subsets by date. </span>
-<span class="sd">        </span>
-<span class="sd">        If step_size = 1, this is a sliding time-window. If step_size = </span>
-<span class="sd">        window_size, this is a time period slice.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        
-        <span class="n">window_size</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;window_size&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">step_size</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;step_size&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;start&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="p">([</span> <span class="n">p</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="p">]))</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;start&#39;</span><span class="p">,</span> <span class="nb">max</span><span class="p">([</span> <span class="n">p</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="p">]))</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">slices</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">-</span><span class="n">window_size</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="n">step_size</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">slices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span> <span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> 
-                                <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">p</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">i</span> <span class="o">+</span> <span class="n">window_size</span> <span class="p">]</span>
-                                </div>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
-    <span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/Users/erickpeirson/Dropbox/DigitalHPS/Davidson Collaborators/Web of Science/A.E. MIrsky/savedrecs.txt&quot;</span><span class="p">)</span>
-    
-    <span class="n">b</span> <span class="o">=</span> <span class="n">graphCollectionBuilder</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
-    <span class="n">C</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="s">&#39;time_window&#39;</span><span class="p">,</span> <span class="s">&#39;bibliographic_coupling&#39;</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="c"># &#39;cocitation&#39;, { &#39;threshold&#39;: 2 },</span>
-    <span class="k">print</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="p">)</span> <span class="k">for</span> <span class="n">G</span> <span class="ow">in</span>  <span class="n">C</span><span class="o">.</span><span class="n">graphs</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="p">]</span>
-    
-    <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">nt</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">bibliographic_coupling</span><span class="p">(</span><span class="n">papers</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">pids</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">graph_axis</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pids</span> <span class="p">]</span>
+            <span class="n">C</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">graph_type</span><span class="p">](</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">C</span>    </div></div>
 </pre></div>
 
           </div>

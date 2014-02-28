@@ -65,6 +65,7 @@
 
 <span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">ds</span>
 <span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">as</span> <span class="nn">ET</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
 
 
 <span class="c"># PubMed functions</span>
@@ -96,6 +97,16 @@
 <span class="sd">    * http://www.ncbi.nlm.nih.gov/pmc/pmcdoc/tagging-guidelines/citations/v2/citationtags.html#2Articlewithmorethan10authors%28listthefirst10andaddetal%29</span>
 <span class="sd">    * http://dtd.nlm.nih.gov/publishing/</span>
 
+<span class="sd">    Each :class:`.Paper` is tagged with an accession id for this</span>
+<span class="sd">    read/conversion.</span>
+
+<span class="sd">    **Usage**</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; import tethne.readers as rd</span>
+<span class="sd">       &gt;&gt;&gt; papers = rd.pubmed.read(&quot;/Path/to/PubMedData.xml&quot;)</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    filepath : string</span>
@@ -114,6 +125,8 @@
 
     <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span> <span class="c"># File does not exist, or couldn&#39;t be read.</span>
         <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;File does not exist, or cannot be read.&quot;</span><span class="p">)</span>
+
+    <span class="n">accession</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
 
     <span class="c"># define location of simple article meta data relative to xml tree rooted</span>
     <span class="c"># at &#39;article&#39;</span>
@@ -135,25 +148,25 @@
 
     <span class="n">meta_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">iter</span><span class="p">(</span><span class="s">&#39;article&#39;</span><span class="p">):</span>
-        <span class="n">meta_dict</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Paper</span><span class="p">()</span>
+        <span class="n">paper</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Paper</span><span class="p">()</span>
 
         <span class="c"># collect information from the &#39;front&#39; section of the article</span>
         <span class="c"># collect the simple data</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">meta_loc</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">():</span>
             <span class="n">key_data</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">meta_loc</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">key_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">meta_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">key_data</span><span class="o">.</span><span class="n">text</span>
+                <span class="n">paper</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">key_data</span><span class="o">.</span><span class="n">text</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">meta_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="n">paper</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
 
         <span class="c"># collect doi and pmid</span>
         <span class="n">id_list</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">&#39;./front/article-meta/article-id&#39;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">identifier</span> <span class="ow">in</span> <span class="n">id_list</span><span class="p">:</span>
             <span class="n">id_type</span> <span class="o">=</span> <span class="n">identifier</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;pub-id-type&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">id_type</span> <span class="o">==</span> <span class="s">&#39;doi&#39;</span><span class="p">:</span>
-                <span class="n">meta_dict</span><span class="p">[</span><span class="s">&#39;doi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">identifier</span><span class="o">.</span><span class="n">text</span>
+                <span class="n">paper</span><span class="p">[</span><span class="s">&#39;doi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">identifier</span><span class="o">.</span><span class="n">text</span>
             <span class="k">elif</span> <span class="n">id_type</span> <span class="o">==</span> <span class="s">&#39;pmid&#39;</span><span class="p">:</span>
-                <span class="n">meta_dict</span><span class="p">[</span><span class="s">&#39;pmid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">identifier</span><span class="o">.</span><span class="n">text</span>
+                <span class="n">paper</span><span class="p">[</span><span class="s">&#39;pmid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">identifier</span><span class="o">.</span><span class="n">text</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c"># if never found, remain at None from initialization</span>
                 <span class="k">pass</span>
@@ -180,8 +193,8 @@
                     <span class="n">auinit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">given_name</span><span class="o">.</span><span class="n">text</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">auinit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
-        <span class="n">meta_dict</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aulast</span>
-        <span class="n">meta_dict</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auinit</span>
+        <span class="n">paper</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aulast</span>
+        <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auinit</span>
 
         <span class="c"># collect date</span>
         <span class="n">pub_dates</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">&#39;./front/article-meta/pub-date&#39;</span><span class="p">)</span>
@@ -193,14 +206,14 @@
                 <span class="n">year</span> <span class="o">=</span> <span class="n">pub_date</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;./year&#39;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">year</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                     <span class="c"># then it was found</span>
-                    <span class="n">meta_dict</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">year</span><span class="o">.</span><span class="n">text</span>
+                    <span class="n">paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">year</span><span class="o">.</span><span class="n">text</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">meta_dict</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="n">paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
 
-        <span class="n">meta_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">meta_dict</span><span class="p">)</span>
+        <span class="n">meta_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paper</span><span class="p">)</span>
 
         <span class="c"># construct ayjid</span>
-        <span class="n">meta_dict</span><span class="p">[</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">create_ayjid</span><span class="p">(</span><span class="o">**</span><span class="n">meta_dict</span><span class="p">)</span>
+        <span class="n">paper</span><span class="p">[</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">create_ayjid</span><span class="p">(</span><span class="o">**</span><span class="n">paper</span><span class="p">)</span>  <span class="c"># THIS IS BROKEN.</span>
 
         <span class="c"># citations</span>
         <span class="n">citations_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -214,9 +227,9 @@
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">cit_meta_loc</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">():</span>
                 <span class="n">key_data</span> <span class="o">=</span> <span class="n">cite</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">cit_meta_loc</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
                 <span class="k">if</span> <span class="n">key_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                    <span class="n">meta_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">key_data</span><span class="o">.</span><span class="n">text</span>
+                    <span class="n">paper</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">key_data</span><span class="o">.</span><span class="n">text</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">meta_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+                    <span class="n">paper</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
 
             <span class="c"># doi and pmid</span>
             <span class="n">pub_id</span> <span class="o">=</span> <span class="n">cite</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;./pub-id&#39;</span><span class="p">)</span>
@@ -271,9 +284,11 @@
             <span class="n">citations_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cite_dict</span><span class="p">)</span>
         <span class="c"># end cite loop</span>
 
-        <span class="n">meta_dict</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">citations_list</span>
+        <span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">citations_list</span>
 
-        <span class="n">meta_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">meta_dict</span><span class="p">)</span>
+        <span class="n">paper</span><span class="p">[</span><span class="s">&#39;accession&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">accession</span>
+
+        <span class="n">meta_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paper</span><span class="p">)</span>
     <span class="c"># end article loop</span>
 
     <span class="k">return</span> <span class="n">meta_list</span>

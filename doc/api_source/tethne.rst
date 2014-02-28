@@ -1,10 +1,18 @@
-API Documentation
-=================
+tethne Package
+==============
 
 :mod:`tethne` Package
 ---------------------
 
 .. automodule:: tethne.__init__
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`__main__` Module
+----------------------
+
+.. automodule:: tethne.__main__
     :members:
     :undoc-members:
     :show-inheritance:
