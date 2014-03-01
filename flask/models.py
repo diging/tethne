@@ -3,11 +3,12 @@ from flask.ext.zodb import Object, List, Dict
 from hashlib import sha256
 
 from BTrees.OOBTree import OOBTree as BTree
-from persistent import Persistent as Object
+#from persistent import Persistent as Object
+from persistent import Persistent
 from persistent.list import PersistentList as List
 from persistent.mapping import PersistentMapping as Dict
 
-class User(Object):
+class User(Persistent):
         
     """
     User Class

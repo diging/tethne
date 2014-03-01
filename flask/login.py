@@ -1,10 +1,15 @@
-from flask import * # do not use '*'; actually input the dependencies.
+#from flask import * # do not use '*'; actually input the dependencies.
+from flask import Flask, session, redirect, url_for, escape, request,render_template,flash
 import logging
 from logging import Formatter, FileHandler
-from forms import *
+from flask_wtf import Form
+from forms import LoginForm,RegisterForm,ForgotForm
 import ZODB.config
 import transaction
 from hashlib import sha256
+from persistent import Persistent
+from persistent.list import PersistentList as List
+from persistent.mapping import PersistentMapping as Dict
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -47,20 +52,31 @@ dbroot = connection.root()  # retrieving the root of the tree
 
 
 #Ensure that a 'userdb' key is present
-#in the root
-if not dbroot.has_key('userdb'):
-    from BTrees.OOBTree import OOBTree
-    dbroot['userdb'] = OOBTree()
-    # userdb is a <BTrees.OOBTree.OOBTree object at some location>
-userdb = dbroot['userdb']           
-print "user db init:",userdb, type(userdb)
+#in the DB
+
+for val in ['userdb']:
+    if not val in dbroot.keys():
+    	print " donot create this always"
+        dbroot[val] = Dict()
+
+# if not dbroot.has_key('userdb'):
+#     from BTrees.OOBTree import OOBTree
+#     #dbroot['userdb'] = OOBTree()
+#     print " donot create this always"
+#     dbroot['userdb'] = Dict()
+#     # userdb is a <BTrees.OOBTree.OOBTree object at some location>
+#     # userdb is a dbroot: {} <class 'persistent.mapping.PersistentMapping'>
+
+#userdb = dbroot['userdb']           
+#print "user db init:",userdb, type(userdb)
+print "user db dbroot:",dbroot['userdb'], type (dbroot['userdb'])
             
 @app.route('/index', methods=['GET','POST'])
 def index():
     form = LoginForm(request.form)
     if 'username' in session:
         return 'Logged in as %s' % escape(session['username'])
-    # return render_template('forms/register.html', form = form)
+    #return render_template('forms/register.html', form = form)
     return 'You are not logged in'            
 
 
@@ -68,8 +84,6 @@ def index():
 def home():
     form = LoginForm(request.form)
     return render_template('forms/login.html', form = form)
-
-
 
 @app.route('/add', methods=['POST'])
 def add_entry():
@@ -84,21 +98,31 @@ def add_entry():
 def login():
 	flash('Welcome to Tethne Website')
 	form = LoginForm(request.form)
+	print "OK here", request.cookies.get('username'), "abc:"
+        username = request.cookies.get('username')
         if request.method == 'GET':
-        	username = form.name.data
-        	print "form:", form.name.data, form.password.data
-        	if session[username] == userdb[username]:
-        		print db, type(db)
+        	#username = form.name.data
+        	for i in request.form.values():
+        		print "I is:" , i
+        	#print "request::::",request.form['name']
+        	#print "username:: form.data", username
+        	for val in dbroot['userdb'].values():
+        		print "value is : " , val, val.name,val.password
+        	print "form:", form.name.data, form.password.data , "session",session, type(session)
+        	if username:
+        		print "inside login last loop:",db, type(db)
         		return redirect(url_for('index'))
         	else:
         		print "error" 
             	
         else:
         	print "comes in else"
-        	return redirect(url_for('register'))
+        	flash("Login Failed")
+        	return redirect(url_for('login'))
         
 	return render_template('forms/login.html', form = form)
-    
+
+  
     
 @app.route('/register',methods=['GET','POST'])
 def register():
@@ -120,10 +144,12 @@ def register():
               	u.institution = form.institution.data
               	u.security_question = form.security_question.data
               	u.security_answer = form.security_answer.data
-                userdb[u.name]=u
+                #userdb[u.name]=u
+                dbroot['userdb'][u.name] = u
                 session['username'] = u.name
                 transaction.commit()
-                print "db now",db,type(db),db.__str__(),db.__getattribute__('databases'),"next",db.databases,db.database_name   
+                print "Database added successfully", dbroot['userdb'][u.name], u.name, u
+                #print "db now",db,type(db),db.__str__(),db.__getattribute__('databases'),"next",db.databases,db.database_name   
                 flash('Registered successfuly')
             	return redirect(url_for('login'))
     return render_template('forms/register.html', form = form)
