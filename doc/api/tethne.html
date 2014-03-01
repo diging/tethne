@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API Documentation &mdash; tethne 0.3.1-alpha documentation</title>
+    <title>tethne Package &mdash; tethne 0.3.1-alpha documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -53,11 +53,11 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="api-documentation">
-<h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-tethne.__init__">
-<span id="tethne-package"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">tethne</span></tt> Package<a class="headerlink" href="#module-tethne.__init__" title="Permalink to this headline">¶</a></h2>
-<p>Tethne is a package for analyzing citation data from the Web of Science.
+  <div class="section" id="tethne-package">
+<h1>tethne Package<a class="headerlink" href="#tethne-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">tethne</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-tethne.__init__"></span><p>Tethne is a package for analyzing citation data from the Web of Science.
 Modules within Tethne can generate a variety of networks, such as
 bibliographic coupling, citation, author-paper, and co-author networks,
 using networkx.</p>
@@ -94,6 +94,19 @@ using networkx.</p>
 </tbody>
 </table>
 </div>
+<div class="section" id="module-tethne.__main__">
+<span id="main-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">__main__</span></tt> Module<a class="headerlink" href="#module-tethne.__main__" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="tethne.__main__.isfloat">
+<tt class="descclassname">tethne.__main__.</tt><tt class="descname">isfloat</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/tethne/__main__.html#isfloat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.__main__.isfloat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="tethne.__main__.isint">
+<tt class="descclassname">tethne.__main__.</tt><tt class="descname">isint</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/tethne/__main__.html#isint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.__main__.isint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
 <div class="section" id="module-tethne.builders">
 <span id="builders-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">builders</span></tt> Module<a class="headerlink" href="#module-tethne.builders" title="Permalink to this headline">¶</a></h2>
 <p>Classes for building a <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</p>
@@ -116,7 +129,7 @@ using networkx.</p>
 </table>
 <dl class="class">
 <dt id="tethne.builders.authorCollectionBuilder">
-<em class="property">class </em><tt class="descclassname">tethne.builders.</tt><tt class="descname">authorCollectionBuilder</tt><big>(</big><em>D</em><big>)</big><a class="headerlink" href="#tethne.builders.authorCollectionBuilder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">tethne.builders.</tt><tt class="descname">authorCollectionBuilder</tt><big>(</big><em>D</em><big>)</big><a class="reference internal" href="_modules/tethne/builders.html#authorCollectionBuilder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.builders.authorCollectionBuilder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#tethne.builders.builder" title="tethne.builders.builder"><tt class="xref py py-class docutils literal"><span class="pre">tethne.builders.builder</span></tt></a></p>
 <p>Builds a <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> with method in 
 <a class="reference internal" href="tethne.networks.html#module-tethne.networks.authors" title="tethne.networks.authors"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.networks.authors</span></tt></a> from a <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> .</p>
@@ -134,7 +147,7 @@ using networkx.</p>
 </table>
 <dl class="method">
 <dt id="tethne.builders.authorCollectionBuilder.build">
-<tt class="descname">build</tt><big>(</big><em>graph_axis</em>, <em>graph_type</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#tethne.builders.authorCollectionBuilder.build" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">build</tt><big>(</big><em>graph_axis</em>, <em>graph_type</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/builders.html#authorCollectionBuilder.build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.builders.authorCollectionBuilder.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates graphs for each slice along graph_axis in
 <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> D.</p>
 <p>Other axes in D are treated as attributes.</p>
@@ -164,7 +177,7 @@ using networkx.</p>
 
 <dl class="class">
 <dt id="tethne.builders.paperCollectionBuilder">
-<em class="property">class </em><tt class="descclassname">tethne.builders.</tt><tt class="descname">paperCollectionBuilder</tt><big>(</big><em>D</em><big>)</big><a class="headerlink" href="#tethne.builders.paperCollectionBuilder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">tethne.builders.</tt><tt class="descname">paperCollectionBuilder</tt><big>(</big><em>D</em><big>)</big><a class="reference internal" href="_modules/tethne/builders.html#paperCollectionBuilder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.builders.paperCollectionBuilder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#tethne.builders.builder" title="tethne.builders.builder"><tt class="xref py py-class docutils literal"><span class="pre">tethne.builders.builder</span></tt></a></p>
 <p>Builds a <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> with method in 
 <a class="reference internal" href="tethne.networks.html#module-tethne.networks.papers" title="tethne.networks.papers"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.networks.papers</span></tt></a> from a <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> .</p>
@@ -182,7 +195,7 @@ using networkx.</p>
 </table>
 <dl class="method">
 <dt id="tethne.builders.paperCollectionBuilder.build">
-<tt class="descname">build</tt><big>(</big><em>graph_axis</em>, <em>graph_type</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#tethne.builders.paperCollectionBuilder.build" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">build</tt><big>(</big><em>graph_axis</em>, <em>graph_type</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/builders.html#paperCollectionBuilder.build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.builders.paperCollectionBuilder.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates graphs for each slice along graph_axis in
 <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> D.</p>
 <p>Other axes in D are treated as attributes.</p>
@@ -229,7 +242,7 @@ using networkx.</p>
 </table>
 <dl class="class">
 <dt id="tethne.data.DataCollection">
-<em class="property">class </em><tt class="descclassname">tethne.data.</tt><tt class="descname">DataCollection</tt><big>(</big><em>data</em>, <em>index_by='wosid'</em><big>)</big><a class="headerlink" href="#tethne.data.DataCollection" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">tethne.data.</tt><tt class="descname">DataCollection</tt><big>(</big><em>data</em>, <em>index_by='wosid'</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#DataCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.DataCollection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>A <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> organizes <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s for analysis.</p>
 <p>The <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> is initialized with some data, which is indexed
@@ -289,13 +302,13 @@ can then be sliced ( <a class="reference internal" href="#tethne.data.DataCollec
 </table>
 <dl class="method">
 <dt id="tethne.data.DataCollection.N_axes">
-<tt class="descname">N_axes</tt><big>(</big><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.N_axes" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">N_axes</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/data.html#DataCollection.N_axes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.DataCollection.N_axes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of slice axes for this <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> .</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="tethne.data.DataCollection.distribution">
-<tt class="descname">distribution</tt><big>(</big><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.distribution" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">distribution</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/data.html#DataCollection.distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.DataCollection.distribution" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a Numpy array describing the number of <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>
 associated with each slice-coordinate.</p>
 <p>WARNING: expensive for a <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> with many axes or
@@ -321,7 +334,7 @@ long axes. Consider using <tt class="xref py py-func docutils literal"><span cla
 
 <dl class="method">
 <dt id="tethne.data.DataCollection.distribution_2d">
-<tt class="descname">distribution_2d</tt><big>(</big><em>x_axis</em>, <em>y_axis</em><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.distribution_2d" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">distribution_2d</tt><big>(</big><em>x_axis</em>, <em>y_axis</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#DataCollection.distribution_2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.DataCollection.distribution_2d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a Numpy array describing the number of <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>
 associated with each slice-coordinate, for x and y axes spcified.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -345,13 +358,13 @@ associated with each slice-coordinate, for x and y axes spcified.</p>
 
 <dl class="method">
 <dt id="tethne.data.DataCollection.get_axes">
-<tt class="descname">get_axes</tt><big>(</big><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.get_axes" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_axes</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/data.html#DataCollection.get_axes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.DataCollection.get_axes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of all slice axes for this <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> .</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="tethne.data.DataCollection.get_by">
-<tt class="descname">get_by</tt><big>(</big><em>key_indices</em>, <em>papers=False</em><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.get_by" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_by</tt><big>(</big><em>key_indices</em>, <em>papers=False</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#DataCollection.get_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.DataCollection.get_by" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a set of (key, index) tuples, return the corresponding subset of
 <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> indices (or <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances themselves, if 
 papers is True).</p>
@@ -380,7 +393,7 @@ papers is True).</p>
 
 <dl class="method">
 <dt id="tethne.data.DataCollection.get_slice">
-<tt class="descname">get_slice</tt><big>(</big><em>key</em>, <em>index</em>, <em>papers=False</em><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.get_slice" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_slice</tt><big>(</big><em>key</em>, <em>index</em>, <em>papers=False</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#DataCollection.get_slice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.DataCollection.get_slice" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yields a specific slice.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -415,7 +428,7 @@ papers is True) a list of <a class="reference internal" href="#tethne.data.Paper
 
 <dl class="method">
 <dt id="tethne.data.DataCollection.get_slices">
-<tt class="descname">get_slices</tt><big>(</big><em>key</em>, <em>papers=False</em><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.get_slices" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_slices</tt><big>(</big><em>key</em>, <em>papers=False</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#DataCollection.get_slices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.DataCollection.get_slices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yields slices for key.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -446,7 +459,7 @@ in this <a class="reference internal" href="#tethne.data.DataCollection" title="
 
 <dl class="method">
 <dt id="tethne.data.DataCollection.indices">
-<tt class="descname">indices</tt><big>(</big><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.indices" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">indices</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/data.html#DataCollection.indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.DataCollection.indices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yields a list of indices of all papers in this <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -464,7 +477,7 @@ in this <a class="reference internal" href="#tethne.data.DataCollection" title="
 
 <dl class="method">
 <dt id="tethne.data.DataCollection.papers">
-<tt class="descname">papers</tt><big>(</big><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.papers" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">papers</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/data.html#DataCollection.papers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.DataCollection.papers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yield the complete set of <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances in this
 <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> .</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -483,32 +496,9 @@ in this <a class="reference internal" href="#tethne.data.DataCollection" title="
 
 <dl class="method">
 <dt id="tethne.data.DataCollection.slice">
-<tt class="descname">slice</tt><big>(</big><em>key</em>, <em>method=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#tethne.data.DataCollection.slice" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">slice</tt><big>(</big><em>key</em>, <em>method=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#DataCollection.slice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.DataCollection.slice" title="Permalink to this definition">¶</a></dt>
 <dd><p>Slices data by key, using method (if applicable).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>key</strong> : str</p>
-<blockquote>
-<div><p>key in <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> by which to slice data.</p>
-</div></blockquote>
-<p><strong>method</strong> : str (optional)</p>
-<blockquote>
-<div><p>Dictates how data should be sliced. See table for available methods.
-If key is &#8216;date&#8217;, default method is time_period with window_size and
-step_size of 1.</p>
-</div></blockquote>
-<p><strong>kwargs</strong> : kwargs</p>
-<blockquote class="last">
-<div><p>See methods table, below.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>Methods available for slicing DataCollections:</p>
+<p>Methods available for slicing a <a class="reference internal" href="#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a>:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="18%" />
@@ -543,6 +533,20 @@ the time period.</td>
 </tr>
 </tbody>
 </table>
+<p>The main difference between the sliding time-window (<tt class="docutils literal"><span class="pre">time_window</span></tt>) 
+and the time-period (<tt class="docutils literal"><span class="pre">time_period</span></tt>) slicing methods are whether the
+resulting periods can overlap. Whereas time-period slicing divides data
+into subsets by sequential non-overlapping time periods, subsets 
+generated by time-window slicing can overlap.</p>
+<div class="figure align-center">
+<img alt="_images/timeline.timeslice.png" src="_images/timeline.timeslice.png" style="width: 400px;" />
+<p class="caption"><strong>Time-period</strong> slicing, with a window-size of 4 years.</p>
+</div>
+<div class="figure align-center">
+<img alt="_images/timeline.timewindow.png" src="_images/timeline.timewindow.png" style="width: 400px;" />
+<p class="caption"><strong>Time-window</strong> slicing, with a window-size of 4 years and a 
+step-size of 1 year.</p>
+</div>
 <p>Avilable kwargs:</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -572,6 +576,28 @@ step (ignored for time_period).</td>
 <td>If True, the data from each successive slice
 includes the data from all preceding slices.
 Only applies if key is &#8216;date&#8217; (default = False).</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>key</strong> : str</p>
+<blockquote>
+<div><p>key in <a class="reference internal" href="#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> by which to slice data.</p>
+</div></blockquote>
+<p><strong>method</strong> : str (optional)</p>
+<blockquote>
+<div><p>Dictates how data should be sliced. See table for available methods.
+If key is &#8216;date&#8217;, default method is time_period with window_size and
+step_size of 1.</p>
+</div></blockquote>
+<p><strong>kwargs</strong> : kwargs</p>
+<blockquote class="last">
+<div><p>See methods table, above.</p>
+</div></blockquote>
+</td>
 </tr>
 </tbody>
 </table>
@@ -614,7 +640,7 @@ organized by some index (e.g. time).</p>
 </table>
 <dl class="method">
 <dt id="tethne.data.GraphCollection.compose">
-<tt class="descname">compose</tt><big>(</big><big>)</big><a class="headerlink" href="#tethne.data.GraphCollection.compose" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">compose</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/data.html#GraphCollection.compose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.GraphCollection.compose" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the simple union of all <tt class="xref py py-class docutils literal"><span class="pre">Graph</span></tt> in the 
 <a class="reference internal" href="#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -737,7 +763,7 @@ True.</p>
 
 <dl class="class">
 <dt id="tethne.data.LDAModel">
-<em class="property">class </em><tt class="descclassname">tethne.data.</tt><tt class="descname">LDAModel</tt><big>(</big><em>doc_topic</em>, <em>top_word</em>, <em>top_keys</em>, <em>metadata</em>, <em>vocabulary</em><big>)</big><a class="headerlink" href="#tethne.data.LDAModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">tethne.data.</tt><tt class="descname">LDAModel</tt><big>(</big><em>doc_topic</em>, <em>top_word</em>, <em>top_keys</em>, <em>metadata</em>, <em>vocabulary</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#LDAModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.LDAModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>Organizes parsed output from MALLET&#8217;s LDA modeling algorithm.</p>
 <p>Used by <a class="reference internal" href="tethne.readers.html#module-tethne.readers.mallet" title="tethne.readers.mallet"><tt class="xref py py-mod docutils literal"><span class="pre">readers.mallet</span></tt></a>.</p>
@@ -758,7 +784,7 @@ True.</p>
 </table>
 <dl class="method">
 <dt id="tethne.data.LDAModel.docs_in_topic">
-<tt class="descname">docs_in_topic</tt><big>(</big><em>z</em>, <em>topD=None</em><big>)</big><a class="headerlink" href="#tethne.data.LDAModel.docs_in_topic" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">docs_in_topic</tt><big>(</big><em>z</em>, <em>topD=None</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#LDAModel.docs_in_topic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.LDAModel.docs_in_topic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of the topD documents most representative of topic z.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -786,7 +812,7 @@ True.</p>
 
 <dl class="method">
 <dt id="tethne.data.LDAModel.topics_in_doc">
-<tt class="descname">topics_in_doc</tt><big>(</big><em>d</em>, <em>topZ=None</em><big>)</big><a class="headerlink" href="#tethne.data.LDAModel.topics_in_doc" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">topics_in_doc</tt><big>(</big><em>d</em>, <em>topZ=None</em><big>)</big><a class="reference internal" href="_modules/tethne/data.html#LDAModel.topics_in_doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.LDAModel.topics_in_doc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of the topZ most prominent topics in a document.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -929,7 +955,7 @@ specific data types.</p>
 </table>
 <dl class="method">
 <dt id="tethne.data.Paper.authors">
-<tt class="descname">authors</tt><big>(</big><big>)</big><a class="headerlink" href="#tethne.data.Paper.authors" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">authors</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/data.html#Paper.authors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.data.Paper.authors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of author names (FI LAST).</p>
 </dd></dl>
 
@@ -1066,8 +1092,9 @@ substantially more processing time, and values will usually be &gt;&gt; 0.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">API Documentation</a><ul>
-<li><a class="reference internal" href="#module-tethne.__init__"><tt class="docutils literal"><span class="pre">tethne</span></tt> Package</a></li>
+<li><a class="reference internal" href="#">tethne Package</a><ul>
+<li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">tethne</span></tt> Package</a></li>
+<li><a class="reference internal" href="#module-tethne.__main__"><tt class="docutils literal"><span class="pre">__main__</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.builders"><tt class="docutils literal"><span class="pre">builders</span></tt> Module</a><ul>
 </ul>
 </li>

@@ -12,6 +12,7 @@ command-line (Mac OSX, Linux; untested for Windows).
    tutorial.quickstart.commandline
    tutorial.quickstart.python
    tutorial.coauthors
+   tutorial.bibliocoupling
    
 
 Step-By-Step Guide (Python)
