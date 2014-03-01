@@ -66,12 +66,12 @@
 <div class="viewcode-block" id="load"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.mallet.load">[docs]</a><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">top_doc</span><span class="p">,</span> <span class="n">word_top</span><span class="p">,</span> <span class="n">topic_keys</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">metadata_key</span><span class="o">=</span><span class="s">&#39;doi&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse results from LDA modeling with MALLET.</span>
-<span class="sd">    </span>
+
 <span class="sd">    MALLET&#39;s LDA topic modeling algorithm produces a collection of output files.</span>
 <span class="sd">    :func:`.read` takes the topic-document and (sparse) word-topic matrices, as</span>
 <span class="sd">    tab-separated value files, along with a metadata file that maps</span>
 <span class="sd">    each MALLET document id to a :class:`.Paper`\, using the `metadata_key`.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    top_doc : string</span>
@@ -84,32 +84,32 @@
 <span class="sd">        Number of topics.</span>
 <span class="sd">    metadata : string (optional)</span>
 <span class="sd">        Path to tab-separated metadata file with IDs and :class:`.Paper` keys.</span>
-<span class="sd">        </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    ldamodel : :class:`.LDAModel`</span>
-<span class="sd">        </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    
+
     <span class="n">td</span> <span class="o">=</span> <span class="n">_handle_top_doc</span><span class="p">(</span><span class="n">top_doc</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
     <span class="n">wt</span><span class="p">,</span><span class="n">vocabulary</span> <span class="o">=</span> <span class="n">_handle_word_top</span><span class="p">(</span><span class="n">word_top</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
     <span class="n">tk</span> <span class="o">=</span> <span class="n">_handle_topic_keys</span><span class="p">(</span><span class="n">topic_keys</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
         <span class="n">md</span> <span class="o">=</span> <span class="n">_handle_metadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">md</span> <span class="o">=</span> <span class="bp">None</span>
 
     <span class="n">ldamodel</span> <span class="o">=</span> <span class="n">LDAModel</span><span class="p">(</span><span class="n">td</span><span class="p">,</span> <span class="n">wt</span><span class="p">,</span> <span class="n">tk</span><span class="p">,</span> <span class="n">md</span><span class="p">,</span> <span class="n">vocabulary</span><span class="p">)</span>
-    
+
     <span class="k">return</span> <span class="n">ldamodel</span>
 </div>
 <div class="viewcode-block" id="read"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.mallet.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">top_doc</span><span class="p">,</span> <span class="n">word_top</span><span class="p">,</span> <span class="n">topic_keys</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">metadata_key</span><span class="o">=</span><span class="s">&#39;doi&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates :class:`.Paper` objects from Mallet output.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Each :class:`.Paper` is assigned a topic vector.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    top_doc : string</span>
@@ -122,24 +122,24 @@
 <span class="sd">        Number of topics.</span>
 <span class="sd">    metadata : string (optional)</span>
 <span class="sd">        Path to tab-separated metadata file with IDs and :class:`.Paper` keys.</span>
-<span class="sd">        </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    papers : list</span>
 <span class="sd">        List of :class:`.Paper`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
+
     <span class="n">ldamodel</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">top_doc</span><span class="p">,</span> <span class="n">word_top</span><span class="p">,</span> <span class="n">topic_keys</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">metadata_key</span><span class="p">)</span>
     <span class="n">D</span> <span class="o">=</span> <span class="n">ldamodel</span><span class="o">.</span><span class="n">doc_topic</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    
+
     <span class="n">papers</span> <span class="o">=</span> <span class="p">[]</span>
-    
+
     <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">D</span><span class="p">):</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">Paper</span><span class="p">()</span>
         <span class="n">p</span><span class="p">[</span><span class="n">metadata_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">ldamodel</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>  <span class="c"># e.g. doi, wosid</span>
         <span class="n">p</span><span class="p">[</span><span class="s">&#39;topics&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">ldamodel</span><span class="o">.</span><span class="n">doc_topic</span><span class="p">[</span><span class="n">d</span><span class="p">,:],</span> <span class="n">ldamodel</span><span class="o">.</span><span class="n">top_keys</span><span class="p">)</span>
         <span class="n">papers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-    
+
     <span class="k">return</span> <span class="n">papers</span>
 </div>
 <span class="k">def</span> <span class="nf">_handle_top_doc</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">Z</span><span class="p">):</span>
@@ -161,9 +161,9 @@
                 <span class="n">tops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span> <span class="p">)</span>
                 <span class="c">#topics.add(int(t[i]))</span>
             <span class="n">documents</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">tops</span><span class="p">)</span>
-    
+
     <span class="n">td</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">documents</span><span class="p">),</span> <span class="n">Z</span><span class="p">)</span> <span class="p">)</span>
-            
+
     <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">documents</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">t</span><span class="p">,</span><span class="n">p</span> <span class="ow">in</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
             <span class="n">td</span><span class="p">[</span><span class="n">d</span><span class="p">,</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
@@ -177,11 +177,11 @@
 <span class="sd">    wt : Numpy array</span>
 <span class="sd">        Rows are topics, columns are words. Rows sum to ~1.</span>
 <span class="sd">    vocabulary : :class:`.Dictionary`</span>
-<span class="sd">        Maps words to word-indices in wt.        </span>
+<span class="sd">        Maps words to word-indices in wt.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">words</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">topics</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-    
+
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
@@ -194,18 +194,18 @@
     <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">words</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">t</span><span class="p">,</span><span class="n">p</span> <span class="ow">in</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
             <span class="n">wt</span><span class="p">[</span><span class="n">t</span><span class="p">,</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
-    
+
     <span class="c"># Normalize</span>
     <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">Z</span><span class="p">):</span>
         <span class="n">wt</span><span class="p">[</span><span class="n">t</span><span class="p">,:]</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">wt</span><span class="p">[</span><span class="n">t</span><span class="p">,:])</span>
-    
+
     <span class="c"># Build vocabulary</span>
     <span class="n">vocabulary</span> <span class="o">=</span> <span class="n">Dictionary</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">words</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
         <span class="n">vocabulary</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    
+
     <span class="k">return</span> <span class="n">wt</span><span class="p">,</span> <span class="n">vocabulary</span>
-        
+
 <span class="k">def</span> <span class="nf">_handle_topic_keys</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns</span>
@@ -215,14 +215,14 @@
 <span class="sd">        list of strings and P is float.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">tk</span> <span class="o">=</span> <span class="p">{}</span>
-    
+
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
             <span class="n">tk</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">l</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
-    
+
     <span class="k">return</span> <span class="n">tk</span>
-    
+
 <span class="k">def</span> <span class="nf">_handle_metadata</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns</span>
@@ -232,13 +232,13 @@
 <span class="sd">        property.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">md</span> <span class="o">=</span> <span class="p">{}</span>
-    
+
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&quot;rU&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span> <span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">reader</span> <span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
         <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
             <span class="n">md</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            
+
     <span class="k">return</span> <span class="n">md</span>
 </pre></div>
 

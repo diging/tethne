@@ -94,6 +94,15 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Yields a Numpy array, along with feature-index and document-index mappings.</span>
 
+<span class="sd">    **Usage**</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; import tethne.readers as rd</span>
+<span class="sd">       &gt;&gt;&gt; import tethne.matrices as mt</span>
+<span class="sd">       &gt;&gt;&gt; data = rd.dfr.ngrams(&quot;/Path/to/DfR/data&quot;)</span>
+<span class="sd">       &gt;&gt;&gt; A, doc_index, feat_index = mt.dfr.array(data, normalize=True)</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    data : dict</span>
@@ -150,6 +159,15 @@
 <div class="viewcode-block" id="matrix"><a class="viewcode-back" href="../../../tethne.matrices.html#tethne.matrices.dfr.matrix">[docs]</a><span class="k">def</span> <span class="nf">matrix</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Yields a Numpy matrix, along with feature-index and document-index mappings.</span>
+
+<span class="sd">    **Usage**</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; import tethne.readers as rd</span>
+<span class="sd">       &gt;&gt;&gt; import tethne.matrices as mt</span>
+<span class="sd">       &gt;&gt;&gt; data = rd.dfr.ngrams(&quot;/Path/to/DfR/data&quot;)</span>
+<span class="sd">       &gt;&gt;&gt; M, doc_index, feat_index = mt.dfr.matrix(data, normalize=True)</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
