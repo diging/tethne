@@ -18,46 +18,35 @@ from ZODB.FileStorage import FileStorage
 from ZODB.DB import DB
 import models as mod
 
-storage = FileStorage('./storage/users.fs')
-db = DB(storage)
-print db, type(db)
-db.database_name = 'userdb'
-connection = db.open()
-# dbroot is a dict like structure.
-dbroot = connection.root()  # retrieving the root of the tree
 
 
+# @app.before_request
+# def set_db_defaults():
+# 	storage = FileStorage('./storage/users.fs')
+# 	db = DB(storage)
+# 	print "Type start:",db, type(db)
+# 	connection = db.open()
+# 	# dbroot is a dict like structure.
+# 	dbroot = connection.root()  # retrieving the root of the tree
+# 	for val in ['userdb']:
+# 		if not val in dbroot.keys():
+# 			print " donot create this always"
+# 			dbroot[val] = Dict()
+# 			print "user db dbroot:",dbroot['userdb'], type (dbroot['userdb'])
+
+# Commented part
 # ZEO commented as of now.
 
 # db = ZODB.config.databaseFromURL('zodb.conf')
 # connection = db.open()
 # root = connection.root()
 
-# 
-# from flaskext.zodb import ZODB
-# db = ZODB(app)
-
-
-# # setting the defaults 
-# @app.before_request
-# def set_db_defaults():
-#     if 'userdb' not in db:
-#         db['userdb'] = List()
               
 # @app.route('/logout')
 # def logout():
 #     session.pop('logged_in', None)
 #     flash('You were logged out')
 #     return redirect(url_for('show_entries'))
-
-
-#Ensure that a 'userdb' key is present
-#in the DB
-
-for val in ['userdb']:
-    if not val in dbroot.keys():
-    	print " donot create this always"
-        dbroot[val] = Dict()
 
 # if not dbroot.has_key('userdb'):
 #     from BTrees.OOBTree import OOBTree
@@ -69,7 +58,9 @@ for val in ['userdb']:
 
 #userdb = dbroot['userdb']           
 #print "user db init:",userdb, type(userdb)
-print "user db dbroot:",dbroot['userdb'], type (dbroot['userdb'])
+#Ensure that a 'userdb' key is present
+#in the DB
+###
             
 @app.route('/index', methods=['GET','POST'])
 def index():
@@ -98,21 +89,30 @@ def add_entry():
 def login():
 	flash('Welcome to Tethne Website')
 	form = LoginForm(request.form)
-	print "OK here", request.cookies.get('username'), "abc:"
+	print "Login", request.form , "FORM", form
+	print "form:", form.name.data, form.password.data , "session",session, type(session)
+	print "Login Form Values", request.cookies.get('username'), "abc:"
         username = request.cookies.get('username')
         if request.method == 'GET':
-        	#username = form.name.data
-        	for i in request.form.values():
-        		print "I is:" , i
-        	#print "request::::",request.form['name']
-        	#print "username:: form.data", username
-        	for val in dbroot['userdb'].values():
-        		print "value is : " , val, val.name,val.password
-        	print "form:", form.name.data, form.password.data , "session",session, type(session)
-        	if username:
+            storage = FileStorage('./storage/userdb.fs')
+            conn = DB(storage)
+            print "Login start:",conn, type(conn)
+            dbroot = conn.open().root()
+            try: 
+            	print "dbroot['userdb'].values()", dbroot['userdb'].values(), "keys",dbroot['userdb'].keys() , dbroot['userdb']
+                for val in dbroot['userdb'].values():
+        				print "value is : " , val, val.name,val.email,"form", form
+        				for key in dbroot['userdb'].keys():
+        					print "Yess!!", key
+            except:
+            	print " donot come here : except"
+                pass           
+           
+        	
+            if username:
         		print "inside login last loop:",db, type(db)
         		return redirect(url_for('index'))
-        	else:
+            else:
         		print "error" 
             	
         else:
@@ -127,23 +127,42 @@ def login():
 @app.route('/register',methods=['GET','POST'])
 def register():
     form = RegisterForm(request.form)
-    print "form OBJECT:::", form
+    print "##form OBJECT:::", form
     if request.method == 'POST':
             #session['username'] = request.form['username']
             if 'Register' in request.form:
-                print " inside if"
+                print "inside if"
             else:
-                print " else", request.form
-                u=mod.User()
-                print "User:", u
-                u.name = form.name.data
-                u.email = form.email.data
-                u.password = sha256(form.password.data).hexdigest()
-                #u.password = form.password.data
-              	u.confirm = form.confirm.data
-              	u.institution = form.institution.data
-              	u.security_question = form.security_question.data
-              	u.security_answer = form.security_answer.data
+            	print "inside else"
+            	storage = FileStorage('./storage/userdb.fs')
+            	conn = DB(storage)
+            	print "Type start:",conn, type(conn)
+            	dbroot = conn.open().root()
+            	try:
+                	for val in ['userdb','graphdb','datadb']:
+                		if val in dbroot.keys():
+							pass
+                except:
+                		if not val in dbroot.keys():
+							print " donot create this always"
+							dbroot[val] = Dict()
+							print "TRY user db dbroot:",dbroot['userdb'], type (dbroot['userdb'])
+							
+                print "else", request.form
+                u=mod.User(form.name.data,form.email.data,\
+                			sha256(form.password.data).hexdigest(), \
+                			form.password.data,form.institution.data,\
+                			form.security_question.data, form.security_answer.data		
+                		   )
+                print "User:", u, "form.name.data",form.name.data
+                # u.name = form.name.data
+#                 u.email = form.email.data
+#                 u.password = sha256(form.password.data).hexdigest()
+#                 #u.password = form.password.data
+#               	u.confirm = form.confirm.data
+#               	u.institution = form.institution.data
+#               	u.security_question = form.security_question.data
+#               	u.security_answer = form.security_answer.data
                 #userdb[u.name]=u
                 dbroot['userdb'][u.name] = u
                 session['username'] = u.name
