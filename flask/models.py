@@ -15,59 +15,46 @@ class User(Persistent):
     DocString to be added
     
     """
-#     self.name = name
-#     self.email = email
-#     self.passwordHash = sha256(password).hexdigest()
-#     self.id = email
-#     self.secretque = que
-#     self.secretans = answerpass
-#     # set it to normal user as default. 
-#     # can change according to session.
-#     self.role = 1  
-#     self._p_changed = 1 # for mutable objects
 
-    def __init__(self):
-        self.name = None
-        self.email = None
-        self.passwordHash = None
-        self.id = None
-        self.secretque = None 
-        self.secretans = None
-        # set it to normal user as default. 
-        # can change according to session.
-        self.role = 1  
+    def __init__(self,name, email, password,emailid,institution,que,ans):
+        self.name = name
+        self.email = email
+        self.password = password
+        self.id = emailid
+        self.institution = institution
+        self.secretque = que 
+        self.secretans = ans    
+        self.role = "user"
         self._p_changed = 1 # for mutable objects
 
-    
-    def register(self, name, email, password,emailid,que,ans):
-#         self.name = name
-#         self.email = email
-#         self.passwordHash = sha256(password).hexdigest()
-#         self.id = email
-#         self.secretque = que
-#         self.secretans = answerpass
-#         # set it to normal user as default. 
-#         # can change according to session.
-#         self.role = 1  
-          pass
+
         
-    def login(self):
-        #pass the User Object and retrieve the user details
-        pass
-   
-    def list_users(self,user, email):
-        # only for admin - whose role is "0"
-        pass
+class ManageUsers(User):
+	
+	"""
+	User Class
+    DocString to be added
     
-    def edit_users(self,UserObject):
-        # only for admin
-        pass
-    
-    def del_users(self):
-        # only for admin
-        pass
+	"""
+	def login(self,name):
+		#pass the User Object and retrieve the user details
+		self.name = name
+		self._p_changed = 1
+    	
    
-        
+    # def list_users(self,user, email):
+#         # only for admin - whose role is "0"
+#         pass
+#     
+#     def edit_users(self,UserObject):
+#         # only for admin
+#         pass
+#     
+#     def del_users(self):
+#         # only for admin
+#         pass
+#    
+#         
         
 class GraphCollection(Object):
     
