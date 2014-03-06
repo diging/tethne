@@ -1,0 +1,145 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Welcome Admin</h1>
+</div>
+<p class="lead"> As an admin you can perform the following activities </p>
+
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+
+<input type="text" id="tb1" value="10">
+<input type="text" id="tb2" value="6">
+<input type="button" value="Create Table" onclick="dynamicTable();"> <br>
+
+<!-- Dynamic , but not working-->
+<script type="text/javascript">
+function dynamicTable() 
+{
+    var a, b, tableElem, rowElem, colElem;
+
+    a = document.getElementById('tb1').value;
+    b = document.getElementById('tb2').value;
+
+    if (a == "" || b == "") {
+        alert("There are no values in the UserID table");
+    } else {
+        tableElem = document.createElement('table');
+
+        for (var i = 0; i < a; i++) {
+            rowElem = document.createElement('tr');
+
+            for (var j = 0; j < b; j++) {
+                colElem = document.createElement('td');
+                rowElem.appendChild(colElem);
+            }
+
+            tableElem.appendChild(rowElem);
+        }
+
+        document.body.appendChild(tableElem);
+
+
+    }
+}
+
+$(document).ready(function() {
+    dynamicTable();
+});
+</script>
+<br>
+<br>
+&nbsp;
+&nbsp;
+
+<!-- Not a dynamic one,need to change-->
+    <SCRIPT language="javascript">
+        function addRow(tableID) {
+ 
+            var table = document.getElementById(tableID);
+ 
+            var rowCount = table.rows.length;
+            var row = table.insertRow(rowCount);
+ 
+            var cell1 = row.insertCell(0);
+            var element1 = document.createElement("input");
+            element1.type = "checkbox";
+            element1.name="chkbox[]";
+            cell1.appendChild(element1);
+ 
+            var cell2 = row.insertCell(1);
+            cell2.innerHTML = rowCount + 1;
+ 
+            var cell3 = row.insertCell(2);
+            var element2 = document.createElement("input");
+            element2.type = "text";
+            element2.name = "txtbox[]";
+            cell3.appendChild(element2);
+            
+            var cell4 = row.insertCell(3);
+            var element3 = document.createElement("input");
+            element3.type = "text";
+            element3.name = "txtbox[]";
+            cell3.appendChild(element3);
+ 
+ 
+        }
+ 
+        function deleteRow(tableID) {
+            try {
+            var table = document.getElementById(tableID);
+            var rowCount = table.rows.length;
+ 
+            for(var i=0; i<rowCount; i++) {
+                var row = table.rows[i];
+                var chkbox = row.cells[0].childNodes[0];
+                if(null != chkbox && true == chkbox.checked) {
+                    table.deleteRow(i);
+                    rowCount--;
+                    i--;
+                }
+ 
+ 
+            }
+            }catch(e) {
+                alert(e);
+            }
+        }
+ 
+    </SCRIPT>
+
+ 
+    <INPUT type="button" value="Add Users" onclick="addRow('dataTable')" />
+ 
+    <INPUT type="button" value="Delete Row" onclick="deleteRow('dataTable')" />
+ 
+    <TABLE id="dataTable" width="350px" border="1">
+        <TR>
+            <TD><INPUT type="checkbox" name="chk"/></TD>
+            <TD> 1 </TD>
+            <TD> <INPUT type="text" /> </TD>
+        </TR>
+    </TABLE>
+ 
+</BODY>
+</HTML>
+
+<!-- Need to change all the image locations to local folders-->
+<!--
+<a href="{{ url_for('home') }}"> <img style="border:0px;" src="http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=Add%20Users" onmouseover="this.src='http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=Add%20Users'" onmouseout="this.src='http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=Add%20Users';" alt="Add%20Users" /></a><script type="text/javascript">img=new Image();img.src= "http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=Add%20Users";</script>
+
+<a href="{{ url_for('home') }}"> <img style="border:0px;" src="http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=Approve%20Users" onmouseover="this.src='http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=Approve%20Users'" onmouseout="this.src='http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=Approve%20Users';" alt="Approve%20Users" /></a><script type="text/javascript">img=new Image();img.src= "http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=Approve%20Users";</script>
+
+<a href="{{ url_for('home') }}"> <img style="border:0px;" src="http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=List%20Users" onmouseover="this.src='http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=List%20Users'" onmouseout="this.src='http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=List%20Users';" alt="List%20Users" /></a><script type="text/javascript">img=new Image();img.src= "http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=List%20Users";</script>
+
+<a href="{{ url_for('home') }}"> <img style="border:0px;" src="http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=Delete%20Users" onmouseover="this.src='http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=Delete%20Users'" onmouseout="this.src='http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=Delete%20Users';" alt="Delete%20Users" /></a><script type="text/javascript">img=new Image();img.src= "http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=Delete%20Users";</script>
+
+-->
+
+
+{% endblock %}

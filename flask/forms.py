@@ -20,7 +20,8 @@ import models as mod
 #     dbroot['userdb'] = OOBTree()
 
 class RegisterForm(Form):
-
+    
+    #Need to change the email using Email validator.
     
     name             = TextField('Username', [validators.Required(),validators.Length(min=6, max=35)])
     email            = TextField('Email', [validators.Required(),validators.Length(min=6, max=35)])
