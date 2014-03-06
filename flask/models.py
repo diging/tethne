@@ -42,15 +42,15 @@ class ManageUsers(User):
 		self._p_changed = 1
     	
    
-    # def list_users(self,user, email):
+    # def list_users(self):
 #         # only for admin - whose role is "0"
 #         pass
 #     
-#     def edit_users(self,UserObject):
+#     def approve_user(self,UserObject):
 #         # only for admin
 #         pass
 #     
-#     def del_users(self):
+#     def del_user(self,UserObject):
 #         # only for admin
 #         pass
 #    

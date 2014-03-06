@@ -10,6 +10,7 @@ from hashlib import sha256
 from persistent import Persistent
 from persistent.list import PersistentList as List
 from persistent.mapping import PersistentMapping as Dict
+from flask_login import current_user,login_user,LoginManager
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -61,6 +62,16 @@ import models as mod
 #Ensure that a 'userdb' key is present
 #in the DB
 ###
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@app.route('/auth', methods=['GET','POST'])
+def auth():
+    if current_user.is_authenticated():
+         return render_template("forms/main.html",form=form)
+    else:
+         return render_template("forms/login.html")
             
 @app.route('/index', methods=['GET','POST'])
 def index():
@@ -69,65 +80,83 @@ def index():
         return 'Logged in as %s' % escape(session['username'])
     #return render_template('forms/register.html', form = form)
     return 'You are not logged in'            
-
+    
+@app.route('/ok', methods=['GET','POST'])
+def ok():
+	form = LoginForm(request.form)
+	return render_template('forms/home.html', form = form)
+               
+@app.route('/place', methods=['GET','POST'])
+def place():
+	print "Are u coming here or not?" 
+	return render_template('pages/placeholder.home.html')
 
 @app.route('/', methods=['GET','POST'])
 def home():
-    form = LoginForm(request.form)
-    return render_template('forms/login.html', form = form)
+    #form = LoginForm(request.form)
+    #return render_template('forms/login.html', form = form)
+    return redirect(url_for('login'))
 
-@app.route('/add', methods=['POST'])
-def add_entry():
-    if not session.get('logged_in'):
-        abort(401)
-    db['userdb'].append(request.form)
-    flash('New entry was successfully posted')
-    
-    
-    return redirect(url_for('show_entries'))
+
+@login_manager.user_loader
+def load_user(userid):
+    return User.get(userid)
+ 
+
+
 @app.route('/login', methods=['GET','POST'])
 def login():
-	flash('Welcome to Tethne Website')
-	form = LoginForm(request.form)
-	print "Login", request.form , "FORM", form
-	print "form:", form.name.data, form.password.data , "session",session, type(session)
-	print "Login Form Values", request.cookies.get('username'), "abc:"
-        username = request.cookies.get('username')
-        if request.method == 'GET':
+    flash('Welcome to Tethne Website')
+    form = LoginForm(request.form)
+    name = request.args.get('name')
+    userpassword = request.args.get('password')
+    print "arguments",name,userpassword 
+    print "Login Form Values", request.cookies.get('username'), "abc:"
+    #username = request.cookies.get('username')
+    if request.method == 'GET':
+        #if form.validate_on_submit():
+        #if 1:
             storage = FileStorage('./storage/userdb.fs')
             conn = DB(storage)
-            print "Login start:",conn, type(conn)
+            print "Login start:",conn, type(conn),form.name.data
             dbroot = conn.open().root()
             try: 
             	print "dbroot['userdb'].values()", dbroot['userdb'].values(), "keys",dbroot['userdb'].keys() , dbroot['userdb']
-                for val in dbroot['userdb'].values():
-        				print "value is : " , val, val.name,val.email,"form", form
-        				for key in dbroot['userdb'].keys():
-        					print "Yess!!", key
+                #for val in dbroot['userdb'].values():
+        		#		print "value is : " , val, val.name,val.email,"form", form
+                for key in dbroot['userdb'].keys():
+        					#print "Yess!!", key, session['username'] 
+                            #if  session['username'] == key :
+                    if name == 'admin' :
+                            # Need to get username from the form  password = sha256(password
+                            print "COOOL it works atlast", "password1",dbroot['userdb'][key].password,"password2", sha256(request.args.get('password'))
+                            print "inside login last loop:",dbroot, type(dbroot)
+                            return render_template('pages/admin.home.html')
+                    if name == key and name !='admin':
+                            print "he is a normal user"
+                            return render_template('pages/admin.home.html')
+                    else :
+                            print "Error : No Such User"
+                            pass
+                            
             except:
+                #flash('Username or password failed')
             	print " donot come here : except"
                 pass           
-           
-        	
-            if username:
-        		print "inside login last loop:",db, type(db)
-        		return redirect(url_for('index'))
-            else:
-        		print "error" 
-            	
-        else:
-        	print "comes in else"
-        	flash("Login Failed")
-        	return redirect(url_for('login'))
-        
-	return render_template('forms/login.html', form = form)
+             	
+    else:
+            print "comes in else"
+            flash("Login Failed") #return redirect(url_for('login'))
+            return redirect(url_for('ok'))
+         
+    return render_template('forms/login.html', form = form)
 
   
     
 @app.route('/register',methods=['GET','POST'])
 def register():
     form = RegisterForm(request.form)
-    print "##form OBJECT:::", form
+    print "##form OBJECT::: register---->", form, form.email.data
     if request.method == 'POST':
             #session['username'] = request.form['username']
             if 'Register' in request.form:
@@ -148,13 +177,13 @@ def register():
 							dbroot[val] = Dict()
 							print "TRY user db dbroot:",dbroot['userdb'], type (dbroot['userdb'])
 							
-                print "else", request.form
+                print "else:::::-->", request.form , form.email.data
                 u=mod.User(form.name.data,form.email.data,\
                 			sha256(form.password.data).hexdigest(), \
                 			form.password.data,form.institution.data,\
                 			form.security_question.data, form.security_answer.data		
                 		   )
-                print "User:", u, "form.name.data",form.name.data
+                print "User:--->", u, "form.name.data",form.name.data
                 # u.name = form.name.data
 #                 u.email = form.email.data
 #                 u.password = sha256(form.password.data).hexdigest()
