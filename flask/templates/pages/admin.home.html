@@ -13,9 +13,7 @@
 &nbsp;
 &nbsp;
 
-<input type="text" id="tb1" value="10">
-<input type="text" id="tb2" value="6">
-<input type="button" value="Create Table" onclick="dynamicTable();"> <br>
+
 
 <!-- Dynamic , but not working-->
 <script type="text/javascript">
@@ -28,7 +26,8 @@ function dynamicTable()
 
     if (a == "" || b == "") {
         alert("There are no values in the UserID table");
-    } else {
+    } 
+    else {
         tableElem = document.createElement('table');
 
         for (var i = 0; i < a; i++) {
@@ -51,13 +50,22 @@ function dynamicTable()
 $(document).ready(function() {
     dynamicTable();
 });
+
+
 </script>
 <br>
 <br>
 &nbsp;
 &nbsp;
 
+
+<input type="text" id="tb1" value="10">
+<input type="text" id="tb2" value="6">
+<input type="button" value="Create Table" onclick="dynamicTable()"> <br>
+
+
 <!-- Not a dynamic one,need to change-->
+
     <SCRIPT language="javascript">
         function addRow(tableID) {
  
