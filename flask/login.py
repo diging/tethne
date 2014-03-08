@@ -43,11 +43,7 @@ import models as mod
 # root = connection.root()
 
               
-# @app.route('/logout')
-# def logout():
-#     session.pop('logged_in', None)
-#     flash('You were logged out')
-#     return redirect(url_for('show_entries'))
+
 
 # if not dbroot.has_key('userdb'):
 #     from BTrees.OOBTree import OOBTree
@@ -83,8 +79,9 @@ def index():
     
 @app.route('/ok', methods=['GET','POST'])
 def ok():
-	form = LoginForm(request.form)
-	return render_template('forms/home.html', form = form)
+    form = LoginForm(request.form)
+    #return redirect(url_for('login'))
+    return render_template('forms/home.html', form = form)
                
 @app.route('/place', methods=['GET','POST'])
 def place():
@@ -113,7 +110,7 @@ def login():
     print "arguments",name,userpassword 
     print "Login Form Values", request.cookies.get('username'), "abc:"
     #username = request.cookies.get('username')
-    if request.method == 'GET':
+    if request.method == 'GET'  : #and name != None
         #if form.validate_on_submit():
         #if 1:
             storage = FileStorage('./storage/userdb.fs')
@@ -134,7 +131,7 @@ def login():
                             return render_template('pages/admin.home.html')
                     if name == key and name !='admin':
                             print "he is a normal user"
-                            return render_template('pages/admin.home.html')
+                            return render_template('pages/user.home.html')
                     else :
                             print "Error : No Such User"
                             pass
@@ -206,6 +203,12 @@ def register():
 def forgot():
     form = ForgotForm(request.form)
     return render_template('forms/forgot.html', form = form)    
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    flash('You were logged out')
+    return redirect(url_for('show_entries'))
 
 # Error handlers.
 @app.errorhandler(500)
