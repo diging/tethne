@@ -84,7 +84,8 @@ def author_papers(papers, node_id='ayjid', paper_attribs=[], **kwargs):
 
     return author_papers_graph
 
-def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
+def coauthors(papers, threshold=1, edge_attribs=['ayjid'], geocode=False, 
+                                                                      **kwargs):
     """
     Generate a co-author network.
 
