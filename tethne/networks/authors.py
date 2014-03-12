@@ -84,7 +84,8 @@ def author_papers(papers, node_id='ayjid', paper_attribs=[], **kwargs):
 
     return author_papers_graph
 
-def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
+def coauthors(papers, threshold=1, edge_attribs=['ayjid'], 
+              node_attribs=['institution'], geocode=False,  **kwargs):
     """
     Generate a co-author network.
 
@@ -121,6 +122,9 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
     edge_attribs : list
         List of edge_attributes specifying which :class:`.Paper` keys (from the
         co-authored paper) to use as edge attributes. (default: ['ayjid'])
+    node_attribs : list
+        List of attributes to attach to author nodes. Presently limited to
+        'institution'.
 
     Returns
     -------
@@ -190,17 +194,32 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'], **kwargs):
         if val['weight'] >= threshold:
             G.add_edge(key[0], key[1], attr_dict=val)
     
-    # Include institutional affiliations as node attributes, if possible.
-    
-    # Find most likely institution for each author. This won't work well if the
-    #  author only occurs once in the dataset and there was no explicit
-    #  author-instituion mapping.
-    for k,v in author_inst.iteritems():
-        top_inst = max(Counter(v))
-        try:    # If an author has no coauthors, they will not appear in G.
-            G.node[k]['institution'] = top_inst
-        except KeyError:
-            pass
+    if 'institution' in node_attribs:
+        # Include institutional affiliations as node attributes, if possible.
+        
+        # Find most likely institution for each author. This won't work well if 
+        #  the author only occurs once in the dataset and there was no explicit
+        #  author-instituion mapping.
+        location_cache = {}
+        for k,v in author_inst.iteritems():
+            top_inst = max(Counter(v))
+            try:    # If an author has no coauthors, they will not appear in G.
+                G.node[k]['institution'] = top_inst
+                
+                # Optionally, include positional information, if possible.
+                if geocode:
+                    from tethne.services.geocode import GoogleCoder
+                    gc = GoogleCoder()
+                    try:    # Coded this before?
+                        location = location_cache[top_inst]
+                    except KeyError:    # Nope.
+                        location = gc.code_this(top_inst)
+                        if location is not None:
+                            G.node[k]['latitude'] = location.latitude
+                            G.node[k]['longitude'] = location.longitude
+
+            except KeyError:
+                pass
 
     return G
 

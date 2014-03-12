@@ -271,7 +271,18 @@ def bibliographic_coupling(papers, citation_id='ayjid', threshold=1,
                 bcoupling.add_edge(papers[i][node_id],
                                    papers[j][node_id],
                                    similarity=similarity)
-        nx.set_node_attributes(bcoupling, nattr)
+                                   
+        # Set node attributes.
+        node_attributes = {}
+        for k, v in nattr.iteritems():
+            for vk, vv in v.iteritems():
+                try:
+                    node_attributes[vk][k] = vv
+                except KeyError:
+                    node_attributes[vk] = {k:vv}
+                    
+        for k, v in node_attributes.iteritems():
+            nx.set_node_attributes(bcoupling, k, v)
         
     return bcoupling
 
