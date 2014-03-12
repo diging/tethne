@@ -56,6 +56,68 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Reader for Web of Science field-tagged bibliographic data.</span>
 
+<span class="sd">Tethne parses Web of Science field-tagged data into a list of :class:`.Paper` </span>
+<span class="sd">objects. This is a two-step process: data are first parsed into a list of </span>
+<span class="sd">dictionaries with field-tags as keys, and then each dictionary is converted to a</span>
+<span class="sd">:class:`.Paper` . :func:`.readers.wos.read` performs both steps in sequence.</span>
+
+<span class="sd">One-step Parsing</span>
+<span class="sd">````````````````</span>
+
+<span class="sd">The method :func:`.readers.wos.read` performs both :func:`.readers.wos.parse` </span>
+<span class="sd">and :func:`.readers.wos.convert` . This is the preferred (simplest) approach in</span>
+<span class="sd">most cases.</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">   &gt;&gt;&gt; papers = rd.wos.read(&quot;/Path/to/savedrecs.txt&quot;)</span>
+<span class="sd">   &gt;&gt;&gt; papers[0]</span>
+<span class="sd">   &lt;tethne.data.Paper instance at 0x101b575a8&gt;</span>
+
+<span class="sd">Alternatively, if you have many data files saved in the same directory, you can </span>
+<span class="sd">use :func:`.readers.wos.from_dir` :</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">   &gt;&gt;&gt; papers = rd.wos.parse_from_dir(&quot;/Path/to&quot;)</span>
+
+<span class="sd">Two-step Parsing</span>
+<span class="sd">````````````````</span>
+
+<span class="sd">Use the two-step approach if you need to access fields not included in </span>
+<span class="sd">:class:`.Paper`\, or if you wish to perform some intermediate manipulation on</span>
+<span class="sd">the raw parsed data.</span>
+
+<span class="sd">First import the :mod:`.readers.wos` module:</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">   &gt;&gt;&gt; import tethne.readers as rd</span>
+
+<span class="sd">Then parse the WoS data to a list of field-tagged dictionaries using </span>
+<span class="sd">:func:`.readers.wos.parse` :</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">   &gt;&gt;&gt; wos_list = rd.wos.parse(&quot;/Path/to/savedrecs.txt&quot;)</span>
+<span class="sd">   &gt;&gt;&gt; wos_list[0].keys()</span>
+<span class="sd">   [&#39;EM&#39;, &#39;&#39;, &#39;CL&#39;, &#39;AB&#39;, &#39;WC&#39;, &#39;GA&#39;, &#39;DI&#39;, &#39;IS&#39;, &#39;DE&#39;, &#39;VL&#39;, &#39;CY&#39;, &#39;AU&#39;, &#39;JI&#39;, </span>
+<span class="sd">    &#39;AF&#39;, &#39;CR&#39;, &#39;DT&#39;, &#39;TC&#39;, &#39;EP&#39;, &#39;CT&#39;, &#39;PG&#39;, &#39;PU&#39;, &#39;PI&#39;, &#39;RP&#39;, &#39;J9&#39;, &#39;PT&#39;, </span>
+<span class="sd">    &#39;LA&#39;, &#39;UT&#39;, &#39;PY&#39;, &#39;ID&#39;, &#39;SI&#39;, &#39;PA&#39;, &#39;SO&#39;, &#39;Z9&#39;, &#39;PD&#39;, &#39;TI&#39;, &#39;SC&#39;, &#39;BP&#39;, </span>
+<span class="sd">    &#39;C1&#39;, &#39;NR&#39;, &#39;RI&#39;, &#39;ER&#39;, &#39;SN&#39;]</span>
+
+<span class="sd">Convert those field-tagged dictionaries to :class:`.Paper` objects using </span>
+<span class="sd">:func:`.readers.wos.convert` :</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">   &gt;&gt;&gt; papers = rd.wos.convert(wos_list)</span>
+<span class="sd">   &gt;&gt;&gt; papers[0]</span>
+<span class="sd">   &lt;tethne.data.Paper instance at 0x101b575a8&gt;</span>
+
+<span class="sd">Methods</span>
+<span class="sd">```````</span>
+
 <span class="sd">.. autosummary::</span>
 
 <span class="sd">   convert</span>
@@ -70,13 +132,12 @@
 <span class="kn">import</span> <span class="nn">tethne.utilities</span> <span class="kn">as</span> <span class="nn">util</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
 
 <span class="c"># MACRO for printing the &#39;print&#39; statement values.</span>
 <span class="c"># 0 prints nothing in the console.</span>
 <span class="c"># 1 prints all print statements in the console.</span>
 <span class="n">DEBUG</span> <span class="o">=</span> <span class="mi">0</span>
-
-<span class="c"># general functions</span>
 
 <span class="k">def</span> <span class="nf">_create_ayjid</span><span class="p">(</span><span class="n">aulast</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">auinit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">date</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">jtitle</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -205,6 +266,14 @@
 <span class="sd">    AttributeError :</span>
 <span class="sd">    IOError : File at filepath not found, not readable, or empty.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; import tethne.readers as rd</span>
+<span class="sd">       &gt;&gt;&gt; wos_list = rd.wos.parse(&quot;/Path/to/data.txt&quot;)</span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    Unknown keys: RI, OI, Z9</span>
@@ -214,6 +283,8 @@
 
     <span class="n">paper_start_key</span> <span class="o">=</span> <span class="s">&#39;PT&#39;</span>
     <span class="n">paper_end_key</span> <span class="o">=</span> <span class="s">&#39;ER&#39;</span>
+    <span class="n">stop_flag</span> <span class="o">=</span> <span class="mi">0</span>
+    
 
     <span class="c"># Try to read filepath</span>
     <span class="n">line_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -225,20 +296,23 @@
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line_list</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;Unable to read filepath or filepath is empty.&quot;</span><span class="p">)</span>
-
     <span class="c"># Convert the data in the file to a usable list of dictionaries.</span>
     <span class="c"># Note: first two lines of file are not related to any paper therein.</span>
     <span class="n">last_field_tag</span> <span class="o">=</span> <span class="n">paper_start_key</span> <span class="c">#initialize to something.</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">line_list</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
         <span class="n">line</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">strip_non_ascii</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
         <span class="n">field_tag</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">field_tag</span> <span class="o">==</span> <span class="s">&#39; &#39;</span><span class="p">:</span>
+            <span class="k">pass</span>
+        
         <span class="k">if</span> <span class="n">field_tag</span> <span class="o">==</span> <span class="n">paper_start_key</span><span class="p">:</span>
             <span class="c"># Then prepare for next paper.</span>
             <span class="n">wos_dict</span> <span class="o">=</span> <span class="n">_new_wos_dict</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">field_tag</span> <span class="o">==</span> <span class="n">paper_end_key</span><span class="p">:</span>
             <span class="c"># Then add paper to our list.</span>
-            <span class="n">wos_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wos_dict</span><span class="p">)</span>
+            <span class="n">wos_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wos_dict</span><span class="p">)</span>  
 
         <span class="c"># Handle keys like AU,AF,CR that continue over many lines.</span>
         <span class="k">if</span> <span class="n">field_tag</span> <span class="o">==</span> <span class="s">&#39;  &#39;</span><span class="p">:</span>
@@ -246,7 +320,7 @@
 
         <span class="c"># Add value for the key to the wos_dict: the rest of the line.</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">field_tag</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">,</span> <span class="s">&#39;AF&#39;</span><span class="p">,</span> <span class="s">&#39;CR&#39;</span><span class="p">,</span> <span class="s">&#39;C1&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">field_tag</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">,</span> <span class="s">&#39;AF&#39;</span><span class="p">,</span> <span class="s">&#39;CR&#39;</span><span class="p">,</span> <span class="s">&#39;C1&#39;</span><span class="p">,</span> <span class="s">&#39;CA&#39;</span><span class="p">]:</span>
                 <span class="c"># These unique fields use the new line delimiter to distinguish</span>
                 <span class="c"># their list elements below.</span>
                 <span class="c"># The field C1 can be either in multiple lines or in a single</span>
@@ -255,19 +329,20 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">wos_dict</span><span class="p">[</span><span class="n">field_tag</span><span class="p">]</span> <span class="o">+=</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="ne">UnboundLocalError</span><span class="p">):</span>
-            <span class="n">wos_dict</span><span class="p">[</span><span class="n">field_tag</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
+                <span class="n">wos_dict</span><span class="p">[</span><span class="n">field_tag</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
 
         <span class="n">last_field_tag</span> <span class="o">=</span> <span class="n">field_tag</span>
     <span class="c"># End line loop.</span>
 
     <span class="c"># Define keys that should be lists instead of default string.</span>
-    <span class="n">list_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">,</span> <span class="s">&#39;AF&#39;</span><span class="p">,</span> <span class="s">&#39;DE&#39;</span><span class="p">,</span> <span class="s">&#39;ID&#39;</span><span class="p">,</span> <span class="s">&#39;CR&#39;</span><span class="p">,</span> <span class="s">&#39;C1&#39;</span><span class="p">]</span>
+    <span class="n">list_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">,</span> <span class="s">&#39;AF&#39;</span><span class="p">,</span> <span class="s">&#39;DE&#39;</span><span class="p">,</span> <span class="s">&#39;ID&#39;</span><span class="p">,</span> <span class="s">&#39;CR&#39;</span><span class="p">,</span> <span class="s">&#39;C1&#39;</span><span class="p">,</span> <span class="s">&#39;CA&#39;</span><span class="p">]</span>
     <span class="n">delims</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;AU&#39;</span><span class="p">:</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span>
               <span class="s">&#39;AF&#39;</span><span class="p">:</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span>
               <span class="s">&#39;DE&#39;</span><span class="p">:</span><span class="s">&#39;;&#39;</span><span class="p">,</span>
               <span class="s">&#39;ID&#39;</span><span class="p">:</span><span class="s">&#39;;&#39;</span><span class="p">,</span>
               <span class="s">&#39;C1&#39;</span><span class="p">:</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span>
-              <span class="s">&#39;CR&#39;</span><span class="p">:</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">}</span>
+              <span class="s">&#39;CR&#39;</span><span class="p">:</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span>
+              <span class="s">&#39;CA&#39;</span><span class="p">:</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">}</span>
 
     <span class="c"># And convert the data at those keys into lists.</span>
     <span class="k">for</span> <span class="n">wos_dict</span> <span class="ow">in</span> <span class="n">wos_list</span><span class="p">:</span>
@@ -431,7 +506,7 @@
     <span class="n">addr_dict</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Paper</span><span class="p">()</span>
     <span class="c">#tokens of form:</span>
     <span class="n">tokens</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
-    <span class="k">print</span> <span class="s">&#39;tokens inside parse_institutions : </span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">tokens</span>
+
     <span class="k">try</span><span class="p">:</span>
 
         <span class="n">name</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -456,14 +531,18 @@
     <span class="n">auinsid</span> <span class="o">=</span> <span class="n">_create_ayjid</span><span class="p">(</span><span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">],</span> <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">],</span>
                          <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">],</span> <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;jtitle&#39;</span><span class="p">])</span>
     <span class="n">addr_dict</span><span class="p">[</span><span class="s">&#39;auinsid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auinsid</span>
-    <span class="k">print</span> <span class="s">&#39;auinsid&#39;</span><span class="p">,</span> <span class="n">auinsid</span>
+
     <span class="k">return</span> <span class="n">addr_dict</span>
 
 <div class="viewcode-block" id="convert"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.convert">[docs]</a><span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">wos_data</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert parsed field-tagged data to :class:`.Paper` instances.</span>
+
 <span class="sd">    Convert a dictionary or list of dictionaries with keys from the</span>
 <span class="sd">    Web of Science field tags into a :class:`.Paper` instance or list of</span>
 <span class="sd">    :class:`.Paper` instances, the standard for Tethne.</span>
+<span class="sd">    </span>
+<span class="sd">    Each :class:`.Paper` is tagged with an accession id for this conversion.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -472,8 +551,17 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    wos_meta : list</span>
+<span class="sd">    papers : list</span>
 <span class="sd">        A list of :class:`.Paper` instances.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; import tethne.readers as rd</span>
+<span class="sd">       &gt;&gt;&gt; wos_list = rd.wos.parse(&quot;/Path/to/data.txt&quot;)</span>
+<span class="sd">       &gt;&gt;&gt; papers = rd.wos.convert(wos_list)</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -482,8 +570,11 @@
 <span class="sd">    important for any graph with authors as nodes.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">accession</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+    
     <span class="c">#create a Paper for each wos_dict and append to this list</span>
-    <span class="n">wos_meta</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">papers</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c">#handle dict inputs by converting to a 1-item list</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">wos_data</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
@@ -491,14 +582,16 @@
         <span class="c">#print &#39;wos data \n&#39; , wos_data</span>
 
 
-    <span class="c"># Calling the validate function here, before even building wos_meta list</span>
+    <span class="c"># Calling the validate function here, before even building papers list</span>
     <span class="c"># [62809724]</span>
     <span class="n">status</span> <span class="o">=</span> <span class="n">_validate</span><span class="p">(</span><span class="n">wos_data</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="p">:</span>
         <span class="c">#raise Error</span>
         <span class="k">pass</span>
+
     <span class="c"># Define the direct relationships between WoS fieldtags and Paper keys.</span>
     <span class="n">translator</span> <span class="o">=</span> <span class="n">_wos2paper_map</span><span class="p">()</span>
+    
     <span class="c"># Perform the key convertions</span>
     <span class="k">for</span> <span class="n">wos_dict</span> <span class="ow">in</span> <span class="n">wos_data</span><span class="p">:</span>
         <span class="n">paper</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Paper</span><span class="p">()</span>
@@ -506,25 +599,18 @@
         <span class="c">#direct translations</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">translator</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">():</span>
             <span class="n">paper</span><span class="p">[</span><span class="n">translator</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">=</span> <span class="n">wos_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            
+        <span class="c"># Group authors (&#39;CA&#39;) are treated as personal authors.</span>
+        <span class="k">if</span> <span class="s">&#39;CA&#39;</span> <span class="ow">in</span> <span class="n">wos_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;CA&#39;</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;CA&#39;</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AF&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;CA&#39;</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;CA&#39;</span><span class="p">]</span>
+    
         <span class="c"># more complicated translations</span>
         <span class="c"># FIXME: not robust to all names, organziation authors, etc.</span>
         <span class="k">if</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">aulast_list</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">auinit_list</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">]:</span>
-                <span class="n">name_tokens</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
-                <span class="n">aulast</span> <span class="o">=</span> <span class="n">name_tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="c"># 1 for &#39;aulast, aufirst&#39;</span>
-                    <span class="n">auinit</span> <span class="o">=</span> <span class="n">name_tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-                    <span class="c"># then no first initial character</span>
-                    <span class="c"># preserve parallel name lists with empty string</span>
-                    <span class="n">auinit</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-                <span class="n">aulast_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aulast</span><span class="p">)</span>
-                <span class="n">auinit_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">auinit</span><span class="p">)</span>
-            <span class="n">paper</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aulast_list</span>
-            <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auinit_list</span>
+            <span class="n">paper</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_handle_authors</span><span class="p">(</span><span class="n">wos_dict</span><span class="p">)</span>
 
         <span class="c">#construct ayjid</span>
         <span class="n">ayjid</span> <span class="o">=</span> <span class="n">_create_ayjid</span><span class="p">(</span><span class="n">paper</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">],</span>
@@ -532,44 +618,8 @@
         <span class="n">paper</span><span class="p">[</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ayjid</span>
 
         <span class="c"># Parse author-institution affiliations. #60216226, #57746858.</span>
-        <span class="c"># pattern = re.compile(&#39;\[(.*?)\]&#39;) # pylint</span>
-        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;\[(.*?)\]&#39;</span><span class="p">)</span>
-        <span class="n">author_institutions</span> <span class="o">=</span> <span class="p">{}</span>
-
         <span class="k">if</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;C1&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">c1_str</span> <span class="ow">in</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;C1&#39;</span><span class="p">]:</span>   <span class="c"># One C1 line for each institution.</span>
-
-                <span class="n">match</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">c1_str</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">match</span><span class="p">:</span>   <span class="c"># Explicit author-institution mappings are provided.</span>
-                    <span class="n">authors</span> <span class="o">=</span> <span class="n">c1_str</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;; &#39;</span><span class="p">)</span>
-                    <span class="n">institution</span> <span class="o">=</span> <span class="n">c1_str</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">():]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;, &#39;</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">authors</span><span class="p">:</span>
-                        <span class="c"># The A-I mapping (in data) uses the AF representation</span>
-                        <span class="c">#  of author names. But we use the AU representation</span>
-                        <span class="c">#  as our mapping key to ensure consistency with older</span>
-                        <span class="c">#  datasets.</span>
-                        <span class="n">author_index</span> <span class="o">=</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AF&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">author</span><span class="p">)</span>
-                        <span class="c">#e.g.&quot;WU, ZD&quot;</span>
-                        <span class="n">author_au</span> <span class="o">=</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">][</span><span class="n">author_index</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-                        <span class="n">inst_name</span> <span class="o">=</span> <span class="n">institution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-                        <span class="k">try</span><span class="p">:</span>
-                            <span class="n">author_institutions</span><span class="p">[</span><span class="n">author_au</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst_name</span><span class="p">)</span>
-                        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                            <span class="n">author_institutions</span><span class="p">[</span><span class="n">author_au</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">inst_name</span><span class="p">]</span>
-
-                <span class="k">else</span><span class="p">:</span>   <span class="c"># Author-institution mappings are not provided. We</span>
-                        <span class="c">#  therefore map all authors to all institutions.</span>
-                    <span class="k">for</span> <span class="n">author_au</span> <span class="ow">in</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">]:</span>
-                        <span class="n">institution</span> <span class="o">=</span> <span class="n">c1_str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;, &#39;</span><span class="p">)</span>
-                        <span class="n">inst_name</span> <span class="o">=</span> <span class="n">institution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-                        <span class="k">try</span><span class="p">:</span>
-                            <span class="n">author_institutions</span><span class="p">[</span><span class="n">author_au</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst_name</span><span class="p">)</span>
-                        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                            <span class="n">author_institutions</span><span class="p">[</span><span class="n">author_au</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">inst_name</span><span class="p">]</span>
-
-            <span class="n">paper</span><span class="p">[</span><span class="s">&#39;institutions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">author_institutions</span>
+            <span class="n">paper</span><span class="p">[</span><span class="s">&#39;institutions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_handle_author_institutions</span><span class="p">(</span><span class="n">wos_dict</span><span class="p">)</span>
 
         <span class="c"># Convert CR references into paper format</span>
         <span class="k">if</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;CR&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
@@ -579,11 +629,103 @@
                 <span class="c">#print &#39;meta_cr_list&#39; , meta_cr_list</span>
             <span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">meta_cr_list</span>
 
-        <span class="n">wos_meta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paper</span><span class="p">)</span>
+        <span class="n">paper</span><span class="p">[</span><span class="s">&#39;accession&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">accession</span>
+        
+        <span class="n">papers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paper</span><span class="p">)</span>
     <span class="c"># End wos_dict for loop.</span>
 
-    <span class="k">return</span> <span class="n">wos_meta</span>
-</div>
+    <span class="k">return</span> <span class="n">papers</span>
+    </div>
+<span class="k">def</span> <span class="nf">_handle_authors</span><span class="p">(</span><span class="n">wos_dict</span><span class="p">):</span>
+
+    <span class="n">aulast_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">auinit_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">]:</span>
+        <span class="n">name_tokens</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+        <span class="n">aulast</span> <span class="o">=</span> <span class="n">name_tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c"># 1 for &#39;aulast, aufirst&#39;</span>
+            <span class="n">auinit</span> <span class="o">=</span> <span class="n">name_tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="c"># then no first initial character</span>
+            <span class="c"># preserve parallel name lists with empty string</span>
+            <span class="n">auinit</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="n">aulast_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aulast</span><span class="p">)</span>
+        <span class="n">auinit_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">auinit</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">aulast_list</span><span class="p">,</span> <span class="n">auinit_list</span>
+
+<span class="k">def</span> <span class="nf">_handle_author_institutions</span><span class="p">(</span><span class="n">wos_dict</span><span class="p">):</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;\[(.*?)\]&#39;</span><span class="p">)</span>
+    <span class="n">author_institutions</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">c1_str</span> <span class="ow">in</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;C1&#39;</span><span class="p">]:</span>   <span class="c"># One C1 line for each institution.</span>
+    
+        <span class="n">match</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">c1_str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>   <span class="c"># Explicit author-institution mappings are provided.</span>
+            <span class="c"># For example:</span>
+            <span class="c">#</span>
+            <span class="c"># [Lin, Bing-Sian; Lee, Chon-Lin] Natl Sun Yat Sen Univ, Dept </span>
+            <span class="c">#   Marine Environm &amp; Engn, Kaohsiung 80424, Taiwan.</span>
+            <span class="c"># [Brimblecombe, Peter] Univ E Anglia, Sch Environm Sci, Norwich NR4</span>
+            <span class="c">#   7TJ, Norfolk, England.</span>
+            <span class="c"># [Lee, Chon-Lin] Natl Sun Yat Sen Univ, Asia Pacific Ocean Res Ctr,</span>
+            <span class="c">#   Kuroshio Res Grp, Kaohsiung 80424, Taiwan.</span>
+            <span class="c"># [Lee, Chon-Lin] Natl Sun Yat Sen Univ, Ctr Emerging Contaminants </span>
+            <span class="c">#   Res, Kaohsiung 80424, Taiwan.</span>
+            <span class="c"># [Liu, James T.] Natl Sun Yat Sen Univ, Inst Marine Geol &amp; Chem, </span>
+            <span class="c">#   Kaohsiung 80424, Taiwan.</span>
+
+            <span class="n">authors</span> <span class="o">=</span> <span class="n">c1_str</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;; &#39;</span><span class="p">)</span>
+            <span class="n">institution</span> <span class="o">=</span> <span class="n">c1_str</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">():]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>      \
+                                              <span class="o">.</span><span class="n">strip</span><span class="p">()</span>      \
+                                              <span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)</span>   \
+                                              <span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;, &#39;</span><span class="p">)</span>
+            
+            <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">authors</span><span class="p">:</span>
+                <span class="c"># The A-I mapping (in data) uses the AF representation</span>
+                <span class="c">#  of author names. But we use the AU representation</span>
+                <span class="c">#  as our mapping key to ensure consistency with older</span>
+                <span class="c">#  datasets.</span>
+                <span class="n">author_index</span> <span class="o">=</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AF&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">author</span><span class="p">)</span>
+                <span class="n">author_au</span> <span class="o">=</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">][</span><span class="n">author_index</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>    \
+                                                        <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+                <span class="n">inst_name</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">institution</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">institution</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()])</span>
+
+                <span class="c"># Use lists, so we can tally &#39;votes&#39; for most likely</span>
+                <span class="c">#  institution.</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">author_institutions</span><span class="p">[</span><span class="n">author_au</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst_name</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">author_institutions</span><span class="p">[</span><span class="n">author_au</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">inst_name</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>   <span class="c"># Author-institution mappings are not provided. We</span>
+                <span class="c">#  therefore map all authors to all institutions.</span>
+            <span class="c"># For example:</span>
+            <span class="c">#</span>
+            <span class="c"># UN, Environm Programme, Nairobi, Kenya.</span>
+            <span class="c"># Univ Haifa, Dept Geog, IL-31095 Haifa, Israel.</span>
+            
+            <span class="k">for</span> <span class="n">author_au</span> <span class="ow">in</span> <span class="n">wos_dict</span><span class="p">[</span><span class="s">&#39;AU&#39;</span><span class="p">]:</span>
+                <span class="n">author_au</span> <span class="o">=</span> <span class="n">author_au</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>       \
+                                     <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+            
+                <span class="n">institution</span> <span class="o">=</span> <span class="n">c1_str</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>        \
+                                    <span class="o">.</span><span class="n">strip</span><span class="p">()</span>        \
+                                    <span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)</span>     \
+                                    <span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+                <span class="n">inst_name</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">institution</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">institution</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()])</span>
+
+                <span class="c"># Use lists, so we can tally &#39;votes&#39; for most likely</span>
+                <span class="c">#  institution.</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">author_institutions</span><span class="p">[</span><span class="n">author_au</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst_name</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">author_institutions</span><span class="p">[</span><span class="n">author_au</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">inst_name</span><span class="p">]</span>
+
+    <span class="c"># Convert values back to lists before returning.</span>
+    <span class="k">return</span> <span class="p">{</span> <span class="n">k</span><span class="p">:</span><span class="nb">list</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">author_institutions</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="p">}</span>
+
 <div class="viewcode-block" id="read"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Yields a list of :class:`.Paper` instances from a Web of Science data file.</span>
@@ -597,18 +739,29 @@
 <span class="sd">    -------</span>
 <span class="sd">    papers : list</span>
 <span class="sd">        A list of :class:`.Paper` instances.</span>
-<span class="sd">      </span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; import tethne.readers as rd</span>
+<span class="sd">       &gt;&gt;&gt; papers = rd.wos.read(&quot;/Path/to/data.txt&quot;)</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># Added Try Except </span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">wl</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
+        <span class="n">papers</span> <span class="o">=</span> <span class="n">convert</span><span class="p">(</span><span class="n">wl</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;Invalid path.&quot;</span><span class="p">)</span>
 
-    <span class="n">wl</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
-    <span class="n">papers</span> <span class="o">=</span> <span class="n">convert</span><span class="p">(</span><span class="n">wl</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">papers</span>
-
 
 <span class="c"># [#60462784]</span></div>
 <div class="viewcode-block" id="from_dir"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.from_dir">[docs]</a><span class="k">def</span> <span class="nf">from_dir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Convenience function for generating a list of :class:`Paper` from a</span>
+<span class="sd">    Convenience function for generating a list of :class:`.Paper` from a</span>
 <span class="sd">    directory of Web of Science field-tagged data files.</span>
 
 <span class="sd">    Parameters</span>
@@ -618,12 +771,21 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    list : A list of :class:`Paper` objects.</span>
+<span class="sd">    papers : list</span>
+<span class="sd">        A list of :class:`.Paper` objects.</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    IOError</span>
 <span class="sd">        Invalid path.</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; import tethne.readers as rd</span>
+<span class="sd">       &gt;&gt;&gt; papers = rd.wos.from_dir(&quot;/Path/to/datadir&quot;)        </span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -633,16 +795,15 @@
         <span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;Invalid path.&quot;</span><span class="p">)</span>
-
+            
     <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s">&quot;Loaded &quot;</span> <span class="o">+</span> <span class="n">f</span>
-            <span class="n">wos_list</span> <span class="o">+=</span> <span class="n">parse</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="n">f</span><span class="p">)</span>
-        <span class="k">except</span> <span class="p">(</span><span class="ne">IOError</span><span class="p">,</span> <span class="n">DataError</span><span class="p">):</span> <span class="c"># Ignore files that don&#39;t contain WoS data.</span>
-            <span class="k">print</span> <span class="s">&quot;Could not load &quot;</span> <span class="o">+</span> <span class="n">f</span>
-            <span class="k">pass</span>
-
-    <span class="k">return</span> <span class="n">convert</span><span class="p">(</span><span class="n">wos_list</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">):</span> <span class="c"># Ignore hidden files.</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">wos_list</span> <span class="o">+=</span> <span class="n">parse</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="n">f</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">IOError</span><span class="p">,</span><span class="ne">UnboundLocalError</span><span class="p">):</span> <span class="c"># Ignore files that don&#39;t </span>
+                <span class="k">pass</span>                            <span class="c">#  contain WoS data.</span>
+    <span class="n">papers</span> <span class="o">=</span> <span class="n">convert</span><span class="p">(</span><span class="n">wos_list</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">papers</span>
 
 <span class="c"># [62809724]</span></div>
 <span class="k">def</span> <span class="nf">_validate</span><span class="p">(</span><span class="n">wos_data</span><span class="p">):</span>
@@ -760,6 +921,11 @@
                     <span class="s">&#39;AB&#39;</span><span class="p">:</span><span class="s">&#39;abstract&#39;</span>    <span class="p">}</span>
 
     <span class="k">return</span> <span class="n">translator</span>
+
+<span class="c">#Custom Error Defined</span>
+<div class="viewcode-block" id="DataError"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.DataError">[docs]</a><span class="k">class</span> <span class="nc">DataError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+        </div>
 </pre></div>
 
           </div>

@@ -1,5 +1,12 @@
+.. _coauthorship:
+
 Coauthorship Networks
 =====================
+
+*This tutorial was developed for the course `Introduction to Digital & Computational 
+Methods in the Humanities (HPS) <http://devo-evo.lab.asu.edu/methods/>`_, created and
+taught by `Julia Damerow <http://devo-evo.lab.asu.edu/?q=damerow>`_ 
+and `Erick Peirson <http://gradinfo.cbs.asu.edu/?page_id=49>`_.
 
 Coauthorship networks are among the most popular models for studying the structure of 
 research communities, due in no small part to the ease with which coauthorship networks
@@ -32,7 +39,8 @@ When you first start TethneGUI, you should see a window like the one shown below
 generated for you; you can change this if you wish.
 
 .. image:: _static/images/tutorial/install.3.png
-   :width: 80%
+   :width: 500
+   :align: center
 
 Once you've selected an output folder and a dataset ID, click the ``Run Tethne...`` 
 button.
@@ -72,8 +80,9 @@ Depending on the size of your dataset, this may take a minute or two. When Tethn
 done reading your data, you should see messages like those depicted in the image below.
 
 .. image:: _static/images/tutorial/coauthors.1.png
-   :width: 80%
-   
+   :width: 500
+   :align: center
+      
 If your data are read successfully, click ``Next >``.
 
 Python
@@ -131,7 +140,8 @@ The slice axis should be set to ``date`` by default. If not, select it from the
 slicing should be complete; click ``Next >``.
 
 .. image:: _static/images/tutorial/coauthors.2.png
-   :width: 80%
+   :width: 500
+   :align: center
 
 Slice Distribution
 ``````````````````
@@ -140,21 +150,23 @@ file describing the number of records in each data slice. In your output folder 
 file called ``[DATASET_ID]_sliceDistribution.csv``.
 
 .. image:: _static/images/tutorial/coauthors.3.png
-   :width: 60%
-   
+   :width: 400
+   :align: center
+      
 You can use your favorite spreadsheet software (e.g. Excel, Numbers, OpenOffice) to chart
 these data.
 
 .. image:: _static/images/tutorial/coauthors.4.png
-   :width: 60%
-   
+   :width: 400
+   :align: center
+      
 Python
 ``````
 Use the :func:`tethne.data.DataCollection.slice` method to slice your data. 
 
 .. code-block:: python
 
-   >>> D.slice('date', 'time_window', window_size=1, cumulative=True)
+   >>> D.slice('date', 'time_period', window_size=1, cumulative=True)
 
 Building the Coauthor Graph
 ---------------------------
@@ -174,7 +186,8 @@ Command-line
 ````````````
 .. code-block:: bash
 
-   tethne -I exampleID -O /Users/erickpeirson/exampleOutput --graph --merged --node-type=author --graph-type=coauthors
+   $ tethne -I exampleID -O /Users/erickpeirson/exampleOutput --graph --merged \
+   > --node-type=author --graph-type=coauthors
    ----------------------------------------
 	   Workflow step: Graph
    ----------------------------------------
@@ -189,7 +202,8 @@ Select ``author`` from the ``Node type`` menu, and ``coauthors`` from the ``Grap
 menu. Check the ``Ignore DataCollection slicing`` option, then click ``Build graph``.
 
 .. image:: _static/images/tutorial/coauthors.5.png
-   :width: 80%
+   :width: 500
+   :align: center   
    
 Once the graph is built, click ``Next >``. For now, we'll skip the analysis step. Click
 ``Next >`` again to reach ``Step 5: Write graph(s)``.
@@ -213,7 +227,8 @@ This step should generate a file in your output folder called
 ``[DATASET_ID]_graph_all.graphml``.
 
 .. image:: _static/images/tutorial/coauthors.6.png
-   :width: 80%
+   :width: 500
+   :align: center   
 
 Command-line
 ````````````
@@ -268,13 +283,15 @@ create a new network with those selected components: select
 ``File > New > Networks > From selected nodes, all edges``.
 
 .. image:: _static/images/tutorial/coauthors.7.png
-   :width: 80%
+   :width: 500
+   :align: center   
 
 You should now see a new graph in its own viewing window, containing only the components 
 that you selected.
 
 .. image:: _static/images/tutorial/coauthors.8.png
-   :width: 80%
+   :width: 500
+   :align: center
 
 Betweenness Centrality
 ``````````````````````
@@ -288,19 +305,22 @@ Run Cytoscape's network-analysis algorithm. Go to
 ``Tools > NetworkAnalyzer > Network Analysis > Analyze Network``.
 
 .. image:: _static/images/tutorial/coauthors.9.png
-   :width: 70%
+   :width: 450
+   :align: center   
 
 Cytoscape may ask you whether to interpret the network as directed or undirected. A
 coauthorship network is always undirected, since coauthorship is a symmetric relationship.
 
 .. image:: _static/images/tutorial/coauthors.10.png
-   :width: 60%
+   :width: 400
+   :align: center   
    
 Once network analysis is complete, a window titled ``Results Panel`` will appear. Close
 this window.
 
 .. image:: _static/images/tutorial/coauthors.11.png
-   :width: 60%
+   :width: 400
+   :align: center
 
 To visualize the betweenness centrality of each node, create a new visual mapping.
 
@@ -311,14 +331,16 @@ To visualize the betweenness centrality of each node, create a new visual mappin
 4. Click in the area to the right of ``Mapping Type`` and select ``Continuous Mapping``.
 
 .. image:: _static/images/tutorial/coauthors.12.png
-   :width: 60%
+   :width: 400
+   :align: center   
    
 To change the size - centrality mapping function, double-click on the figure to the right
 of ``Curent Mapping``, and drag the red open boxes up and down to change the angle of the 
 function.
 
 .. image:: _static/images/tutorial/coauthors.13.png
-   :width: 60%
+   :width: 400
+   :align: center
 
 The largest nodes are the most central nodes in their respective connected components. 
 These are the nodes most responsible for connecting disparate clusters in the network.
@@ -326,13 +348,15 @@ These are the nodes most responsible for connecting disparate clusters in the ne
 To see a list of the most central nodes, set the Table Panel to show all nodes.
 
 .. image:: _static/images/tutorial/coauthors.14.png
-   :width: 80%
-
+   :width: 500
+   :align: center
+   
 Then sort by betweenness centrality by clicking on the column header in the Node Table 
 (you may have to click twice to sort in descending order).
 
 .. image:: _static/images/tutorial/coauthors.15.png
-   :width: 90%
+   :width: 550
+   :align: center
 
 Institutional affiliation
 `````````````````````````
@@ -340,8 +364,9 @@ Wherever possible, Tethne includes institutional affiliations for authors as nod
 attributes. You should see institutions listed in the Node Table.
 
 .. image:: _static/images/tutorial/coauthors.16.png
-   :width: 60%
-   
+   :width: 400
+   :align: center
+      
 Create a visual mapping for institutional affiliation.
 
 1. Go to the VizMapper.
@@ -353,21 +378,24 @@ Create a visual mapping for institutional affiliation.
    ``Mapping Value Generators > Random Color``.
 
 .. image:: _static/images/tutorial/coauthors.17.png
-   :width: 90%
-   
+   :width: 550
+   :align: center
+      
 Each node should now be colored according to its institutional affiliation. 
 Inspecting the network yields an immediate impression of whether coauthorship clusters are
 due to affiliation with the same institution.
 
 .. image:: _static/images/tutorial/coauthors.18.png
-   :width: 90%
-   
+   :width: 550
+   :align: center
+      
 Since some institutions may be colored quite similarly, select a cluster to view the 
 specific institutional affiliation of each node. You may need to set the Node Table to 
 ``show selected`` rather than ``show all``.
 
 .. image:: _static/images/tutorial/coauthors.19.png
-   :width: 70%
+   :width: 450
+   :align: center
    
 Circular layouts can also yield some insights into connectivity between different 
 institutions. In the menu bar, select ``Layout > Attribute Circle Layout > institution``. 
@@ -378,7 +406,8 @@ institutions. Edges crossing from one region to another should give a visual imp
 the magnitude of linkages between institutions.
 
 .. image:: _static/images/tutorial/coauthors.20.png
-   :width: 90%
+   :width: 550
+   :align: center
    
 A similar layout, the ``Degree Sorted Circle`` layout, can yield more information about 
 the structure of the network. As the name suggests, this layout arranges nodes in 
@@ -391,8 +420,9 @@ the most well-connected nodes are all highly connected to each other. This may b
 part to papers with a very large number of authors.
 
 .. image:: _static/images/tutorial/coauthors.21.png
-   :width: 90%
-   
+   :width: 550
+   :align: center
+ 
 To export an image of your network, select 
 ``File > Export > Current Network View as Graphics``, and follow the prompts to save your
 image.
@@ -411,12 +441,14 @@ Import & visualize
 2. Click on the ``Preview`` tab.
 
 .. image:: _static/images/tutorial/coauthors.22.png
-   :width: 60%
+   :width: 400
+   :align: center
    
 3. Open the ``Graph`` window: select ``Window > Graph``.
 
 .. image:: _static/images/tutorial/coauthors.23.png
-   :width: 60%
+   :width: 400
+   :align: center
    
 4. Open the ``Layout`` window: select ``Window > Layout``.
 
@@ -424,7 +456,8 @@ Import & visualize
    After a few seconds the graph should be spread out; click ``Stop``.
 
 .. image:: _static/images/tutorial/coauthors.25.png
-   :width: 90%
+   :width: 550
+   :align: center
 
 Partition by institution
 ````````````````````````
@@ -438,7 +471,8 @@ Partition by institution
 3. To color nodes by institution, click the ``Apply`` button.
 
 .. image:: _static/images/tutorial/coauthors.26.png
-   :width: 50%
+   :width: 350
+   :align: center
    
 Zooming in on the network, you’ll notice that some clusters of nodes are comprised of one
 or a few colors, while other clusters are quite mixed. Just as in Cytoscape, this gives a
@@ -446,7 +480,8 @@ visual impression of which research communities involve inter-institutional
 collaborations, and which are more internal to a particular institution.
 
 .. image:: _static/images/tutorial/coauthors.27.png
-   :width: 90%
+   :width: 550
+   :align: center
 
 Gephi makes it easy to collapse individual author nodes into nodes corresponding to their 
 institutions. Cytoscape has this feature as well, but not all of the bugs are completely 
@@ -469,20 +504,23 @@ The result may look a bit messy. There are a few things to notice:
   on the node and select ``Delete``. When prompted, click ``Yes``.
 
 .. image:: _static/images/tutorial/coauthors.28.png
-   :width: 90%
+   :width: 550
+   :align: center
 
 To re-layout the network, go back to the ``Layout`` tab, and run the layout algorithm 
 again. You may notice that the network contracts rapidly. You may find it useful to reduce
 the edge width and zoom in, to achieve a nice node-size : edge-weight ratio. 
 
 .. image:: _static/images/tutorial/coauthors.29.png
-   :width: 90%
+   :width: 550
+   :align: center
 
 To save an image of your network, click the ``SVG/PDF/PNG`` button in the lower-left
 corner of the Gephi workspace.
 
 .. image:: _static/images/tutorial/coauthors.30.png
-   :width: 50%
+   :width: 350
+   :align: center
 
 Coauthorship network evolution
 ------------------------------
@@ -558,20 +596,23 @@ Use the ``< Back`` button to return to ``Step 3: Build Graphs``. Uncheck the
 again. Then click ``Next >``.
 
 .. image:: _static/images/tutorial/coauthors.31.png
-   :width: 90%
+   :width: 550
+   :align: center
    
 At the ``analysis`` step, select ``attachment_probability`` from the ``Graph analysis
 algorithm`` menu, and click the ``Analyze graph(s)`` button. Then click ``Next >``.
 
 .. image:: _static/images/tutorial/coauthors.32.png
-   :width: 90%
+   :width: 550
+   :align: center
    
 Finally, select ``xgmml`` in the ``Output format`` menu, and click ``Write graph(s)``.
 This should create a new file called ``[DATASET_ID]_graph_dynamic.xgmml`` in your output
 folder.
 
 .. image:: _static/images/tutorial/coauthors.33.png
-   :width: 90%
+   :width: 550
+   :align: center
 
 Python
 ``````
@@ -601,6 +642,8 @@ Use the :func:`.writers.collection.to_dxgmml` method to create dynamic XGMML.
    
 ``[OUTPUT_PATH]`` should be a path to the XGMML file that Tethne will create.
 
+.. _dynanetwork:
+
 Visualizing a dynamic network in Cytoscape
 ``````````````````````````````````````````
 
@@ -609,12 +652,14 @@ In Cytoscape, import your .xgmml file by selecting
 spring-embedded layout.
 
 .. image:: _static/images/tutorial/coauthors.34.png
-   :width: 70%
+   :width: 450
+   :align: center
 
 In the VizMapper, map ``Node Size`` to ``attachment_probability``.
 
 .. image:: _static/images/tutorial/coauthors.35.png
-   :width: 40%
+   :width: 300
+   :align: center
    
 Double-click on the function icon next to ``Current Mapping`` to edit the ``Node Size``
 mapping function.
@@ -626,7 +671,8 @@ mapping function.
 3. Click ``OK``.
 
 .. image:: _static/images/tutorial/coauthors.36.png
-   :width: 60%
+   :width: 400
+   :align: center
 
 In the Control Panel, select the ``Dynamic Network`` tab.
 
@@ -639,11 +685,14 @@ In the Control Panel, select the ``Dynamic Network`` tab.
    in succession, use the ``<< Play`` and ``Play >>`` buttons.
 
 .. image:: _static/images/tutorial/coauthors.37.png
-   :width: 90%
+   :width: 550
+   :align: center
    
 The size of each node should reflect the relative probability that a node will accrue a
 new neighbor in the next time slice. Try zooming in on a particular region of your
 network, and move between two successive states to verify that this is the case.
 
 .. image:: _static/images/tutorial/coauthors.38.png
-   :width: 90%
+   :width: 550
+   :align: center
+   

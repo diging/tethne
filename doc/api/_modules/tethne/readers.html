@@ -53,22 +53,35 @@
             
   <h1>Source code for tethne.readers</h1><div class="highlight"><pre>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Methods for parsing bibliographic datasets.</span>
+
+<span class="sd">.. autosummary::</span>
+
+<span class="sd">   dfr</span>
+<span class="sd">   mallet</span>
+<span class="sd">   pubmed</span>
+<span class="sd">   wos</span>
+
 <span class="sd">Each file reader provides methods to parse bibliographic data from a</span>
 <span class="sd">scholarly database (e.g. Web of Science or PubMed), resulting in a</span>
 <span class="sd">list of :class:`.Paper` instances containing as many as possible of</span>
 <span class="sd">the following keys (missing values are set to None):</span>
 
-<span class="sd">    * aulast (list) -- Authors&#39; surnames, as a list.</span>
-<span class="sd">    * auinit (list) -- Authors&#39; initials, as a list.</span>
-<span class="sd">    * institution (dict) -- Institutions with which the authors are affiliated.</span>
-<span class="sd">    * atitle (str) -- Article title.</span>
-<span class="sd">    * jtitle (str) -- Journal title or abbreviated title.</span>
-<span class="sd">    * volume (str) -- Journal volume number.</span>
-<span class="sd">    * issue (str) -- journal issue number.</span>
-<span class="sd">    * spage (str) -- Etarting page of article in journal.</span>
-<span class="sd">    * epage (str) -- Ending page of article in journal.</span>
-<span class="sd">    * date (int) -- Date of publication.</span>
-<span class="sd">    * abstract (str)</span>
+<span class="sd">===========    =====    ===================================================</span>
+<span class="sd">Field          Type     Description</span>
+<span class="sd">===========    =====    ===================================================</span>
+<span class="sd">aulast         list     Authors&#39; surnames, as a list.</span>
+<span class="sd">auinit         list     Authors&#39; initials, as a list.</span>
+<span class="sd">institution    dict     Institutions with which the authors are affiliated.</span>
+<span class="sd">atitle         str      Article title.</span>
+<span class="sd">jtitle         str      Journal title or abbreviated title.</span>
+<span class="sd">volume         str      Journal volume number.</span>
+<span class="sd">issue          str      Journal issue number.</span>
+<span class="sd">spage          str      Starting page of article in journal.</span>
+<span class="sd">epage          str      Ending page of article in journal.</span>
+<span class="sd">date           int      Date of publication.</span>
+<span class="sd">abstract       str</span>
+<span class="sd">===========    =====    ===================================================</span>
 
 <span class="sd">These keys are associated with the meta data entries in the databases of</span>
 <span class="sd">organizations such as the International DOI Foundation and its Registration</span>
@@ -77,26 +90,26 @@
 <span class="sd">In addition, :class:`.Paper` instances will contain keys with information</span>
 <span class="sd">relevant to the networks of interest for Tethne including:</span>
 
-<span class="sd">    * citations -- list of minimum :class:`.Paper` instances for cited</span>
-<span class="sd">        references.</span>
-<span class="sd">    * ayjid -- First author&#39;s name (last, fi), publication year, and journal.</span>
-<span class="sd">    * doi -- Digital Object Identifier</span>
-<span class="sd">    * pmid -- PubMed ID</span>
-<span class="sd">    * wosid -- Web of Science UT fieldtag</span>
+<span class="sd">===========    =====    ======================================================</span>
+<span class="sd">Field          Type     Description</span>
+<span class="sd">===========    =====    ======================================================</span>
+<span class="sd">citations      list     List of minimum :class:`.Paper` instances for cited</span>
+<span class="sd">                        references.</span>
+<span class="sd">ayjid          str      First author&#39;s name (last, fi), publication year, and</span>
+<span class="sd">                        journal.</span>
+<span class="sd">doi            str      Digital Object Identifier.</span>
+<span class="sd">pmid           str      PubMed ID.</span>
+<span class="sd">wosid          str      Web of Science UT fieldtag.</span>
+<span class="sd">===========    =====    ======================================================</span>
 
 <span class="sd">Missing data here also results in the above keys being set to None.</span>
-
-<span class="sd">.. autosummary::</span>
-
-<span class="sd">   dfr</span>
-<span class="sd">   pubmed</span>
-<span class="sd">   wos</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">wos</span>
 <span class="kn">import</span> <span class="nn">pubmed</span>
 <span class="kn">import</span> <span class="nn">dfr</span>
+<span class="kn">import</span> <span class="nn">mallet</span>
 <span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">dt</span>
 
 <div class="viewcode-block" id="DataError"><a class="viewcode-back" href="../../tethne.readers.html#tethne.readers.DataError">[docs]</a><span class="k">class</span> <span class="nc">DataError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
@@ -124,6 +137,16 @@
 <span class="sd">    -------</span>
 <span class="sd">    combined : list</span>
 <span class="sd">        A list of :class:`.Paper` instances.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; import tethne.readers as rd</span>
+<span class="sd">       &gt;&gt;&gt; P1 = rd.wos.read(&quot;/Path/to/data1.txt&quot;)</span>
+<span class="sd">       &gt;&gt;&gt; P2 = rd.dfr.read(&quot;/Path/to/DfR&quot;)</span>
+<span class="sd">       &gt;&gt;&gt; papers = rd.merge(P1, P2, [&#39;ayjid&#39;])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">combined</span> <span class="o">=</span> <span class="p">[]</span>
