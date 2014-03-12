@@ -405,14 +405,18 @@ class TestCoauthorsGeocoding(unittest.TestCase):
 
     def setUp(self):
 
-        wos_data =rd.wos.parse("../testsuite/testin/coauthors_2_recs.txt")
+        wos_data =rd.wos.parse(
+                    "../testsuite/testin/authorinstitutions_test.txt")
         meta_list = rd.wos.convert(wos_data)
 
         self.coauthors = nt.authors.coauthors(meta_list,
                                               edge_attribs=['institution'],
                                               geocode=True)
     def test_codes(self):
-        print self.coauthors.nodes(data=True)
+        expected_nodes = [('VITIELLO A', {'latitude': 40.7687118, 'institution': 'UNIV SALERNO, ITALY', 'longitude': 14.7920179}), ('CHEN EH', {'latitude': 23.0078743, 'institution': 'UNIV SCI & TECHNOL CHINA, PEOPLES R CHINA', 'longitude': 113.0962272}), ('XU GD', {'latitude': -33.8838982, 'institution': 'UNIV TECHNOL SYDNEY, AUSTRALIA', 'longitude': 151.2010127}), ('ZHANG YC', {'latitude': -37.7933058, 'institution': 'VICTORIA UNIV, AUSTRALIA', 'longitude': 144.8964966}), ('LU CL', {'latitude': 27.994267, 'institution': 'WENZHOU UNIV, PEOPLES R CHINA', 'longitude': 120.699367}), ('ACAMPORA G', {'latitude': 51.44860980000001, 'institution': 'EINDHOVEN UNIV TECHNOL, NETHERLANDS', 'longitude': 5.4907148}), ('LOIA V', {'latitude': 40.7687118, 'institution': 'UNIV SALERNO, ITALY', 'longitude': 14.7920179}), ('ZHANG H', {'institution': 'INST SCI & TECHNOL INFORMAT ZHEJIANG PROV, PEOPLES R CHINA'}), ('WU ZD', {'latitude': 27.994267, 'institution': 'WENZHOU UNIV, PEOPLES R CHINA', 'longitude': 120.699367})]
+        observed_nodes = self.coauthors.nodes(data=True)
+        
+        self.assertEqual(expected_nodes, observed_nodes)
 
 class TestCoauthorsGraph(unittest.TestCase):
     """
@@ -584,7 +588,6 @@ class TestBiblioGraph(unittest.TestCase):
         Weighted similarities.
         """
         edges = self.weighted.edges(data=True)
-        print edges[0][2]['similarity']
         self.assertEqual(edges[0][2]['similarity'], 0.5)
         self.assertEqual(edges[1][2]['similarity'], 1.0)
         self.assertEqual(edges[2][2]['similarity'], 0.5)
