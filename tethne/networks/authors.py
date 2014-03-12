@@ -200,7 +200,7 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
         # Find most likely institution for each author. This won't work well if 
         #  the author only occurs once in the dataset and there was no explicit
         #  author-instituion mapping.
-        location_cache = {}
+
         for k,v in author_inst.iteritems():
             top_inst = max(Counter(v))
             try:    # If an author has no coauthors, they will not appear in G.
@@ -210,14 +210,16 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
                 if geocode:
                     from tethne.services.geocode import GoogleCoder
                     gc = GoogleCoder()
-                    try:    # Coded this before?
-                        location = location_cache[top_inst]
-                    except KeyError:    # Nope.
-                        location = gc.code_this(top_inst)
-                        if location is not None:
-                            G.node[k]['latitude'] = location.latitude
-                            G.node[k]['longitude'] = location.longitude
-
+                    location = gc.code_this(top_inst)
+                    if location is None:
+                        location = gc.code_this(top_inst.split(',')[-1])
+                        precision = 'country'
+                    else:
+                        precision = 'institution'
+                    if location is not None:
+                        G.node[k]['latitude'] = location.latitude
+                        G.node[k]['longitude'] = location.longitude
+                        G.node[k]['precision'] = precision
             except KeyError:
                 pass
 
