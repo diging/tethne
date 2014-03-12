@@ -3,6 +3,8 @@ To do: move testing of different types of attributes to writers testing
 rather than graph testing; NetworkX can support any data structure as an
 attribute but the graph file formats may not.
 """
+import sys
+sys.path.append("/Users/erickpeirson/Dropbox/DigitalHPS/Scripts/tethne")
 
 import tethne.readers as rd
 import tethne.networks as nt
@@ -10,7 +12,7 @@ import tethne.writers as wr
 import tethne.utilities as util
 import unittest
 import networkx as nx
-import sys
+
 
 class TestDirectCitationGraph(unittest.TestCase):
     """
@@ -397,6 +399,21 @@ class TestAuthorPapersGraph(unittest.TestCase):
         pass
 
 
+class TestCoauthorsGeocoding(unittest.TestCase):
+    """
+    """
+
+    def setUp(self):
+
+        wos_data =rd.wos.parse("../testsuite/testin/coauthors_2_recs.txt")
+        meta_list = rd.wos.convert(wos_data)
+
+        self.coauthors = nt.authors.coauthors(meta_list,
+                                              edge_attribs=['institution'],
+                                              geocode=True)
+    def test_codes(self):
+        print self.coauthors.nodes(data=True)
+
 class TestCoauthorsGraph(unittest.TestCase):
     """
     Test the coauthors network, assumes reader is functioning
@@ -458,7 +475,6 @@ class TestCoauthorsGraph(unittest.TestCase):
         expected_edge_attribs_list = [('IZAGIRRE U', 'CAJARAVILLE MP', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('IZAGIRRE U', 'JIN MG', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('IZAGIRRE U', 'MARIGOMEZ I', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('IZAGIRRE U', 'ORBEA A', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('IZAGIRRE U', 'SOTO M', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('IZAGIRRE U', 'GARMENDIA L', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('TONG XX', 'HAN DM', {'date': [2013], 'jtitle': ['ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'ayjid': ['HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'weight': 1}), ('TONG XX', 'CAJARAVILLE MP', {'date': [2013], 'jtitle': ['ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'ayjid': ['HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'weight': 1}), ('TONG XX', 'JIN MG', {'date': [2013], 'jtitle': ['ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'ayjid': ['HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'weight': 1}), ('CAJARAVILLE MP', 'JIN MG', {'date': [2013, 2013], 'jtitle': ['ECOTOXICOLOGY', 'ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY', 'HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'weight': 2}), ('CAJARAVILLE MP', 'HAN DM', {'date': [2013], 'jtitle': ['ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'ayjid': ['HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'weight': 1}), ('CAJARAVILLE MP', 'MARIGOMEZ I', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('CAJARAVILLE MP', 'ORBEA A', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('CAJARAVILLE MP', 'SOTO M', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('CAJARAVILLE MP', 'GARMENDIA L', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('JIN MG', 'HAN DM', {'date': [2013], 'jtitle': ['ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'ayjid': ['HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'weight': 1}), ('JIN MG', 'MARIGOMEZ I', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('JIN MG', 'ORBEA A', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('JIN MG', 'SOTO M', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('JIN MG', 'GARMENDIA L', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('MARIGOMEZ I', 'ORBEA A', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('MARIGOMEZ I', 'SOTO M', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('MARIGOMEZ I', 'GARMENDIA L', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('ORBEA A', 'SOTO M', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('ORBEA A', 'GARMENDIA L', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('SOTO M', 'GARMENDIA L', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1})]
 
         self.assertListEqual(expected_edge_attribs_list,obtained_edge_attribs_list)
-
 
     def tearDown(self):
             pass
