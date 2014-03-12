@@ -1,5 +1,6 @@
 from geopy import geocoders
 import time 
+import pickle
 
 class Location(object):
     place = ""
@@ -15,8 +16,16 @@ class BaseCoder(object):
     """
     Base class for geocoders.
     """
-
+    persistent = True   # Triggers on-disk cacheing with Pickle
     sleep_interval = 0.5    # Avoid rate-limiting. Adjust as desired.
+
+    def __init__(self, **kwargs):
+        if self.persistent:
+            try:
+                with open(".geocache.pickle", "r") as f:
+                    self.cache = pickle.load(f)
+            except IOError:
+                self.cache = {}
 
     def code_this(self, placename):
         """
@@ -31,8 +40,15 @@ class BaseCoder(object):
         
         if type(placename) not in [str, unicode]:
             raise ValueError("Encountered non-string in placenames list.")
-        
-        return self.get_location(self.code(placename))
+
+        try:    # Check the cache first.
+            location = self.cache[placename]
+        except KeyError:    # Not in the cache, call the service.
+            location = self.get_location(self.code(placename))
+            self.cache[placename] = location
+            with open(".geocache.pickle", "w") as f:
+                self.cache = pickle.dump(self.cache, f)
+        return location
         
     def code_list(self, placenames):
         """
@@ -68,7 +84,8 @@ class GoogleCoder(BaseCoder):
         -------
         location : :class:`.Location`
         """
-        
+        if response is None: return None
+
         return Location(place=response[0], 
                         latitude=response[1][0],
                         longitude=response[1][1])
@@ -82,8 +99,9 @@ class YahooCoder(BaseCoder):
                      "{http://where.yahooapis.com/v1/schema.rng}longitude"
     name_searchpath = ".//{http://where.yahooapis.com/v1/schema.rng}name"
     
-    def __init__(self, yahoo_id):
+    def __init__(self, yahoo_id, **kwargs):
         self.yahoo_id = yahoo_id
+        super(YahooCoder, self).__init__(self, **kwargs)
     
     def code(self, name):
         """
