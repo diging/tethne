@@ -1,3 +1,6 @@
+import sys
+sys.path.append("../")
+
 import unittest
 import tethne.data as ds
 import tethne.analyze.collection as co

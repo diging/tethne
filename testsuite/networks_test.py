@@ -4,7 +4,7 @@ rather than graph testing; NetworkX can support any data structure as an
 attribute but the graph file formats may not.
 """
 import sys
-sys.path.append("/Users/erickpeirson/Dropbox/DigitalHPS/Scripts/tethne")
+sys.path.append("../")
 
 import tethne.readers as rd
 import tethne.networks as nt
@@ -413,9 +413,9 @@ class TestCoauthorsGeocoding(unittest.TestCase):
                                               edge_attribs=['institution'],
                                               geocode=True)
     def test_codes(self):
-        expected_nodes = [('VITIELLO A', {'latitude': 40.7687118, 'institution': 'UNIV SALERNO, ITALY', 'longitude': 14.7920179}), ('CHEN EH', {'latitude': 23.0078743, 'institution': 'UNIV SCI & TECHNOL CHINA, PEOPLES R CHINA', 'longitude': 113.0962272}), ('XU GD', {'latitude': -33.8838982, 'institution': 'UNIV TECHNOL SYDNEY, AUSTRALIA', 'longitude': 151.2010127}), ('ZHANG YC', {'latitude': -37.7933058, 'institution': 'VICTORIA UNIV, AUSTRALIA', 'longitude': 144.8964966}), ('LU CL', {'latitude': 27.994267, 'institution': 'WENZHOU UNIV, PEOPLES R CHINA', 'longitude': 120.699367}), ('ACAMPORA G', {'latitude': 51.44860980000001, 'institution': 'EINDHOVEN UNIV TECHNOL, NETHERLANDS', 'longitude': 5.4907148}), ('LOIA V', {'latitude': 40.7687118, 'institution': 'UNIV SALERNO, ITALY', 'longitude': 14.7920179}), ('ZHANG H', {'institution': 'INST SCI & TECHNOL INFORMAT ZHEJIANG PROV, PEOPLES R CHINA'}), ('WU ZD', {'latitude': 27.994267, 'institution': 'WENZHOU UNIV, PEOPLES R CHINA', 'longitude': 120.699367})]
+
+        expected_nodes = [('VITIELLO A', {'latitude': 40.7687118, 'institution': 'UNIV SALERNO, ITALY', 'longitude': 14.7920179, 'precision': 'institution'}), ('CHEN EH', {'latitude': 23.0078743, 'institution': 'UNIV SCI & TECHNOL CHINA, PEOPLES R CHINA', 'longitude': 113.0962272, 'precision': 'institution'}), ('XU GD', {'latitude': -33.8838982, 'institution': 'UNIV TECHNOL SYDNEY, AUSTRALIA', 'longitude': 151.2010127, 'precision': 'institution'}), ('ZHANG YC', {'latitude': -37.7933058, 'institution': 'VICTORIA UNIV, AUSTRALIA', 'longitude': 144.8964966, 'precision': 'institution'}), ('LU CL', {'latitude': 27.994267, 'institution': 'WENZHOU UNIV, PEOPLES R CHINA', 'longitude': 120.699367, 'precision': 'institution'}), ('ACAMPORA G', {'latitude': 51.44860980000001, 'institution': 'EINDHOVEN UNIV TECHNOL, NETHERLANDS', 'longitude': 5.4907148, 'precision': 'institution'}), ('LOIA V', {'latitude': 40.7687118, 'institution': 'UNIV SALERNO, ITALY', 'longitude': 14.7920179, 'precision': 'institution'}), ('ZHANG H', {'latitude': 38.057347, 'institution': 'INST SCI & TECHNOL INFORMAT ZHEJIANG PROV, PEOPLES R CHINA', 'longitude': 117.233375, 'precision': 'country'}), ('WU ZD', {'latitude': 27.994267, 'institution': 'WENZHOU UNIV, PEOPLES R CHINA', 'longitude': 120.699367, 'precision': 'institution'})]
         observed_nodes = self.coauthors.nodes(data=True)
-        
         self.assertEqual(expected_nodes, observed_nodes)
 
 class TestCoauthorsGraph(unittest.TestCase):
