@@ -21,7 +21,6 @@ class BaseCoder(object):
 
     def __init__(self, **kwargs):
         if self.persistent:
-            print 'persistent'
             try:
                 with open(".geocache.pickle", "r") as f:
                     self.cache = pickle.load(f)
