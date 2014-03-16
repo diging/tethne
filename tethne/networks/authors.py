@@ -19,6 +19,12 @@ import tethne.utilities as util
 import tethne.data as ds
 from collections import defaultdict, Counter
 
+
+import logging
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel('DEBUG')
+
 # MACRO for printing the 'print' statement values.
 # 0 prints nothing in the console.
 # 1 prints all print statements in the console.
@@ -135,6 +141,9 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
 
     # TODO: Check whether papers contains :class:`.Paper` instances, and raise
     #  an exception if not.
+    
+    caller = logger.findCaller()
+    logger.debug("{0}: start building coauthors graph".format(caller[1]))
 
     G = nx.Graph(type='coauthors')
     edge_att = {}
@@ -189,15 +198,23 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
                                                     in edge_att.iteritems() }
                         coauthor_dict[authors]['weight'] = 1
 
+    caller = logger.findCaller()
+    logger.debug("{0}: done iterating over papers".format(caller[1]))
+    
     # Add edges with specified edge attributes.
     for key, val in coauthor_dict.iteritems():
         if val['weight'] >= threshold:
             G.add_edge(key[0], key[1], attr_dict=val)
-    
+
+    caller = logger.findCaller()
+    logger.debug("{0}: done adding edges".format(caller[1]))
+        
     # Load GeoCoder here, to avoid excessive cache read/write operations.
     if geocode:
         from tethne.services.geocode import GoogleCoder
         gc = GoogleCoder()
+        caller = logger.findCaller()
+        logger.debug("{0}: loaded geocoder".format(caller[1]))
     
     if 'institution' in node_attribs:
         # Include institutional affiliations as node attributes, if possible.
@@ -205,7 +222,10 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
         # Find most likely institution for each author. This won't work well if 
         #  the author only occurs once in the dataset and there was no explicit
         #  author-instituion mapping.
-
+        
+        caller = logger.findCaller()
+        logger.debug("{0}: adding institutional information".format(caller[1]))
+        
         for k,v in author_inst.iteritems():
             top_inst = max(Counter(v))
             try:    # If an author has no coauthors, they will not appear in G.
@@ -225,7 +245,10 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
                         G.node[k]['precision'] = precision
             except KeyError:
                 pass
-
+    
+    caller = logger.findCaller()
+    logger.debug("{0}: done building coauthors graph".format(caller[1]))
+    
     return G
 
 def author_institution(Papers, edge_attribs=[], **kwargs):
