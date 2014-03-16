@@ -12,7 +12,15 @@ Many methods simply invoke equivalent methods in NetworkX.
 """
 
 import networkx as nx
+from networkx.readwrite.graphml import GraphMLWriter
 import csv
+try:
+    from xml.etree.cElementTree import Element, ElementTree, tostring
+except ImportError:
+    try:
+        from xml.etree.ElementTree import Element, ElementTree, tostring
+    except ImportError:
+        pass
 
 def to_sif(graph, output_path):
     """
@@ -168,7 +176,7 @@ def to_gexf(graph, output_path):
     nx.write_gexf(graph, output_path + ".gexf")
 
 
-def to_graphml(graph, output_path):
+def to_graphml(graph, path, encoding='utf-8',prettyprint=True):
     """Writes graph to `GraphML <http://graphml.graphdrawing.org/>`_.
     
     Uses the NetworkX method 
@@ -185,7 +193,35 @@ def to_graphml(graph, output_path):
     """
     graph = _strip_list_attributes(graph)
     
-    nx.write_graphml(graph, output_path + ".graphml")
+#    nx.write_graphml(graph, output_path + ".graphml")
+    writer = TethneGraphMLWriter(encoding=encoding, prettyprint=prettyprint)
+    writer.add_graph_element(graph)
+    writer.dump(open(path, 'wb'))
+
+class TethneGraphMLWriter(GraphMLWriter):
+    """
+    """
+    
+    def get_key(self, name, attr_type, scope, default):
+        keys_key = (name, attr_type, scope)
+        try:
+            return self.keys[keys_key]
+        except KeyError:
+#            new_id = "d%i" % len(list(self.keys))
+            new_id = name
+            self.keys[keys_key] = new_id
+            key_kwargs = {"id":new_id,
+                          "for":scope,
+                          "attr.name":name, 
+                          "attr.type":attr_type}
+            key_element=Element("key",**key_kwargs)
+            # add subelement for data default value if present
+            if default is not None:
+                default_element=Element("default")
+                default_element.text=make_str(default)
+                key_element.append(default_element)
+            self.xml.insert(0,key_element)
+        return new_id
 
 #def to_csv(file, delim=","):
 #    '''
