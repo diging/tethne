@@ -8,8 +8,8 @@ LICENSE = 'GNU GPL 3'
 URL = 'https://github.com/erickpeirson/tethne' 
 VERSION = '0.3.1-alpha'
 PACKAGES = [ 'tethne','tethne.analyze','tethne.networks','tethne.readers', \
-             'tethne.utilities', 'tethne.writers', 'tethne.matrices',
-             'testsuite' ]
+             'tethne.utilities', 'tethne.writers', 'tethne.matrices', \
+             'tethne.services', 'testsuite' ]
 
 setup(name=DISTNAME,
       maintainer=MAINTAINER,
