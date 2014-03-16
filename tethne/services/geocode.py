@@ -26,6 +26,10 @@ class BaseCoder(object):
                     self.cache = pickle.load(f)
             except IOError:
                 self.cache = {}
+                
+    def __del__(self):
+        with open(".geocache.pickle", "w") as f:
+            pickle.dump(self.cache, f)
 
     def code_this(self, placename):
         """
@@ -43,10 +47,9 @@ class BaseCoder(object):
         try:    # Check the cache first.
             location = self.cache[placename]
         except KeyError:    # Not in the cache, call the service.
+            time.sleep(self.sleep_interval) # Avoid rate-limiting.
             location = self.get_location(self.code(placename))
             self.cache[placename] = location
-            with open(".geocache.pickle", "w") as f:
-                pickle.dump(self.cache, f)
         return location
         
     def code_list(self, placenames):
@@ -63,7 +66,6 @@ class BaseCoder(object):
 
         locations = {}
         for name in placenames:
-            time.sleep(self.sleep_interval) # Avoid rate-limiting.
             locations[name] = self.code_this(name)
             
         return locations
