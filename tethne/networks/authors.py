@@ -194,6 +194,11 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
         if val['weight'] >= threshold:
             G.add_edge(key[0], key[1], attr_dict=val)
     
+    # Load GeoCoder here, to avoid excessive cache read/write operations.
+    if geocode:
+        from tethne.services.geocode import GoogleCoder
+        gc = GoogleCoder()
+    
     if 'institution' in node_attribs:
         # Include institutional affiliations as node attributes, if possible.
         
@@ -208,8 +213,6 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
                 
                 # Optionally, include positional information, if possible.
                 if geocode:
-                    from tethne.services.geocode import GoogleCoder
-                    gc = GoogleCoder()
                     location = gc.code_this(top_inst)
                     if location is None:
                         location = gc.code_this(top_inst.split(',')[-1])
