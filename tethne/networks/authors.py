@@ -90,6 +90,121 @@ def author_papers(papers, node_id='ayjid', paper_attribs=[], **kwargs):
 
     return author_papers_graph
 
+def institutions(papers, threshold=1, edge_attrbs=['ayjid'], 
+                 node_attribs=['authors'], geocode=False, **kwargs):
+    """
+    Generates an institutional network based on coauthorship.
+    
+    An edge is drawn between two institutional vertices whenever two authors,
+    one at each respective institution, coauthor a :class:`.Paper`\.
+
+    .. code-block:: python
+    
+       >>> I = nt.authors.institutions(papers)
+       >>> I
+       <networkx.classes.graph.Graph object at 0x10d94cfd0>
+       
+
+    ==============     =========================================================
+    Element            Description
+    ==============     =========================================================
+    Node               Institution name and location.
+    Edges              (a,b) in E(G) if coauthors R and S are affiliated with 
+                       institutions a and b, respectively.
+    ==============     =========================================================
+    
+    Parameters
+    ----------
+    papers : list
+        A list of :class:`Paper` instances.
+    threshold : int
+        Minimum number of co-citations required for an edge. (default: 1)
+    edge_attribs : list
+        List of edge_attributes specifying which :class:`.Paper` keys (from the
+        co-authored paper) to use as edge attributes. (default: ['ayjid'])
+    node_attribs : list
+        List of attributes to attach to author nodes. Presently limited to
+        'institution'.
+    geocode : bool
+        If True, attempts to geocode institutional information for authors, and
+        adds latitude, longitude, and precision attributes to each node.
+    
+    Returns
+    -------
+    G : networkx.Graph
+        An institutional co-authorship network.    
+    """
+
+    G = nx.Graph(type='institutions')
+    ca = coauthors(papers, threshold=threshold, geocode=geocode, **kwargs)
+    
+    edges = {}
+    nodes = {   'latitude': {},
+                'longitude': {},
+                'precision': {},
+                'authors': {}       }
+    
+    defaultEdge = { 'authors': list,
+                    'ayjid': list,
+                    'weight': int     }
+    
+    for edge in ca.edges(data=True):
+        n = { 0: ca.node[edge[0]],
+              1: ca.node[edge[1]] }
+        
+        # If there is no institutional information for an author, skip the edge.
+        skip = False    
+        try:
+            inst = { 0:n[0]['institution'],
+                     1:n[1]['institution'] }
+        except KeyError:
+            skip = True
+        
+        if not skip:
+            if geocode:
+                # Add geodata from most recent author at this institution.
+                for i in (0,1):
+                    nodes['latitude'][inst[i]] = n[i]['latitude']
+                    nodes['longitude'][inst[i]] = n[i]['longitude']
+                    nodes['precision'][inst[i]] = n[i]['precision']
+
+            # try-except blocks to avoid 'key in dict.keys()' pattern.
+            try:
+                assert type(edges[(inst[0],inst[1])]) is dict
+                key = (inst[0],inst[1])
+            except (AssertionError, KeyError):
+                try:
+                    assert type(edges[(inst[1],inst[0])]) is dict
+                    key = (inst[1],inst[0])
+                except (AssertionError, KeyError):
+                    # Instantiate types to avoid reference issues.
+                    edges[(inst[0],inst[1])] = { k:v() for k,v 
+                                                   in defaultEdge.iteritems() }
+                    key = (inst[0],inst[1])
+
+            # Add authors to institution nodes.
+            for i in (0,1):
+                try:
+                    nodes['authors'][inst[i]].add(edge[i])
+                except KeyError:
+                    nodes['authors'][inst[i]] = set([edge[i]])
+
+            edges[key]['authors'] += [ (edge[0], edge[1]) ]
+            edges[key]['ayjid'] += edge[2]['ayjid']
+            edges[key]['weight'] += edge[2]['weight']
+    
+    for edge, attributes in edges.iteritems():
+        G.add_edge(edge[0], edge[1], **attributes)
+    
+    for key, values in nodes.iteritems():
+        if key is 'authors':    # Since many writers don't support sets.
+            values = { k:list(v) for k,v in values.iteritems() }
+        nx.set_node_attributes(G, key, values)
+    nx.set_node_attributes(G, 'size', { k:len(v) for k,v 
+                                            in nodes['authors'].iteritems() })
+        
+    return G
+
 def coauthors(papers, threshold=1, edge_attribs=['ayjid'], 
               node_attribs=['institution'], geocode=False,  **kwargs):
     """
@@ -110,7 +225,7 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
 
        >>> CA = nt.authors.coauthors(papers)
        >>> CA
-       <networkx.classes.multigraph.MultiGraph object at 0x101705650>
+       <networkx.classes.graph.Graph object at 0x10d94cfd0>
 
     ==============     =========================================================
     Element            Description
@@ -131,6 +246,9 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
     node_attribs : list
         List of attributes to attach to author nodes. Presently limited to
         'institution'.
+    geocode : bool
+        If True, attempts to geocode institutional information for authors, and
+        adds latitude, longitude, and precision attributes to each node.        
 
     Returns
     -------
@@ -161,6 +279,7 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
             full_names = util.concat_list(entry['aulast'],
                                           entry['auinit'],
                                           ' ')
+
             for a in xrange(len(full_names)):
                 # Update global author-institution mappings.
                 n = full_names[a]
@@ -180,23 +299,21 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
                     authors = full_names[a], full_names[b]
                     authors_inv = full_names[b], full_names[a]
 
-                    if authors in coauthor_dict.keys():
-                        for key,value in edge_att.iteritems():
-                            coauthor_dict[authors][key].append(value)
-                        coauthor_dict[authors]['weight'] += 1
-
-                    # Author names may be in inverse order.
-                    elif authors_inv in coauthor_dict.keys():
-                        for key,value in edge_att.iteritems():
-                            coauthor_dict[authors_inv][key].append(value)
-                        coauthor_dict[authors_inv]['weight'] += 1
-
-                    # First encounter for this author-pair.
-                    else:
-                        coauthor_dict[authors] = { k:[v]
-                                                    for k,v
-                                                    in edge_att.iteritems() }
-                        coauthor_dict[authors]['weight'] = 1
+                    try:
+                        assert type(coauthor_dict[authors]) is dict
+                        key = authors
+                    except (AssertionError, KeyError):
+                        try:
+                            assert type(coauthor_dict[authors_inv]) is dict
+                            key = authors_inv
+                        except (AssertionError, KeyError):
+                            coauthor_dict[authors] = { k:[] for k 
+                                                        in edge_att.keys() }
+                            coauthor_dict[authors]['weight'] = 0
+                            key = authors
+                    for k, v in edge_att.iteritems():
+                        coauthor_dict[key][k].append(v)
+                    coauthor_dict[key]['weight'] += 1
 
     caller = logger.findCaller()
     logger.debug("{0}: done iterating over papers".format(caller[1]))
