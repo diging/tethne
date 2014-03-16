@@ -21,6 +21,7 @@ class BaseCoder(object):
 
     def __init__(self, **kwargs):
         if self.persistent:
+            print 'persistent'
             try:
                 with open(".geocache.pickle", "r") as f:
                     self.cache = pickle.load(f)
@@ -40,14 +41,13 @@ class BaseCoder(object):
         
         if type(placename) not in [str, unicode]:
             raise ValueError("Encountered non-string in placenames list.")
-
         try:    # Check the cache first.
             location = self.cache[placename]
         except KeyError:    # Not in the cache, call the service.
             location = self.get_location(self.code(placename))
             self.cache[placename] = location
             with open(".geocache.pickle", "w") as f:
-                self.cache = pickle.dump(self.cache, f)
+                pickle.dump(self.cache, f)
         return location
         
     def code_list(self, placenames):
