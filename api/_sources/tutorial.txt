@@ -13,6 +13,7 @@ command-line (Mac OSX, Linux; untested for Windows).
    tutorial.quickstart.python
    tutorial.coauthors
    tutorial.bibliocoupling
+   tutorial.geonetworks
    
 
 Step-By-Step Guide (Python)

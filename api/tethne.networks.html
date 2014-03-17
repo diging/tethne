@@ -128,7 +128,7 @@ edge (x,y), x -&gt; y, xy, etc. by calling x the &#8220;tail&#8221; and y the &#
 <tr class="row-even"><td><a class="reference internal" href="#tethne.networks.authors.author_papers" title="tethne.networks.authors.author_papers"><tt class="xref py py-obj docutils literal"><span class="pre">author_papers</span></tt></a>(papers[,&nbsp;node_id,&nbsp;paper_attribs])</td>
 <td>Generate an author_papers network NetworkX directed graph.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.authors.coauthors" title="tethne.networks.authors.coauthors"><tt class="xref py py-obj docutils literal"><span class="pre">coauthors</span></tt></a>(papers[,&nbsp;threshold,&nbsp;edge_attribs])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.authors.coauthors" title="tethne.networks.authors.coauthors"><tt class="xref py py-obj docutils literal"><span class="pre">coauthors</span></tt></a>(papers[,&nbsp;threshold,&nbsp;edge_attribs,&nbsp;...])</td>
 <td>Generate a co-author network.</td>
 </tr>
 </tbody>
@@ -374,7 +374,7 @@ positional arguments.</p>
 
 <dl class="function">
 <dt id="tethne.networks.authors.coauthors">
-<tt class="descclassname">tethne.networks.authors.</tt><tt class="descname">coauthors</tt><big>(</big><em>papers, threshold=1, edge_attribs=['ayjid'], **kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/authors.html#coauthors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.authors.coauthors" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">tethne.networks.authors.</tt><tt class="descname">coauthors</tt><big>(</big><em>papers, threshold=1, edge_attribs=['ayjid'], node_attribs=['institution'], geocode=False, **kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/authors.html#coauthors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.authors.coauthors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a co-author network.</p>
 <p>As the name suggests, edges are drawn between two author-vertices in the
 case that those authors published a paper together. Co-authorship networks
@@ -386,7 +386,7 @@ communities.</p>
 possible.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">CA</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">coauthors</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">CA</span>
-<span class="go">&lt;networkx.classes.multigraph.MultiGraph object at 0x101705650&gt;</span>
+<span class="go">&lt;networkx.classes.graph.Graph object at 0x10d94cfd0&gt;</span>
 </pre></div>
 </div>
 <table border="1" class="docutils">
@@ -425,11 +425,91 @@ possible.</p>
 <div><p>List of edge_attributes specifying which <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> keys (from the
 co-authored paper) to use as edge attributes. (default: [&#8216;ayjid&#8217;])</p>
 </div></blockquote>
+<p><strong>node_attribs</strong> : list</p>
+<blockquote>
+<div><p>List of attributes to attach to author nodes. Presently limited to
+&#8216;institution&#8217;.</p>
+</div></blockquote>
+<p><strong>geocode</strong> : bool</p>
+<blockquote>
+<div><p>If True, attempts to geocode institutional information for authors, and
+adds latitude, longitude, and precision attributes to each node.</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>G</strong> : networkx.Graph</p>
 <blockquote class="last">
 <div><p>A co-authorship network.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.networks.authors.institutions">
+<tt class="descclassname">tethne.networks.authors.</tt><tt class="descname">institutions</tt><big>(</big><em>papers, threshold=1, edge_attrbs=['ayjid'], node_attribs=['authors'], geocode=False, **kwargs</em><big>)</big><a class="headerlink" href="#tethne.networks.authors.institutions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an institutional network based on coauthorship.</p>
+<p>An edge is drawn between two institutional vertices whenever two authors,
+one at each respective institution, coauthor a <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">I</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">institutions</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">I</span>
+<span class="go">&lt;networkx.classes.graph.Graph object at 0x10d94cfd0&gt;</span>
+</pre></div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Element</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Node</td>
+<td>Institution name and location.</td>
+</tr>
+<tr class="row-odd"><td>Edges</td>
+<td>(a,b) in E(G) if coauthors R and S are affiliated with
+institutions a and b, respectively.</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
+<blockquote>
+<div><p>A list of <tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt> instances.</p>
+</div></blockquote>
+<p><strong>threshold</strong> : int</p>
+<blockquote>
+<div><p>Minimum number of co-citations required for an edge. (default: 1)</p>
+</div></blockquote>
+<p><strong>edge_attribs</strong> : list</p>
+<blockquote>
+<div><p>List of edge_attributes specifying which <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> keys (from the
+co-authored paper) to use as edge attributes. (default: [&#8216;ayjid&#8217;])</p>
+</div></blockquote>
+<p><strong>node_attribs</strong> : list</p>
+<blockquote>
+<div><p>List of attributes to attach to author nodes. Presently limited to
+&#8216;institution&#8217;.</p>
+</div></blockquote>
+<p><strong>geocode</strong> : bool</p>
+<blockquote>
+<div><p>If True, attempts to geocode institutional information for authors, and
+adds latitude, longitude, and precision attributes to each node.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>G</strong> : networkx.Graph</p>
+<blockquote class="last">
+<div><p>An institutional co-authorship network.</p>
 </div></blockquote>
 </td>
 </tr>

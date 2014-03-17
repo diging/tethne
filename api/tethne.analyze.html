@@ -143,6 +143,28 @@ index.</p>
 <tt class="descclassname">tethne.analyze.collection.</tt><tt class="descname">attachment_probability</tt><big>(</big><em>C</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/collection.html#attachment_probability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.collection.attachment_probability" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the observed attachment probability for each node at each
 time-step.</p>
+<p>Attachment probability is calculated based on the observed new edges in the
+next time-step. So if a node acquires new edges at time t, this will accrue
+to the node&#8217;s attachment probability at time t-1. Thus at a given time,
+one can ask whether degree and attachment probability are related.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
+<blockquote>
+<div><p>Must be sliced by &#8216;date&#8217;. See <tt class="xref py py-func docutils literal"><span class="pre">GraphCollection.slice()</span></tt>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>probs</strong> : dict</p>
+<blockquote class="last">
+<div><p>Keyed by index in C.graphs, and then by node.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
