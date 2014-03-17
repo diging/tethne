@@ -12,6 +12,7 @@ using networkx.
    tethne.matrices
    tethne.networks
    tethne.readers
+   tethne.services
    tethne.utilities
    tethne.writers
    

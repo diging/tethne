@@ -3,10 +3,10 @@
 Coauthorship Networks
 =====================
 
-*This tutorial was developed for the course `Introduction to Digital & Computational 
-Methods in the Humanities (HPS) <http://devo-evo.lab.asu.edu/methods/>`_, created and
-taught by `Julia Damerow <http://devo-evo.lab.asu.edu/?q=damerow>`_ 
-and `Erick Peirson <http://gradinfo.cbs.asu.edu/?page_id=49>`_.
+*This tutorial was developed for the course* `Introduction to Digital & Computational 
+Methods in the Humanities (HPS) <http://devo-evo.lab.asu.edu/methods>`_, *created and 
+taught by* `Julia Damerow <http://devo-evo.lab.asu.edu/?q=damerow>`_ *and* `Erick Peirson
+<http://gradinfo.cbs.asu.edu/?page_id=49>`_.
 
 Coauthorship networks are among the most popular models for studying the structure of 
 research communities, due in no small part to the ease with which coauthorship networks
@@ -218,6 +218,8 @@ To generate a single graph from your :class:`.DataCollection`\, call the
    >>> import tethne.networks as nt
    >>> ca_graph = nt.authors.coauthors(D.papers())
 
+.. _coauthors_to_graphml:
+
 Write the Graph to GraphML
 --------------------------
 `GraphML <http://graphml.graphdrawing.org>`_ is a widely-used static network data format.
@@ -426,6 +428,8 @@ part to papers with a very large number of authors.
 To export an image of your network, select 
 ``File > Export > Current Network View as Graphics``, and follow the prompts to save your
 image.
+
+.. _coauthors_gephi:
 
 Inter-institutional Collaboration in Gephi
 ------------------------------------------
