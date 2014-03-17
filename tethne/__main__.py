@@ -1,4 +1,11 @@
-def isfloat(x):
+"""
+Provides the Tethne command-line interface.
+
+See :ref:`quickstart_cl` and :ref:`commandline_options` for an introduction to 
+the CLI.
+"""
+
+def _isFloat(x):
     try:
         a = float(x)
     except ValueError:
@@ -6,7 +13,7 @@ def isfloat(x):
     else:
         return True
 
-def isint(x):
+def _isInt(x):
     try:
         a = float(x)
         b = int(a)
@@ -131,6 +138,13 @@ if __name__ == "__main__":
                            "./doc/api/tethne.networks.html#module-tethne."+\
                            "networks. e.g. if '-n' is 'author', '-t' could be"+\
                            " 'coauthors'")
+    graphReqGroup.add_option("-G", "--geocode",
+                             action="store_true", dest="geocode", default=False,
+                             help="Attempt to retrieve geographic coordinates"+\
+                                  " for each node in the network. Currently"  +\
+                                  " available for coauthors and institutions" +\
+                                  " graphs.")
+                             
 
     # Optional arguments for network-building, for setting keyword arguments of
     #  methods in tethne.networks.
@@ -402,8 +416,8 @@ if __name__ == "__main__":
         if options.threshold is not None:
             kwargs['threshold'] = int(options.threshold)
         if options.topn is not None:
-            if isint(options.topn): topn = int(options.topn)
-            elif isfloat(options.topn): topn = float(options.topn)
+            if _isInt(options.topn): topn = int(options.topn)
+            elif _isFloat(options.topn): topn = float(options.topn)
             kwargs['topn'] = topn
         if options.node_attr is not None:
             kwargs['node_attribs'] = options.node_attr.split(',')
@@ -412,6 +426,7 @@ if __name__ == "__main__":
         if options.node_id is not None:
             kwargs['node_id'] = options.node_id
         kwargs['weighted'] = options.weighted
+        kwargs['geocode'] = options.geocode
         
         # Build the graph(s).
         sys.stdout.write("Building {0} graph using {1} method..."
