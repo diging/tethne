@@ -10,7 +10,11 @@ from hashlib import sha256
 from persistent import Persistent
 from persistent.list import PersistentList as List
 from persistent.mapping import PersistentMapping as Dict
-from flask_login import current_user,login_user,LoginManager
+from flask_login import current_user,login_user,LoginManager,logout_user , \
+                     current_user , login_required
+from flask import abort
+
+
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -59,8 +63,11 @@ import models as mod
 #in the DB
 ###
 
-login_manager = LoginManager()
-login_manager.init_app(app)
+login_manager = LoginManager() #class
+login_manager.init_app(app) #create a LoginManager Object from our 'app' object
+login_manager.login_view = 'login' #set the view
+
+
 
 @app.route('/auth', methods=['GET','POST'])
 def auth():
@@ -94,33 +101,100 @@ def home():
     #return render_template('forms/login.html', form = form)
     return redirect(url_for('login'))
 
-
+# Loader callback. Reload the user-id from the value stored in the session.
 @login_manager.user_loader
 def load_user(userid):
-    return User.get(userid)
- 
+    #here use the ZODB user class and returns the user object
+    pass
 
 
-@app.route('/login', methods=['GET','POST'])
+
+# USing Login Manager
+# @app.route('/login/', methods=['GET', 'POST'])
+# def login():
+#     print "Request Method", request.method, request.form
+#     
+#     if request.method == 'GET':
+#         form = LoginForm(request.form)
+#         #if 'Login' not in request.form.values:
+#         if request.form["action"] == "Login":
+#                     print "inside if"
+#                     
+#         else:
+#             print "inside else"
+#             print "request.form.values", reques.form.values
+#             uname = request.form.get('name', None)
+#             print "UNAME:::", uname
+#             user = mod.User.get_user('admin')
+#             if user and hash_password(request.form['password']) == user._password:
+#                 login_user(user, remember=True)
+#                 return redirect('/home/')
+#             else:
+#                 print "401"
+#                 return abort(401)  # 401 Unauthorized
+#     else:
+#             print "Why here"
+#             flash("No use get")
+#             return abort(405)  # 405 Method Not Allowed
+#         
+#     return render_template('forms/login.html',form=form)
+
+
+# Other Try
+# @app.route('/login', methods=['GET','POST'])
+# def login():
+#     if request.method == 'GET':
+#         form = LoginForm(request.form)
+#         return render_template('forms/login.html',form=form)
+#         username = request.form['name']
+#         password = request.form['password']
+#         print "Username and password :", username,password
+#         #registered_user = somehow check if the user is 
+#         if registered_user is None:
+#             flash('Username or Password is invalid' , 'error')
+#             return redirect(url_for('login'))
+#         login_user(registered_user)
+#         flash('Logged in successfully')
+#         return redirect(request.args.get('next') or url_for('index'))
+#     
+#  
+# Working method - my manual option
+# Issue : Password is shown in the request, and form data is not retrieved.
+@app.route('/login/', methods=['GET','POST'])
 def login():
-    flash('Welcome to Tethne Website')
-    form = LoginForm(request.form)
-    name = request.args.get('name')
-    userpassword = request.args.get('password')
-    print "arguments",name,userpassword 
-    print "Login Form Values", request.cookies.get('username'), "abc:"
+    #flash('Welcome to Tethne Website')
+#     form = LoginForm(request.form)
+#     name = request.args.get('name')
+#     userpassword = request.args.get('password')
+#     print "arguments",name,userpassword 
+#     print "Login Form Values", request.cookies.get('username'), "abc:"
     #username = request.cookies.get('username')
     if request.method == 'GET'  : #and name != None
-        #if form.validate_on_submit():
+        form = LoginForm(request.form)
+        if not form.validate():
         #if 1:
+            print "##form OBJECT::: Login--->", form, request.form
+            name = request.args.get('name')
+            userpassword = request.args.get('password')
+            print "1 : URL arguments",name,userpassword 
+            uname = form.name
+            pswd = form.password
+            print "\n 2. FORM arguments: Login form:#####", uname, pswd, type(uname), type(pswd)
+            print "#####Login Form Values", request.cookies.get('username'), "abc:"
             storage = FileStorage('./storage/userdb.fs')
             conn = DB(storage)
-            print "Login start:",conn, type(conn),form.name.data
+            print "3.Login start:",conn, type(conn),form.name.data
             dbroot = conn.open().root()
             try: 
             	print "dbroot['userdb'].values()", dbroot['userdb'].values(), "keys",dbroot['userdb'].keys() , dbroot['userdb']
                 #for val in dbroot['userdb'].values():
         		#		print "value is : " , val, val.name,val.email,"form", form
+                
+                # This gives error.  as the ImmutableDict request.form is empty
+                #uname = request.form['name']
+                #pswd = request.form['password']
+                #print " 4.The arguments [ '' method]: Login form:", uname, pswd
+                print " 4.Login form data:", form.name.data, form.name.description,form.name.label
                 for key in dbroot['userdb'].keys():
         					#print "Yess!!", key, session['username'] 
                             #if  session['username'] == key :
@@ -135,25 +209,27 @@ def login():
                     else :
                             print "Error : No Such User"
                             pass
-                            
+                              
             except:
                 #flash('Username or password failed')
             	print " donot come here : except"
                 pass           
-             	
+               	
     else:
             print "comes in else"
             flash("Login Failed") #return redirect(url_for('login'))
             return redirect(url_for('ok'))
-         
+           
     return render_template('forms/login.html', form = form)
 
-  
+def generate_user_list(template_name, **kwargs):
+    user_count = get_user_count()
+    return render_template(template_name, uc = usercount, var2=var2, var3=var3, **kwargs)
     
 @app.route('/register',methods=['GET','POST'])
 def register():
     form = RegisterForm(request.form)
-    print "##form OBJECT::: register---->", form, form.email.data
+    print "##form OBJECT::: register---->", form, request.form,
     if request.method == 'POST':
             #session['username'] = request.form['username']
             if 'Register' in request.form:

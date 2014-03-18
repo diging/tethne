@@ -8,6 +8,15 @@ from persistent import Persistent
 from persistent.list import PersistentList as List
 from persistent.mapping import PersistentMapping as Dict
 
+from ZODB.FileStorage import FileStorage
+from ZODB.DB import DB
+import ZODB.config
+import transaction
+from hashlib import sha256
+
+
+
+
 class User(Persistent):
         
     """
@@ -27,8 +36,35 @@ class User(Persistent):
         self.role = "user"
         self._p_changed = 1 # for mutable objects
 
-
+    def get_user(self,name,password):
+        initialize_userdb()
+        print "In get_user"
+        pass
+    
+    def is_authenticated(self):
+        pass
+    
+    def is_anonymous(self):
+        pass
+    
+    def initialize_userdb(self):
+        """
+        User DB is initialized
+        """
+        storage = FileStorage('./storage/userdb.fs')
+        conn = DB(storage)
+        dbroot = conn.open().root()
+        print ("DB initialized")
         
+    def is_active(self):
+        return True
+  
+    def get_id(self):
+        return unicode(self.id)
+ 
+    def __repr__(self):
+        return '<User %r>' % (self.name)
+
 class ManageUsers(User):
 	
 	"""
