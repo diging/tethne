@@ -350,7 +350,9 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
                 
                 # Optionally, include positional information, if possible.
                 if geocode:
+
                     location = gc.code_this(top_inst)
+            
                     if location is None:
                         location = gc.code_this(top_inst.split(',')[-1])
                         precision = 'country'
@@ -360,6 +362,7 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
                         G.node[k]['latitude'] = location.latitude
                         G.node[k]['longitude'] = location.longitude
                         G.node[k]['precision'] = precision
+        
             except KeyError:
                 pass
     

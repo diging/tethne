@@ -38,8 +38,15 @@ triggering rate-limiting.
 """
 
 from geopy import geocoders
+from geopy.exc import GeocoderTimedOut
 import time 
 import pickle
+from ssl import SSLError
+
+import logging
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel('DEBUG')
 
 class Location(object):
     """
@@ -61,6 +68,8 @@ class BaseCoder(object):
     """
     persistent = True   # Triggers on-disk cacheing with Pickle
     sleep_interval = 0.5    # Avoid rate-limiting. Adjust as desired.
+    timeout = 3         # Duration in seconds until timeout.
+    max_tries = 3       # How many times to re-try after a timeout.
 
     def __init__(self, **kwargs):
         if self.persistent:
@@ -92,9 +101,26 @@ class BaseCoder(object):
         try:    # Check the cache first.
             location = self.cache[placename]
         except KeyError:    # Not in the cache, call the service.
-            time.sleep(self.sleep_interval) # Avoid rate-limiting.
-            location = self.get_location(self.code(placename))
-            self.cache[placename] = location
+            tries = 0
+            hope = True
+            while hope:
+                try:
+                    time.sleep(self.sleep_interval) # Avoid rate-limiting.
+                    location = self.get_location(self.code(placename))
+                    self.cache[placename] = location
+                    hope = False
+                except (GeocoderTimedOut, SSLError):
+                    logger.warning("Geocoder timed out for {0}. Retrying."
+                                                             .format(placename))
+                    if tries >= self.max_tries:
+                        location = None
+                        hope = False
+                        logger.warning("Geocoder gave up for {0}."
+                                                             .format(placename))
+                    else:
+                        tries += 1
+                except:
+                    pass    # TODO: What else could go wrong?
         return location
         
     def code_list(self, placenames):
@@ -122,7 +148,7 @@ class GoogleCoder(BaseCoder):
     Uses the Google Geocoding API, via the ``geopy.geocoders.GoogleV3`` coder.
     """
 
-    coder = geocoders.GoogleV3()
+    coder = geocoders.GoogleV3(timeout=3)
     code = coder.geocode
     
     def get_location(self, response):
