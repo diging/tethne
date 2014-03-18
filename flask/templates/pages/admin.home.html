@@ -15,53 +15,7 @@
 
 
 
-<!-- Dynamic , but not working-->
-<script type="text/javascript">
-function dynamicTable() 
-{
-    var a, b, tableElem, rowElem, colElem;
 
-    a = document.getElementById('tb1').value;
-    b = document.getElementById('tb2').value;
-
-    if (a == "" || b == "") {
-        alert("There are no values in the UserID table");
-    } 
-    else {
-        tableElem = document.createElement('table');
-
-        for (var i = 0; i < a; i++) {
-            rowElem = document.createElement('tr');
-
-            for (var j = 0; j < b; j++) {
-                colElem = document.createElement('td');
-                rowElem.appendChild(colElem);
-            }
-
-            tableElem.appendChild(rowElem);
-        }
-
-        document.body.appendChild(tableElem);
-
-
-    }
-}
-
-$(document).ready(function() {
-    dynamicTable();
-});
-
-
-</script>
-<br>
-<br>
-&nbsp;
-&nbsp;
-
-
-<input type="text" id="tb1" value="10">
-<input type="text" id="tb2" value="6">
-<input type="button" value="Create Table" onclick="dynamicTable()"> <br>
 
 
 <!-- Not a dynamic one,need to change-->
@@ -137,6 +91,41 @@ $(document).ready(function() {
 </BODY>
 </HTML>
 
+<!-- Not a dynamic  - check box needed to be added-->
+<script type="text/javascript">
+function createTable()
+{
+    var num_rows = document.getElementById('rows').value;
+    var num_cols = document.getElementById('cols').value;
+    var theader = '<table border="1">\n';
+    var tbody = '';
+
+    for( var i=0; i<num_rows;i++)
+    {
+        tbody += '<tr>';
+        for( var j=0; j<num_cols;j++)
+        {
+            tbody += '<td>';
+            tbody += 'Cell ' + i + ',' + j;
+            tbody += '</td>'
+        }
+        tbody += '</tr>\n';
+    }
+    var tfooter = '</table>';
+    document.getElementById('wrapper').innerHTML = theader + tbody + tfooter;
+}
+</script>
+</head>
+
+<body>
+<form name="tablegen">
+<label>Rows: <input type="text" name="rows" id="rows"/></label><br />
+<label>Cols: <input type="text" name="cols" id="cols"/></label><br/>
+<input name="generate" type="button" value="Create Table!" onclick='createTable();'/>
+</form>
+
+<div id="wrapper"></div>
+
 <!-- Need to change all the image locations to local folders-->
 <!--
 <a href="{{ url_for('home') }}"> <img style="border:0px;" src="http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=Add%20Users" onmouseover="this.src='http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=Add%20Users'" onmouseout="this.src='http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=Add%20Users';" alt="Add%20Users" /></a><script type="text/javascript">img=new Image();img.src= "http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=Add%20Users";</script>
@@ -146,8 +135,104 @@ $(document).ready(function() {
 <a href="{{ url_for('home') }}"> <img style="border:0px;" src="http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=List%20Users" onmouseover="this.src='http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=List%20Users'" onmouseout="this.src='http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=List%20Users';" alt="List%20Users" /></a><script type="text/javascript">img=new Image();img.src= "http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=List%20Users";</script>
 
 <a href="{{ url_for('home') }}"> <img style="border:0px;" src="http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=Delete%20Users" onmouseover="this.src='http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=Delete%20Users'" onmouseout="this.src='http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=Delete%20Users';" alt="Delete%20Users" /></a><script type="text/javascript">img=new Image();img.src= "http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=Delete%20Users";</script>
-
 -->
+
+<html><div align="center" class="myDiv" style="width: 520px; height: 435px; padding:4px; border: 0px ; overflow:auto "> </html>
+
+<!-- Dynamic , but not working-->  
+
+<script type="text/javascript">
+function dynamicTable() 
+{
+    var a, b, tableElem, rowElem, colElem;
+
+    a = document.getElementById('tb1').value;
+    b = document.getElementById('tb2').value;
+
+    if (a == "" || b == "") {
+        alert("There are no values in the UserID table");
+    } 
+    else 
+    {
+        tableElem = document.createElement('table');
+
+        for (var i = 0; i < a; i++) {
+            rowElem = document.createElement('tr');
+
+            for (var j = 0; j < b; j++) {
+                colElem = document.createElement('td');
+                rowElem.appendChild(colElem);
+            }
+
+            tableElem.appendChild(rowElem);
+        }
+
+        document.body.appendChild(tableElem);
+
+
+    }
+}
+
+$(document).ready(function() {
+    dynamicTable();}
+);
+
+</script>
+
+
+
+
+
+
+<input type="text" id="tb1" value="10">
+<input type="text" id="tb2" value="6">
+<br>
+<br>
+&nbsp;
+&nbsp;
+
+
+
+<div>Users List</div>
+<button id="button_1" class="button">Users List</button>
+<div id="description_button_1">This isSample Test.</div>
+
+<div>Users List 2</div>
+<button id="button_2" class="button">Click</button>
+<div id="description_button_2">This is toggle-able text.</div>
+
+<div>SUBJECT</div>
+<button id="button_3" class="button">Do not Click</button>
+<div id="description_button_3">This is toggle-able text.</div>
+
+
+
+<script src="http://code.jquery.com/jquery-1.9.1.min.js">
+$(document).ready(function() {        
+console.log( "ready!" );  
+    $('.button').each(function(){
+        var toggle_div_id = 'description_' + $(this).attr('id');
+        $(this).click(function(){
+            $('#'+toggle_div_id).toggle();
+        });
+    });
+});
+
+</script>
+
+
+<table style="background-color:#FFFFE0;">
+<tr>
+<th>Table Header</th><th>Table Header</th>
+</tr>
+<tr>
+<td>Table cell 1</td><td>Table cell 2</td>
+</tr>
+<tr>
+<td>Table cell 3</td><td>Table cell 4</td>
+</tr>
+</table>
+
 
 
 {% endblock %}
