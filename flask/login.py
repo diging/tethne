@@ -78,17 +78,27 @@ def auth():
             
 @app.route('/index', methods=['GET','POST'])
 def index():
-    form = LoginForm(request.form)
     if 'username' in session:
+        print " comes here in index", session, type(session) 
         return 'Logged in as %s' % escape(session['username'])
     #return render_template('forms/register.html', form = form)
     return 'You are not logged in'            
     
 @app.route('/ok', methods=['GET','POST'])
 def ok():
-    form = LoginForm(request.form)
+    #form = LoginForm(request.form)
     #return redirect(url_for('login'))
-    return render_template('forms/home.html', form = form)
+    return render_template('pages/placeholder.home.html')
+               
+@app.route('/admin', methods=['GET','POST'])
+def admin():
+    print " session can be accessed here as well", session, session['username']
+    return render_template('pages/admin.home.html')
+               
+@app.route('/user', methods=['GET','POST'])
+def user():
+    print " session can be accessed here as well", session, session['username']
+    return render_template('pages/user.home.html')
                
 @app.route('/place', methods=['GET','POST'])
 def place():
@@ -99,6 +109,7 @@ def place():
 def home():
     #form = LoginForm(request.form)
     #return render_template('forms/login.html', form = form)
+    #flask.redirect(flask.url_for('login'))
     return redirect(url_for('login'))
 
 # Loader callback. Reload the user-id from the value stored in the session.
@@ -160,67 +171,148 @@ def load_user(userid):
 #  
 # Working method - my manual option
 # Issue : Password is shown in the request, and form data is not retrieved.
+#@app.route('/login/', methods=['GET','POST'])
+#@app.route('/login/', methods=['POST'])
+# def login():
+#     #flash('Welcome to Tethne Website')
+# #     form = LoginForm(request.form)
+# #     name = request.args.get('name')
+# #     userpassword = request.args.get('password')
+# #     print "arguments",name,userpassword 
+# #     print "Login Form Values", request.cookies.get('username'), "abc:"
+#     #username = request.cookies.get('username')
+#     if request.method == 'GET'  : #and name != None
+#         form = LoginForm(request.form)
+#         if not form.validate():
+#         #if 1:
+#             print "##form OBJECT::: Login--->", form, request.form
+#             name = request.args.get('name')
+#             userpassword = request.args.get('password')
+#             print "1 : URL arguments",name,userpassword 
+#             uname = form.name
+#             pswd = form.password
+#             print "\n 2. FORM arguments: Login form:#####", uname, pswd, type(uname), type(pswd)
+#             print "#####Login Form Values", request.cookies.get('username'), "abc:"
+#             storage = FileStorage('./storage/userdb.fs')
+#             conn = DB(storage)
+#             print "3.Login start:",conn, type(conn),form.name.data
+#             dbroot = conn.open().root()
+#             try: 
+#             	print "dbroot['userdb'].values()", dbroot['userdb'].values(), "keys",dbroot['userdb'].keys() , dbroot['userdb']
+#                 #for val in dbroot['userdb'].values():
+#         		#		print "value is : " , val, val.name,val.email,"form", form
+#                 
+#                 # This gives error.  as the ImmutableDict request.form is empty
+#                 #uname = request.form['name']
+#                 #pswd = request.form['password']
+#                 #print " 4.The arguments [ '' method]: Login form:", uname, pswd
+#                 print " 4.Login form data:", form.name.data, form.name.description,form.name.label
+#                 for key in dbroot['userdb'].keys():
+#         					#print "Yess!!", key, session['username'] 
+#                             #if  session['username'] == key :
+#                     if name == 'admin' :
+#                             # Need to get username from the form  password = sha256(password
+#                             print "COOOL it works atlast", "password1",dbroot['userdb'][key].password,"password2", sha256(request.args.get('password'))
+#                             print "inside login last loop:",dbroot, type(dbroot)
+#                             return render_template('pages/admin.home.html')
+#                     if name == key and name !='admin':
+#                             print "he is a normal user"
+#                             return render_template('pages/user.home.html')
+#                     else :
+#                             print "Error : No Such User"
+#                             pass
+#                               
+#             except:
+#                 #flash('Username or password failed')
+#             	print " donot come here : except"
+#                 pass           
+#                	
+#     else:
+#             print "comes in else"
+#             flash("Login Failed") #return redirect(url_for('login'))
+#             return redirect(url_for('ok'))
+#            
+#     return render_template('forms/login.html', form = form)
+
+
+# TRY WITH GET. the perfect method
 @app.route('/login/', methods=['GET','POST'])
 def login():
-    #flash('Welcome to Tethne Website')
-#     form = LoginForm(request.form)
-#     name = request.args.get('name')
-#     userpassword = request.args.get('password')
-#     print "arguments",name,userpassword 
-#     print "Login Form Values", request.cookies.get('username'), "abc:"
-    #username = request.cookies.get('username')
+ 
     if request.method == 'GET'  : #and name != None
-        form = LoginForm(request.form)
-        if not form.validate():
-        #if 1:
-            print "##form OBJECT::: Login--->", form, request.form
-            name = request.args.get('name')
-            userpassword = request.args.get('password')
-            print "1 : URL arguments",name,userpassword 
-            uname = form.name
-            pswd = form.password
-            print "\n 2. FORM arguments: Login form:#####", uname, pswd, type(uname), type(pswd)
-            print "#####Login Form Values", request.cookies.get('username'), "abc:"
-            storage = FileStorage('./storage/userdb.fs')
-            conn = DB(storage)
-            print "3.Login start:",conn, type(conn),form.name.data
-            dbroot = conn.open().root()
-            try: 
-            	print "dbroot['userdb'].values()", dbroot['userdb'].values(), "keys",dbroot['userdb'].keys() , dbroot['userdb']
-                #for val in dbroot['userdb'].values():
-        		#		print "value is : " , val, val.name,val.email,"form", form
-                
-                # This gives error.  as the ImmutableDict request.form is empty
-                #uname = request.form['name']
-                #pswd = request.form['password']
-                #print " 4.The arguments [ '' method]: Login form:", uname, pswd
-                print " 4.Login form data:", form.name.data, form.name.description,form.name.label
-                for key in dbroot['userdb'].keys():
-        					#print "Yess!!", key, session['username'] 
-                            #if  session['username'] == key :
-                    if name == 'admin' :
-                            # Need to get username from the form  password = sha256(password
-                            print "COOOL it works atlast", "password1",dbroot['userdb'][key].password,"password2", sha256(request.args.get('password'))
-                            print "inside login last loop:",dbroot, type(dbroot)
-                            return render_template('pages/admin.home.html')
-                    if name == key and name !='admin':
-                            print "he is a normal user"
-                            return render_template('pages/user.home.html')
-                    else :
-                            print "Error : No Such User"
-                            pass
-                              
-            except:
-                #flash('Username or password failed')
-            	print " donot come here : except"
-                pass           
-               	
-    else:
-            print "comes in else"
-            flash("Login Failed") #return redirect(url_for('login'))
-            return redirect(url_for('ok'))
-           
-    return render_template('forms/login.html', form = form)
+        #form = LoginForm(request.form)
+        return render_template('forms/login_new.html')
+        print " Its coming out"
+    try:
+        username = request.form['username']
+        password = request.form['password']
+    except:
+        print "comes to except"
+        pass
+    print "comes out", request.form , "uname", username , "pass", password, type(password)
+    #if form.validate():
+    if 1:
+          #new
+          name = username
+          session['username'] = username
+          userpassword = password 
+          #new
+          print "Session",session, session['username']
+          storage = FileStorage('./storage/userdb.fs')
+          conn = DB(storage)
+          print "3.Login start:",conn, type(conn),
+          dbroot = conn.open().root()
+          try: 
+              print "####values()", dbroot['userdb'].values(), "#####keys",dbroot['userdb'].keys(), type(dbroot['userdb'])
+              if name in dbroot['userdb'].keys():
+                  for key in dbroot['userdb'].keys():
+                      print "\nkey is" , key 
+                      print "\ndbroot['userdb'][key]", dbroot['userdb'][key]
+                      if key == 'admin' and name == 'admin':
+                                  # Need to get username from the form  password = sha256(password
+                                  dbpswd = dbroot['userdb'][key].password
+                                  loginpswd = sha256(userpassword).hexdigest()
+                                  if dbpswd == loginpswd:                                 
+                                      print "COOOL it works atlast", "password1",dbroot['userdb'][key].password,"password2", sha256(userpassword).hexdigest()
+                                      print "inside login last loop:",
+                                      #return render_template('pages/admin.home.html')
+                                      return redirect(url_for('admin'))
+                                  else:
+                                      flash("Login Failed : Please check the Username / password") 
+                                      return redirect(url_for('login'))
+                                 
+                                  
+                      if key != 'admin' and name != 'admin':
+                                 if name == key:
+                                  # Need to get username from the form  password = sha256(password
+                                  dbpswd = dbroot['userdb'][key].password
+                                  loginpswd = sha256(userpassword).hexdigest()
+                                  if dbpswd == loginpswd:                                 
+                                      print "COOOL it works atlast", "password1",dbroot['userdb'][key].password,"password2", sha256(userpassword).hexdigest()
+                                      print "inside login last loop:",
+                                      print "he is a normal user"
+                                      #return render_template('pages/user.home.html')
+                                      return redirect(url_for('user'))
+                                  else:
+                                      flash("Login Failed : Please check the Username / password") 
+                                      return redirect(url_for('login'))
+                                
+                      else:
+                          print "No such user"
+                          pass
+              else:       
+                      #render_template('pages/user.error.html')
+                  flash("User, Please register First") 
+                  return redirect(url_for('login'))       
+          except:
+              print " donot come here : except"
+              pass           
+                     
+
+    return redirect(url_for('ok'))
+            
+#return render_template('forms/login.html', form = form)
+
 
 def generate_user_list(template_name, **kwargs):
     user_count = get_user_count()
