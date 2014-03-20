@@ -1,4 +1,4 @@
-{% extends 'layouts/main.html' %}
+{% extends 'layouts/admin.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
 
@@ -12,11 +12,6 @@
 &nbsp;
 &nbsp;
 &nbsp;
-
-
-
-
-
 
 <!-- Not a dynamic one,need to change-->
 
@@ -221,18 +216,29 @@ console.log( "ready!" );
 </script>
 
 
-<table style="background-color:#FFFFE0;">
-<tr>
-<th>Table Header</th><th>Table Header</th>
-</tr>
-<tr>
-<td>Table cell 1</td><td>Table cell 2</td>
-</tr>
-<tr>
-<td>Table cell 3</td><td>Table cell 4</td>
-</tr>
-</table>
 
+
+<table id="table_id">
+    <thead>
+        <tr>
+            <th>Column 1</th>
+            <th>Column 2</th>
+            <th>etc</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Row 1 Data 1</td>
+            <td>Row 1 Data 2</td>
+            <td>etc</td>
+        </tr>
+        <tr>
+            <td>Row 2 Data 1</td>
+            <td>Row 2 Data 2</td>
+            <td>etc</td>
+        </tr>
+    </tbody>
+</table>
 
 
 {% endblock %}

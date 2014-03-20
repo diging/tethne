@@ -39,7 +39,6 @@ class RegisterForm(Form):
 
 class LoginForm(Form):
     name        = TextField('Username', [validators.Required()])
-    email       = TextField('Email', [validators.Required(),validators.Length(min=4, max=35)])
     password    = PasswordField('Password', [validators.Required()])
 
 class ForgotForm(Form):
