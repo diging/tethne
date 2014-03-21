@@ -46,7 +46,6 @@ from ssl import SSLError
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
 
 class Location(object):
     """

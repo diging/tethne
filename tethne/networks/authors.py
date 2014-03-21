@@ -23,7 +23,6 @@ from collections import defaultdict, Counter
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
 
 # MACRO for printing the 'print' statement values.
 # 0 prints nothing in the console.
