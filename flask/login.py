@@ -13,17 +13,37 @@ from persistent.mapping import PersistentMapping as Dict
 from flask_login import current_user,login_user,LoginManager,logout_user , \
                      current_user , login_required
 from flask import abort
-
-
+import json
 
 app = Flask(__name__)
 app.config.from_object('config')
+app.debug = True
 
 from ZODB.FileStorage import FileStorage
 from ZODB.DB import DB
 import models as mod
 
 
+@app.before_first_request
+def set_db_defaults():
+    storage = FileStorage('./storage/userdb.fs')
+    conn = DB(storage)
+    print "3.Login start:",conn, type(conn),
+    dbroot = conn.open().root()
+
+def get_user_details():
+    storage = FileStorage('./storage/userdb.fs')
+    conn = DB(storage)
+    print "Get User Deatails:",conn, type(conn),
+    dbroot = conn.open().root()
+    print "Get_user_details", dbroot['userdb'].values(), "#####keys",dbroot['userdb'].keys(), type(dbroot['userdb'])
+    if name in dbroot['userdb'].keys():
+      for key in dbroot['userdb'].keys():
+          print "\nkey is" , key 
+          print "\ndbroot['userdb'][key]", dbroot['userdb'][key]
+          
+
+    
 
 # @app.before_request
 # def set_db_defaults():
@@ -93,7 +113,10 @@ def ok():
 @app.route('/admin', methods=['GET','POST'])
 def admin():
     print " session can be accessed here as well", session, session['username']
-    return render_template('pages/admin.home.html')
+    columns = [ 'S.No', 'User Name', 'Institution', 'Email ID', 'Status', 'Active']
+    return render_template('pages/admin.home.html', columns=columns)
+    return 'Hello World!'
+    #return render_template('pages/admin.home.html')
                
 @app.route('/user', methods=['GET','POST'])
 def user():
@@ -110,6 +133,7 @@ def home():
     #form = LoginForm(request.form)
     #return render_template('forms/login.html', form = form)
     #flask.redirect(flask.url_for('login'))
+    
     return redirect(url_for('login'))
 
 # Loader callback. Reload the user-id from the value stored in the session.
@@ -238,7 +262,6 @@ def load_user(userid):
 # TRY WITH GET. the perfect method
 @app.route('/login/', methods=['GET','POST'])
 def login():
- 
     if request.method == 'GET'  : #and name != None
         #form = LoginForm(request.form)
         return render_template('forms/login_new.html')
@@ -309,7 +332,7 @@ def login():
               pass           
                      
 
-    return redirect(url_for('ok'))
+    return redirect(url_for('login'))
             
 #return render_template('forms/login.html', form = form)
 
@@ -324,47 +347,37 @@ def register():
     print "##form OBJECT::: register---->", form, request.form,
     if request.method == 'POST':
             #session['username'] = request.form['username']
-            if 'Register' in request.form:
-                print "inside if"
-            else:
-            	print "inside else"
-            	storage = FileStorage('./storage/userdb.fs')
-            	conn = DB(storage)
-            	print "Type start:",conn, type(conn)
-            	dbroot = conn.open().root()
-            	try:
-                	for val in ['userdb','graphdb','datadb']:
-                		if val in dbroot.keys():
-							pass
-                except:
-                		if not val in dbroot.keys():
-							print " donot create this always"
-							dbroot[val] = Dict()
-							print "TRY user db dbroot:",dbroot['userdb'], type (dbroot['userdb'])
-							
-                print "else:::::-->", request.form , form.email.data
-                u=mod.User(form.name.data,form.email.data,\
-                			sha256(form.password.data).hexdigest(), \
-                			form.password.data,form.institution.data,\
-                			form.security_question.data, form.security_answer.data		
-                		   )
-                print "User:--->", u, "form.name.data",form.name.data
-                # u.name = form.name.data
-#                 u.email = form.email.data
-#                 u.password = sha256(form.password.data).hexdigest()
-#                 #u.password = form.password.data
-#               	u.confirm = form.confirm.data
-#               	u.institution = form.institution.data
-#               	u.security_question = form.security_question.data
-#               	u.security_answer = form.security_answer.data
-                #userdb[u.name]=u
-                dbroot['userdb'][u.name] = u
-                session['username'] = u.name
-                transaction.commit()
-                print "Database added successfully", dbroot['userdb'][u.name], u.name, u
-                #print "db now",db,type(db),db.__str__(),db.__getattribute__('databases'),"next",db.databases,db.database_name   
-                flash('Registered successfuly')
-            	return redirect(url_for('login'))
+#                 if 'Register' in request.form:
+#                     print "inside if"
+#                 else:
+#                 	print "inside else"
+    	storage = FileStorage('./storage/userdb.fs')
+    	conn = DB(storage)
+    	print "Type start:",conn, type(conn)
+    	dbroot = conn.open().root()
+        try:
+            for val in ['userdb','graphdb','datadb']:
+        		if val in dbroot.keys():
+					pass
+        except:
+        		if not val in dbroot.keys():
+					print " donot create this always"
+					dbroot[val] = Dict()
+					print "TRY user db dbroot:",dbroot['userdb'], type (dbroot['userdb'])
+					
+        print "else:::::-->", request.form , form.email.data
+        u=mod.User(form.name.data,form.email.data,\
+        			sha256(form.password.data).hexdigest(), \
+        			form.password.data,form.institution.data,\
+        			form.security_question.data, form.security_answer.data		
+        		   )
+        print "User:--->", u, "form.name.data",form.name.data
+        dbroot['userdb'][u.name] = u
+        session['username'] = u.name
+        transaction.commit()
+        print "Database added successfully", dbroot['userdb'][u.name], u.name, u
+        flash('Registered successfuly')
+    	return redirect(url_for('login'))
     return render_template('forms/register.html', form = form)
 
 @app.route('/forgot',methods=['GET','POST'])
@@ -397,10 +410,78 @@ if not app.debug:
     app.logger.addHandler(file_handler)
     app.logger.info('errors')
 
+class BaseDataTables:
+    
+    """
+    Need to format PyDocs.
+        
+    """
+    def __init__(self, request, columns, collection):
+        
+        self.columns = columns
+
+        self.collection = collection
+         
+        # values specified by the datatable for filtering, sorting, paging
+        self.request_values = request.values
+         
+ 
+        # results from the db
+        self.result_data = None
+         
+        # total in the table after filtering
+        self.cardinality_filtered = 0
+ 
+        # total in the table unfiltered
+        self.cadinality = 0
+ 
+        self.run_queries()
+    
+    def output_result(self):
+        
+        output = {}
+        aaData_rows = []
+        
+        for row in self.result_data:
+            aaData_row = []
+            for i in range(len(self.columns)):
+                print row, self.columns, self.columns[i]
+                aaData_row.append(str(row[ self.columns[i] ]).replace('"','\\"'))
+            aaData_rows.append(aaData_row)
+            
+        output['aaData'] = aaData_rows
+        
+        return output
+    
+    def run_queries(self):
+        
+         self.result_data = self.collection
+         self.cardinality_filtered = len(self.result_data)
+         self.cardinality = len(self.result_data)
+
+
+
+@app.route('/get_server_data')
+def get_server_data():
+        
+        columns = [ 'S.No', 'User Name', 'Institution', 'Email ID', 'Status', 'Active']
+    
+        collection = [dict(zip(columns, [1,'Ramki',2,3,4,6])), dict(zip(columns, [2,'user889',5,5,33,7]))]
+        
+        results = BaseDataTables(request, columns, collection).output_result()
+        
+        # return the results as a string for the datatable
+        print "results:", results
+
+        return json.dumps(results)
+
+
 
 # Default port:
 if __name__ == '__main__':
+    #app.before_first_request()
     app.run()
+    
 
 # Or specify port manually:
 '''
