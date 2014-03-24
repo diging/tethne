@@ -31,8 +31,11 @@ tethne/readers/dfr.py
 tethne/readers/mallet.py
 tethne/readers/pubmed.py
 tethne/readers/wos.py
+tethne/services/__init__.py
+tethne/services/geocode.py
 tethne/utilities/__init__.py
 tethne/writers/__init__.py
 tethne/writers/collection.py
+tethne/writers/corpora.py
 tethne/writers/graph.py
 tethne/writers/matrix.py

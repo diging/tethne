@@ -5,6 +5,7 @@ Export networks to structured and unstructured formats, for visualization.
 
    collection
    graph
+   corpora
    matrix
    
 """
@@ -12,3 +13,4 @@ Export networks to structured and unstructured formats, for visualization.
 import tethne.writers.graph
 import tethne.writers.matrix
 import tethne.writers.collection
+import tethne.writers.corpora
