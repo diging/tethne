@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Geographic Networks &mdash; tethne 0.4.0-alpha documentation</title>
+    <title>Geographic Networks &mdash; tethne 0.4.2-alpha documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.4.0-alpha',
+        VERSION:     '0.4.2-alpha',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="tethne 0.4.0-alpha documentation" href="index.html" />
+    <link rel="top" title="tethne 0.4.2-alpha documentation" href="index.html" />
     <link rel="up" title="Tutorial" href="tutorial.html" />
-    <link rel="next" title="Creating Networks from Bibliographic Data" href="tutorial.networks.html" />
+    <link rel="next" title="Generating and Visualizing Topic Models with Tethne and MALLET" href="tutorial.mallet.html" />
     <link rel="prev" title="Bibliographic Coupling" href="tutorial.bibliocoupling.html" /> 
   </head>
   <body>
@@ -44,12 +44,12 @@
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorial.networks.html" title="Creating Networks from Bibliographic Data"
+          <a href="tutorial.mallet.html" title="Generating and Visualizing Topic Models with Tethne and MALLET"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="tutorial.bibliocoupling.html" title="Bibliographic Coupling"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">tethne 0.4.0-alpha documentation</a> &raquo;</li>
+        <li><a href="index.html">tethne 0.4.2-alpha documentation</a> &raquo;</li>
           <li><a href="tutorial.html" accesskey="U">Tutorial</a> &raquo;</li> 
       </ul>
     </div>  
@@ -141,15 +141,25 @@ and Python users can skip the slice step; TethneGUI users should use the <tt cla
 <span class="pre">DataCollection</span> <span class="pre">slicing</span></tt> option. Also:</p>
 <div class="section" id="command-line">
 <h3>Command-line<a class="headerlink" href="#command-line" title="Permalink to this headline">¶</a></h3>
-<p>At the <tt class="docutils literal"><span class="pre">graph</span></tt> step, include the <tt class="docutils literal"><span class="pre">--geocode</span></tt> flag. For example:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Skip the <tt class="docutils literal"><span class="pre">slice</span></tt> step.</li>
+<li>At the <tt class="docutils literal"><span class="pre">graph</span></tt> step, include the <tt class="docutils literal"><span class="pre">--merged</span></tt> and <tt class="docutils literal"><span class="pre">--geocode</span></tt> flags. For example:</li>
+</ul>
+</div></blockquote>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python ~/Downloads/tethne-python/tethne -I fundata01 -O ~/results --graph <span class="se">\</span>
-&gt; -N author -T coauthors --edge-attr<span class="o">=</span>ayjid,date,jtitle --geocode
+&gt; -N author -T coauthors --edge-attr<span class="o">=</span>ayjid,date,jtitle --geocode --merged
 </pre></div>
 </div>
 </div>
 <div class="section" id="tethnegui">
 <h3>TethneGUI<a class="headerlink" href="#tethnegui" title="Permalink to this headline">¶</a></h3>
-<p>At the <tt class="docutils literal"><span class="pre">Graph</span></tt> step, check the <tt class="docutils literal"><span class="pre">Geocode</span></tt> option (coming soon).</p>
+<blockquote>
+<div><ul class="simple">
+<li>Skip the <tt class="docutils literal"><span class="pre">Slice</span></tt> step.</li>
+<li>At the <tt class="docutils literal"><span class="pre">Graph</span></tt> step, check the <tt class="docutils literal"><span class="pre">Geocode</span></tt> option.</li>
+</ul>
+</div></blockquote>
 </div>
 <div class="section" id="python">
 <h3>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h3>
@@ -501,8 +511,8 @@ list of all of the authors associated with that institution.</p>
   <p class="topless"><a href="tutorial.bibliocoupling.html"
                         title="previous chapter">Bibliographic Coupling</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="tutorial.networks.html"
-                        title="next chapter">Creating Networks from Bibliographic Data</a></p>
+  <p class="topless"><a href="tutorial.mallet.html"
+                        title="next chapter">Generating and Visualizing Topic Models with Tethne and MALLET</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/tutorial.geonetworks.txt"
@@ -538,12 +548,12 @@ list of all of the authors associated with that institution.</p>
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorial.networks.html" title="Creating Networks from Bibliographic Data"
+          <a href="tutorial.mallet.html" title="Generating and Visualizing Topic Models with Tethne and MALLET"
              >next</a> |</li>
         <li class="right" >
           <a href="tutorial.bibliocoupling.html" title="Bibliographic Coupling"
              >previous</a> |</li>
-        <li><a href="index.html">tethne 0.4.0-alpha documentation</a> &raquo;</li>
+        <li><a href="index.html">tethne 0.4.2-alpha documentation</a> &raquo;</li>
           <li><a href="tutorial.html" >Tutorial</a> &raquo;</li> 
       </ul>
     </div>
