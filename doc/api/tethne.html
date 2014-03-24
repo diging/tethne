@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>tethne Package &mdash; tethne 0.3.1-alpha documentation</title>
+    <title>tethne Package &mdash; tethne 0.4.2-alpha documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.1-alpha',
+        VERSION:     '0.4.2-alpha',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="tethne 0.3.1-alpha documentation" href="index.html" />
+    <link rel="top" title="tethne 0.4.2-alpha documentation" href="index.html" />
     <link rel="prev" title="Command-line Options" href="commandline.html" /> 
   </head>
   <body>
@@ -44,7 +44,7 @@
         <li class="right" >
           <a href="commandline.html" title="Command-line Options"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">tethne 0.3.1-alpha documentation</a> &raquo;</li> 
+        <li><a href="index.html">tethne 0.4.2-alpha documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -85,10 +85,13 @@ using networkx.</p>
 <tr class="row-even"><td><a class="reference internal" href="tethne.readers.html#module-tethne.readers" title="tethne.readers"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.readers</span></tt></a></td>
 <td>Methods for parsing bibliographic datasets.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="tethne.utilities.html#module-tethne.utilities" title="tethne.utilities"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.utilities</span></tt></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="tethne.services.html#module-tethne.services" title="tethne.services"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.services</span></tt></a></td>
+<td>Modules for interacting with external web services.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="tethne.utilities.html#module-tethne.utilities" title="tethne.utilities"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.utilities</span></tt></a></td>
 <td>Helper functions for <a class="reference internal" href="tethne.networks.html#module-tethne.networks" title="tethne.networks"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.networks</span></tt></a> .</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.writers.html#module-tethne.writers" title="tethne.writers"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.writers</span></tt></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="tethne.writers.html#module-tethne.writers" title="tethne.writers"><tt class="xref py py-obj docutils literal"><span class="pre">tethne.writers</span></tt></a></td>
 <td>Export networks to structured and unstructured formats, for visualization.</td>
 </tr>
 </tbody>
@@ -96,16 +99,9 @@ using networkx.</p>
 </div>
 <div class="section" id="module-tethne.__main__">
 <span id="main-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">__main__</span></tt> Module<a class="headerlink" href="#module-tethne.__main__" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="tethne.__main__.isfloat">
-<tt class="descclassname">tethne.__main__.</tt><tt class="descname">isfloat</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/tethne/__main__.html#isfloat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.__main__.isfloat" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="tethne.__main__.isint">
-<tt class="descclassname">tethne.__main__.</tt><tt class="descname">isint</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/tethne/__main__.html#isint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.__main__.isint" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<p>Provides the Tethne command-line interface.</p>
+<p>See <a class="reference internal" href="tutorial.quickstart.commandline.html#quickstart-cl"><em>Quickstart (Command-line)</em></a> and <a class="reference internal" href="commandline.html#commandline-options"><em>Command-line Options</em></a> for an introduction to 
+the CLI.</p>
 </div>
 <div class="section" id="module-tethne.builders">
 <span id="builders-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">builders</span></tt> Module<a class="headerlink" href="#module-tethne.builders" title="Permalink to this headline">¶</a></h2>
@@ -1068,6 +1064,13 @@ substantially more processing time, and values will usually be &gt;&gt; 0.</p>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="tethne.services.html">services Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tethne.services.html#id1"><tt class="docutils literal"><span class="pre">services</span></tt> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.services.html#module-tethne.services.geocode"><tt class="docutils literal"><span class="pre">geocode</span></tt> Module</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="tethne.utilities.html">utilities Package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tethne.utilities.html#id1"><tt class="docutils literal"><span class="pre">utilities</span></tt> Package</a></li>
 </ul>
@@ -1075,7 +1078,10 @@ substantially more processing time, and values will usually be &gt;&gt; 0.</p>
 <li class="toctree-l1"><a class="reference internal" href="tethne.writers.html">writers Package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tethne.writers.html#id1"><tt class="docutils literal"><span class="pre">writers</span></tt> Package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.writers.html#module-tethne.writers.collection"><tt class="docutils literal"><span class="pre">collection</span></tt> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.writers.html#module-tethne.writers.graph"><tt class="docutils literal"><span class="pre">graph</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.writers.html#module-tethne.writers.corpora"><tt class="docutils literal"><span class="pre">corpora</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.writers.html#module-tethne.writers.graph"><tt class="docutils literal"><span class="pre">graph</span></tt> Module</a><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.writers.html#module-tethne.writers.matrix"><tt class="docutils literal"><span class="pre">matrix</span></tt> Module</a></li>
 </ul>
 </li>
@@ -1149,7 +1155,7 @@ substantially more processing time, and values will usually be &gt;&gt; 0.</p>
         <li class="right" >
           <a href="commandline.html" title="Command-line Options"
              >previous</a> |</li>
-        <li><a href="index.html">tethne 0.3.1-alpha documentation</a> &raquo;</li> 
+        <li><a href="index.html">tethne 0.4.2-alpha documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
