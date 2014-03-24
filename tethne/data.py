@@ -17,7 +17,6 @@ from pprint import pprint
 import sys
 import numpy as np
 
-
 class Paper(object):
     """
     Base class for Papers. 

@@ -72,7 +72,10 @@
 <tr class="row-even"><td><a class="reference internal" href="#module-tethne.writers.graph" title="tethne.writers.graph"><tt class="xref py py-obj docutils literal"><span class="pre">graph</span></tt></a></td>
 <td>Write NetworkX graphs to structured and unstructured network file formats.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#module-tethne.writers.matrix" title="tethne.writers.matrix"><tt class="xref py py-obj docutils literal"><span class="pre">matrix</span></tt></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#module-tethne.writers.corpora" title="tethne.writers.corpora"><tt class="xref py py-obj docutils literal"><span class="pre">corpora</span></tt></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#module-tethne.writers.matrix" title="tethne.writers.matrix"><tt class="xref py py-obj docutils literal"><span class="pre">matrix</span></tt></a></td>
 <td>Methods for writing matrices to commonly-used file formats, for external visualization and analysis.</td>
 </tr>
 </tbody>
@@ -143,6 +146,37 @@ and edge attributes are defined for each <cite>Graph</cite>. in the
 <p class="rubric">Notes</p>
 <p>Period start and end dates in this method are inclusive, whereas XGMML end
 dates are exclusive. Hence +1 is added to all end dates when writing XGMML.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tethne.writers.corpora">
+<span id="corpora-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">corpora</span></tt> Module<a class="headerlink" href="#module-tethne.writers.corpora" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="tethne.writers.corpora.to_documents">
+<tt class="descclassname">tethne.writers.corpora.</tt><tt class="descname">to_documents</tt><big>(</big><em>target</em>, <em>ngrams</em><big>)</big><a class="reference internal" href="_modules/tethne/writers/corpora.html#to_documents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.writers.corpora.to_documents" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>target</strong> : str</p>
+<blockquote>
+<div><p>Target path for documents; e.g. &#8216;./mycorpus&#8217; will result in 
+&#8216;./mycorpus_docs.txt&#8217; and &#8216;./mycorpus_meta.csv&#8217;.</p>
+</div></blockquote>
+<p><strong>ngrams</strong> : dict</p>
+<blockquote>
+<div><p>Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>None</strong> : If all goes well.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises :</th><td class="field-body"><p class="first last"><strong>ValueError</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -320,6 +354,7 @@ visualization and analysis. Not yet implemented.</p>
 <li><a class="reference internal" href="#">writers Package</a><ul>
 <li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">writers</span></tt> Package</a></li>
 <li><a class="reference internal" href="#module-tethne.writers.collection"><tt class="docutils literal"><span class="pre">collection</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-tethne.writers.corpora"><tt class="docutils literal"><span class="pre">corpora</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-tethne.writers.graph"><tt class="docutils literal"><span class="pre">graph</span></tt> Module</a><ul>
 </ul>
 </li>

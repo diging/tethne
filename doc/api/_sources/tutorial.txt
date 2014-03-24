@@ -14,6 +14,7 @@ command-line (Mac OSX, Linux; untested for Windows).
    tutorial.coauthors
    tutorial.bibliocoupling
    tutorial.geonetworks
+   tutorial.mallet
    
 
 Step-By-Step Guide (Python)
@@ -25,7 +26,6 @@ Step-By-Step Guide (Python)
    tutorial.analyze
    tutorial.writers
    tutorial.collections
-   tutorial.cocitation
    tutorial.vsm
    
 .. toctree::

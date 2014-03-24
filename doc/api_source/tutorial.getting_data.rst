@@ -134,6 +134,8 @@ here_.
 
 .. _here: http://images.webofknowledge.com/WOKRS53B4/help/WOS/hs_wos_fieldtags.html
 
+.. _getting-jstor:
+
 JSTOR Data-for-Research
 -----------------------
 

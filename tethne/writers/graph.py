@@ -176,7 +176,7 @@ def to_gexf(graph, output_path):
     nx.write_gexf(graph, output_path + ".gexf")
 
 
-def to_graphml(graph, path, encoding='utf-8',prettyprint=True):
+def to_graphml(graph, path, encoding='utf-8', prettyprint=True):
     """Writes graph to `GraphML <http://graphml.graphdrawing.org/>`_.
     
     Uses the NetworkX method 
