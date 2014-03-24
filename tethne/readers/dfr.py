@@ -8,6 +8,10 @@ Methods for parsing JSTOR Data-for-Research datasets.
 
 """
 
+import sys
+sys.path.append('/Users/erickpeirson/Dropbox/DigitalHPS/Scripts/tethne')
+
+
 import tethne.data as dt
 import os
 import xml.etree.ElementTree as ET
@@ -111,11 +115,10 @@ def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
 
     Parameters
     ----------
-    filepath : string
-        Filepath to unzipped JSTOR DfR folder containing N-grams (e.g.
-        'bigrams').
+    datapath : string
+        Path to unzipped JSTOR DfR folder containing N-grams (e.g. 'bigrams').
     N : string
-        'bi', 'tri', or 'quad'
+        'uni', 'bi', 'tri', or 'quad'
     ignore_hash : bool
         If True, will exclude all N-grams that contain the hash '#' character.
     apply_stoplist : bool
@@ -136,19 +139,26 @@ def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
        >>> trigrams = rd.dfr.ngrams("/Path/to/DfR", N='tri')
     """
 
-    gram_path = datapath + "/" + N + "grams"
+    if  N =='uni':
+        gram_dir = "/wordcounts"
+        elem = "wordcount"
+    else:
+        gram_dir = "/" + N + "grams"
+        elem = N + "gram"
+    gram_path = datapath + gram_dir
+
     ngrams = {}
 
     for file in os.listdir(gram_path):
         if file.split('.')[-1] == 'XML':
             root = ET.parse(gram_path + "/" + file).getroot()
             doi = root.attrib['id']
-            grams = [ (gram.text.strip(), int(gram.attrib['weight']) )
-                       for gram in root.findall(N + 'gram') # v Hashes v
-                       if not ignore_hash or '#' not in list(gram.text) ]
+            grams = [ ( gram.text.strip(), int(gram.attrib['weight']) )
+                            for gram in root.findall(elem)    # v Hashes v
+                            if not ignore_hash or '#' not in list(gram.text) ]
 
             if apply_stoplist:
-                stoplist = stoplist.words()
+                stoplist = stopwords.words()
                 grams_ = []
                 for g,c in grams:
                     for w in g.split():
@@ -372,3 +382,11 @@ def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
         ayj = 'Unknown paper'
 
     return ayj.upper()
+
+if __name__ == '__main__':
+    import tethne.writers as wr
+    
+    n = ngrams('/Users/erickpeirson/Genecology Project Archive/JStor DfR Datasets/2013.5.3.W8mEeULy', 'uni')
+    print n.keys()[0:5]
+    print n.values()[0][10:20]
+    wr.corpora.to_documents('./mycorpus', n)

@@ -82,17 +82,20 @@ DataCollection slicing`` option. Also:
 
 Command-line
 ````````````
-At the ``graph`` step, include the ``--geocode`` flag. For example:
+
+	* Skip the ``slice`` step.
+	* At the ``graph`` step, include the ``--merged`` and ``--geocode`` flags. For example:
 
 .. code-block:: bash
 
    $ python ~/Downloads/tethne-python/tethne -I fundata01 -O ~/results --graph \
-   > -N author -T coauthors --edge-attr=ayjid,date,jtitle --geocode
+   > -N author -T coauthors --edge-attr=ayjid,date,jtitle --geocode --merged
 
 TethneGUI
 `````````
-At the ``Graph`` step, check the ``Geocode`` option (coming soon).
-
+	* Skip the ``Slice`` step.
+	* At the ``Graph`` step, check the ``Geocode`` option.
+	
 Python
 ``````
 Include the keyword argument ``geocode=True`` when calling 
