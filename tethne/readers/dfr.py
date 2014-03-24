@@ -382,11 +382,3 @@ def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
         ayj = 'Unknown paper'
 
     return ayj.upper()
-
-if __name__ == '__main__':
-    import tethne.writers as wr
-    
-    n = ngrams('/Users/erickpeirson/Genecology Project Archive/JStor DfR Datasets/2013.5.3.W8mEeULy', 'uni')
-    print n.keys()[0:5]
-    print n.values()[0][10:20]
-    wr.corpora.to_documents('./mycorpus', n)
