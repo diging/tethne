@@ -36,5 +36,6 @@ tethne/services/geocode.py
 tethne/utilities/__init__.py
 tethne/writers/__init__.py
 tethne/writers/collection.py
+tethne/writers/corpora.py
 tethne/writers/graph.py
 tethne/writers/matrix.py
