@@ -23,8 +23,8 @@ class RegisterForm(Form):
     
     #Need to change the email using Email validator.
     
-    name             = TextField('Username', [validators.Required(),validators.Length(min=6, max=35)])
-    email            = TextField('Email', [validators.Required(),validators.Length(min=6, max=35)])
+    name             = TextField('Username', [validators.Required(),validators.Length(min=4, max=35)])
+    email            = TextField('Email', [validators.Required(),validators.Length(min=4, max=35)])
     password         = PasswordField('Password', [validators.Required(),validators.Length(min=6, max=30)])
     confirm          = PasswordField('Repeat Password',[validators.Required(), validators.EqualTo('password', message='Passwords must match')])
     institution      = TextField('Institution', [validators.Required(), validators.Length(min=4, max=40)])
