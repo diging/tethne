@@ -8,14 +8,6 @@
 <p class="lead"> As an admin you can perform the following activities </p>
 <p class = "lead"> {{ url_for('admin') }} </p>
 
-<head>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-<script src="{{ url_for('static', filename='js/jquery-1.8.1.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
-<script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
-</head>
-
 &nbsp;
 &nbsp;
 &nbsp;
@@ -34,8 +26,7 @@ $(document).ready(function() {
 </script>
 
 
-<form action="" method="post" class="form" >
-<h3 class="form-heading">
+<form action="" method="get" class="form" >
 <body>
 	<div class="container">
 	<table class='table' id='example'>
@@ -44,6 +35,15 @@ $(document).ready(function() {
 				{% for col in columns %}
 				<th>{{ col }}</th>
 				{% endfor %}
+				<tr>
+				{% for res in results %}
+					<tr>
+					{% for eachres in res %}
+						<td>{{ eachres }}</td>
+					{% endfor %}
+					</tr>	
+				{% endfor %}
+				</tr>
 			</tr>
 		</thead>
 	</table>
@@ -51,21 +51,12 @@ $(document).ready(function() {
 </body>
 
 
-<input type="submit" value="List Users" class="btn btn-primary btn-block" >
-</form> 
+<p>    </p>
+
+<input type="submit" value="Search Users" class="button" >
+<input type="submit" value="Delete Users" class="button" >
+<input type="submit" value="Approve Users" class="button" >
+</form>
 
 {% endblock %}
-
-<!-- Need to change all the image locations to local folders-->
-
-<!--
-<a href="{{ url_for('home') }}"> <img style="border:0px;" src="http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=Add%20Users" onmouseover="this.src='http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=Add%20Users'" onmouseout="this.src='http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=Add%20Users';" alt="Add%20Users" /></a><script type="text/javascript">img=new Image();img.src= "http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=Add%20Users";</script>
-
-<a href="{{ url_for('home') }}"> <img style="border:0px;" src="http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=Approve%20Users" onmouseover="this.src='http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=Approve%20Users'" onmouseout="this.src='http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=Approve%20Users';" alt="Approve%20Users" /></a><script type="text/javascript">img=new Image();img.src= "http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=Approve%20Users";</script>
-
-<a href="{{ url_for('home') }}"> <img style="border:0px;" src="http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=List%20Users" onmouseover="this.src='http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=List%20Users'" onmouseout="this.src='http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=List%20Users';" alt="List%20Users" /></a><script type="text/javascript">img=new Image();img.src= "http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=List%20Users";</script>
-
-<a href="{{ url_for('home') }}"> <img style="border:0px;" src="http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=Delete%20Users" onmouseover="this.src='http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=Delete%20Users'" onmouseout="this.src='http://images.webestools.com/buttons.php?frm=1&btn_type=51&txt=Delete%20Users';" alt="Delete%20Users" /></a><script type="text/javascript">img=new Image();img.src= "http://images.webestools.com/buttons.php?frm=2&btn_type=51&txt=Delete%20Users";</script>
-
--->
 
