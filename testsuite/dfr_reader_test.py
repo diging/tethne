@@ -1,5 +1,5 @@
 import sys
-sys.path.append("../tethne")
+sys.path.append("../")
 import tethne.readers as rd
 import tethne.data as dt
 import unittest

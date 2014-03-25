@@ -121,6 +121,7 @@ def topic_coupling(model, threshold=0.005, **kwargs):
         weight = sum( [ t[1] for t in topics ] ) / Z
         i_id = model.vocabulary[e[0]]
         j_id = model.vocabulary[e[1]]
-        tc.add_edge(i_id, j_id, weight=weight, topics=[t[0] for t in topics])
+        tc.add_edge(i_id, j_id, weight=float(weight), 
+                                topics=[t[0] for t in topics])
 
     return tc

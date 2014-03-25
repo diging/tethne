@@ -215,6 +215,7 @@ def bibliographic_coupling(papers, citation_id='ayjid', threshold=1,
     """
 
     bcoupling = nx.Graph(type='biblio_coupling')
+    nattr = {}
 
     # Validate identifiers.
     meta_dict = ds.Paper()
@@ -261,14 +262,28 @@ def bibliographic_coupling(papers, citation_id='ayjid', threshold=1,
             else:
                 similarity = len(overlap)
 
+            
             if similarity >= threshold:
-                bcoupling.add_node(papers[i][node_id], node_i_attribs)
-                bcoupling.add_node(papers[j][node_id], node_j_attribs)
+                nattr[papers[i][node_id]] = node_i_attribs
+                nattr[papers[j][node_id]] = node_j_attribs
                 #nx.set_node_attributes(bcoupling,"",node_i_attribs)
 
                 bcoupling.add_edge(papers[i][node_id],
                                    papers[j][node_id],
                                    similarity=similarity)
+                                   
+        # Set node attributes.
+        node_attributes = {}
+        for k, v in nattr.iteritems():
+            for vk, vv in v.iteritems():
+                try:
+                    node_attributes[vk][k] = vv
+                except KeyError:
+                    node_attributes[vk] = {k:vv}
+                    
+        for k, v in node_attributes.iteritems():
+            nx.set_node_attributes(bcoupling, k, v)
+        
     return bcoupling
 
 def cocitation(papers, threshold=1, node_id='ayjid', topn=None, verbose=False,\

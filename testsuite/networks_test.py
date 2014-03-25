@@ -3,6 +3,8 @@ To do: move testing of different types of attributes to writers testing
 rather than graph testing; NetworkX can support any data structure as an
 attribute but the graph file formats may not.
 """
+import sys
+sys.path.append("../")
 
 import tethne.readers as rd
 import tethne.networks as nt
@@ -10,7 +12,7 @@ import tethne.writers as wr
 import tethne.utilities as util
 import unittest
 import networkx as nx
-import sys
+
 
 class TestDirectCitationGraph(unittest.TestCase):
     """
@@ -39,13 +41,13 @@ class TestDirectCitationGraph(unittest.TestCase):
         # ayjid with attribs
         (self.ayjid_cit_attrib,
          self.ayjid_int_attrib) = nt.papers.direct_citation(meta_list,
-                                                  'ayjid',
-                                                  *self.node_attribs)
+                                              node_id='ayjid',
+                                              node_attribs=self.node_attribs)
         # doi with attribs
         (self.doi_cit_attrib,
          self.doi_int_attrib) = nt.papers.direct_citation(meta_list,
-                                                'doi',
-                                                *self.node_attribs)
+                                            node_id='doi',
+                                            node_attribs=self.node_attribs)
 
     def test_ayjid(self):
         """
@@ -261,26 +263,7 @@ class TestDirectCitation_DAG(unittest.TestCase):
         c_des = nx.descendants(self.ayjid_citations,
                                'ALAMPORA G 1999 INFORMATION SCIENCES')
         i_des = nx.descendants(self.ayjid_internal,
-                               'WU Z 2012 NEUROCOMPUTING')
-
-        # to check if error is raised if a node which
-        # is not in the graph is called.
-
-        # commented as of now
-        # c_des_err = \
-        # nx.descendants(self.ayjid_citations, \
-        #     'ALAMPORA G 1999 addadaddsa SCIENCES')
-
-        # self.assertRaises(NetworkXError, \
-        # testsuite.networks_test.TestDirectCitation_DAG)
-
-        #=======================================================================
-        # try:
-        #     c_des_err = nx.descendants(self.ayjid_citations, \
-        #                   'ALAMPORA G 1999 addadaddsa SCIENCES')
-        # except NetworkXError :
-        #     self.fail('NetworkXerror thrown:', NetworkXError)
-        #=======================================================================
+                               'WU ZD 2012 NEUROCOMPUTING')
 
     def tearDown(self):
         pass
@@ -300,13 +283,13 @@ class TestAuthorPapersGraph(unittest.TestCase):
     def setUp(self):
         wos_data = rd.wos.parse('./testin/wos_authors.txt')
         meta_list = rd.wos.convert(wos_data)
-        self.no_attribs = nt.authors.author_papers(meta_list, 'doi')
+        self.no_attribs = nt.authors.author_papers(meta_list, node_id='doi')
 
         # int, string, list, dict
-        node_attribs = ('date', 'atitle', 'aulast', 'citations')
-        self.node_attribs = nt.authors.author_papers(meta_list, 'doi',
-                                                *node_attribs)
-
+        node_attribs = ['date', 'atitle', 'aulast', 'citations']
+        self.node_attribs = nt.authors.author_papers(meta_list, 
+                                                     node_id='doi',
+                                                     paper_attribs=node_attribs)
     def test_case_sensitivity(self):
         """
         Fails if case sensitivity of author names matters
@@ -359,7 +342,7 @@ class TestAuthorPapersGraph(unittest.TestCase):
                     'Adams SM, 1990, AM FISHERIES SOC S, V8, P1']
         citations1 = []
         for cite in cr1_list:
-            cite_dict = rd.wos.parse_cr(cite)
+            cite_dict = rd.wos._parse_cr(cite)
             citations1.append(cite_dict)
 
         # and those attributes in the expected form: a 'primitive' dictionary
@@ -387,7 +370,7 @@ class TestAuthorPapersGraph(unittest.TestCase):
                         'DOI 10.1111/j.1095-8649.1982.tb02858.x')]
         citations2 = []
         for cite in cr2_list:
-            cite_dict = rd.wos.parse_cr(cite)
+            cite_dict = rd.wos._parse_cr(cite)
             citations2.append(cite_dict)
 
         # and those attributes in the expected form: a 'primitive' dictionary
@@ -416,6 +399,25 @@ class TestAuthorPapersGraph(unittest.TestCase):
         pass
 
 
+class TestCoauthorsGeocoding(unittest.TestCase):
+    """
+    """
+
+    def setUp(self):
+
+        wos_data =rd.wos.parse(
+                    "../testsuite/testin/authorinstitutions_test.txt")
+        meta_list = rd.wos.convert(wos_data)
+
+        self.coauthors = nt.authors.coauthors(meta_list,
+                                              edge_attribs=['institution'],
+                                              geocode=True)
+    def test_codes(self):
+
+        expected_nodes = [('VITIELLO A', {'latitude': 40.7687118, 'institution': 'UNIV SALERNO, ITALY', 'longitude': 14.7920179, 'precision': 'institution'}), ('CHEN EH', {'latitude': 23.0078743, 'institution': 'UNIV SCI & TECHNOL CHINA, PEOPLES R CHINA', 'longitude': 113.0962272, 'precision': 'institution'}), ('XU GD', {'latitude': -33.8838982, 'institution': 'UNIV TECHNOL SYDNEY, AUSTRALIA', 'longitude': 151.2010127, 'precision': 'institution'}), ('ZHANG YC', {'latitude': -37.7933058, 'institution': 'VICTORIA UNIV, AUSTRALIA', 'longitude': 144.8964966, 'precision': 'institution'}), ('LU CL', {'latitude': 27.994267, 'institution': 'WENZHOU UNIV, PEOPLES R CHINA', 'longitude': 120.699367, 'precision': 'institution'}), ('ACAMPORA G', {'latitude': 51.44860980000001, 'institution': 'EINDHOVEN UNIV TECHNOL, NETHERLANDS', 'longitude': 5.4907148, 'precision': 'institution'}), ('LOIA V', {'latitude': 40.7687118, 'institution': 'UNIV SALERNO, ITALY', 'longitude': 14.7920179, 'precision': 'institution'}), ('ZHANG H', {'latitude': 38.057347, 'institution': 'INST SCI & TECHNOL INFORMAT ZHEJIANG PROV, PEOPLES R CHINA', 'longitude': 117.233375, 'precision': 'country'}), ('WU ZD', {'latitude': 27.994267, 'institution': 'WENZHOU UNIV, PEOPLES R CHINA', 'longitude': 120.699367, 'precision': 'institution'})]
+        observed_nodes = self.coauthors.nodes(data=True)
+        self.assertEqual(expected_nodes, observed_nodes)
+
 class TestCoauthorsGraph(unittest.TestCase):
     """
     Test the coauthors network, assumes reader is functioning
@@ -429,13 +431,13 @@ class TestCoauthorsGraph(unittest.TestCase):
         wos_data =rd.wos.parse("../testsuite/testin/coauthors_2_recs.txt")
         meta_list = rd.wos.convert(wos_data)
 
-        # There is no concept of user input threshold testcases as the authors \
+        # There is no concept of user input threshold testcases as the authors
         # will be mapped with their respective co-authors anyways.
-        self.coauthors_noattribs  = nt.authors.coauthors(meta_list,)
-        self.coauthors_one_attribs  = nt.authors.coauthors \
-                            (meta_list,'ayjid')
-        self.coauthors_three_attribs  = nt.authors.coauthors \
-                            (meta_list,'ayjid','jtitle','date')
+        self.coauthors_noattribs  = nt.authors.coauthors(meta_list)
+        self.coauthors_one_attribs  = nt.authors.coauthors(meta_list,
+                                                        edge_attribs=['ayjid'])
+        self.coauthors_three_attribs  = nt.authors.coauthors(meta_list,
+                                        edge_attribs=['ayjid','jtitle','date'])
 
     # When no attribs are provided by the user.
     def test_coauthors_no_attribs(self):
@@ -451,47 +453,15 @@ class TestCoauthorsGraph(unittest.TestCase):
 
     # When no attribs are provided by the user.
     def test_coauthors_one_attribs(self):
+
         # 9 nodes: one for each author and his co-author
         self.assertEqual(nx.number_of_nodes(self.coauthors_one_attribs),9)
+        
         # 26 edges between them
         self.assertEqual(nx.number_of_edges(self.coauthors_one_attribs),26)
         obtained_edge_attribs_dict = nx.get_edge_attributes \
                 (self.coauthors_one_attribs, "ayjid")
-        expected_edge_attribs_dict = \
-        {   ('JIN M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('IZAGIRRE U', 'JIN M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('IZAGIRRE U', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('MARIGOMEZ I', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('ORBEA A', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('JIN M', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('CAJARAVILLE M', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('IZAGIRRE U', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('IZAGIRRE U', 'CAJARAVILLE M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('IZAGIRRE U', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('TONG X', 'CAJARAVILLE M'):
-                    ('HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'),
-            ('CAJARAVILLE M', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('JIN M', 'TONG X'):
-                    'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT',
-            ('JIN M', 'CAJARAVILLE M'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY',
-             'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'],
-            ('ORBEA A', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('CAJARAVILLE M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('CAJARAVILLE M', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('JIN M', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('SOTO M', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('HAN D', 'JIN M'): \
-                'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT',
-            ('HAN D', 'CAJARAVILLE M'): \
-                'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT',
-            ('MARIGOMEZ I', 'GARMENDIA L'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('HAN D', 'TONG X'): \
-                'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT',
-            ('IZAGIRRE U', 'ORBEA A'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('JIN M', 'MARIGOMEZ I'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY',
-            ('MARIGOMEZ I', 'SOTO M'): 'MARIGOMEZ I 2013 ECOTOXICOLOGY'
-        }
-
+        expected_edge_attribs_dict = {('TONG XX', 'HAN DM'): ['HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], ('CAJARAVILLE MP', 'JIN MG'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY', 'HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], ('IZAGIRRE U', 'SOTO M'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('MARIGOMEZ I', 'ORBEA A'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('JIN MG', 'MARIGOMEZ I'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('TONG XX', 'JIN MG'): ['HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], ('ORBEA A', 'GARMENDIA L'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('JIN MG', 'GARMENDIA L'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('IZAGIRRE U', 'MARIGOMEZ I'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('CAJARAVILLE MP', 'ORBEA A'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('JIN MG', 'ORBEA A'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('TONG XX', 'CAJARAVILLE MP'): ['HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], ('IZAGIRRE U', 'GARMENDIA L'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('CAJARAVILLE MP', 'GARMENDIA L'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('ORBEA A', 'SOTO M'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('JIN MG', 'SOTO M'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('CAJARAVILLE MP', 'HAN DM'): ['HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], ('CAJARAVILLE MP', 'SOTO M'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('IZAGIRRE U', 'CAJARAVILLE MP'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('CAJARAVILLE MP', 'MARIGOMEZ I'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('JIN MG', 'HAN DM'): ['HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], ('MARIGOMEZ I', 'GARMENDIA L'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('IZAGIRRE U', 'JIN MG'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('IZAGIRRE U', 'ORBEA A'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('SOTO M', 'GARMENDIA L'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], ('MARIGOMEZ I', 'SOTO M'): ['MARIGOMEZ I 2013 ECOTOXICOLOGY']}
 
         self.assertDictEqual(expected_edge_attribs_dict,\
                              obtained_edge_attribs_dict)
@@ -506,11 +476,9 @@ class TestCoauthorsGraph(unittest.TestCase):
         obtained_edge_attribs_list = \
                         self.coauthors_three_attribs.edges(data=True)
         #Need to properly format them in 80Char limit.
-        expected_edge_attribs_list = \
-        [('IZAGIRRE U', 'JIN M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('IZAGIRRE U', 'CAJARAVILLE M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('IZAGIRRE U', 'MARIGOMEZ I', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('IZAGIRRE U', 'ORBEA A', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('IZAGIRRE U', 'SOTO M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('IZAGIRRE U', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('HAN D', 'CAJARAVILLE M', {'date': 2013, 'ayjid': 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 'jtitle': 'ENVIRONMENTAL MONITORING AND ASSESSMENT'}), ('HAN D', 'JIN M', {'date': 2013, 'ayjid': 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 'jtitle': 'ENVIRONMENTAL MONITORING AND ASSESSMENT'}), ('HAN D', 'TONG X', {'date': 2013, 'ayjid': 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 'jtitle': 'ENVIRONMENTAL MONITORING AND ASSESSMENT'}), ('JIN M', 'TONG X', {'date': 2013, 'ayjid': 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 'jtitle': 'ENVIRONMENTAL MONITORING AND ASSESSMENT'}), ('JIN M', 'CAJARAVILLE M', {'date': [2013, 2013], 'jtitle': ['ECOTOXICOLOGY', 'ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY', 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT']}), ('JIN M', 'MARIGOMEZ I', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('JIN M', 'ORBEA A', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('JIN M', 'SOTO M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('JIN M', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('TONG X', 'CAJARAVILLE M', {'date': 2013, 'ayjid': 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT', 'jtitle': 'ENVIRONMENTAL MONITORING AND ASSESSMENT'}), ('CAJARAVILLE M', 'MARIGOMEZ I', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('CAJARAVILLE M', 'ORBEA A', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('CAJARAVILLE M', 'SOTO M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('CAJARAVILLE M', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('MARIGOMEZ I', 'ORBEA A', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('MARIGOMEZ I', 'SOTO M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('MARIGOMEZ I', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('ORBEA A', 'SOTO M', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('ORBEA A', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'}), ('SOTO M', 'GARMENDIA L', {'date': 2013, 'ayjid': 'MARIGOMEZ I 2013 ECOTOXICOLOGY', 'jtitle': 'ECOTOXICOLOGY'})]
+        expected_edge_attribs_list = [('IZAGIRRE U', 'CAJARAVILLE MP', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('IZAGIRRE U', 'JIN MG', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('IZAGIRRE U', 'MARIGOMEZ I', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('IZAGIRRE U', 'ORBEA A', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('IZAGIRRE U', 'SOTO M', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('IZAGIRRE U', 'GARMENDIA L', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('TONG XX', 'HAN DM', {'date': [2013], 'jtitle': ['ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'ayjid': ['HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'weight': 1}), ('TONG XX', 'CAJARAVILLE MP', {'date': [2013], 'jtitle': ['ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'ayjid': ['HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'weight': 1}), ('TONG XX', 'JIN MG', {'date': [2013], 'jtitle': ['ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'ayjid': ['HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'weight': 1}), ('CAJARAVILLE MP', 'JIN MG', {'date': [2013, 2013], 'jtitle': ['ECOTOXICOLOGY', 'ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY', 'HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'weight': 2}), ('CAJARAVILLE MP', 'HAN DM', {'date': [2013], 'jtitle': ['ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'ayjid': ['HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'weight': 1}), ('CAJARAVILLE MP', 'MARIGOMEZ I', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('CAJARAVILLE MP', 'ORBEA A', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('CAJARAVILLE MP', 'SOTO M', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('CAJARAVILLE MP', 'GARMENDIA L', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('JIN MG', 'HAN DM', {'date': [2013], 'jtitle': ['ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'ayjid': ['HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'], 'weight': 1}), ('JIN MG', 'MARIGOMEZ I', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('JIN MG', 'ORBEA A', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('JIN MG', 'SOTO M', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('JIN MG', 'GARMENDIA L', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('MARIGOMEZ I', 'ORBEA A', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('MARIGOMEZ I', 'SOTO M', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('MARIGOMEZ I', 'GARMENDIA L', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('ORBEA A', 'SOTO M', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('ORBEA A', 'GARMENDIA L', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1}), ('SOTO M', 'GARMENDIA L', {'date': [2013], 'jtitle': ['ECOTOXICOLOGY'], 'ayjid': ['MARIGOMEZ I 2013 ECOTOXICOLOGY'], 'weight': 1})]
 
         self.assertListEqual(expected_edge_attribs_list,obtained_edge_attribs_list)
-
 
     def tearDown(self):
             pass
@@ -533,29 +501,29 @@ class TestBiblioGraph(unittest.TestCase):
         wos_data = rd.wos.parse('./testin/wos_biblio.txt')
         wos_meta = rd.wos.convert(wos_data)
         self.ayjid_zero = nt.papers.bibliographic_coupling(wos_meta,
-                                                 'ayjid',
-                                                 0,
-                                                 'ayjid')
+                                                 citation_id='ayjid',
+                                                 threshold=0,
+                                                 node_id='ayjid')
         self.ayjid_one = nt.papers.bibliographic_coupling(wos_meta,
-                                               'ayjid',
-                                               1,
-                                               'ayjid')
+                                               citation_id='ayjid',
+                                               threshold=1,
+                                               node_id='ayjid')
         self.ayjid_two = nt.papers.bibliographic_coupling(wos_meta,
-                                               'ayjid',
-                                               2,
-                                               'ayjid')
+                                               citation_id='ayjid',
+                                               threshold=2,
+                                               node_id='ayjid')
         self.ayjid_attribs = nt.papers.bibliographic_coupling(wos_meta,
-                                                   'ayjid',
-                                                   1,
-                                                   'ayjid',
-                                                   'atitle',
-                                                   'aulast',
-                                                   'date',
-                                                   'citations')
+                                                   citation_id='ayjid',
+                                                   threshold=1,
+                                                   node_id='ayjid',
+                                                   node_attribs=['atitle',
+                                                                 'aulast',
+                                                                 'date',
+                                                                 'citations'])
         self.weighted = nt.papers.bibliographic_coupling(wos_meta,
-                                               'ayjid',
-                                               0.5,
-                                               'ayjid',
+                                               citation_id='ayjid',
+                                               threshold=0.5,
+                                               node_id='ayjid',
                                                weighted=True)
 
         # define a separate file for the missing citations test case
@@ -565,15 +533,15 @@ class TestBiblioGraph(unittest.TestCase):
         doc_list_cite = rd.wos.convert(wos_cite)
         self.missing_citations_zero = \
                 nt.papers.bibliographic_coupling(doc_list_cite,
-                                                             'ayjid',
-                                                             0,
-                                                             'ayjid')
+                                                 citation_id='ayjid',
+                                                 threshold=0,
+                                                 node_id='ayjid')
 
         self.missing_citations_one = \
                     nt.papers.bibliographic_coupling(doc_list_cite,
-                                                            'ayjid',
-                                                            1,
-                                                            'ayjid')
+                                                     citation_id='ayjid',
+                                                     threshold=1,
+                                                     node_id='ayjid')
 
     def test_ayjid_zero(self):
         """
@@ -611,8 +579,8 @@ class TestBiblioGraph(unittest.TestCase):
         Unweighted similarities.
         """
         edges = self.ayjid_one.edges(data=True)
-        self.assertEqual(edges[0][2]['similarity'], 2)
-        self.assertEqual(edges[1][2]['similarity'], 1)
+        self.assertEqual(edges[0][2]['similarity'], 1)
+        self.assertEqual(edges[1][2]['similarity'], 2)
         self.assertEqual(edges[2][2]['similarity'], 1)
 
     def test_weighted(self):
@@ -620,8 +588,8 @@ class TestBiblioGraph(unittest.TestCase):
         Weighted similarities.
         """
         edges = self.weighted.edges(data=True)
-        self.assertEqual(edges[0][2]['similarity'], 1.0)
-        self.assertEqual(edges[1][2]['similarity'], 0.5)
+        self.assertEqual(edges[0][2]['similarity'], 0.5)
+        self.assertEqual(edges[1][2]['similarity'], 1.0)
         self.assertEqual(edges[2][2]['similarity'], 0.5)
 
     def test_attribs(self):
@@ -651,7 +619,7 @@ class TestBiblioGraph(unittest.TestCase):
                           'IBRAUT>2.0.CO;2')]
         node1_citations = []
         for cite in node1_cr_list:
-            node1_citations.append(rd.wos.parse_cr(cite))
+            node1_citations.append(rd.wos._parse_cr(cite))
         node1_expected_attribs = {'atitle':node1_atitle,
                                   'date':node1_date,
                                   'aulast':node1_aulast,
@@ -674,7 +642,7 @@ class TestBiblioGraph(unittest.TestCase):
                           'IBRAUT>2.0.CO;2')]
         node2_citations = []
         for cite in node2_cr_list:
-            node2_citations.append(rd.wos.parse_cr(cite))
+            node2_citations.append(rd.wos._parse_cr(cite))
         node2_expected_attribs = {'atitle':node2_atitle,
                                   'date':node2_date,
                                   'aulast':node2_aulast,
@@ -695,7 +663,7 @@ class TestBiblioGraph(unittest.TestCase):
                           '<1316:IBRAUT>2.0.CO;2')]
         node3_citations = []
         for cite in node3_cr_list:
-            node3_citations.append(rd.wos.parse_cr(cite))
+            node3_citations.append(rd.wos._parse_cr(cite))
         node3_expected_attribs = {'atitle':node3_atitle,
                                   'date':node3_date,
                                   'aulast':node3_aulast,
@@ -746,22 +714,21 @@ class TestAuthorCouplingGraph(unittest.TestCase):
         meta_list = rd.wos.convert(wos_data)
 
         self.ayjid_zero = nt.papers.author_coupling(meta_list,
-                                                0,
-                                                'ayjid')
+                                                threshold=0,
+                                                node_id='ayjid')
 
         self.ayjid_one = nt.papers.author_coupling(meta_list,
-                                               1,
-                                               'ayjid')
+                                               threshold=1,
+                                               node_id='ayjid')
 
         self.ayjid_two = nt.papers.author_coupling(meta_list,
-                                               2,
-                                               'ayjid')
+                                               threshold=2,
+                                               node_id='ayjid')
 
         self.ayjid_attribs = nt.papers.author_coupling(meta_list,
-                                                   1,
-                                                   'ayjid',
-                                                   'atitle',
-                                                   'date')
+                                               threshold=1,
+                                               node_id='ayjid',
+                                               node_attribs=['atitle','date'])
     def test_ayjid_zero(self):
         # with four papers there are 4 nodes
         self.assertEqual(nx.number_of_nodes(self.ayjid_zero), 4)
@@ -804,7 +771,7 @@ class TestAuthorCouplingGraph(unittest.TestCase):
         node2_date = 2013
         node2_expected_attribs = {'atitle':node2_atitle,
                                   'date':node2_date}
-        node2_ayjid = 'HAN D 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'
+        node2_ayjid = 'HAN DM 2013 ENVIRONMENTAL MONITORING AND ASSESSMENT'
 
         # paper 3 meta data
         node3_atitle = ('Multilevel governance and management of shared' +
@@ -822,12 +789,13 @@ class TestAuthorCouplingGraph(unittest.TestCase):
         node4_date = 2013
         node4_expected_attribs = {'atitle':node4_atitle,
                                   'date':node4_date}
-        node4_ayjid = 'LIU L 2013 ENVIRONMENTAL TOXICOLOGY AND CHEMISTRY'
+        node4_ayjid = 'LIU LY 2013 ENVIRONMENTAL TOXICOLOGY AND CHEMISTRY'
 
         # test attribute expectations
         node_id_list = [node1_ayjid, node2_ayjid, node3_ayjid, node4_ayjid]
         node_attrib_list = [node1_expected_attribs, node2_expected_attribs,
                             node3_expected_attribs, node4_expected_attribs]
+
         for i in xrange(len(node_id_list)):
             node = node_id_list[i]
             obtained_attribs = self.ayjid_attribs.node[node]
@@ -949,7 +917,9 @@ class TestAuthorInstitution(unittest.TestCase):
 
         self.edge_attribs_zero = nt.authors.author_institution(meta_list)
 
-        self.edge_attribs_one = nt.authors.author_institution(meta_list,'date')
+        self.edge_attribs_one = nt.authors.author_institution(
+                                                        meta_list,
+                                                        edge_attribs=['date'])
 
 
 
@@ -968,57 +938,36 @@ class TestAuthorInstitution(unittest.TestCase):
         obtained_node_attribs_dict = nx.get_node_attributes \
                     (self.node_attribs_check,"type")
 
-        expected_node_attribs_dict = {'Natl Chung Cheng Univ': 'institution', \
-            'Victoria Univ': 'institution',
-         'ZHANG, YC': 'author', 'ACAMPORA, G': 'author', \
-             'Univ Sci & Technol China': 'institution',
-         'Huang, TCK': 'author', 'Eindhoven Univ Technol': 'institution',
-         'XU, GD': 'author', \
-             'Inst Sci & Technol Informat Zhejiang Prov': 'institution',
-         'WU, ZD': 'author', 'Wenzhou Univ': 'institution', \
-             'Northwestern Polytech Univ': 'institution',
-          'LU, CL': 'author', 'CHEN, EH': 'author', \
-              'VITIELLO, A': 'author',
-          'Univ Salerno': 'institution', 'ZHANG, H': 'author',
-          'LOIA, V': 'author', 'Univ Technol Sydney': 'institution'}
+        expected_node_attribs_dict = {'VITIELLO A': 'author', 'WENZHOU UNIV, PEOPLES R CHINA': 'institution', 'CHEN EH': 'author', 'UNIV SALERNO, ITALY': 'institution', 'XU GD': 'author', 'VICTORIA UNIV, AUSTRALIA': 'institution', 'ZHANG YC': 'author', 'LU CL': 'author', 'UNIV SCI & TECHNOL CHINA, PEOPLES R CHINA': 'institution', 'NATL CHUNG CHENG UNIV, TAIWAN': 'institution', 'LOIA V': 'author', 'EINDHOVEN UNIV TECHNOL, NETHERLANDS': 'institution', 'UNIV TECHNOL SYDNEY, AUSTRALIA': 'institution', 'NORTHWESTERN POLYTECH UNIV, PEOPLES R CHINA': 'institution', 'HUANG TCK': 'author', 'INST SCI & TECHNOL INFORMAT ZHEJIANG PROV, PEOPLES R CHINA': 'institution', 'ACAMPORA G': 'author', 'ZHANG H': 'author', 'WU ZD': 'author'}
 
         self.assertDictEqual(obtained_node_attribs_dict, \
                              expected_node_attribs_dict, \
-                             "Node attribs of Author institutions Equal")
+                             "Node attribs of Author institutions not Equal")
 
     def test_edge_attribs_zero(self):
 
-        obtained_edge_attribs_dict = \
-        nx.get_edge_attributes(self.edge_attribs_zero,"")
+        obtained_edge_attribs_dict = nx.get_edge_attributes(
+                                                        self.edge_attribs_zero,
+                                                        "")
 
         expected_edge_attribs_dict = {}
 
         self.assertDictEqual(expected_edge_attribs_dict, \
                             obtained_edge_attribs_dict, \
-                            "Edge Attribs are equal")
+                            "Edge Attribs are not equal")
 
 
     def test_edge_attribs_one(self):
 
-       obtained_edge_attribs_dict = \
-            nx.get_edge_attributes(self.edge_attribs_one, "date")
+        obtained_edge_attribs_dict = nx.get_edge_attributes(
+                                                        self.edge_attribs_one, 
+                                                        "date")
 
-       expected_edge_attribs_dict = {('Wenzhou Univ', 'LU, CL'): 2012, \
-            ('ACAMPORA, G', 'Eindhoven Univ Technol'): 1999,
-            ('Univ Technol Sydney', 'XU, GD'): 2012,\
-            ('Northwestern Polytech Univ', 'LU, CL'): 2012, \
-            ('Univ Salerno', 'LOIA, V'): 1999, \
-            ('ZHANG, YC', 'Victoria Univ'): 2012,\
-            ('Inst Sci & Technol Informat Zhejiang Prov', 'ZHANG, H'): 2012,\
-            ('WU, ZD', 'Wenzhou Univ'): 2012,
-            ('Natl Chung Cheng Univ', 'Huang, TCK'): 2013, \
-            ('Univ Sci & Technol China', 'CHEN, EH'): 2012, \
-            ('WU, ZD', 'Univ Sci & Technol China'): 2012, \
-            ('VITIELLO, A', 'Univ Salerno'): 1999}
+        expected_edge_attribs_dict = {('WENZHOU UNIV, PEOPLES R CHINA', 'LU CL'): 2012, ('NATL CHUNG CHENG UNIV, TAIWAN', 'HUANG TCK'): 2013, ('EINDHOVEN UNIV TECHNOL, NETHERLANDS', 'ACAMPORA G'): 1999, ('WENZHOU UNIV, PEOPLES R CHINA', 'WU ZD'): 2012, ('CHEN EH', 'UNIV SCI & TECHNOL CHINA, PEOPLES R CHINA'): 2012, ('UNIV SCI & TECHNOL CHINA, PEOPLES R CHINA', 'WU ZD'): 2012, ('VICTORIA UNIV, AUSTRALIA', 'ZHANG YC'): 2012, ('VITIELLO A', 'UNIV SALERNO, ITALY'): 1999, ('XU GD', 'UNIV TECHNOL SYDNEY, AUSTRALIA'): 2012, ('ZHANG H', 'INST SCI & TECHNOL INFORMAT ZHEJIANG PROV, PEOPLES R CHINA'): 2012, ('LU CL', 'NORTHWESTERN POLYTECH UNIV, PEOPLES R CHINA'): 2012, ('UNIV SALERNO, ITALY', 'LOIA V'): 1999}
 
-       self.assertDictEqual(expected_edge_attribs_dict, \
+        self.assertDictEqual(expected_edge_attribs_dict, \
                             obtained_edge_attribs_dict, \
-                            "Edge Attribs are equal")
+                            "Edge Attribs are not equal")
 
 
     def tearDown(self):
@@ -1107,12 +1056,12 @@ class TestAuthorCoinstitution(unittest.TestCase):
             nx.get_node_attributes(self.node_attribs_check,"type")
 
         expected_node_attribs_dict = \
-            {'WU, ZD': 'author', 'VITIELLO, A': 'author',
-                'LU, CL': 'author', 'LOIA, V': 'author', 'CHEN, EH': 'author'}
+            {'WU ZD': 'author', 'VITIELLO A': 'author',
+                'LU CL': 'author', 'LOIA V': 'author', 'CHEN EH': 'author'}
 
-        self.assertDictEqual \
-        (expected_node_attribs_dict, \
-                    obtained_node_attribs_dict, " Node Attribs are not same")
+        self.assertDictEqual(expected_node_attribs_dict,
+                             obtained_node_attribs_dict,
+                             "Node Attribs are not same")
 
     def tearDown(self):
          pass
@@ -1238,21 +1187,21 @@ class TestTopCitedParameters(unittest.TestCase):
         meta_list = rd.wos.convert(wos_data)
 
         # Trying with no function arguments as there are default ones.
-        self.top_cited,self.citation_count = nt.papers.top_cited(meta_list)
+        self.top_cited,self.citation_count = nt.helpers.top_cited(meta_list)
 
         self.top_parents,self.top_cited,self.citation_count = \
-                                            nt.papers.top_parents(meta_list)
+                                            nt.helpers.top_parents(meta_list)
 
-        self.citation_count = nt.papers.citation_count(meta_list)
+        self.citation_count = nt.helpers.citation_count(meta_list)
 
         # Trying with different function argument other than default one.
         self.top_cited_date,self.citation_count_date = \
-                                 nt.papers.top_cited(meta_list,10)
+                                 nt.helpers.top_cited(meta_list,10)
 
         self.top_parents_date,self.top_cited_date,self.citation_count_date  = \
-                        nt.papers.top_parents(meta_list,12)
+                        nt.helpers.top_parents(meta_list,12)
 
-        self.citation_count_date = nt.papers.citation_count(meta_list,'date')
+        self.citation_count_date = nt.helpers.citation_count(meta_list,'date')
 
         # TypeError slice indices must be integers or None or \
         #  have an __index__ method

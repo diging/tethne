@@ -417,68 +417,6 @@ def _parse_cr(ref):
 
     return paper
 
-def _parse_institutions(ref):
-    """
-    Supports the Web of Science reader by converting the strings found at the C1
-    fieldtag of a record into a minimum :class:`.Paper` instance.
-
-    Parameters
-    ----------
-    ref : str
-        'C1' field tag data from a plain text Web of Science file which contains
-        Author First and Last names, Institution affiliated, and the
-        location/city where they are affiliated to.
-
-    Returns
-    -------
-    addr_dict : :class:`.Paper`
-        A :class:`.Paper` instance.
-
-    Raises
-    ------
-    IndexError
-        When input 'ref' has less number of tokens than necessary ones.
-
-    ValueError
-        Gets input with mismacthed inputtype. Ex: getting no numbers for a date
-        field.
-
-    Notes
-    -----
-    Needs to check many test cases to check various input types.
-
-    """
-    addr_dict = ds.Paper()
-    #tokens of form:
-    tokens = ref.split(',')
-
-    try:
-
-        name = tokens[0]
-        name_tokens = name.split(' ')
-        addr_dict['aulast'] = name_tokens[0]
-        addr_dict['auinit'] = name_tokens[1]
-
-        #strip initial characters based on the field (spaces, 'V', 'DOI')
-        addr_dict['addr2'] = tokens[1][1:]
-        addr_dict['addr3'] = tokens[2][1:]
-        addr_dict['country'] = tokens[3][2:]
-
-    except IndexError:
-        #ref did not have the full set of tokens
-        pass
-    except ValueError:
-        #this occurs when the program expects a date but gets a string with
-        #no numbers, we leave the field incomplete because chances are
-        #the CR string is too sparse to use anyway
-        pass
-
-    auinsid = _create_ayjid(addr_dict['aulast'], addr_dict['auinit'],
-                         addr_dict['date'], addr_dict['jtitle'])
-    addr_dict['auinsid'] = auinsid
-
-    return addr_dict
-
 def convert(wos_data):
     """
     Convert parsed field-tagged data to :class:`.Paper` instances.
