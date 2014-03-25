@@ -17,6 +17,14 @@ writers Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`corpora` Module
+---------------------
+
+.. automodule:: tethne.writers.corpora
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`graph` Module
 -------------------
 

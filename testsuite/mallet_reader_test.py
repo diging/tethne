@@ -1,3 +1,6 @@
+import sys
+sys.path.append("../")
+
 import unittest
 import tethne.readers as rd
 from tethne.data import Paper

@@ -1,3 +1,5 @@
+.. _quickstart_cl:
+
 Quickstart (Command-line)
 =========================
 

@@ -1,3 +1,6 @@
+import sys
+sys.path.append("../")
+
 import unittest
 import tethne.data as ds
 import networkx as nx
@@ -88,7 +91,7 @@ class TestGraphCollection(unittest.TestCase):
         C[0].add_edge(2,0)
         C.save(self.correct_filename)
 
-        self.assertIsInstance(C,type(C), msg="yes it is a object")
+        self.assertIsInstance(C,type(C))
         
         self.g1 = ds.GraphCollection()
         self.g2 = ds.GraphCollection()
@@ -99,8 +102,13 @@ class TestGraphCollection(unittest.TestCase):
         meta_list= rd.wos.convert(wos_list)
 
 
-        coauthors = nt.authors.coauthors(meta_list, 'date','jtitle','ayjid')
-        author_coup = nt.papers.author_coupling(meta_list, 1, 'ayjid', 'atitle')
+        coauthors = nt.authors.coauthors(meta_list, edge_attribs=['date',
+                                                                  'jtitle',
+                                                                  'ayjid'])
+        author_coup = nt.papers.author_coupling(meta_list,
+                                                threshold=1, 
+                                                edge_attribs=['ayjid', 
+                                                              'atitle'])
 
 
         self.g1.__setitem__('ayjid',coauthors)
@@ -110,16 +118,11 @@ class TestGraphCollection(unittest.TestCase):
         self.save_nodes = self.g1.nodes()
         self.save_edges = self.g1.edges()
 
-        self.g1.save\
-            ("../testsuite/testout/graphcollections.txt")
+        self.g1.save("../testsuite/testout/graphcollections.txt")
 
         obtained = set(self.g1.nodes())
-        expected = set (['TUERHONG G', 'CHEN T', 'BARRENECHEA E', 'KANG P', \
-                         'GALAR M', 'ZHANG B', 'CHO S', 'CHEN F', 'YE G', \
-                         'MAALEJ W', 'FERNANDEZ A', 'HUANG J', 'PAGANO D', \
-                         'HERMAN G', 'KIM S', 'VATALIS K', 'WANG Y', \
-                         'HERRERA F', 'MODIS K'])
-                
+        expected = set(['VATALIS KI', 'MAALEJ W', 'YE G', 'KANG P', 'FERNANDEZ A', 'CHEN TY', 'WANG Y', 'MODIS K', 'KIM SB', 'HUANG JH', 'BARRENECHEA E', 'PAGANO D', 'TUERHONG G', 'GALAR M', 'ZHANG B', 'CHO S', 'HERRERA F', 'HERMAN G', 'CHEN FT'])
+        
         self.assertSetEqual(obtained, expected, "nodes not as expected")
     
 

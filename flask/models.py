@@ -8,6 +8,15 @@ from persistent import Persistent
 from persistent.list import PersistentList as List
 from persistent.mapping import PersistentMapping as Dict
 
+from ZODB.FileStorage import FileStorage
+from ZODB.DB import DB
+import ZODB.config
+import transaction
+from hashlib import sha256
+
+
+
+
 class User(Persistent):
         
     """
@@ -27,8 +36,35 @@ class User(Persistent):
         self.role = "user"
         self._p_changed = 1 # for mutable objects
 
-
+    def get_user(self,name,password):
+        initialize_userdb()
+        print "In get_user"
+        pass
+    
+    def is_authenticated(self):
+        pass
+    
+    def is_anonymous(self):
+        pass
+    
+    def initialize_userdb(self):
+        """
+        User DB is initialized
+        """
+        storage = FileStorage('./storage/userdb.fs')
+        conn = DB(storage)
+        dbroot = conn.open().root()
+        print ("DB initialized")
         
+    def is_active(self):
+        return True
+  
+    def get_id(self):
+        return unicode(self.id)
+ 
+    def __repr__(self):
+        return '<User %r>' % (self.name)
+
 class ManageUsers(User):
 	
 	"""
@@ -42,15 +78,15 @@ class ManageUsers(User):
 		self._p_changed = 1
     	
    
-    # def list_users(self,user, email):
+    # def list_users(self):
 #         # only for admin - whose role is "0"
 #         pass
 #     
-#     def edit_users(self,UserObject):
+#     def approve_user(self,UserObject):
 #         # only for admin
 #         pass
 #     
-#     def del_users(self):
+#     def del_user(self,UserObject):
 #         # only for admin
 #         pass
 #    
@@ -114,8 +150,58 @@ class SaveNetworks(object):
     """
     
     def __init__(self,type):
-        pass                       
+        pass        
+                   
+class BaseDataTables:
+    
+    """
+    Need to format PyDocs.
+        
+    """
+    def __init__(self, request, columns, collection):
+        
+        self.columns = columns
 
+        self.collection = collection
+         
+        # values specified by the datatable for filtering, sorting, paging
+        self.request_values = request.values
+         
+ 
+        # results from the db
+        self.result_data = None
+         
+        # total in the table after filtering
+        self.cardinality_filtered = 0
+ 
+        # total in the table unfiltered
+        self.cadinality = 0
+ 
+        self.run_queries()
+    
+    def output_result(self):
+        
+        output = {}
+        aaData_rows = []
+        
+        for row in self.result_data:
+            aaData_row = []
+            for i in range(len(self.columns)):
+                print row, self.columns, self.columns[i]
+                aaData_row.append(str(row[ self.columns[i] ]).replace('"','\\"'))
+            aaData_rows.append(aaData_row)
+            
+        output['aaData'] = aaData_rows
+        return output
+    
+    def run_queries(self):
+        
+         self.result_data = self.collection
+         self.cardinality_filtered = len(self.result_data)
+         self.cardinality = len(self.result_data)
+        
+    
+    
     
         
         

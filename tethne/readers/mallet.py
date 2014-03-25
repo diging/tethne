@@ -2,6 +2,9 @@
 Reader for output from topic modeling with MALLET.
 """
 
+import sys
+sys.path.append('/Users/erickpeirson/Dropbox/DigitalHPS/Scripts/tethne')
+
 import csv
 import numpy as np
 from tethne.data import LDAModel, Paper
