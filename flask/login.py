@@ -34,13 +34,22 @@ def set_db_defaults():
 def get_user_details():
     storage = FileStorage('./storage/userdb.fs')
     conn = DB(storage)
-    print "Get User Deatails:",conn, type(conn),
-    dbroot = conn.open().root()
-    print "Get_user_details", dbroot['userdb'].values(), "#####keys",dbroot['userdb'].keys(), type(dbroot['userdb'])
-    if name in dbroot['userdb'].keys():
-      for key in dbroot['userdb'].keys():
-          print "\nkey is" , key 
-          print "\ndbroot['userdb'][key]", dbroot['userdb'][key]
+    #print "Get User Deatails:",conn, type(conn),
+    dbroot = conn.open().root() 
+    columns = [ 'S.No', 'User Name', 'Institution', 'Email ID'] 
+    abc = [('1',dbroot['userdb'][key].name,dbroot['userdb'][key].id, dbroot['userdb'][key].institution) for key in dbroot['userdb'].keys()]
+    #remove unicode characters
+    new_list =[','.join(list(each_item)) for each_item in abc]
+    unicode_removed_list = [n.encode('ascii','ignore') for n in new_list]
+    for val1 in unicode_removed_list:
+        each_list = val1.split(',')  
+        try:
+            collection += [dict(zip(columns, each_list))]
+        except UnboundLocalError,KeyError:
+            collection = [dict(zip(columns, each_list))]
+    results = mod.BaseDataTables(request, columns, collection).output_result()
+    return json.dumps(results)   
+    
           
 
     
@@ -112,11 +121,37 @@ def ok():
                
 @app.route('/admin', methods=['GET','POST'])
 def admin():
-    print " session can be accessed here as well", session, session['username']
-    columns = [ 'S.No', 'User Name', 'Institution', 'Email ID', 'Status', 'Active']
-    return render_template('pages/admin.home.html', columns=columns)
+    if request.method == 'GET'  : #and name != None
+        columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
+        return render_template('pages/admin.home.html', columns=columns)
+        print " Its coming out"
+    columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
+    user_details =get_user_details()
+    results = json.dumps(user_details)
+    #print "results:", results
+    return render_template('pages/admin.home.html', columns=columns,results=results)
     return 'Hello World!'
-    #return render_template('pages/admin.home.html')
+    
+@app.route('/_user_data')
+def get_user_data():
+    
+        print "comes here"
+        #columns = [ 'S.No chANGED', 'User Name', 'Institution', 'Email ID', 'Status', 'Active']
+    
+        #collection = [dict(zip(columns, [1,'Ramki',2,3,4,6])), dict(zip(columns, [2,'user889',5,5,33,7]))]
+        
+        #print "collection" , collection
+        
+        #results = BaseDataTables(request, columns, collection).output_result()
+        
+        #return the results as a string for the datatable
+        #print "results:", results
+        print " session can be accessed here as well", session, session['username']
+        columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
+        user_details =get_user_details()
+        results = json.dumps(user_details)
+   
+        return results
                
 @app.route('/user', methods=['GET','POST'])
 def user():
@@ -410,70 +445,10 @@ if not app.debug:
     app.logger.addHandler(file_handler)
     app.logger.info('errors')
 
-class BaseDataTables:
-    
-    """
-    Need to format PyDocs.
-        
-    """
-    def __init__(self, request, columns, collection):
-        
-        self.columns = columns
-
-        self.collection = collection
-         
-        # values specified by the datatable for filtering, sorting, paging
-        self.request_values = request.values
-         
- 
-        # results from the db
-        self.result_data = None
-         
-        # total in the table after filtering
-        self.cardinality_filtered = 0
- 
-        # total in the table unfiltered
-        self.cadinality = 0
- 
-        self.run_queries()
-    
-    def output_result(self):
-        
-        output = {}
-        aaData_rows = []
-        
-        for row in self.result_data:
-            aaData_row = []
-            for i in range(len(self.columns)):
-                print row, self.columns, self.columns[i]
-                aaData_row.append(str(row[ self.columns[i] ]).replace('"','\\"'))
-            aaData_rows.append(aaData_row)
-            
-        output['aaData'] = aaData_rows
-        
-        return output
-    
-    def run_queries(self):
-        
-         self.result_data = self.collection
-         self.cardinality_filtered = len(self.result_data)
-         self.cardinality = len(self.result_data)
 
 
 
-@app.route('/get_server_data')
-def get_server_data():
-        
-        columns = [ 'S.No', 'User Name', 'Institution', 'Email ID', 'Status', 'Active']
-    
-        collection = [dict(zip(columns, [1,'Ramki',2,3,4,6])), dict(zip(columns, [2,'user889',5,5,33,7]))]
-        
-        results = BaseDataTables(request, columns, collection).output_result()
-        
-        # return the results as a string for the datatable
-        print "results:", results
 
-        return json.dumps(results)
 
 
 
