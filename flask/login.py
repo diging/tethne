@@ -37,11 +37,13 @@ def get_user_details():
     #print "Get User Deatails:",conn, type(conn),
     dbroot = conn.open().root() 
     columns = [ 'S.No', 'User Name', 'Institution', 'Email ID'] 
+    results = []
     abc = [('1',dbroot['userdb'][key].name,dbroot['userdb'][key].id, dbroot['userdb'][key].institution) for key in dbroot['userdb'].keys()]
     #remove unicode characters
     new_list =[','.join(list(each_item)) for each_item in abc]
     unicode_removed_list = [n.encode('ascii','ignore') for n in new_list]
     for val1 in unicode_removed_list:
+<<<<<<< HEAD
         each_list = val1.split(',')  
         try:
             collection += [dict(zip(columns, each_list))]
@@ -51,6 +53,35 @@ def get_user_details():
     #return json.dumps(results)   
     print "results", results
     return results
+=======
+        each_list = val1.split(',') 
+     	results.append(each_list)
+    return results
+     
+
+def del_user_details():
+    storage = FileStorage('./storage/userdb.fs')
+    conn = DB(storage)
+    #print "Get User Deatails:",conn, type(conn),
+    dbroot = conn.open().root() 
+    
+def update_user_details():
+    storage = FileStorage('./storage/userdb.fs')
+    conn = DB(storage)
+    #print "Get User Deatails:",conn, type(conn),
+    dbroot = conn.open().root() 
+    
+
+       #  try:
+#             collection = [dict(zip(columns, each_list))]
+#         except UnboundLocalError,KeyError:
+#             collection = [dict(zip(columns, each_list))]
+    #results = mod.BaseDataTables(request, columns, collection).output_result()
+    print results
+    return results 
+    #return json.dumps(results)   
+    
+>>>>>>> python
           
 def list_user_details():
     storage = FileStorage('./storage/userdb.fs')
@@ -145,6 +176,7 @@ def ok():
 @app.route('/admin', methods=['GET','POST'])
 def admin():
     if request.method == 'GET'  : #and name != None
+<<<<<<< HEAD
 #         columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
 #         #return render_template('pages/admin.home.html', columns=columns)
 #         print " Its coming out"
@@ -156,6 +188,19 @@ def admin():
         return 'Hello World!'
     
 @app.route("/_user_data")
+=======
+        # columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
+		# return render_template('pages/admin.home.html', columns=columns)
+		# print " Its coming out"
+    	columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
+    	results =get_user_details()
+   	    #results = json.dumps(user_details)
+   	    #print "results:", results
+    return render_template('pages/admin.home.html', columns=columns,results=results)
+    return 'Hello World!'
+    
+@app.route('/user_data')
+>>>>>>> python
 def get_user_data():
     
         print "comes here"
@@ -174,7 +219,8 @@ def get_user_data():
         user_details =get_user_details()
         
         results = json.dumps(user_details)
-   
+            #results  = [ {"S.No" : "1"},{"User Name" : "Admin"} , {"Institution" : "ASU"} ,
+    #		 {"Email ID" : "admin@asu.edu"} ]
         return results
                
 @app.route('/user', methods=['GET','POST'])
