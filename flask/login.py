@@ -43,19 +43,8 @@ def get_user_details():
     new_list =[','.join(list(each_item)) for each_item in abc]
     unicode_removed_list = [n.encode('ascii','ignore') for n in new_list]
     for val1 in unicode_removed_list:
-<<<<<<< HEAD
-        each_list = val1.split(',')  
-        try:
-            collection += [dict(zip(columns, each_list))]
-        except UnboundLocalError,KeyError:
-            collection = [dict(zip(columns, each_list))]
-    results = mod.BaseDataTables(request, columns, collection).output_result()
-    #return json.dumps(results)   
-    print "results", results
-    return results
-=======
         each_list = val1.split(',') 
-     	results.append(each_list)
+        results.append(each_list)
     return results
      
 
@@ -81,46 +70,23 @@ def update_user_details():
     return results 
     #return json.dumps(results)   
     
->>>>>>> python
           
-def list_user_details():
-    storage = FileStorage('./storage/userdb.fs')
-    conn = DB(storage)
-    #print "Get User Deatails:",conn, type(conn),
-    dbroot = conn.open().root() 
-    columns = [ 'S.No', 'User Name', 'Institution', 'Email ID'] 
-    abc = [('1',dbroot['userdb'][key].name,dbroot['userdb'][key].id, dbroot['userdb'][key].institution) for key in dbroot['userdb'].keys()]
-    #remove unicode characters
-    new_list =[','.join(list(each_item)) for each_item in abc]
-    unicode_removed_list = [n.encode('ascii','ignore') for n in new_list]
-    for val1 in unicode_removed_list:
-        each_list = val1.split(',')  
-        print "each_list", each_list
-    #results = mod.BaseDataTables(request, columns, collection).output_result()
-    #return json.dumps(results)   
-    results = "No":"1", "Name":"Ramki"], ["No":"1", "Name":"Ramki"]]
-    print "keys",results.keys(),"val", type(results)
-    
-    for k,v in results.iteritems():
-        print 'key',k 
-    
-    return results          
 
     
 
 # @app.before_request
 # def set_db_defaults():
-# 	storage = FileStorage('./storage/users.fs')
-# 	db = DB(storage)
-# 	print "Type start:",db, type(db)
-# 	connection = db.open()
-# 	# dbroot is a dict like structure.
-# 	dbroot = connection.root()  # retrieving the root of the tree
-# 	for val in ['userdb']:
-# 		if not val in dbroot.keys():
-# 			print " donot create this always"
-# 			dbroot[val] = Dict()
-# 			print "user db dbroot:",dbroot['userdb'], type (dbroot['userdb'])
+#     storage = FileStorage('./storage/users.fs')
+#     db = DB(storage)
+#     print "Type start:",db, type(db)
+#     connection = db.open()
+#     # dbroot is a dict like structure.
+#     dbroot = connection.root()  # retrieving the root of the tree
+#     for val in ['userdb']:
+#         if not val in dbroot.keys():
+#             print " donot create this always"
+#             dbroot[val] = Dict()
+#             print "user db dbroot:",dbroot['userdb'], type (dbroot['userdb'])
 
 # Commented part
 # ZEO commented as of now.
@@ -176,31 +142,17 @@ def ok():
 @app.route('/admin', methods=['GET','POST'])
 def admin():
     if request.method == 'GET'  : #and name != None
-<<<<<<< HEAD
-#         columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
-#         #return render_template('pages/admin.home.html', columns=columns)
-#         print " Its coming out"
-        columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
-        user_details =list_user_details()
-        results = json.dumps(user_details)
-        #print "results:", results
-        return render_template('pages/admin.home.html', columns=columns,results=results)
-        return 'Hello World!'
-    
-@app.route("/_user_data")
-=======
         # columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
-		# return render_template('pages/admin.home.html', columns=columns)
-		# print " Its coming out"
-    	columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
-    	results =get_user_details()
-   	    #results = json.dumps(user_details)
-   	    #print "results:", results
+        # return render_template('pages/admin.home.html', columns=columns)
+        # print " Its coming out"
+        columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
+        results =get_user_details()
+           #results = json.dumps(user_details)
+           #print "results:", results
     return render_template('pages/admin.home.html', columns=columns,results=results)
     return 'Hello World!'
     
 @app.route('/user_data')
->>>>>>> python
 def get_user_data():
     
         print "comes here"
@@ -217,10 +169,9 @@ def get_user_data():
         print " session can be accessed here as well", session, session['username']
         columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
         user_details =get_user_details()
-        
         results = json.dumps(user_details)
             #results  = [ {"S.No" : "1"},{"User Name" : "Admin"} , {"Institution" : "ASU"} ,
-    #		 {"Email ID" : "admin@asu.edu"} ]
+    #         {"Email ID" : "admin@asu.edu"} ]
         return results
                
 @app.route('/user', methods=['GET','POST'])
@@ -230,8 +181,8 @@ def user():
                
 @app.route('/place', methods=['GET','POST'])
 def place():
-	print "Are u coming here or not?" 
-	return render_template('pages/placeholder.home.html')
+    print "Are u coming here or not?" 
+    return render_template('pages/placeholder.home.html')
 
 @app.route('/', methods=['GET','POST'])
 def home():
@@ -327,9 +278,9 @@ def load_user(userid):
 #             print "3.Login start:",conn, type(conn),form.name.data
 #             dbroot = conn.open().root()
 #             try: 
-#             	print "dbroot['userdb'].values()", dbroot['userdb'].values(), "keys",dbroot['userdb'].keys() , dbroot['userdb']
+#                 print "dbroot['userdb'].values()", dbroot['userdb'].values(), "keys",dbroot['userdb'].keys() , dbroot['userdb']
 #                 #for val in dbroot['userdb'].values():
-#         		#		print "value is : " , val, val.name,val.email,"form", form
+#                 #        print "value is : " , val, val.name,val.email,"form", form
 #                 
 #                 # This gives error.  as the ImmutableDict request.form is empty
 #                 #uname = request.form['name']
@@ -337,7 +288,7 @@ def load_user(userid):
 #                 #print " 4.The arguments [ '' method]: Login form:", uname, pswd
 #                 print " 4.Login form data:", form.name.data, form.name.description,form.name.label
 #                 for key in dbroot['userdb'].keys():
-#         					#print "Yess!!", key, session['username'] 
+#                             #print "Yess!!", key, session['username'] 
 #                             #if  session['username'] == key :
 #                     if name == 'admin' :
 #                             # Need to get username from the form  password = sha256(password
@@ -353,9 +304,9 @@ def load_user(userid):
 #                               
 #             except:
 #                 #flash('Username or password failed')
-#             	print " donot come here : except"
+#                 print " donot come here : except"
 #                 pass           
-#                	
+#                    
 #     else:
 #             print "comes in else"
 #             flash("Login Failed") #return redirect(url_for('login'))
@@ -455,34 +406,34 @@ def register():
 #                 if 'Register' in request.form:
 #                     print "inside if"
 #                 else:
-#                 	print "inside else"
-    	storage = FileStorage('./storage/userdb.fs')
-    	conn = DB(storage)
-    	print "Type start:",conn, type(conn)
-    	dbroot = conn.open().root()
+#                     print "inside else"
+        storage = FileStorage('./storage/userdb.fs')
+        conn = DB(storage)
+        print "Type start:",conn, type(conn)
+        dbroot = conn.open().root()
         try:
             for val in ['userdb','graphdb','datadb']:
-        		if val in dbroot.keys():
-					pass
+                if val in dbroot.keys():
+                    pass
         except:
-        		if not val in dbroot.keys():
-					print " donot create this always"
-					dbroot[val] = Dict()
-					print "TRY user db dbroot:",dbroot['userdb'], type (dbroot['userdb'])
-					
+                if not val in dbroot.keys():
+                    print " donot create this always"
+                    dbroot[val] = Dict()
+                    print "TRY user db dbroot:",dbroot['userdb'], type (dbroot['userdb'])
+                    
         print "else:::::-->", request.form , form.email.data
         u=mod.User(form.name.data,form.email.data,\
-        			sha256(form.password.data).hexdigest(), \
-        			form.password.data,form.institution.data,\
-        			form.security_question.data, form.security_answer.data		
-        		   )
+                    sha256(form.password.data).hexdigest(), \
+                    form.password.data,form.institution.data,\
+                    form.security_question.data, form.security_answer.data        
+                   )
         print "User:--->", u, "form.name.data",form.name.data
         dbroot['userdb'][u.name] = u
         session['username'] = u.name
         transaction.commit()
         print "Database added successfully", dbroot['userdb'][u.name], u.name, u
         flash('Registered successfuly')
-    	return redirect(url_for('login'))
+        return redirect(url_for('login'))
     return render_template('forms/register.html', form = form)
 
 @app.route('/forgot',methods=['GET','POST'])
