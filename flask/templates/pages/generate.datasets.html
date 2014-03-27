@@ -1,0 +1,49 @@
+{% extends 'layouts/user.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Welcome {{user}} </h1>
+</div>
+<p class="lead"> Create Data Collection </p>
+
+<br>
+<br> <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+	
+	
+	
+<form role="form">
+  
+   
+  <div class="checkbox">
+    <label>
+      <input type="checkbox"> WOS Data   
+      </label>
+  </div>
+  
+   <div class="checkbox">
+    <label>
+      <input type="checkbox"> DF   
+      </label>
+  </div>
+  
+  
+  <div class="form-group">
+    <label for="FileInput">File input</label>
+    <input type="file" id="FileInput">
+    
+
+    
+    <p class="help-block"> Select a File.</p>
+ 
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+	
+
+{% endblock %}

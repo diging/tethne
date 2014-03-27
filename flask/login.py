@@ -120,11 +120,20 @@ login_manager.login_view = 'login' #set the view
 
 @app.route('/auth', methods=['GET','POST'])
 def auth():
-    if current_user.is_authenticated():
-         return render_template("forms/main.html",form=form)
-    else:
-         return render_template("forms/login.html")
-            
+    print "comes in auth"
+    #print session
+    
+    if session is None:
+        flash ( "Please Login First!!!!!")
+        return redirect(url_for("login"))
+    if session['username'] is None:
+         flash ( "Please Login First!!")
+         return redirect(url_for("login"))
+    if session['username'] != 'admin':
+        flash ("Only Admins can view this page!!")
+        return redirect(url_for('user'))
+
+     
 @app.route('/index', methods=['GET','POST'])
 def index():
     if 'username' in session:
@@ -141,10 +150,13 @@ def ok():
                
 @app.route('/admin', methods=['GET','POST'])
 def admin():
+    if session['username'] != 'admin':
+        flash ("Only Admins can view this page!!")
+        return redirect(url_for('user'))
+ 
+    #redirect(url_for("auth"))       
+    
     if request.method == 'GET'  : #and name != None
-        # columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
-        # return render_template('pages/admin.home.html', columns=columns)
-        # print " Its coming out"
         columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
         results =get_user_details()
            #results = json.dumps(user_details)
@@ -156,22 +168,9 @@ def admin():
 def get_user_data():
     
         print "comes here"
-        #columns = [ 'S.No chANGED', 'User Name', 'Institution', 'Email ID', 'Status', 'Active']
-    
-        #collection = [dict(zip(columns, [1,'Ramki',2,3,4,6])), dict(zip(columns, [2,'user889',5,5,33,7]))]
-        
-        #print "collection" , collection
-        
-        #results = BaseDataTables(request, columns, collection).output_result()
-        
-        #return the results as a string for the datatable
-        #print "results:", results
         print " session can be accessed here as well", session, session['username']
         columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
-        user_details =get_user_details()
-        results = json.dumps(user_details)
-            #results  = [ {"S.No" : "1"},{"User Name" : "Admin"} , {"Institution" : "ASU"} ,
-    #         {"Email ID" : "admin@asu.edu"} ]
+        results =get_user_details()
         return results
                
 @app.route('/user', methods=['GET','POST'])
@@ -197,122 +196,6 @@ def home():
 def load_user(userid):
     #here use the ZODB user class and returns the user object
     pass
-
-
-
-# USing Login Manager
-# @app.route('/login/', methods=['GET', 'POST'])
-# def login():
-#     print "Request Method", request.method, request.form
-#     
-#     if request.method == 'GET':
-#         form = LoginForm(request.form)
-#         #if 'Login' not in request.form.values:
-#         if request.form["action"] == "Login":
-#                     print "inside if"
-#                     
-#         else:
-#             print "inside else"
-#             print "request.form.values", reques.form.values
-#             uname = request.form.get('name', None)
-#             print "UNAME:::", uname
-#             user = mod.User.get_user('admin')
-#             if user and hash_password(request.form['password']) == user._password:
-#                 login_user(user, remember=True)
-#                 return redirect('/home/')
-#             else:
-#                 print "401"
-#                 return abort(401)  # 401 Unauthorized
-#     else:
-#             print "Why here"
-#             flash("No use get")
-#             return abort(405)  # 405 Method Not Allowed
-#         
-#     return render_template('forms/login.html',form=form)
-
-
-# Other Try
-# @app.route('/login', methods=['GET','POST'])
-# def login():
-#     if request.method == 'GET':
-#         form = LoginForm(request.form)
-#         return render_template('forms/login.html',form=form)
-#         username = request.form['name']
-#         password = request.form['password']
-#         print "Username and password :", username,password
-#         #registered_user = somehow check if the user is 
-#         if registered_user is None:
-#             flash('Username or Password is invalid' , 'error')
-#             return redirect(url_for('login'))
-#         login_user(registered_user)
-#         flash('Logged in successfully')
-#         return redirect(request.args.get('next') or url_for('index'))
-#     
-#  
-# Working method - my manual option
-# Issue : Password is shown in the request, and form data is not retrieved.
-#@app.route('/login/', methods=['GET','POST'])
-#@app.route('/login/', methods=['POST'])
-# def login():
-#     #flash('Welcome to Tethne Website')
-# #     form = LoginForm(request.form)
-# #     name = request.args.get('name')
-# #     userpassword = request.args.get('password')
-# #     print "arguments",name,userpassword 
-# #     print "Login Form Values", request.cookies.get('username'), "abc:"
-#     #username = request.cookies.get('username')
-#     if request.method == 'GET'  : #and name != None
-#         form = LoginForm(request.form)
-#         if not form.validate():
-#         #if 1:
-#             print "##form OBJECT::: Login--->", form, request.form
-#             name = request.args.get('name')
-#             userpassword = request.args.get('password')
-#             print "1 : URL arguments",name,userpassword 
-#             uname = form.name
-#             pswd = form.password
-#             print "\n 2. FORM arguments: Login form:#####", uname, pswd, type(uname), type(pswd)
-#             print "#####Login Form Values", request.cookies.get('username'), "abc:"
-#             storage = FileStorage('./storage/userdb.fs')
-#             conn = DB(storage)
-#             print "3.Login start:",conn, type(conn),form.name.data
-#             dbroot = conn.open().root()
-#             try: 
-#                 print "dbroot['userdb'].values()", dbroot['userdb'].values(), "keys",dbroot['userdb'].keys() , dbroot['userdb']
-#                 #for val in dbroot['userdb'].values():
-#                 #        print "value is : " , val, val.name,val.email,"form", form
-#                 
-#                 # This gives error.  as the ImmutableDict request.form is empty
-#                 #uname = request.form['name']
-#                 #pswd = request.form['password']
-#                 #print " 4.The arguments [ '' method]: Login form:", uname, pswd
-#                 print " 4.Login form data:", form.name.data, form.name.description,form.name.label
-#                 for key in dbroot['userdb'].keys():
-#                             #print "Yess!!", key, session['username'] 
-#                             #if  session['username'] == key :
-#                     if name == 'admin' :
-#                             # Need to get username from the form  password = sha256(password
-#                             print "COOOL it works atlast", "password1",dbroot['userdb'][key].password,"password2", sha256(request.args.get('password'))
-#                             print "inside login last loop:",dbroot, type(dbroot)
-#                             return render_template('pages/admin.home.html')
-#                     if name == key and name !='admin':
-#                             print "he is a normal user"
-#                             return render_template('pages/user.home.html')
-#                     else :
-#                             print "Error : No Such User"
-#                             pass
-#                               
-#             except:
-#                 #flash('Username or password failed')
-#                 print " donot come here : except"
-#                 pass           
-#                    
-#     else:
-#             print "comes in else"
-#             flash("Login Failed") #return redirect(url_for('login'))
-#             return redirect(url_for('ok'))
-#            
-#     return render_template('forms/login.html', form = form)
 
 
 # TRY WITH GET. the perfect method
@@ -441,11 +324,24 @@ def forgot():
     form = ForgotForm(request.form)
     return render_template('forms/forgot.html', form = form)    
 
+
+@app.route('/create_data/', methods = ['GET','POST'])
+def create_data():
+         
+    if request.method == 'GET'  : 
+        print " comes inside"
+        user = session['username']
+        return render_template('pages/generate.datasets.html', user = user)
+        
+    
+    return redirect(url_for('login'))
+
+
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
-    flash('You were logged out')
-    return redirect(url_for('show_entries'))
+    flash('You are logged out')
+    return redirect(url_for('login'))
 
 # Error handlers.
 @app.errorhandler(500)
