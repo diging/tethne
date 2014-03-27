@@ -6,24 +6,6 @@
   <h1>Welcome Admin</h1>
 </div>
 <p class="lead"> As an admin you can perform the following activities </p>
-<<<<<<< HEAD
-<p class = "lead"> {{ url_for('get_user_data') }} </p>
-
-
-&lt;
-&lt;
-&lt;
-&lt;
-&lt;
-&lt;
-
-
-
-
-
-<form action="" method="post" class="form" >
-
-=======
 <p class = "lead"> {{ url_for('admin') }} </p>
 
 &nbsp;
@@ -45,28 +27,14 @@ $(document).ready(function() {
 
 
 <form action="" method="get" class="form" >
->>>>>>> python
 <body>
 	<div class="container">
-	<table class="table table-hover">
-		
-		<tr>
+	<table class='table' id='example'>
+		<thead>
+			<tr>
 				{% for col in columns %}
 				<th>{{ col }}</th>
 				{% endfor %}
-<<<<<<< HEAD
-		
-		<tr>	
-				
-				{% for v in results %}
-				<td>{{ v.No }}</td>
-				<td>{{ v.Name }}</td>
-				{% endfor %}
-				
-			</tr>	
-			
-		
-=======
 				<tr>
 				{% for res in results %}
 					<tr>
@@ -78,24 +46,12 @@ $(document).ready(function() {
 				</tr>
 			</tr>
 		</thead>
->>>>>>> python
 	</table>
 	</div>
 </body>
 
 
-<<<<<<< HEAD
-<input type="submit" value="List Users" class="form-control" >
-<input type="submit" value="Delete Users" class="form-control" >
-<input type="submit" value="Approve Users" class="form-control" >
-</form> 
-
-{% endblock %}
-
-<!-- Need to change all the image locations to local folders-->
-=======
 <p>    </p>
->>>>>>> python
 
 <input type="submit" value="Search Users" class="button" >
 <input type="submit" value="Delete Users" class="button" >
