@@ -332,8 +332,9 @@ def create_data():
         print " comes inside"
         user = session['username']
         return render_template('pages/generate.datasets.html', user = user)
-        
     
+       
+    print "comes out create data", request.form
     return redirect(url_for('login'))
 
 

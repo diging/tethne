@@ -6,44 +6,54 @@
   <h1>Welcome {{user}} </h1>
 </div>
 <p class="lead"> Create Data Collection </p>
-
-<br>
-<br> <br>
-<br>
-<br>
-<br>
-<br>
-<br>
+<span class="help-block">Some Details about this module. What is Data Collection??.... </span>
+</br> </br>
 
 	
-	
-	
-<form role="form">
-  
-   
-  <div class="checkbox">
-    <label>
-      <input type="checkbox"> WOS Data   
-      </label>
-  </div>
-  
-   <div class="checkbox">
-    <label>
-      <input type="checkbox"> DF   
-      </label>
-  </div>
-  
-  
-  <div class="form-group">
-    <label for="FileInput">File input</label>
-    <input type="file" id="FileInput">
-    
+<div class="panel panel-primary">
+	<div class="panel-heading"><bold>Create Data Collection</div>
+ 		 <div class="panel-body">
+    		<div class="well well-lg">
+  					<form role="form" class="form-inline" method = "post">
+  					<span class="help-block">Tethne Supports two types of Input data. Please select one among them.</span>
+  						<div class="radio">
+  							<label> <input type="radio" name="optionsRadios" id="wos" value="option1" checked>
+    							WOS : Web Of Science field-tagged format.
+							 </label>
+					    </div> 
+						&nbsp &nbsp &nbsp &nbsp 
+						&nbsp &nbsp &nbsp &nbsp 
+						&nbsp &nbsp &nbsp &nbsp 
+						<div class="radio">
+  							<label><input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+  							   DFR  : JSTOR Data-For-Research dataset in XML format.  
+  							</label>
+						</div>
+						</br> </br>
+						<span class="help-block">Output window</span>
+ 						<!--<textarea style="resize:vertical,horizontal" name="textarea" cols="num" rows="num"></textarea> --!>
+ 						<textarea class="form-control" rows="3"></textarea>
+  						<div class="form-horizontal">
+  						</br> </br>
+  							<span class="help-block">Select multiple files here</span>
+   							 <label for="FileInput">File input</label>
+    						 <input type="file" multiple id="FileInput">
+    						 </br></br>
+    						 <!-- Not a proper design ...change the class="btn btn-default alignment to middle --!>
+    						 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+ 							 <button type="submit" class="btn btn-default">Submit</button>
+ 						</div>
+					 </form>
+ 			 </div>
+    	  </div>
+	</div>
+</div>
 
-    
-    <p class="help-block"> Select a File.</p>
- 
-  <button type="submit" class="btn btn-default">Submit</button>
-</form>
-	
+
 
 {% endblock %}
