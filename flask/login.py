@@ -37,7 +37,7 @@ def set_db_defaults():
     print "4.Data Sets DB:",ds_conn, type(ds_conn),
     ds_dbroot = ds_conn.open().root()
     
-    
+@app.before_first_request
 # check if this is set.
 def db():
     storage = FileStorage('./storage/userdb.fs')
@@ -298,6 +298,7 @@ def register():
         print "Type start:",conn, type(conn)
         dbroot = conn.open().root()
         db()   # to check if the DB is already initialized
+        # this part is commented as it is moved up in db()
 #        try:
 #            for val in ['userdb','graphdb','datadb','dsdb']:
 #                if val in dbroot.keys():
@@ -367,24 +368,23 @@ def create_datasets():
              if file in "pickle":
                 print "inside",file
 
-        # Add it to the DB
+        #Initialize the DB
     
-#        ds_storage = FileStorage('./storage/datasets.fs')
-#        ds_conn = DB(ds_storage)
-#        print "4.Data Sets DB:",ds_conn, type(ds_conn),
-#        ds_dbroot = ds_conn.open().root()
-                    
         storage = FileStorage('./storage/userdb.fs')
         conn = DB(storage)
         print "3.Login start:",conn, type(conn),
         dbroot = conn.open().root()
-
+        if not dbroot.has_key('dsdb'):
+            dbroot['dsdb'] = Dict()
+    
+        #db() # call to check dsdb is initialized - this is not working
+                
+        # Add it to the DB
         dataobj=mod.DataCollection(session['username'],"samplepickleobject",datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
-        print "DS:--->", dataobj,
-        db() # call to check dsdb is initialized
+        print "DS:--->", dataobj
         dbroot['dsdb'][dataobj.user_id] = dataobj
         transaction.commit()
-        print "Database added successfully", ds_dbroot['dsdb'][dataobj.user_id]
+        print "Database added successfully", dbroot['dsdb'][dataobj.user_id].date
     
 
 
@@ -392,6 +392,70 @@ def create_datasets():
         return render_template('pages/generate.datasets.html', user = user, text= log)
     
     return render_template('pages/generate.datasets.html', user = user, form= form)
+
+
+@app.route('/create_slices/', methods = ['GET','POST'])
+def create_slices():
+    """
+    Create datasets slices
+    """
+    form = GenerateDataSetsForm(request.form)
+    user = session['username']
+    if request.method == 'POST'  :
+        try:
+            input_type = request.form['filetype']
+            input_path = request.form['fileinput']
+        
+        except:
+            print "comes to except"
+            pass
+        print " comes out here"
+        print "comes out create data", request.form, request.form['filetype'],request.form['fileinput']
+        
+        #status = os.system("python ../tethne -I example_data -O ./ --read-file  -P  /Users/ramki/tethne/testsuite/testin/2_testrecords.txt -F WOS | tee datasets_log.txt")
+        status = os.system("python ../tethne -I " + session['username'] + " -O ./ --read-file  -P  /Users/ramki/tethne/testsuite/testin/2_testrecords.txt -F " + input_type + "| tee datasets_log.txt")
+        #status = os.system("python ../tethne -I " + session['username'] + " -O ./ --read-file  -P " + input_path + " -F " + input_type + "| tee datasets_log.txt")
+        print "try", status
+        print os.getcwd()
+        # Check if the command succeeded.
+        if status is 0:
+            log = "Dataset created successfully."
+        else:
+            log = "There seems to be some error while creating datasets."
+        
+        # Read the log file line by line and display it in the webpage.
+        cmd  = 'cat datasets_log.txt'
+        cmd2 = os.popen(cmd,'r',1)
+        log=""
+        for file in cmd2.readlines():
+            log +=file
+            if file in "pickle":
+                print "inside",file
+
+        #Initialize the DB
+        
+        storage = FileStorage('./storage/userdb.fs')
+        conn = DB(storage)
+        print "3.Login start:",conn, type(conn),
+        dbroot = conn.open().root()
+        if not dbroot.has_key('dsdb'):
+            dbroot['dsdb'] = Dict()
+
+        #db() # call to check dsdb is initialized - this is not working
+
+        # Add it to the DB
+        dataobj=mod.DataCollection(session['username'],"samplepickleobject",datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+        print "DS:--->", dataobj
+        dbroot['dsdb'][dataobj.user_id] = dataobj
+        transaction.commit()
+        print "Database added successfully", dbroot['dsdb'][dataobj.user_id].date
+
+        return render_template('pages/generate.datasets.slices.html', user = user, text= log)
+
+    return render_template('pages/generate.datasets.slices.html', user = user, form= form)
+
+
+
 
 @app.route('/logout')
 def logout():
