@@ -125,22 +125,31 @@ class DataCollection(Object):
     DocString to be added
     """
 
-    
-    def __init__(self):
-        pass
-    
+    def __init__(self,user_id,dataset_obj,date):
+        self.user_id = user_id
+        self.dataset_obj = dataset_obj
+        self.date = date
+        self._p_changed = 1 # for mutable objects
+
     def list_datasets(self):
         # Call Users class here and show the existing data sets collection
         # List the existing data sets
         pass 
         
-    def create_datasets(self,input_type, network_category, network_type):
+    def create_datasets(self,input_type, input_path, input_id):
+        
         # Wos and Dfr type
-        pass
-    
-    def update_datasets(self,DatasetObject):
+        self.input_type = input_type # WOS or JSTOR
+        self.input_path = input_path # The Path got from the user
+        self.input_id = input_id # presently considering this as userID
+
+    def update_datasets(self,user_id,dataset_obj,date):
         # Call Users Class here
         # Editing the existing data collection here
+        self.user_id = user_id
+        self.dataset_obj = dataset_obj
+        self.date = date
+        
         pass
             
 class SaveNetworks(object):
