@@ -58,8 +58,8 @@
                      
              <li> <a class="dropdown-toggle" data-toggle="dropdown">Generate Networks<b class="caret"></b></a>
                <ul class="dropdown-menu">
-                 <li><a>Create DataCollection</a></li>
-                 <li><a>Create GraphCollection</a></li>
+                 <li{%if request.endpoint == 'create_data' %} class ="active" {% endif %} ><a href = "{{url_for('create_datasets')}}">Create DataCollection</a></li>
+                 <li{%if request.endpoint == 'create_graph' %} class ="active" {% endif %} ><a href = "{{url_for('home')}}">Create GraphCollection</a></li>
                  
                </ul>
             </li>
@@ -83,7 +83,7 @@
                </ul>
             </li>
             
-            <li {% if request.endpoint == 'home'  %} class="active" {% endif %}><a href="{{ url_for('home') }}">Sitemap</a></li>
+            <li {% if request.endpoint == 'logout'  %} class="active" {% endif %}><a href="{{ url_for('logout') }}">Logout</a></li>
         	  
          
          </ul>
