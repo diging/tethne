@@ -1,48 +1,64 @@
-#from flask import * # do not use '*'; actually input the dependencies.
+
+"""
+    This script contains various methods (views of a webpage) in relation to User Login, creating datasets
+    and viewving the dataset details.
+    
+    views ( methods)
+    ```````
+    /login        - Login check
+    /register     - register a new user.
+    
+    .. autosummary::
+    
+    login
+    register
+    ....
+    ....
+    
+    """
+
+
+# Import Statements   
 from flask import Flask, session, redirect, url_for, escape, request,render_template,flash
-import logging
-from logging import Formatter, FileHandler
 from flask_wtf import Form
 from forms import LoginForm,RegisterForm,ForgotForm,GenerateDataSetsForm
 import ZODB.config
 import transaction
-from hashlib import sha256
+from hashlib import sha256 # for password
 from persistent import Persistent
 from persistent.list import PersistentList as List
 from persistent.mapping import PersistentMapping as Dict
-from flask_login import current_user,login_user,LoginManager,logout_user , \
-                     current_user , login_required
+#from flask_login import current_user,login_user,LoginManager,logout_user , \
+#                     current_user , login_required
 from flask import abort
 import json
 import subprocess,os
 import datetime
+import logging
+from logging import Formatter, FileHandler
 
+
+# Initializing the application
 app = Flask(__name__)
 app.config.from_object('config')
 app.debug = True
 
 from ZODB.FileStorage import FileStorage
 from ZODB.DB import DB
-import models as mod
+import models as mod                    #calling the DB Script
 
 
 @app.before_first_request
 def set_db_defaults():
-    storage = FileStorage('./storage/userdb.fs')
-    conn = DB(storage)
-    print "3.Login start:",conn, type(conn),
-    dbroot = conn.open().root()
-    ds_storage = FileStorage('./storage/datasets.fs')
-    ds_conn = DB(ds_storage)
-    print "4.Data Sets DB:",ds_conn, type(ds_conn),
-    ds_dbroot = ds_conn.open().root()
     
-@app.before_first_request
-# check if this is set.
-def db():
+    """
+    This is to be called only once during the script.
+    Setting the ZODB databases. 
+    
+    """
     storage = FileStorage('./storage/userdb.fs')
     conn = DB(storage)
-    print "3.Login start:",conn, type(conn),
+    #print "3.Login start:",conn, type(conn),
     dbroot = conn.open().root()
     try:
         for val in ['userdb','graphdb','datadb','dsdb']:
@@ -54,6 +70,7 @@ def db():
             dbroot[val] = Dict()
             print "TRY user db dbroot:",dbroot['dsdb'], type (dbroot['dsdb'])
 
+        
 def get_user_details():
     storage = FileStorage('./storage/userdb.fs')
     conn = DB(storage)
@@ -78,58 +95,35 @@ def del_user_details():
     dbroot = conn.open().root() 
     
 def update_user_details():
+    """
+    Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid
+    Returns 'Unknown paper' if all id components are missing (None).
+
+    Parameters
+    ----------
+    Kwargs : dict
+        A dictionary of keyword arguments.
+    aulast : string
+        Author surname.
+    auinit: string
+        Author initial(s).
+    date : string
+        Four-digit year.
+    jtitle : string
+        Title of the journal.
+
+    Returns
+    -------
+    ayj : string
+        Fuzzy identifier ayjid, or 'Unknown paper' if all id components are
+        missing (None).
+    """
     storage = FileStorage('./storage/userdb.fs')
     conn = DB(storage)
     #print "Get User Deatails:",conn, type(conn),
     dbroot = conn.open().root() 
     return results 
     #return json.dumps(results)   
-    
-          
-
-    
-
-# @app.before_request
-# def set_db_defaults():
-#     storage = FileStorage('./storage/users.fs')
-#     db = DB(storage)
-#     print "Type start:",db, type(db)
-#     connection = db.open()
-#     # dbroot is a dict like structure.
-#     dbroot = connection.root()  # retrieving the root of the tree
-#     for val in ['userdb']:
-#         if not val in dbroot.keys():
-#             print " donot create this always"
-#             dbroot[val] = Dict()
-#             print "user db dbroot:",dbroot['userdb'], type (dbroot['userdb'])
-
-# Commented part
-# ZEO commented as of now.
-
-# db = ZODB.config.databaseFromURL('zodb.conf')
-# connection = db.open()
-# root = connection.root()
-
-              
-
-# Using Tree instead of Dict
-# if not dbroot.has_key('userdb'):
-#     from BTrees.OOBTree import OOBTree
-#     #dbroot['userdb'] = OOBTree()
-#     print " donot create this always"
-#     dbroot['userdb'] = Dict()
-#     # userdb is a <BTrees.OOBTree.OOBTree object at some location>
-#     # userdb is a dbroot: {} <class 'persistent.mapping.PersistentMapping'>
-
-#userdb = dbroot['userdb']           
-#print "user db init:",userdb, type(userdb)
-#Ensure that a 'userdb' key is present
-#in the DB
-###
-
-login_manager = LoginManager() #class
-login_manager.init_app(app) #create a LoginManager Object from our 'app' object
-login_manager.login_view = 'login' #set the view
 
 
 
