@@ -15,7 +15,7 @@
     ....
     ....
     
-    """
+"""
 
 
 # Import Statements   
@@ -28,24 +28,26 @@ from hashlib import sha256 # for password
 from persistent import Persistent
 from persistent.list import PersistentList as List
 from persistent.mapping import PersistentMapping as Dict
-#from flask_login import current_user,login_user,LoginManager,logout_user , \
-#                     current_user , login_required
+from flask_login import current_user,login_user,LoginManager,logout_user , \
+                    current_user , login_required
 from flask import abort
 import json
 import subprocess,os
 import datetime
 import logging
 from logging import Formatter, FileHandler
-
+from flask import Blueprint
 
 # Initializing the application
-app = Flask(__name__)
-app.config.from_object('config')
+app = Flask(__name__)   # create a Flask Object
+app.config.from_object('config') # get the values from a config value
 app.debug = True
 
+#ZODB import
 from ZODB.FileStorage import FileStorage
 from ZODB.DB import DB
-import models as mod                    #calling the DB Script
+#Importing the models module
+import models as mod                    
 
 
 @app.before_first_request
@@ -58,7 +60,7 @@ def set_db_defaults():
     """
     storage = FileStorage('./storage/userdb.fs')
     conn = DB(storage)
-    #print "3.Login start:",conn, type(conn),
+    print "3.Login start:",conn, type(conn),
     dbroot = conn.open().root()
     try:
         for val in ['userdb','graphdb','datadb','dsdb']:
@@ -69,9 +71,21 @@ def set_db_defaults():
             print " donot create this always"
             dbroot[val] = Dict()
             print "TRY user db dbroot:",dbroot['dsdb'], type (dbroot['dsdb'])
-
-        
+            
+    
 def get_user_details():
+    
+    """
+    Getting user details to display in the web page.
+    This is only for admin view.
+    
+    Returns
+    -------
+    A list  - "results" in the form of 
+    SNo      UserName     Institution
+    
+    """
+    
     storage = FileStorage('./storage/userdb.fs')
     conn = DB(storage)
     #print "Get User Deatails:",conn, type(conn),
@@ -89,29 +103,31 @@ def get_user_details():
      
 
 def del_user_details():
+    
+    """
+    Deleting the user details when the admin calls this method.
+    This is only for admin view.
+    
+    Returns
+    -------
+    Status : If the user removal is a success/failure. 
+    
+    """
     storage = FileStorage('./storage/userdb.fs')
     conn = DB(storage)
     #print "Get User Deatails:",conn, type(conn),
     dbroot = conn.open().root() 
     
 def update_user_details():
+   
     """
     Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid
     Returns 'Unknown paper' if all id components are missing (None).
 
     Parameters
     ----------
-    Kwargs : dict
-        A dictionary of keyword arguments.
-    aulast : string
-        Author surname.
-    auinit: string
-        Author initial(s).
-    date : string
-        Four-digit year.
-    jtitle : string
-        Title of the journal.
-
+    None
+    
     Returns
     -------
     ayj : string
@@ -155,68 +171,88 @@ def ok():
     #form = LoginForm(request.form)
     #return redirect(url_for('login'))
     return render_template('pages/placeholder.home.html')
-               
+ 
+#Admin view              
 @app.route('/admin', methods=['GET','POST'])
 def admin():
+    """
+    Admin view.
+    """
+    # Handling if normal users try accessing this view.
     if session['username'] != 'admin':
         flash ("Only Admins can view this page!!")
-        return redirect(url_for('user'))
- 
-    #redirect(url_for("auth"))       
+        return redirect(url_for('user'))    
     
-    if request.method == 'GET'  : #and name != None
+    if request.method == 'GET'  : 
         columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
         results =get_user_details()
-           #results = json.dumps(user_details)
-           #print "results:", results
     return render_template('pages/admin.home.html', columns=columns,results=results)
-    return 'Hello World!'
-    
+
+
+@app.route('/user', methods=['GET','POST'])
+def user():
+    """
+    User View
+    """
+    print " session can be accessed here as well", session, session['username']
+    return render_template('pages/user.home.html', user = session['username'])
+
+# View for displaying user details     
 @app.route('/user_data')
 def get_user_data():
-    
-        print "comes here"
-        print " session can be accessed here as well", session, session['username']
+        """
+        The view where actually get_user_details gets called and 
+        the details are returned to the web page.
+        
+        """
         columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
         results =get_user_details()
         return results
                
-@app.route('/user', methods=['GET','POST'])
-def user():
-    print " session can be accessed here as well", session, session['username']
-    return render_template('pages/user.home.html', user = session['username'])
+
                
 @app.route('/place', methods=['GET','POST'])
 def place():
+    """
+    A placeholder view.
+    """ 
+    
     print "Are u coming here or not?" 
     return render_template('pages/placeholder.home.html')
 
 @app.route('/', methods=['GET','POST'])
 def home():
+    """
+    A dummy view for login routing.
+    
+    """
     return redirect(url_for('login'))
 
-# Loader callback. Reload the user-id from the value stored in the session.
-@login_manager.user_loader
-def load_user(userid):
-    #here use the ZODB user class and returns the user object
-    pass
-
-
 # TRY WITH GET. the perfect method
+test1 = 100
 @app.route('/login/', methods=['GET','POST'])
 def login():
-    if request.method == 'GET'  : #and name != None
-        #form = LoginForm(request.form)
+    """
+    Login check for a user. 
+    
+    If its successful user would be redirected to either 
+    "user" view or "admin" view.
+    
+    If the user is not registered then an error message is displayed and 
+    redirected to Login/register page.
+    
+    """
+    if request.method == 'GET'  :
         return render_template('forms/login_new.html')
-        print " Its coming out"
+        #print " Its coming out"
     try:
         username = request.form['username']
         password = request.form['password']
     except:
         print "comes to except"
         pass
-    print "comes out", request.form , "uname", username , "pass", password, type(password)
-    #if form.validate():
+    #print "comes out", request.form , "uname", username , "pass", password, type(password)
+    
     if 1:
           #new
           name = username
@@ -224,20 +260,20 @@ def login():
           userpassword = password 
           #new
           print "Session",session, session['username']
+          # Need to make it call only once. set_defaults function should work.
           storage = FileStorage('./storage/userdb.fs')
           conn = DB(storage)
-          print "3.Login start:",conn, type(conn),
+          print "4.Login start:",conn, type(conn),
           dbroot = conn.open().root()
           try: 
               print "####values()", dbroot['userdb'].values(), "#####keys",dbroot['userdb'].keys(), type(dbroot['userdb'])
               if name in dbroot['userdb'].keys():
-                  for key in dbroot['userdb'].keys():
-                      if key == 'admin' and name == 'admin':
-                                  # Need to get username from the form  password = sha256(password
+                  for key in dbroot['userdb'].keys(): #Traverse through keys
+                      if key == 'admin' and name == 'admin':  #if the user is admin
+                                  # Checking the Stored User password with the form password
                                   dbpswd = dbroot['userdb'][key].password
                                   loginpswd = sha256(userpassword).hexdigest()
                                   if dbpswd == loginpswd:                                 
-                                      #return render_template('pages/admin.home.html')
                                       return redirect(url_for('admin'))
                                   else:
                                       flash("Login Failed : Please provide the correct Username / password") 
@@ -260,49 +296,31 @@ def login():
                           print "No such user"
                           pass
               else:       
-                      #render_template('pages/user.error.html')
+                    
                   flash("User, Please register First !!") 
                   return redirect(url_for('login'))       
           except:
               print " donot come here : except"
               pass           
-                     
-
+ 
     return redirect(url_for('login'))
             
-#return render_template('forms/login.html', form = form)
-
-
-def generate_user_list(template_name, **kwargs):
-    user_count = get_user_count()
-    return render_template(template_name, uc = usercount, var2=var2, var3=var3, **kwargs)
     
 @app.route('/register',methods=['GET','POST'])
 def register():
+    """
+    register a new user.
+    """
     form = RegisterForm(request.form)
     #print "##form OBJECT::: register---->", form, request.form,
     if request.method == 'POST':
-            #session['username'] = request.form['username']
-#                 if 'Register' in request.form:
-#                     print "inside if"
-#                 else:
-#                     print "inside else"
         storage = FileStorage('./storage/userdb.fs')
         conn = DB(storage)
         print "Type start:",conn, type(conn)
         dbroot = conn.open().root()
-        #db()   # to check if the DB is already initialized
-        # this part is commented as it is moved up in db()
-        try:
-            for val in ['userdb','graphdb','datadb','dsdb']:
-                if val in dbroot.keys():
-                    pass
-        except:
-                if not val in dbroot.keys():
-                    print " donot create this always"
-                    dbroot[val] = Dict()
-                    print "TRY user db dbroot:",dbroot['userdb'], type (dbroot['userdb'])
-        
+        # to check if the DB is already initialized
+        # this part is commented as it is moved up 
+            
         print "else:::::-->", request.form , form.email.data
         u=mod.User(form.name.data,form.email.data,\
                     sha256(form.password.data).hexdigest(), \
@@ -313,13 +331,19 @@ def register():
         dbroot['userdb'][u.name] = u
         session['username'] = u.name
         transaction.commit()
-        print "Database added successfully", dbroot['userdb'][u.name], u.name, u
+        #print "Database added successfully", dbroot['userdb'][u.name], u.name, u
         flash('Registered successfuly')
         return redirect(url_for('login'))
     return render_template('forms/register.html', form = form)
 
 @app.route('/forgot',methods=['GET','POST'])
 def forgot():
+    """
+    This is when  user forgets his username / password
+    This module is a TO- DO.
+    
+    """
+    
     form = ForgotForm(request.form)
     return render_template('forms/forgot.html', form = form)    
 
@@ -341,48 +365,49 @@ def create_datasets():
             pass
         print " comes out here"
         print "comes out create data", request.form, request.form['filetype'],request.form['fileinput']
-    
+        # Parse data.
+        import tethne.readers as rd
+        papers = rd.wos.read("/Users/ramki/tethne/testsuite/testin/2_testrecords.txt")
+        # Create a DataCollection, and slice it.    
+        from tethne.data import DataCollection, GraphCollection
+        D = DataCollection(papers)
+        print "Object", D
+        slice = D.slice('date', 'time_window', window_size=4)   
+        print "Object", slice 
         #status = os.system("python ../tethne -I example_data -O ./ --read-file  -P  /Users/ramki/tethne/testsuite/testin/2_testrecords.txt -F WOS | tee datasets_log.txt")
-        status = os.system("python ../tethne -I " + session['username'] + " -O ./ --read-file  -P  /Users/ramki/tethne/testsuite/testin/2_testrecords.txt -F " + input_type + "| tee datasets_log.txt")
+        #status = os.system("python ../tethne -I " + session['username'] + " -O ./ --read-file  -P  /Users/ramki/tethne/testsuite/testin/2_testrecords.txt -F " + input_type + "| tee datasets_log.txt")
         #status = os.system("python ../tethne -I " + session['username'] + " -O ./ --read-file  -P " + input_path + " -F " + input_type + "| tee datasets_log.txt")
-        print "try", status
-        print os.getcwd()
-        # Check if the command succeeded.
-        if status is 0:
-           log = "Dataset created successfully."
-        else:
-           log = "There seems to be some error while creating datasets."
-
-        # Read the log file line by line and display it in the webpage.
-        cmd  = 'cat datasets_log.txt'
-        cmd2 = os.popen(cmd,'r',1)
-        log=""
-        for file in cmd2.readlines():     
-             log +=file
-             if file in "pickle":
-                print "inside",file
-
+        #print "try", status
+#         print os.getcwd()
+#         # Check if the command succeeded.
+#         if status is 0:
+#            log = "Dataset created successfully."
+#         else:
+#            log = "There seems to be some error while creating datasets."
+# 
+#         # Read the log file line by line and display it in the webpage.
+#         cmd  = 'cat datasets_log.txt'
+#         cmd2 = os.popen(cmd,'r',1)
+#         log=""
+#         for file in cmd2.readlines():     
+#              log +=file
+#              if file in "pickle":
+#                 print "inside",file
+# 
         #Initialize the DB
-    
         storage = FileStorage('./storage/userdb.fs')
         conn = DB(storage)
-        print "3.Login start:",conn, type(conn),
         dbroot = conn.open().root()
         if not dbroot.has_key('dsdb'):
             dbroot['dsdb'] = Dict()
-    
-        #db() # call to check dsdb is initialized - this is not working
-                
+          
         # Add it to the DB
-        dataobj=mod.DataCollection(session['username'],"samplepickleobject",datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+        dataobj=mod.DataCollection(session['username'],D,datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
         print "DS:--->", dataobj
         dbroot['dsdb'][dataobj.user_id] = dataobj
         transaction.commit()
-        print "Database added successfully", dbroot['dsdb'][dataobj.user_id].date
-    
-
-
-    
+        #As of now keeping datasets coupled with users. Need to change it.
+        log = "Dataset" +str (D) +"created successfully and added in the database at " +  str(dbroot['dsdb'][dataobj.user_id].date)   
         return render_template('pages/generate.datasets.html', user = user, text= log)
     
     return render_template('pages/generate.datasets.html', user = user, form= form)
@@ -453,6 +478,10 @@ def create_slices():
 
 @app.route('/logout')
 def logout():
+    """
+    When the User logs out, the session is ended and  
+    user is redirected to login page.
+    """
     session.pop('logged_in', None)
     flash('You are logged out')
     return redirect(url_for('login'))
@@ -480,8 +509,8 @@ if not app.debug:
 
 # Default port:
 if __name__ == '__main__':
-    #app.before_first_request()
     app.run()
+    before_first_request()
     
 
 # Or specify port manually:
