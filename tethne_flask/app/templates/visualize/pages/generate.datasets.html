@@ -1,0 +1,64 @@
+{% extends 'layouts/user.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Welcome {{user}} </h1>
+</div>
+<p class="lead"> Create Data Collection </p>
+<span class="help-block">A DataCollection organizes the papers for analysis. </span>
+</br> </br>
+
+	
+<div class="panel panel-primary">
+	<div class="panel-heading"><bold>Create Data Collection</div>
+ 		 <div class="panel-body">
+    		<div class="well well-lg">
+  					<form role="form" class="form-inline" method = "post">
+  					<span class="help-block">Tethne Supports two types of Input data. Please select one among them.</span>
+  						<div class="radio">
+  							<label> <input type="radio" name="filetype" id="wos" value="WOS" checked value="{{ request.form.input_type}}">
+    							WOS : Web Of Science field-tagged format.
+							 </label>
+							 
+					    </div> 
+						&nbsp &nbsp &nbsp &nbsp 
+						&nbsp &nbsp &nbsp &nbsp 
+						&nbsp &nbsp &nbsp &nbsp 
+						<div class="radio">
+  							<label><input type="radio" name="filetype" id="optionsRadios2" value="DFR" checked value="{{ request.form.input_type}}">
+  							   DFR  : JSTOR Data-For-Research dataset in XML format.  
+  							</label>
+						</div>
+						</br> 
+						<!--<span class="help-block">Output window</span> --!>
+ 						<!--<textarea style="resize:vertical,horizontal" name="textarea" cols="num" rows="num"></textarea> --!>
+ 						<!--<textarea class="form-control" rows="3"> {{text}}</textarea> --!>
+  						<div class="form-horizontal">
+  						</br> </br>
+  							<span class="help-block">Select multiple files here</span>
+   							 <label for="FileInput"> <input type="file" multiple id="fileinput" name="fileinput" value ="{{request.form.input_path}}"> 
+    						 File Name</label>
+    						 </br></br>
+    						 <!-- Not a proper design ...change the class="btn btn-default alignment to middle --!>
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+ 							 <input button type="submit" value = "Create Datasets"class="btn btn-default">
+					    <span class="help-block">Output window</span>
+ 						<!--<textarea style="resize:vertical,horizontal" name="textarea" cols="num" rows="num"></textarea> --!>
+ 						<textarea class="form-control" rows="3"> {{text}}</textarea>
+ 							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+  						 <li {% if request.endpoint == 'create_data' %} class="active" {% endif %}><a href="{{ url_for('create_slices') }}">Step 2: Click here to select slices for the Datasets.</a></li>	
+					 </form>
+ 			 </div>
+    	  </div>
+	</div>
+</div>
+
+
+
+{% endblock %}
