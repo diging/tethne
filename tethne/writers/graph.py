@@ -203,11 +203,14 @@ class TethneGraphMLWriter(GraphMLWriter):
     """
     
     def get_key(self, name, attr_type, scope, default):
+        """
+        Modified to use attribute name as key, rather than numeric ID.
+        """
         keys_key = (name, attr_type, scope)
         try:
             return self.keys[keys_key]
         except KeyError:
-#            new_id = "d%i" % len(list(self.keys))
+            # new_id = "d%i" % len(list(self.keys)) <-- old way.
             new_id = name
             self.keys[keys_key] = new_id
             key_kwargs = {"id":new_id,
