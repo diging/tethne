@@ -1,3 +1,24 @@
+"""
+    This script contains various views of  GraphCollections
+    for User Login, creating GraphCollection
+    and viewing the GraphCollection details.
+    
+    views 
+    ```````
+    /create_gc
+    /list_gc
+    /view_gc_details
+    /del_gc
+    /add_gc
+    /results_gc
+    .. autosummary::
+
+  
+    
+"""
+
+
+
 from flask import Blueprint
 from flask import Flask, session, redirect, url_for, escape, request,render_template,flash
 from flask_wtf import Form
@@ -8,7 +29,7 @@ from persistent import Persistent
 from persistent.list import PersistentList as List
 from persistent.mapping import PersistentMapping as Dict
 from flask_login import current_user,login_user,LoginManager,logout_user , \
-    current_user , login_required
+                                 current_user , login_required
 from flask import abort,Blueprint
 import json
 import subprocess,os
@@ -17,6 +38,8 @@ import logging
 from logging import Formatter, FileHandler
 from datacollection.views import dataset
 
+
+#
 graphset = Blueprint('graph',__name__)
 
 
