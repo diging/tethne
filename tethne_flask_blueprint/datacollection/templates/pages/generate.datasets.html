@@ -52,7 +52,7 @@
  						<textarea class="form-control" rows="3"> {{text}}</textarea>
  							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
 							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
-  						 <li {% if request.endpoint == 'create_data' %} class="active" {% endif %}><a href="{{ url_for('create_slices') }}">Step 2: Click here to select slices for the Datasets.</a></li>	
+  						 <li {% if request.endpoint == 'create_data' %} class="active" {% endif %}><a href="{{ url_for('.create_slices') }}">Step 2: Click here to select slices for the Datasets.</a></li>	
 					 </form>
  			 </div>
     	  </div>

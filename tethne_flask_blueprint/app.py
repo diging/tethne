@@ -28,13 +28,13 @@ from datacollection.views import dataset
 from visualize_networks.visualize import viz
 from jinja2 import TemplateNotFound
 
-app.register_blueprint(graphset,url_prefix="/graph",template_folder='templates')
-app.register_blueprint(dataset,url_prefix="/data",template_folder='templates')
-app.register_blueprint(viz,url_prefix="/viz",template_folder='templates')
+# app.register_blueprint(graphset,url_prefix="/graph",template_folder='templates')
+# app.register_blueprint(dataset,url_prefix="/data",template_folder='templates')
+# app.register_blueprint(viz,url_prefix="/viz",template_folder='templates')
 
-app.register_blueprint(graphset,url_prefix="/graph",template_folder='templates')
-app.register_blueprint(dataset,template_folder='datacollection/templates')
-app.register_blueprint(viz,url_prefix="/viz",template_folder='templates')
+app.register_blueprint(graphset,url_prefix="/graph",template_folder='graphcollection')
+app.register_blueprint(dataset,template_folder='./datacollection/templates')
+app.register_blueprint(viz,url_prefix="/viz",template_folder='./datacollection/templates')
 
 
 # app.register_blueprint(graphset,url_prefix="/",template_folder='/datacollection/templates')
