@@ -1,18 +1,22 @@
 {% extends 'layouts/admin.html' %}
-{% block title %}Admin Page{% endblock %}
+{% block title %}Home{% endblock %}
 {% block content %}
+
+<head>
+    <title>User Data</title>
+    <meta name="description" content="user List">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+	<script src="{{ url_for('static', filename='js/jquery-1.8.1.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
+</head>
 
 <div class="page-header">
   <h1>Welcome Admin</h1>
 </div>
 <p class="lead"> As an admin you can perform the following activities </p>
-<p class = "lead"> {{ url_for('.admin') }} </p>
 
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
+
 
 <script>
 $(document).ready(function() {
@@ -20,13 +24,11 @@ $(document).ready(function() {
 		"sDom": "<'row-fluid'<'span6 toolbar'><'span6'>r>t<'row-fluid'<'span6'f><'span6'p>>",
 		"bProcessing": true,
 		"bjQueryUI": true,
-		"sAjaxSource": "{{ url_for('.get_user_data') }}",
+		"sAjaxSource": "{{ url_for('get_server_data') }}",
 	});
 } );
 </script>
 
-
-<form action="" method="get" class="form" >
 <body>
 	<div class="container">
 	<table class='table' id='example'>
@@ -35,15 +37,6 @@ $(document).ready(function() {
 				{% for col in columns %}
 				<th>{{ col }}</th>
 				{% endfor %}
-				<tr>
-				{% for res in results %}
-					<tr>
-					{% for eachres in res %}
-						<td>{{ eachres }}</td>
-					{% endfor %}
-					</tr>	
-				{% endfor %}
-				</tr>
 			</tr>
 		</thead>
 	</table>
@@ -51,12 +44,6 @@ $(document).ready(function() {
 </body>
 
 
-<p>    </p>
-
-<input type="submit" value="Search Users" class="button" >
-<input type="submit" value="Delete Users" class="button" >
-<input type="submit" value="Approve Users" class="button" >
-</form>
 
 {% endblock %}
 

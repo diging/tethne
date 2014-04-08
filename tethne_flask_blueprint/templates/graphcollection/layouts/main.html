@@ -50,21 +50,21 @@
           </button>
           <a class="navbar-brand" href="/">Tethne</a>
         </div>
-        
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li {% if request.endpoint == 'home'  %} class="active" {% endif %}><a href="{{ url_for('.home') }}">Home</a></li>
-            <li {% if request.endpoint == 'about' %} class="active" {% endif %}><a href="{{ url_for('.home') }}">About Tethne</a></li>
+            <li {% if request.endpoint == 'home'  %} class="active" {% endif %}><a href="{{ url_for('{{dataset}}.home') }}">Home</a></li>
+            <li {% if request.endpoint == 'about' %} class="active" {% endif %}><a href="{{ url_for('{{dataset}}.home') }}">About Tethne</a></li>
+          
                      
-             <li> <a class="dropdown-toggle" data-toggle="dropdown">Generate Networks<b class="caret"></b></a>
+             <li> <a class="dropdown-toggle" data-toggle="dropdown">Generate Networks <b class="caret"></b></a>
                <ul class="dropdown-menu">
-                 <li{%if request.endpoint == 'create_data' %} class ="active" {% endif %} ><a href = "{{url_for('.create_datasets')}}">Create DataCollection</a></li>
-                 <li{%if request.endpoint == 'create_graph' %} class ="active" {% endif %} ><a href = "{{url_for('.home')}}">Create GraphCollection</a></li>
+                 <li><a>Create DataCollection</a></li>
+                 <li><a>Create GraphCollection</a></li>
                  
                </ul>
             </li>
  			
- 			<li> <a class="dropdown-toggle" data-toggle="dropdown">View Networks<b class="caret"></b></a>
+ 			<li> <a class="dropdown-toggle" data-toggle="dropdown">Data Management <b class="caret"></b></a>
                <ul class="dropdown-menu">
                  <li><a>List DataCollections</a></li>
                  <li><a>View DataCollections</a></li>
@@ -77,13 +77,13 @@
             <li> <a class="dropdown-toggle" data-toggle="dropdown"> Analyze Networks<b class="caret"></b></a>	
             
                <ul class="dropdown-menu">
-                 <li {% if request.endpoint == 'about' %} class="active" {% endif %}><a href="{{ url_for('.home') }}">Networks 1</a></li>
-                 <li {% if request.endpoint == 'about' %} class="active" {% endif %}><a href="{{ url_for('.home') }}">Visualize networks </a></li>
-                 <li {% if request.endpoint == 'about' %} class="active" {% endif %}><a href="{{ url_for('.home') }}">Networks 3</a></li>
+                 <li {% if request.endpoint == 'about' %} class="active" {% endif %}><a href="{{ url_for('{{dataset}}.home') }}">Networks 1</a></li>
+                 <li {% if request.endpoint == 'about' %} class="active" {% endif %}><a href="{{ url_for('{{dataset}}.home') }}">Visualize networks </a></li>
+                 <li {% if request.endpoint == 'about' %} class="active" {% endif %}><a href="{{ url_for('{{dataset}}.home') }}">Networks 3</a></li>
                </ul>
             </li>
             
-            <li {% if request.endpoint == 'logout'  %} class="active" {% endif %}><a href="{{ url_for('.logout') }}">Logout</a></li>
+            <li {% if request.endpoint == 'home'  %} class="active" {% endif %}><a href="{{ url_for('{{dataset}}.home') }}">Sitemap</a></li>
         	  
          
          </ul>
