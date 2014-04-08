@@ -2,7 +2,7 @@
 {% block title %}Register{% endblock %}
 {% block content %}
   <form method="post" class="form">
-    <h3 class="form-heading">Register <a href="{{ url_for('home') }}" title="Back to homepage"><i class="icon icon-home pull-right"></i></a></h3>
+    <h3 class="form-heading">Register <a href="{{ url_for('.home') }}" title="Back to homepage"><i class="icon icon-home pull-right"></i></a></h3>
     {{ form.name(class_ = 'form-control first-input', placeholder = "User Name", required = true, autofocus = true) }}
     {{ form.email(class_ = 'form-control', placeholder = form.email.label.text, required = true) }}
     {{ form.password(class_ = 'form-control', placeholder = form.password.label.text, required = true) }}
@@ -11,7 +11,7 @@
 	{{ form.security_question(class_ = 'form-control', placeholder = form.security_question.label.text, required = true) }}
 	{{ form.security_answer(class_ = 'form-control', placeholder = form.security_answer.label.text, required = true) }}
     
-    <p class="pull-left"><a href="{{ url_for('create_data') }}">Login</a></p>
+    <p class="pull-left"><a href="{{ url_for('.create_data') }}">Login</a></p>
     <input type="submit" value="Register" class="btn btn-primary btn-lg btn-block" >
     
   </form>
