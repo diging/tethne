@@ -1,18 +1,44 @@
 """
-    This script contains various methods (views of a webpage) in relation to User Login, creating datasets
-    and viewving the dataset details.
+    This script contains various views of DataCollections 
+    for User Login, creating DataCollection
+    and viewing the datasets details.
     
-    views ( methods)
+    views 
     ```````
     /login        - Login check
     /register     - register a new user.
+    /admin        - admin view
+    /user         - user view
+    /forgot
+    /logout
+    /create_datasets
+    /list_datasets
+    /view_dataset_details
+    /del_datasets
+    /add_datasets
+    /create_slices
+    
+     functions (methods) 
+    ```````
+    get_user_details()        - list the users
+    del_user()                - delete an user.
+    auth()                    - restrict admin view to normal user
+    update_user_details()     - update user details
     
     .. autosummary::
     
     login
     register
-    ....
-    ....
+    admin
+    user
+    forgot
+    logout
+    create_datasets
+    list_datasets
+    view_dataset_details
+    del_datasets
+    add_datasets
+    create_slices
     
 """
 
