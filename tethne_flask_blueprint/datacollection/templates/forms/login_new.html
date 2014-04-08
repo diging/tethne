@@ -2,7 +2,7 @@
 {% block title %}Login{% endblock %}
 {% block content %}
   <form action="" method="post" class="form" >
-    <h3 class="form-heading"> Ramki 
+    <h3 class="form-heading"> Data Login 
  
 
     <i class="icon icon-home pull-right"></i></a></h3>
@@ -32,8 +32,8 @@
     </div>
  
      
-   <p class="pull-left"><a href="{{ url_for('forgot') }}">Forgot Password?</a></p>
-    <p class="pull-right"><a href="{{ url_for('register') }}">Register</a></p>
+   <p class="pull-left"><a href="{{ url_for('.forgot') }}">Forgot Password?</a></p>
+    <p class="pull-right"><a href="{{ url_for('.register') }}">Register</a></p>
    
     <input type="submit" value="Login" class="btn btn-primary btn-lg btn-block">
     </form> 
