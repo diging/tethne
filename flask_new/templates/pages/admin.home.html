@@ -1,0 +1,62 @@
+{% extends 'layouts/admin.html' %}
+{% block title %}Admin Page{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Welcome Admin</h1>
+</div>
+<p class="lead"> As an admin you can perform the following activities </p>
+<p class = "lead"> {{ url_for('.admin') }} </p>
+
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+
+<script>
+$(document).ready(function() {
+	$('#example').dataTable( {
+		"sDom": "<'row-fluid'<'span6 toolbar'><'span6'>r>t<'row-fluid'<'span6'f><'span6'p>>",
+		"bProcessing": true,
+		"bjQueryUI": true,
+		"sAjaxSource": "{{ url_for('.get_user_data') }}",
+	});
+} );
+</script>
+
+
+<form action="" method="get" class="form" >
+<body>
+	<div class="container">
+	<table class='table' id='example'>
+		<thead>
+			<tr>
+				{% for col in columns %}
+				<th>{{ col }}</th>
+				{% endfor %}
+				<tr>
+				{% for res in results %}
+					<tr>
+					{% for eachres in res %}
+						<td>{{ eachres }}</td>
+					{% endfor %}
+					</tr>	
+				{% endfor %}
+				</tr>
+			</tr>
+		</thead>
+	</table>
+	</div>
+</body>
+
+
+<p>    </p>
+
+<input type="submit" value="Search Users" class="button" >
+<input type="submit" value="Delete Users" class="button" >
+<input type="submit" value="Approve Users" class="button" >
+</form>
+
+{% endblock %}
+
