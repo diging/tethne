@@ -1,0 +1,64 @@
+{% extends 'layouts/user.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Welcome {{user}} </h1>
+</div>
+<p class="lead"> Create GraphCollection </p>
+<span class="help-block">A GraphCollection is to create various graphs from the selected DataCollection</span>
+</br> </br>
+
+	
+<div class="panel panel-danger">
+	<div class="panel-heading"><bold>Create GraphCollection</div>
+ 		 <div class="panel-body">
+    		<div class="well well-lg">
+  					<form role="form" class="form-inline" method = "post">
+  					<span class="help-block">Select a Node type (paper or author)</span>
+  					<select class="form-control"> <option>author</option><option>paper</option></select> 
+						</br> 
+						<span class="help-block">Select a Node type (paper or author)</span>
+  							<select class="form-control"> <option>couthors</option><option>paper</option></select> 
+  						<div class="form-horizontal">
+  						</br> </br>
+  						<span class="help-block">Select additional options to create GraphCollection</span> 
+  							<div class="checkbox">
+  							  <label>
+      							<input type="checkbox"> Ignore slicing of this dataset. This will build a single graph from all the papers
+   							 </label>
+   							  &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+   							 <label>
+      							<input type="checkbox"> Weighted
+   							 </label>
+   							 </br>
+   							 </br>
+   							 <form class="form-horizontal">
+  								<div class="control-group">
+   							   	 Threshold	<input type="text" class="input-small"><br>
+ 								 Top N 		<input type="text" class="input-small">	<br>	
+ 								</div>
+ 							 </form>	
+ 							 </div>
+ 							 <br><br>
+  							 <!-- Not a proper design ...change the class="btn btn-default alignment to middle --!>
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+ 							 <input button type="submit" value = "Create Datasets"class="btn btn-default">
+					    <span class="help-block">Output window</span>
+ 						<!--<textarea style="resize:vertical,horizontal" name="textarea" cols="num" rows="num"></textarea> --!>
+ 						<textarea class="form-control" rows="3"> {{text}}</textarea>
+ 							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+					 </form>
+ 			 </div>
+    	  </div>
+	</div>
+</div>
+
+
+
+{% endblock %}

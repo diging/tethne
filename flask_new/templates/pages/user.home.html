@@ -1,0 +1,28 @@
+{% extends 'layouts/user.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Welcome {{ user }} !! </h1>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading"><bold>How can Tethne Help you??</div>
+ 		 <div class="panel-body">
+    		<div class="well well-lg">
+  					<form role="form" class="form-inline" method = "post">
+
+						<p class="lead">Please select one </p>
+						<p class="text-muted"> Click below to list the existing DataCollections</p>
+					    <!-- <input type="submit" value="List exisiting DataCollections" type="button" class="btn btn-warning"> --!>
+						<a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">List DataCollections</a>
+						<br> <br> 
+						<p class="text-muted"> Click below to create a new DataCollections</p>
+						<a href="{{ url_for('.dc_create') }}"class="btn btn-info" role="button">Create new DataCollection</a>
+					    
+						<br> <br> 
+						</body>
+					</form>
+				</div> </div> </div> </div>
+
+{% endblock %}
