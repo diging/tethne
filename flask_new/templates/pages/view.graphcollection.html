@@ -5,7 +5,7 @@
 <div class="page-header">
   <h1>Welcome {{ user }} !! </h1>
 </div>
-<p class="lead"> List of Data Collections</p>
+<p class="lead"> Stats about the selected GraphCollection</p>
 
  
 <!-- 
@@ -43,7 +43,7 @@
 <table class="table table-hover" >
 
     <tr>
-        <th class="success"></th><th class="success">S No</th><th class="success" >Data Set ID</th><th class="success">Date Created<br></th>
+        <th class="success"></th><th class="danger">S No</th><th class="warning" >Paper ID</th><th class="success">No.of.nodes</th><th class="danger">No.of.edges</th>
     </tr>
 
     <tr>
@@ -53,10 +53,13 @@
         
 		<td class = ".table-hover"> 1</td>
         <td class = ".table-hover">
-            DataSet #11334
+            Graph #114
         </td>
 		<td class = ".table-hover">
-            2014040333221
+            34
+        </td>
+        <td class = ".table-hover">
+            434
         </td>
 
     
@@ -70,10 +73,13 @@
         
 		<td class = ".table-hover"> 2</td>
         <td>
-            DataSet #53677
+            paper #536
         </td>
 		<td>
-            2014040813441	
+            56	
+        </td>
+		<td>
+            456	
         </td>
 
     
@@ -87,29 +93,34 @@
         
 		<td> 3</td>
         <td>
-            DataSet #78678
+            paper#788
         </td>
 		<td>
-            2014040811456
+            56	
+        </td>
+
+		<td>
+            561
         </td>
 
     
     </tr>
 
 </table>
-<p class="text-muted"> Pick one dataset and delete it!</p>
 
-<a href="{{ url_for('.dc_list') }}"class="btn btn-warning " role="button">Delete DataCollections</a>
-<br> <br> 
-<p class="text-muted"> Pick one dataset and view its stats!</p>
 
-<a href="{{ url_for('.dc_stats')}}"class="btn btn-success" role="button">View DataCollection Stats</a>
-<br> <br> 
-<p class="text-muted"> Pick one dataset and slice them according to various axes.</p>
 
-<a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button">Slice DataCollections</a>
+<a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">List DataCollections</a>
+<br><br>
 
- 
+<p class="text-warning"> Graph showing test data</p>
+<img src="/static/img/test.png"> 
+<br>
+<br>
+
+
+
+
 </body>
 </form>
 
