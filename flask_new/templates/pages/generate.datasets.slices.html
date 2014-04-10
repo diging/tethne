@@ -18,7 +18,7 @@
   					<span class="help-block">Select the axis for slicing: the key along with datasets needs to be sliced. 
   					For example, if network evolution is studied over 'time', then the first slice axis should be selected as 'date'. 
   					</span>
-  					<select class="form-control"> <option>date</option> <option>institutions</option> <option>3</option> <option>4</option> <option>5</option> </select> 
+  					<select class="form-control"> <option>date</option> <option>institutions</option> </select> 
 						</br> </br>
 						<span class="help-block">Output window</span>
  						<!--<textarea style="resize:vertical,horizontal" name="textarea" cols="num" rows="num"></textarea> --!>
@@ -34,7 +34,7 @@
 							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
 							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
  							 <input button type="submit" value="Slice It!" class="btn btn-default">
- 							 <li {% if request.endpoint == 'create_data' %} class="active" {% endif %}><a href="{{ url_for('.create_datasets') }}">Step 2: Click here to select slices for the Datasets.</a></li>
+ 							 <li {% if request.endpoint == 'create_data' %} class="active" {% endif %}><a href="{{ url_for('.dc_list') }}">DataCollection List.</a></li>
 					 </form>
  			 </div>
     	  </div>

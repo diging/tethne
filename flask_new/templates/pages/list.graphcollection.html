@@ -5,7 +5,7 @@
 <div class="page-header">
   <h1>Welcome {{ user }} !! </h1>
 </div>
-<p class="lead"> List of Data Collections</p>
+<p class="lead"> {{ user }}'s Existing GraphCollection</p>
 
  
 <!-- 
@@ -43,7 +43,7 @@
 <table class="table table-hover" >
 
     <tr>
-        <th class="success"></th><th class="success">S No</th><th class="success" >Data Set ID</th><th class="success">Date Created<br></th>
+        <th class="warning"></th><th class="warning">S No</th><th class="warning" >Data Set ID</th><th class="warning">Date Created<br></th>
     </tr>
 
     <tr>
@@ -53,7 +53,7 @@
         
 		<td class = ".table-hover"> 1</td>
         <td class = ".table-hover">
-            DataSet #11334
+            gc#11334
         </td>
 		<td class = ".table-hover">
             2014040333221
@@ -70,7 +70,7 @@
         
 		<td class = ".table-hover"> 2</td>
         <td>
-            DataSet #53677
+            gc#53677
         </td>
 		<td>
             2014040813441	
@@ -87,7 +87,7 @@
         
 		<td> 3</td>
         <td>
-            DataSet #78678
+            gc#78678
         </td>
 		<td>
             2014040811456
@@ -97,17 +97,17 @@
     </tr>
 
 </table>
-<p class="text-muted"> Pick one dataset and delete it!</p>
+<p class="text-muted"> Pick one GraphCollection and delete it!</p>
 
-<a href="{{ url_for('.dc_list') }}"class="btn btn-warning " role="button">Delete DataCollections</a>
+<a href="{{ url_for('.gc_list') }}"class="btn btn-success" role="button">Delete GraphCollection</a>
 <br> <br> 
-<p class="text-muted"> Pick one dataset and view its stats!</p>
+<p class="text-muted"> Pick one GraphCollection and view its stats!</p>
 
-<a href="{{ url_for('.dc_stats')}}"class="btn btn-success" role="button">View DataCollection Stats</a>
+<a href="{{ url_for('.gc_stats') }}"class="btn btn-info" role="button">View GraphCollection Stats</a>
 <br> <br> 
-<p class="text-muted"> Pick one dataset and slice them according to various axes.</p>
+<p class="text-muted"> Pick one GraphCollection and analyze it !</p>
 
-<a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button">Slice DataCollections</a>
+<a href="{{ url_for('.gc_analyze') }}"class="btn btn-danger" role="button">Analyze GraphCollections</a>
 
  
 </body>

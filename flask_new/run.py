@@ -29,7 +29,6 @@ from flask_new.views import dataset
 #print "gdb root in app", app.config['DBROOT'], app.config['CSRF_ENABLED']
 app.register_blueprint(dataset)
 
-
 # Error handlers.
 @app.errorhandler(500)
 def internal_error(error):
