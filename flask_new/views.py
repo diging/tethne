@@ -18,12 +18,6 @@
     /add_datasets
     /create_slices
     
-     functions (methods) 
-    ```````
-    get_user_details()        - list the users
-    del_user()                - delete an user.
-    auth()                    - restrict admin view to normal user
-    update_user_details()     - update user details
     
     .. autosummary::
     
@@ -62,209 +56,37 @@ import datetime
 import logging
 from logging import Formatter, FileHandler
 
-
-# Initializing the Blueprint. 
-# Instead of @app the whole module will have @dataset.
-dataset = Blueprint('views',__name__,template_folder='templates')
-
-@dataset.route('/info')
-def info():
-	print "I am inside Data Sets Show_info"
-	
 #ZODB import
 from ZODB.FileStorage import FileStorage
 from ZODB.DB import DB
 #Importing the database models module
-import models as mod                    
+import models as mod         
+# Importing helpers module
+import helpers as help           
 
+# Initializing the Blueprint. 
+# Instead of @app the module will have @dataset
 
+dataset = Blueprint('views',__name__,template_folder='templates')
 
-def set_db_defaults():
-     
-    """
-    This is to be called only once during the script.
-    Setting the ZODB databases. 
-     
-    """
-    
-    storage = FileStorage('.storage/userdb.fs')
-    conn = DB(storage)
-    print "3.Login start:",conn, type(conn),
-    dbroot = conn.open().root()
-    try:
-        for val in ['userdb','graphdb','datadb','dsdb']:
-            if val in dbroot.keys():
-                pass
-    except:
-        if not val in dbroot.keys():
-            print " donot create this always"
-            dbroot[val] = Dict()
-            print "TRY user db dbroot:",dbroot['dsdb'], type (dbroot['dsdb'])
-             
-    
-def get_user_details():
-    
-    """
-    Getting user details to display in the web page.
-    This is only for admin view.
-    
-    Returns
-    -------
-    A list  - "results" in the form of 
-    SNo      UserName     Institution
-    
-    """
-    
-    storage = FileStorage('./storage/userdb.fs')
-    conn = DB(storage)
-    #print "Get User Deatails:",conn, type(conn),
-    dbroot = conn.open().root() 
-    columns = [ 'S.No', 'User Name', 'Institution', 'Email ID'] 
-    results = []
-    abc = [('1',dbroot['userdb'][key].name,dbroot['userdb'][key].id, dbroot['userdb'][key].institution) for key in dbroot['userdb'].keys()]
-    #remove unicode characters
-    new_list =[','.join(list(each_item)) for each_item in abc]
-    unicode_removed_list = [n.encode('ascii','ignore') for n in new_list]
-    for val1 in unicode_removed_list:
-        each_list = val1.split(',') 
-        results.append(each_list)
-    #print results    
-    return results
-     
+"""
+Test Views
+"""
+# test view
+@dataset.route('/info')
+def info():
+	return "I am inside Show_info"
+	
+# To catch the URLs which are not defined 
 @dataset.route('/', defaults={'path': ''})
 @dataset.route('/<path:path>')
 def catch_all(path):
     return 'You want path: %s, This one is a wrong path! Please check!' % path
-
-
-def del_user_details():
-    
-    """
-    Deleting the user details when the admin calls this method.
-    This is only for admin view.
-    
-    Returns
-    -------
-    Status : If the user removal is a success/failure. 
-    
-    """
-    storage = FileStorage('./storage/userdb.fs')
-    conn = DB(storage)
-    #print "Get User Deatails:",conn, type(conn),
-    dbroot = conn.open().root() 
-    
-def update_user_details():
-   
-    """
-    Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid
-    Returns 'Unknown paper' if all id components are missing (None).
-
-    Parameters
-    ----------
-    None
-    
-    Returns
-    -------
-    ayj : string
-        Fuzzy identifier ayjid, or 'Unknown paper' if all id components are
-        missing (None).
-    """
-    storage = FileStorage('./storage/userdb.fs')
-    conn = DB(storage)
-    #print "Get User Deatails:",conn, type(conn),
-    dbroot = conn.open().root() 
-    print results
-    return results 
-    #return json.dumps(results)   
-
-
-
-@dataset.route('/auth', methods=['GET','POST'])
-def auth():
-    print "comes in auth"
-    #print session
-    if session is None:
-        flash ( "Please Login First!!!!!")
-        return redirect(url_for(".login"))
-    if session['username'] is None:
-         flash ( "Please Login First!!")
-         return redirect(url_for(".login"))
-    if session['username'] != 'admin':
-        flash ("Only Admins can view this page!!")
-        return redirect(url_for('.user'))
-    else:
-    	return 0
-
-     
-@dataset.route('/index', methods=['GET','POST'])
-def index():
-    if 'username' in session:
-        print " comes here in index", session, type(session) 
-        return 'Logged in as %s' % escape(session['username'])
-    #return render_template('forms/register.html', form = form)
-    return 'You are not logged in'            
     
 @dataset.route('/ok', methods=['GET','POST'])
 def ok():
-    #form = LoginForm(request.form)
-    #return redirect(url_for('.login'))
     return render_template('pages/placeholder.home.html')
- 
-#Admin view              
-@dataset.route('/admin', methods=['GET','POST'])
-def admin():
-    """
-    Admin view.
-    """
-    # Handling if normal users try accessing this view.
-    if session['username'] != 'admin':
-        flash ("Only Admins can view this page!!")
-        return redirect(url_for('.user'))    
-    
-    if request.method == 'GET'  : 
-        columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
-        results =get_user_details()
-    return render_template('pages/admin.home.html', columns=columns,results=results)
 
-
-#@dataset.route('/<username>/home', methods=['GET','POST'])
-@dataset.route('/user/home', methods=['GET','POST'])
-def user():
-    """
-    User View
-    """
-    if request.method == 'GET'  :
-        return render_template('pages/user.home.html', user = session['username'])
-    return redirect(url_for('.dc_list'),username= session['username']) 
-    #return render_template('pages/list.datasets.html', user = session['username'])
-
-@dataset.route('/user/datacollection/list', methods=['GET','POST'])
-def dc_list():
-    """
-    User View
-    """
-    if request.method == 'GET'  :
-        # hard code the values for showing demo on wednesday Apr 08 2014.
-        columns = ['C', 'S.No', 'DataCollection ID', 'Created Date' ]
-        checkboxes = ['','','']
-        results =  [['1', 'Data#1156734', '20140408132211'], ['2', 'Data#2356734', '20140308092211'], ['3', 'Data#4456734', '20140408112221']]   
-        #print " session can be accessed here as well", session, session['username']
-        return render_template('pages/list.datasets.html', user = session['username'])
-    
-
-
-# View for displaying user details     
-@dataset.route('/user_data')
-def get_user_data():
-        """
-        The view where actually get_user_details gets called and 
-        the details are returned to the web page.
-        
-        """
-              
-        results =get_user_details()
-        return results
-               
                
 @dataset.route('/place', methods=['GET','POST'])
 def place():
@@ -275,17 +97,29 @@ def place():
     print "Are u coming here or not?" 
     return render_template('pages/placeholder.home.html')
 
+
+"""
+Login Views
+"""
+     
+@dataset.route('/index', methods=['GET','POST'])
+def index():
+    
+    if 'username' in session:
+        print " comes here in index", session, type(session) 
+        return 'Logged in as %s' % escape(session['username'])
+        return redirect(url_for('.login'))
+    return 'You are not logged in'        
+
+
 @dataset.route('/', methods=['GET','POST'])
 def home():
     """
     A dummy view for login routing.
     
     """
-
     return redirect(url_for('.login'))
 
-# TRY WITH GET. the perfect method
-test1 = 100
 @dataset.route('/login/', methods=['GET','POST'])
 def login():
     """
@@ -300,7 +134,7 @@ def login():
     """
     
     if request.method == 'GET'  :
-    	print "comes inside login"
+        print "comes inside login"
         return render_template('forms/login_new.html')
         #print " Its coming out"
     try:
@@ -309,23 +143,21 @@ def login():
     except:
         print "comes to except"
         pass
-    #print "comes out", request.form , "uname", username , "pass", password, type(password)
+  
     
     if 1:
-          #new
           name = username
           session['username'] = username
           userpassword = password 
           #new
-          print "Session",session, session['username']
+          #print "Session",session, session['username']
           # Need to make it call only once. set_defaults function should work.
           storage = FileStorage('./storage/userdb.fs')
-          #storage = FileStorage('./datacollection/storage/userdb.fs')
           conn = DB(storage)
-          print "4.Login start:",conn, type(conn),
+          #print "4.Login start:",conn, type(conn),
           dbroot = conn.open().root()
           if not 'userdb' in dbroot.keys():
-            print " donot create this always"
+            #print " donot create this always"
             dbroot[userdb] = Dict()
           try: 
               print "####values()", dbroot['userdb'].values(), "#####keys",dbroot['userdb'].keys(), type(dbroot['userdb'])
@@ -374,7 +206,7 @@ def register():
     register a new user.
     """
     form = RegisterForm(request.form)
-    #print "##form OBJECT::: register---->", form, request.form,
+   
     if request.method == 'POST':
         storage = FileStorage('./storage/userdb.fs')
         conn = DB(storage)
@@ -401,6 +233,8 @@ def register():
         return redirect(url_for('.login'))
     return render_template('forms/register.html', form = form)
 
+
+
 @dataset.route('/forgot',methods=['GET','POST'])
 def forgot():
     """
@@ -413,6 +247,67 @@ def forgot():
     return render_template('forms/forgot.html', form = form)    
 
 
+
+@dataset.route('/logout')
+def logout():
+    """
+    When the User logs out, the session is ended and  
+    user is redirected to login page.
+    """
+    session.pop('logged_in', None)
+    flash('You are logged out')
+    return redirect(url_for('.login'))
+
+"""
+Admin and User Views
+
+"""
+
+#Admin view              
+@dataset.route('/admin', methods=['GET','POST'])
+def admin():
+    """
+    Admin view.
+    """
+    # Handling if normal users try accessing this view.
+    if session['username'] != 'admin':
+        flash ("Only Admins can view this page!!")
+        return redirect(url_for('.user'))    
+    
+    if request.method == 'GET'  : 
+        columns = [ 'S.No', 'User Name', 'Institution', 'Email ID']
+        results =help.get_user_details()
+    return render_template('pages/admin.home.html', columns=columns,results=results)
+
+
+#@dataset.route('/<username>/home', methods=['GET','POST'])
+@dataset.route('/user/home', methods=['GET','POST'])
+def user():
+    """
+    User View
+    """
+    if request.method == 'GET'  :
+        return render_template('pages/user.home.html', user = session['username'])
+    return redirect(url_for('.dc_list'),username= session['username']) 
+
+
+"""
+DataCollection Views
+"""
+
+@dataset.route('/datacollection/list', methods=['GET','POST'])
+def dc_list():
+    """
+    List Data Collection 
+    Show the user the existing collection of datacollection.
+    """
+    if request.method == 'GET'  :
+        # hard code the values for showing demo on wednesday Apr 08 2014.
+        columns = ['C', 'S.No', 'DataCollection ID', 'Created Date' ]
+        checkboxes = ['','','']
+        results =  [['1', 'Data#1156734', '20140408132211'], ['2', 'Data#2356734', '20140308092211'], ['3', 'Data#4456734', '20140408112221']]   
+        return render_template('pages/list.datasets.html', user = session['username'])
+    
 @dataset.route('/datacollection/create/', methods = ['GET','POST'])
 def dc_create():
     """
@@ -480,6 +375,99 @@ def dc_create():
     #return render_template('pages/user.home.html', user = user, form= form)
 
 
+@dataset.route('/datacollection/create_slices/', methods = ['GET','POST'])
+def dc_create_slices():
+    """
+    Create datasets slices
+    """
+    form = GenerateDataSetsForm(request.form)
+    user = session['username']
+    if request.method == 'POST'  :
+#         try:
+#             input_type = request.form['filetype']
+#             input_path = request.form['fileinput']
+#         
+#         except:
+#             print "comes to except"
+#             pass
+#         print " comes out here"
+#         print "comes out create data", request.form, request.form['filetype'],request.form['fileinput']
+#         
+#         #status = os.system("python ../tethne -I example_data -O ./ --read-file  -P  /Users/ramki/tethne/testsuite/testin/2_testrecords.txt -F WOS | tee datasets_log.txt")
+#         status = os.system("python ../tethne -I " + session['username'] + " -O ./ --read-file  -P  /Users/ramki/tethne/testsuite/testin/2_testrecords.txt -F " + input_type + "| tee datasets_log.txt")
+#         #status = os.system("python ../tethne -I " + session['username'] + " -O ./ --read-file  -P " + input_path + " -F " + input_type + "| tee datasets_log.txt")
+#         print "try", status
+#         print os.getcwd()
+#         # Check if the command succeeded.
+#         if status is 0:
+#             log = "Dataset created successfully."
+#         else:
+#             log = "There seems to be some error while creating datasets."
+#         
+#         # Read the log file line by line and display it in the webpage.
+#         cmd  = 'cat datasets_log.txt'
+#         cmd2 = os.popen(cmd,'r',1)
+#         log=""
+#         for file in cmd2.readlines():
+#             log +=file
+#             if file in "pickle":
+#                 print "inside",file
+# 
+#         #Initialize the DB
+#         
+#         storage = FileStorage('./storage/userdb.fs')
+#         conn = DB(storage)
+#         print "3.Login start:",conn, type(conn),
+#         dbroot = conn.open().root()
+#         if not dbroot.has_key('dsdb'):
+#             dbroot['dsdb'] = Dict()
+# 
+#         #db() # call to check dsdb is initialized - this is not working
+# 
+#         # Add it to the DB
+#         dataobj=mod.DataCollection(session['username'],"samplepickleobject",datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+#         print "DS:--->", dataobj
+#         dbroot['dsdb'][dataobj.user_id] = dataobj
+#         transaction.commit()
+        log = "Silces created and added  in DB successfully"
+
+        return render_template('pages/generate.datasets.slices.html', user = user, text= log)
+
+    return render_template('pages/generate.datasets.slices.html', user = user, form= form)
+
+
+@dataset.route('/datacollection/view', methods=['GET','POST'])
+def dc_stats():
+    """
+    List the stats for a selected Data Collection 
+    
+    """
+    if request.method == 'GET'  :
+        # hard code the values for showing demo on wednesday Apr 08 2014.
+        columns = ['C','S No', 'Paper ID', 'No. of nodes', 'No. of edges' ]
+        checkboxes = ['','','','']
+        results =  [['', '1', 'paper#113', '34', '250'], ['2', 'paper#1234',  '43', '250'], ['3', 'paper#4734',  '134', '2510']]   
+        return render_template('pages/view.datasets.html', user = session['username'])
+    
+"""
+Graph Collection Views
+"""
+
+
+@dataset.route('/graphcollection/list', methods=['GET','POST'])
+def gc_list():
+    """
+    List Graph Collection 
+    Show the user the existing collection of datacollection.
+    """
+    if request.method == 'GET'  :
+        # hard code the values for showing demo on wednesday Apr 08 2014.
+        columns = ['C', 'S.No', 'GraphCollection ID', 'Created Date' ]
+        checkboxes = ['','','']
+        results =  [['1', 'gc#1156734', '20140408132211'], ['2', 'gc#2356734', '20140308092211'], ['3', 'gc#4456734', '20140408112221']]   
+        return render_template('pages/list.graphcollection.html', user = session['username'])
+    
+
 @dataset.route('/graphcollection/create', methods = ['GET','POST'])
 def gc_create():
     """
@@ -489,24 +477,24 @@ def gc_create():
     user = session['username']
     #if request.method == 'POST' and user == 'admin' :
     if request.method == 'POST' :
-        try:
-            input_type = request.form['filetype']
-            input_path = request.form['fileinput']
-           
-        except:
-            print "comes to except"
-            pass
-        print " comes out here"
-        print "comes out create data", request.form, request.form['filetype'],request.form['fileinput']
-        # Parse data.
-        import tethne.readers as rd
-        papers = rd.wos.read("/Users/ramki/tethne/testsuite/testin/2_testrecords.txt")
-        # Create a DataCollection, and slice it.    
-        from tethne.data import DataCollection, GraphCollection
-        D = DataCollection(papers)
-        print "Object", D
-        slice = D.slice('date', 'time_window', window_size=4)   
-        print "Object", slice 
+#         try:
+#             input_type = request.form['filetype']
+#             input_path = request.form['fileinput']
+#            
+#         except:
+#             print "comes to except"
+#             pass
+#         print " comes out here"
+#         print "comes out create data", request.form, request.form['filetype'],request.form['fileinput']
+#         # Parse data.
+#         import tethne.readers as rd
+#         papers = rd.wos.read("/Users/ramki/tethne/testsuite/testin/2_testrecords.txt")
+#         # Create a DataCollection, and slice it.    
+#         from tethne.data import DataCollection, GraphCollection
+#         D = DataCollection(papers)
+#         print "Object", D
+#         slice = D.slice('date', 'time_window', window_size=4)   
+#         print "Object", slice 
         #status = os.system("python ../tethne -I example_data -O ./ --read-file  -P  /Users/ramki/tethne/testsuite/testin/2_testrecords.txt -F WOS | tee datasets_log.txt")
         #status = os.system("python ../tethne -I " + session['username'] + " -O ./ --read-file  -P  /Users/ramki/tethne/testsuite/testin/2_testrecords.txt -F " + input_type + "| tee datasets_log.txt")
         #status = os.system("python ../tethne -I " + session['username'] + " -O ./ --read-file  -P " + input_path + " -F " + input_type + "| tee datasets_log.txt")
@@ -528,123 +516,86 @@ def gc_create():
 #                 print "inside",file
 # 
         #Initialize the DB
-        storage = FileStorage('./storage/userdb.fs')
-        conn = DB(storage)
-        dbroot = conn.open().root()
-        if not dbroot.has_key('dsdb'):
-            dbroot['dsdb'] = Dict()
-          
-        # Add it to the DB
-        dataobj=mod.DataCollection(session['username'],D,datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
-        print "DS:--->", dataobj
-        dbroot['dsdb'][dataobj.user_id] = dataobj
-        transaction.commit()
+#         storage = FileStorage('./storage/userdb.fs')
+#         conn = DB(storage)
+#         dbroot = conn.open().root()
+#         if not dbroot.has_key('dsdb'):
+#             dbroot['dsdb'] = Dict()
+#           
+#         # Add it to the DB
+#         dataobj=mod.DataCollection(session['username'],D,datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+#         print "DS:--->", dataobj
+#         dbroot['dsdb'][dataobj.user_id] = dataobj
+#         transaction.commit()
+        D = "Gc#11124"
         #As of now keeping datasets coupled with users. Need to change it.
-        log = "Dataset" +str (D) +"created successfully and added in the database at " +  str(dbroot['dsdb'][dataobj.user_id].date)   
-        return render_template('pages/generate.datasets.html', user = user, text= log)
+        log = "GraphCollection" +str (D) +"created successfully and added in the database at " +  "201404061223412 "  
+        return render_template('pages/generate.graphsets.html', user = user, text= log)
     
-    return render_template('pages/generate.datasets.html', user = user, form= form)
+    return render_template('pages/generate.graphsets.html', user = user, form= form)
     #return render_template('pages/user.home.html', user = user, form= form)
 
 
-
-@dataset.route('/datacollection/create_slices/', methods = ['GET','POST'])
-def dc_create_slices():
+@dataset.route('/graphcollection/view', methods=['GET','POST'])
+def gc_stats():
     """
-    Create datasets slices
+    List the stats for a selected GraphCollection 
+    
     """
-    form = GenerateDataSetsForm(request.form)
-    user = session['username']
-    if request.method == 'POST'  :
-        try:
-            input_type = request.form['filetype']
-            input_path = request.form['fileinput']
-        
-        except:
-            print "comes to except"
-            pass
-        print " comes out here"
-        print "comes out create data", request.form, request.form['filetype'],request.form['fileinput']
-        
-        #status = os.system("python ../tethne -I example_data -O ./ --read-file  -P  /Users/ramki/tethne/testsuite/testin/2_testrecords.txt -F WOS | tee datasets_log.txt")
-        status = os.system("python ../tethne -I " + session['username'] + " -O ./ --read-file  -P  /Users/ramki/tethne/testsuite/testin/2_testrecords.txt -F " + input_type + "| tee datasets_log.txt")
-        #status = os.system("python ../tethne -I " + session['username'] + " -O ./ --read-file  -P " + input_path + " -F " + input_type + "| tee datasets_log.txt")
-        print "try", status
-        print os.getcwd()
-        # Check if the command succeeded.
-        if status is 0:
-            log = "Dataset created successfully."
-        else:
-            log = "There seems to be some error while creating datasets."
-        
-        # Read the log file line by line and display it in the webpage.
-        cmd  = 'cat datasets_log.txt'
-        cmd2 = os.popen(cmd,'r',1)
-        log=""
-        for file in cmd2.readlines():
-            log +=file
-            if file in "pickle":
-                print "inside",file
+    if request.method == 'GET'  :
+        # hard code the values for showing demo on wednesday Apr 08 2014.
+        columns = ['C','S No', 'Paper ID', 'No. of nodes', 'No. of edges' ]
+        checkboxes = ['','','','']
+        results =  [['', '1', 'paper#113', '34', '250'], ['2', 'paper#1234',  '43', '250'], ['3', 'paper#4734',  '134', '2510']]   
+        return render_template('pages/view.graphcollection.html', user = session['username'])
 
-        #Initialize the DB
-        
-        storage = FileStorage('./storage/userdb.fs')
-        conn = DB(storage)
-        print "3.Login start:",conn, type(conn),
-        dbroot = conn.open().root()
-        if not dbroot.has_key('dsdb'):
-            dbroot['dsdb'] = Dict()
-
-        #db() # call to check dsdb is initialized - this is not working
-
-        # Add it to the DB
-        dataobj=mod.DataCollection(session['username'],"samplepickleobject",datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
-        print "DS:--->", dataobj
-        dbroot['dsdb'][dataobj.user_id] = dataobj
-        transaction.commit()
-        print "Database added successfully", dbroot['dsdb'][dataobj.user_id].date
-
-        return render_template('pages/generate.datasets.slices.html', user = user, text= log)
-
-    return render_template('pages/generate.datasets.slices.html', user = user, form= form)
-
-
-
-
-@dataset.route('/logout')
-def logout():
+@dataset.route('/graphcollection/analyze', methods=['GET','POST'])
+def gc_analyze():
     """
-    When the User logs out, the session is ended and  
-    user is redirected to login page.
+    Analyze the  selected GraphCollection (ex: between centrality)
+    
     """
-    session.pop('logged_in', None)
-    flash('You are logged out')
-    return redirect(url_for('.login'))
-
-# # Error handlers.
-# @dataset.errorhandler(500)
-# def internal_error(error):
-#     #db_session.rollback()
-#     return render_template('errors/500.html'), 500
-# 
-# @dataset.errorhandler(404)
-# def internal_error(error):
-#     return render_template('errors/404.html'), 404
-
-# if not dataset.debug:
-#     file_handler = FileHandler('error.log')
-#     file_handler.setFormatter(Formatter('%(asctime)s %(levelname)s: %(message)s '
-#     '[in %(pathname)s:%(lineno)d]'))
-#     app.logger.setLevel(logging.INFO)
-#     file_handler.setLevel(logging.INFO)
-#     app.logger.addHandler(file_handler)
-#     app.logger.info('errors')
+    if request.method == 'GET'  :
+        # hard code the values for showing demo on wednesday Apr 08 2014.
+        columns = ['C','S No', 'Paper ID', 'No. of nodes', 'No. of edges' ]
+        checkboxes = ['','','','']
+        results =  [['', '1', 'paper#113', '34', '250'], ['2', 'paper#1234',  '43', '250'], ['3', 'paper#4734',  '134', '2510']]   
+        return render_template('pages/analyze.graphcollection.html', user = session['username'])
 
 
-@dataset.errorhandler(404)
-def page_not_found(error):
-    return 'This page does not exist', 404
 
+
+"""
+Visualize Networks View
+"""
+
+
+@dataset.route('/visualize', methods=['GET','POST'])
+def viz():
+    """
+    Visualize Graph Collection using D3.
+    """
+    if request.method == 'GET'  :
+        # hard code the values for showing demo on wednesday Apr 08 2014.
+        return render_template('pages/viz.graphcollection.html', user = session['username'])
+
+@dataset.route('/visualize/#23412334', methods=['GET','POST'])
+def dc_viztest():
+    """
+    Visualize Graph Collection using D3.
+    #23412334 -This is a to-do, this has to be replaced with the
+    original graphCollection ID.
+    """
+    if request.method == 'GET'  :
+        # hard code the values for showing demo on wednesday Apr 08 2014.
+        return render_template('pages/viz.network.html', user = session['username'])
+
+
+    
+"""
+Not used
+
+"""
 
 # # Default port:
 # if __name__ == '__main__':

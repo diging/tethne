@@ -68,7 +68,7 @@
             <input type="radio" name="textbox">    
         </td>
         
-		<td class = ".table-hover"> 1</td>
+		<td class = ".table-hover"> 2</td>
         <td>
             DataSet #53677
         </td>
@@ -85,7 +85,7 @@
             <input type="radio" name="textbox">    
         </td>
         
-		<td> 1</td>
+		<td> 3</td>
         <td>
             DataSet #78678
         </td>
@@ -99,15 +99,15 @@
 </table>
 <p class="text-muted"> Pick one dataset and delete it!</p>
 
-<a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">Delete DataCollections</a>
+<a href="{{ url_for('.dc_list') }}"class="btn btn-warning " role="button">Delete DataCollections</a>
 <br> <br> 
 <p class="text-muted"> Pick one dataset and view its stats!</p>
 
-<a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">View DataCollection Stats</a>
+<a href="{{ url_for('.dc_stats')}}"class="btn btn-success" role="button">View DataCollection Stats</a>
 <br> <br> 
 <p class="text-muted"> Pick one dataset and slice them according to various axes.</p>
 
-<a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">Slice DataCollections</a>
+<a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button">Slice DataCollections</a>
 
  
 </body>

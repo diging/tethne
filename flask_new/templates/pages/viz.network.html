@@ -1,0 +1,29 @@
+{% extends 'layouts/user.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Welcome {{ user }} !! </h1>
+</div>
+<p class="lead"> List of GraphCollections</p>
+
+<form action="" method="get" class="form" >
+<body>
+
+
+<a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">List of  DataCollections</a>
+<br><br>
+
+<p class="text-warning"> D3</p>
+<img src="/static/img/d3.jpg"> 
+<br>
+<br>
+
+
+
+
+</body>
+</form>
+
+
+{% endblock %}
