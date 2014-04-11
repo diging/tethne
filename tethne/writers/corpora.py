@@ -76,6 +76,7 @@ def to_dtm_input(target, D, t_ngrams, vocab):
     except IOError:
         raise IOError('Invalid target. Could not open files for writing.')
 
+    seq = {}
     # Generate -mult.dat file (wordcounts for each document).
     #   From the DTM example:
     #
@@ -92,15 +93,20 @@ def to_dtm_input(target, D, t_ngrams, vocab):
     #
     with open(target + '-meta.dat', 'wb') as metaFile:
         with open(target + '-mult.dat', 'wb') as multFile:
-            for year, papers in sorted(D['date'].items()):
+            for year, papers in sorted(D.axes['date'].items()):
+                seq[year] = []
                 for doi in papers:  # D must be indexed by doi.
-                    grams = t_ngrams[doi]
-                    wordcount = len(grams)  # Number of unique words.
-                    multFile.write(' '.join([ str(wordcount) ] + \
-                                            [ '{0}:{1}'.format(g,c)
-                                                for g,c in grams ] + \
-                                            ['\n']))
-                    metaFile.write('{0}\n'.format(doi))
+                    try:
+                        grams = t_ngrams[doi]
+                        seq[year].append(doi)
+                        wordcount = len(grams)  # Number of unique words.
+                        multFile.write(' '.join([ str(wordcount) ] + \
+                                                [ '{0}:{1}'.format(g,c)
+                                                    for g,c in grams ] + \
+                                                ['\n']))
+                        metaFile.write('{0}\n'.format(doi))
+                    except KeyError:    # May not have data for each Paper.
+                        pass
 
     # Generate -seq.dat file (number of papers per year).
     #   From the DTM example:
@@ -113,8 +119,8 @@ def to_dtm_input(target, D, t_ngrams, vocab):
     #       number_docs_time_NumberTimestamps
     #
     with open(target + '-seq.dat', 'wb') as seqFile:
-        seqFile.write(str(len(D['date'])) + '\n')
-        for year, papers in sorted(D['date'].items()):
+        seqFile.write(str(len(seq)) + '\n')
+        for year, papers in sorted(seq.items()):
             seqFile.write('{0}\n'.format(len(papers)))
 
     #       a file with all of the words in the vocabulary, arranged in
@@ -129,5 +135,24 @@ if __name__ == '__main__':
     import sys
     sys.path.append("/Users/erickpeirson/Dropbox/DigitalHPS/Scripts/tethne")
 
+    datapath = "/Users/erickpeirson/Genecology Project Archive/JStor DfR Datasets/2013.5.3.cHrmED8A/"
+    datapath2 = "/Users/erickpeirson/Genecology Project Archive/JStor DfR Datasets/2013.5.3.k2HUvXh9/"
+    datapath3 = "/Users/erickpeirson/Genecology Project Archive/JStor DfR Datasets/2013.5.3.W8mEeULy/"
+
     import tethne.readers as rd
-    papers = rd.dfr.read("")
+    from tethne.data import DataCollection
+    papers = rd.dfr.read(datapath) + rd.dfr.read(datapath2) + rd.dfr.read(datapath3)
+
+    D = DataCollection(papers, 'doi')
+    D.slice('date', 'time_period', window_size=8)
+    
+    ngrams = rd.dfr.ngrams(datapath, 'uni', apply_stoplist=True)
+    print len(ngrams)
+    ngrams.update(rd.dfr.ngrams(datapath2, 'uni', apply_stoplist=True))
+    print len(ngrams)
+    ngrams.update(rd.dfr.ngrams(datapath3, 'uni', apply_stoplist=True))
+    print len(ngrams)
+    t_ngrams, vocab, counts = rd.dfr.tokenize(ngrams)
+    
+    to_dtm_input("/Users/erickpeirson/Desktop/dtm_test", D, t_ngrams, vocab)
+    
