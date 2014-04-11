@@ -25,7 +25,7 @@ from ZODB.DB import DB
 
 
 #registering blueprints for datacollection
-from flask_new.views import dataset
+from views import dataset
 #print "gdb root in app", app.config['DBROOT'], app.config['CSRF_ENABLED']
 app.register_blueprint(dataset)
 
@@ -53,17 +53,17 @@ def set_db_defaults():
     dbroot = conn.open().root()
     DBROOT=app.config['DBROOT']
 #     print "gdb root in app:::::", DBROOT
-# 
-#     try:
-#         for val in ['userdb','graphdb','datadb','dsdb']:
-#             if val in dbroot.keys():
-#                 print "val", val
-#                 pass
-#             else:
-#                 print "else"
-#                 DBROOT[val] = Dict()
-#     except:          
-#             print "except user db dbroot:",DBROOT['dsdb'], type (DBROOT['dsdb'])
+ 
+#    try:
+#        for val in ['userdb','graphdb','datadb','dsdb']:
+#            if val in dbroot.keys():
+#                print "val", val
+#                pass
+#            else:
+#                print "else"
+#                DBROOT[val] = Dict()
+#    except:          
+#        print "except user db dbroot:",DBROOT['dsdb'], type (DBROOT['dsdb'])
 
     
 if __name__ == "__main__":
