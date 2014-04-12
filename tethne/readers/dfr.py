@@ -19,6 +19,7 @@ import re
 from tethne.utilities import dict_from_node, strip_non_ascii
 from nltk.corpus import stopwords
 import uuid
+from collections import Counter
 
 def read(datapath):
     """
@@ -46,12 +47,12 @@ def read(datapath):
        >>> papers = rd.dfr.read("/Path/to/DfR")
     """
 
-    try:
-        with open(datapath + "/citations.XML", 'rb') as f:
-            data = f.read().replace('&', '&amp;')
-            root = ET.fromstring(data)
-    except IOError:
-        raise IOError(datapath+"citations.XML not found.")
+#    try:
+    with open(datapath + "/citations.XML", 'rb') as f:
+        data = f.read().replace('&', '&amp;')
+        root = ET.fromstring(data)
+#    except IOError:
+#        raise IOError(datapath+"citations.XML not found.")
 
     accession = str(uuid.uuid4())
 
@@ -169,6 +170,32 @@ def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
             ngrams[doi] = grams
 
     return ngrams
+
+def tokenize(ngrams):
+    """
+    Builds a vocabulary, and replaces words with vocab indices.
+    
+    Parameters
+    ----------
+    ngrams : dict
+        Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
+    """
+
+    vocab = {}
+    counts = Counter()
+    t_ngrams = {}
+    
+    for doi,grams in ngrams.iteritems():
+        t_ngrams[doi] = []
+        for g,c in grams:
+            i = len(vocab)
+            if g not in vocab:
+                vocab[i] = g
+            counts[i] += c
+
+            t_ngrams[doi].append( (i,c) )
+
+    return t_ngrams, vocab, counts
 
 def _handle_paper(article):
     """
