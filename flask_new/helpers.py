@@ -1,45 +1,13 @@
 """
-    This script contains various views of DataCollections 
-    for User Login, creating DataCollection
-    and viewing the datasets details.
-    
-    views 
-    ```````
-    /login        - Login check
-    /register     - register a new user.
-    /admin        - admin view
-    /user         - user view
-    /forgot
-    /logout
-    /create_datasets
-    /list_datasets
-    /view_dataset_details
-    /del_datasets
-    /add_datasets
-    /create_slices
-    
+    This script contains helper functions.    
+        
      functions (methods) 
     ```````
     get_user_details()        - list the users
     del_user()                - delete an user.
     auth()                    - restrict admin view to normal user
     update_user_details()     - update user details
-    
-    .. autosummary::
-    
-    login
-    register
-    admin
-    user
-    forgot
-    logout
-    create_datasets
-    list_datasets
-    view_dataset_details
-    del_datasets
-    add_datasets
-    create_slices
-    
+        
 """
 
 # Import Statements   
@@ -142,11 +110,28 @@ def del_user_details():
     Status : If the user removal is a success/failure. 
     
     """
-    storage = FileStorage('./storage/userdb.fs')
-    conn = DB(storage)
-    #print "Get User Deatails:",conn, type(conn),
-    dbroot = conn.open().root() 
+#    storage = FileStorage('./storage/userdb.fs')
+#    conn = DB(storage)
+#    #print "Get User Deatails:",conn, type(conn),
+#    dbroot = conn.open().root()
+
+
+
+def del_dc():
     
+    """
+        Deleting the selected Dataset and update the DB and redirect back to
+        View DataCollections page.
+        
+        Returns
+        -------
+        
+        
+    """
+    flash("Dataset deleted successfully")
+    return redirect(url_for('.dc_list'))
+
+
 def update_user_details():
    
     """
