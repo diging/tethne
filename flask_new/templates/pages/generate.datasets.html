@@ -6,7 +6,14 @@
 </div>
 <p class="lead"> Create Data Collection </p>
 <span class="help-block">A DataCollection organizes the papers for analysis. </span>
-</br> </br>
+</br>
+                    <p class="text-muted"> Click below to slice this dataset according to various axes.</p>
+<a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button">Slice DataCollections</a></br>
+</br>
+     <p class="text-muted">List {{ user }}'s DataCollections</p>
+        
+        					<a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">List DataCollections</a>
+ </br> </br>                 	
 <div class="panel panel-primary">
     <div class="panel-heading">
         <bold>
@@ -50,12 +57,14 @@
                     &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
                     &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
                     <input button type="submit" value = "Create Datasets"class="btn btn-default">
-                    <span class="help-block">Output window</span>
-                    <!--<textarea style="resize:vertical,horizontal" name="textarea" cols="num" rows="num"></textarea> --!>
+                   <!-- 
+ <span class="help-block">Output window</span>
+                    <!~~<textarea style="resize:vertical,horizontal" name="textarea" cols="num" rows="num"></textarea> ~~!>
                     <textarea class="form-control" rows="3"> {{text}}</textarea>
+ -->
                     &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
                     &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
-                    <li {% if request.endpoint == 'create_data' %} class="active" {% endif %}><a href="{{ url_for('.dc_create_slices') }}">Click here to slice Datasets</a></li>	
+
             </form>
             </div>
         </div>

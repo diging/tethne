@@ -248,7 +248,7 @@ def dc_create():
         from tethne.data import DataCollection, GraphCollection
         D = DataCollection(papers)
         log = "Dataset #127846748 created successfully"
-        return render_template('pages/generate.datasets.html', user = user, text= log)
+        return render_template('pages/list.datasets.html', user = user, text= log)
     
     return render_template('pages/generate.datasets.html', user = user, form= form)
 
@@ -293,6 +293,17 @@ Graph Collection Views
 """
 
 
+@dataset.route('/graphcollection/create/', methods=['GET','POST'])
+def gc_create_landing():
+    """
+        Landing page to create a new Graph Collection
+        Show the user the existing GraphCollection.
+        """
+    if request.method == 'GET'  :
+        return render_template('pages/create.graphcollection.landing.html', user = session['username'])
+
+
+
 @dataset.route('/graphcollection/list', methods=['GET','POST'])
 def gc_list():
     """
@@ -317,7 +328,7 @@ def gc_del():
     flash("GraphCollection deleted successfully")
     return redirect(url_for('.gc_list'))
 
-@dataset.route('/graphcollection/create', methods = ['GET','POST'])
+@dataset.route('/graphcollection/create/new', methods = ['GET','POST'])
 def gc_create():
     """
     Create a new Graph Collection from existing DataCollection
@@ -328,7 +339,7 @@ def gc_create():
         G = "Gc#11124"
         #As of now displaying some random GC number and date.
         log = "GraphCollection" +str (G) +"created successfully and added in the database at " + "201404061223412 "
-        return render_template('pages/generate.graphsets.html', user = user, text= log)
+        return render_template('pages/list.graphcollection.html', user = user, text= log)
     
     return render_template('pages/generate.graphsets.html', user = user, form= form)
     
@@ -339,10 +350,12 @@ def gc_analyze():
         Analyze the  selected GraphCollection (ex: between centrality)
         
         """
-    if request.method == 'GET'  :
+    if request.method == 'POST'  :
+        # take a DataCollection, and slice it.
         
-        return render_template('pages/analyze.graphcollection.html', user = session['username'])
-
+        return render_template('pages/list.graphcollection.html', user = session['username'])
+    return render_template('pages/analyze.graphcollection.html', user = session['username'])
+   
 
 @dataset.route('/graphcollection/view/<data>', methods=['GET','POST'])
 def gc_stats(data=None):
@@ -363,6 +376,15 @@ def gc_stats(data=None):
 Visualize Networks View
 """
 
+
+@dataset.route('/visualize/', methods=['GET','POST'])
+def viz_landing():
+    """
+       Landing page for Visualize Graph Collection using D3.
+    """
+    if request.method == 'GET'  :
+        # hard code the values for showing demo on wednesday Apr 08 2014.
+        return render_template('pages/viz.graphcollection.landing.html', user = session['username'])
 
 @dataset.route('/visualize/list', methods=['GET','POST'])
 def viz():

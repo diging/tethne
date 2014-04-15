@@ -84,7 +84,7 @@
         </table>
         <p class="text-muted"> Click below to list {{ user }}'s remaining DataCollections</p>
         <!-- <input type="submit" value="List exisiting DataCollections" type="button" class="btn btn-warning"> --!>
-        <a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">Full List DataCollections</a>
+        <a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">List DataCollections</a>
         <!--
         <p class="text-muted"> Click below to create a new DataCollection</p>
         --!>
@@ -246,6 +246,24 @@
             
           </table>
           
+          
+            <p class="text-muted"> Click below to list {{ user }}'s remaining GraphCollections</p>
+        <!-- <input type="submit" value="List exisiting DataCollections" type="button" class="btn btn-warning"> --!>
+        <a href="{{ url_for('.gc_list') }}"class="btn btn-warning" role="button">List GraphCollections</a>
+        <a href="{{ url_for('.gc_create_landing') }}"class="btn btn-success " role="button">Create GraphCollections</a>
+       
+        <p class="text-muted"> Pick one DataCollection and do the following.</p>
+        
+      
+    	 <a href="{{ url_for('.dc_del') }}"class="btn btn-danger " role="button">Delete DataCollection</a>
+    	 <a href="{{ url_for('.gc_stats',data='gc13453') }}"class="btn btn-info" role="button">View GraphCollection Stats</a>
+    	 <a href="{{ url_for('.gc_analyze') }}"class="btn btn-success" role="button">Analyze GraphCollections</a>
+    <!-- 
+    <br> <br> 
+        <p class="text-muted"> Pick one DataCollection and slice them according to various axes.</p>
+        <a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button">Slice DataCollections</a>
+          
+          
           <p class="text-muted"> Pick one GraphCollection and delete it!</p>
 
 <a href="{{ url_for('.gc_del') }}"class="btn btn-danger" role="button">Delete GraphCollection</a>
@@ -257,6 +275,7 @@
 <p class="text-muted"> Pick one GraphCollection and analyze it !</p>
 
 <a href="{{ url_for('.gc_analyze') }}"class="btn btn-success" role="button">Analyze GraphCollections</a>
+ -->
 
           <br> <br> 
         </body>
