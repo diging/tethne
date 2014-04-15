@@ -3,9 +3,16 @@
 {% block content %}
 
 <div class="page-header">
-  <h1>Welcome {{ user }} !! </h1>
+  <h1>Welcome {{ user }}</h1>
 </div>
-<p class="lead"> Stats about the selected dataset</p>
+<p class="lead"> Stats about the selected dataset {{data}}</p>
+
+</br>
+
+<!-- <p class="text-muted"> W</p> -->
+<a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button">Slice this dataset</a>
+<a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">List DataCollections</a>
+<br><br>
 
  
 <!-- 
@@ -109,13 +116,9 @@
 </table>
 
 
-<p class="text-muted"> Pick one dataset and slice them according to various axes.</p>
-<a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button">Slice this dataset</a>
-<a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">List DataCollections</a>
-<br><br>
 
-<p class="text-warning"> Graph showing test data</p>
-<img src="/static/img/test.png"> 
+<p class="text-warning"> Test Data plot</p>
+<img src="/static/img/sample_matplotlib.png"> 
 <br>
 <br>
 
