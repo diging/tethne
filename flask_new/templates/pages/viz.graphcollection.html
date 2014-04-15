@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="page-header">
-  <h1>Welcome {{ user }} !! </h1>
+  <h1>Welcome {{ user }} </h1>
 </div>
 <p class="lead"> List of GraphCollections</p>
 
@@ -99,7 +99,7 @@
 </table>
 
 <p class="text-muted"> Pick one GraphCollection and view the networks for them.</p>
-<a href="{{ url_for('.gc_stats') }}"class="btn btn-info" role="button">View GraphCollection Stats</a>
+<a href="{{ url_for('.gc_stats',data='None') }}"class="btn btn-info" role="button">View GraphCollection Stats</a>
 <a href="{{ url_for('.dc_viztest') }}"class="btn btn-primary" role="button">Vizualize it !!</a>
 <a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">List DataCollections</a>
 <br><br>

@@ -1,52 +1,41 @@
 {% extends 'layouts/admin.html' %}
 {% block title %}Admin Page{% endblock %}
 {% block content %}
-
 <div class="page-header">
-  <h1>Welcome Admin</h1>
+    <h1>Welcome Admin</h1>
 </div>
 <p class="lead"> As an admin you can perform the following activities </p>
-
-
 &nbsp;
 &nbsp;
 &nbsp;
 &nbsp;
 &nbsp;
-
-
-
 <form action="" method="get" class="form" >
-<body>
-	<div class="container">
-	<table class='table' id='example'>
-		<thead>
-			<tr>
-				{% for col in columns %}
-				<th>{{ col }}</th>
-				{% endfor %}
-				<tr>
-				{% for res in results %}
-					<tr>
-					{% for eachres in res %}
-						<td>{{ eachres }}</td>
-					{% endfor %}
-					</tr>	
-				{% endfor %}
-				</tr>
-			</tr>
-		</thead>
-	</table>
-	</div>
-</body>
-
-
-<p>    </p>
-
-<input type="submit" value="Search Users" class="button" >
-<input type="submit" value="Delete Users" class="button" >
-<input type="submit" value="Approve Users" class="button" >
+    <body>
+        <div class="container">
+            <table class='table' id='example'>
+                <thead>
+                    <tr>
+                        {% for col in columns %}
+                        <th>{{ col }}</th>
+                        {% endfor %}
+                    <tr>
+                        {% for res in results %}
+                    <tr>
+                        {% for eachres in res %}
+                        <td>{{ eachres }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    </tr>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </body>
+    <p>    </p>
+    <input type="submit" value="Search Users" class="button" >
+    <input type="submit" value="Delete Users" class="button" >
+    <input type="submit" value="Approve Users" class="button" >
 </form>
-
 {% endblock %}
-

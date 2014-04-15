@@ -3,15 +3,15 @@
 {% block content %}
 
 <div class="page-header">
-  <h1>Welcome {{user}}!</h1>
+  <h1>Welcome {{user}}</h1>
 </div>
-<p class="lead"> Create Slices for Datasets </p>
+<p class="lead"> Create Slices for DataCollection</p>
 <span class="help-block">Slice operation helps in partitioning {{user}}'s existing dataset for analysis.</span>
 </br> </br>
 
 	
 <div class="panel panel-danger">
-	<div class="panel-heading"><bold>Slices for Datasets</div>
+	<div class="panel-heading"><bold>Slices for DataCollection</div>
  		 <div class="panel-body">
     		<div class="well well-lg">
   					<form role="form" class="form-inline" method = "post">
@@ -20,9 +20,6 @@
   					</span>
   					<select class="form-control"> <option>date</option> <option>institutions</option> </select> 
 						</br> </br>
-						<span class="help-block">Output window</span>
- 						<!--<textarea style="resize:vertical,horizontal" name="textarea" cols="num" rows="num"></textarea> --!>
- 						<textarea class="form-control" rows="3"> {{text}}</textarea>
   						<div class="form-horizontal">
   						</br> </br>
   							
@@ -34,7 +31,11 @@
 							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
 							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
  							 <input button type="submit" value="Slice It!" class="btn btn-default">
- 							 <li {% if request.endpoint == 'create_data' %} class="active" {% endif %}><a href="{{ url_for('.dc_list') }}">DataCollection List.</a></li>
+ 							
+ 							      <p class="text-muted">List {{ user }}'s DataCollections</p>
+        
+        					<a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">List DataCollections</a>
+ 							
 					 </form>
  			 </div>
     	  </div>

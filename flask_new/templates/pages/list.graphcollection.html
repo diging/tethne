@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="page-header">
-  <h1>Welcome {{ user }} !! </h1>
+  <h1>Welcome {{ user }} </h1>
 </div>
 <p class="lead"> {{ user }}'s Existing GraphCollection</p>
 
@@ -40,59 +40,146 @@
 
 <form action="" method="get" class="form" >
 <body>
-<table class="table table-hover" >
 
-    <tr>
-        <th class="warning"></th><th class="warning">S No</th><th class="warning" >Data Set ID</th><th class="warning">Date Created<br></th>
-    </tr>
-
-    <tr>
-        <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
-            <input type="radio" name="textbox">    
-        </td>
-        
-		<td class = ".table-hover"> 1</td>
-        <td class = ".table-hover">
-            gc#11334
-        </td>
-		<td class = ".table-hover">
-            2014040333221
-        </td>
-
-    
-    </tr>
-    
-    
-      <tr>
-        <td class = ".table-hover" style="text-align: center; vertical-align: middle;">
-            <input type="radio" name="textbox">    
-        </td>
-        
-		<td class = ".table-hover"> 2</td>
-        <td>
-            gc#53677
-        </td>
-		<td>
-            2014040813441	
-        </td>
-
-    
-    </tr>
-    
-    
-      <tr>
-        <td style="text-align: center; vertical-align: middle;">
-            <input type="radio" name="textbox">    
-        </td>
-        
-		<td> 3</td>
-        <td>
-            gc#78678
-        </td>
-		<td>
-            2014040811456
-        </td>
-
+ <table class="table table-hover" >
+            <tr>
+              <th class="warning"></th>
+              <th class="warning">No</th>
+              <th class="warning" >GraphCollection Name</th>
+              <th class="warning">Date Created<br></th>
+            </tr>
+            <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 1</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc11334') }}">gc#11334</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 14, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 1</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc11334') }}">gc#11334</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 14, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 2</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc124334') }}">gc#124334</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 14, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 3</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc11444') }}">gc#11444</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 14, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 4</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc200') }}">gc#200</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 12, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 5</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc111') }}">gc#11</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 12, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 6</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc334') }}">gc#334</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 4, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 7</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc134') }}">gc#134</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 4, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 8</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc1122334') }}">gc#1122334</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 2, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 9</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc2334') }}">gc#2334</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 2, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 10</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc1433') }}">gc#1433</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 1, 2014
+              </td>
+            </tr>
     
     </tr>
 
@@ -100,10 +187,6 @@
 <p class="text-muted"> Pick one GraphCollection and delete it!</p>
 
 <a href="{{ url_for('.gc_del') }}"class="btn btn-success" role="button">Delete GraphCollection</a>
-<br> <br> 
-<p class="text-muted"> Pick one GraphCollection and view its stats!</p>
-
-<a href="{{ url_for('.gc_stats') }}"class="btn btn-info" role="button">View GraphCollection Stats</a>
 <br> <br> 
 <p class="text-muted"> Pick one GraphCollection and analyze it !</p>
 

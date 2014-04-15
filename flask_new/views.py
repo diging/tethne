@@ -215,6 +215,7 @@ def dc_list():
         # hard code the values for showing demo on wednesday Apr 08 2014.
         columns = ['C', 'S.No', 'DataCollection ID', 'Created Date' ]
         checkboxes = ['','','']
+        #results is not used as of now.
         results =  [['1', 'Data#1156734', '20140408132211'], ['2', 'Data#2356734', '20140308092211'], ['3', 'Data#4456734', '20140408112221']]   
         return render_template('pages/list.datasets.html', user = session['username'])
 
@@ -264,18 +265,19 @@ def dc_create_slices():
         # take a DataCollection, and slice it.
         log = "Silces created and added in DB successfully"
 
-        return render_template('pages/generate.datasets.slices.html', user = user, text= log)
+        return render_template('pages/list.datasets.html', user = user, text= log)
 
     return render_template('pages/generate.datasets.slices.html', user = user, form= form)
 
 
-@dataset.route('/datacollection/view', methods=['GET','POST'])
-def dc_stats():
+@dataset.route('/datacollection/view/<data>', methods=['GET','POST'])
+def dc_stats(data=None):
     """
     List the stats for a selected Data Collection 
     
     """
     if request.method == 'GET'  :
+        print "Data is ", data
         # hard code the values for showing demo on wednesday Apr 08 2014.
         columns = ['C','S No', 'Paper ID', 'No. of nodes', 'No. of edges' ]
         checkboxes = ['','','','']
@@ -283,7 +285,7 @@ def dc_stats():
                     ['2', 'paper#1234',  '43', '250'], \
                     ['3', 'paper#4734',  '134', '2510']]
         
-        return render_template('pages/view.datasets.html', user = session['username'])
+        return render_template('pages/view.datasets.html', user = session['username'],data=data)
 
 
 """
@@ -342,8 +344,8 @@ def gc_analyze():
         return render_template('pages/analyze.graphcollection.html', user = session['username'])
 
 
-@dataset.route('/graphcollection/view', methods=['GET','POST'])
-def gc_stats():
+@dataset.route('/graphcollection/view/<data>', methods=['GET','POST'])
+def gc_stats(data=None):
     """
     List the stats for a selected GraphCollection 
     
@@ -353,7 +355,7 @@ def gc_stats():
         columns = ['C','S No', 'Paper ID', 'No. of nodes', 'No. of edges' ]
         checkboxes = ['','','','']
         results =  [['', '1', 'paper#113', '34', '250'], ['2', 'paper#1234',  '43', '250'], ['3', 'paper#4734',  '134', '2510']]   
-        return render_template('pages/view.graphcollection.html', user = session['username'])
+        return render_template('pages/view.graphcollection.html', user = session['username'],data=data)
 
 
 
