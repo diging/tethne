@@ -242,7 +242,7 @@ def dc_create():
         # Parse data.
         # Actually it should be the file taken from the server.
         # Currently this is a dummy one.
-        papers = rd.wos.read("/Users/ramki/tethne/testsuite/testin/2_testrecords.txt")
+        papers = rd.wos.read("/Users/kbatna/tethne/testsuite/testin/2_testrecords.txt")
     
         # Create a DataCollection
         from tethne.data import DataCollection, GraphCollection
