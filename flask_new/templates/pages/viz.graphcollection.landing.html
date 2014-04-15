@@ -5,8 +5,8 @@
 <div class="page-header">
   <h1>Welcome {{ user }} </h1>
 </div>
-<p class="lead"> {{ user }}'s Existing GraphCollection</p>
-
+<p class="lead"> List of GraphCollections</p>
+<p class="lead"> Pick one GraphCollection and Visualize it.</p>
  
 <!-- 
  <form action="" method="get" class="form" >
@@ -37,18 +37,16 @@
 </body>
 
  -->
-<p class="text-muted"> Pick one GraphCollection and delete it!</p>
+ 
 
-<a href="{{ url_for('.gc_del') }}"class="btn btn-success" role="button">Delete GraphCollection</a>
-<br> <br> 
-<p class="text-muted"> Pick one GraphCollection and analyze it !</p>
+<a href="{{ url_for('.dc_viztest') }}"class="btn btn-primary" role="button">Vizualize it !!</a>
+<a href="{{ url_for('.gc_list') }}"class="btn btn-warning" role="button">Graph DataCollections</a>
+<br><br> 
 
-<a href="{{ url_for('.gc_analyze') }}"class="btn btn-danger" role="button">Analyze GraphCollections</a>
-</br></br>
 <form action="" method="get" class="form" >
 <body>
 
- <table class="table table-hover" >
+<table class="table table-hover" >
             <tr>
               <th class="warning"></th>
               <th class="warning">No</th>
@@ -187,12 +185,18 @@
                 Apr 1, 2014
               </td>
             </tr>
-    
-    </tr>
+      </table>      
 
-</table>
 
- 
+
+<br>
+<br>
+
+<p class="text-warning"> Graph showing test data</p>
+<img src="/static/img/test.png"> 
+
+
+
 </body>
 </form>
 

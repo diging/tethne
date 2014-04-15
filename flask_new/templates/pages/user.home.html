@@ -1,28 +1,287 @@
 {% extends 'layouts/user.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
-
 <div class="page-header">
-  <h1>Welcome {{ user }} !! </h1>
+  <h1>Welcome {{ user }}  </h1>
 </div>
-
 <div class="panel panel-primary">
-	<div class="panel-heading"><bold>How can Tethne Help you??</div>
- 		 <div class="panel-body">
-    		<div class="well well-lg">
-  					<form role="form" class="form-inline" method = "post">
+  <div class="panel-heading">
+    <bold>
+    How can Tethne Help you??
+  </div>
+  <div class="panel-body">
+    <div class="well well-lg">
+      <form role="form" class="form-inline" method = "post">
+        <p class="lead">{{user}}'s most recent DataCollections.</p>
+       <table class="table table-hover" >
+            <tr>
+                <th class="success"></th>
+                <th class="success">No.</th>
+                <th class="success" >DataCollectionID</th>
+                <th class="success">DateCreated<br></th>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td class = ".table-hover"> 1</td>
+                <td class = ".table-hover">
+                    <a href="{{ url_for('.dc_stats',data='ds11334') }}">DataSet #11334</a>  
+                </td>
+                <td class = ".table-hover">
+                    Apr 14, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td class = ".table-hover" style="text-align: center; vertical-align: middle;">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td class = ".table-hover"> 2</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds53677') }}">DataSet #53677</a>
+                </td>
+                <td>
+                    Apr 14, 2014.	
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td> 3</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds78678') }}">DataSet #78678</a>  
+                </td>
+                <td>
+                    Apr 12, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td> 4</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds77478') }}">DataSet #77478</a>  
+                </td>
+                <td>
+                    Apr 10, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td> 5</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds89790') }}">DataSet #89790</a>  
+                </td>
+                <td>
+                    Apr 08, 2014.
+                </td>
+            </tr>
+            <tr>
+        </table>
+        <p class="text-muted"> Click below to list {{ user }}'s remaining DataCollections</p>
+        <!-- <input type="submit" value="List exisiting DataCollections" type="button" class="btn btn-warning"> --!>
+        <a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">List DataCollections</a>
+        <!--
+        <p class="text-muted"> Click below to create a new DataCollection</p>
+        --!>
+        <a href="{{ url_for('.dc_create') }}"class="btn btn-info" role="button">Create new DataCollection</a>
+       
+        <br> <br> 
+        <p class="text-muted"> Pick one DataCollection and do the following.</p>
+        
+      
+    	 <a href="{{ url_for('.dc_del') }}"class="btn btn-danger " role="button">Delete DataCollection</a>
+    <!-- 
+    <br> <br> 
+        <p class="text-muted"> Pick one DataCollection and slice them according to various axes.</p>
+ -->
+        <a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button">Slice DataCollections</a>
+        <body>
+        </br></br>
+        </br></br>
+        <p class="lead">{{user}}'s most recent GraphCollections.</p>
+          <table class="table table-hover" >
+            <tr>
+              <th class="warning"></th>
+              <th class="warning">No</th>
+              <th class="warning" >GraphCollection Name</th>
+              <th class="warning">Date Created<br></th>
+            </tr>
+            <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 1</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc11334') }}">gc#11334</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 14, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 1</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc11334') }}">gc#11334</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 14, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 2</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc124334') }}">gc#124334</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 14, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 3</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc11444') }}">gc#11444</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 14, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 4</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc200') }}">gc#200</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 14, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 5</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc111') }}">gc#11</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 14, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 6</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc334') }}">gc#334</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 14, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 7</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc134') }}">gc#134</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 14, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 8</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc1122334') }}">gc#1122334</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 14, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 9</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc2334') }}">gc#2334</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 14, 2014.
+              </td>
+            </tr>
+             <tr>
+              <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                <input type="radio" name="textbox">    
+              </td>
+              <td class = ".table-hover"> 10</td>
+              <td class = ".table-hover">
+               <a href="{{ url_for('.gc_stats',data='gc1433') }}">gc#1433</a>  
+              </td>
+              <td class = ".table-hover">
+                Apr 14, 2014.
+              </td>
+            </tr>
+            
+          </table>
+          
+          
+            <p class="text-muted"> Click below to list {{ user }}'s remaining GraphCollections</p>
+        <!-- <input type="submit" value="List exisiting DataCollections" type="button" class="btn btn-warning"> --!>
+        <a href="{{ url_for('.gc_list') }}"class="btn btn-warning" role="button">List GraphCollections</a>
+        <a href="{{ url_for('.gc_create_landing') }}"class="btn btn-success " role="button">Create GraphCollections</a>
+       
+        <p class="text-muted"> Pick one DataCollection and do the following.</p>
+        
+      
+    	 <a href="{{ url_for('.dc_del') }}"class="btn btn-danger " role="button">Delete DataCollection</a>
+    	 <a href="{{ url_for('.gc_stats',data='gc13453') }}"class="btn btn-info" role="button">View GraphCollection Stats</a>
+    	 <a href="{{ url_for('.gc_analyze') }}"class="btn btn-success" role="button">Analyze GraphCollections</a>
+    <!-- 
+    <br> <br> 
+        <p class="text-muted"> Pick one DataCollection and slice them according to various axes.</p>
+        <a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button">Slice DataCollections</a>
+          
+          
+          <p class="text-muted"> Pick one GraphCollection and delete it!</p>
 
-						<p class="lead">Please select one </p>
-						<p class="text-muted"> Click below to list the existing DataCollections</p>
-					    <!-- <input type="submit" value="List exisiting DataCollections" type="button" class="btn btn-warning"> --!>
-						<a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">List DataCollections</a>
-						<br> <br> 
-						<p class="text-muted"> Click below to create a new DataCollections</p>
-						<a href="{{ url_for('.dc_create') }}"class="btn btn-info" role="button">Create new DataCollection</a>
-					    
-						<br> <br> 
-						</body>
-					</form>
-				</div> </div> </div> </div>
+<a href="{{ url_for('.gc_del') }}"class="btn btn-danger" role="button">Delete GraphCollection</a>
+<br> <br> 
+<p class="text-muted"> Pick one GraphCollection and view its stats!</p>
 
+<a href="{{ url_for('.gc_stats',data='None') }}"class="btn btn-info" role="button">View GraphCollection Stats</a>
+<br> <br> 
+<p class="text-muted"> Pick one GraphCollection and analyze it !</p>
+
+<a href="{{ url_for('.gc_analyze') }}"class="btn btn-success" role="button">Analyze GraphCollections</a>
+ -->
+
+          <br> <br> 
+        </body>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
 {% endblock %}
