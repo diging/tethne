@@ -37,7 +37,14 @@
 </body>
 
  -->
+<p class="text-muted"> Pick one GraphCollection and delete it!</p>
 
+<a href="{{ url_for('.gc_del') }}"class="btn btn-success" role="button">Delete GraphCollection</a>
+<br> <br> 
+<p class="text-muted"> Pick one GraphCollection and analyze it !</p>
+
+<a href="{{ url_for('.gc_analyze') }}"class="btn btn-danger" role="button">Analyze GraphCollections</a>
+</br></br>
 <form action="" method="get" class="form" >
 <body>
 
@@ -184,13 +191,6 @@
     </tr>
 
 </table>
-<p class="text-muted"> Pick one GraphCollection and delete it!</p>
-
-<a href="{{ url_for('.gc_del') }}"class="btn btn-success" role="button">Delete GraphCollection</a>
-<br> <br> 
-<p class="text-muted"> Pick one GraphCollection and analyze it !</p>
-
-<a href="{{ url_for('.gc_analyze') }}"class="btn btn-danger" role="button">Analyze GraphCollections</a>
 
  
 </body>
