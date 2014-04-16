@@ -242,11 +242,11 @@ def dc_create():
         # Parse data.
         # Actually it should be the file taken from the server.
         # Currently this is a dummy one.
-        papers = rd.wos.read("/Users/kbatna/tethne/testsuite/testin/2_testrecords.txt")
+        #papers = rd.wos.read("/Users/kbatna/tethne/testsuite/testin/2_testrecords.txt")
     
         # Create a DataCollection
-        from tethne.data import DataCollection, GraphCollection
-        D = DataCollection(papers)
+        #from tethne.data import DataCollection, GraphCollection
+        #D = DataCollection(papers)
         log = "Dataset #127846748 created successfully"
         return render_template('pages/list.datasets.html', user = user, text= log)
     
