@@ -7,12 +7,8 @@
 <p class="lead"> Create Data Collection </p>
 <span class="help-block">A DataCollection organizes the papers for analysis. </span>
 </br>
-                    <p class="text-muted"> Click below to slice this dataset according to various axes.</p>
-<a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button">Slice DataCollections</a></br>
 </br>
-     <p class="text-muted">List {{ user }}'s DataCollections</p>
-        
-        					<a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">List DataCollections</a>
+  <a href="{{ url_for('.dc_list') }}"> <<< Back to List DataCollections</a><br></br>
  </br> </br>                 	
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -37,19 +33,15 @@
                     </label>
                 </div>
                 </br> 
-                <!--<span class="help-block">Output window</span> --!>
-                <!--
-                <textarea style="resize:vertical,horizontal" name="textarea" cols="num" rows="num"></textarea>
-                --!>
-                <!--
-                <textarea class="form-control" rows="3"> {{text}}</textarea>
-                --!>
+                
                 <div class="form-horizontal">
                     </br> </br>
                     <span class="help-block">Select multiple files here</span>
                     <label for="FileInput"> <input type="file" multiple id="fileinput" name="fileinput" value ="{{request.form.input_path}}"> 
                     File Name</label>
                     </br></br>
+                     <input type="text" class="form-control" id="inputDCName" placeholder="Enter a Name for your DataCollection">
+                     
                     <!-- Not a proper design ...change the class="btn btn-default alignment to middle --!>
                     &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
                     &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
