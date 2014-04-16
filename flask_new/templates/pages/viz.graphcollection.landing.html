@@ -5,6 +5,7 @@
 <div class="page-header">
   <h1>Welcome {{ user }} </h1>
 </div>
+ <a href="{{ url_for('.gc_list') }}"> <<< Back to List GraphCollections</a><br></br>
 <p class="lead"> List of GraphCollections</p>
 <p class="lead"> Pick one GraphCollection and Visualize it.</p>
  
@@ -40,7 +41,8 @@
  
 
 <a href="{{ url_for('.dc_viztest') }}"class="btn btn-primary" role="button">Vizualize it !!</a>
-<a href="{{ url_for('.gc_list') }}"class="btn btn-warning" role="button">Graph DataCollections</a>
+
+<!-- <a href="{{ url_for('.gc_list') }}"class="btn btn-warning" role="button">Graph DataCollections</a> -->
 <br><br> 
 
 <form action="" method="get" class="form" >

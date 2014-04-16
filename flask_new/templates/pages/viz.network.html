@@ -7,7 +7,7 @@
 <p class="lead"> List of GraphCollections</p>
 <form action="" method="get" class="form" >
    <body>
-      <a href="{{ url_for('.gc_list') }}"class="btn btn-warning" role="button">List of  GraphCollections</a>
+       <a href="{{ url_for('.gc_list') }}"> <<< Back to List GraphCollections</a><br></br>
       <br><br>
       <p class="text-warning"> D3</p>
       <img src="/static/img/d3.jpg"> 
@@ -17,6 +17,8 @@
          table { border: 1px solid black;float:left;width:148px;}
          #table_container{width:300px;margin:0 auto;}
       </style>
+         
+
       <div id="table_container">
          <table>
             <tr>
@@ -186,6 +188,7 @@
                </tr>
             </tbody>
          </table>
+      </div>
       </div>
    </body>
 </form>
