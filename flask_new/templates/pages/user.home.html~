@@ -1,0 +1,407 @@
+{% extends 'layouts/user.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="page-header">
+	<h1>Welcome {{ user }}  </h1>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<bold>
+		How can Tethne Help you??
+	</div>
+	<div></br></div>
+	<div class="panel-body">
+		<div class="well well-lg">
+			<form role="form" class="form-inline" method = "post">
+			<span class="help-block">Design 1:(The way it is in story, not sure if its good than the second design. Please provide comments) </span>
+				<p class="lead">{{user}}'s most recent DataCollections and GraphCollections.</p>
+				
+				<a href="{{ url_for('.dc_create') }}"class="btn btn-info" role="button">Create new DataCollection</a></br></br>
+				<div id="table_container">
+				
+					<div class="panel panel-info">
+  						<div class="panel-heading">
+   						 <h3 class="panel-title">Recent DataCollections and GraphCollections</h3>
+  							</div>
+  <div class="panel-body">
+   <!-- Main Table -->
+   
+<style>   
+.dctable
+{
+border:0px solid #FFFFFF;
+border-collapse:collapse;
+
+}
+
+.dctd
+{
+border:1px solid #3385D6;
+
+}
+.dcth
+{
+background-color:#3385D6;
+color:white;
+
+}
+</style>
+					<table class="dctable" width="100%" border="1" cellspacing="0" cellpadding="10">
+						<tr>
+							<td width="50%">
+								<!-- Table on left side -->
+								<table  class = "dctable" width="70%" border="1" cellspacing="0" cellpadding="1" align="left">
+									<tr>
+										<th class="dcth" >DataCollectionID</th>
+										<th class="dcth">DateCreated</th>
+										<th class="dcth">No.of.Papers</th>
+										<th class="dcth"></th>
+									</tr>
+									<tr>
+										<td class = "dctd">
+											<a href="{{ url_for('.dc_stats',data='ds11334') }}">DataSet #11334</a>  
+										</td>
+										<td class = "dctd">
+											Apr 14, 2014.
+										</td>
+										<td class = "dctd"> 23</td>
+										<td class = "dctd"> <abbr title="Create a Graph Collection">
+											<a href="{{ url_for('.gc_create') }}"> <img src="/static/img/create_graph.png "> </a> </abbr> 
+										</td>
+									</tr>
+									<tr>
+										<td class = "dctd">
+											<a href="{{ url_for('.dc_stats',data='ds53677') }}">DataSet #53677</a>
+										</td>
+										<td class = "dctd">
+											Apr 14, 2014.	
+										</td>
+										<td class = "dctd"> 53</td>
+										<td class = "dctd"> <abbr title="Create a Graph Collection">
+											<a href="{{ url_for('.gc_create') }}"> <img src="/static/img/create_graph.png "> </a> </abbr> 
+										</td>
+									</tr>
+									<tr>
+										<td class = "dctd">
+											<a href="{{ url_for('.dc_stats',data='ds78678') }}">DataSet #78678</a>  
+										</td>
+										<td class = "dctd">
+											Apr 12, 2014.
+										</td>
+										<td class = "dctd"> 23</td>
+										<td class = "dctd"> <abbr title="Create a Graph Collection">
+											<a href="{{ url_for('.gc_create') }}"> <img src="/static/img/create_graph.png "> </a> </abbr> 
+										</td>
+									</tr>
+									<tr>
+										<td class = "dctd">
+											<a href="{{ url_for('.dc_stats',data='ds77478') }}">DataSet #77478</a>  
+										</td>
+										<td class = "dctd">
+											Apr 10, 2014.
+										</td>
+										<td class = "dctd"> 2343</td>
+										<td class = "dctd"> <abbr title="Create a Graph Collection">
+											<a href="{{ url_for('.gc_create') }}"> <img src="/static/img/create_graph.png "> </a> </abbr> 
+										</td>
+									</tr>
+									<tr>
+										<td class = "dctd">
+											<a href="{{ url_for('.dc_stats',data='ds89790') }}">DataSet #89790</a>  
+										</td>
+										<td class = "dctd">
+											Apr 08, 2014.
+										</td>
+										<td class = "dctd"> 23</td>
+										<td class = "dctd"> <abbr title="Create a Graph Collection">
+											<a href="{{ url_for('.gc_create') }}"> <img src="/static/img/create_graph.png "> </a> </abbr> 
+										</td>
+									</tr>
+									<tr>
+								</table>
+								
+								<!-- END -->
+							</td>
+							
+							
+							
+							<td width="50%">
+								<!-- Table on right side -->
+								<table class = "dctable" width="70%" border="1" cellspacing="0" cellpadding="1" align="right">
+									<tr>
+										<th class="dcth" >GraphCollectionID</th>
+										<th class="dcth">DateCreated<br></th>
+										<th class="dcth">No.of.papers</th>
+									</tr>
+									<tr>
+										<td class = "dctd">
+											<a href="{{ url_for('.gc_stats',data='gc11334') }}">gc#11334</a>  
+										</td>
+										<td class = "dctd">
+											Apr 14, 2014.
+										</td>
+										<td class = "dctd">23</td>
+									</tr>
+									<tr>
+										<td class = "dctd">
+											<a href="{{ url_for('.gc_stats',data='gc11334') }}">gc#11334</a>  
+										</td>
+										<td class = "dctd">
+											Apr 14, 2014.
+										</td>
+										<td class = "dctd">23</td>
+									</tr>
+									<tr>
+										<td class = "dctd">
+											<a href="{{ url_for('.gc_stats',data='gc124334') }}">gc#124334</a>  
+										</td>
+										<td class = "dctd">
+											Apr 14, 2014.
+										</td>
+										<td class = "dctd"> 243</td>
+									</tr>
+									<tr>
+										<td class = "dctd">
+											<a href="{{ url_for('.gc_stats',data='gc11444') }}">gc#11444</a>  
+										</td>
+										<td class = "dctd">
+											Apr 12, 2014.
+										</td>
+										<td class = "dctd"> 23</td>
+									</tr>
+									<tr>
+										<td class = "dctd">
+											<a href="{{ url_for('.gc_stats',data='gc200') }}">gc#200</a>  
+										</td>
+										<td class = "dctd">
+											Apr 11, 2014.
+										</td>
+										<td class = "dctd"> 12311</td>
+									</tr>
+									
+							
+								</table>
+								
+								</br>
+							
+								<!-- END -->
+							</td>
+						
+						</tr>
+					
+					</table>
+					<div>
+					   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+           			   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+             		   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+             		     &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+           			   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+             		   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+             		     &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+           			   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+             		   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+					<a href = "{{url_for('.gc_list')}}">View more GraphCollections</a>
+					</div>
+					<a href = "{{url_for('.dc_list')}}">View more DataCollections</a> 
+					
+  </div>
+  	
+</div>		
+					
+					
+					</br></br></br><span class="help-block">Design 2</span>
+					
+					<p class="lead">{{user}}'s most recent DataCollections.</p>
+				
+				<a href="{{ url_for('.dc_create') }}"class="btn btn-info" role="button">Create new DataCollection</a></br></br>
+				<div id="table_container">
+					<table class="table table-condensed table-hover" >
+						<tr>
+							<th class="success" >DataCollectionID</th>
+							<th class="success">DateCreated</th>
+							<th class="success">No.of.Papers</th>
+							<th class="success"></th>
+						</tr>
+						<tr>
+							<td class = ".table-hover">
+								<a href="{{ url_for('.dc_stats',data='ds11334') }}">DataSet #11334</a>  
+							</td>
+							<td class = ".table-hover">
+								Apr 14, 2014.
+							</td>
+							<td class = ".table-hover"> 23</td>
+							<td class = ".table-hover"> <abbr title="Create a Graph Collection">
+								<a href="{{ url_for('.gc_create') }}"> <img src="/static/img/create_graph.png "> </a> </abbr> 
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="{{ url_for('.dc_stats',data='ds53677') }}">DataSet #53677</a>
+							</td>
+							<td>
+								Apr 14, 2014.	
+							</td>
+							<td class = ".table-hover"> 23</td>
+							<td class = ".table-hover"> <abbr title="Create a Graph Collection">
+								<a href="{{ url_for('.gc_create') }}"> <img src="/static/img/create_graph.png "> </a> </abbr> 
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="{{ url_for('.dc_stats',data='ds78678') }}">DataSet #78678</a>  
+							</td>
+							<td>
+								Apr 12, 2014.
+							</td>
+							<td class = ".table-hover"> 23</td>
+							<td class = ".table-hover"> <abbr title="Create a Graph Collection">
+								<a href="{{ url_for('.gc_create') }}"> <img src="/static/img/create_graph.png "> </a> </abbr> 
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="{{ url_for('.dc_stats',data='ds77478') }}">DataSet #77478</a>  
+							</td>
+							<td>
+								Apr 10, 2014.
+							</td>
+							<td class = ".table-hover"> 23</td>
+							<td class = ".table-hover"> <abbr title="Create a Graph Collection">
+								<a href="{{ url_for('.gc_create') }}"> <img src="/static/img/create_graph.png "> </a> </abbr> 
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<a href="{{ url_for('.dc_stats',data='ds89790') }}">DataSet #89790</a>  
+							</td>
+							<td>
+								Apr 08, 2014.
+							</td>
+							<td class = ".table-hover"> 23</td>
+							<td class = ".table-hover"> <abbr title="Create a Graph Collection">
+								<a href="{{ url_for('.gc_create') }}"> <img src="/static/img/create_graph.png "> </a> </abbr> 
+							</td>
+						</tr>
+						<tr>
+					</table>
+					<!-- <p class="text-muted"> Click below to list {{ user }}'s remaining DataCollections</p> -->
+					<!-- <input type="submit" value="List exisiting DataCollections" type="button" class="btn btn-warning"> --!>
+						<a href = "{{url_for('.dc_list')}}">View more DataCollections</a> </br>
+						<!-- <a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">List DataCollections</a> -->
+					<!--
+						<p class="text-muted"> Click below to create a new DataCollection</p>
+						--!>
+						<!-- 
+						
+						
+						<br> <br> 
+						<p class="text-muted"> Pick one DataCollection and do the following.</p>
+						
+						
+						<a href="{{ url_for('.dc_del') }}"class="btn btn-danger " role="button">Delete DataCollection</a>
+						<!~~ 
+						<br> <br> 
+						<p class="text-muted"> Pick one DataCollection and slice them according to various axes.</p>
+						~~>
+						<a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button">Slice DataCollections</a>
+						-->
+					<body>
+						</br>
+						<p class="lead">{{user}}'s most recent GraphCollections.</p>
+						<a href="{{ url_for('.gc_create_landing') }}"class="btn btn-success " role="button">Create GraphCollections</a></br></br>
+						<table class="table table-condensed table-hover">
+							<tr>
+								<th class="warning" >GraphCollectionID</th>
+								<th class="warning">DateCreated<br></th>
+								<th class="warning">No.of.papers</th>
+							</tr>
+							<tr>
+								<td class = ".table-hover">
+									<a href="{{ url_for('.gc_stats',data='gc11334') }}">gc#11334</a>  
+								</td>
+								<td class = ".table-hover">
+									Apr 14, 2014.
+								</td>
+								<td class = ".table-hover"> 23</td>
+							</tr>
+							<tr>
+								<td class = ".table-hover">
+									<a href="{{ url_for('.gc_stats',data='gc11334') }}">gc#11334</a>  
+								</td>
+								<td class = ".table-hover">
+									Apr 14, 2014.
+								</td>
+								<td class = ".table-hover"> 23</td>
+							</tr>
+							<tr>
+								<td class = ".table-hover">
+									<a href="{{ url_for('.gc_stats',data='gc124334') }}">gc#124334</a>  
+								</td>
+								<td class = ".table-hover">
+									Apr 14, 2014.
+								</td>
+								<td class = ".table-hover"> 243</td>
+							</tr>
+							<tr>
+								<td class = ".table-hover">
+									<a href="{{ url_for('.gc_stats',data='gc11444') }}">gc#11444</a>  
+								</td>
+								<td class = ".table-hover">
+									Apr 12, 2014.
+								</td>
+								<td class = ".table-hover"> 23</td>
+							</tr>
+							<tr>
+								<td class = ".table-hover">
+									<a href="{{ url_for('.gc_stats',data='gc200') }}">gc#200</a>  
+								</td>
+								<td class = ".table-hover">
+									Apr 11, 2014.
+								</td>
+								<td class = ".table-hover"> 123</td>
+							</tr>
+							<tr>
+								<td class = ".table-hover">
+									<a href="{{ url_for('.gc_stats',data='gc111') }}">gc#11</a>  
+								</td>
+								<td class = ".table-hover">
+									Apr 11, 2014.
+								</td>
+								<td class = ".table-hover"> 4523</td>
+							</tr>
+						</table>
+						<a href = "{{url_for('.gc_list')}}">View more GraphCollections</a> </br>
+						<!--  <a href="{{ url_for('.gc_list') }}"class="btn btn-warning" role="button">List GraphCollections</a> -->
+						<!--  <p class="text-muted"> Pick one DataCollection and do the following.</p> -->
+						<!-- 
+							<a href="{{ url_for('.dc_del') }}"class="btn btn-danger " role="button">Delete DataCollection</a>
+							              <a href="{{ url_for('.gc_stats',data='gc13453') }}"class="btn btn-info" role="button">View GraphCollection Stats</a>
+							              <a href="{{ url_for('.gc_analyze') }}"class="btn btn-success" role="button">Analyze GraphCollections</a>
+							-->
+						<!-- 
+							<br> <br> 
+							    <p class="text-muted"> Pick one DataCollection and slice them according to various axes.</p>
+							    <a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button">Slice DataCollections</a>
+							      
+							      
+							      <p class="text-muted"> Pick one GraphCollection and delete it!</p>
+							
+							<a href="{{ url_for('.gc_del') }}"class="btn btn-danger" role="button">Delete GraphCollection</a>
+							<br> <br> 
+							<p class="text-muted"> Pick one GraphCollection and view its stats!</p>
+							
+							<a href="{{ url_for('.gc_stats',data='None') }}"class="btn btn-info" role="button">View GraphCollection Stats</a>
+							<br> <br> 
+							<p class="text-muted"> Pick one GraphCollection and analyze it !</p>
+							
+							<a href="{{ url_for('.gc_analyze') }}"class="btn btn-success" role="button">Analyze GraphCollections</a>
+							-->
+						<br> <br> 
+					</body>
+			</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
