@@ -19,7 +19,8 @@
         <div class="well well-lg">
             <form role="form" class="form-inline" method = "post">
                 <span class="help-block">Tethne Supports two types of Input data. Please select one among them.</span>
-                <div class="radio">
+                <!-- 
+<div class="radio">
                     <label> <input type="radio" name="filetype" id="wos" value="WOS" checked value="{{ request.form.input_type}}">
                     WOS : Web Of Science field-tagged format.
                     </label>
@@ -33,22 +34,29 @@
                     </label>
                 </div>
                 </br> 
-                
+ -->
+ 				
+                <select class="form-control"> <option value="{{ request.form.input_type}}">WOS : Web Of Science field-tagged format.</option> <option>DFR  : JSTOR Data-For-Research dataset in XML format.</option> </select> 
                 <div class="form-horizontal">
                     </br> </br>
-                    <span class="help-block">Select multiple files here</span>
+                    <span class="help-block">Select input file(s) here</span>
                     <label for="FileInput"> <input type="file" multiple id="fileinput" name="fileinput" value ="{{request.form.input_path}}"> 
-                    File Name</label>
+                    </label>
                     </br></br>
-                     <input type="text" class="form-control" id="inputDCName" placeholder="Enter a Name for your DataCollection">
-                     
+                      <span class="help-block">Please provide a name to the DataCollection</span>
+                     <input type = "text" class="form" placeholder="DataCollection Name"></input>
+
                     <!-- Not a proper design ...change the class="btn btn-default alignment to middle --!>
+                    <div></br></div>
+                    <!-- 
+&nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
                     &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
                     &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
                     &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
                     &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
-                    &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
-                    <input button type="submit" value = "Create Datasets"class="btn btn-default">
+ -->
+                    <!-- <input button type="submit" value = "Create Datasets"class="btn btn-default"> -->
+                    <button type="submit" id ="Create Datasets"class="btn btn-lg btn-primary" disabled="disabled">Create Datasets</button>
                    <!-- 
  <span class="help-block">Output window</span>
                     <!~~<textarea style="resize:vertical,horizontal" name="textarea" cols="num" rows="num"></textarea> ~~!>
