@@ -4,6 +4,7 @@
 <div class="page-header">
 	<h1>Welcome {{ user }}  </h1>
 </div>
+
 <div class="panel panel-primary">
 	<div class="panel-heading">
 		<bold>
@@ -25,74 +26,95 @@
   							</div>
   <div class="panel-body">
    <!-- Main Table -->
-					<table width="100%" border="0" cellspacing="0" cellpadding="10">
+   
+<style>   
+.dctable
+{
+border:0px solid #FFFFFF;
+border-collapse:collapse;
+
+}
+
+.dctd
+{
+border:1px solid #3385D6;
+
+}
+.dcth
+{
+background-color:#3385D6;
+color:white;
+
+}
+</style>
+					<table class="dctable" width="100%" border="1" cellspacing="0" cellpadding="10">
 						<tr>
 							<td width="50%">
 								<!-- Table on left side -->
-								<table width="70%" border="1" cellspacing="0" cellpadding="1" align="left">
+								<table  class = "dctable" width="70%" border="1" cellspacing="0" cellpadding="1" align="left">
 									<tr>
-										<th class="success" >DataCollectionID</th>
-										<th class="success">DateCreated</th>
-										<th class="success">No.of.Papers</th>
-										<th class="success"></th>
+										<th class="dcth" >DataCollectionID</th>
+										<th class="dcth">DateCreated</th>
+										<th class="dcth">No.of.Papers</th>
+										<th class="dcth"></th>
 									</tr>
 									<tr>
-										<td class = ".table-hover">
+										<td class = "dctd">
 											<a href="{{ url_for('.dc_stats',data='ds11334') }}">DataSet #11334</a>  
 										</td>
-										<td class = ".table-hover">
+										<td class = "dctd">
 											Apr 14, 2014.
 										</td>
-										<td class = ".table-hover"> 23</td>
-										<td class = ".table-hover"> <abbr title="Create a Graph Collection">
+										<td class = "dctd"> 23</td>
+										<td class = "dctd"> <abbr title="Create a Graph Collection">
 											<a href="{{ url_for('.gc_create') }}"> <img src="/static/img/create_graph.png "> </a> </abbr> 
 										</td>
 									</tr>
 									<tr>
-										<td>
+										<td class = "dctd">
 											<a href="{{ url_for('.dc_stats',data='ds53677') }}">DataSet #53677</a>
 										</td>
-										<td>
+										<td class = "dctd">
 											Apr 14, 2014.	
 										</td>
-										<td class = ".table-hover"> 53</td>
-										<td class = ".table-hover"> <abbr title="Create a Graph Collection">
+										<td class = "dctd"> 53</td>
+										<td class = "dctd"> <abbr title="Create a Graph Collection">
 											<a href="{{ url_for('.gc_create') }}"> <img src="/static/img/create_graph.png "> </a> </abbr> 
 										</td>
 									</tr>
 									<tr>
-										<td>
+										<td class = "dctd">
 											<a href="{{ url_for('.dc_stats',data='ds78678') }}">DataSet #78678</a>  
 										</td>
-										<td>
+										<td class = "dctd">
 											Apr 12, 2014.
 										</td>
-										<td class = ".table-hover"> 23</td>
-										<td class = ".table-hover"> <abbr title="Create a Graph Collection">
+										<td class = "dctd"> 23</td>
+										<td class = "dctd"> <abbr title="Create a Graph Collection">
 											<a href="{{ url_for('.gc_create') }}"> <img src="/static/img/create_graph.png "> </a> </abbr> 
 										</td>
 									</tr>
 									<tr>
-										<td>
+										<td class = "dctd">
 											<a href="{{ url_for('.dc_stats',data='ds77478') }}">DataSet #77478</a>  
 										</td>
-										<td>
+										<td class = "dctd">
 											Apr 10, 2014.
 										</td>
-										<td class = ".table-hover"> 2343</td>
-										<td class = ".table-hover"> <abbr title="Create a Graph Collection">
+										<td class = "dctd"> 2343</td>
+										<td class = "dctd"> <abbr title="Create a Graph Collection">
 											<a href="{{ url_for('.gc_create') }}"> <img src="/static/img/create_graph.png "> </a> </abbr> 
 										</td>
 									</tr>
 									<tr>
-										<td>
+										<td class = "dctd">
 											<a href="{{ url_for('.dc_stats',data='ds89790') }}">DataSet #89790</a>  
 										</td>
-										<td>
+										<td class = "dctd">
 											Apr 08, 2014.
 										</td>
-										<td class = ".table-hover"> 23</td>
-										<td class = ".table-hover"> <abbr title="Create a Graph Collection">
+										<td class = "dctd"> 23</td>
+										<td class = "dctd"> <abbr title="Create a Graph Collection">
 											<a href="{{ url_for('.gc_create') }}"> <img src="/static/img/create_graph.png "> </a> </abbr> 
 										</td>
 									</tr>
@@ -106,72 +128,86 @@
 							
 							<td width="50%">
 								<!-- Table on right side -->
-								<table width="70%" border="1" cellspacing="0" cellpadding="1" align="right">
+								<table class = "dctable" width="70%" border="1" cellspacing="0" cellpadding="1" align="right">
 									<tr>
-										<th class="warning" >GraphCollectionID</th>
-										<th class="warning">DateCreated<br></th>
-										<th class="warning">No.of.papers</th>
+										<th class="dcth" >GraphCollectionID</th>
+										<th class="dcth">DateCreated<br></th>
+										<th class="dcth">No.of.papers</th>
 									</tr>
 									<tr>
-										<td class = ".table-hover">
+										<td class = "dctd">
 											<a href="{{ url_for('.gc_stats',data='gc11334') }}">gc#11334</a>  
 										</td>
-										<td class = ".table-hover">
+										<td class = "dctd">
 											Apr 14, 2014.
 										</td>
-										<td class = ".table-hover"> 23</td>
+										<td class = "dctd">23</td>
 									</tr>
 									<tr>
-										<td class = ".table-hover">
+										<td class = "dctd">
 											<a href="{{ url_for('.gc_stats',data='gc11334') }}">gc#11334</a>  
 										</td>
-										<td class = ".table-hover">
+										<td class = "dctd">
 											Apr 14, 2014.
 										</td>
-										<td class = ".table-hover"> 23</td>
+										<td class = "dctd">23</td>
 									</tr>
 									<tr>
-										<td class = ".table-hover">
+										<td class = "dctd">
 											<a href="{{ url_for('.gc_stats',data='gc124334') }}">gc#124334</a>  
 										</td>
-										<td class = ".table-hover">
+										<td class = "dctd">
 											Apr 14, 2014.
 										</td>
-										<td class = ".table-hover"> 243</td>
+										<td class = "dctd"> 243</td>
 									</tr>
 									<tr>
-										<td class = ".table-hover">
+										<td class = "dctd">
 											<a href="{{ url_for('.gc_stats',data='gc11444') }}">gc#11444</a>  
 										</td>
-										<td class = ".table-hover">
+										<td class = "dctd">
 											Apr 12, 2014.
 										</td>
-										<td class = ".table-hover"> 23</td>
+										<td class = "dctd"> 23</td>
 									</tr>
 									<tr>
-										<td class = ".table-hover">
+										<td class = "dctd">
 											<a href="{{ url_for('.gc_stats',data='gc200') }}">gc#200</a>  
 										</td>
-										<td class = ".table-hover">
+										<td class = "dctd">
 											Apr 11, 2014.
 										</td>
-										<td class = ".table-hover"> 123</td>
+										<td class = "dctd"> 12311</td>
 									</tr>
 									
+							
 								</table>
-								<a href = "{{url_for('.gc_list')}}">View more GraphCollections</a> </br>
-								<span class="help-block">(This should be placed properly below the table)</span>
-								</br>
 								
+								</br>
+							
 								<!-- END -->
 							</td>
 						
 						</tr>
-						
+					
 					</table>
+					<div>
+					<!-- Not a good way of design. handle in CSS -->
+					   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+           			   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+             		   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+             		     &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+           			   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+             		   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+             		     &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+           			   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+             		   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+					<a href = "{{url_for('.gc_list')}}">View more GraphCollections</a>
+					</div>
 					<a href = "{{url_for('.dc_list')}}">View more DataCollections</a> 
 					
   </div>
+  	
 </div>		
 					
 					
