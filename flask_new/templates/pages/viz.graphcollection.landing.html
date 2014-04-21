@@ -2,11 +2,10 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-<div class="page-header">
+<!-- <div class="page-header">
   <h1>Welcome {{ user }} </h1>
-</div>
+</div> -->
  <a href="{{ url_for('.gc_list') }}"> <<< Back to List GraphCollections</a><br></br>
-<p class="lead"> List of GraphCollections</p>
 <p class="lead"> Pick one GraphCollection and Visualize it.</p>
  
 <!-- 
@@ -48,12 +47,12 @@
 <form action="" method="get" class="form" >
 <body>
 
-<table class="table table-hover" >
+<table class="danger table table-hover" >
             <tr>
-              <th class="warning"></th>
-              <th class="warning">No</th>
-              <th class="warning" >GraphCollection Name</th>
-              <th class="warning">Date Created<br></th>
+              <th class="danger"></th>
+              <th class="danger">No</th>
+              <th class="danger" >GraphCollection Name</th>
+              <th class="danger">Date Created<br></th>
             </tr>
             <tr>
               <td style="text-align: center; vertical-align: middle;" class = ".table-hover">

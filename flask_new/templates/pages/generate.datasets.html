@@ -1,15 +1,13 @@
 {% extends 'layouts/user.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
-<div class="page-header">
+<!-- <div class="page-header">
     <h1>Welcome {{user}} </h1>
-</div>
-<p class="lead"> Create Data Collection </p>
+</div> -->
+<p class="lead"> Create a new DataCollection </p>
 <span class="help-block">A DataCollection organizes the papers for analysis. </span>
-</br>
-</br>
-  <a href="{{ url_for('.dc_list') }}"> <<< Back to List DataCollections</a><br></br>
- </br> </br>                 	
+  <a href="{{ url_for('.dc_list') }}"> <<< Back to List DataCollections</a></br>
+ </br> 
 <div class="panel panel-primary">
     <div class="panel-heading">
         <bold>
@@ -18,7 +16,7 @@
     <div class="panel-body">
         <div class="well well-lg">
             <form role="form" class="form-inline" method = "post">
-                <span class="help-block">Tethne Supports two types of Input data. Please select one among them.</span>
+                <span class="help-block">Tethne Supports these input data formats. Please select one among them.</span>
                 <!-- 
 <div class="radio">
                     <label> <input type="radio" name="filetype" id="wos" value="WOS" checked value="{{ request.form.input_type}}">
@@ -43,7 +41,7 @@
                     <label for="FileInput"> <input type="file" multiple id="fileinput" name="fileinput" value ="{{request.form.input_path}}"> 
                     </label>
                     </br></br>
-                      <span class="help-block">Please provide a name to the DataCollection</span>
+                      <span class="help-block">Please provide a name to this DataCollection</span>
                      <input type = "text" class="form" placeholder="DataCollection Name"></input>
 
                     <!-- Not a proper design ...change the class="btn btn-default alignment to middle --!>
