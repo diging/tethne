@@ -1,9 +1,9 @@
 {% extends 'layouts/user.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
-<div class="page-header">
+<!-- <div class="page-header">
     <h1>Welcome {{ user }} </h1>
-</div>
+</div> -->
 <p class="lead"> List of {{user}}'s Data Collections</p>
 <!-- 
     <form action="" method="get" class="form" >
@@ -35,23 +35,26 @@
     
     -->
     
-   <p class="text-muted"> Pick one DataCollection and delete it!</p>
+   <p class="text-muted"> Pick one DataCollection to delete/analyze it. A GraphCollection can also be created from the selected DataCollection.</p>
         <a href="{{ url_for('.dc_del') }}"class="btn btn-danger " role="button">Delete DataCollections</a>
-        <br> <br> 
-</form>
-<p class="text-muted"> Pick one DataCollection and slice them according to various axes.</p>
-<a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button">Slice DataCollections</a></br></br>
+        <a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button">Slice DataCollections</a>
+        <a href="{{ url_for('.gc_create') }}"class="btn btn-success " role="button">Create GraphCollection</a></br> </br>
 
-<p class="text-muted"> Create a new GraphCollection</p>
-<a href="{{ url_for('.gc_create') }}"class="btn btn-success " role="button">Create GraphCollections</a></br></br>   
+      <!--   <br> <br>  -->
+</form>
+<!-- <p class="text-muted"> Pick one DataCollection and slice them according to various axes.</p> -->
+<!-- <a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info"    role="button">Slice DataCollections</a></br></br>
+ -->
+<!-- <p class="text-muted"> Create a new GraphCollection</p>
+<a href="{{ url_for('.gc_create') }}"class="btn btn-success " role="button">Create GraphCollections</a></br></br>   --> 
 <form action="" method="get" class="form" >
     <body>
     	<div class="table-responsive">
         <table class="table table-hover" >
             <tr>
-                <th class="success"></th>
+                <th class="danger"></th>
                 <th class="success">No.</th>
-                <th class="success" >DataCollectionID</th>
+                <th class="danger" >DataCollectionID</th>
                 <th class="success">DateCreated<br></th>
             </tr>
             <tr>

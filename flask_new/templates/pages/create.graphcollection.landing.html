@@ -1,11 +1,15 @@
 {% extends 'layouts/user.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
-<div class="page-header">
+<!-- <div class="page-header">
     <h1>Welcome {{ user }} </h1>
-</div>
-<p class="lead"> List of {{user}}'s Data Collections</p>
+</div> -->
+<!-- <p class="lead"> List of {{user}}'s Data Collections</p> -->
 <p class="lead"> Please select a DataCollection to generate a GraphCollection</p>
+        <a href="{{ url_for('.gc_create') }}"class="btn btn-success " role="button">Create GraphCollection</a>
+<a href="{{ url_for('.gc_list') }}"> See the List of existing GraphCollections</a><br></br>
+    </br></br>
+
 <!-- 
     <form action="" method="get" class="form" >
     <body>
@@ -191,14 +195,14 @@
             </tr>
         </table>
         
-          <p class="text-muted"> Pick one DataCollection and Create a Graph Collection of it!</p>
+       <!--    <p class="text-muted"> Pick one DataCollection and Create a Graph Collection of it!</p>
         <a href="{{ url_for('.gc_create') }}"class="btn btn-success " role="button">Create GraphCollections</a>
-        </br></br>
+        </br></br> -->
        
 </form>
 
-<p class="text-muted"> View the List of GraphCollections</p>
-<a href="{{ url_for('.gc_list') }}"class="btn btn-info" role="button">List GraphCollections</a>
+<!-- <p class="text-muted"> View the List of GraphCollections</p>
+<a href="{{ url_for('.gc_list') }}"class="btn btn-info" role="button">List GraphCollections</a> -->
 
 </br></br>
 </body>

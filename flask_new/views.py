@@ -353,7 +353,7 @@ def gc_analyze():
     if request.method == 'POST'  :
         # take a DataCollection, and slice it.
         
-        return render_template('pages/list.graphcollection.html', user = session['username'])
+        return render_template('pages/view.graphcollection.html', user = session['username'])
     return render_template('pages/analyze.graphcollection.html', user = session['username'])
    
 

@@ -12,18 +12,18 @@
 	</div>
 	<div></br></div>
 	<div class="panel-body">
-		<div class="well well-lg">
+		<!-- <div class="well well-lg"> -->
 			<form role="form" class="form-inline" method = "post">
-			<span class="help-block">Design 1:(The way it is in story, not sure if its good than the second design. Please provide comments) </span>
+			<!-- <span class="help-block">Design 1:(The way it is in story, not sure if its good than the second design. Please provide comments) </span> -->
+			<!-- <span class="help-block">{{user}}'s most recent DataCollections and GraphCollections.</span> -->
 				<p class="lead">{{user}}'s most recent DataCollections and GraphCollections.</p>
-				
-				<a href="{{ url_for('.dc_create') }}"class="btn btn-info" role="button">Create new DataCollection</a></br></br>
-				<div id="table_container">
-				
+				<a href="{{ url_for('.dc_create') }}"class="btn btn-info" role="button">Create new DataCollection
+				</a></br>
+				<!-- <div id="table_container">
 					<div class="panel panel-info">
   						<div class="panel-heading">
-   						 <h3 class="panel-title">Recent DataCollections and GraphCollections</h3>
-  							</div>
+   						 <h3 class="panel-title">Recent DataCollections and GraphCollections</h3> -->
+  				<!-- 			</div> -->
   <div class="panel-body">
    <!-- Main Table -->
    
@@ -40,22 +40,37 @@ border-collapse:collapse;
 border:1px solid #3385D6;
 
 }
+
+.outerdctd
+{
+border:1px solid #FFFFFF;
+
+}
 .dcth
 {
 background-color:#3385D6;
 color:white;
 
 }
+
+
+</style>
+
+
+<style>
+  .link, .explanation {display:inline}
+  .link {float: right}
+  .explanation {float: right}
 </style>
 					<table class="dctable" width="100%" border="1" cellspacing="0" cellpadding="10">
 						<tr>
-							<td width="50%">
+							<td class = 'outerdctd' width="50%">
 								<!-- Table on left side -->
 								<table  class = "dctable" width="70%" border="1" cellspacing="0" cellpadding="1" align="left">
 									<tr>
-										<th class="dcth" >DataCollectionID</th>
-										<th class="dcth">DateCreated</th>
-										<th class="dcth">No.of.Papers</th>
+										<th class="dcth" >Collection</th>
+										<th class="dcth">Created</th>
+										<th class="dcth">N</th>
 										<th class="dcth"></th>
 									</tr>
 									<tr>
@@ -126,13 +141,13 @@ color:white;
 							
 							
 							
-							<td width="50%">
+							<td class = "outerdctd" width="50%">
 								<!-- Table on right side -->
 								<table class = "dctable" width="70%" border="1" cellspacing="0" cellpadding="1" align="right">
 									<tr>
-										<th class="dcth" >GraphCollectionID</th>
-										<th class="dcth">DateCreated<br></th>
-										<th class="dcth">No.of.papers</th>
+										<th class="dcth" >Collection</th>
+										<th class="dcth">Created<br></th>
+										<th class="dcth">N</th>
 									</tr>
 									<tr>
 										<td class = "dctd">
@@ -191,27 +206,18 @@ color:white;
 						</tr>
 					
 					</table>
-					<div>
-					<!-- Not a good way of design. handle in CSS -->
-					   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
-           			   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
-             		   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
-             		     &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
-           			   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
-             		   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
-             		     &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
-           			   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
-             		   &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
-					<a href = "{{url_for('.gc_list')}}">View more GraphCollections</a>
-					</div>
 					<a href = "{{url_for('.dc_list')}}">View more DataCollections</a> 
+					
+					
+  					<span class="link"><a href = "{{url_for('.gc_list')}}">View more GraphCollections</a></span>
+		
 					
   </div>
   	
 </div>		
 					
 					
-					</br></br></br><span class="help-block">Design 2</span>
+					<!-- </br></br></br><span class="help-block">Design 2</span>
 					
 					<p class="lead">{{user}}'s most recent DataCollections.</p>
 				
@@ -287,9 +293,9 @@ color:white;
 						<tr>
 					</table>
 					<!-- <p class="text-muted"> Click below to list {{ user }}'s remaining DataCollections</p> -->
-					<!-- <input type="submit" value="List exisiting DataCollections" type="button" class="btn btn-warning"> --!>
+					<!-- <input type="submit" value="List exisiting DataCollections" type="button" class="btn btn-warning">
 						<a href = "{{url_for('.dc_list')}}">View more DataCollections</a> </br>
-						<!-- <a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">List DataCollections</a> -->
+					 -->	<!-- <a href="{{ url_for('.dc_list') }}"class="btn btn-warning" role="button">List DataCollections</a>  --!>
 					<!--
 						<p class="text-muted"> Click below to create a new DataCollection</p>
 						--!>
@@ -307,7 +313,7 @@ color:white;
 						~~>
 						<a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button">Slice DataCollections</a>
 						-->
-					<body>
+					<!-- <body>
 						</br>
 						<p class="lead">{{user}}'s most recent GraphCollections.</p>
 						<a href="{{ url_for('.gc_create_landing') }}"class="btn btn-success " role="button">Create GraphCollections</a></br></br>
