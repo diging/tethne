@@ -38,7 +38,7 @@
 from flask import Flask, session, redirect, url_for, escape,\
                     request,render_template,flash
 from flask_wtf import Form
-from forms import LoginForm,RegisterForm,ForgotForm,GenerateDataSetsForm
+from forms import LoginForm,RegisterForm,ForgotForm,GenerateDataSetsForm,ListDataSetsForm
 from flask import abort,Blueprint
 import datetime,logging
 from logging import Formatter, FileHandler
@@ -211,14 +211,19 @@ def dc_list():
     List Data Collection 
     Show the user the existing collection of datacollection.
     """
-    if request.method == 'GET'  :
-        # hard code the values for showing demo on wednesday Apr 08 2014.
-        columns = ['C', 'S.No', 'DataCollection ID', 'Created Date' ]
-        checkboxes = ['','','']
-        #results is not used as of now.
-        results =  [['1', 'Data#1156734', '20140408132211'], ['2', 'Data#2356734', '20140308092211'], ['3', 'Data#4456734', '20140408112221']]   
-        return render_template('pages/list.datasets.html', user = session['username'])
 
+    form = ListDataSetsForm(request.form)
+    user = session['username']
+
+    if request.method == 'POST'  :
+        # hard code the values for showing demo on wednesday Apr 08 2014.
+        log = "Please select a DataCollection first"
+        input_type = request.form['filetype']
+        print "input_slice", input_type
+        return render_template('pages/list.datasets.html', user = session['username'],log=log)
+    
+    flash ("Please select a DataCollection first")
+    return render_template('pages/list.datasets.html', user = session['username'])
 
 @dataset.route('/datacollection/dc_del', methods=['GET','POST'])
 def dc_del():
@@ -263,9 +268,10 @@ def dc_create_slices():
     user = session['username']
     if request.method == 'POST'  :
         # take a DataCollection, and slice it.
-        log = "Silces created and added in DB successfully"
-
-        return render_template('pages/list.datasets.html', user = user, text= log)
+        log = "Slices created and added in DB successfully"
+        print "slices"
+       
+        return render_template('pages/view.datasets.html', user = user, text= log)
 
     return render_template('pages/generate.datasets.slices.html', user = user, form= form)
 
