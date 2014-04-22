@@ -60,3 +60,13 @@ class GenerateDataSetsForm(Form):
     
     input_type            = RadioField('input_type', [validators.Required()])
     input_path            = TextField('input_path', [validators.Required()])
+
+
+class ListDataSetsForm(Form):
+    """
+    List DataColleection form
+    """
+    #Need to check on the input dataset ID.
+    input_type = RadioField('input_type',[validators.Required()])
+
+   
