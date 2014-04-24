@@ -35,29 +35,40 @@
     
     -->
 
-   <script type="text/javascript">
-   $("input:radio").attr("checked", false);
-   </script> 
+
+ <body>
+<button id="ok1">Slice DataSets</button>
+<!-- <p>This is a paragraph with little content.</p> -->
+<input type="radio" id="rd" value=0>
+
    <!-- <form action="" method="post" class="form" >  -->  
 <form role="form" class="form-inline" method = "post">
    <p class="text-muted"> Pick one DataCollection to delete/analyze it. A GraphCollection can also be created from the selected DataCollection.</p>
-        <a href="{{ url_for('.dc_del') }}"class="btn btn-danger " role="button" id="delete">Delete DataCollections</a>
-        <!-- <a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button" id="slice" value ="{{request.form.slice}}">Slice DataCollections</a>
-         -->
 
-         <a href="{{ url_for('.dc_list') }}"class="btn btn-info" role="button" id="slice" value ="{{request.form.slice}}">Slice DataCollections</a>
+        <a href="{{ url_for('.dc_del') }}"class="btn btn-danger " role="button" id="delete">Delete DataCollections</a>
+
+        <a href="{{ url_for('.dc_create_slices') }}"class="btn btn-success " role="button" id="slice">Slice DataCollection</a></br> </br>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
+</script>
+<script>
+$(document).ready(function(){
+  $("#ok1").click(function(){
+    $("p").hide("slow",function(){
+     if($('#rd').is(':checked')) { alert("it's checked"); }
+    });
+  });
+});
+</script>
+
+
+
+         <!-- <a href="{{ url_for('.dc_list') }}"class="btn btn-info" role="button" id="slice" value ="{{request.form.slice}}">Slice DataCollections</a>
+ -->
+              
         
         <a href="{{ url_for('.gc_create') }}"class="btn btn-success " role="button" id="create">Create GraphCollection</a></br> </br>
-
-      <!--   <br> <br>  -->
-
-<!-- <p class="text-muted"> Pick one DataCollection and slice them according to various axes.</p> -->
-<!-- <a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info"    role="button">Slice DataCollections</a></br></br>
- -->
-<!-- <p class="text-muted"> Create a new GraphCollection</p>
-<a href="{{ url_for('.gc_create') }}"class="btn btn-success " role="button">Create GraphCollections</a></br></br>   --> 
-
-    <body>
+  <p> click me</p>
+   
     	<div class="table-responsive">
         <table class="table table-hover" >
             <tr>
@@ -72,7 +83,8 @@
             <tr>
                 <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
                     
-                            <input type="radio" name="filetype" id="ds" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                            <input type="radio" name="filetype" id="ds1" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                           
                              
                       
                     <!-- <input type="radio" name="textbox" value ="{{request.form.input_path}}"> -->    
@@ -96,7 +108,7 @@
             </tr>
             <tr>
                 <td class = ".table-hover" style="text-align: center; vertical-align: middle;">
-                      <input type="radio" name="filetype" id="ds" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                      <input type="radio" name="filetype" id="ds2" value="DataSet #53677" checked value="{{ request.form.input_type}}">
                                 
                 </td>
                 <td class = ".table-hover"> 2</td>
@@ -119,7 +131,7 @@
             </tr>
             <tr>
                 <td style="text-align: center; vertical-align: middle;">
-                      <input type="radio" name="filetype" id="ds" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                      <input type="radio" name="filetype" id="ds3" value="DataSet #53677" checked value="{{ request.form.input_type}}">
                              
                 </td>
                 <td> 3</td>
@@ -142,7 +154,7 @@
             </tr>
             <tr>
                 <td style="text-align: center; vertical-align: middle;">
-                      <input type="radio" name="filetype" id="ds" value="DataSet #53677" checked value="{{ request.form.input_type}}">  
+                      <input type="radio" name="filetype" id="ds4" value="DataSet #53677" checked value="{{ request.form.input_type}}">  
                 </td>
                 <td> 4</td>
                 <td>
@@ -154,7 +166,7 @@
             </tr>
             <tr>
                 <td style="text-align: center; vertical-align: middle;">
-                     <input type="radio" name="filetype" id="ds" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                     <input type="radio" name="filetype" id="ds5" value="DataSet #53677" checked value="{{ request.form.input_type}}">
                 </td>
                 <td> 5</td>
                 <td>
@@ -166,7 +178,7 @@
             </tr>
             <tr>
                 <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
-                      <input type="radio" name="filetype" id="ds" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                      <input type="radio" name="filetype" id="ds6" value="DataSet #53677" checked value="{{ request.form.input_type}}">
                 </td>
                 <td class = ".table-hover"> 6</td>
                 <td class = ".table-hover">
@@ -178,7 +190,7 @@
             </tr>
             <tr>
                 <td class = ".table-hover" style="text-align: center; vertical-align: middle;">
-                    <input type="radio" name="filetype" id="ds" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                    <input type="radio" name="filetype" id="ds7" value="DataSet #53677" checked value="{{ request.form.input_type}}">
                 </td>
                 <td class = ".table-hover"> 7</td>
                 <td>
@@ -190,7 +202,7 @@
             </tr>
             <tr>
                 <td style="text-align: center; vertical-align: middle;">
-                      <input type="radio" name="filetype" id="ds" value="DataSet #53677" checked value="{{ request.form.input_type}}">  
+                      <input type="radio" name="filetype" id="ds8" value="DataSet #53677" checked value="{{ request.form.input_type}}">  
                 </td>
                 <td> 8</td>
                 <td>
@@ -202,7 +214,7 @@
             </tr>
             <tr>
                 <td style="text-align: center; vertical-align: middle;">
-                      <input type="radio" name="filetype" id="ds" value="DataSet #53677" checked value="{{ request.form.input_type}}"> 
+                      <input type="radio" name="filetype" id="ds9" value="DataSet #53677" checked value="{{ request.form.input_type}}"> 
                 </td>
                 <td> 9</td>
                 <td>
@@ -214,7 +226,7 @@
             </tr>
             <tr>
                 <td style="text-align: center; vertical-align: middle;">
-                     <input type="radio" name="filetype" id="ds" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                     <input type="radio" name="filetype" id="ds9" value="DataSet #53677" checked value="{{ request.form.input_type}}">
                 </td>
                 <td> 10</td>
                 <td>
@@ -227,7 +239,7 @@
             </tr>
             <tr>
                 <td style="text-align: center; vertical-align: middle;">
-                      <input type="radio" name="filetype" id="ds" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                      <input type="radio" name="filetype" id="ds10" value="DataSet #53677" checked value="{{ request.form.input_type}}">
                 </td>
                 <td> 11</td>
                 <td>
@@ -239,7 +251,7 @@
             </tr>
             <tr>
                 <td style="text-align: center; vertical-align: middle;">
-                     <input type="radio" name="filetype" id="ds" value="DataSet #53677" checked value="{{ request.form.input_type}}  name="category_visibility" value="0" ">
+                     <input type="radio" name="filetype" id="ds11" value="DataSet #53677" checked value="{{ request.form.input_type}}">
                 </td>
                 <td> 12</td>
                 <td>
@@ -254,6 +266,14 @@
 
 
 </br></br>
+
+
+ 
+
+ 
+
 </body>
+</form>
+
 
 {% endblock %}

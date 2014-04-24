@@ -222,6 +222,7 @@ def dc_list():
         print "input_slice", input_type
         return render_template('pages/list.datasets.html', user = session['username'],log=log)
     
+    print "input_slice"
     flash ("Please select a DataCollection first")
     return render_template('pages/list.datasets.html', user = session['username'])
 

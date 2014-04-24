@@ -1,50 +1,75 @@
 from flask import current_app as app
 from flask.ext.zodb import Object, List, Dict
-from hashlib import sha256
-
 from BTrees.OOBTree import OOBTree as BTree
-#from persistent import Persistent as Object
 from persistent import Persistent
 from persistent.list import PersistentList as List
 from persistent.mapping import PersistentMapping as Dict
-
 from ZODB.FileStorage import FileStorage
 from ZODB.DB import DB
-import ZODB.config
-import transaction
+import ZODB.config,transaction
 from hashlib import sha256
 
+# Import tethne classes
+import tethne.data as data
+import tethne.readers as rd
+# from tethne.data import DataCollection 
+# from tethne.data import GraphCollection 
+
+#Errors:
+
+#import tethne.networks as nt 
+# >>> import models as m
+# Traceback (most recent call last):
+#   File "<stdin>", line 1, in <module>
+#   File "models.py", line 15, in <module>
+#     import tethne.networks as nt
+#   File "E:\program_files\Anaconda\lib\site-packages\tethne\networks.py", line
+# 1, in <module>
+#     for paper in meta_list:
+# NameError: name 'meta_list' is not defined
 
 
 
+
+# User Class inherits Persistent class.
 class User(Persistent):
         
     """
-    User Class
-    DocString to be added
-    
+    User Class.
+    1. Can get the user details
+    2. Can check if the user is an authenticated user
+    3.  
     """
 
-    def __init__(self,name, email, password,emailid,institution,que,ans):
+    #def __init__(self,name,password,emailid,institution,que,ans):
+    def __init__(self,name,password,emailid=None,institution=None,\
+                                    que=None,ans=None):    
         self.name = name
-        self.email = email
         self.password = password
         self.id = emailid
         self.institution = institution
         self.secretque = que 
         self.secretans = ans    
-        self.role = "user"
-        self._p_changed = 1 # for mutable objects
+        self.role = 1 # all users who register will be "Normal Users"
+        self._p_changed = 1 #for mutable objects
 
-    def get_user(self,name,password):
-        initialize_userdb()
-        print "In get_user"
-        pass
+    def get_user_details(self,name):
+        return 
     
-    def is_authenticated(self):
-        pass
+    def is_authenticated(self,name,password):
+       """
+
+       To check if the user details are present in the DB
+       Return a boolean true or false
+
+       The input password is encrypted before checking it with the stored user
+
+       """
+       #Perform the check, return the boolean result.
+       pass
     
-    def is_anonymous(self):
+    def is_anonymous(self,name):
+
         pass
     
     def initialize_userdb(self):
@@ -56,94 +81,175 @@ class User(Persistent):
         dbroot = conn.open().root()
         print ("DB initialized")
         
-    def is_active(self):
-        return True
-  
-    def get_id(self):
-        return unicode(self.id)
- 
+
     def __repr__(self):
         return '<User %r>' % (self.name)
 
-class ManageUsers(User):
+class AdminActivities(Persistent):
 	
 	"""
-	User Class
-    DocString to be added
+	Admin Class
+    Admin can perform the following activities. 
+    1. List all Users.
+    2. Remove Users.
+    3. List all the DataCollections or filtered by user(s)
+    4. Monitor the recent activity in the system 
+    (any DataCollection or GraphCollection) 
+    """
     
-	"""
-	def login(self,name):
-		#pass the User Object and retrieve the user details
-		self.name = name
-		self._p_changed = 1
-    	
-   
-    # def list_users(self):
-#         # only for admin - whose role is "0"
-#         pass
-#     
-#     def approve_user(self,UserObject):
-#         # only for admin
-#         pass
-#     
-#     def del_user(self,UserObject):
-#         # only for admin
-#         pass
-#    
-#         
+
         
-class GraphCollection(Object):
+class PersistentGraphCollection(Persistent):
     
     """
-    GraphCollection Class
-    DocString to be added
+    PersistentGraphCollection Class.
+    It is used to persist the Tethne GraphCollection objects
+    This has the following methods.
+
+
     """
     
-    def __init__(self):
+    def __init__(self,g_id,name,owner,graph_obj):
+        
+        self.id = g_id
+        self.name = name
+        self.owner = owner
+        self.graph_obj = graph_obj
         pass
     
+    def ListRecentGraphcollections(self,owner,date):
+        '''
+        List the recent existing Graph Collections in the Home page
+         
+        parameters
+        ``````````
+        owner   - the userID 
+        date    - the system date and to fetch only 
+                  top 5 Collections less than the date.
+        '''
+
+        pass  
+
+    def ListAllGraphcollections(self,owner):
+        '''
+        List all the existing Graph Collections in the 
+        List Graph Collections page
+         
+        parameters
+        ``````````
+        owner   - the userID 
+        date    - the system date and to fetch only 
+                  top 5 Collections less than the date.
+
+        return
+        ```````
+        A List of values for the tables in List Details view.
+        '''
+        pass     
     
-    def list_collections(self):
-        # List the existing Graph Collections
+    def DelGraphCollection(self,graph_obj,owner):
+        '''
+        Delete the existing GraphCollections in the Home page.
+         
+        parameters
+        ``````````
+        graph_obj = the GraphCollection to be deleted
+        owner   - the userID 
+        
+        '''
+
+        return     
+        
+    
+    def AnalyseGraphCollection(self,graph_obj,owner):
+        '''
+        Analyze the existing GraphCollections in the Home page.
+         
+        parameters
+        ``````````
+        graph_obj = the GraphCollection to be analyzed
+        owner   - the userID 
+        
+        '''
+
+        return  
+      
+    
+    def ListDetails(self,graph_obj):
+        # provide the details of the selected dataset
+        # On-the fly computation or DB storage of the 
+        # No.of.slices, No of Papers is unsure.But keeping this class
+        # as an option for the same.
         pass 
-    
-    def create_collections(self,DataObjectsdict):
-        # List the existing Graph Collections
-        pass 
-    
-    def analyze_collections(self,DataObject,method):
+       
+
+    def analyze_collections(self,graph_obj,method):
         # Method : Betweenness centrality
-        # Call users class here
         pass
     
         
         
-class DataCollection(Object):
+class PersistentDataCollection(Persistent):
     
     """
-    DataCollection Class
+    PersistentDataCollection Class
     DocString to be added
     """
 
-    def __init__(self,user_id,dataset_obj,date):
-        self.user_id = user_id
-        self.dataset_obj = dataset_obj
+    def __init__(self,user_id,date,dataset_obj):
+
+        self.id = user_id
         self.date = date
+        self.dataset_obj = data.DataCollection(); #  or simply dc - tethne dataCollection Object
         self._p_changed = 1 # for mutable objects
 
-    def list_datasets(self):
-        # Call Users class here and show the existing data sets collection
-        # List the existing data sets
+    def ListDetails(self,dataset_obj):
+        # provide the details of the selected dataset
+        # On-the fly computation or DB storage of the 
+        # No.of.slices, No of Papers is unsure.But keeping this class
+        # as an option for the same.
         pass 
-        
-    def create_datasets(self,input_type, input_path, input_id):
+    
+
+    def ListRecentDatacollections(self,owner,date):
+        '''
+        List the recent existing Data Collections in the Home page
+         
+        parameters
+        ``````````
+        owner   - the userID 
+        date    - the system date and to fetch only 
+                  top 5 Collections less than the date.
+        '''
+
+        pass  
+
+    def ListAllDatacollections(self,owner):
+        '''
+        List all the existing Data Collections in the 
+        List DataCollections page
+         
+        parameters
+        ``````````
+        owner   - the userID 
+        date    - the system date and to fetch only 
+                  top 5 Collections less than the date.
+
+        return
+        ```````
+        A List of values for the tables in ListDetails view.
+        '''
+        pass         
+
+    def CreateDataCollection(self,input_type, input_path, owner):
         
         # Wos and Dfr type
         self.input_type = input_type # WOS or JSTOR
         self.input_path = input_path # The Path got from the user
-        self.input_id = input_id # presently considering this as userID
+        self.input_id = owner # presently considering this as userID
+        self.dataset_obj = data.DataCollection()
 
-    def update_datasets(self,user_id,dataset_obj,date):
+    def UpdateDatasets(self,user_id,dataset_obj,date):
         # Call Users Class here
         # Editing the existing data collection here
         self.user_id = user_id
@@ -151,13 +257,18 @@ class DataCollection(Object):
         self.date = date
         
         pass
-            
-class SaveNetworks(object):
-    """
-    SaveNetworks Class
-    DocString to be added
-    """
     
-    def __init__(self,type):
-        pass        
-                   
+    def DelDataCollection(self,data_obj,owner):
+        '''
+        Delete the existing DataCollections in the Home page.
+         
+        parameters
+        ``````````
+        data_obj = the DataCollection to be deleted
+        owner   - the userID 
+        
+        '''
+
+        return     
+            
+
