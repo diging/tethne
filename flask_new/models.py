@@ -85,20 +85,9 @@ class User(Persistent):
     def __repr__(self):
         return '<User %r>' % (self.name)
 
-class AdminActivities(Persistent):
-	
-	"""
-	Admin Class
-    Admin can perform the following activities. 
-    1. List all Users.
-    2. Remove Users.
-    3. List all the DataCollections or filtered by user(s)
-    4. Monitor the recent activity in the system 
-    (any DataCollection or GraphCollection) 
-    """
     
 
-        
+       
 class PersistentGraphCollection(Persistent):
     
     """
@@ -127,7 +116,6 @@ class PersistentGraphCollection(Persistent):
         date    - the system date and to fetch only 
                   top 5 Collections less than the date.
         '''
-
         pass  
 
     def ListAllGraphcollections(self,owner):
@@ -268,7 +256,33 @@ class PersistentDataCollection(Persistent):
         owner   - the userID 
         
         '''
-
         return     
             
 
+class AdminActivities(Persistent):
+    
+    """
+    Admin Class
+    Admin can perform the following activities. 
+    1. List all Users.
+    2. Remove Users.
+    3. List all the DataCollections or filtered by user(s)
+    4. Monitor the recent activity in the system 
+    (any DataCollection or GraphCollection) 
+    
+    """
+    def __init__(self,user_id,date,obj,activity):
+
+        self.id = user_id
+        self.date = date
+        self.dataset_obj = obj # The last object which got accessed / created
+        self.activity = activity
+        self._p_changed = 1 # for mutable objects
+    
+    def GetActivityDetails(self,startdate,enddate):
+        """
+        Admin provides the date and he will get the history of events happened in that period
+
+        """
+
+        pass
