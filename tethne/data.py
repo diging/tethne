@@ -817,7 +817,7 @@ class LDAModel(object):
             topZ = td.shape[0]
             
         if type(topZ) is int:   # Return a set number of topics.
-            top_indices = np.argsort(td)[topZ]
+            top_indices = np.argsort(td)[0:topZ]
         elif type(topZ) is float:   # Return topics above a threshold.
             top_indices = [ z for z in np.argsort(td) if td[z] > topZ ]
 
