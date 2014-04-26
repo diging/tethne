@@ -98,11 +98,12 @@ class PersistentGraphCollection(Persistent):
 
     """
     
-    def __init__(self,g_id,name,owner,graph_obj):
+    def __init__(self,g_id,name,owner,date,graph_obj):
         
         self.id = g_id
         self.name = name
         self.owner = owner
+        self.date = date
         self.graph_obj = graph_obj
         pass
     
@@ -184,18 +185,24 @@ class PersistentDataCollection(Persistent):
     DocString to be added
     """
 
-    def __init__(self,user_id,date,dataset_obj):
-
-        self.id = user_id
+    def __init__(self,id, name, owner,date,dataset_obj):
+        
+        self.id = data_id
+        self.name = name
+        self.owner = owner
         self.date = date
-        self.dataset_obj = data.DataCollection(); #  or simply dc - tethne dataCollection Object
+        self.dataobj = dataset_obj; 
         self._p_changed = 1 # for mutable objects
+
 
     def ListDetails(self,dataset_obj):
         # provide the details of the selected dataset
         # On-the fly computation or DB storage of the 
         # No.of.slices, No of Papers is unsure.But keeping this class
         # as an option for the same.
+
+        self.dataobj = dataset_obj
+        print "dataset_obj" , self.dataobj
         pass 
     
 
