@@ -2,7 +2,22 @@ import sys
 sys.path.append("../")
 import tethne.readers as rd
 import tethne.data as dt
+import tethne.writers as wr
 import unittest
+
+class TestNGrams(unittest.TestCase):
+
+    def setUp(self):
+        filepath = "./testin/2013.5.3.cHrmED8A"
+        self.unigrams = rd.dfr.ngrams(filepath, N='uni')
+
+    def test_read(self):
+        self.assertEqual(len(self.unigrams), 398)
+
+    def test_write_corpus(self):
+        """will fail if non-ascii characters aren't stripped."""
+        ret = wr.corpora.to_documents('./testout/mycorpus', self.unigrams)
+        self.assertEqual(ret, None)
 
 class TestRead(unittest.TestCase):
 

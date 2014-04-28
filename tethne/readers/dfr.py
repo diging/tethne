@@ -47,12 +47,9 @@ def read(datapath):
        >>> papers = rd.dfr.read("/Path/to/DfR")
     """
 
-#    try:
     with open(datapath + "/citations.XML", 'rb') as f:
         data = f.read().replace('&', '&amp;')
         root = ET.fromstring(data)
-#    except IOError:
-#        raise IOError(datapath+"citations.XML not found.")
 
     accession = str(uuid.uuid4())
 
@@ -154,7 +151,7 @@ def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
         if file.split('.')[-1] == 'XML':
             root = ET.parse(gram_path + "/" + file).getroot()
             doi = root.attrib['id']
-            grams = [ ( gram.text.strip(), int(gram.attrib['weight']) )
+            grams = [ ( strip_non_ascii(gram.text.strip()), int(gram.attrib['weight']) )
                             for gram in root.findall(elem)    # v Hashes v
                             if not ignore_hash or '#' not in list(gram.text) ]
 
