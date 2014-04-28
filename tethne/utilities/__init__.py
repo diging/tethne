@@ -1,6 +1,7 @@
 """
-Helper functions for :mod:`tethne.networks` .
+Helper functions.
 """
+
 def contains(l, f):
     """
     Searches list l for a pattern specified in a lambda function f.
