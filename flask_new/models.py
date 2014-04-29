@@ -1,3 +1,18 @@
+"""
+Classes for  accessing persistence of tethne data in ZODB and to perform
+various operations on them.
+
+
+.. autosummary::
+
+   User
+   PersistentDataCollection
+   PersistentGraphCollection
+   Events
+   
+"""
+
+
 from flask import current_app as app
 from flask.ext.zodb import Object, List, Dict
 from BTrees.OOBTree import OOBTree as BTree
@@ -29,76 +44,113 @@ import tethne.readers as rd
 # NameError: name 'meta_list' is not defined
 
 
-
-
-# User Class inherits Persistent class.
 class User(Persistent):
-        
     """
-    User Class.
-    1. Can get the user details
-    2. Can check if the user is an authenticated user
-    3.  
+    Class for handling user data. 
+    The following fields (and corresponding data types) are allowed:
+    
+    ===========     =====   ====================================================
+    Field           Type    Description
+    ===========     =====   ====================================================
+    name            str     Username of the user.
+    password        str     Password of the user, stored after encryption.
+    emailid         str     email-id of the user.
+    institution     str     Institution to which the user belongs to.
+    que             str     Secret Question for password recovery
+    ans             str     Answer for the secret question.
+    ===========     =====   ====================================================
+
+    None values are not allowed for these fields.
     """
 
-    #def __init__(self,name,password,emailid,institution,que,ans):
-    def __init__(self,name,password,emailid=None,institution=None,\
-                                    que=None,ans=None):    
+    def __init__(self,name,password,emailid,institution,\
+                                    que,ans): 
+        """
+        Initialize the User object with registration details.
+        
+        Parameters
+        ----------
+        name     : str
+        password : str
+        email-id : str
+        institution: str
+        que : str
+        ans : str
+
+        Returns
+        -------
+        None. 
+            An User Object with "name" as the key gets stored in the 
+            User data tree. 
+
+        Raises
+        ------
+            None.
+        
+        """
+
+    
         self.name = name
-        self.password = password
+        self.password = sha256(password)
         self.id = emailid
         self.institution = institution
         self.secretque = que 
         self.secretans = ans    
-        self.role = 1 # all users who register will be "Normal Users"
+        self.role = 1 #all users who register will be "Normal Users"
         self._p_changed = 1 #for mutable objects
-
-    def get_user_details(self,name):
-        return 
-    
-    def is_authenticated(self,name,password):
-       """
-
-       To check if the user details are present in the DB
-       Return a boolean true or false
-
-       The input password is encrypted before checking it with the stored user
-
-       """
-       #Perform the check, return the boolean result.
-       pass
-    
-    def is_anonymous(self,name):
-
-        pass
-    
-    def initialize_userdb(self):
-        """
-        User DB is initialized
-        """
-        storage = FileStorage('./storage/userdb.fs')
-        conn = DB(storage)
-        dbroot = conn.open().root()
-        print ("DB initialized")
-        
 
     def __repr__(self):
         return '<User %r>' % (self.name)
-
-    
 
        
 class PersistentGraphCollection(Persistent):
     
     """
-    PersistentGraphCollection Class.
-    It is used to persist the Tethne GraphCollection objects
-    This has the following methods.
+    Class for accessing :class:`.GraphCollection` 
+    from tethne and persist the :class:`.GraphCollection` object in this class.
 
+    The following fields (and corresponding data types) are allowed:
+    
+    ===========     =====   ====================================================
+    Field           Type    Description
+    ===========     =====   ====================================================
+    g_id            str     GraphCollection ID. Unique name for each collection.
+    name            str     Name provided by the user for the collection.
+    owner           str     User who created this collection.
+    date            str     The date of GraphCollection creation.
+    graph_obj       Obj     class:`.GraphCollection` object 
+    data_obj       Obj     class:`.DataCollection` object used to create this
+                            class:`.GraphCollection` object.
+    ===========     =====   ====================================================
 
+    None values are not allowed for these fields.
     """
     
-    def __init__(self,g_id,name,owner,date,graph_obj):
+    def __init__(self,g_id,name,owner,date,graph_obj,data_obj):
+
+        """
+        Initialize the PersistentGraphCollection object.
+        
+        Parameters
+        ----------
+        g_id : str
+        name : str
+        owner: str
+        date : str
+        graph_obj: class:`.GraphCollection` object 
+        
+
+        Returns
+        -------
+        None. 
+            A PersistentGraphCollection Object with "g_id" 
+            as the key gets stored in the PersistentGraphCollection data tree. 
+
+        Raises
+        ------
+            None.
+        
+        """
         
         self.id = g_id
         self.name = name
@@ -107,85 +159,53 @@ class PersistentGraphCollection(Persistent):
         self.graph_obj = graph_obj
         pass
     
-    def ListRecentGraphcollections(self,owner,date):
-        '''
-        List the recent existing Graph Collections in the Home page
-         
-        parameters
-        ``````````
-        owner   - the userID 
-        date    - the system date and to fetch only 
-                  top 5 Collections less than the date.
-        '''
-        pass  
-
-    def ListAllGraphcollections(self,owner):
-        '''
-        List all the existing Graph Collections in the 
-        List Graph Collections page
-         
-        parameters
-        ``````````
-        owner   - the userID 
-        date    - the system date and to fetch only 
-                  top 5 Collections less than the date.
-
-        return
-        ```````
-        A List of values for the tables in List Details view.
-        '''
-        pass     
-    
-    def DelGraphCollection(self,graph_obj,owner):
-        '''
-        Delete the existing GraphCollections in the Home page.
-         
-        parameters
-        ``````````
-        graph_obj = the GraphCollection to be deleted
-        owner   - the userID 
-        
-        '''
-
-        return     
-        
-    
-    def AnalyseGraphCollection(self,graph_obj,owner):
-        '''
-        Analyze the existing GraphCollections in the Home page.
-         
-        parameters
-        ``````````
-        graph_obj = the GraphCollection to be analyzed
-        owner   - the userID 
-        
-        '''
-
-        return  
-      
-    
-    def ListDetails(self,graph_obj):
-        # provide the details of the selected dataset
-        # On-the fly computation or DB storage of the 
-        # No.of.slices, No of Papers is unsure.But keeping this class
-        # as an option for the same.
-        pass 
-       
-
-    def analyze_collections(self,graph_obj,method):
-        # Method : Betweenness centrality
-        pass
-    
-        
         
 class PersistentDataCollection(Persistent):
     
     """
-    PersistentDataCollection Class
-    DocString to be added
-    """
+    Class for accessing :class:`.DataCollection` 
+    from tethne and persist the :class:`.DataCollection` object in this class.
 
-    def __init__(self,id, name, owner,date,dataset_obj):
+    The following fields (and corresponding data types) are allowed:
+    
+    ===========     =====   ====================================================
+    Field           Type    Description
+    ===========     =====   ====================================================
+    d_id            str     DataCollection ID. Unique name for each collection.
+    name            str     Name provided by the user for the collection.
+    owner           str     User who created this collection.
+    date            str     The date of DataCollection creation.
+    dataset_obj     str     class:`.DataCollection` object 
+    ===========     =====   ====================================================
+
+    None values are not allowed for these fields.
+    """
+    
+    def __init__(self,d_id, name, owner,date,dataset_obj):
+
+        """
+        Initialize the PersistentDataCollection object.
+        
+        Parameters
+        ----------
+        d_id : str
+        name : str
+        owner: str
+        date : str
+        dataset_obj: class:`.DataCollection` object 
+        
+
+        Returns
+        -------
+        None. 
+            A PersistentDataCollection Object with "d_id" 
+            as the key gets stored in the PersistentDataCollection data tree.
+
+        Raises
+        ------
+            None.
+        
+        """
         
         self.id = data_id
         self.name = name
@@ -193,103 +213,53 @@ class PersistentDataCollection(Persistent):
         self.date = date
         self.dataobj = dataset_obj; 
         self._p_changed = 1 # for mutable objects
+  
 
-
-    def ListDetails(self,dataset_obj):
-        # provide the details of the selected dataset
-        # On-the fly computation or DB storage of the 
-        # No.of.slices, No of Papers is unsure.But keeping this class
-        # as an option for the same.
-
-        self.dataobj = dataset_obj
-        print "dataset_obj" , self.dataobj
-        pass 
-    
-
-    def ListRecentDatacollections(self,owner,date):
-        '''
-        List the recent existing Data Collections in the Home page
-         
-        parameters
-        ``````````
-        owner   - the userID 
-        date    - the system date and to fetch only 
-                  top 5 Collections less than the date.
-        '''
-
-        pass  
-
-    def ListAllDatacollections(self,owner):
-        '''
-        List all the existing Data Collections in the 
-        List DataCollections page
-         
-        parameters
-        ``````````
-        owner   - the userID 
-        date    - the system date and to fetch only 
-                  top 5 Collections less than the date.
-
-        return
-        ```````
-        A List of values for the tables in ListDetails view.
-        '''
-        pass         
-
-    def CreateDataCollection(self,input_type, input_path, owner):
-        
-        # Wos and Dfr type
-        self.input_type = input_type # WOS or JSTOR
-        self.input_path = input_path # The Path got from the user
-        self.input_id = owner # presently considering this as userID
-        self.dataset_obj = data.DataCollection()
-
-    def UpdateDatasets(self,user_id,dataset_obj,date):
-        # Call Users Class here
-        # Editing the existing data collection here
-        self.user_id = user_id
-        self.dataset_obj = dataset_obj
-        self.date = date
-        
-        pass
-    
-    def DelDataCollection(self,data_obj,owner):
-        '''
-        Delete the existing DataCollections in the Home page.
-         
-        parameters
-        ``````````
-        data_obj = the DataCollection to be deleted
-        owner   - the userID 
-        
-        '''
-        return     
-            
-
-class AdminActivities(Persistent):
+class Events(Persistent):
     
     """
-    Admin Class
-    Admin can perform the following activities. 
-    1. List all Users.
-    2. Remove Users.
-    3. List all the DataCollections or filtered by user(s)
-    4. Monitor the recent activity in the system 
-    (any DataCollection or GraphCollection) 
+    Class for the admin to track the events in the application.
+    The following fields (and corresponding data types) are allowed:
     
+    ===========     =====   ====================================================
+    Field           Type    Description
+    ===========     =====   ====================================================
+    user_id         str     Activity corresponding to the user.
+    datetime        str     The date-time used for viewing events details.
+    obj             obj     Either class:`.GraphCollection` object or 
+                            class:`.DataCollection` object which was 
+                            accessed/modified/created during the datetime period.
+    action          str     The list of activity during that datetime period.                        
+    ===========     =====   ====================================================
+
+    None values are not allowed for these fields.
     """
-    def __init__(self,user_id,date,obj,activity):
+    
+    def __init__(self,user_id,datetime,obj,action):
+
+        """
+        Initialize the PersistentDataCollection object.
+        
+        Parameters
+        ----------
+        user_id : str
+        datetime : str
+        obj:  class:`.DataCollection` object or class:`.GraphCollection` object
+        action : str
+        
+        Returns
+        -------
+        An Events Object with the activity details for the datetime window, for
+        the respective user.
+
+        Raises
+        ------
+            None.
+        
+        """
 
         self.id = user_id
-        self.date = date
-        self.dataset_obj = obj # The last object which got accessed / created
-        self.activity = activity
+        self.datetime = datetime
+        self.obj = obj # The last object which got accessed / created
+        self.activity = action
         self._p_changed = 1 # for mutable objects
-    
-    def GetActivityDetails(self,startdate,enddate):
-        """
-        Admin provides the date and he will get the history of events happened in that period
-
-        """
-
-        pass
