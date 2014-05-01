@@ -19,15 +19,21 @@ from flask import abort,Blueprint
 import datetime,logging
 from logging import Formatter, FileHandler
 
+
+
 import random as random
 import models as db
 import views as view
+import tethne.readers as rd
+
+
 
 # Initializing the Blueprint. 
 # Instead of @app the module will have @dataset
-dataset = Blueprint('controllers',__name__,template_folder='templates')
+control = Blueprint('controllers',__name__,template_folder='templates')
 
-@dataset.route('/create_datacollection/', methods=['GET','POST'])
+
+@control.route('/datacollection/create_datacollec/', methods=['GET','POST'])
 def create_datacollection():
     """
     This is the controller from the CreateDataCollection View. 
@@ -53,16 +59,39 @@ def create_datacollection():
      
     """
     
-    if request.method == 'GET'  :
-        print "comes inside controller"
+    if request.method == 'POST'  :
+        print "comes inside controller"    
         #return nothing.
-    try:
-            file_format = input_file_format         # got from the view. 
+        try:
+        
+            #file_format = input_file_format         # got from the view. 
             username    = session['username']
-            input_file  = input_file_with_path      # with full path
-    except:
+            #input_file  = input_file_with_path      # with full path
+
+        except:
             print "comes to except"
             pass
-         
-    return redirect(url_for('.login'))
-            
+        print " comes in controller outside get"
+        # Parse data.
+        # Actually it should be the file taken from the server.
+        # Currently this is a dummy one.
+        
+        # Create a DataCollection
+        # from tethne.data import DataCollection, GraphCollection
+        # from tethne.readers import wos
+        # papers = rd.wos.read("C:\\Users\\Ramki\\Documents\\GitHub\\tethne\\testsuitetestsuite\\testin\\2_testrecords.txt")  
+        # D = DataCollection(papers)
+
+
+        log = "Dataset #127846748 created successfully"
+        print log
+
+
+        return render_template('pages/generate.datasets.html')
+
+
+                
+    
+
+
+    return render_template('pages/generate.datasets.html', user = user)
