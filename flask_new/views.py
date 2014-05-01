@@ -45,6 +45,7 @@ from logging import Formatter, FileHandler
 import tethne.readers as rd
 import random as random
 import models as db
+from controllers import control
 
 # Importing helpers module
 import helpers as help           
@@ -120,6 +121,10 @@ def login():
             print "comes to except"
             pass
     print "username" , username
+    print "control" , control
+    #print url_for("control.create_datacollection")
+
+
         # Dummy routing to admin page and other pages.
     if username == 'admin':
             return redirect(url_for('.admin'))
@@ -244,18 +249,22 @@ def dc_create():
     form = GenerateDataSetsForm(request.form)
     user = session['username']
     if request.method == 'POST' :
-    
-        # Parse data.
-        # Actually it should be the file taken from the server.
-        # Currently this is a dummy one.
-        #papers = rd.wos.read("/Users/kbatna/tethne/testsuite/testin/2_testrecords.txt")
-    
-        # Create a DataCollection
-        #from tethne.data import DataCollection, GraphCollection
-        #D = DataCollection(papers)
-        log = "Dataset #127846748 created successfully"
-        return render_template('pages/list.datasets.html', user = user, text= log)
-    
+
+        try:
+            input_type = request.form['filetype']
+            input_path = request.form['fileinput']
+            print "try" ,input_path
+            print "input_type", input_type
+        except:
+            print "comes to except"
+            pass
+        
+
+        print "comes out create data", request.form
+
+        #print "comes out create data", request.form, request.form['filetype'],request.form['fileinput']
+        return render_template('pages/list.datasets.html', user = user, input_type = input_type, input_path = "dummy")
+        #return redirect(url_for('control.create_datacollection',_external=True)) 
     return render_template('pages/generate.datasets.html', user = user, form= form)
 
 
