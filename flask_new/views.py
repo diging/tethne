@@ -253,16 +253,21 @@ def dc_create():
         try:
             input_type = request.form['filetype']
             input_path = request.form['fileinput']
+            input_name = request.form['dcname']
             print "try" ,input_path
             print "input_type", input_type
         except:
             print "comes to except"
             pass
         
+        
+        #Call Controller here.
+        status = control.CreatePersistentDataCollection(input_type,input_path,input_name)
+        
+        #If status is true then the user to be notified about the success.
 
-        print "comes out create data", request.form
+        #Else,the user should be notified about the reason for the failure.
 
-        #print "comes out create data", request.form, request.form['filetype'],request.form['fileinput']
         return render_template('pages/list.datasets.html', user = user, input_type = input_type, input_path = "dummy")
         #return redirect(url_for('control.create_datacollection',_external=True)) 
     return render_template('pages/generate.datasets.html', user = user, form= form)
