@@ -60,7 +60,7 @@ class GenerateDataSetsForm(Form):
     
     input_type            = RadioField('input_type', [validators.Required()])
     input_path            = TextField('input_path', [validators.Required()])
-
+    input_name            = TextField('dc_name', [validators.Required()])
 
 class ListDataSetsForm(Form):
     """
