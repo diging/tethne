@@ -1,0 +1,476 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tethne.readers.dfr &mdash; tethne 0.4.2-alpha documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.2-alpha',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="tethne 0.4.2-alpha documentation" href="../../../index.html" />
+    <link rel="up" title="tethne.readers" href="../readers.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">tethne 0.4.2-alpha documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../readers.html" accesskey="U">tethne.readers</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for tethne.readers.dfr</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Methods for parsing JSTOR Data-for-Research datasets.</span>
+
+<span class="sd">.. autosummary::</span>
+
+<span class="sd">   ngrams</span>
+<span class="sd">   read</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">tethne.data</span> <span class="kn">as</span> <span class="nn">dt</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">as</span> <span class="nn">ET</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">dict_from_node</span><span class="p">,</span> <span class="n">strip_non_ascii</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+
+<div class="viewcode-block" id="read"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.dfr.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Yields :class:`.Paper` s from JSTOR DfR package.</span>
+
+<span class="sd">    Each :class:`.Paper` is tagged with an accession id for this</span>
+<span class="sd">    read/conversion.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filepath : string</span>
+<span class="sd">        Filepath to unzipped JSTOR DfR folder containing a citations.XML file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    papers : list</span>
+<span class="sd">        A list of :class:`.Paper` objects.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; import tethne.readers as rd</span>
+<span class="sd">       &gt;&gt;&gt; papers = rd.dfr.read(&quot;/Path/to/DfR&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datapath</span> <span class="o">+</span> <span class="s">&quot;/citations.XML&quot;</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;&amp;&#39;</span><span class="p">,</span> <span class="s">&#39;&amp;amp;&#39;</span><span class="p">)</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">datapath</span><span class="o">+</span><span class="s">&quot;citations.XML not found.&quot;</span><span class="p">)</span>
+
+    <span class="n">accession</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+
+    <span class="n">papers</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
+        <span class="n">paper</span> <span class="o">=</span> <span class="n">_handle_paper</span><span class="p">(</span><span class="n">article</span><span class="p">)</span>
+        <span class="n">paper</span><span class="p">[</span><span class="s">&#39;accession&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">accession</span>
+        <span class="n">papers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paper</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">papers</span>
+</div>
+<div class="viewcode-block" id="from_dir"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.dfr.from_dir">[docs]</a><span class="k">def</span> <span class="nf">from_dir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convenience function for generating a list of :class:`.Paper` from a</span>
+<span class="sd">    directory of JSTOR DfR datasets.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : string</span>
+<span class="sd">        Path to directory containing DfR dataset directories.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    papers : list</span>
+<span class="sd">        A list of :class:`.Paper` objects.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    IOError</span>
+<span class="sd">        Invalid path.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; import tethne.readers as rd</span>
+<span class="sd">       &gt;&gt;&gt; papers = rd.dfr.from_dir(&quot;/Path/to/datadir&quot;)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">papers</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;Invalid path.&quot;</span><span class="p">)</span>  <span class="c"># Ignore hidden files.</span>
+
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="n">f</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">papers</span> <span class="o">+=</span> <span class="n">read</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="n">f</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">IOError</span><span class="p">,</span> <span class="ne">UnboundLocalError</span><span class="p">):</span>    <span class="c"># Ignore directories that</span>
+                <span class="k">pass</span>                                <span class="c">#  don&#39;t contain DfR data.</span>
+
+    <span class="k">return</span> <span class="n">papers</span>
+</div>
+<div class="viewcode-block" id="ngrams"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.dfr.ngrams">[docs]</a><span class="k">def</span> <span class="nf">ngrams</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="s">&#39;bi&#39;</span><span class="p">,</span> <span class="n">ignore_hash</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">apply_stoplist</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Yields N-grams from a JSTOR DfR dataset.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filepath : string</span>
+<span class="sd">        Filepath to unzipped JSTOR DfR folder containing N-grams (e.g.</span>
+<span class="sd">        &#39;bigrams&#39;).</span>
+<span class="sd">    N : string</span>
+<span class="sd">        &#39;bi&#39;, &#39;tri&#39;, or &#39;quad&#39;</span>
+<span class="sd">    ignore_hash : bool</span>
+<span class="sd">        If True, will exclude all N-grams that contain the hash &#39;#&#39; character.</span>
+<span class="sd">    apply_stoplist : bool</span>
+<span class="sd">        If True, will exclude all N-grams that contain words in the NLTK</span>
+<span class="sd">        stoplist.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ngrams : dict</span>
+<span class="sd">        Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; import tethne.readers as rd</span>
+<span class="sd">       &gt;&gt;&gt; trigrams = rd.dfr.ngrams(&quot;/Path/to/DfR&quot;, N=&#39;tri&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">gram_path</span> <span class="o">=</span> <span class="n">datapath</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="n">N</span> <span class="o">+</span> <span class="s">&quot;grams&quot;</span>
+    <span class="n">ngrams</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">gram_path</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;XML&#39;</span><span class="p">:</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">gram_path</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">file</span><span class="p">)</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
+            <span class="n">doi</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
+            <span class="n">grams</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="n">gram</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="nb">int</span><span class="p">(</span><span class="n">gram</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;weight&#39;</span><span class="p">])</span> <span class="p">)</span>
+                       <span class="k">for</span> <span class="n">gram</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="s">&#39;gram&#39;</span><span class="p">)</span> <span class="c"># v Hashes v</span>
+                       <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_hash</span> <span class="ow">or</span> <span class="s">&#39;#&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">gram</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">apply_stoplist</span><span class="p">:</span>
+                <span class="n">stoplist</span> <span class="o">=</span> <span class="n">stoplist</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>
+                <span class="n">grams_</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">g</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="n">grams</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="n">w</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stoplist</span><span class="p">:</span>
+                            <span class="n">grams_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="n">c</span><span class="p">)</span> <span class="p">)</span>
+                <span class="n">grams</span> <span class="o">=</span> <span class="n">grams_</span>
+
+            <span class="n">ngrams</span><span class="p">[</span><span class="n">doi</span><span class="p">]</span> <span class="o">=</span> <span class="n">grams</span>
+
+    <span class="k">return</span> <span class="n">ngrams</span>
+</div>
+<span class="k">def</span> <span class="nf">_handle_paper</span><span class="p">(</span><span class="n">article</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Yields a :class:`.Paper` from an article ET node.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    article : Element</span>
+<span class="sd">        ElementTree Element &#39;article&#39;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    paper : :class:`.Paper`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">paper</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">Paper</span><span class="p">()</span>
+    <span class="n">pdata</span> <span class="o">=</span> <span class="n">dict_from_node</span><span class="p">(</span><span class="n">article</span><span class="p">)</span>
+
+    <span class="c"># Direct mappings.</span>
+    <span class="n">translator</span> <span class="o">=</span> <span class="n">_dfr2paper_map</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">translator</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">paper</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="n">key</span><span class="p">])</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>    <span class="c"># Article may not have all keys of interest.</span>
+            <span class="k">pass</span>
+
+    <span class="c"># Handle author names.</span>
+    <span class="n">paper</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_handle_authors</span><span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="s">&#39;author&#39;</span><span class="p">])</span>
+
+    <span class="c"># Handle pubdate.</span>
+    <span class="n">paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_handle_pubdate</span><span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="s">&#39;pubdate&#39;</span><span class="p">])</span>
+
+    <span class="c"># Handle pagerange.</span>
+    <span class="n">paper</span><span class="p">[</span><span class="s">&#39;spage&#39;</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;epage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_handle_pagerange</span><span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="s">&#39;pagerange&#39;</span><span class="p">])</span>
+
+    <span class="c"># Generate ayjid.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">paper</span><span class="p">[</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_create_ayjid</span><span class="p">(</span><span class="n">paper</span><span class="p">[</span><span class="s">&#39;aulast&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;auinit&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> \
+                                       <span class="n">paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">],</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;jtitle&#39;</span><span class="p">])</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>  <span class="c"># Article may not have authors.</span>
+        <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">paper</span>
+
+<span class="k">def</span> <span class="nf">_handle_pagerange</span><span class="p">(</span><span class="n">pagerange</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Yields start and end pages from DfR pagerange field.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pagerange : str or unicode</span>
+<span class="sd">        DfR-style pagerange, e.g. &quot;pp. 435-444&quot;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    start : str</span>
+<span class="sd">        Start page.</span>
+<span class="sd">    end : str</span>
+<span class="sd">        End page.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">pr</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&quot;pp\.\s([0-9]+)\-([0-9]+)&quot;</span><span class="p">)</span>
+        <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pr</span><span class="p">,</span> <span class="n">pagerange</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">start</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">end</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_handle_pubdate</span><span class="p">(</span><span class="n">pubdate</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Yields a date integer from DfR pubdate field.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">pubdate</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">_handle_authors</span><span class="p">(</span><span class="n">authors</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Yields aulast and auinit lists from value of authors node.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    authors : list, str, or unicode</span>
+<span class="sd">        Value or values of &#39;author&#39; element in DfR XML.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    aulast : list</span>
+<span class="sd">        A list of author surnames (string).</span>
+<span class="sd">    auinit : list</span>
+<span class="sd">        A list of author first-initials (string).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">aulast</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">auinit</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">authors</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">authors</span><span class="p">:</span>
+            <span class="n">author</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">strip_non_ascii</span><span class="p">(</span><span class="n">author</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">l</span><span class="p">,</span><span class="n">i</span> <span class="o">=</span> <span class="n">_handle_author</span><span class="p">(</span><span class="n">author</span><span class="p">)</span>
+                <span class="n">aulast</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+                <span class="n">auinit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">pass</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">authors</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">authors</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">unicode</span><span class="p">:</span>
+        <span class="n">author</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">strip_non_ascii</span><span class="p">(</span><span class="n">authors</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">l</span><span class="p">,</span><span class="n">i</span> <span class="o">=</span> <span class="n">_handle_author</span><span class="p">(</span><span class="n">author</span><span class="p">)</span>
+            <span class="n">aulast</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+            <span class="n">auinit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;authors must be a list or a string&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">aulast</span><span class="p">,</span> <span class="n">auinit</span>
+
+<span class="k">def</span> <span class="nf">_handle_author</span><span class="p">(</span><span class="n">author</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Yields aulast and auinit from an author&#39;s full name.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    author : str or unicode</span>
+<span class="sd">        Author fullname, e.g. &quot;Richard L. Nixon&quot;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    aulast : str</span>
+<span class="sd">        Author surname.</span>
+<span class="sd">    auinit : str</span>
+<span class="sd">        Author first-initial.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">lname</span> <span class="o">=</span> <span class="n">author</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">auinit</span> <span class="o">=</span> <span class="n">lname</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">final</span> <span class="o">=</span> <span class="n">lname</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">final</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;JR.&#39;</span><span class="p">,</span> <span class="s">&#39;III&#39;</span><span class="p">]:</span>
+            <span class="n">aulast</span> <span class="o">=</span> <span class="n">lname</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">final</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">aulast</span> <span class="o">=</span> <span class="n">final</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;malformed author name&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">aulast</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">auinit</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_dfr2paper_map</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines the direct relationships between DfR article elements and</span>
+<span class="sd">    :class:`.Paper` fields.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    translator : dict</span>
+<span class="sd">        A &#39;translator&#39; dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">translator</span> <span class="o">=</span> <span class="p">{</span>  <span class="s">&#39;doi&#39;</span><span class="p">:</span> <span class="s">&#39;doi&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;atitle&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;journaltitle&#39;</span><span class="p">:</span> <span class="s">&#39;jtitle&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;volume&#39;</span><span class="p">:</span> <span class="s">&#39;volume&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;issue&#39;</span><span class="p">:</span> <span class="s">&#39;issue&#39;</span>    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">translator</span>
+
+<span class="k">def</span> <span class="nf">_create_ayjid</span><span class="p">(</span><span class="n">aulast</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">auinit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">date</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">jtitle</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert aulast, auinit, and jtitle into the fuzzy identifier ayjid</span>
+<span class="sd">    Returns &#39;Unknown paper&#39; if all id components are missing (None).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Kwargs : dict</span>
+<span class="sd">        A dictionary of keyword arguments.</span>
+<span class="sd">    aulast : string</span>
+<span class="sd">        Author surname.</span>
+<span class="sd">    auinit: string</span>
+<span class="sd">        Author initial(s).</span>
+<span class="sd">    date : string</span>
+<span class="sd">        Four-digit year.</span>
+<span class="sd">    jtitle : string</span>
+<span class="sd">        Title of the journal.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ayj : string</span>
+<span class="sd">        Fuzzy identifier ayjid, or &#39;Unknown paper&#39; if all id components are</span>
+<span class="sd">        missing (None).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">aulast</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">aulast</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aulast</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">aulast</span> <span class="o">=</span> <span class="n">aulast</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">auinit</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">auinit</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">auinit</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">auinit</span> <span class="o">=</span> <span class="n">auinit</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">date</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+
+    <span class="k">if</span> <span class="n">jtitle</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">jtitle</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+
+    <span class="n">ayj</span> <span class="o">=</span> <span class="n">aulast</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">auinit</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">date</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">jtitle</span>
+
+    <span class="k">if</span> <span class="n">ayj</span> <span class="o">==</span> <span class="s">&#39;   &#39;</span><span class="p">:</span>
+        <span class="n">ayj</span> <span class="o">=</span> <span class="s">&#39;Unknown paper&#39;</span>
+
+    <span class="k">return</span> <span class="n">ayj</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">tethne 0.4.2-alpha documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../readers.html" >tethne.readers</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, ASU Digital Innovation Group.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

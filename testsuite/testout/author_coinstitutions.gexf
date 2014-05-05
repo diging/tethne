@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?><gexf version="1.1" xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gexf.net/1.1draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
+  <graph defaultedgetype="undirected" mode="static">
+    <attributes class="edge" mode="static">
+      <attribute id="1" title="overlap" type="integer" />
+    </attributes>
+    <attributes class="node" mode="static">
+      <attribute id="0" title="type" type="string" />
+    </attributes>
+    <nodes>
+      <node id="KOCAGUNELI, E" label="KOCAGUNELI, E">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="GALAR, M" label="GALAR, M">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="MENZIES, T" label="MENZIES, T">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="HUANG, JH" label="HUANG, JH">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="CHEN, FT" label="CHEN, FT">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="TUERHONG, G" label="TUERHONG, G">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="HERMAN, G" label="HERMAN, G">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="KIM, SB" label="KIM, SB">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="PAGANO, D" label="PAGANO, D">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="ZHANG, B" label="ZHANG, B">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="CHEN, TY" label="CHEN, TY">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="WANG, Y" label="WANG, Y">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="BARRENECHEA, E" label="BARRENECHEA, E">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="MAALEJ, W" label="MAALEJ, W">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <edge id="0" source="KOCAGUNELI, E" target="MENZIES, T">
+        <attvalues>
+          <attvalue for="1" value="1" />
+        </attvalues>
+      </edge>
+      <edge id="1" source="GALAR, M" target="BARRENECHEA, E">
+        <attvalues>
+          <attvalue for="1" value="1" />
+        </attvalues>
+      </edge>
+      <edge id="2" source="HUANG, JH" target="CHEN, TY">
+        <attvalues>
+          <attvalue for="1" value="1" />
+        </attvalues>
+      </edge>
+      <edge id="3" source="CHEN, FT" target="ZHANG, B">
+        <attvalues>
+          <attvalue for="1" value="2" />
+        </attvalues>
+      </edge>
+      <edge id="4" source="CHEN, FT" target="WANG, Y">
+        <attvalues>
+          <attvalue for="1" value="2" />
+        </attvalues>
+      </edge>
+      <edge id="5" source="CHEN, FT" target="HERMAN, G">
+        <attvalues>
+          <attvalue for="1" value="2" />
+        </attvalues>
+      </edge>
+      <edge id="6" source="TUERHONG, G" target="KIM, SB">
+        <attvalues>
+          <attvalue for="1" value="1" />
+        </attvalues>
+      </edge>
+      <edge id="7" source="HERMAN, G" target="ZHANG, B">
+        <attvalues>
+          <attvalue for="1" value="2" />
+        </attvalues>
+      </edge>
+      <edge id="8" source="HERMAN, G" target="WANG, Y">
+        <attvalues>
+          <attvalue for="1" value="2" />
+        </attvalues>
+      </edge>
+      <edge id="9" source="PAGANO, D" target="MAALEJ, W">
+        <attvalues>
+          <attvalue for="1" value="1" />
+        </attvalues>
+      </edge>
+      <edge id="10" source="ZHANG, B" target="WANG, Y">
+        <attvalues>
+          <attvalue for="1" value="2" />
+        </attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>
