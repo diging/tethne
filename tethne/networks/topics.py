@@ -119,36 +119,6 @@ def topic_coupling(model, papers=None, threshold=None):
     
     return G
     
-if __name__ == '__main__':
-    import sys
-    sys.path.append("/Users/erickpeirson/tethne")
-    from tethne.readers import mallet
-    from tethne.data import DataCollection
-    from tethne.builders import topicCollectionBuilder
-    from tethne.writers import collection
-    import random
-
-    basepath = "/Users/erickpeirson/Dropbox/DigitalHPS/Kristen/"
-    md = basepath + "mycorpus_meta.csv"
-    td = basepath + "doc_top"
-    tk = basepath + "topic_keys"
-    wt = basepath + "word_top"
-    
-    model = mallet.load(td, wt, tk, 100, md)
-    papers = mallet.read(td, wt, tk, 100, md)
-    for p in xrange(len(papers)):
-        papers[p]['date'] = random.randint(1900, 2012)
-        
-    D = DataCollection(papers, model=model, index_by='doi')
-    D.slice('date', 'time_window', window_size=10, step_size=2)
-    
-    builder = topicCollectionBuilder(D)
-    C = builder.build('date', 'topic_coupling')
-    
-    collection.to_dxgmml(C, '/Users/erickpeirson/Desktop/tc_test.xgmml')
-    
-    #G = topic_coupling(model, papers=[1,2,3,4,5,10], threshold=0.9)
-    #nx.write_graphml(G, '/Users/erickpeirson/Desktop/tc_test.graphml')
     
     
     
