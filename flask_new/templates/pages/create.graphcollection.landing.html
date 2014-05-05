@@ -1,0 +1,210 @@
+{% extends 'layouts/user.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<!-- <div class="page-header">
+    <h1>Welcome {{ user }} </h1>
+</div> -->
+<!-- <p class="lead"> List of {{user}}'s Data Collections</p> -->
+<p class="lead"> Please select a DataCollection to generate a GraphCollection</p>
+        <a href="{{ url_for('.gc_create') }}"class="btn btn-success " role="button">Create GraphCollection</a>
+<a href="{{ url_for('.gc_list') }}"> See the List of existing GraphCollections</a><br></br>
+    </br></br>
+
+<!-- 
+    <form action="" method="get" class="form" >
+    <body>
+    <table class="table table-hover">
+    		<tr >
+    			{% for col in columns %}
+    			<th class="success">{{ col }}</th>
+    			{% endfor %}
+    			<tr class = ".table-hover">
+    			{% for res in results %}
+    				<tr class = ".table-hover"> 
+    					
+    				<td class="warning">
+    				
+    				{% for eachres in res %}
+           				{{ eachres }}
+           			{% for chk in checkboxes %}  
+              				  <input type="radio" name="query"> 	
+    				 </td>
+    				 {% endfor %}
+    				{% endfor %}
+    				</tr>	
+    			{% endfor %}
+    			</tr>
+    		</tr>
+    </table>
+    </body>
+    
+    -->
+<form action="" method="get" class="form" >
+    <body>
+        <table class="table table-hover" >
+            <tr>
+                <th class="success"></th>
+                <th class="success">No.</th>
+                <th class="success" >DataCollectionID</th>
+                <th class="success">DateCreated<br></th>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td class = ".table-hover"> 1</td>
+                <td class = ".table-hover">
+                    <a href="{{ url_for('.dc_stats',data='ds11334') }}">DataSet #11334</a>  
+                </td>
+                <td class = ".table-hover">
+                    Apr 14, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td class = ".table-hover" style="text-align: center; vertical-align: middle;">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td class = ".table-hover"> 2</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds53677') }}">DataSet #53677</a>
+                </td>
+                <td>
+                    Apr 14, 2014.	
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td> 3</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds78678') }}">DataSet #78678</a>  
+                </td>
+                <td>
+                    Apr 12, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td> 4</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds77478') }}">DataSet #77478</a>  
+                </td>
+                <td>
+                    Apr 10, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td> 5</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds89790') }}">DataSet #89790</a>  
+                </td>
+                <td>
+                    Apr 08, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td class = ".table-hover"> 6</td>
+                <td class = ".table-hover">
+                    <a href="{{ url_for('.dc_stats',data='ds1124') }}">DataSet #1124</a>  
+                </td>
+                <td class = ".table-hover">
+                    Apr 07, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td class = ".table-hover" style="text-align: center; vertical-align: middle;">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td class = ".table-hover"> 7</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds3277') }}">DataSet #3277</a> 
+                </td>
+                <td>
+                    Apr 07, 2014.	
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td> 8</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds78478') }}">DataSet #78478</a> 
+                </td>
+                <td>
+                    Apr 06, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td> 9</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds77478') }}">DataSet #77478</a>  
+                </td>
+                <td>
+                    Apr 05, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td> 10</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds89790')}}">DataSet #89790</a> 
+                </td>
+                <td>
+                    Mar 27, 2014.
+                </td>
+            </tr>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td> 11</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds77478') }}">DataSet #77478</a> 
+                </td>
+                <td>
+                    Apr 05, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                    <input type="radio" name="textbox">    
+                </td>
+                <td> 12</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds12344') }}">DataSet #12344</a> 
+                </td>
+                <td>
+                    Mar 27, 2014.
+                </td>
+            </tr>
+        </table>
+        
+       <!--    <p class="text-muted"> Pick one DataCollection and Create a Graph Collection of it!</p>
+        <a href="{{ url_for('.gc_create') }}"class="btn btn-success " role="button">Create GraphCollections</a>
+        </br></br> -->
+       
+</form>
+
+<!-- <p class="text-muted"> View the List of GraphCollections</p>
+<a href="{{ url_for('.gc_list') }}"class="btn btn-info" role="button">List GraphCollections</a> -->
+
+</br></br>
+</body>
+</form>
+{% endblock %}

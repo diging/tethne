@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?><gexf version="1.1" xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gexf.net/1.1draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
+  <graph defaultedgetype="directed" mode="static">
+    <attributes class="edge" mode="static">
+      <attribute id="1" title="date" type="integer" />
+    </attributes>
+    <attributes class="node" mode="static">
+      <attribute id="0" title="date" type="integer" />
+    </attributes>
+    <nodes>
+      <node id="10.1016/j.ins.2013.06.052" label="10.1016/j.ins.2013.06.052">
+        <attvalues>
+          <attvalue for="0" value="1999" />
+        </attvalues>
+      </node>
+      <node id="10.2307/2279372" label="10.2307/2279372">
+        <attvalues>
+          <attvalue for="0" value="1937" />
+        </attvalues>
+      </node>
+      <node id="10.1002/int.20517" label="10.1002/int.20517">
+        <attvalues>
+          <attvalue for="0" value="2012" />
+        </attvalues>
+      </node>
+      <node id="10.1016/j.ins.2011.12.018" label="10.1016/j.ins.2011.12.018">
+        <attvalues>
+          <attvalue for="0" value="2012" />
+        </attvalues>
+      </node>
+      <node id="10.1016/j.ins.2010.10.001" label="10.1016/j.ins.2010.10.001">
+        <attvalues>
+          <attvalue for="0" value="2011" />
+        </attvalues>
+      </node>
+      <node id="10.1016/j.fss.2006.02.008" label="10.1016/j.fss.2006.02.008">
+        <attvalues>
+          <attvalue for="0" value="2006" />
+        </attvalues>
+      </node>
+      <node id="10.1016/j.neucom.2013.04.018" label="10.1016/j.neucom.2013.04.018">
+        <attvalues>
+          <attvalue for="0" value="2012" />
+        </attvalues>
+      </node>
+      <node id="10.1093/comjnl/bxr056" label="10.1093/comjnl/bxr056">
+        <attvalues>
+          <attvalue for="0" value="2012" />
+        </attvalues>
+      </node>
+      <node id="10.1016/j.is.2006.09.002" label="10.1016/j.is.2006.09.002">
+        <attvalues>
+          <attvalue for="0" value="2007" />
+        </attvalues>
+      </node>
+      <node id="10.1007/s007780100057" label="10.1007/s007780100057">
+        <attvalues>
+          <attvalue for="0" value="2001" />
+        </attvalues>
+      </node>
+      <node id="10.1016/j.ejor.2008.09.004" label="10.1016/j.ejor.2008.09.004">
+        <attvalues>
+          <attvalue for="0" value="2009" />
+        </attvalues>
+      </node>
+      <node id="10.1016/j.eswa.2007.04.004" label="10.1016/j.eswa.2007.04.004">
+        <attvalues>
+          <attvalue for="0" value="2008" />
+        </attvalues>
+      </node>
+      <node id="10.1007/s11280-010-0084-2" label="10.1007/s11280-010-0084-2">
+        <attvalues>
+          <attvalue for="0" value="2010" />
+        </attvalues>
+      </node>
+      <node id="10.1007/978-3-642-00958-7_21" label="10.1007/978-3-642-00958-7_21">
+        <attvalues>
+          <attvalue for="0" value="2009" />
+        </attvalues>
+      </node>
+      <node id="10.1016/j.dss.2009.12.003" label="10.1016/j.dss.2009.12.003">
+        <attvalues>
+          <attvalue for="0" value="2010" />
+        </attvalues>
+      </node>
+      <node id="10.1016/j.ins.2010.08.021" label="10.1016/j.ins.2010.08.021">
+        <attvalues>
+          <attvalue for="0" value="2010" />
+        </attvalues>
+      </node>
+      <node id="10.1016/j.ins.2010.08.013" label="10.1016/j.ins.2010.08.013">
+        <attvalues>
+          <attvalue for="0" value="2012" />
+        </attvalues>
+      </node>
+      <node id="10.1007/s10732-008-9080-4" label="10.1007/s10732-008-9080-4">
+        <attvalues>
+          <attvalue for="0" value="2009" />
+        </attvalues>
+      </node>
+      <node id="10.1145/361219.361220" label="10.1145/361219.361220">
+        <attvalues>
+          <attvalue for="0" value="1975" />
+        </attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <edge id="0" source="10.1016/j.ins.2013.06.052" target="10.1007/s10732-008-9080-4">
+        <attvalues>
+          <attvalue for="1" value="1999" />
+        </attvalues>
+      </edge>
+      <edge id="1" source="10.1016/j.ins.2013.06.052" target="10.1002/int.20517">
+        <attvalues>
+          <attvalue for="1" value="1999" />
+        </attvalues>
+      </edge>
+      <edge id="2" source="10.1016/j.ins.2013.06.052" target="10.1016/j.ins.2011.12.018">
+        <attvalues>
+          <attvalue for="1" value="1999" />
+        </attvalues>
+      </edge>
+      <edge id="3" source="10.1016/j.ins.2013.06.052" target="10.1016/j.ins.2010.10.001">
+        <attvalues>
+          <attvalue for="1" value="1999" />
+        </attvalues>
+      </edge>
+      <edge id="4" source="10.1016/j.ins.2013.06.052" target="10.1016/j.ejor.2008.09.004">
+        <attvalues>
+          <attvalue for="1" value="1999" />
+        </attvalues>
+      </edge>
+      <edge id="5" source="10.1016/j.ins.2013.06.052" target="10.1016/j.ins.2010.08.021">
+        <attvalues>
+          <attvalue for="1" value="1999" />
+        </attvalues>
+      </edge>
+      <edge id="6" source="10.1016/j.ins.2013.06.052" target="10.1016/j.is.2006.09.002">
+        <attvalues>
+          <attvalue for="1" value="1999" />
+        </attvalues>
+      </edge>
+      <edge id="7" source="10.1016/j.ins.2013.06.052" target="10.1016/j.fss.2006.02.008">
+        <attvalues>
+          <attvalue for="1" value="1999" />
+        </attvalues>
+      </edge>
+      <edge id="8" source="10.1016/j.ins.2013.06.052" target="10.1016/j.eswa.2007.04.004">
+        <attvalues>
+          <attvalue for="1" value="1999" />
+        </attvalues>
+      </edge>
+      <edge id="9" source="10.1016/j.ins.2013.06.052" target="10.1016/j.dss.2009.12.003">
+        <attvalues>
+          <attvalue for="1" value="1999" />
+        </attvalues>
+      </edge>
+      <edge id="10" source="10.1016/j.ins.2013.06.052" target="10.2307/2279372">
+        <attvalues>
+          <attvalue for="1" value="1999" />
+        </attvalues>
+      </edge>
+      <edge id="11" source="10.1016/j.ins.2013.06.052" target="10.1016/j.ins.2010.08.013">
+        <attvalues>
+          <attvalue for="1" value="1999" />
+        </attvalues>
+      </edge>
+      <edge id="12" source="10.1016/j.ins.2013.06.052" target="10.1007/s007780100057">
+        <attvalues>
+          <attvalue for="1" value="1999" />
+        </attvalues>
+      </edge>
+      <edge id="13" source="10.1016/j.neucom.2013.04.018" target="10.1016/j.fss.2006.02.008">
+        <attvalues>
+          <attvalue for="1" value="2012" />
+        </attvalues>
+      </edge>
+      <edge id="14" source="10.1016/j.neucom.2013.04.018" target="10.1093/comjnl/bxr056">
+        <attvalues>
+          <attvalue for="1" value="2012" />
+        </attvalues>
+      </edge>
+      <edge id="15" source="10.1016/j.neucom.2013.04.018" target="10.1016/j.ejor.2008.09.004">
+        <attvalues>
+          <attvalue for="1" value="2012" />
+        </attvalues>
+      </edge>
+      <edge id="16" source="10.1016/j.neucom.2013.04.018" target="10.1016/j.eswa.2007.04.004">
+        <attvalues>
+          <attvalue for="1" value="2012" />
+        </attvalues>
+      </edge>
+      <edge id="17" source="10.1016/j.neucom.2013.04.018" target="10.1007/978-3-642-00958-7_21">
+        <attvalues>
+          <attvalue for="1" value="2012" />
+        </attvalues>
+      </edge>
+      <edge id="18" source="10.1016/j.neucom.2013.04.018" target="10.1007/s11280-010-0084-2">
+        <attvalues>
+          <attvalue for="1" value="2012" />
+        </attvalues>
+      </edge>
+      <edge id="19" source="10.1016/j.neucom.2013.04.018" target="10.1016/j.dss.2009.12.003">
+        <attvalues>
+          <attvalue for="1" value="2012" />
+        </attvalues>
+      </edge>
+      <edge id="20" source="10.1016/j.neucom.2013.04.018" target="10.1016/j.ins.2010.08.021">
+        <attvalues>
+          <attvalue for="1" value="2012" />
+        </attvalues>
+      </edge>
+      <edge id="21" source="10.1016/j.neucom.2013.04.018" target="10.1145/361219.361220">
+        <attvalues>
+          <attvalue for="1" value="2012" />
+        </attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>

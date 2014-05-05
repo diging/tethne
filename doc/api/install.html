@@ -1,0 +1,373 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installation &mdash; tethne 0.4.2-alpha documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4.2-alpha',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="tethne 0.4.2-alpha documentation" href="index.html" />
+    <link rel="next" title="Tutorial" href="tutorial.html" />
+    <link rel="prev" title="Tethne: Bibliographic Network Analysis in Python" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Tutorial"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Tethne: Bibliographic Network Analysis in Python"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">tethne 0.4.2-alpha documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="installation">
+<span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>The following sections describe how to install the Tethne package and TethneGUI. Since
+Tethne is under active development, we&#8217;re making improvements and adding features all the
+time. It&#8217;s a good idea to stay on top of new releases. To get notifications about new
+releases, you should watch our GitHub repository.</p>
+<img alt="_images/install.2.png" src="_images/install.2.png" style="width: 90%;" />
+<ol class="arabic simple">
+<li>Find our GitHub repository at
+<a class="reference external" href="https://github.com/diging/tethne">https://github.com/diging/tethne</a></li>
+<li>Click the <strong>Watch</strong> button in the upper-right corner of the page, and select
+<strong>Watching</strong>.</li>
+</ol>
+<div class="section" id="how-to-get-help">
+<h2>How to get help<a class="headerlink" href="#how-to-get-help" title="Permalink to this headline">¶</a></h2>
+<p>Tethne is under active development, so you will most certainly run into bugs and hiccups.
+If you run into trouble, please create a new issue in our
+<a class="reference external" href="https://github.com/diging/tethne/issues?state=open">issue tracker</a>. This will help us
+to hunt down problems, and will ensure that you get updates as we work to solve those
+problems.</p>
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>Tethne requires the following software and packages.:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#python"><em>Python 2.7</em></a></li>
+<li><a class="reference internal" href="#numpy"><em>NumPy</em></a></li>
+<li><a class="reference internal" href="#nltk"><em>NLTK</em></a></li>
+<li><a class="reference internal" href="#nx"><em>NetworkX</em></a></li>
+</ul>
+<div class="section" id="anaconda">
+<h3>Anaconda<a class="headerlink" href="#anaconda" title="Permalink to this headline">¶</a></h3>
+<p>We recommend installing <a class="reference external" href="http://continuum.io/downloads">Anaconda</a>, which will install
+Python, Numpy, NLTK, and a variety of other useful libraries. Installation instructions
+for Anaconda can be found <a class="reference external" href="http://docs.continuum.io/anaconda/install.html">here</a>. This
+may be a good idea <em>even if you already have Python installed on your system</em>.</p>
+</div>
+<div class="section" id="python-2-7">
+<span id="python"></span><h3>Python 2.7<a class="headerlink" href="#python-2-7" title="Permalink to this headline">¶</a></h3>
+<p>Tethne requires Python 2.7; Python 3 is not fully backwards-compatible, and Tethne will
+not work properly with that version. <strong>If you installed</strong> <a class="reference external" href="http://continuum.io/downloads">Anaconda</a>, <strong>Python 2.7 should
+already be installed.</strong></p>
+<p>You may already have Python installed on your system. To find out, open a new
+command-line window. On Mac, find <tt class="docutils literal"><span class="pre">Terminal</span></tt> in <tt class="docutils literal"><span class="pre">Applications</span> <span class="pre">&gt;</span> <span class="pre">Utilities</span></tt>; on
+Windows, go to <tt class="docutils literal"><span class="pre">Start</span> <span class="pre">&gt;</span> <span class="pre">All</span> <span class="pre">Programs</span> <span class="pre">&gt;</span> <span class="pre">Accessories</span> <span class="pre">&gt;</span> <span class="pre">Command</span> <span class="pre">Prompt</span></tt>. Type in <tt class="docutils literal"><span class="pre">python</span></tt>
+and press enter. If Python is installed, the command-line interpreter should start:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python
+Python 2.7.5 |Anaconda 1.6.1 <span class="o">(</span>x86_64<span class="o">)</span>| <span class="o">(</span>default, Jun 28 2013, 22:20:13<span class="o">)</span>
+<span class="o">[</span>GCC 4.0.1 <span class="o">(</span>Apple Inc. build 5493<span class="o">)]</span> on darwin
+Type <span class="s2">&quot;help&quot;</span>, <span class="s2">&quot;copyright&quot;</span>, <span class="s2">&quot;credits&quot;</span> or <span class="s2">&quot;license&quot;</span> <span class="k">for </span>more information.
+&gt;&gt;&gt;
+</pre></div>
+</div>
+<p>Note that the version number (<tt class="docutils literal"><span class="pre">Python</span> <span class="pre">2.7.5</span></tt>) is listed in the first line when the
+interpreter starts. If you have Python 2.7.x, you&#8217;re good to go.</p>
+<p>If Python is not installed, or you have the wrong version of Python, you can find the
+latest versions of Python <a class="reference external" href="http://www.python.org/downloads/">here</a>.</p>
+<p><strong>Windows users</strong> should use the 32-bit version of Python. Look for the <tt class="docutils literal"><span class="pre">Windows</span> <span class="pre">x86</span> <span class="pre">MSI</span> <span class="pre">Installer</span></tt>. For details about installing Python on Windows, see <a class="reference external" href="http://python-guide.readthedocs.org/en/latest/starting/install/win/">Installing Python on Windows</a>.</p>
+</div>
+<div class="section" id="numpy">
+<span id="id4"></span><h3>NumPy<a class="headerlink" href="#numpy" title="Permalink to this headline">¶</a></h3>
+<p>NumPy stands for Numerical Python. NumPy is a Python library that provides functionality
+for scientific computing.</p>
+<p><strong>If you installed</strong> <a class="reference external" href="http://continuum.io/downloads">Anaconda</a>, <strong>NumPy should already be installed</strong>. Otherwise, you can
+find an installer for your operating system on the
+<a class="reference external" href="http://sourceforge.net/projects/numpy/files/NumPy/1.8.0/">NumPy SourceForge project</a>.
+Mac users should download and install <tt class="docutils literal"><span class="pre">numpy-1.8.0-py2.7-python.org-macosx10.6.dmg</span></tt>.
+Windows users should download and install <tt class="docutils literal"><span class="pre">numpy-1.8.0-win32-superpack-python2.7.exe</span></tt>.</p>
+</div>
+<div class="section" id="nltk">
+<span id="id5"></span><h3>NLTK<a class="headerlink" href="#nltk" title="Permalink to this headline">¶</a></h3>
+<p>NLTK stands for Natural Language ToolKit. <strong>If you installed</strong> <a class="reference external" href="http://continuum.io/downloads">Anaconda</a>, <strong>NLTK should
+already be installed.</strong> For installation instructions, see the
+<a class="reference external" href="http://www.nltk.org/install.html">NLTK documentation</a>.</p>
+</div>
+<div class="section" id="networkx">
+<span id="nx"></span><h3>NetworkX<a class="headerlink" href="#networkx" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://networkx.github.io/">NetworkX</a> is a Python package for network analysis. The
+easiest way to install NetworkX is to use <tt class="docutils literal"><span class="pre">pip</span></tt>. <tt class="docutils literal"><span class="pre">pip</span></tt> installs Python packages from
+the <a class="reference external" href="https://pypi.python.org/pypi">Python Package Index</a>. You will need to be connected
+to the internet in order for <tt class="docutils literal"><span class="pre">pip</span></tt> to successfully download and install packages.</p>
+<p>First, check to see whether you have <tt class="docutils literal"><span class="pre">pip</span></tt> installed. Open the command prompt, and enter
+<tt class="docutils literal"><span class="pre">pip</span> <span class="pre">--version</span></tt>. If <tt class="docutils literal"><span class="pre">pip</span></tt> is installed, you should see something like:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip --version
+pip 1.3.1 from /anaconda/lib/python2.7/site-packages <span class="o">(</span>python 2.7<span class="o">)</span>
+</pre></div>
+</div>
+<p>Otherwise, you&#8217;ll need to install <tt class="docutils literal"><span class="pre">pip</span></tt>. See
+<a class="reference external" href="http://pip.readthedocs.org/en/latest/installing.html">this installation guide</a>.</p>
+<p>Once <tt class="docutils literal"><span class="pre">pip</span></tt> is installed, install NetworkX by entering the following in the command
+prompt:</p>
+<div class="highlight-python"><pre>$ sudo pip install networkx</pre>
+</div>
+<p>You will be prompted to enter your password.</p>
+<p>If all goes well, you should be able to <tt class="docutils literal"><span class="pre">import</span></tt> NetworkX in Python:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python
+ Python 2.7.5 |Anaconda 1.6.1 <span class="o">(</span>x86_64<span class="o">)</span>| <span class="o">(</span>default, Jun 28 2013, 22:20:13<span class="o">)</span>
+ <span class="o">[</span>GCC 4.0.1 <span class="o">(</span>Apple Inc. build 5493<span class="o">)]</span> on darwin
+ Type <span class="s2">&quot;help&quot;</span>, <span class="s2">&quot;copyright&quot;</span>, <span class="s2">&quot;credits&quot;</span> or <span class="s2">&quot;license&quot;</span> <span class="k">for </span>more information.
+ &gt;&gt;&gt; import networkx
+ &gt;&gt;&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="tethne-for-python-and-command-line">
+<h2>Tethne for Python and Command-line<a class="headerlink" href="#tethne-for-python-and-command-line" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="from-pypi">
+<h3>From PyPI<a class="headerlink" href="#from-pypi" title="Permalink to this headline">¶</a></h3>
+<p>Tethne is available via the Python Package Index. You can install the latest release using
+<tt class="docutils literal"><span class="pre">pip</span></tt></p>
+<div class="highlight-python"><pre>$ sudo pip install tethne
+Password:
+Downloading/unpacking tethne
+  Downloading tethne-0.3.0-alpha.tar.gz (61kB): 61kB downloaded
+  Running setup.py egg_info for package tethne
+
+Installing collected packages: tethne
+  Running setup.py install for tethne
+
+Successfully installed tethne
+Cleaning up...</pre>
+</div>
+</div>
+<div class="section" id="from-github">
+<h3>From GitHub<a class="headerlink" href="#from-github" title="Permalink to this headline">¶</a></h3>
+<p>Alternatively, you can find the latest release of Tethne in our
+<a class="reference external" href="https://github.com/diging/tethne/releases">GitHub repository</a>.</p>
+<img alt="_images/install.0.png" src="_images/install.0.png" style="width: 60%;" />
+<ol class="arabic">
+<li><p class="first">Download the source code.</p>
+</li>
+<li><p class="first">Unpack the .zip/.tar.gz archive (e.g. <tt class="docutils literal"><span class="pre">tethne-0.3.1-alpha.zip</span></tt>). This should
+create a new folder, e.g. <tt class="docutils literal"><span class="pre">tethne-0.3.1-alpha</span></tt>.</p>
+</li>
+<li><p class="first">Open the command prompt, and navigate to the folder where you unpacked Tethne. For
+example, if you unpacked Tethne in your Downloads folder, use:</p>
+<div class="highlight-python"><pre>$ cd ~/Downloads</pre>
+</div>
+</li>
+<li><p class="first">If you have <tt class="docutils literal"><span class="pre">pip</span></tt> installed, use:</p>
+<div class="highlight-python"><pre>$ sudo pip install ./tethne-0.3.1-alpha</pre>
+</div>
+</li>
+</ol>
+<p>(change <tt class="docutils literal"><span class="pre">tethne-0.3.1-alpha</span></tt> to reflect the release that you downloaded).</p>
+<ol class="arabic" start="5">
+<li><p class="first">If you don&#8217;t have <tt class="docutils literal"><span class="pre">pip</span></tt>, you can use:</p>
+<div class="highlight-python"><pre>$ sudo python ./tethne-0.3.1-alpha/setup.py install</pre>
+</div>
+</li>
+</ol>
+<p>If Tethne is installed successfully, you should be able to <tt class="docutils literal"><span class="pre">import</span></tt> it in the Python
+interpreter:</p>
+<div class="highlight-python"><pre>$ python
+Python 2.7.5 |Anaconda 1.6.1 (x86_64)| (default, Jun 28 2013, 22:20:13)
+[GCC 4.0.1 (Apple Inc. build 5493)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+&gt;&gt;&gt; import tethne.readers as rd
+&gt;&gt;&gt;</pre>
+</div>
+</div>
+<div class="section" id="alias">
+<span id="id7"></span><h3>Alias<a class="headerlink" href="#alias" title="Permalink to this headline">¶</a></h3>
+<p>To make using Tethne from the command-line a bit easier, create a permanent alias.</p>
+<p><strong>Mac:</strong></p>
+<p>Add the following line to <tt class="docutils literal"><span class="pre">~/.bash_profile</span></tt>:</p>
+<div class="highlight-python"><pre>alias tethne='python [TETHNE PATH]'</pre>
+</div>
+<ol class="arabic simple">
+<li>To find the <tt class="docutils literal"><span class="pre">[TETHNE</span> <span class="pre">PATH]</span></tt>, start the Python interpreter in Terminal, and import
+Tethne. Then call <tt class="docutils literal"><span class="pre">tethne.__file__</span></tt>. In the example below, the path that we&#8217;re
+looking for is <tt class="docutils literal"><span class="pre">/anaconda/lib/python2.7/site-packages/tethne</span></tt>:</li>
+</ol>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python
+Python 2.7.5 |Anaconda 1.6.1 <span class="o">(</span>x86_64<span class="o">)</span>| <span class="o">(</span>default, Jun 28 2013, 22:20:13<span class="o">)</span>
+<span class="o">[</span>GCC 4.0.1 <span class="o">(</span>Apple Inc. build 5493<span class="o">)]</span> on darwin
+Type <span class="s2">&quot;help&quot;</span>, <span class="s2">&quot;copyright&quot;</span>, <span class="s2">&quot;credits&quot;</span> or <span class="s2">&quot;license&quot;</span> <span class="k">for </span>more information.
+&gt;&gt;&gt; import tethne
+&gt;&gt;&gt; tethne.__file__
+<span class="s1">&#39;//anaconda/lib/python2.7/site-packages/tethne/__init__.pyc&#39;</span>
+&gt;&gt;&gt;
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>In TextWrangler, open the file <tt class="docutils literal"><span class="pre">.bash_profile</span></tt> in your Home directory. You may need
+to set <tt class="docutils literal"><span class="pre">Enable</span></tt> to <tt class="docutils literal"><span class="pre">Everything</span></tt>, and check the <tt class="docutils literal"><span class="pre">Show</span> <span class="pre">hidden</span> <span class="pre">files</span></tt> checkbox.</li>
+</ol>
+<img alt="_images/install.4.png" src="_images/install.4.png" style="width: 60%;" />
+<ol class="arabic simple" start="3">
+<li>Add the line <tt class="docutils literal"><span class="pre">alias</span> <span class="pre">tethne='python</span> <span class="pre">[TETHNE</span> <span class="pre">PATH]'</span></tt>
+(change <tt class="docutils literal"><span class="pre">[TETHNE</span> <span class="pre">PATH]</span></tt> to the Tethne installation path, from step 1) to the end of
+<tt class="docutils literal"><span class="pre">._bash_profile</span></tt>, then save and close the file.</li>
+</ol>
+<img alt="_images/install.5.png" src="_images/install.5.png" style="width: 60%;" />
+<ol class="arabic simple" start="4">
+<li>Open a new Terminal window, and enter <tt class="docutils literal"><span class="pre">tethne</span></tt>. If all goes well, you should see:</li>
+</ol>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tethne
+Must specify --dataset-id
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="tethnegui">
+<h2>TethneGUI<a class="headerlink" href="#tethnegui" title="Permalink to this headline">¶</a></h2>
+<p>A demonstration graphical user interface was created for teaching purposes only. This is
+not intended for extensive use. It provides a very basic interface to the Tethne
+command-line workflow.</p>
+<p>TethneGUI comes bundled with most of the things that it needs to run. On <strong>Windows</strong>
+systems, however, you will need to install NumPy independently. See <a class="reference internal" href="#numpy"><em>NumPy</em></a>, above.</p>
+<p>You can find the most recent build of the TethneGUI on the <a class="reference external" href="http://sourceforge.net/projects/neotomaphenax/?source=directory">Neotoma phenax SourceForge
+repository</a>.</p>
+<img alt="_images/install.1.png" src="_images/install.1.png" style="width: 60%;" />
+<ol class="arabic simple">
+<li>Download the version of TethneGUI appropriate for your operating system. Look
+for the green download button near the center of the page. Clicking this button will
+take you to a new page, and after a few seconds you should start downloading a
+.zip archive (e.g. <tt class="docutils literal"><span class="pre">TethneGUI-0.1-osx.zip</span></tt>)</li>
+<li>Once the download completes, unpack it. This will create a new directory called
+<tt class="docutils literal"><span class="pre">TethneGUI</span></tt>. Move this directory to a place in your filesystem where you can find it
+later (e.g. your <tt class="docutils literal"><span class="pre">Applications</span></tt> folder).</li>
+<li>Look inside the <tt class="docutils literal"><span class="pre">TethneGUI</span></tt> folder. <strong>On Mac</strong>, double-click <tt class="docutils literal"><span class="pre">TethneGUI.app</span></tt>,
+inside. <strong>On Windows</strong>, run <tt class="docutils literal"><span class="pre">TethneGUI.exe</span></tt>.</li>
+</ol>
+<p>Once TethneGUI loads, you should see a window that looks like this:</p>
+<img alt="_images/install.3.png" src="_images/install.3.png" style="width: 60%;" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#how-to-get-help">How to get help</a></li>
+<li><a class="reference internal" href="#requirements">Requirements</a><ul>
+<li><a class="reference internal" href="#anaconda">Anaconda</a></li>
+<li><a class="reference internal" href="#python-2-7">Python 2.7</a></li>
+<li><a class="reference internal" href="#numpy">NumPy</a></li>
+<li><a class="reference internal" href="#nltk">NLTK</a></li>
+<li><a class="reference internal" href="#networkx">NetworkX</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tethne-for-python-and-command-line">Tethne for Python and Command-line</a><ul>
+<li><a class="reference internal" href="#from-pypi">From PyPI</a></li>
+<li><a class="reference internal" href="#from-github">From GitHub</a></li>
+<li><a class="reference internal" href="#alias">Alias</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tethnegui">TethneGUI</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Tethne: Bibliographic Network Analysis in Python</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="next chapter">Tutorial</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/install.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Tutorial"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Tethne: Bibliographic Network Analysis in Python"
+             >previous</a> |</li>
+        <li><a href="index.html">tethne 0.4.2-alpha documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, ASU Digital Innovation Group.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

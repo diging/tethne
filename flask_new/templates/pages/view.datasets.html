@@ -1,0 +1,132 @@
+{% extends 'layouts/user.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<!-- <div class="page-header">
+  <h1>Welcome {{ user }}</h1>
+</div> -->
+<p class="lead"> Stats about the selected dataset {{data}}</p>
+
+<a href="{{ url_for('.dc_list') }}"> <<< Back to DataCollections List</a><br><br>
+<a href="{{ url_for('.dc_create_slices') }}"class="btn btn-info" role="button">Slice this dataset</a>
+    <a href="{{ url_for('.gc_create') }}"class="btn btn-success " role="button">Create GraphCollection</a>
+<br><br>
+
+ 
+<!-- 
+ <form action="" method="get" class="form" >
+<body>
+	<table class="table table-hover">
+			<tr >
+				{% for col in columns %}
+				<th class="success">{{ col }}</th>
+				{% endfor %}
+				<tr class = ".table-hover">
+				{% for res in results %}
+					<tr class = ".table-hover"> 
+						
+					<td class="warning">
+					
+					{% for eachres in res %}
+        				{{ eachres }}
+        			{% for chk in checkboxes %}  
+           				  <input type="radio" name="query"> 	
+					 </td>
+					 {% endfor %}
+					{% endfor %}
+					</tr>	
+				{% endfor %}
+				</tr>
+			</tr>
+	</table>
+</body>
+
+ -->
+
+<form action="" method="get" class="form" >
+<body>
+<!-- 
+<table class="table table-hover" >
+
+    <tr>
+        <th class="success"></th><th class="danger">S No</th><th class="warning" >Paper ID</th><th class="success">No.of.nodes</th><th class="danger">No.of.edges</th>
+    </tr>
+
+    <tr>
+        <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+            <input type="radio" name="textbox">    
+        </td>
+        
+		<td class = ".table-hover"> 1</td>
+        <td class = ".table-hover">
+            Paper #114
+        </td>
+		<td class = ".table-hover">
+            34
+        </td>
+        <td class = ".table-hover">
+            434
+        </td>
+
+    
+    </tr>
+    
+    
+      <tr>
+        <td class = ".table-hover" style="text-align: center; vertical-align: middle;">
+            <input type="radio" name="textbox">    
+        </td>
+        
+		<td class = ".table-hover"> 2</td>
+        <td>
+            paper #536
+        </td>
+		<td>
+            56	
+        </td>
+		<td>
+            456	
+        </td>
+
+    
+    </tr>
+    
+    
+      <tr>
+        <td style="text-align: center; vertical-align: middle;">
+            <input type="radio" name="textbox">    
+        </td>
+        
+		<td> 3</td>
+        <td>
+            paper#788
+        </td>
+		<td>
+            56	
+        </td>
+
+		<td>
+            561
+        </td>
+
+    
+    </tr>
+
+</table>
+
+ -->
+
+<p class="text-warning"> Test Data plot</p>
+<p class="text-warning"> Simple graph drawn Slice Key(ex:date) Vs Number of Indices(paper objects)</p>
+<img src="/static/img/pyplot.png"> 
+<br>
+<br>
+
+
+
+
+</body>
+</form>
+
+
+{% endblock %}

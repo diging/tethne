@@ -1,0 +1,7 @@
+
+from readers.py
+
+create_ayjid  -> In this function, when isinstance() is checked whether it is of type LIST , there can be a possibility that it might not be of type list. 
+				 This needs to be checked in the unit test case.
+				 
+				 

@@ -1,0 +1,7 @@
+----------------------------------------
+	Workflow step: Read
+----------------------------------------
+Reading WOS data from file /Users/ramki/tethne/testsuite/testin/2_testrecords.txt...done.
+Read 2 papers in 0.0102939605713 seconds. Accession: 163563ee-841f-4448-9629-009d7aa44579.
+Generating a new DataCollection...done.
+Saving DataCollection to /tmp/user12_DataCollection.pickle...done.

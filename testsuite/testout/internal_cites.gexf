@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><gexf version="1.1" xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gexf.net/1.1draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
+  <graph defaultedgetype="directed" mode="static">
+    <attributes class="edge" mode="static">
+      <attribute id="1" title="date" type="integer" />
+    </attributes>
+    <attributes class="node" mode="static">
+      <attribute id="0" title="date" type="integer" />
+    </attributes>
+    <nodes>
+      <node id="ALAMPORA G 1999 INFORMATION SCIENCES" label="ALAMPORA G 1999 INFORMATION SCIENCES">
+        <attvalues>
+          <attvalue for="0" value="1999" />
+        </attvalues>
+      </node>
+      <node id="WU Z 2012 NEUROCOMPUTING" label="WU Z 2012 NEUROCOMPUTING">
+        <attvalues>
+          <attvalue for="0" value="2012" />
+        </attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <edge id="0" source="WU Z 2012 NEUROCOMPUTING" target="ALAMPORA G 1999 INFORMATION SCIENCES">
+        <attvalues>
+          <attvalue for="1" value="2012" />
+        </attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>

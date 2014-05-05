@@ -1,0 +1,279 @@
+{% extends 'layouts/user.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<!-- <div class="page-header">
+    <h1>Welcome {{ user }} </h1>
+</div> -->
+<p class="lead"> List of {{user}}'s Data Collections</p>
+<!-- 
+    <form action="" method="get" class="form" >
+    <body>
+    <table class="table table-hover">
+    		<tr >
+    			{% for col in columns %}
+    			<th class="success">{{ col }}</th>
+    			{% endfor %}
+    			<tr class = ".table-hover">
+    			{% for res in results %}
+    				<tr class = ".table-hover"> 
+    					
+    				<td class="warning">
+    				
+    				{% for eachres in res %}
+           				{{ eachres }}
+           			{% for chk in checkboxes %}  
+              				  <input type="radio" name="query"> 	
+    				 </td>
+    				 {% endfor %}
+    				{% endfor %}
+    				</tr>	
+    			{% endfor %}
+    			</tr>
+    		</tr>
+    </table>
+    </body>
+    
+    -->
+
+
+ <body>
+<button id="ok1">Slice DataSets</button>
+<!-- <p>This is a paragraph with little content.</p> -->
+<input type="radio" id="rd" value=0>
+
+   <!-- <form action="" method="post" class="form" >  -->  
+<form role="form" class="form-inline" method = "post">
+   <p class="text-muted"> Pick one DataCollection to delete/analyze it. A GraphCollection can also be created from the selected DataCollection.</p>
+
+        <a href="{{ url_for('.dc_del') }}"class="btn btn-danger " role="button" id="delete">Delete DataCollections</a>
+
+        <a href="{{ url_for('.dc_create_slices') }}"class="btn btn-success " role="button" id="slice">Slice DataCollection</a></br> </br>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
+</script>
+<script>
+$(document).ready(function(){
+  $("#ok1").click(function(){
+    $("p").hide("slow",function(){
+     if($('#rd').is(':checked')) { alert("it's checked"); }
+    });
+  });
+});
+</script>
+
+
+
+         <!-- <a href="{{ url_for('.dc_list') }}"class="btn btn-info" role="button" id="slice" value ="{{request.form.slice}}">Slice DataCollections</a>
+ -->
+              
+        
+        <a href="{{ url_for('.gc_create') }}"class="btn btn-success " role="button" id="create">Create GraphCollection</a></br> </br>
+  <p> click me</p>
+   
+    	<div class="table-responsive">
+        <table class="table table-hover" >
+            <tr>
+                <th class="danger"></th>
+                <th class="success">No.</th>
+                <th class="danger" >DataCollectionID</th>
+                <th class="success">Created<br></th>
+                <th class="danger" >No.of.slices</th>
+                <th class="success">Slice axes<br></th>
+                <th class="danger" >No.of.papers</th>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                    
+                            <input type="radio" name="filetype" id="ds1" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                           
+                             
+                      
+                    <!-- <input type="radio" name="textbox" value ="{{request.form.input_path}}"> -->    
+                </td>
+                <td class = ".table-hover"> 1</td>
+                <td class = ".table-hover">
+                    <a href="{{ url_for('.dc_stats',data='ds11334') }}">DataSet #11334</a>  
+                </td>
+                <td class = ".table-hover">
+                    Apr 14, 2014.
+                </td>
+                  <td class = ".table-hover">
+                    2
+                </td>
+                  <td class = ".table-hover">
+                    date,accession
+                </td>
+                  <td class = ".table-hover">
+                    345
+                </td>
+            </tr>
+            <tr>
+                <td class = ".table-hover" style="text-align: center; vertical-align: middle;">
+                      <input type="radio" name="filetype" id="ds2" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                                
+                </td>
+                <td class = ".table-hover"> 2</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds53677') }}">DataSet #53677</a>
+                </td>
+                <td>
+                    Apr 14, 2014.	
+                </td>
+                   </td>
+                  <td class = ".table-hover">
+                    2
+                </td>
+                  <td class = ".table-hover">
+                    date,accession
+                </td>
+                  <td class = ".table-hover">
+                    145
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                      <input type="radio" name="filetype" id="ds3" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                             
+                </td>
+                <td> 3</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds78678') }}">DataSet #78678</a>  
+                </td>
+                <td>
+                    Apr 12, 2014.
+                </td>
+                   </td>
+                  <td class = ".table-hover">
+                    1
+                </td>
+                  <td class = ".table-hover">
+                    date
+                </td>
+                  <td class = ".table-hover">
+                    45
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                      <input type="radio" name="filetype" id="ds4" value="DataSet #53677" checked value="{{ request.form.input_type}}">  
+                </td>
+                <td> 4</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds77478') }}">DataSet #77478</a>  
+                </td>
+                <td>
+                    Apr 10, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                     <input type="radio" name="filetype" id="ds5" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                </td>
+                <td> 5</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds89790') }}">DataSet #89790</a>  
+                </td>
+                <td>
+                    Apr 08, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;" class = ".table-hover">
+                      <input type="radio" name="filetype" id="ds6" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                </td>
+                <td class = ".table-hover"> 6</td>
+                <td class = ".table-hover">
+                    <a href="{{ url_for('.dc_stats',data='ds1124') }}">DataSet #1124</a>  
+                </td>
+                <td class = ".table-hover">
+                    Apr 07, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td class = ".table-hover" style="text-align: center; vertical-align: middle;">
+                    <input type="radio" name="filetype" id="ds7" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                </td>
+                <td class = ".table-hover"> 7</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds3277') }}">DataSet #3277</a> 
+                </td>
+                <td>
+                    Apr 07, 2014.	
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                      <input type="radio" name="filetype" id="ds8" value="DataSet #53677" checked value="{{ request.form.input_type}}">  
+                </td>
+                <td> 8</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds78478') }}">DataSet #78478</a> 
+                </td>
+                <td>
+                    Apr 06, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                      <input type="radio" name="filetype" id="ds9" value="DataSet #53677" checked value="{{ request.form.input_type}}"> 
+                </td>
+                <td> 9</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds77478') }}">DataSet #77478</a>  
+                </td>
+                <td>
+                    Apr 05, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                     <input type="radio" name="filetype" id="ds9" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                </td>
+                <td> 10</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds89790')}}">DataSet #89790</a> 
+                </td>
+                <td>
+                    Mar 27, 2014.
+                </td>
+            </tr>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                      <input type="radio" name="filetype" id="ds10" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                </td>
+                <td> 11</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds77478') }}">DataSet #77478</a> 
+                </td>
+                <td>
+                    Apr 05, 2014.
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                     <input type="radio" name="filetype" id="ds11" value="DataSet #53677" checked value="{{ request.form.input_type}}">
+                </td>
+                <td> 12</td>
+                <td>
+                    <a href="{{ url_for('.dc_stats',data='ds12344') }}">DataSet #12344</a> 
+                </td>
+                <td>
+                    Mar 27, 2014.
+                </td>
+            </tr>
+        </table>
+      </div>
+
+
+</br></br>
+
+
+ 
+
+ 
+
+</body>
+</form>
+
+
+{% endblock %}
