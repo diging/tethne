@@ -176,6 +176,15 @@ def tokenize(ngrams):
     ----------
     ngrams : dict
         Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
+        
+    Returns
+    -------
+    t_ngrams : dict
+        Tokenized ngrams, as doi:{i:count}.
+    vocab : dict
+        Vocabulary as i:term.
+    counts : :class:`.Counter`
+        Term counts for corpus, as i:count.
     """
 
     vocab = {}
