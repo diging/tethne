@@ -16,6 +16,7 @@ from cStringIO import StringIO
 from pprint import pprint
 import sys
 import numpy as np
+import scipy as sc
 
 class Paper(object):
     """
@@ -174,7 +175,7 @@ class DataCollection(object):
         
     """
     
-    def __init__(self, data, model=None, index_by='wosid'):
+    def __init__(self, data, model=None, grams=None, index_by='wosid'):
         self.axes = {}
         self.index_by = index_by
         self.datakeys = data[0].keys()
@@ -506,39 +507,39 @@ class DataCollection(object):
         
         return len(self.axes.keys())
     
-    def distribution(self):
-        """
-        Returns a Numpy array describing the number of :class:`.Paper`
-        associated with each slice-coordinate.
-        
-        WARNING: expensive for a :class:`.DataCollection` with many axes or
-        long axes. Consider using :func:`.distribution_2d` .
-        
-        Returns
-        -------
-        dist : Numpy array
-            An N-dimensional array. Axes are given by 
-            :func:`DataCollection.get_axes` and values are the number of
-            :class:`.Paper` at that slice-coordinate.
+#    def distribution(self):
+#        """
+#        Returns a Numpy array describing the number of :class:`.Paper`
+#        associated with each slice-coordinate.
+#        
+#        WARNING: expensive for a :class:`.DataCollection` with many axes or
+#        long axes. Consider using :func:`.distribution_2d` .
+#        
+#        Returns
+#        -------
+#        dist : Numpy array
+#            An N-dimensional array. Axes are given by 
+#            :func:`DataCollection.get_axes` and values are the number of
+#            :class:`.Paper` at that slice-coordinate.
+#            
+#        Raises
+#        ------
+#        RuntimeError : DataCollection has not been sliced.
+#        """
+#        
+#        if len(self.axes) == 0:
+#            raise(RuntimeError("DataCollection has not been sliced."))
+#        
+#        shape = tuple( len(v) for v in self.axes.values() )
+#        dist = np.zeros(shape)
+#        axes = self.get_axes()
+#
+#        for indices in np.ndindex(shape):
+#            dist[indices] = len( self._get_by_i(zip(axes, indices)))
+#            
+#        return dist
             
-        Raises
-        ------
-        RuntimeError : DataCollection has not been sliced.
-        """
-        
-        if len(self.axes) == 0:
-            raise(RuntimeError("DataCollection has not been sliced."))
-        
-        shape = tuple( len(v) for v in self.axes.values() )
-        dist = np.zeros(shape)
-        axes = self.get_axes()
-
-        for indices in np.ndindex(shape):
-            dist[indices] = len( self._get_by_i(zip(axes, indices)))
-            
-        return dist
-            
-    def distribution_2d(self, x_axis, y_axis):
+    def distribution(self, x_axis, y_axis=None):
         """
         Returns a Numpy array describing the number of :class:`.Paper`
         associated with each slice-coordinate, for x and y axes spcified.
@@ -557,19 +558,37 @@ class DataCollection(object):
         
         if len(self.axes) == 0:
             raise(RuntimeError("DataCollection has not been sliced."))
-        if x_axis not in self.get_axes() or y_axis not in self.get_axes():
-            raise(KeyError("Invalid slice axes for this DataCollection."))
+        if x_axis not in self.get_axes():
+            raise(KeyError("X axis invalid for this DataCollection."))
         
         x_size = len(self.axes[x_axis])
-        y_size = len(self.axes[y_axis])
+        
+        if y_axis is not None:
+            if y_axis not in self.get_axes():
+                raise(KeyError("Y axis invalid for this DataCollection."))     
+
+            y_size = len(self.axes[y_axis])
+        else:   # Only 1 slice axis.
+            y_size = 1
+
         shape = (x_size, y_size)
-        dist = np.zeros(shape)
+        dist = sc.sparse.coo_matrix(shape)
         
         for i in xrange(x_size):
-            for j in xrange(y_size):
-                dist[i, j] = len(self._get_by_i([(x_axis, i),(y_axis, j)]))
+            if y_axis is None:
+                dist[i, 0] = len(self._get_by_i([(x_axis, i)])
+            else:
+                for j in xrange(y_size):
+                    dist[i, j] = len(self._get_by_i([(x_axis, i),(y_axis, j)]))
         
         return dist
+
+    def distribution_2d(self, x_axis, y_axis=None):
+        """
+        Deprecated as of 0.4.3-alpha. Use :func:`.distribution` instead.
+        """
+
+        return distribution(self, x_axis, y_axis=y_axis):
 
 class GraphCollection(object):
     """
