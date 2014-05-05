@@ -3,6 +3,8 @@ Build networks from topics in a topic model.
 """
 
 import networkx as nx
+from scipy import stats
+import numpy as np
 
 def paper_coupling(model, threshold=0.1):
     """
@@ -72,3 +74,81 @@ def term_coupling(model, threshold=0.01):
         tc.node[t]['words'] = model.top_keys[t][1]  # Add list of top words.
 
     return tc
+    
+def topic_coupling(model, papers=None, threshold=None):
+    """
+    Builds a network of topics using inverse symmetric KL-divergence on papers.
+    
+    If `papers` is not None, uses only those papers provided to calculate
+    KL-divergence.
+    
+    Parameters
+    ----------
+    model : :class:`.LDAModel`
+    papers : list
+        A list of paper indices to use in KL-divergence calculation.
+    threshold : float
+        Minimum inverse symmetric KL-divergence for an edge. (default = 0.25)
+    """
+    
+    Z = model.top_word.shape[0]
+    G = nx.Graph()
+    
+    if threshold is None:
+        # Scaling factor to remove negative correlation between N_d and number 
+        # of edges.
+        threshold = len(papers)**-0.2 + 0.1
+        
+    if papers is None:
+        dt_matrix = model.doc_topic
+    else:
+        N_d = len(papers)
+        dt_matrix = np.zeros((N_d, Z))
+        for d in xrange(N_d):
+            dt_matrix[d, :] = model.doc_topic[papers[d], :]
+
+    for i in xrange(Z):
+        for j in xrange(i+1, Z):
+            D_ij = stats.entropy(dt_matrix[:,i], dt_matrix[:,j])
+            D_ji = stats.entropy(dt_matrix[:,j], dt_matrix[:,i])
+            iD_sym = float(1/(D_ij + D_ji))
+            
+            if iD_sym >= threshold:
+                G.add_node(j, label=', '.join(model.top_keys[i][1]))
+                G.add_edge(i,j,weight=iD_sym)
+    
+    return G
+    
+if __name__ == '__main__':
+    import sys
+    sys.path.append("/Users/erickpeirson/tethne")
+    from tethne.readers import mallet
+    from tethne.data import DataCollection
+    from tethne.builders import topicCollectionBuilder
+    from tethne.writers import collection
+    import random
+
+    basepath = "/Users/erickpeirson/Dropbox/DigitalHPS/Kristen/"
+    md = basepath + "mycorpus_meta.csv"
+    td = basepath + "doc_top"
+    tk = basepath + "topic_keys"
+    wt = basepath + "word_top"
+    
+    model = mallet.load(td, wt, tk, 100, md)
+    papers = mallet.read(td, wt, tk, 100, md)
+    for p in xrange(len(papers)):
+        papers[p]['date'] = random.randint(1900, 2012)
+        
+    D = DataCollection(papers, model=model, index_by='doi')
+    D.slice('date', 'time_window', window_size=10, step_size=2)
+    
+    builder = topicCollectionBuilder(D)
+    C = builder.build('date', 'topic_coupling')
+    
+    collection.to_dxgmml(C, '/Users/erickpeirson/Desktop/tc_test.xgmml')
+    
+    #G = topic_coupling(model, papers=[1,2,3,4,5,10], threshold=0.9)
+    #nx.write_graphml(G, '/Users/erickpeirson/Desktop/tc_test.graphml')
+    
+    
+    
