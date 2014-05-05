@@ -3,7 +3,7 @@
 
 from collections import Counter
 
-def to_documents(target, ngrams):
+def to_documents(target, ngrams, papers=None, fields=['date','atitle']):
     """
     
     Parameters
@@ -13,15 +13,25 @@ def to_documents(target, ngrams):
         './mycorpus_docs.txt' and './mycorpus_meta.csv'.
     ngrams : dict
         Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
-    
+    papers : list
+        Optional. List of :class:`.Paper` objects. Should have DOIs that 
+        correspond to keys in `ngrams`.
+    fields : list
+        Optional. If `papers` is provided, a list of fields in :class:`.Paper`
+        to include in the metadata file.
+
     Returns
     -------
-    None : If all goes well.
+    None : If all goes well....
     
     Raises
     ------
     IOError
     """
+    
+    # Index papers by DOI, for easy retrieval later.
+    if papers is not None:
+        papers_by_doi = { p['doi']:p for p in papers }
     
     try:
         docFile = open(target + '_docs.txt', 'wb')
@@ -36,7 +46,12 @@ def to_documents(target, ngrams):
         for key,values in ngrams.iteritems():
             docFile.write(' '.join([ gram for gram,freq in values 
                                                 for i in xrange(freq) ]) + '\n')
-            metaFile.write('{0}\t{1}\n'.format(d, key))
+
+            meta = [ str(d), str(key) ]
+            if papers:
+                p = papers_by_doi[key]
+                meta += [ str(p[f]) for f in fields ]
+            metaFile.write('\t'.join(meta) + '\n')  #'{0}\t{1}\n'.format(d, key))
             d += 1
     except AttributeError:  # .iteritems() raises an AttributeError if ngrams
                             #  is not dict-like.
@@ -47,7 +62,7 @@ def to_documents(target, ngrams):
     
     return
 
-def to_dtm_input(target, D, t_ngrams, vocab):
+def to_dtm_input(target, D, t_ngrams, vocab, fields=['date','atitle']):
     """
     
     Parameters
@@ -61,6 +76,11 @@ def to_dtm_input(target, D, t_ngrams, vocab):
         './mycorpus-meta.dat'.
     t_ngrams : dict
         Keys are paper DOIs, values are lists of (index, frequency) tuples.
+    vocab : dict
+        Vocabulary as i:term.
+    fields : list
+        Optional. A list of fields in :class:`.Paper` to include in the metadata
+        file.
         
     Returns
     -------
@@ -94,6 +114,9 @@ def to_dtm_input(target, D, t_ngrams, vocab):
     with open(target + '-meta.dat', 'wb') as metaFile:
         with open(target + '-mult.dat', 'wb') as multFile:
             for year, papers in sorted(D.axes['date'].items()):
+                # Index papers by DOI, for easy retrieval later.
+                print year, papers
+                
                 seq[year] = []
                 for doi in papers:  # D must be indexed by doi.
                     try:
@@ -104,7 +127,12 @@ def to_dtm_input(target, D, t_ngrams, vocab):
                                                 [ '{0}:{1}'.format(g,c)
                                                     for g,c in grams ] + \
                                                 ['\n']))
-                        metaFile.write('{0}\n'.format(doi))
+                        meta = [ str(doi) ]
+                        if papers:
+                            p = papers_by_doi[doi]
+                            meta += [ str(p[f]) for f in fields ]
+                        metaFile.write('\t'.join(meta) + '\n')
+                        
                     except KeyError:    # May not have data for each Paper.
                         pass
 

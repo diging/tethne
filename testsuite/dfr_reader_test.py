@@ -10,6 +10,12 @@ class TestNGrams(unittest.TestCase):
     def setUp(self):
         filepath = "./testin/2013.5.3.cHrmED8A"
         self.unigrams = rd.dfr.ngrams(filepath, N='uni')
+        self.papers = rd.dfr.read(filepath)
+
+        self.D = dt.DataCollection(self.papers)
+        self.D.slice('date')
+        
+        self.t_unigrams, self.voc, self.counts = rd.dfr.tokenize(self.unigrams)
 
     def test_read(self):
         self.assertEqual(len(self.unigrams), 398)
@@ -18,6 +24,16 @@ class TestNGrams(unittest.TestCase):
         """will fail if non-ascii characters aren't stripped."""
         ret = wr.corpora.to_documents('./testout/mycorpus', self.unigrams)
         self.assertEqual(ret, None)
+
+    def test_write_corpus_papers(self):
+        ret = wr.corpora.to_documents('./testout/mycorpus', self.unigrams,
+                                                             papers=self.papers)
+        self.assertEqual(ret, None)
+
+    def test_write_dtm(self):
+        ret = wr.corpora.to_dtm_input('./testout/mydtm', self.D, self.unigrams,
+                                      self.voc)
+
 
 class TestRead(unittest.TestCase):
 
