@@ -174,7 +174,7 @@ class DataCollection(object):
         
     """
     
-    def __init__(self, data, index_by='wosid'):
+    def __init__(self, data, model=None, index_by='wosid'):
         self.axes = {}
         self.index_by = index_by
         self.datakeys = data[0].keys()
@@ -186,6 +186,8 @@ class DataCollection(object):
             raise(KeyError(str(index_by) + " not a valid key in data."))
         
         self.data = { p[index_by]:p for p in data }
+        
+        self.model = model
     
     def slice(self, key, method=None, **kwargs):
         """
@@ -256,7 +258,7 @@ class DataCollection(object):
         if key == 'date':
             if method == 'time_window':
                 kw = {  'window_size': kwargs.get('window_size', 1),
-                        'step_size': 1 }
+                        'step_size': kwargs.get('step_size', 1) }
                 self.axes[key] = self._time_slice(**kw)
 
             elif method == 'time_period' or method is None:
@@ -759,7 +761,14 @@ class GraphCollection(object):
         
         return composed
 
-class LDAModel(object):
+class BaseModel(object):
+    """
+    Base class for corpus models.
+    
+    """
+    pass
+
+class LDAModel(BaseModel):
     """
     Organizes parsed output from MALLET's LDA modeling algorithm.
     
