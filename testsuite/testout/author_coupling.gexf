@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?><gexf version="1.1" xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gexf.net/1.1draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
+  <graph defaultedgetype="undirected" mode="static">
+    <attributes class="edge" mode="static">
+      <attribute id="3" title="overlap" type="integer" />
+    </attributes>
+    <attributes class="node" mode="static">
+      <attribute id="0" title="date" type="integer" />
+      <attribute id="1" title="jtitle" type="string" />
+      <attribute id="2" title="atitle" type="string" />
+    </attributes>
+    <nodes>
+      <node id="LEMPER M 2014 SKIN PHARMACOLOGY AND PHYSIOLOGY" label="LEMPER M 2014 SKIN PHARMACOLOGY AND PHYSIOLOGY">
+        <attvalues>
+          <attvalue for="0" value="2014" />
+          <attvalue for="1" value="SKIN PHARMACOLOGY AND PHYSIOLOGY" />
+          <attvalue for="2" value="Current Status of Healthy Human Skin Models: Can Histone Deacetylase Inhibitors Potentially Improve the Present Replacement Models?" />
+        </attvalues>
+      </node>
+      <node id="GARSTKA E 2013 Official Gazette of the United States Patent and Trademark Office Patents" label="GARSTKA E 2013 Official Gazette of the United States Patent and Trademark Office Patents">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="Official Gazette of the United States Patent and Trademark Office Patents" />
+          <attvalue for="2" value="Medical electrodes" />
+        </attvalues>
+      </node>
+      <node id="RAPHAEL K 2013 JOURNAL OF OROFACIAL PAIN" label="RAPHAEL K 2013 JOURNAL OF OROFACIAL PAIN">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="JOURNAL OF OROFACIAL PAIN" />
+          <attvalue for="2" value="Effect of Contingent Electrical Stimulation on Masticatory Muscle Activity and Pain in Patients with a Myofascial Temporomandibular Disorder and Sleep Bruxism" />
+        </attvalues>
+      </node>
+      <node id="ISHIKAWA Y 2013 BIOCHIMICA ET BIOPHYSICA ACTA-MOLECULAR CELL RESEARCH" label="ISHIKAWA Y 2013 BIOCHIMICA ET BIOPHYSICA ACTA-MOLECULAR CELL RESEARCH">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="BIOCHIMICA ET BIOPHYSICA ACTA-MOLECULAR CELL RESEARCH" />
+          <attvalue for="2" value="A molecular ensemble in the rER for procollagen maturation" />
+        </attvalues>
+      </node>
+      <node id="HSIEH P 2013 CURRENT MEDICINAL CHEMISTRY" label="HSIEH P 2013 CURRENT MEDICINAL CHEMISTRY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="CURRENT MEDICINAL CHEMISTRY" />
+          <attvalue for="2" value="Co-Drug Strategy for Promoting Skin Targeting and Minimizing the Transdermal Diffusion of Hydroquinone and Tranexamic Acid" />
+        </attvalues>
+      </node>
+      <node id="FU J 2013 INTERNATIONAL JOURNAL OF CANCER" label="FU J 2013 INTERNATIONAL JOURNAL OF CANCER">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="INTERNATIONAL JOURNAL OF CANCER" />
+          <attvalue for="2" value="Involvement of Gpr125 in the myeloid sarcoma formation induced by cooperating MLL/AF10(OM-LZ) and oncogenic KRAS in a mouse bone marrow transplantation model" />
+        </attvalues>
+      </node>
+      <node id="CHEREDDY K 2013 JOURNAL OF CONTROLLED RELEASE" label="CHEREDDY K 2013 JOURNAL OF CONTROLLED RELEASE">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="JOURNAL OF CONTROLLED RELEASE" />
+          <attvalue for="2" value="Combined effect of PLGA and curcumin on wound healing activity" />
+        </attvalues>
+      </node>
+      <node id="HIEBERT P 2013 CELL DEATH AND DIFFERENTIATION" label="HIEBERT P 2013 CELL DEATH AND DIFFERENTIATION">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="CELL DEATH AND DIFFERENTIATION" />
+          <attvalue for="2" value="Granzyme B degrades extracellular matrix and contributes to delayed wound closure in apolipoprotein E knockout mice" />
+        </attvalues>
+      </node>
+      <node id="CARRIERI C 2013 FOOD CHEMISTRY" label="CARRIERI C 2013 FOOD CHEMISTRY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="FOOD CHEMISTRY" />
+          <attvalue for="2" value="Antithrombotic activity of 12 table grape varieties. Relationship with polyphenolic profile" />
+        </attvalues>
+      </node>
+      <node id="ZARSKY J 2013 Official Gazette of the United States Patent and Trademark Office Patents" label="ZARSKY J 2013 Official Gazette of the United States Patent and Trademark Office Patents">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="Official Gazette of the United States Patent and Trademark Office Patents" />
+          <attvalue for="2" value="Methods and systems for subcutaneous treatments" />
+        </attvalues>
+      </node>
+      <node id="LARREY D 2013 ANTIMICROBIAL AGENTS AND CHEMOTHERAPY" label="LARREY D 2013 ANTIMICROBIAL AGENTS AND CHEMOTHERAPY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="ANTIMICROBIAL AGENTS AND CHEMOTHERAPY" />
+          <attvalue for="2" value="Antiviral Effect, Safety, and Pharmacokinetics of Five-Day Oral Administration of Deleobuvir (BI 207127), an Investigational Hepatitis C Virus RNA Polymerase Inhibitor, in Patients with Chronic Hepatitis C" />
+        </attvalues>
+      </node>
+      <node id="PANG C 2013 JOURNAL OF APPLIED POLYMER SCIENCE" label="PANG C 2013 JOURNAL OF APPLIED POLYMER SCIENCE">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="JOURNAL OF APPLIED POLYMER SCIENCE" />
+          <attvalue for="2" value="Recent advances in flexible sensors for wearable and implantable devices" />
+        </attvalues>
+      </node>
+      <node id="MUTHUGADURU D 2013 DOCUMENTA OPHTHALMOLOGICA" label="MUTHUGADURU D 2013 DOCUMENTA OPHTHALMOLOGICA">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="DOCUMENTA OPHTHALMOLOGICA" />
+          <attvalue for="2" value="Report on ocular biometry of microphthalmos, retinal dystrophy, flash electroretinography, ocular coherence tomography, genetic analysis and the surgical challenge of entropion correction in a rare case of Hallermann-Streiff-Francois syndrome" />
+        </attvalues>
+      </node>
+      <node id="WU Y 2013 PROTEIN AND PEPTIDE LETTERS" label="WU Y 2013 PROTEIN AND PEPTIDE LETTERS">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="PROTEIN AND PEPTIDE LETTERS" />
+          <attvalue for="2" value="Ranachensinin: A Novel Aliphatic Tachykinin from the Skin Secretion of the Chinese Brown Frog, Rana chensinensis" />
+        </attvalues>
+      </node>
+      <node id="HEATH W 2013 NATURE IMMUNOLOGY" label="HEATH W 2013 NATURE IMMUNOLOGY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="NATURE IMMUNOLOGY" />
+          <attvalue for="2" value="The skin-resident and migratory immune system in steady state and memory: innate lymphocytes, dendritic cells and T cells" />
+        </attvalues>
+      </node>
+      <node id="KATHURIA S 2013 MEDICAL MYCOLOGY" label="KATHURIA S 2013 MEDICAL MYCOLOGY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="MEDICAL MYCOLOGY" />
+          <attvalue for="2" value="Disseminated histoplasmosis in an apparently immunocompetent individual from north India: a case report and review" />
+        </attvalues>
+      </node>
+      <node id="SONG S 2013 ARCHIVES OF ENVIRONMENTAL &amp; OCCUPATIONAL HEALTH" label="SONG S 2013 ARCHIVES OF ENVIRONMENTAL &amp; OCCUPATIONAL HEALTH">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="ARCHIVES OF ENVIRONMENTAL &amp; OCCUPATIONAL HEALTH" />
+          <attvalue for="2" value="Effects of Ambient Fine Particles on Pulmonary Function in Children With Mild Atopic Dermatitis" />
+        </attvalues>
+      </node>
+      <node id="NOVOTNA K 2013 CELLULOSE" label="NOVOTNA K 2013 CELLULOSE">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="CELLULOSE" />
+          <attvalue for="2" value="Cellulose-based materials as scaffolds for tissue engineering" />
+        </attvalues>
+      </node>
+      <node id="UTECHT R 2013 Official Gazette of the United States Patent and Trademark Office Patents" label="UTECHT R 2013 Official Gazette of the United States Patent and Trademark Office Patents">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="Official Gazette of the United States Patent and Trademark Office Patents" />
+          <attvalue for="2" value="Bonding tissues and cross-linking proteins with naphthalimide compounds" />
+        </attvalues>
+      </node>
+      <node id="OH J 2013 Official Gazette of the United States Patent and Trademark Office Patents" label="OH J 2013 Official Gazette of the United States Patent and Trademark Office Patents">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="Official Gazette of the United States Patent and Trademark Office Patents" />
+          <attvalue for="2" value="Composition for improving inflammatory disease using ABH antigens" />
+        </attvalues>
+      </node>
+      <node id="RUGGIERO A 2013 EUROPEAN JOURNAL OF CLINICAL PHARMACOLOGY" label="RUGGIERO A 2013 EUROPEAN JOURNAL OF CLINICAL PHARMACOLOGY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="EUROPEAN JOURNAL OF CLINICAL PHARMACOLOGY" />
+          <attvalue for="2" value="Incidence, clinical features and management of hypersensitivity reactions to chemotherapeutic drugs in children with cancer" />
+        </attvalues>
+      </node>
+      <node id="LOPEZ-LERA A 2013 MOLECULAR IMMUNOLOGY" label="LOPEZ-LERA A 2013 MOLECULAR IMMUNOLOGY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="MOLECULAR IMMUNOLOGY" />
+          <attvalue for="2" value="Novel C1q mutation in an homozygous C1q-deficienct patient affected of glomerulonephritis and Rothmund-Thomson Syndrome" />
+        </attvalues>
+      </node>
+      <node id="LIAO F 2013 PHYSICA A-STATISTICAL MECHANICS AND ITS APPLICATIONS" label="LIAO F 2013 PHYSICA A-STATISTICAL MECHANICS AND ITS APPLICATIONS">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="PHYSICA A-STATISTICAL MECHANICS AND ITS APPLICATIONS" />
+          <attvalue for="2" value="Assessing complexity of skin blood flow oscillations in response to locally applied heating and pressure in rats: Implications for pressure ulcer risk" />
+        </attvalues>
+      </node>
+      <node id="GAJANAYAKE T 2013 MOLECULAR IMMUNOLOGY" label="GAJANAYAKE T 2013 MOLECULAR IMMUNOLOGY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="MOLECULAR IMMUNOLOGY" />
+          <attvalue for="2" value="Complement activation in vascularized composite allotransplantation" />
+        </attvalues>
+      </node>
+      <node id="CADDEO C 2013 JOURNAL OF BIOMEDICAL NANOTECHNOLOGY" label="CADDEO C 2013 JOURNAL OF BIOMEDICAL NANOTECHNOLOGY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="JOURNAL OF BIOMEDICAL NANOTECHNOLOGY" />
+          <attvalue for="2" value="Extraction, Purification and Nanoformulation of Natural Phycocyanin (from Klamath algae) for Dermal and Deeper Soft Tissue Delivery" />
+        </attvalues>
+      </node>
+      <node id="MINOV J 2013 ARCHIVES OF ENVIRONMENTAL &amp; OCCUPATIONAL HEALTH" label="MINOV J 2013 ARCHIVES OF ENVIRONMENTAL &amp; OCCUPATIONAL HEALTH">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="ARCHIVES OF ENVIRONMENTAL &amp; OCCUPATIONAL HEALTH" />
+          <attvalue for="2" value="Exercise-Related Respiratory Symptoms and Exercise-Induced Bronchoconstriction in Industrial Bakers" />
+        </attvalues>
+      </node>
+      <node id="ANDERSON G 2013 BIOCHIMICA ET BIOPHYSICA ACTA-MOLECULAR BASIS OF DISEASE" label="ANDERSON G 2013 BIOCHIMICA ET BIOPHYSICA ACTA-MOLECULAR BASIS OF DISEASE">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="BIOCHIMICA ET BIOPHYSICA ACTA-MOLECULAR BASIS OF DISEASE" />
+          <attvalue for="2" value="Human pathology in NCL" />
+        </attvalues>
+      </node>
+      <node id="BROWN R 2013 EXPERIMENTAL CELL RESEARCH" label="BROWN R 2013 EXPERIMENTAL CELL RESEARCH">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="EXPERIMENTAL CELL RESEARCH" />
+          <attvalue for="2" value="In the beginning there were soft collagen-cell gels: towards better 3D connective tissue models?" />
+        </attvalues>
+      </node>
+      <node id="PENG J 2013 LWT-FOOD SCIENCE AND TECHNOLOGY" label="PENG J 2013 LWT-FOOD SCIENCE AND TECHNOLOGY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="LWT-FOOD SCIENCE AND TECHNOLOGY" />
+          <attvalue for="2" value="Dielectric properties of tomatoes assisting in the development of microwave pasteurization and sterilization processes" />
+        </attvalues>
+      </node>
+      <node id="DAVIN J 2013 MOLECULAR IMMUNOLOGY" label="DAVIN J 2013 MOLECULAR IMMUNOLOGY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="MOLECULAR IMMUNOLOGY" />
+          <attvalue for="2" value="A case of hemolytic uremic syndrome associated with a post-infectious glomerulonephritis: A major pathophysiological role of complement activation?" />
+        </attvalues>
+      </node>
+      <node id="MIZUSHINA Y 2013 FOOD CHEMISTRY" label="MIZUSHINA Y 2013 FOOD CHEMISTRY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="FOOD CHEMISTRY" />
+          <attvalue for="2" value="Cycloartenyl trans-ferulate, a component of the bran byproduct of sake-brewing rice, inhibits mammalian DNA polymerase and suppresses inflammation" />
+        </attvalues>
+      </node>
+      <node id="CLEMENTE F 2013 MEASUREMENT" label="CLEMENTE F 2013 MEASUREMENT">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="MEASUREMENT" />
+          <attvalue for="2" value="Characterization of human skin impedance after electrical treatment for transdermal drug delivery" />
+        </attvalues>
+      </node>
+      <node id="WOO S 2013 APPLIED ACOUSTICS" label="WOO S 2013 APPLIED ACOUSTICS">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="APPLIED ACOUSTICS" />
+          <attvalue for="2" value="The measurement of transmission loss and absorption coefficient of the rat and porcine skin: Synthesizing artificial material for an implantable microphone test" />
+        </attvalues>
+      </node>
+      <node id="SUGIMOTO K 2013 INFECTION" label="SUGIMOTO K 2013 INFECTION">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="INFECTION" />
+          <attvalue for="2" value="Methicillin-resistant Staphylococcus aureus foot infection after fish pedicure" />
+        </attvalues>
+      </node>
+      <node id="GAUTIERI A 2013 INTERNATIONAL JOURNAL OF NON-LINEAR MECHANICS" label="GAUTIERI A 2013 INTERNATIONAL JOURNAL OF NON-LINEAR MECHANICS">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="INTERNATIONAL JOURNAL OF NON-LINEAR MECHANICS" />
+          <attvalue for="2" value="Modeling and measuring visco-elastic properties: From collagen molecules to collagen fibrils" />
+        </attvalues>
+      </node>
+      <node id="SERAS-FRANZOSO J 2013 JOURNAL OF CONTROLLED RELEASE" label="SERAS-FRANZOSO J 2013 JOURNAL OF CONTROLLED RELEASE">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="JOURNAL OF CONTROLLED RELEASE" />
+          <attvalue for="2" value="Functionalization of 3D scaffolds with protein-releasing biomaterials for intracellular delivery" />
+        </attvalues>
+      </node>
+      <node id="KONYCHEV A 2013 DRUGS &amp; AGING" label="KONYCHEV A 2013 DRUGS &amp; AGING">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="DRUGS &amp; AGING" />
+          <attvalue for="2" value="Safety and Efficacy of Daptomycin as First-Line Treatment for Complicated Skin and Soft Tissue Infections in Elderly Patients: An Open-Label, Multicentre, Randomized Phase IIIb Trial" />
+        </attvalues>
+      </node>
+      <node id="SULTAN B 2013 INTERNATIONAL JOURNAL OF STD &amp; AIDS" label="SULTAN B 2013 INTERNATIONAL JOURNAL OF STD &amp; AIDS">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="INTERNATIONAL JOURNAL OF STD &amp; AIDS" />
+          <attvalue for="2" value="Comparison of two interferon-gamma release assays (QuantiFERON-TB Gold In-Tube and T-SPOT.TB) in testing for latent tuberculosis infection among HIV-infected adults" />
+        </attvalues>
+      </node>
+      <node id="BALDOVINO S 2013 MOLECULAR IMMUNOLOGY" label="BALDOVINO S 2013 MOLECULAR IMMUNOLOGY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="MOLECULAR IMMUNOLOGY" />
+          <attvalue for="2" value="C1 esterase inhibitor deficiency and SLE: A case report and review of the literature" />
+        </attvalues>
+      </node>
+      <node id="VLUG E 2013 CELLULAR ONCOLOGY" label="VLUG E 2013 CELLULAR ONCOLOGY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="CELLULAR ONCOLOGY" />
+          <attvalue for="2" value="Nuclear localization of the transcriptional coactivator YAP is associated with invasive lobular breast cancer" />
+        </attvalues>
+      </node>
+      <node id="LIANG X 2013 BIOORGANIC &amp; MEDICINAL CHEMISTRY LETTERS" label="LIANG X 2013 BIOORGANIC &amp; MEDICINAL CHEMISTRY LETTERS">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="BIOORGANIC &amp; MEDICINAL CHEMISTRY LETTERS" />
+          <attvalue for="2" value="Syntheses, biological evaluation and SAR of ingenol mebutate analogues for treatment of actinic keratosis and non-melanoma skin cancer" />
+        </attvalues>
+      </node>
+      <node id="CAMARA-LEMARROY C 2013 AMERICAN JOURNAL OF CLINICAL DERMATOLOGY" label="CAMARA-LEMARROY C 2013 AMERICAN JOURNAL OF CLINICAL DERMATOLOGY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="AMERICAN JOURNAL OF CLINICAL DERMATOLOGY" />
+          <attvalue for="2" value="The Role of Tumor Necrosis Factor-alpha in the Pathogenesis of Vitiligo" />
+        </attvalues>
+      </node>
+      <node id="ZHENG X 2013 ONCOLOGY REPORTS" label="ZHENG X 2013 ONCOLOGY REPORTS">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="ONCOLOGY REPORTS" />
+          <attvalue for="2" value="Role of the Hedgehog pathway in hepatocellular carcinoma (Review)" />
+        </attvalues>
+      </node>
+      <node id="[ANONYMOUS]  2013 NATURE IMMUNOLOGY" label="[ANONYMOUS]  2013 NATURE IMMUNOLOGY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="NATURE IMMUNOLOGY" />
+          <attvalue for="2" value="Immunity in the tissues" />
+        </attvalues>
+      </node>
+      <node id="BAIETTO L 2013 JOURNAL OF CHROMATOGRAPHY B-ANALYTICAL TECHNOLOGIES IN THE BIOMEDICAL AND LIFE SCIENCES" label="BAIETTO L 2013 JOURNAL OF CHROMATOGRAPHY B-ANALYTICAL TECHNOLOGIES IN THE BIOMEDICAL AND LIFE SCIENCES">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="JOURNAL OF CHROMATOGRAPHY B-ANALYTICAL TECHNOLOGIES IN THE BIOMEDICAL AND LIFE SCIENCES" />
+          <attvalue for="2" value="Development and validation of a new UPLC-PDA method to quantify linezolid in plasma and in dried plasma spots" />
+        </attvalues>
+      </node>
+      <node id="CHEN C 2013 GENE" label="CHEN C 2013 GENE">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="GENE" />
+          <attvalue for="2" value="An interstitial deletion of 8q23.3-q24.22 associated with Langer-Giedion syndrome, Cornelia de Lange syndrome and epilepsy" />
+        </attvalues>
+      </node>
+      <node id="UBI B 2013 GENE" label="UBI B 2013 GENE">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="GENE" />
+          <attvalue for="2" value="Characterization of 10 MADS-box genes from Pyrus pyrifolia and their differential expression during fruit development and ripening" />
+        </attvalues>
+      </node>
+      <node id="MENARD R 2013 NATURE REVIEWS MICROBIOLOGY" label="MENARD R 2013 NATURE REVIEWS MICROBIOLOGY">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="NATURE REVIEWS MICROBIOLOGY" />
+          <attvalue for="2" value="Looking under the skin: the first steps in malarial infection and immunity" />
+        </attvalues>
+      </node>
+      <node id="SULUR V 2013 Official Gazette of the United States Patent and Trademark Office Patents" label="SULUR V 2013 Official Gazette of the United States Patent and Trademark Office Patents">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="Official Gazette of the United States Patent and Trademark Office Patents" />
+          <attvalue for="2" value="Medicinal cream made using neomycin sulphate, betamethasone valerate, and chitosan, and a process to make the same" />
+        </attvalues>
+      </node>
+      <node id="CASEY J 2013 Official Gazette of the United States Patent and Trademark Office Patents" label="CASEY J 2013 Official Gazette of the United States Patent and Trademark Office Patents">
+        <attvalues>
+          <attvalue for="0" value="2013" />
+          <attvalue for="1" value="Official Gazette of the United States Patent and Trademark Office Patents" />
+          <attvalue for="2" value="Oral composition" />
+        </attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <edge id="0" source="HSIEH P 2013 CURRENT MEDICINAL CHEMISTRY" target="CHEN C 2013 GENE">
+        <attvalues>
+          <attvalue for="3" value="1" />
+        </attvalues>
+      </edge>
+      <edge id="1" source="FU J 2013 INTERNATIONAL JOURNAL OF CANCER" target="CHEN C 2013 GENE">
+        <attvalues>
+          <attvalue for="3" value="1" />
+        </attvalues>
+      </edge>
+      <edge id="2" source="PANG C 2013 JOURNAL OF APPLIED POLYMER SCIENCE" target="CHEN C 2013 GENE">
+        <attvalues>
+          <attvalue for="3" value="1" />
+        </attvalues>
+      </edge>
+      <edge id="3" source="PANG C 2013 JOURNAL OF APPLIED POLYMER SCIENCE" target="SONG S 2013 ARCHIVES OF ENVIRONMENTAL &amp; OCCUPATIONAL HEALTH">
+        <attvalues>
+          <attvalue for="3" value="1" />
+        </attvalues>
+      </edge>
+      <edge id="4" source="SONG S 2013 ARCHIVES OF ENVIRONMENTAL &amp; OCCUPATIONAL HEALTH" target="CHEN C 2013 GENE">
+        <attvalues>
+          <attvalue for="3" value="1" />
+        </attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><gexf version="1.1" xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gexf.net/1.1draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
+  <graph defaultedgetype="undirected" mode="static">
+    <nodes>
+      <node id="LANG CL 2012 NAV RES LOG" label="LANG CL 2012 NAV RES LOG" />
+      <node id="RAO J 1992 RNEA TECHN B SER LAN" label="RAO J 1992 RNEA TECHN B SER LAN" />
+      <node id="ZOU CK 2011 TECHNOMETRICS" label="ZOU CK 2011 TECHNOMETRICS" />
+      <node id="FILIPPIDIS A 1992 FUEL" label="FILIPPIDIS A 1992 FUEL" />
+    </nodes>
+    <edges>
+      <edge id="0" source="LANG CL 2012 NAV RES LOG" target="RAO J 1992 RNEA TECHN B SER LAN" weight="2" />
+      <edge id="1" source="LANG CL 2012 NAV RES LOG" target="ZOU CK 2011 TECHNOMETRICS" weight="2" />
+      <edge id="2" source="LANG CL 2012 NAV RES LOG" target="FILIPPIDIS A 1992 FUEL" weight="2" />
+      <edge id="3" source="RAO J 1992 RNEA TECHN B SER LAN" target="ZOU CK 2011 TECHNOMETRICS" weight="2" />
+      <edge id="4" source="RAO J 1992 RNEA TECHN B SER LAN" target="FILIPPIDIS A 1992 FUEL" weight="2" />
+      <edge id="5" source="ZOU CK 2011 TECHNOMETRICS" target="FILIPPIDIS A 1992 FUEL" weight="2" />
+    </edges>
+  </graph>
+</gexf>

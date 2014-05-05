@@ -1,0 +1,114 @@
+\indexentry{tethne.\_\_init\_\_ (module)|hyperpage}{87}
+\indexentry{tethne.\_\_main\_\_ (module)|hyperpage}{88}
+\indexentry{isfloat() (in module tethne.\_\_main\_\_)|hyperpage}{88}
+\indexentry{isint() (in module tethne.\_\_main\_\_)|hyperpage}{88}
+\indexentry{tethne.builders (module)|hyperpage}{88}
+\indexentry{authorCollectionBuilder (class in tethne.builders)|hyperpage}{88}
+\indexentry{build() (tethne.builders.authorCollectionBuilder method)|hyperpage}{88}
+\indexentry{builder (class in tethne.builders)|hyperpage}{88}
+\indexentry{paperCollectionBuilder (class in tethne.builders)|hyperpage}{89}
+\indexentry{build() (tethne.builders.paperCollectionBuilder method)|hyperpage}{89}
+\indexentry{tethne.data (module)|hyperpage}{89}
+\indexentry{DataCollection (class in tethne.data)|hyperpage}{89}
+\indexentry{N\_axes() (tethne.data.DataCollection method)|hyperpage}{90}
+\indexentry{distribution() (tethne.data.DataCollection method)|hyperpage}{90}
+\indexentry{distribution\_2d() (tethne.data.DataCollection method)|hyperpage}{90}
+\indexentry{get\_axes() (tethne.data.DataCollection method)|hyperpage}{90}
+\indexentry{get\_by() (tethne.data.DataCollection method)|hyperpage}{90}
+\indexentry{get\_slice() (tethne.data.DataCollection method)|hyperpage}{91}
+\indexentry{get\_slices() (tethne.data.DataCollection method)|hyperpage}{91}
+\indexentry{indices() (tethne.data.DataCollection method)|hyperpage}{91}
+\indexentry{papers() (tethne.data.DataCollection method)|hyperpage}{91}
+\indexentry{slice() (tethne.data.DataCollection method)|hyperpage}{91}
+\indexentry{GraphCollection (class in tethne.data)|hyperpage}{92}
+\indexentry{compose() (tethne.data.GraphCollection method)|hyperpage}{93}
+\indexentry{edges() (tethne.data.GraphCollection method)|hyperpage}{93}
+\indexentry{load() (tethne.data.GraphCollection method)|hyperpage}{93}
+\indexentry{nodes() (tethne.data.GraphCollection method)|hyperpage}{93}
+\indexentry{save() (tethne.data.GraphCollection method)|hyperpage}{94}
+\indexentry{LDAModel (class in tethne.data)|hyperpage}{94}
+\indexentry{docs\_in\_topic() (tethne.data.LDAModel method)|hyperpage}{94}
+\indexentry{topics\_in\_doc() (tethne.data.LDAModel method)|hyperpage}{94}
+\indexentry{Paper (class in tethne.data)|hyperpage}{94}
+\indexentry{authors() (tethne.data.Paper method)|hyperpage}{95}
+\indexentry{iteritems() (tethne.data.Paper method)|hyperpage}{95}
+\indexentry{keys() (tethne.data.Paper method)|hyperpage}{95}
+\indexentry{values() (tethne.data.Paper method)|hyperpage}{95}
+\indexentry{tethne.workflow (module)|hyperpage}{95}
+\indexentry{closeness\_introgression() (in module tethne.workflow)|hyperpage}{95}
+\indexentry{tethne.analyze (module)|hyperpage}{96}
+\indexentry{tethne.analyze.collection (module)|hyperpage}{96}
+\indexentry{algorithm() (in module tethne.analyze.collection)|hyperpage}{96}
+\indexentry{attachment\_probability() (in module tethne.analyze.collection)|hyperpage}{97}
+\indexentry{connected() (in module tethne.analyze.collection)|hyperpage}{97}
+\indexentry{edge\_history() (in module tethne.analyze.collection)|hyperpage}{98}
+\indexentry{node\_global\_closeness\_centrality() (in module tethne.analyze.collection)|hyperpage}{98}
+\indexentry{node\_history() (in module tethne.analyze.collection)|hyperpage}{98}
+\indexentry{tethne.analyze.graph (module)|hyperpage}{98}
+\indexentry{global\_closeness\_centrality() (in module tethne.analyze.graph)|hyperpage}{98}
+\indexentry{node\_global\_closeness\_centrality() (in module tethne.analyze.graph)|hyperpage}{99}
+\indexentry{tethne.matrices (module)|hyperpage}{99}
+\indexentry{tethne.matrices.dfr (module)|hyperpage}{100}
+\indexentry{Map (class in tethne.matrices.dfr)|hyperpage}{100}
+\indexentry{array() (in module tethne.matrices.dfr)|hyperpage}{100}
+\indexentry{matrix() (in module tethne.matrices.dfr)|hyperpage}{100}
+\indexentry{tethne.networks (module)|hyperpage}{101}
+\indexentry{tethne.networks.authors (module)|hyperpage}{101}
+\indexentry{author\_cocitation() (in module tethne.networks.authors)|hyperpage}{101}
+\indexentry{author\_coinstitution() (in module tethne.networks.authors)|hyperpage}{102}
+\indexentry{author\_institution() (in module tethne.networks.authors)|hyperpage}{102}
+\indexentry{author\_papers() (in module tethne.networks.authors)|hyperpage}{103}
+\indexentry{coauthors() (in module tethne.networks.authors)|hyperpage}{103}
+\indexentry{tethne.networks.helpers (module)|hyperpage}{104}
+\indexentry{citation\_count() (in module tethne.networks.helpers)|hyperpage}{104}
+\indexentry{simplify\_multigraph() (in module tethne.networks.helpers)|hyperpage}{104}
+\indexentry{top\_cited() (in module tethne.networks.helpers)|hyperpage}{104}
+\indexentry{top\_parents() (in module tethne.networks.helpers)|hyperpage}{105}
+\indexentry{tethne.networks.papers (module)|hyperpage}{105}
+\indexentry{author\_coupling() (in module tethne.networks.papers)|hyperpage}{105}
+\indexentry{bibliographic\_coupling() (in module tethne.networks.papers)|hyperpage}{106}
+\indexentry{cocitation() (in module tethne.networks.papers)|hyperpage}{107}
+\indexentry{direct\_citation() (in module tethne.networks.papers)|hyperpage}{108}
+\indexentry{topic\_coupling() (in module tethne.networks.papers)|hyperpage}{108}
+\indexentry{tethne.networks.terms (module)|hyperpage}{109}
+\indexentry{keyword\_cooccurrence() (in module tethne.networks.terms)|hyperpage}{109}
+\indexentry{topic\_coupling() (in module tethne.networks.terms)|hyperpage}{109}
+\indexentry{tethne.networks.topics (module)|hyperpage}{110}
+\indexentry{paper\_coupling() (in module tethne.networks.topics)|hyperpage}{110}
+\indexentry{term\_coupling() (in module tethne.networks.topics)|hyperpage}{110}
+\indexentry{tethne.readers (module)|hyperpage}{110}
+\indexentry{DataError|hyperpage}{110}
+\indexentry{merge() (in module tethne.readers)|hyperpage}{110}
+\indexentry{tethne.readers.dfr (module)|hyperpage}{111}
+\indexentry{from\_dir() (in module tethne.readers.dfr)|hyperpage}{111}
+\indexentry{ngrams() (in module tethne.readers.dfr)|hyperpage}{111}
+\indexentry{read() (in module tethne.readers.dfr)|hyperpage}{112}
+\indexentry{tethne.readers.mallet (module)|hyperpage}{112}
+\indexentry{load() (in module tethne.readers.mallet)|hyperpage}{112}
+\indexentry{read() (in module tethne.readers.mallet)|hyperpage}{113}
+\indexentry{tethne.readers.pubmed (module)|hyperpage}{113}
+\indexentry{read() (in module tethne.readers.pubmed)|hyperpage}{113}
+\indexentry{tethne.readers.wos (module)|hyperpage}{114}
+\indexentry{DataError|hyperpage}{114}
+\indexentry{convert() (in module tethne.readers.wos)|hyperpage}{115}
+\indexentry{from\_dir() (in module tethne.readers.wos)|hyperpage}{115}
+\indexentry{parse() (in module tethne.readers.wos)|hyperpage}{115}
+\indexentry{read() (in module tethne.readers.wos)|hyperpage}{116}
+\indexentry{tethne.utilities (module)|hyperpage}{116}
+\indexentry{Dictionary (class in tethne.utilities)|hyperpage}{116}
+\indexentry{attribs\_to\_string() (in module tethne.utilities)|hyperpage}{116}
+\indexentry{concat\_list() (in module tethne.utilities)|hyperpage}{116}
+\indexentry{contains() (in module tethne.utilities)|hyperpage}{116}
+\indexentry{dict\_from\_node() (in module tethne.utilities)|hyperpage}{116}
+\indexentry{overlap() (in module tethne.utilities)|hyperpage}{117}
+\indexentry{strip\_non\_ascii() (in module tethne.utilities)|hyperpage}{117}
+\indexentry{subdict() (in module tethne.utilities)|hyperpage}{117}
+\indexentry{tethne.writers (module)|hyperpage}{117}
+\indexentry{tethne.writers.collection (module)|hyperpage}{117}
+\indexentry{to\_dxgmml() (in module tethne.writers.collection)|hyperpage}{117}
+\indexentry{tethne.writers.graph (module)|hyperpage}{118}
+\indexentry{to\_gexf() (in module tethne.writers.graph)|hyperpage}{118}
+\indexentry{to\_graphml() (in module tethne.writers.graph)|hyperpage}{118}
+\indexentry{to\_sif() (in module tethne.writers.graph)|hyperpage}{119}
+\indexentry{to\_table() (in module tethne.writers.graph)|hyperpage}{119}
+\indexentry{tethne.writers.matrix (module)|hyperpage}{119}

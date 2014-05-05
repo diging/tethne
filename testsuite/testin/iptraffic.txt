@@ -1,0 +1,3145 @@
+FN Thomson Reuters Web of Knowledge
+VR 1.0
+PT J
+AU Unnikrishnan, D
+   Vadlamani, R
+   Liao, Y
+   Crenne, J
+   Gao, LX
+   Tessier, R
+AF Unnikrishnan, Deepak
+   Vadlamani, Ramakrishna
+   Liao, Yong
+   Crenne, Jeremie
+   Gao, Lixin
+   Tessier, Russell
+TI Reconfigurable Data Planes for Scalable Network Virtualization
+SO IEEE TRANSACTIONS ON COMPUTERS
+LA English
+DT Article
+DE Internetworking routers; design; virtual networks; FPGA
+ID PLATFORM; HARDWARE; FLAT
+AB Network virtualization presents a powerful approach to share physical network infrastructure among multiple virtual networks. Recent advances in network virtualization advocate the use of field-programmable gate arrays (FPGAs) as flexible high performance alternatives to conventional host virtualization techniques. However, the limited on-chip logic and memory resources in FPGAs severely restrict the scalability of the virtualization platform and necessitate the implementation of efficient forwarding structures in hardware. The research described in this manuscript explores the implementation of a scalable heterogeneous network virtualization platform that integrates virtual data planes implemented in FPGAs with software data planes created using host virtualization techniques. The system exploits data plane heterogeneity to cater to the dynamic service requirements of virtual networks by migrating networks between software and hardware data planes. We demonstrate data plane migration as an effective technique to limit the impact of traffic on unmodified data planes during FPGA reconfiguration. Our system implements forwarding tables in a shared fashion using inexpensive off-chip memories and supports both Internet Protocol (IP) and non-IP-based data planes. Experimental results show that FPGA-based data planes can offer two orders of magnitude better throughput than their software counterparts, and FPGA reconfiguration can facilitate data plane customization within 12 seconds. An integrated system that supports up to 15 virtual networks has been validated on the NetFPGA platform.
+C1 [Unnikrishnan, Deepak; Liao, Yong; Gao, Lixin; Tessier, Russell] Univ Massachusetts, Dept Elect & Comp Engn, Amherst, MA 01003 USA.
+   [Vadlamani, Ramakrishna] Qualcomm Inc, Boxboro, MA 01719 USA.
+   [Crenne, Jeremie] Univ Bretagne Sud, F-56100 Lorient, France.
+RP Unnikrishnan, D (reprint author), Univ Massachusetts, Dept Elect & Comp Engn, Amherst, MA 01003 USA.
+EM tessier@ecs.umass.edu
+FU US National Science Foundation [CNS-0831940]
+FX The work was funded in part by the US National Science Foundation Grant
+   CNS-0831940. The FPGA compilation tools were generously donated by
+   Xilinx Corporation.
+CR [Anonymous] , 2013, UND FULL VIRT PAR HA
+   [Anonymous] , 2013, CISC NEX 1000V SER S
+   [Anonymous] , 2013, CLICK ELEMENT DOCUME
+   Anwer, 2010, COMPUT COMMUN REV, V40, P183, DOI 10.1145/1851275.1851206
+   Anwer , 2009, VISA 09, P1
+   Bavier, 2006, COMPUT COMMUN REV, V36, P3, DOI 10.1145/1151659.1159916
+   Bhatia S., 2008, P ACM C EM NETW EXP, P72
+   Caesar M, 2006, COMPUT COMMUN REV, V36, P363, DOI 10.1145/1151659.1159955
+   Chowdhury NMMK, 2010, COMPUT NETW, V54, P862, DOI 10.1016/j.comnet.2009.10.017
+   Covington GA, 2009, ANN IEEE SYM FIELD P, P235, DOI 10.1109/FCCM.2009.29
+   Dingledine R, 2004, USENIX ASSOCIATION PROCEEDINGS OF THE 13TH USENIX SECURITY SYMPOSIUM, P303
+   Feamster N., 2007, COMPUT COMMUN REV, V37, P1256
+   Fu J., 2008, P ACM CONEXT C DEC, P21
+   Gupta P, 1998, IEEE INFOCOM SER, P1240
+   Keller E., 2008, P ACM SIGCOMM WORKSH, P9, DOI 10.1145/1397718.1397721
+   Kim C, 2009, LECT NOTES COMPUT SC, V5448, P3
+   Liao Y, 2009, VISA 09, P9
+   Liao Yingchen, 2010, Proceedings of the 2010 Asia-Pacific Power and Energy Engineering Conference (APPEEC 2010), DOI 10.1109/APPEEC.2010.5448323
+   Lu GH, 2009, 2ND ACM SIGCOMM WORKSHOP ON PROGRAMMABLE ROUTERS FOR EXTENSIBLE SERVICES OF TOMORROW - PRESTO 09, P25
+   Pfaff B., 2009, P ACM WORKSH HOT TOP
+   Ruiz-Sanchez MA, 2001, IEEE NETWORK, V15, P8, DOI 10.1109/65.912716
+   Soltesz S., 2007, P 2 ACM SIGOPS EUROS, P275
+   Song H., 2010, P IEEE INFOCOM, P1
+   Turner J, 2007, COMPUT COMMUN REV, V37, P85, DOI 10.1145/1282427.1282391
+   Unnikrishnan D, 2010, FPGA 10, P219
+   Wang Y, 2008, COMPUT COMMUN REV, V38, P231
+   Watson G., 2006, P WORKSH ARCH RES US, P160
+   Zhuang L., 2005, P 2 S NETW SYST DES, P301
+NR 28
+TC 0
+Z9 0
+PU IEEE COMPUTER SOC
+PI LOS ALAMITOS
+PA 10662 LOS VAQUEROS CIRCLE, PO BOX 3014, LOS ALAMITOS, CA 90720-1314 USA
+SN 0018-9340
+J9 IEEE T COMPUT
+JI IEEE Trans. Comput.
+PD DEC
+PY 2013
+VL 62
+IS 12
+BP 2476
+EP 2488
+DI 10.1109/TC.2012.155
+PG 13
+WC Computer Science, Hardware & Architecture; Engineering, Electrical &
+   Electronic
+SC Computer Science; Engineering
+GA 257TJ
+UT WOS:000327409300011
+ER
+
+PT J
+AU Yang, M
+   Luo, JZ
+   Zhang, L
+   Wang, XG
+   Fu, XW
+AF Yang, Ming
+   Luo, Junzhou
+   Zhang, Lu
+   Wang, Xiaogang
+   Fu, Xinwen
+TI How to block Tor's hidden bridges: detecting methods and countermeasures
+SO JOURNAL OF SUPERCOMPUTING
+LA English
+DT Article
+DE Privacy; Tor network; Block resistance; Bridge
+ID ATTACKS; SYSTEMS
+AB Tor network has been widely used for protecting the privacy of users while accessing various online services. Since Tor can be easily blocked by blacklisting the publicly published Tor relays, the hidden bridges-based blocking-resistance mechanism is designed and implemented in the current Tor network. Any user can subscribe a tuple of three bridges via email, https, twitter etc. However, we have found that there exist high correlations among those published tuples, which can be exploited to effectively detect hidden bridges by monitoring the outbound traffic from a controlled network. When Tor clients try to connect chosen hidden bridges, multiple SYN packets with consecutive source ports will be sent almost simultaneously, destining for different hosts. If any destination IP contained among such packets belongs to a known bridge, all others can then be inferred to be of bridges too. By recording and analyzing a series of traffic segments satisfying the above packet features, the hidden bridges used in a controlled network can be detected and further blocked. According to different available computing and storage resources, we proposed both online and offline detecting methods. Both analytical and simulation results verify the high correlation among published bridge tuples, validating the feasibility of our methods. By configuring optimized detecting parameters in the real-world experiments, we can achieve a detection rate of 86.7 % with a 0.85 % false-positive rate for online detection, and a 98.4 % detection rate with a 0.62 % false-positive rate for offline detection. To make up the flaws in Tor's current blocking-resistance mechanism, we also provide some countermeasures from the perspective of Tor network and users, respectively.
+C1 [Yang, Ming; Luo, Junzhou; Zhang, Lu; Wang, Xiaogang] Southeast Univ, Sch Comp Sci & Engn, Nanjing 211189, Jiangsu, Peoples R China.
+   [Wang, Xiaogang] Changzhou Coll Informat Technol, Changzhou 213164, Peoples R China.
+   [Fu, Xinwen] Univ Massachusetts, Lowell, MA 01854 USA.
+RP Yang, M (reprint author), Southeast Univ, Sch Comp Sci & Engn, Nanjing 211189, Jiangsu, Peoples R China.
+EM yangming2002@seu.edu.cn
+FU National Key Basic Research program of China [2010CB328104]; National
+   Natural Science Foundation of China [60903162, 60903161, 61070161,
+   61003257]; China National Key Technology RD Program [2010BAI88B03,
+   2011BAK21B02]; China Specialized Research Fund for the Doctoral Program
+   of Higher Education [20110092130002]; Jiangsu Provincial Natural Science
+   Foundation of China [BK2008030]; Jiangsu Provincial Key Laboratory of
+   Network and Information Security [BM2003201]; Key Laboratory of Computer
+   Network and Information Integration of Ministry of Education of China
+   [93K-9]
+FX This work is supported by National Key Basic Research program of China
+   under Grants No. 2010CB328104, National Natural Science Foundation of
+   China under Grants No. 60903162, No. 60903161, No. 61070161 and No.
+   61003257, China National Key Technology R&D Program under Grants No.
+   2010BAI88B03 and No. 2011BAK21B02, China Specialized Research Fund for
+   the Doctoral Program of Higher Education under Grants No.
+   20110092130002, Jiangsu Provincial Natural Science Foundation of China
+   under Grants No. BK2008030, Jiangsu Provincial Key Laboratory of Network
+   and Information Security under Grants No. BM2003201 and Key Laboratory
+   of Computer Network and Information Integration of Ministry of Education
+   of China under Grants No. 93K-9.
+CR Abbott TG, 2007, LECT NOTES COMPUT SC, V4776, P184
+   Bauer K, 2007, P 2007 ACM WORKSH PR
+   CHAUM DL, 1981, COMMUN ACM, V24, P84, DOI 10.1145/358549.358563
+   Danezis G, 2008, LECT NOTES COMPUT SC, V5134, P187, DOI 10.1007/978-3-540-70630-4_12
+   Dingledine R, DESIGN BLOCKING RESI
+   Dingledine R, 2004, USENIX ASSOCIATION PROCEEDINGS OF THE 13TH USENIX SECURITY SYMPOSIUM, P303
+   Evans N., 2009, P 18 USENIX SEC S SE
+   Houmansadr A, 2009, P 16 ANN NETW DISTR
+   Karagiannis T, 2004, GLOB TELECOMM CONF, P1532
+   Kopsell S, 2004, P 2004 ACM WORKSH PR, P47, DOI 10.1145/1029179.1029197
+   Larsen M, 2010, TRANSPORT P IN PRESS
+   Levine BN, 2004, LECT NOTES COMPUT SC, V3110, P251
+   Ling Z., 2009, P 16 ACM C COMP COMM
+   Ling Z, 2012, 2012 PROCEEDINGS IEEE INFOCOM, P2381
+   Manils P, 2010, ARXIV10041461
+   McLachlan J, 2009, P ACM C COMP COMM SE, P31, DOI 10.1145/1655188.1655193
+   Murdoch SJ, 2005, P IEEE S SECUR PRIV, P183, DOI 10.1109/SP.2005.12
+   Murdoch SJ, 2006, P 13 ACM C COMP COMM, P27, DOI 10.1145/1180405.1180410
+   Overlier L, 2006, P IEEE S SECUR PRIV, P100, DOI 10.1109/SP.2006.24
+   Pries R, 2008, IEEE ICC, P1578, DOI 10.1109/ICC.2008.305
+   Pyun YJ, 2007, IEEE INFOCOM SER, P634, DOI 10.1109/INFCOM.2007.80
+   Wang X, 2007, P IEEE S SECUR PRIV, P116, DOI 10.1109/SP.2007.30
+   Wang X, 2003, ACM C COMP COMM SEC, P20
+   Yu W, 2007, P IEEE S SECUR PRIV, P18, DOI 10.1109/SP.2007.14
+   Zander S, 2008, P 17 USENIX SEC S SE
+   Zhu Y., 2004, Privacy Enhancing Technologies. 4th International Workshop, PET 2004. Revised Selected Papers (Lecture Notes in Computer Science Vol. 3424
+NR 26
+TC 0
+Z9 0
+PU SPRINGER
+PI DORDRECHT
+PA VAN GODEWIJCKSTRAAT 30, 3311 GZ DORDRECHT, NETHERLANDS
+SN 0920-8542
+J9 J SUPERCOMPUT
+JI J. Supercomput.
+PD DEC
+PY 2013
+VL 66
+IS 3
+BP 1285
+EP 1305
+DI 10.1007/s11227-012-0788-4
+PG 21
+WC Computer Science, Hardware & Architecture; Computer Science, Theory &
+   Methods; Engineering, Electrical & Electronic
+SC Computer Science; Engineering
+GA 249UT
+UT WOS:000326805000010
+ER
+
+PT J
+AU Pedrola, O
+   Ruiz, M
+   Velasco, L
+   Careglio, D
+   de Dios, OG
+   Comellas, J
+AF Pedrola, Oscar
+   Ruiz, Marc
+   Velasco, Luis
+   Careglio, Davide
+   de Dios, Oscar Gonzalez
+   Comellas, Jaume
+TI A GRASP with path-relinking heuristic for the survivable
+   IP/MPLS-over-WSON multi-layer network optimization problem
+SO COMPUTERS & OPERATIONS RESEARCH
+LA English
+DT Article
+DE Multi-layer optimization; Survivability; Greedy randomized adaptive
+   search; procedure (GRASP); Path-relinking (PR); Biased random-key
+   genetic algorithm (BRKGA)
+ID KEY GENETIC ALGORITHM; ADAPTIVE SEARCH PROCEDURES; SET
+AB In this paper we deal with the survivable internet protocol (IP)/multi-protocol label switching (MPLS)-overwavelength switched optical network (WSON) multi-layer network optimization problem (SIMNO). This problem entails planning an IP/MPLS network layer over a photonic mesh infrastructure whilst, at the same time, ensuring the highest availability of services and minimizing the capital expenditures (CAPEX) investments. Such a problem is currently identified as an open issue among network operators, and hence, its solution is of great interest. To tackle SIMNO, we first provide an integer linear programming (ILP) formulation which provides an insight into the complexity of its managing. Then, a greedy randomized adaptive search procedure (GRASP) with path-relinking (PR) together with a biased random-key genetic algorithm (BRKGA) are specifically developed to help solve the problem. The performance of both heuristics is exhaustively tested and compared making use of various network and traffic instances. Numerical experiments show the benefits of using GRASP instead of BRKGA when dealing with highly complex network scenarios. Moreover, we verified that the use of GRASP with PR remarkably improves the basic GRASP algorithm, particularly in real-sized, complex scenarios such as those proposed in this paper. (C) 2011 Elsevier Ltd. All rights reserved.
+C1 [Pedrola, Oscar; Ruiz, Marc; Velasco, Luis; Careglio, Davide; Comellas, Jaume] Univ Politecn Cataluna, Adv Broadband Commun Ctr CCABA, ES-08034 Barcelona, Spain.
+   [de Dios, Oscar Gonzalez] Telefon I D, Madrid 28006, Spain.
+RP Pedrola, O (reprint author), Univ Politecn Cataluna, Adv Broadband Commun Ctr CCABA, ES-08034 Barcelona, Spain.
+EM opedrola@ac.upc.edu
+FU European Community's Seventh Framework Programme [247674]; Spanish
+   Ministry of Science through the FPU Program; DOMINO Project
+   [TEC2010-18522]
+FX The research leading to these results has received funding from the
+   European Community's Seventh Framework Programme FP7/2007-2013 under
+   Grant agreement no. 247674 STRONGEST Project. Moreover, it was supported
+   by the Spanish Ministry of Science through the FPU Program and the
+   DOMINO Project (TEC2010-18522).
+CR Architecture for the automatically switched optical network (ASON), 2001, ARCH AUT SWITCH OPT
+   Chigan C, 2003, J LIGHTWAVE TECHNOL, V21, P2694, DOI 10.1109/JLT.2003.819552
+   Chiu A, 2001, P IEEE OSA OFC
+   Cholda P, 2010, J LIGHTWAVE TECHNOL, V28, P372, DOI 10.1109/JLT.2009.2031821
+   de Miguel I, 2009, J OPT COMMUN NETW, V1, P608, DOI 10.1364/JOCN.1.000608
+   Duarte A, 2011, NETWORKS, V58, P171, DOI 10.1002/net.20418
+   FEO TA, 1989, OPER RES LETT, V8, P67, DOI 10.1016/0167-6377(89)90002-3
+   FEO TA, 1995, J GLOBAL OPTIM, V6, P109, DOI 10.1007/BF01096763
+   FEO TA, 1994, OPER RES, V42, P860, DOI 10.1287/opre.42.5.860
+   Festa P, 2009, INT T OPER RES, V16, P131, DOI 10.1111/j.1475-3995.2009.00664.x
+   Festa P, 2009, INT T OPER RES, V16, P1, DOI 10.1111/j.1475-3995.2009.00663.x
+   Festa P, 2010, LECT NOTES COMPUT SC, V6049, P338, DOI 10.1007/978-3-642-13193-6_29
+   Glover F., 1996, INTERFACES COMPUTER, P1
+   Glover F., 1997, TABU SEARCH
+   Goncalves JF, 2011, J HEURISTICS, V17, P487, DOI 10.1007/s10732-010-9143-1
+   Goncalves JF, 2011, J COMB OPTIM, V22, P180, DOI 10.1007/s10878-009-9282-1
+   Hansen P, 2001, EUR J OPER RES, V130, P449, DOI 10.1016/S0377-2217(00)00100-4
+   Huelsermann R, 2008, J OPT NETW, V7, P814, DOI 10.1364/JON.7.000814
+   Laguna M, 1999, INFORMS J COMPUT, V11, P44, DOI 10.1287/ijoc.11.1.44
+   Lee Y, 2011, FRAMEWORK G IN PRESS
+   Mannie E., 2004, RFC3945 IETF
+   Mateus GR, 2011, J HEURISTICS, V17, P527, DOI 10.1007/s10732-010-9144-0
+   Morais R, 2011, IEEE OSA J OPTICAL C, V3, P17
+   Noronha TF, 2011, J GLOBAL OPTIM, V50, P503, DOI 10.1007/s10898-010-9608-7
+   Palmieri F, 2010, COMPUT COMMUN, V33, P1809, DOI 10.1016/j.comcom.2010.05.003
+   Pascoal M., 2003, 4OR-Q J OPER RES, V1, P121, DOI [DOI 10.1007/S10288-002-0010-2, 10.1007/s10288-002-0010-2]
+   Pessoa LS, 2010, HYBRID LAGRANGEAN HE
+   Pioro M., 2004, ROUTING FLOW CAPACIT
+   Reis R, 2011, INT T OPER RES, V18, P401, DOI 10.1111/j.1475-3995.2010.00771.x
+   Resende MGC, 2003, INT SER OPER RES MAN, V57, P219, DOI 10.1007/0-306-48056-5_8
+   Resende MGC, 2010, HDB METAHEURISTICS
+   Resende MGC, 2010, COMPUT OPER RES, V37, P498, DOI 10.1016/j.cor.2008.05.011
+   Resende MGC, 2005, METAHEURISTICS PROGR, P29
+   Resende MGC, 2004, J HEURISTICS, V10, P59, DOI 10.1023/B:HEUR.0000019986.96257.50
+   Ribeiro CC, 2002, INFORMS J COMPUT, V14, P228, DOI 10.1287/ijoc.14.3.228.116
+   Robert C., 2004, MONTE CARLO STAT MET
+   Velasco L, 2010, J OPT COMMUN NETW, V2, P427, DOI 10.1364/JOCN.2.000427
+   Villegas JG, 2011, COMPUT OPER RES, V38, P1319, DOI 10.1016/j.cor.2010.11.011
+   Zhang XN, 2011, PHOTONIC NETW COMMUN, V21, P310, DOI 10.1007/s11107-010-0301-z
+NR 39
+TC 0
+Z9 0
+PU PERGAMON-ELSEVIER SCIENCE LTD
+PI OXFORD
+PA THE BOULEVARD, LANGFORD LANE, KIDLINGTON, OXFORD OX5 1GB, ENGLAND
+SN 0305-0548
+J9 COMPUT OPER RES
+JI Comput. Oper. Res.
+PD DEC
+PY 2013
+VL 40
+IS 12
+BP 3174
+EP 3187
+PG 14
+WC Computer Science, Interdisciplinary Applications; Engineering,
+   Industrial; Operations Research & Management Science
+SC Computer Science; Engineering; Operations Research & Management Science
+GA 247IB
+UT WOS:000326610000034
+ER
+
+PT J
+AU Kapoor, HK
+   Rao, GB
+   Arshi, S
+   Trivedi, G
+AF Kapoor, Hemangee K.
+   Rao, G. Bhoopal
+   Arshi, Sharique
+   Trivedi, Gaurav
+TI A Security Framework for NoC Using Authenticated Encryption and Session
+   Keys
+SO CIRCUITS SYSTEMS AND SIGNAL PROCESSING
+LA English
+DT Article
+DE Network-on-chip; Security; Authenticated encryption; Session key; GCM;
+   NoCem
+ID ON-CHIP
+AB Network on Chip (NoC) is an emerging solution to the existing scalability problems with System on Chip (SoC). However, it is exposed to security threats like extraction of secret information from IP cores. In this paper we present an Authenticated Encryption (AE)-based security framework for NoC based systems. The security framework resides in Network Interface (NI) of every IP core allowing secure communication among such IP cores. The secure cores can communicate using permanent keys whereas temporary session keys are used for communication between secure and non-secure cores. A traffic limiting counter is used to prevent bandwidth denial and access rights table avoids unauthorized memory accesses. We simulated and implemented our framework using Verilog/VHDL modules on top of NoCem emulator. The results showed tolerable area overhead and did not affect the network performance apart from some initial latency.
+C1 [Kapoor, Hemangee K.; Arshi, Sharique] Indian Inst Technol Guwahati, Dept CSE, Gauhati, India.
+   [Rao, G. Bhoopal; Trivedi, Gaurav] Indian Inst Technol Guwahati, Dept EEE, Gauhati, India.
+RP Kapoor, HK (reprint author), Indian Inst Technol Guwahati, Dept CSE, Gauhati, India.
+EM hemangee@iitg.ernet.in; bhoopal@iitg.ernet.in; sharique@iitg.ernet.in;
+   trivedi@iitg.ernet.in
+CR Bjerregaard T, 2006, ACM COMPUT SURV, V38, P1, DOI 10.1145/1132952.1132953
+   Black J., 2005, ENCY CRYPTOGRAPHY SE
+   Diguet J.P., 2007, P ACM IEEE 1 INT S N, P223
+   Dworkin M., 2007, COMPUTER SECURITY
+   Evain S, 2005, IEEE WRK SIG PRO SYS, P166, DOI 10.1109/SIPS.2005.1579858
+   Fiorin L, 2008, IEEE T COMPUT, V57, P1216, DOI 10.1109/TC.2008.69
+   Fiorin L., 2008, P INT C HARDW SOFTW, P197
+   Fiorin L., 2007, P 5 IEEE ACM IFIP IN, P167, DOI 10.1145/1289816.1289858
+   Gebotys C. H., 2003, Proceedings IEEE Computer Society Annual Symposium on VLSI. New Trends and Technologies for VLSI Systems Design. ISVLSI 2003, DOI 10.1109/ISVLSI.2003.1183361
+   Gebotys C.H., 2003, P ACM IEEE ISSS CODE, P162
+   Inoue H, 2009, ACM T DES AUTOMAT EL, V14, DOI 10.1145/1497561.1497567
+   Kapoor H.K., 2011, P INT S EL SYST DES, P134
+   Lukovic S., 2010, P INT WORKSH SEC DEP
+   Lukovic S., 2010, P 5 WORKSH EMB SYST
+   McGrew D.A., 2005, GALOIS COUNTER MODE
+   Schelle G., 2007, NOCEM USER GUIDE REL
+   SCHELLE G, 2008, P INT C FIELD PROGR, P41
+   Stallings W., 2006, CRYPTOGRAPHY NETWORK
+   Usselmann R., 2002, ADV ENCRYPTION STAND
+   Wu HJ, 2008, LECT NOTES COMPUT SC, V4986, P39
+NR 20
+TC 0
+Z9 0
+PU SPRINGER BIRKHAUSER
+PI NEW YORK
+PA 233 SPRING STREET, 6TH FLOOR, NEW YORK, NY 10013 USA
+SN 0278-081X
+J9 CIRC SYST SIGNAL PR
+JI Circuits Syst. Signal Process.
+PD DEC
+PY 2013
+VL 32
+IS 6
+BP 2605
+EP 2622
+DI 10.1007/s00034-013-9568-5
+PG 18
+WC Engineering, Electrical & Electronic
+SC Engineering
+GA 244IE
+UT WOS:000326380400005
+ER
+
+PT J
+AU Krynicki, K
+   Jaen, J
+   Mocholi, JA
+AF Krynicki, Kamil
+   Jaen, Javier
+   Mocholi, Jose A.
+TI On the performance of ACO-based methods in p2p resource discovery
+SO APPLIED SOFT COMPUTING
+LA English
+DT Article
+DE Semantic search; Ant colony optimization; Peer-to-peer
+ID HYBRID METAHEURISTICS; ANT; NETWORKS
+AB Over the recent years peer-to-peer (p2p) systems have become increasingly popular. As of today most of the internet IP traffic is already transmitted in this format and still it is said to double in volume till 2014. Most p2p systems, however, are not pure serverless solutions, nor is the searching in those networks highly efficient, usually achieved by simple flooding. In order to confront with the growing traffic we must consider more elaborate search mechanisms and far less centralized environments. An effective proposal to this problem is to solve it in the domain of ant colony optimization metaheuristics. In this paper we present an overview of ACO algorithms that offer the best potential in this field, under the strict requirements and limitations of a pure p2p network. We design several experiments to serve as an evaluation platform for the mentioned algorithms to conclude the features of a high quality approach. Finally, we consider two hybrid extensions to the classical algorithms, in order to examine their contribution to the overall quality robustness. (c) 2013 Elsevier B.V. All rights reserved.
+C1 [Krynicki, Kamil; Jaen, Javier; Mocholi, Jose A.] Univ Politecn Valencia, ISSI Dept Sistemas Informat & Comp, Valencia 46022, Spain.
+RP Krynicki, K (reprint author), Univ Politecn Valencia, ISSI Dept Sistemas Informat & Comp, Camino Vera S-N, Valencia 46022, Spain.
+EM kkrynicki@dsic.upv.es; fjaen@dsic.upv.es; jmocholi@dsic.upv.es
+FU Spanish Ministry of Education and Science and Innovation
+   [TIN2010-20488]; Universidad Politecnica de Valencia
+FX This work was funded by the Spanish Ministry of Education and Science
+   and Innovation under the National Strategic Program of Scientific
+   Research, Development and Technological Innovation (I+D+i) project
+   TIN2010-20488. Kamil Krynicki is supported by a FPI fellowship from
+   Universidad Politecnica de Valencia.
+CR [Anonymous], 2012, VOIC INT PROT VOIP D
+   Association for Computing Machinery, 1998, ACMCOMPUTING CLASS S
+   Beydoun G, 2011, EXPERT SYST APPL, V38, P9352, DOI 10.1016/j.eswa.2011.01.104
+   Caro G. D., 2004, LNCS, P461
+   Colorni A, 1991, P 1 EUR C ART LIF, P134
+   Crespo A., 2002, TECHNICAL REPORT
+   Derrac J., 2011, SWARM EVOLUTIONARY C, V1, P3, DOI DOI 10.1016/J.SWEVO.2011.02.002
+   Di Caro G, 1998, J ARTIF INTELL RES, V9, P317
+   Dorigo M., 1999, NEW IDEAS OPTIMIZATI, P11
+   Dorigo M., 2004, IEEE T SYSTEMM MAN B, V34, P1161
+   Dorigo M., 1997, IEEE Transactions on Evolutionary Computation, V1, DOI 10.1109/4235.585892
+   Duan Q, 2013, APPL SOFT COMPUT, V13, P1464, DOI 10.1016/j.asoc.2012.05.016
+   Ghit B., 2010, P 2010 INT C P2P PAR, P393
+   Glover F., 1989, ORSA Journal on Computing, V1
+   Gordon J. M., 1988, HYPERCUBE MESSAGE RO, P318
+   GOSS S, 1989, NATURWISSENSCHAFTEN, V76, P579, DOI 10.1007/BF00462870
+   Jaen J, 2011, APPL SOFT COMPUT, V11, P111, DOI 10.1016/j.asoc.2009.11.002
+   Jun-qing L., 2008, 4 INT C NAT COMP, V7, P516
+   Klingberg T., 2002, GNUTELLA 0 6
+   Lv Q., 2002, P 16 INT C SUP, P84, DOI 10.1145/514191.514206
+   Michlmayr E, 2007, COMPUT NETW, V51, P4514, DOI 10.1016/j.comnet.2007.06.015
+   Michlmayr E., 2006, 22 INT C DAT ENG WOR, P142
+   Michlmayr E., 2006, THESIS VIENNA U TECH
+   Mocholi JA, 2012, EXPERT SYST APPL, V39, P2270, DOI 10.1016/j.eswa.2011.07.131
+   Prinkey M. T., 2001, EFFICIENT SCHEME QUE
+   Raidl GR, 2006, LECT NOTES COMPUT SC, V4030, P1
+   Ratnasamy S., 2001, SIGCOMM 01, P161, DOI DOI 10.1145/383059.383072
+   Santillan C. Gomez, 2010, COMPUT SIST, V13, P433
+   Schoonderwoerd R, 1996, ADAPT BEHAV, V5, P169
+   Stoica I., 2001, SIGCOMM 01 SAN DIEG
+   Stutzle T., 1997, IMPROVEMENTS ANT SYS, P245
+   Talbi EG, 2002, J HEURISTICS, V8, P541, DOI 10.1023/A:1016540724870
+   Tanenbaum A. S., 2002, DISTRIBUTED SYSTEMS
+   Wang L, 2011, EXPERT SYST APPL, V38, P94, DOI 10.1016/j.eswa.2010.06.020
+   Weisstein E., 2013, TORUS MATHWORLD WOLF
+   Weisstein E., 2013, HYPERCUBE MATHWORLD
+   Zhao S., 2006, P SPIE ACM MULT COMP
+NR 37
+TC 0
+Z9 0
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 1568-4946
+J9 APPL SOFT COMPUT
+JI Appl. Soft. Comput.
+PD DEC
+PY 2013
+VL 13
+IS 12
+BP 4813
+EP 4831
+DI 10.1016/j.asoc.2013.07.022
+PG 19
+WC Computer Science, Artificial Intelligence; Computer Science,
+   Interdisciplinary Applications
+SC Computer Science
+GA 235YM
+UT WOS:000325759200027
+ER
+
+PT J
+AU Katayama, Y
+   Inoue, T
+   Takahashi, N
+   Kawamura, R
+AF Katayama, Yohei
+   Inoue, Takeru
+   Takahashi, Noriyuki
+   Kawamura, Ryutaro
+TI Scalability Analysis of Source Routing Multicast for Huge Numbers of
+   Groups
+SO IEICE TRANSACTIONS ON COMMUNICATIONS
+LA English
+DT Article
+DE multicast; source routing; stateless; publish/subscribe
+ID SCALABLE MULTICAST; EFFICIENCY; PUBLISH/SUBSCRIBE; NETWORKS; TREES; LAW
+AB Source routing multicast has been gathering much more attention rather than traditional IP multicast, since it is thought to be more scalable in terms of the number of groups at the cost of higher traffic loads. This paper introduces a mathematical framework to analyze the scalability of source routing multicast and II multicast by leveraging previous multicast studies. We first analyze the amount of data traffic based on the small-world nature of networks, and show that source routing multicast can be as efficient as IP multicast if a simple header fragmentation technique (sub-grouping) is utilized. We also analyze scalability in terms of group numbers, which are derived under the equal budget assumption. Our analysis shows that source routing multicast is competitive for low bit-rate streams, like those in the publish/subscribe service, but we find some factors that offset the advantage. This is the first work to analytically investigate the scalability of source routing multicast.
+C1 [Katayama, Yohei; Inoue, Takeru; Takahashi, Noriyuki; Kawamura, Ryutaro] NTT Corp, NTT Network Innovat Labs, Yokosuka, Kanagawa 2390847, Japan.
+RP Katayama, Y (reprint author), NTT Corp, NTT Network Innovat Labs, Yokosuka, Kanagawa 2390847, Japan.
+EM katayama.yohei@lab.ntt.co.jp
+CR Balakrishnan M., 2008, ACM HOTNETS
+   BLOOM BH, 1970, COMMUN ACM, V13, P422, DOI 10.1145/362686.362692
+   Chalmers RC, 2001, IEEE INFOCOM SER, P449
+   Cho TW, 2009, IEEE INFOCOM SER, P1980, DOI 10.1109/INFCOM.2009.5062120
+   Chuang J., 1998, INET 98
+   Deering S. E., 1988, ACM SIGCOMM, P55
+   Eugster PT, 2003, ACM COMPUT SURV, V35, P114, DOI 10.1145/857076.857078
+   Fei AG, 2001, GLOB TELECOMM CONF, P1595
+   Gronvall B, 2002, COMPUT COMMUN REV, V32, P68
+   Guitton A., 2004, IEEE ISCC, V2, P1012
+   Hosseini M, 2007, IEEE COMMUN SURV TUT, V9, P58, DOI 10.1109/COMST.2007.4317616
+   INOUE T, 2010, IEEE GLOBECOM FUTURE, P333
+   Inoue T, 2006, IEICE T INF SYST, VE89D, P687, DOI 10.1093/ietisy/e89-d.2.687
+   Jacobson V., 2006, STANF CLEAN SLAT SEM
+   Jokela P, 2009, COMPUT COMMUN REV, V39, P195
+   Moore GE, 1998, P IEEE, V86, P82, DOI 10.1109/JPROC.1998.658762
+   Nikander P., 2009, IEEE ICC, P1
+   Phillips G, 1999, COMP COMM R, V29, P41
+   Ramalho Maria, 2000, IEEE Communications Surveys & Tutorials, V3, DOI 10.1109/COMST.2000.5340719
+   Ratnasamy S., 2009, ACM HOTNETS
+   RATNASAMY S, 2006, ACM SIGCOMM, V36, P15, DOI 10.1145/1151659.1159917
+   Roberts LG, 2000, COMPUTER, V33, P117, DOI 10.1109/2.963131
+   Sareld M., 2011, IEEE INFOCOM
+   Spring N, 2004, IEEE ACM T NETWORK, V12, P2, DOI 10.1109/TNET.2003.822655
+   TANGMUNARUNKFIT H, 2002, ACM SIGCOMM COMPUTER, V32, P147, DOI 10.1145/964725.633040
+   Thaler D., 2000, IEEE INFOCOM 2000, V3, P1654
+   Van Mieghem P, 2001, IEEE ACM T NETWORK, V9, P719, DOI 10.1109/90.974526
+   Watts DJ, 1998, NATURE, V393, P440, DOI 10.1038/30918
+   Wu J., 2011, IEEE INFOCOM
+   YUM TSP, 1991, IEEE INFOCOM SER, P1284, DOI 10.1109/INFCOM.1991.147652
+NR 30
+TC 0
+Z9 0
+PU IEICE-INST ELECTRONICS INFORMATION COMMUNICATIONS ENG
+PI TOKYO
+PA KIKAI-SHINKO-KAIKAN BLDG, 3-5-8, SHIBA-KOEN, MINATO-KU, TOKYO, 105-0011,
+   JAPAN
+SN 0916-8516
+J9 IEICE T COMMUN
+JI IEICE Trans. Commun.
+PD NOV
+PY 2013
+VL E96B
+IS 11
+BP 2784
+EP 2794
+DI 10.1587/transcom.E96.B.2784
+PG 11
+WC Engineering, Electrical & Electronic; Telecommunications
+SC Engineering; Telecommunications
+GA 254LV
+UT WOS:000327168100010
+ER
+
+PT J
+AU Aparicio-Pardo, R
+   Garcia-Manrubia, B
+   Pavon-Marino, P
+   Skorin-Kapov, N
+   Furdek, M
+AF Aparicio-Pardo, R.
+   Garcia-Manrubia, B.
+   Pavon-Marino, P.
+   Skorin-Kapov, N.
+   Furdek, M.
+TI Balancing CapEx reduction and network stability with stable
+   routing-virtual topology capacity adjustment (SR-VTCA)
+SO OPTICAL SWITCHING AND NETWORKING
+LA English
+DT Article
+DE Optical communications; Multi-hour traffic; Virtual topology design;
+   Capacity adjustment; Stable routing; Traffic domination
+ID SCHEDULED LIGHTPATH DEMANDS; ROUTED OPTICAL NETWORKS; WDM MESH NETWORKS;
+   WAVELENGTH ASSIGNMENT; TRAFFIC MATRICES; RECONFIGURATION; ADAPTATION;
+   DOMINATION; PARADIGM; DESIGN
+AB This paper investigates the merits of the SR-VTCA (stable routing-virtual topology capacity adjustment) approach as a mechanism to find a beneficial trade-off between network stability and reduction in capital expenditures (CapEx). These are two main objectives for the entities that own the optical infrastructure, such as network operators (NOs), and those also acting as Internet service providers (ISPs). The SR-VTCA scheme is a novel approach to adapt transparent optical networks to time-varying traffic by adjusting the number of lightpaths between node pairs, while keeping the IP routing unchanged. Lightpath bundling (LB) and anycast (AS) switching are combined in SR-VTCA operation to advertise lightpath additions/removals to the IP layer as mere adjustments (increments or decrements) in the capacity, allowing to keep the IP routing stable, and thus, simplifying control plane operations. On the contrary, a fully-reconfigurable (FR) network design, where IP routing can be also modified, would increase the burden in the control plane, but at a higher CapEx reduction, since the optical infrastructure is used more efficiently. In this work, we investigate the CapEx overprovision introduced by SR-VTCA with respect to a FR scheme. In order to do this, SR-VTCA planning problem is first modeled as a MILP formulation. A heuristic procedure based on traffic domination is then proposed to solve large instances of the problem. Exhaustive experiments are conducted comparing the SR-VTCA solutions obtained by the aforementioned MILP and heuristic proposal with solutions found by other optimization methods presented in the literature to solve the FR planning problem. Finally, the results show that SR-VTCA can achieve similar results to the FR case in terms of CapEx reduction, while a huge number of IP reroutings are saved by maintaining IP stability. Thus, SR-VTCA provides an advantageous balance between CapEx overprovisioning and the control plane overhead associated with IP rerouting. (C) 2013 Elsevier B.V. All rights reserved.
+C1 [Aparicio-Pardo, R.] France Telecom, Orange Labs Networks & Carriers, F-22307 Lannion, France.
+   [Aparicio-Pardo, R.; Garcia-Manrubia, B.; Pavon-Marino, P.] Univ Politecn Cartagena UPCT, Dept Informat Technol & Commun, Cartagena 30202, Spain.
+   [Skorin-Kapov, N.] MDE UPCT, Spanish Air Force Acad, Univ Ctr Def, Ctr Univ Def San Javier, Murcia 30720, Spain.
+   [Skorin-Kapov, N.; Furdek, M.] Univ Zagreb, Fac Elect Engn & Comp FER, Dept Telecommun, HR-10000 Zagreb, Croatia.
+RP Aparicio-Pardo, R (reprint author), France Telecom, Orange Labs Networks & Carriers, 2 Ave Pierre Marzin, F-22307 Lannion, France.
+EM ramon.aparicio.pardo@gmail.com
+FU MICINN/FEDER [TEC2010-21405-C02-02/TCM]; MICINN [TEC2010-12250-E]; E
+   Seneca (Plan Regional de Ciencia y Tecnologia); COST Action IC0806
+   IntelliCIS
+FX This research was partially supported by the MICINN/FEDER project grant
+   TEC2010-21405-C02-02/TCM (CALM) and MICINN project grant TEC2010-12250-E
+   (FIERRO). It was also developed in the framework of project "Programa de
+   Ayudas a Grupos de Excelencia de la Region de Murcia" funded by E Seneca
+   (Plan Regional de Ciencia y Tecnologia 2007/2010) and COST Action IC0806
+   IntelliCIS.
+CR Agrawal G, 2006, P IEEE GLOBECOM
+   Ahuja R.K., 1993, NETWORK FLOWS THEORY
+   Aparicio-Pardo R, 2012, IEEE ACM T NETWORK, V20, P1567, DOI 10.1109/TNET.2012.2184300
+   Banerjee D, 2000, IEEE ACM T NETWORK, V8, P598, DOI 10.1109/90.879346
+   Bouillet E, 2005, IEEE ACM T NETWORK, V13, P437, DOI 10.1109/TNET.2005.845540
+   Cavdar C, 2007, IEEE COMMUN MAG, V45, P60, DOI 10.1109/MCOM.2007.343613
+   Chamania M, 2010, OPT SWITCH NETW, V7, P173, DOI 10.1016/j.osn.2010.05.005
+   Dutta R., 2000, OPTICAL NETWORKS MAG, V1, P73
+   Feuer MD, 2011, J LIGHTWAVE TECHNOL, V29, P529, DOI 10.1109/JLT.2010.2101048
+   Gencata AE, 2003, IEEE ACM T NETWORK, V11, P236, DOI 10.1109/TNET.2003.810319
+   Gieselman SF, 2005, IEEE ICC, P1787
+   Huelsermann R, 2008, J OPT NETW, V7, P814, DOI 10.1364/JON.7.000814
+   Konda V.R., 2011, P IEEE WORKSH HIGH P, P218
+   Kuri J, 2003, IEEE J SEL AREA COMM, V21, P1231, DOI 10.1109/JSAC.2003.816622
+   LOGOTHETIS M, 1995, IEEE T COMMUN, V43, P2630, DOI 10.1109/26.469436
+   Manohar P, 2003, IEE P-CIRC DEV SYST, V150, P516, DOI 10.1049/ip-cds:20031142
+   Milbrandt J., 2005, P 19 INT TEL C ITC19
+   Mukherjee B, 1996, IEEE ACM T NETWORK, V4, P684, DOI 10.1109/90.541317
+   Oriolo G, 2008, MATH OPER RES, V33, P91, DOI 10.1287/moor.1070.0280
+   Pavon-Marino P, 2011, J OPT COMMUN NETW, V3, P902, DOI 10.1364/JOCN.3.000902
+   Pavon-Marino P, 2010, PHOTONIC NETW COMMUN, V19, P42, DOI 10.1007/s11107-009-0209-7
+   Pavon-Marino P., 2011, OPER RES LETT, V39, P40, DOI 10.1016/j.orl.2010.11.007
+   Pavon-Marino P, 2011, J LIGHTWAVE TECHNOL, V29, P3265, DOI 10.1109/JLT.2011.2167497
+   Pavon-Marino P, 2012, IEEE COMMUN MAG, V50, P89, DOI 10.1109/MCOM.2012.6257532
+   Pavon-Marino P, 2011, COMPUT NETW, V55, P665, DOI 10.1016/j.comnet.2010.10.013
+   Pioro M., ROUTING FLOW CAPACIT, P455
+   Renais O., 2012, P NETW ROM IT
+   Ricciato F., 2002, Proceedings IEEE INFOCOM 2002 Conference on Computer Communications. Twenty-First Annual Joint Conference of the IEEE Computer and Communications Societies (Cat. No.37364), DOI 10.1109/INFCOM.2002.1019246
+   Roukas G.N., 1995, J HIGH SPEED NETW, V4, P221
+   Saad M, 2005, J LIGHTWAVE TECHNOL, V23, P3092, DOI 10.1109/JLT.2005.856152
+   SARADHI CV, 2008, P BROADN 2008 LOND U, P197
+   Shioda S, 1997, IEICE T COMMUN, VE80B, P252
+   Skorin-Kapov N, 2006, IEEE J SEL AREA COMM, V24, P2, DOI 10.1109/JSAC-OCN.2006.19705
+   Skorin-Kapov N, 2009, P BROADNETS MADR SPA
+   Terblanche S.E., 2008, THESIS NW U S AFRICA
+   TOTEM Project, TOOLB TRAFF ENG METH
+   Wang B., 2005, P IEEE BROADNETS OCT, V1, P13
+   Zang H., 2000, OPTICAL NETWORKS MAG, V1, P47
+NR 38
+TC 0
+Z9 0
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 1573-4277
+J9 OPT SWITCH NETW
+JI Opt. Switch. Netw.
+PD NOV
+PY 2013
+VL 10
+IS 4
+BP 343
+EP 353
+DI 10.1016/j.osn.2013.05.001
+PG 11
+WC Computer Science, Information Systems; Optics; Telecommunications
+SC Computer Science; Optics; Telecommunications
+GA 256DD
+UT WOS:000327289000005
+ER
+
+PT J
+AU Chen, YR
+   Radhakrishnan, S
+   Dhall, S
+   Karabuk, S
+AF Chen, Yuh-Rong
+   Radhakrishnan, Sridhar
+   Dhall, Sudarshan
+   Karabuk, Suleyman
+TI On multi-stream multi-source multicast routing
+SO COMPUTER NETWORKS
+LA English
+DT Article
+DE Multicast; Multi-source; Multi-tree; Tree packing; Optimization
+ID APPLICATION-LAYER MULTICAST; HEURISTIC ALGORITHMS; TREES; PACKING
+AB Multicasting has been used to conserve bandwidth and reduce network traffic for delivering a single data stream to a set of destinations. The problem of conserving bandwidth is a challenging one when one considers multiple data streams with multiple sources for each and a set of destinations that subscribe to one or more of these streams. The Multi-stream Multi-source Multicast Routing Problem (MMMRP) is to determine multiple multicasting trees on a given network, rooted at sources (nodes in the network) that are responsible for delivering one or more data streams to a set of destinations. Since several multicast trees co-exist on the same network, our goal is to construct these trees in such a way that the minimum residual bandwidth on the links that are shared among the trees is maximized. We prove that MMMRP is NP-hard and apart from providing an IP formulation, we have also provided a heuristic algorithm MMForests, which runs in polynomial-time. We compared and contrasted MMMRP with known algorithms for the multicast tree packing problem and our exhaustive empirical evaluations show that our heuristic has a very low execution-time while achieving near-optimal residual bandwidth. In addition, our heuristic is very scalable as it is able to produce results for networks with thousands of nodes, unlike the other ones that are based on Steiner tree heuristics. (c) 2013 Elsevier B.V. All rights reserved.
+C1 [Chen, Yuh-Rong; Radhakrishnan, Sridhar; Dhall, Sudarshan] Univ Oklahoma, Sch Comp Sci, Norman, OK 73019 USA.
+   [Karabuk, Suleyman] Univ Oklahoma, Sch Ind Engn, Norman, OK 73019 USA.
+RP Radhakrishnan, S (reprint author), Univ Oklahoma, Sch Comp Sci, 110 W Boyd St,Room 150, Norman, OK 73019 USA.
+EM yrchern@ou.edu; sridhar@ou.edu; sdhall@ou.edu; karabuk@ou.edu
+CR Bhattacharjee B., 2012, PROJECT NICE U MARYL
+   Birrer S, 2004, LECT NOTES COMPUT SC, V3293, P182
+   Brosh E, 2007, IEEE ACM T NETWORK, V15, P473, DOI 10.1109/TNET.2007.892840
+   Calvert KL, 1997, IEEE COMMUN MAG, V35, P160, DOI 10.1109/35.587723
+   Castro M., 2003, SIGOPS OPER SYST REV, V37, P298, DOI DOI 10.1145/1165389.945474
+   Chen SW, 2000, IEEE ACM T NETWORK, V8, P311, DOI 10.1109/90.851977
+   Chen Y.-R., 2012, IEEE GLOB 2012 COMM
+   Chu YH, 2002, IEEE J SEL AREA COMM, V20, P1456, DOI 10.1109/JSAC.2002.803066
+   Chvatal V., 1983, LINEAR PROGRAMMING
+   Dijkstra E. W., 1959, NUMER MATH, V1, P269, DOI DOI 10.1007/BF01386390
+   Even S., 1976, SIAM Journal on Computing, V5, DOI 10.1137/0205048
+   Fahmy S, 2007, IEEE ACM T NETWORK, V15, P373, DOI 10.1109/TNET.2007.892847
+   Figueiredo G., 2004, 2004 IEEE INT C COMM, V4
+   Gurobi Optimization Inc., 2012, GUR OPT
+   HU TC, 1961, OPER RES, V9, P898, DOI 10.1287/opre.9.6.898
+   Kar K, 2000, IEEE J SEL AREA COMM, V18, P2566, DOI 10.1109/49.898737
+   Karp R. M., 1975, Networks, V5
+   KOU L, 1981, ACTA INFORM, V15, P141, DOI 10.1007/BF00288961
+   Lee CY, 2004, COMPUT OPER RES, V31, P1115, DOI 10.1016/S0305-0548(03)00068-6
+   Medina A., 2012, BOSTON U REPRESENTAT
+   Ravindran K, 2001, IEEE INFOCOM SER, P966
+   The Internet Engineering Task Force, 2013, 4601 RFC INT ENG TAS
+   The Internet Engineering Task Force, 2012, 3376 RFC INT ENG TAS
+   The Internet Engineering Task Force, 2012, 3810 RFC INT ENG TAS
+   Vik KH, 2008, COMPUT NETW, V52, P2872, DOI 10.1016/j.comnet.2008.06.003
+   Wang CF, 2002, COMPUT OPER RES, V29, P905, DOI 10.1016/S0305-0548(00)00092-7
+NR 26
+TC 0
+Z9 0
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 1389-1286
+J9 COMPUT NETW
+JI Comput. Netw.
+PD OCT 29
+PY 2013
+VL 57
+IS 15
+BP 2916
+EP 2930
+DI 10.1016/j.comnet.2013.05.012
+PG 15
+WC Computer Science, Hardware & Architecture; Computer Science, Information
+   Systems; Engineering, Electrical & Electronic; Telecommunications
+SC Computer Science; Engineering; Telecommunications
+GA 225PI
+UT WOS:000324974400004
+ER
+
+PT J
+AU Ye, J
+   Ma, CL
+   Wang, F
+   Hsueh, EC
+   Toth, K
+   Huang, Y
+   Mo, W
+   Liu, S
+   Han, B
+   Varvares, MA
+   Hoft, DF
+   Peng, GY
+AF Ye, Jian
+   Ma, Chunling
+   Wang, Fang
+   Hsueh, Eddy C.
+   Toth, Karoly
+   Huang, Yi
+   Mo, Wei
+   Liu, Shuai
+   Han, Bing
+   Varvares, Mark A.
+   Hoft, Daniel F.
+   Peng, Guangyong
+TI Specific Recruitment of gamma delta Regulatory T Cells in Human Breast
+   Cancer
+SO CANCER RESEARCH
+LA English
+DT Article
+ID FOSTERS IMMUNE PRIVILEGE; TGF-BETA; OVARIAN-CARCINOMA; DENDRITIC CELLS;
+   INTRAEPITHELIAL LYMPHOCYTES; PARTIAL REDUCTION; PERIPHERAL-BLOOD;
+   TUMOR-IMMUNITY; TOLL-LIKE; IN-VIVO
+AB Understanding the role of different subtypes of tumor-infiltrating lymphocytes (TIL) in the immunosuppressive tumor microenvironment is essential for improving cancer treatment. Enriched gamma delta 1 T-cell populations in TILs suppress T-cell responses and dendritic cell maturation in breast cancer, where their presence is correlated negatively with clinical outcomes. However, mechanism(s) that explain the increase in this class of regulatory T cells (gamma delta Treg) in patients with breast cancer have yet to be elucidated. In this study, we show that IP-10 secreted by breast cancer cells attracted gamma delta Tregs. Using neutralizing antibodies against chemokines secreted by breast cancer cells, we found that IP-10 was the only functional chemokine that causes gamma delta Tregs to migrate toward breast cancer cells. In a humanized NOD-scid IL-2R gamma(null) (NSG) mouse model, human breast cancer cells attracted gamma delta Tregs as revealed by a live cell imaging system. IP-10 neutralization in vivo inhibited migration and trafficking of gamma delta Tregs into breast tumor sites, enhancing tumor immunity mediated by tumor-specific T cells. Together, our studies show how gamma delta Tregs accumulate in breast tumors, providing a rationale for their immunologic targeting to relieve immunosuppression in the tumor microenvironment. Cancer Res; 73(20); 6137-48. (C) 2013 AACR.
+C1 [Ye, Jian; Ma, Chunling; Wang, Fang; Huang, Yi; Mo, Wei; Liu, Shuai; Han, Bing; Hoft, Daniel F.; Peng, Guangyong] St Louis Univ, Sch Med, Dept Internal Med, Div Infect Dis Allergy & Immunol,Doisy Res Ctr, St Louis, MO 63104 USA.
+   [Hsueh, Eddy C.] St Louis Univ, Sch Med, Dept Surg, St Louis, MO USA.
+   [Toth, Karoly] St Louis Univ, Sch Med, Dept Mol Microbiol & Immunol, St Louis, MO USA.
+   [Varvares, Mark A.] St Louis Univ, Sch Med, Dept Otolaryngol Head & Neck Surg, St Louis, MO USA.
+   [Ma, Chunling] Shandong Med Coll, Dept Immunol & Microbiol, Linyi, Peoples R China.
+   [Wang, Fang] Nanjing Med Univ, Affiliated Hosp 1, Dept Lab Med, Nanjing, Jiangsu, Peoples R China.
+RP Peng, GY (reprint author), St Louis Univ, Sch Med, Dept Internal Med, Div Infect Dis Allergy & Immunol,Doisy Res Ctr, 1100 S Grand Blvd,Room 813, St Louis, MO 63104 USA.
+EM gpeng@slu.edu
+FU American Cancer Society [RSG-10-160-01-LIB]; Melanoma Research Alliance;
+   National Institutes of Health [AI097852, AI094478]
+FX This work was supported by grants from the American Cancer Society
+   (RSG-10-160-01-LIB, G. Peng), the Melanoma Research Alliance (G. Peng),
+   and the National Institutes of Health (AI097852 and AI094478, G. Peng).
+CR Bates GJ, 2006, J CLIN ONCOL, V24, P5373, DOI 10.1200/JCO.2006.05.9584
+   Chen WJ, 2003, J EXP MED, V198, P1875, DOI 10.1084/jem.20030152
+   Curiel TJ, 2004, NAT MED, V10, P942, DOI 10.1038/nm1093
+   Datta D, 2006, CANCER RES, V66, P9509, DOI 10.1158/0008-5472.CAN-05-4345
+   DeNardo DG, 2009, CANCER CELL, V16, P91, DOI 10.1016/j.ccr.2009.06.018
+   Gajewski TF, 2007, IMMUNITY, V27, P185, DOI 10.1016/j.immuni.2007.08.001
+   Georgiannos SN, 2003, SURGERY, V134, P827, DOI 10.1016/S0039-6060(03)00292-7
+   Gobert M, 2009, CANCER RES, V69, P2000, DOI 10.1158/0008-5472.CAN-08-2360
+   Groom JR, 2011, IMMUNOL CELL BIOL, V89, P207, DOI 10.1038/icb.2010.158
+   Hayday A, 2003, NAT REV IMMUNOL, V3, P233, DOI 10.1038/nri1030
+   Ishida T, 2006, CANCER RES, V66, P5716, DOI 10.1158/0008-5472.CAN-06-0261
+   Kapp JA, 2004, IMMUNOL RES, V29, P93, DOI 10.1385/IR:29:1-3:093
+   Kapp JA, 2004, IMMUNOLOGY, V111, P155, DOI 10.1111/j.0019-2805.2003.01793.x
+   Kavanagh B, 2008, BLOOD, V112, P1175, DOI 10.1182/blood-2007-11-125435
+   Kawaida H, 2005, J SURG RES, V124, P151, DOI 10.1016/j.jss.2004.10.004
+   Ke Y, 2003, CELL IMMUNOL, V221, P107, DOI 10.1016/S0008-8749(03)00066-2
+   Kiniwa Y, 2007, CLIN CANCER RES, V13, P6947, DOI 10.1158/1078-0432.CCR-07-0842
+   Kono K, 2006, CANCER IMMUNOL IMMUN, V55, P1064, DOI 10.1007/s00262-005-0092-8
+   Li XY, 2011, J IMMUNOL, V186, P6693, DOI 10.4049/jimmunol.1002776
+   Liu VC, 2007, J IMMUNOL, V178, P2883
+   Liyanage UK, 2002, J IMMUNOL, V169, P2756
+   Locke NR, 2006, J IMMUNOL, V176, P6553
+   Ma CL, 2012, J IMMUNOL, V189, P5029, DOI 10.4049/jimmunol.1201892
+   Moore AC, 2005, J IMMUNOL, V175, P7264
+   Morse MA, 2008, BLOOD, V112, P610, DOI 10.1182/blood-2008-01-135319
+   Nian H, 2010, INVEST OPHTH VIS SCI, V51, P4661, DOI 10.1167/iovs.09-5045
+   Peng G, 2007, IMMUNITY, V27, P334, DOI 10.1016/j.immuni.2007.05.020
+   Peng GY, 2005, SCIENCE, V309, P1380, DOI 10.1126/science.1113401
+   Petermann F, 2010, IMMUNITY, V33, P351, DOI 10.1016/j.immuni.2010.08.013
+   Powell DJ, 2008, J IMMUNOTHER, V31, P189, DOI 10.1097/CJI.0b013e31815dc0e8
+   Powell DJ, 2007, J IMMUNOL, V179, P4919
+   Qian C, 2007, BLOOD, V109, P3308, DOI 10.1182/blood-2006-08-040337
+   Rabinovich GA, 2007, ANNU REV IMMUNOL, V25, P267, DOI 10.1146/annurev.immunol.25.022106.141609
+   Roncarolo MG, 2006, IMMUNOL REV, V212, P28
+   Sakaguchi S, 2001, IMMUNOL REV, V182, P18, DOI 10.1034/j.1600-065X.2001.1820102.x
+   Sasada T, 2003, CANCER, V98, P1089, DOI 10.1002/cncr.11618
+   Seo N, 1999, J IMMUNOL, V163, P242
+   Simonian PL, 2006, J IMMUNOL, V177, P4436
+   Su XM, 2010, J IMMUNOL, V184, P1630, DOI 10.4049/jimmunol.0902813
+   Tan MCB, 2009, J IMMUNOL, V182, P1746
+   Tan W, 2011, NATURE, V470, P548, DOI 10.1038/nature09707
+   Traxlmayr MW, 2010, J IMMUNOTHER, V33, P40, DOI 10.1097/CJI.0b013e3181b51447
+   Wei S, 2005, CANCER RES, V65, P5020, DOI 10.1158/0008-5472.CAN-04-4043
+   Wei S, 2007, CANCER RES, V67, P7487, DOI 10.1158/0008-5472.CAN-07-0565
+   Wolf AM, 2003, CLIN CANCER RES, V9, P606
+   Yang JM, 2004, MOL THER, V9, P846, DOI 10.1016/j.ymthe.2004.01.010
+   Ye J, 2013, J IMMUNOL, V190, P2403, DOI 10.4049/jimmunol.1202369
+   Ye J, 2012, BLOOD, V120, P2021, DOI 10.1182/blood-2012-03-416040
+   Ye JA, 2011, EUR J IMMUNOL, V41, P936, DOI 10.1002/eji.201040682
+   Zhou J, 2008, TRANSPL INT, V21, P679, DOI 10.1111/j.1432-2277.2008.00669.x
+   Zou LH, 2004, CANCER RES, V64, P8451, DOI 10.1158/0008-5472.CAN-04-1987
+   Zou WP, 2006, NAT REV IMMUNOL, V6, P295, DOI 10.1038/nri1806
+NR 52
+TC 0
+Z9 0
+PU AMER ASSOC CANCER RESEARCH
+PI PHILADELPHIA
+PA 615 CHESTNUT ST, 17TH FLOOR, PHILADELPHIA, PA 19106-4404 USA
+SN 0008-5472
+J9 CANCER RES
+JI Cancer Res.
+PD OCT 15
+PY 2013
+VL 73
+IS 20
+BP 6137
+EP 6148
+DI 10.1158/0008-5472.CAN-13-0348
+PG 12
+WC Oncology
+SC Oncology
+GA 236KV
+UT WOS:000325796100007
+ER
+
+PT J
+AU Guo, L
+   Hou, WG
+   Zheng, ZY
+   Gong, XX
+   Lv, SZ
+AF Guo, Lei
+   Hou, Weigang
+   Zheng, Zeyu
+   Gong, Xiaoxue
+   Lv, Size
+TI Green Provisioning of Many-to-Many Sessions Over WDM Optical Networks
+SO JOURNAL OF LIGHTWAVE TECHNOLOGY
+LA English
+DT Article
+DE Green provision; many-to-many grooming; WDM optical networks
+ID MESH NETWORKS; IP; PLACEMENT; DESIGN
+AB In a many-to-many session, a participant distributes and receives traffic flows to/from all others in the same session. It is desirable to achieve both high resource utilization and low power consumption when such sessions are provisioned. In wavelength division multiplexing (WDM) optical networks, traffic grooming has been widely applied as the key technology for aggregating sessions to improve resource utilization. However, the current many-to-many grooming approaches, the lightpath circle and hubbed light-tree, do not make an effort to reduce the power consumption of many-to-many sessions. In this paper, we formulate the green routing and aggregation of many-to-many sessions problem and prove its NP-completeness. For problem solving in WDM optical networks, we apply a rational combined method of lightpaths. Both an integer linear programming-based approach and a novel graph-based heuristic are devised. We further provide an illustrative comparison between our heuristic and the existing benchmarks in terms of power consumption. Extensive simulation results demonstrate that, compared with the benchmarks, our heuristic improves the average power efficiency in the range of 13-19%.
+C1 [Guo, Lei; Hou, Weigang; Gong, Xiaoxue; Lv, Size] Northeastern Univ, Coll Informat Sci & Engn, Shenyang 110819, Peoples R China.
+   [Hou, Weigang; Zheng, Zeyu] City Univ Hong Kong, Dept Comp Sci, Kowloon, Hong Kong, Peoples R China.
+RP Hou, WG (reprint author), Northeastern Univ, Coll Informat Sci & Engn, Shenyang 110819, Peoples R China.
+EM haveball@yahoo.com; hwghtc@gmail.com; zzeyu2@student.cityu.edu.hk;
+   xiaoxue_gong@163.com; haveball@yeah.net
+FU National Natural Science Foundation of China [61172051, 61302070,
+   61302071, 61302072]; Fundamental Research Funds for the Central
+   Universities [N110204001, N120804002, N110604008]; Specialized Research
+   Fund for the Doctoral Program of Higher Education [20110042110023];
+   Liaoning Province Ph.D. Start-up Fund [20131029]
+FX This work was supported in part by the National Natural Science
+   Foundation of China under Grants 61172051, 61302070, 61302071, and
+   61302072, in part by the Fundamental Research Funds for the Central
+   Universities under Grants N110204001, N120804002, and N110604008, in
+   part by the Specialized Research Fund for the Doctoral Program of Higher
+   Education under Grant 20110042110023, and in part by the Liaoning
+   Province Ph.D. Start-up Fund under Grant 20131029.
+CR Angelo C., 2011, P ICC, P1
+   [Anonymous], 2001, 3170 IETF RFC
+   Chen Y., 2011, P OFC, P1
+   Hasan M. M., 2010, P ICC MAY, P1, DOI 10.1145/1722024.1722069
+   Hou WG, 2012, PHOTONIC NETW COMMUN, V23, P230, DOI 10.1007/s11107-011-0353-8
+   Huang S., 2009, P IEEE GLOBECOM 2009, P1, DOI DOI 10.1109/IPDPS.2009.5160980
+   Kamal AE, 2006, IEEE COMMUN MAG, V44, P96, DOI 10.1109/MCOM.2006.248171
+   Lin RP, 2012, J OPT COMMUN NETW, V4, P918, DOI 10.1364/JOCN.4.000918
+   Saleh A. M., 2010, IEEE ACM T NETWORK, V18, P1869
+   Saleh A. M., 2009, J OPT COMMUN NETW, V1, P376
+   Shen GX, 2009, J OPT COMMUN NETW, V1, P176, DOI 10.1364/JOCN.1.000176
+   Shen GX, 2009, J LIGHTWAVE TECHNOL, V27, P4471, DOI 10.1109/JLT.2009.2024174
+   UI-Mustafa R, 2006, IEEE J SEL AREA COMM, V24, P68, DOI 10.1109/JSAC-OCN.2006.18804
+   Xia M, 2011, IEEE J SEL TOP QUANT, V17, P437, DOI 10.1109/JSTQE.2010.2050867
+   YETGINER E, 2009, P GLOBECOM, P1838, DOI DOI 10.1364/JOCN.1.000176
+   Zhang Y, 2011, OPT SWITCH NETW, V8, P171, DOI 10.1016/j.osn.2011.03.006
+   Zhu ZQ, 2012, IEEE COMMUN LETT, V16, P262, DOI 10.1109/LCOMM.2011.122211.112091
+   Zhu ZQ, 2012, J LIGHTWAVE TECHNOL, V30, P3147, DOI 10.1109/JLT.2012.2213296
+NR 18
+TC 0
+Z9 0
+PU IEEE-INST ELECTRICAL ELECTRONICS ENGINEERS INC
+PI PISCATAWAY
+PA 445 HOES LANE, PISCATAWAY, NJ 08855-4141 USA
+SN 0733-8724
+J9 J LIGHTWAVE TECHNOL
+JI J. Lightwave Technol.
+PD OCT 15
+PY 2013
+VL 31
+IS 20
+BP 3289
+EP 3301
+DI 10.1109/JLT.2013.2281117
+PG 13
+WC Engineering, Electrical & Electronic; Optics; Telecommunications
+SC Engineering; Optics; Telecommunications
+GA 228KM
+UT WOS:000325185000006
+ER
+
+PT J
+AU Li, H
+   Gu, HX
+   Yang, YT
+   Yu, XS
+AF Li, Hui
+   Gu, Huaxi
+   Yang, Yintang
+   Yu, Xiaoshan
+TI A hybrid packet-circuit switched router for optical network on chip
+SO COMPUTERS & ELECTRICAL ENGINEERING
+LA English
+DT Article
+ID ON-CHIP; INTERCONNECT; TECHNOLOGY
+AB The increasing number of Intellectual Property (IP) cores challenges the traditional electrical Network on Chip (NoC). Silicon nanophotonics becomes a leading technology because of offering several benefits for NoC. Also, On-chip services, including guaranteed service and best-effort service, have different traffic characteristics. This has an important influence on the performance of NoC. This paper proposes a hybrid packet-circuit switched router for optical Network on Chip (ONoC). It can support optical circuit switching (OCS) and optical packet switching (OPS) in parallel and simultaneously, in order to optimize the performance of the network with both services. According to the simulation results, the proposed architecture achieves lower latency and higher throughput than the traditional architectures in the same network scale. (C) 2013 Elsevier Ltd. All rights reserved.
+C1 [Li, Hui; Gu, Huaxi; Yu, Xiaoshan] Xidian Univ, State Key Lab ISN, Xian 710071, Shaanxi, Peoples R China.
+   [Yang, Yintang] Xidian Univ, Inst Microelect, Xian 710071, Shaanxi, Peoples R China.
+RP Gu, HX (reprint author), Xidian Univ, State Key Lab ISN, 2 South Taibai Rd, Xian 710071, Shaanxi, Peoples R China.
+EM hxgu@xidian.edu.cn
+FU National Science Foundation of China [61070046, 61334003]; special fund
+   from State Key Lab; Fundamental Research Funds for the Central
+   Universities [K5051301003]; 111 Project [B08038]
+FX This work is supported partly by the National Science Foundation of
+   China Grant Nos. 61070046, 61334003, the special fund from State Key
+   Lab, the Fundamental Research Funds for the Central Universities under
+   Grant No. K5051301003, the 111 Project Grant No. B08038.
+CR Batten C, 2008, SYMP HI PER INT, P21, DOI 10.1109/HOTI.2008.11
+   Beausoleil RG, 2008, P IEEE, V96, P230, DOI 10.1109/JPROC.2007.911057
+   Beux SL, 2011, DES AUT TEST EUR C E, P788
+   Biberman A, 2011, ACM J EMERG TECH COM, V7, DOI 10.1145/1970406.1970409
+   Biberman A, 2010, IEEE PHOTONIC TECH L, V22, P926, DOI 10.1109/LPT.2010.2047850
+   Briere M, 2007, DES AUT TEST EUROPE, P1084
+   Campenhout JV, 2009, C LAS EL OPT CLEO, P1
+   Chen GQ, 2005, IEEE INT SYMP CIRC S, P2514
+   Cianchetti MJ, 2009, CONF PROC INT SYMP C, P441
+   Cianchetti MJ, 2011, ACM J EMERG TECH COM, V7, DOI 10.1145/1970406.1970411
+   Dokania RK, 2009, GLSVLSI 2009: PROCEEDINGS OF THE 2009 GREAT LAKES SYMPOSIUM ON VLSI, P275
+   Hamidi SM, 2012, OPT LASER TECHNOL, V44, P1556, DOI 10.1016/j.optlastec.2011.11.049
+   Hsu SH, 2006, P IEEE AS SOL STAT C, P211
+   Hu T, 2011, OPT LETT, V36, P4710, DOI 10.1364/OL.36.004710
+   HUANG L, 2010, P IEEE ACM INT C COM, P680
+   Ji RQ, 2011, OPT EXPRESS, V19, P20258, DOI 10.1364/OE.19.020258
+   Ji RQ, 2011, OPT EXPRESS, V19, P18945, DOI 10.1364/OE.19.018945
+   Joshi A, 2009, 2009 3RD ACM/IEEE INTERNATIONAL SYMPOSIUM ON NETWORKS-ON-CHIP, P124, DOI 10.1109/NOCS.2009.5071460
+   Kirman N, 2010, ACM SIGPLAN NOTICES, V45, P15
+   Kirman N, 2006, INT SYMP MICROARCH, P492
+   Koohi S, 2011, IEEE ACM INT S NAN A, P114
+   Li Z, 2011, ACM J EMERG TECH COM, V7, DOI 10.1145/1970406.1970410
+   Miller J, 2009, MITCSAILTR2009018
+   O'Connor I, 2008, P VLSI ULSI MULT INT
+   Palumbo F, 2008, LECT NOTES COMPUT SC, V5114, P96, DOI 10.1007/978-3-540-70550-5_11
+   Pan Y, 2009, CONF PROC INT SYMP C, P429
+   Pappu A, 2004, P 2004 INT S CIRC SY
+   Pasricha S, 2008, P AS S PAC C DES AUT, P789
+   Preston K, 2008, APPL PHYS LETT, V92
+   Shacham A, 2007, 1 INT S NETW ON CHIP, P53, DOI 10.1109/NOCS.2007.35
+   Tan XF, 2012, J LIGHTWAVE TECHNOL, V30, P368, DOI 10.1109/JLT.2011.2178019
+   Vantrease D, 2008, CONF PROC INT SYMP C, P153, DOI 10.1109/ISCA.2008.35
+   Wu X, 2010, 2010 IEEE ACM INT S, P35, DOI 10.1109/NANOARCH.2010.5510930
+   Xu QF, 2007, OPT EXPRESS, V15, P430
+   Yu ZH, 2010, OPT LASER TECHNOL, V42, P1332, DOI 10.1016/j.optlastec.2010.04.014
+NR 35
+TC 0
+Z9 0
+PU PERGAMON-ELSEVIER SCIENCE LTD
+PI OXFORD
+PA THE BOULEVARD, LANGFORD LANE, KIDLINGTON, OXFORD OX5 1GB, ENGLAND
+SN 0045-7906
+J9 COMPUT ELECTR ENG
+JI Comput. Electr. Eng.
+PD OCT
+PY 2013
+VL 39
+IS 7
+BP 2197
+EP 2206
+DI 10.1016/j.compeleceng.2013.08.006
+PG 10
+WC Computer Science, Hardware & Architecture; Computer Science,
+   Interdisciplinary Applications; Engineering, Electrical & Electronic
+SC Computer Science; Engineering
+GA 247YT
+UT WOS:000326661600021
+ER
+
+PT J
+AU Muniz, A
+   Tsukamoto, K
+   Tsuru, M
+   Oie, Y
+AF Muniz, Adriano
+   Tsukamoto, Kazuya
+   Tsuru, Masato
+   Oie, Yuji
+TI Network-Supported TCP Rate Control for the Coexistence of Multiple and
+   Different Types of Flows on IP over PLC
+SO IEICE TRANSACTIONS ON COMMUNICATIONS
+LA English
+DT Article; Proceedings Paper
+CT 17th International Symposium on Antennas and Propagation (ISAP)
+CY OCT 29-NOV 02, 2012
+CL Nagoya, JAPAN
+SP IEICE, Commun Soc
+DE power line communications (PLC); TCP rate control; multiple and
+   different types of flows; unfairness problem
+AB With the approval of IEEE 1901 standard for power line communications (PLC) and the recent Internet-enable home appliances like the IPTV having access to a content-on-demand service through the Internet as AcTVila in Japan, there is no doubt that PLC has taken a great step forward to emerge as the preeminent in-home-network technology. However, existing schemes developed so far have not considered the PLC network connected to an unstable Internet environment (i.e. more realistic situation). In this paper, we investigate the communication performance from the end-user's perspective in networks with large and variable round-trip time (RTT) and with the existence of cross-traffic. Then, we address the problem of unfair bandwidth allocation when multiple and different types of flows coexist and propose a TCP rate control considering the difference in terms of end-to-end delay to solve it. We validate our methodology through simulations, and show that it effectively deals with the throughput unfairness problem under critical communication environment, where multiple flows with different RTTs share the PLC and cross-traffic exists on the path of the Internet.
+C1 [Muniz, Adriano; Tsukamoto, Kazuya; Tsuru, Masato; Oie, Yuji] Kyushu Inst Technol, Iizuka, Fukuoka 8208502, Japan.
+RP Muniz, A (reprint author), Kyushu Inst Technol, Iizuka, Fukuoka 8208502, Japan.
+EM adriano@infonet.cse.kyutech.ac.jp; tsukamoto@cse.kyutech.ac.jp;
+   tsuru@cse.kyutech.ac.jp; oie@cse.kyutech.ac.jp
+CR [Anonymous], 2010, 19012010 IEEE
+   [Anonymous], 2009, HD PLC WHITE PAPER V
+   [Anonymous], 2006, NETW PERF OBJ IP BAS
+   Berganza Valmala I., 2010, POWER LINE COMMUNICA
+   Caini C, 2004, INT J SATELL COMM N, V22, P547, DOI 10.1002/sat.799
+   Galli S., 2010, POWER LINE COMMUNICA
+   Galli S., 2011, P IEEE, V99
+   Jaiswal S., 2004, P 23 ANN JOINT C IEE
+   Lin YJ, 2003, IEEE COMMUN MAG, V41, P54
+   Liu J., 2012, IEEE INT S POW LIN C
+   Mizutani M., 2009, 2 INT WORKSH INF DES
+   Mizutani M., 2010, ELSEVIER SIMULATION, V19, P69
+   Muniz A., 2012, IEEE INT S POW LIN C
+   Toral-Cruz H., INTRO VOIP END TO EN
+   Zarikoff B., 2011, IEEE INT S POW LIN C
+NR 15
+TC 0
+Z9 0
+PU IEICE-INST ELECTRONICS INFORMATION COMMUNICATIONS ENG
+PI TOKYO
+PA KIKAI-SHINKO-KAIKAN BLDG, 3-5-8, SHIBA-KOEN, MINATO-KU, TOKYO, 105-0011,
+   JAPAN
+SN 0916-8516
+J9 IEICE T COMMUN
+JI IEICE Trans. Commun.
+PD OCT
+PY 2013
+VL E96B
+IS 10
+BP 2587
+EP 2600
+DI 10.1587/transcom.E96.B.2587
+PG 14
+WC Engineering, Electrical & Electronic; Telecommunications
+SC Engineering; Telecommunications
+GA 248BC
+UT WOS:000326667700032
+ER
+
+PT J
+AU Ahmad, A
+   Bianco, A
+   Bonetto, E
+   Chiaraviglio, L
+   Idzikowski, F
+AF Ahmad, Arsalan
+   Bianco, Andrea
+   Bonetto, Edoardo
+   Chiaraviglio, Luca
+   Idzikowski, Filip
+TI Energy-Aware Design of Multilayer Core Networks
+SO JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING
+LA English
+DT Article
+DE Energy awareness; Multilayer core networks; Network design; Optical
+   networks
+ID OPTICAL NETWORKS; WDM NETWORKS; IP; EFFICIENCY
+AB We consider the power-efficient design of an Internet protocol (IP)-over-wavelength division multiplexing (WDM) network, tackling the problem of installing optical and IP layer equipment to satisfy traffic requirements. We take into account routing constraints and consider a comprehensive set of realistic scenarios defined by network topology, traffic matrix, and power consumption values of network devices in both layers. Furthermore, besides defining and solving an optimal integer linear programming model, we propose an efficient heuristic to solve the problem up to medium-sized networks. The proposed heuristic requires at most 30% of additional power with respect to the optimal solution, but with a significantly reduced complexity. We show that the largest power consumption is due to line cards and routers rather than WDM equipment. Furthermore, we find that multipath routing reduces the network power consumption with respect to single-path routing, but not significantly. Finally, we show that a two-step design procedure, in which power is separately minimized in each layer (i.e., IP and WDM layers), can find results with a total power consumption comparable to the one achieved by a more complex joint multilayer design procedure.
+C1 [Ahmad, Arsalan; Bianco, Andrea; Bonetto, Edoardo] Politecn Torino, Dept Elect & Telecommun, Turin, Italy.
+   [Chiaraviglio, Luca] Univ Roma La Sapienza, DIET Dept, I-00185 Rome, Italy.
+   [Idzikowski, Filip] Tech Univ Berlin, TKN, Berlin, Germany.
+RP Ahmad, A (reprint author), Politecn Torino, Dept Elect & Telecommun, Turin, Italy.
+EM andrea.bianco@polito.it
+FU European Union [257740]
+FX The research leading to these results has received funding from the
+   European Union Seventh Framework Programme (FP7/2007-2013) under grant
+   agreement no. 257740 (Network of Excellence "TREND"). Part of this work
+   has been presented in [12,13].
+CR Ahuja R.K., 1993, NETWORK FLOWS THEORY
+   [Anonymous], 2011, LIB TEST INST SURV F
+   Betker A., 2012, 1245 ZR KONR ZUS ZEN
+   Bianco A., 2013, OPT FIB COMM C NAT F
+   Bianzino AP, 2012, IEEE COMMUN SURV TUT, V14, P3, DOI 10.1109/SURV.2011.113010.00106
+   Bolla R, 2011, IEEE COMMUN SURV TUT, V13, P223, DOI 10.1109/SURV.2011.071410.00073
+   Chowdhury P, 2012, J LIGHTWAVE TECHNOL, V30, P130, DOI 10.1109/JLT.2011.2177441
+   Coiro A, 2012, IET OPTOELECTRON, V6, P165, DOI 10.1049/iet-opt.2010.0113
+   DAUIN-Politecnico di Torino, 2011, HPC PROJECT
+   Dong XW, 2011, J LIGHTWAVE TECHNOL, V29, P3, DOI 10.1109/JLT.2010.2086434
+   Dong XW, 2012, J LIGHTWAVE TECHNOL, V30, P1931, DOI 10.1109/JLT.2012.2186557
+   IBM-ILOG, 2009, CPLEX
+   Idzikowski F., 2009, TKN09006 TU BERL
+   Idzikowski F, 2011, OPT SWITCH NETW, V8, P181, DOI 10.1016/j.osn.2011.03.007
+   Idzikowski F., 2012, P 3 INT C FUT EN SYS
+   Idzikowski F., 2012, FINAL REPORT IRA ENE
+   Lange C., 2009, EUR C OPT COMM ECOC
+   Orlowski S., 2009, THESIS TU BERLIN
+   Palkopoulou E., 2009, INT S ADV NETW TEL S
+   Pickavet M, 2008, ANTS: 2008 2ND INTERNATIONAL SYMPOSIUM ON ADVANCED NETWORKS AND TELECOMMUNICATION SYSTEMS, P1
+   Ramaswami R, 1996, IEEE J SEL AREA COMM, V14, P840, DOI 10.1109/49.510907
+   Renais O., 2012, INT TEL NETW STRAT O
+   Rizzelli G, 2012, COMPUT NETW, V56, P2443, DOI 10.1016/j.comnet.2012.03.013
+   Shen GX, 2009, J OPT COMMUN NETW, V1, P176, DOI 10.1364/JOCN.1.000176
+   Shen W., 2010, C OPT NETW DES MOD O
+   Tzanakaki A, 2011, J OPT COMMUN NETW, V3, P272, DOI 10.1364/JOCN.3.000272
+   Van Heddeghem W, 2010, C OPT NETW DES MOD O
+   Van Heddeghem W, 2012, PHOTONIC NETW COMMUN, V24, P86, DOI 10.1007/s11107-011-0370-7
+   Wang L., 2011, INFOCOM WORKSH GREEN
+   Zhang Y, 2010, IEEE COMMUN SURV TUT, V12, P441, DOI 10.1109/SURV.2011.062410.00034
+NR 30
+TC 0
+Z9 0
+PU OPTICAL SOC AMER
+PI WASHINGTON
+PA 2010 MASSACHUSETTS AVE NW, WASHINGTON, DC 20036 USA
+SN 1943-0620
+J9 J OPT COMMUN NETW
+JI J. Opt. Commun. Netw.
+PD OCT
+PY 2013
+VL 5
+IS 10
+SI SI
+BP A127
+EP A143
+DI 10.1364/JOCN.5.00A127
+PG 17
+WC Computer Science, Hardware & Architecture; Computer Science, Information
+   Systems; Optics; Telecommunications
+SC Computer Science; Optics; Telecommunications
+GA 246AG
+UT WOS:000326507000015
+ER
+
+PT J
+AU Jinno, M
+   Takara, H
+   Yonenaga, K
+   Hirano, A
+AF Jinno, Masahiko
+   Takara, Hidehiko
+   Yonenaga, Kazushige
+   Hirano, Akira
+TI Virtualization in Optical Networks from Network Level to Hardware Level
+SO JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING
+LA English
+DT Article
+DE Optical network; Regenerator; Transponder; Virtualization
+ID PATH NETWORK; EFFICIENT
+AB Elastic optical networking is attracting much attention as a promising solution to achieve spectrum-efficient transport of higher data rates at 100 Gbits/s and beyond. If we draw an analogy to virtualization in cloud computing, it can be seen as network level resource virtualization of optical networks where spectrum resources in optical links are segmented as shareable resources and adaptively aggregated to create a wide variety of optical channels (OChs). In this paper, we discuss the benefits of introducing virtualization into the optical domain from the viewpoints of the network level and the hardware level. In elastic optical networks, a frequency slot through which an OCh is transported and the OCh itself are explicitly decoupled. While the adaptability in the frequency slot is brought about by bandwidth variable wavelength-selective switches, the adaptability in an OCh is yielded by digital coherent technology that is employed in transponders and regenerators. It is emphasized that in order to achieve transponders and regenerators that accommodate heterogeneous traffic demands in an economical manner, simply being adaptive is not enough, and being shareable is essential. We refer to this concept as hardware level virtualization. As examples, we describe a multiflow transponder and an elastic regenerator with results that show proof of concept. Based on the hardware virtualization concept, we propose an elastic optical transport system (EOTS) architecture that enables cost-and energy-efficient IP traffic offloading to the optical domain and improves programmability and automation of optical networks.
+C1 [Jinno, Masahiko; Takara, Hidehiko; Yonenaga, Kazushige; Hirano, Akira] NTT Corp, NTT Network Innovat Labs, Yokosuka, Kanagawa 2390847, Japan.
+RP Jinno, M (reprint author), Kagawa Univ, Dept Engn, Takamatsu, Kagawa 7610396, Japan.
+EM jinno@eng.kagawa-u.ac.jp
+CR [Anonymous], SOFTW DEF NETW NEW N
+   Chowdhury NMMK, 2010, COMPUT NETW, V54, P862, DOI 10.1016/j.comnet.2009.10.017
+   Cugini F., 2012, OPT FIB COMM C EXP N
+   Evans P., 2011, OPT FIB COMM C EXP N
+   Gerstel O, 2012, IEEE COMMUN MAG, V50, pS12, DOI 10.1109/MCOM.2012.6146481
+   Gerstel O., 2010, P INT PHOT RES SIL N
+   Gringeri S, 2010, IEEE COMMUN MAG, V48, P40, DOI 10.1109/MCOM.2010.5496877
+   Jinno M, 2011, IEEE COMMUN MAG, V49, P164, DOI 10.1109/MCOM.2011.6035831
+   Jinno M, 2010, IEEE COMMUN MAG, V48, P138, DOI 10.1109/MCOM.2010.5534599
+   Jinno M, 2009, IEEE COMMUN MAG, V47, P66, DOI 10.1109/MCOM.2009.5307468
+   Jinno M, 2012, IEEE COMMUN MAG, V50, P56, DOI 10.1109/MCOM.2012.6194383
+   Jinno M., 2009, C OPT FIB COMM OFC
+   Liu L., 2011, EUR C OPT COMM
+   Miyata Y., 2010, OPT FIB COMM C EXP N
+   Nejabati R., 2011, 15 INT C OPT NETW DE, P1
+   Proietti R, 2012, OPT EXPRESS, V20, P26958, DOI 10.1364/OE.20.026958
+   Sone K., 2012, EUR C OPT COMM
+   Takagi T., 2011, EUR C OPT COMM
+   Watanabe T., 2012, OPT FIB COMM C EXP N
+   Yamazaki E, 2011, OPT EXPRESS, V19, P13179, DOI 10.1364/OE.19.013179
+NR 20
+TC 0
+Z9 0
+PU OPTICAL SOC AMER
+PI WASHINGTON
+PA 2010 MASSACHUSETTS AVE NW, WASHINGTON, DC 20036 USA
+SN 1943-0620
+J9 J OPT COMMUN NETW
+JI J. Opt. Commun. Netw.
+PD OCT
+PY 2013
+VL 5
+IS 10
+SI SI
+BP A46
+EP A56
+DI 10.1364/JOCN.5.000A46
+PG 11
+WC Computer Science, Hardware & Architecture; Computer Science, Information
+   Systems; Optics; Telecommunications
+SC Computer Science; Optics; Telecommunications
+GA 246AG
+UT WOS:000326507000007
+ER
+
+PT J
+AU Hsiao, HW
+   Sun, HM
+   Fan, WC
+AF Hsiao, Han-Wei
+   Sun, Huey-Min
+   Fan, Wei-Cheng
+TI Detecting stepping-stone intrusion using association rule mining
+SO SECURITY AND COMMUNICATION NETWORKS
+LA English
+DT Article
+DE detecting stepping-stones; association rules; network attack;
+   information security; data mining
+ID CONNECTION-CHAINS; TCP/IP PACKETS; IP TRACEBACK; INTRUDERS; DELAY
+AB Hackers generally do not use their own computers to launch attacks on the Internet to avoid exposing their actual locations. The trick involves an intruder connecting to a victim indirectly through a sequence of hosts called stepping-stone, which makes network managers difficult to detect the intrusion, often results in serious injuries. In this study, a detection method of stepping-stone based on the association rule mining of network traffic records is proposed. The association rules establish a model for detecting stepping-stones in accordance with collecting the connecting records in the governed network. Test records are gathered from the source and destination addresses of Internet protocol in a fixed time interval, which are then analyzed with the association rules algorithm to filter out the transmission characteristics of stepping-stone attacks. In the experimental results, empirical evaluation under 5min of test records shows that the accuracy rate, the precision rate, and the recall rate are 83.81%, 84.26%, and 83.16%, respectively. When the test record gathering time is extended to 20min, with the same detecting method, the three evaluations achieve 99.9%. The proposed detection method may be helpful to network management for detecting suspected stepping-stone attacks. Copyright (c) 2013 John Wiley & Sons, Ltd.
+C1 [Hsiao, Han-Wei; Fan, Wei-Cheng] Natl Univ Kaohsiung, Dept Informat Management, Kaohsiung, Taiwan.
+   [Sun, Huey-Min] Chang Jung Christian Univ, Dept Informat Management, Tainan, Taiwan.
+RP Sun, HM (reprint author), Chang Jung Christian Univ, Dept Informat Management, Tainan, Taiwan.
+EM prince@mail.cjcu.edu.tw
+CR Agrawal R, 1994, P 20 INT C VER LARG, V1215, P487
+   Agrawal R., 1993, ACM SIGMOD RECORD, V22, P207, DOI DOI 10.1145/170035.170072
+   Almulhem A, 2010, INT J NETWORK SECURI, V10, P62
+   Almulhem A, 2007, INT FED INFO PROC, V238, P47
+   BLUM A, 2004, RECENT ADV INTRUSION, V3224, P258, DOI 10.1007/978-3-540-30143-1_14
+   Donoho DL, 2002, LECT NOTES COMPUT SC, V2516, P17
+   Giovanni Di Crescenzo AG, 2011, J WIRELESS MOBILE NE, V2, P103
+   Goodrich MT, P 9 ACM C COMP COMM, P117
+   He T, 2006, INF SCI SYST 2006 40, P687
+   He T, 2007, IEEE T SIGNAL PROCES, V55, P1612, DOI 10.1109/TSP.2006.890881
+   Hsiao H-W, ICICIC P 2009 4 INT, P1176
+   Kuo YW, 2009, 2009 INTERNATIONAL CONFERENCE ON AVAILABILITY, RELIABILITY, AND SECURITY (ARES), VOLS 1 AND 2, P90, DOI 10.1109/ARES.2009.101
+   Lin R-M, 2011, 1 INT WORKSH SEC COM, P981
+   Mogul JC, 2001, SIGCOMM COMPUT COMMU
+   Savage S, 2000, COMPUT COMMUN REV, V30, P295
+   Song DXD, 2001, IEEE INFOCOM SER, P878
+   STANIFORDCHEN S, 1995, P IEEE S SECUR PRIV, P39, DOI 10.1109/SECPRI.1995.398921
+   Strayer WT, 2003, INTEGRATED ARCHITECT
+   Wan MD, 20 INT C ADV INF NET, P231
+   Wang X, P 2004 ACM S APPL CO, P404
+   Wang X, 2001, IEEE P 6 INT C SOL S, P369
+   Wang X., 2003, P 10 ACM C COMP COMM, P20
+   Wang XY, 2002, LECT NOTES COMPUT SC, V2502, P244
+   Yang J, P 3 INT C INF SEC, P198
+   Yang JH, 2007, COMPUT SECUR, V26, P479, DOI 10.1016/j.cose.2007.07.001
+   Yang JH, 2008, LECT NOTES COMPUT SC, V5060, P2
+   Yang JH, 2005, 19TH INTERNATIONAL CONFERENCE ON ADVANCED INFORMATION NETWORKING AND APPLICATIONS, VOL 1, PROCEEDINGS, P1005
+   Yang JH, 2011, COMPUT SECUR, V30, P538, DOI 10.1016/j.cose.2011.06.003
+   Yoda K, 2000, LECT NOTES COMPUT SC, V1895, P191
+   Yung KH, 2002, LECT NOTES COMPUT SC, V2516, P1
+   Zhang Y, P 9 USENIX SEC S, P171
+   Zhang Y, 24 IEEE INT C ADV IN, P1101
+NR 32
+TC 0
+Z9 0
+PU WILEY-BLACKWELL
+PI HOBOKEN
+PA 111 RIVER ST, HOBOKEN 07030-5774, NJ USA
+SN 1939-0114
+J9 SECUR COMMUN NETW
+JI Secur. Commun. Netw.
+PD OCT
+PY 2013
+VL 6
+IS 10
+BP 1225
+EP 1235
+DI 10.1002/sec.692
+PG 11
+WC Computer Science, Information Systems; Telecommunications
+SC Computer Science; Telecommunications
+GA 227KA
+UT WOS:000325110400004
+ER
+
+PT J
+AU Huang, BR
+   Li, JY
+   Svensson, T
+AF Huang, Binru
+   Li, Jingya
+   Svensson, Tommy
+TI A Utility-Based Joint Resource Allocation Approach for Multi-Service in
+   CoMP Networks
+SO WIRELESS PERSONAL COMMUNICATIONS
+LA English
+DT Article
+DE Coordinated multi-point (CoMP) network; OFDMA; QoS; Joint resource
+   allocation; Multiple services
+ID WIRELESS NETWORKS; OFDMA NETWORKS
+AB Coordinated multi-point (CoMP) joint transmission is considered as a key technique to mitigate inter-cell interference and improve the cell-edge performance in 3GPP LTE-Advanced. In this paper, a utility-based joint resource allocation approach is proposed to support CoMP joint transmission in orthogonal frequency division multiple access systems. Two different utility functions are considered with diverse quality of service provisioning. The objective is to maximize the sum utility of a clustered CoMP network, considering mixed real-time voice over IP (VoIP) and best-effort (BE) traffic patterns. A centralized joint resource allocation algorithm is proposed by decoupling the optimization problem into per-subchannel subproblems. Further more, a greedy user selection based low-complexity algorithm is proposed for practical implementation. For the sake of performance comparison, the proportional-fair based joint scheduling, as well as two non-coordinated scheduling schemes are also evaluated. Via system-level simulation we show that the proposed algorithms not only substantially improve the cell-edge spectrum efficiency of BE users, but also significantly decrease the packet drop ratio and call outage ratio of VoIP users.
+C1 [Huang, Binru; Li, Jingya; Svensson, Tommy] Chalmers, S-41296 Gothenburg, Sweden.
+RP Huang, BR (reprint author), Chalmers, S-41296 Gothenburg, Sweden.
+EM binru@student.chalmers.se; jingya.li@chalmers.se;
+   tommy.svensson@chalmers.se
+FU Swedish Agency for Innovation Systems (VINNOVA) [MAGIC 2009-02986];
+   Swedish Research Council [621-2009-4555]
+FX This work has been partly supported by The Swedish Agency for Innovation
+   Systems (VINNOVA) within the MAGIC 2009-02986 project, and partly by the
+   Swedish Research Council, within the project 621-2009-4555 Dynamic
+   Multipoint Wireless Transmission.
+CR Andrews M, 2001, IEEE COMMUN MAG, V39, P150, DOI 10.1109/35.900644
+   [Anonymous], 2006, 25814 3GPP TR
+   [Anonymous], 2010, 36814 3GPP TR
+   Boccardi F., 2007, P PIMRC 07
+   [陈丽琼 CHEN Li-qiong], 2009, [高分子通报, Polymer Bulletin], P1
+   Goldsmith AJ, 1997, IEEE T COMMUN, V45, P1218, DOI 10.1109/26.634685
+   Huang B., 2011, IEEE WIRELESS PERSON
+   Katoozian M., 2009, IEEE T WIREL COMMUN, V8
+   Li J., 2012, EURASIP J WIRELESS C
+   Li J., 2011, VTC FALL, P1
+   Li JY, 2010, IEICE T COMMUN, VE93B, P3480, DOI 10.1587/transcom.E93.B.3480
+   Puttonen J., 2008, P IEEE INT S PERS IN, P1
+   Skjevling H., 2008, EURASIP J ADV SIGNAL
+   Song G., 2005, THESIS GEORGIA I TEC
+   Song GC, 2005, IEEE T WIREL COMMUN, V4, P625, DOI 10.1109/TWC.2004.843067
+   Venturino L, 2009, IEEE T VEH TECHNOL, V58, P2835, DOI 10.1109/TVT.2009.2013233
+   Wang X, 2007, P IEEE, V95, P2410, DOI 10.1109/JPROC.2007.907120
+   Zhang J, 2009, IEEE T WIREL COMMUN, V8, P1910, DOI 10.1109/TWC.2009.080180
+NR 18
+TC 0
+Z9 0
+PU SPRINGER
+PI NEW YORK
+PA 233 SPRING ST, NEW YORK, NY 10013 USA
+SN 0929-6212
+J9 WIRELESS PERS COMMUN
+JI Wirel. Pers. Commun.
+PD OCT
+PY 2013
+VL 72
+IS 3
+SI SI
+BP 1633
+EP 1648
+DI 10.1007/s11277-013-1125-9
+PG 16
+WC Telecommunications
+SC Telecommunications
+GA 214FL
+UT WOS:000324116800005
+ER
+
+PT J
+AU Geller, MA
+   Knorr, DA
+   Hermanson, DA
+   Pribyl, L
+   Bendzick, L
+   McCullar, V
+   Miller, JS
+   Kaufman, DS
+AF Geller, Melissa A.
+   Knorr, David A.
+   Hermanson, David A.
+   Pribyl, Lee
+   Bendzick, Laura
+   McCullar, Valarie
+   Miller, Jeffrey S.
+   Kaufman, Dan S.
+TI Intraperitoneal delivery of human natural killer cells for treatment of
+   ovarian cancer in a mouse xenograft model
+SO CYTOTHERAPY
+LA English
+DT Article
+DE bioluminescent imaging; immunotherapy; natural killer (NK) cells;
+   ovarian cancer
+ID NK CELLS; IN-VIVO; IMMUNOTHERAPY; RECEPTORS; PROSPECTS; MEMORY
+AB Background aims. There is an urgent need for novel therapeutic strategies for relapsed ovarian cancer. Dramatic clinical antitumor effects have been observed with interleukin (IL)-2 activated natural killer (NK) cells; however, intravenous delivery of NK cells in patients with ovarian cancer has not been successful in ameliorating disease. We investigated in vivo engraftment of intraperitoneally (IP) delivered NK cells in an ovarian cancer xenograft model to determine if delivery mode can affect tumor cell killing and circumvent lack of NK cell expansion. Methods. An ovarian cancer xenograft mouse model was established to evaluate efficacy of IP-delivered NK cells. Tumor burden was monitored by bioluminescent imaging of luciferase-expressing ovarian cancer cells. NK cell persistence, tumor burden and NK cell trafficking were evaluated. Transplanted NK cells were evaluated by flow cytometry and cytotoxicity assays. Results. IP delivery of human NK cells plus cytokines led to high levels of circulating NK and was effective in clearing intraperitoneal ovarian cancer burden in xenografted mice. NK cells remained within the peritoneal cavity 54 days after injection and had markers of maturation. Additionally, surviving NK cells were able to kill ovarian cancer cells at a rate similar to pre-infusion levels, supporting that in vivo functionality of human NK cells can be maintained after IP infusion. Conclusions. IP delivery of NK cells leads to stable engraftment and antitumor response in an ovarian cancer xenograft model. These data support further pre-clinical and clinical evaluation of IP delivery of allogeneic NK cells in ovarian cancer.
+C1 [Geller, Melissa A.; Pribyl, Lee] Univ Minnesota, Div Gynecol Oncol, Dept Obstet Gynecol & Womens Hlth, Minneapolis, MN 55455 USA.
+   [Knorr, David A.; Hermanson, David A.; Bendzick, Laura; McCullar, Valarie; Miller, Jeffrey S.; Kaufman, Dan S.] Univ Minnesota, Dept Med Hematol Oncol & Transplant, Minneapolis, MN 55455 USA.
+   [Knorr, David A.; Hermanson, David A.; Bendzick, Laura; Kaufman, Dan S.] Univ Minnesota, Stem Cell Inst, Minneapolis, MN 55455 USA.
+RP Kaufman, DS (reprint author), Univ Minnesota, Dept Med, 420 Delaware St SE,MMC 480, Minneapolis, MN 55455 USA.
+EM kaufm020@umn.edu
+FU National Institutes of Health/National Heart, Lung and Blood Institute
+   [R01-HL77923]; National Institutes of Health MSTP [T32 GM008244]; Stem
+   Cell Biology Training Grant T32 [T32HD060536]; Minnesota Ovarian Cancer
+   Research Award; Gynecologic Cancer Foundation/Caring Together;  [P50
+   CA136393]
+FX This work was supported in part by National Institutes of
+   Health/National Heart, Lung and Blood Institute grant R01-HL77923 (DSK)
+   and by National Institutes of Health MSTP grant T32 GM008244 (DAK), Stem
+   Cell Biology Training Grant T32 (DAK) (T32HD060536), a Minnesota Ovarian
+   Cancer Research Award (MAG), the Gynecologic Cancer Foundation/Caring
+   Together (MAG), and P50 CA136393 (MAG).
+CR Armstrong DK, 2002, ONCOLOGIST, V7, P20, DOI 10.1634/theoncologist.7-suppl_5-20
+   Barao I, 2006, P NATL ACAD SCI USA, V103, P5460, DOI 10.1073/pnas.0509249103
+   Berg M, 2009, CYTOTHERAPY, V11, P341, DOI 10.1080/14653240902807034
+   Bjo NK, 2010, TRENDS IMMUNOL, V31, P401
+   Carlsten M, 2007, CANCER RES, V67, P1317, DOI 10.1158/0008-5472.CAN-06-2264
+   Cheng M, 2011, CELL TRANSPLANT, V7, P7
+   Cooper MA, 2009, P NATL ACAD SCI USA, V106, P1915, DOI 10.1073/pnas.0813192106
+   Denman CJ, 2012, PLOS ONE, V7, DOI 10.1371/journal.pone.0030264
+   Francois G, 2006, IMMUNOL REV, V214, P229
+   Geller MA, 2011, CYTOTHERAPY, V13, P98, DOI 10.3109/14653249.2010.515582
+   Geller MA, 2011, IMMUNOTHERAPY-UK, V3, P1445, DOI [10.2217/imt.11.131, 10.2217/IMT.11.131]
+   Gruenbacher G, 2010, CANCER RES, V70, P9611, DOI 10.1158/0008-5472.CAN-10-1968
+   Huenecke S, 2010, J IMMUNOTHER, V33, P200, DOI 10.1097/CJI.0b013e3181bb46f7
+   Huntington ND, 2009, J EXP MED, V206, P25, DOI 10.1084/jem.20082013
+   Kappos L, 2010, NEW ENGL J MED, V362, P387, DOI 10.1056/NEJMoa0909494
+   Ljunggren HG, 2007, NAT REV IMMUNOL, V7, P329, DOI 10.1038/nri2073
+   Lopez-Verges S, 2010, BLOOD, V116, P3865, DOI 10.1182/blood-2010-04-282301
+   McCullar V, 2008, EXP HEMATOL, V36, P598, DOI 10.1016/j.exphem.2008.01.001
+   Miller JS, 2005, BLOOD, V105, P3051, DOI 10.1182/blood-2004-07-2974
+   Ndhlovu LC, 2012, BLOOD, V119, P3734, DOI 10.1182/blood-2011-11-392951
+   Skak K, 2008, IMMUNOLOGY, V123, P575, DOI 10.1111/j.1365-2567.2007.02730.x
+   Sun JC, 2011, J IMMUNOL, V186, P1891, DOI 10.4049/jimmunol.1003035
+   Sutlu T, 2009, J INTERN MED, V266, P154, DOI 10.1111/j.1365-2796.2009.02121.x
+   Tian XH, 2009, STEM CELLS, V27, P2675, DOI 10.1002/stem.204
+   Waldmann TA, 2011, BLOOD, V117, P4787, DOI 10.1182/blood-2010-10-311456
+   Wilson EB, 2011, PLOS ONE, V6, P6
+   Yamamura S, 2012, INT J CANCER, V130, P20, DOI 10.1002/ijc.25961
+NR 27
+TC 0
+Z9 0
+PU INFORMA HEALTHCARE
+PI LONDON
+PA TELEPHONE HOUSE, 69-77 PAUL STREET, LONDON EC2A 4LQ, ENGLAND
+SN 1465-3249
+J9 CYTOTHERAPY
+JI Cytotherapy
+PD OCT
+PY 2013
+VL 15
+IS 10
+BP 1297
+EP 1306
+DI 10.1016/j.jcyt.2013.05.022
+PG 10
+WC Cell & Tissue Engineering; Biotechnology & Applied Microbiology; Cell
+   Biology; Hematology; Medicine, Research & Experimental
+SC Cell Biology; Biotechnology & Applied Microbiology; Hematology; Research
+   & Experimental Medicine
+GA 217JJ
+UT WOS:000324355500014
+ER
+
+PT J
+AU Alasaad, A
+   Nicanfar, H
+   Gopalakrishnan, S
+   Leung, VCM
+AF Alasaad, Amr
+   Nicanfar, Hasen
+   Gopalakrishnan, Sathish
+   Leung, Victor C. M.
+TI A ring-based multicast routing topology with QoS support in wireless
+   mesh networks
+SO WIRELESS NETWORKS
+LA English
+DT Article
+DE Multicast; Wireless mesh networks; End-to-end delay analysis; Multicast
+   network topology; QoS
+ID AD-HOC NETWORKS; EFFICIENT; PROTOCOLS; CAPACITY
+AB Wireless mesh networking (WMN) is an emerging technology for future broadband wireless access. The proliferation of the mobile computing devices that are equipped with cameras and ad hoc communication mode creates the possibility of exchanging real-time data between mobile users in wireless mesh networks. In this paper, we argue for a ring-based multicast routing topology with support from infrastructure nodes for group communications in WMNs. We study the performance of multicast communication over a ring routing topology when 802.11 with RTS/CTS scheme is used at the MAC layer to enable reliable multicast services in WMNs. We propose an algorithm to enhance the IP multicast routing on the ring topology. We show that when mesh routers on a ring topology support group communications by employing our proposed algorithms, a significant performance enhancement is realized. We analytically compute the end-to-end delay on a ring multicast routing topology. Our results show that the end-to-end delay is reduced about 33 %, and the capacity of multicast network (i.e., maximum group size that the ring can serve with QoS guarantees) is increased about 50 % as compared to conventional schemes. We also use our analytical results to develop heuristic algorithms for constructing an efficient ring-based multicast routing topology with QoS guarantees. The proposed algorithms take into account all possible traffic interference when constructing the multicast ring topology. Thus, the constructed ring topology provides QoS guarantees for the multicast traffic and minimizes the cost of group communications in WMNs.
+C1 [Alasaad, Amr; Nicanfar, Hasen; Gopalakrishnan, Sathish; Leung, Victor C. M.] Univ British Columbia, Dept Elect & Comp Engn, WiNMoS Lab, Vancouver, BC V6T 1Z4, Canada.
+RP Alasaad, A (reprint author), Univ British Columbia, Dept Elect & Comp Engn, WiNMoS Lab, 5500-2332 Main Mall, Vancouver, BC V6T 1Z4, Canada.
+EM amiral@ece.ubc.ca; hasennic@ece.ubc.ca; sathish@ece.ubc.ca;
+   vleung@ece.ubc.ca
+FU King Abdulaziz City for Science and Technology [8399-120]
+FX This work was supported in part by King Abdulaziz City for Science and
+   Technology under Grant number 8399-120.
+CR Akyildiz IF, 2005, COMPUT NETW, V47, P445, DOI 10.1016/j.comnet.2004.12.001
+   Badarneh OS, 2009, EURASIP J WIREL COMM, DOI 10.1155/2009/764047
+   Boujelben Y, 2006, TELECOMMUN SYST, V31, P43, DOI 10.1007/s11235-006-5522-1
+   Campolo C., 2009, PROC OF INTERNATIONA, P1, DOI 10.1109/VETECS.2009.5073373
+   Chiu CY, 2004, GLOB TELECOMM CONF, P2802
+   Cordeiro CD, 2003, IEEE NETWORK, V17, P52
+   Draves R., 2004, P 10 ANN INT C MOB C, P114, DOI 10.1145/1023720.1023732
+   Fenner B., 2006, PROTOCOL INDEPENDENT
+   Griese B., 2008, P IEEE IPDPS, P1, DOI [10.1109/IPDPS.2008.4536571, DOI 10.1109/IPDPS.2008.4536571]
+   Gupta P, 2000, IEEE T INFORM THEORY, V46, P388, DOI 10.1109/18.825799
+   Hueter G., 1988, P IEEE INT C NEUR NE, P85, DOI [10.1109/ICNN.1988.23832, DOI 10.1109/ICNN.1988.23832]
+   Jain S., 2006, P COMSW 06, P1
+   Junahai L. X. L., 2009, P IEEE COMM SURV TUT, P78
+   Koutsonikolas D, 2009, AD HOC NETW, V7, P932, DOI 10.1016/j.adhoc.2008.08.005
+   Kunz T, 2002, INT CON DISTR COMP S, P453
+   Layuan L., 2007, COMPUT COMMUN, V30, P1641, DOI 10.1016/j.comcom.2007.01.017
+   Lee J, 2007, 2007 4TH ANNUAL IEEE COMMUNICATIONS SOCIETY CONFERENCE ON SENSOR, MESH AND AD-HOC COMMUNICATIONS AND NETWORKS, VOLS 1 AND 2, P491, DOI 10.1109/SAHCN.2007.4292861
+   Leung V. C. M., 2009, P IEEE PIM RC TOK JA
+   Biradar RC, 2012, WIRELESS PERS COMMUN, V66, P117, DOI 10.1007/s11277-011-0329-0
+   Masoudifar M, 2009, AD HOC NETW, V7, P1150, DOI 10.1016/j.adhoc.2008.10.004
+   Ng J., 2004, P IEEE PIMRC 2004 BA, P2504
+   Nicanfar H., 2012, IEEE ICC WS IN PRESS
+   Oliveira CAS, 2005, COMPUT OPER RES, V32, P1953, DOI 10.1016/j.cor.2003.12.007
+   Portmann M, 2008, IEEE INTERNET COMPUT, V12, P18, DOI 10.1109/MIC.2008.25
+   Ramachandran K., 2006, P IEEE INFOCOM, P1
+   Roy S., 2006, P 26 IEEE INT C DIST, P48
+   Shakkottai S, 2010, IEEE ACM T NETWORK, V18, P1691, DOI 10.1109/TNET.2010.2050901
+   Subramanian AP, 2008, IEEE T MOBILE COMPUT, V7, P1459, DOI 10.1109/TMC.2008.70
+   Tebbe H., 2006, P 1 INT S WIR PERV C, P1, DOI 10.1109/ISWPC.2006.1613664
+   Thomas K., 2003, RELIABLE MULTICASTIN
+   Viennot L., 2002, P IEEE INT MULT C IN, P62
+   WANG XZ, 2009, STUD FUZZINESS SOFT, V245, P1, DOI DOI 10.1109/WCNC.2009.4917978
+   Wiegand T., 2008, VISUAL COMMUNICATION, V6822, P205
+   Xiang X, 2011, IEEE T MOBILE COMPUT, V10, P544, DOI 10.1109/TMC.2010.176
+   Xie F, 2008, COMPUT COMMUN, V31, P1615, DOI 10.1016/j.comcom.2008.01.042
+   Yarali A, 2009, MESH: 2009 SECOND INTERNATIONAL CONFERENCE ON ADVANCES IN MESH NETWORKS, P143
+   Yurcik W., 2005, P SPIE C
+   Yurcik W., 2004, P IEEE MASCOTS
+   Zeng GK, 2010, IEEE T PARALL DISTR, V21, P86, DOI 10.1109/TPDS.2009.46
+   Zill B., 2005, P USENIX IMC, P305
+NR 40
+TC 0
+Z9 0
+PU SPRINGER
+PI DORDRECHT
+PA VAN GODEWIJCKSTRAAT 30, 3311 GZ DORDRECHT, NETHERLANDS
+SN 1022-0038
+J9 WIREL NETW
+JI Wirel. Netw.
+PD OCT
+PY 2013
+VL 19
+IS 7
+BP 1627
+EP 1651
+DI 10.1007/s11276-013-0559-z
+PG 25
+WC Computer Science, Information Systems; Engineering, Electrical &
+   Electronic; Telecommunications
+SC Computer Science; Engineering; Telecommunications
+GA 211QO
+UT WOS:000323924800010
+ER
+
+PT J
+AU Lee, J
+   Lee, SJ
+   Chen, HM
+   Hsu, KH
+AF Lee, Jonathan
+   Lee, Shin-Jie
+   Chen, Hsi-Min
+   Hsu, Kuo-Hsun
+TI Itinerary-Based Mobile Agent as a Basis for Distributed OSGi Services
+SO IEEE TRANSACTIONS ON COMPUTERS
+LA English
+DT Article
+DE Mobile agent itinerary; OSGi; mobile agent
+ID POSSIBILISTIC PETRI NETS; PLATFORM; ARCHITECTURE; TECHNOLOGY; SYSTEMS
+AB Recently, as more and more mobile devices embedded with intelligent software become part of our daily lives, Open Services Gateway initiative (OSGi) has gained increasing attention in the development of services for such devices. However, services residing in OSGi platforms are devised specifically for the platforms' local bundles. Although several works have enhanced OSGi with various communication mechanisms that enable remote service invocations, two crucial issues pertaining to mobile computing remain to be addressed: One is limited resources of mobile devices, and the other is unstable links experienced with mobile devices. To address these two issues, we propose an itinerary-based mobile agent approach with four major features: To implement mobile agents as OSGi bundles to deliver distributed OSGi services with lower resource consumption; to extend WSDL and WS-BPEL to help developers design mobile agent itineraries; to provide an opportunistic service matchmaking mechanism allowing mobile agents to adapt to context changes at runtime; and to devise asynchronous communication mechanism to enable reliable mobile agent transmissions among mobile devices with dynamic IP addresses and intermittent connection to the Internet. Through experimental evaluations, we demonstrate that both network traffic and turnaround time of our approach are better than those of client-server ones.
+C1 [Lee, Jonathan] Natl Taiwan Univ, Dept Comp Sci & Informat Engn, Taipei 10617, Taiwan.
+   [Lee, Shin-Jie] Natl Cheng Kung Univ, Comp & Network Ctr, Tainan 701, Taiwan.
+   [Chen, Hsi-Min] Natl Cent Univ, Dept Comp Sci & Informat Engn, Jhongli 32001, Taiwan.
+   [Hsu, Kuo-Hsun] Natl Taichung Univ, Dept Comp Sci, Taichung 40306, Taiwan.
+RP Lee, J (reprint author), Natl Taiwan Univ, Dept Comp Sci & Informat Engn, Taipei 10617, Taiwan.
+EM jlee@csie.ntu.edu.tw; jielee@mail.ncku.edu.tw;
+   seeme@selab.csie.ncu.edu.tw; glenn@mail.ntcu.edu.tw
+FU National Science Council (Taiwan) [NSC 100-2631-H-002-035, NSC
+   102-2622-E-002-007-CC1]
+FX This research was sponsored by the National Science Council (Taiwan)
+   under the grants NSC 100-2631-H-002-035 and NSC 102-2622-E-002-007-CC1.
+CR [Anonymous], 2004, UDDI VERS 3
+   Baumann J., 1998, World Wide Web, V1, DOI 10.1023/A:1019211714301
+   Baumer C., 1999, P 1 INT WORKSH MOB A, P1
+   Chen B, 2008, J SYST SOFTWARE, V81, P1364, DOI 10.1016/j.jss.2007.10.026
+   Chiu K., 2002, Proceedings 11th IEEE International Symposium on High Performance Distributed Computing, DOI 10.1109/HPDC.2002.1029924
+   Dobrev P, 2002, IEEE COMMUN MAG, V40, P86, DOI 10.1109/MCOM.2002.1024420
+   Eikerling HJ, 2002, LECT NOTES COMPUT SC, V2515, P80
+   Ferscha A., 2004, Proceedings. 24th International Conference on Distributed Computing System Workshops
+   Fortino G, 2008, INFORM SOFTWARE TECH, V50, P322, DOI 10.1016/j.infsof.2007.02.016
+   Foster I., 1995, DESIGNING BUILDING P
+   Fuggetta A, 1998, IEEE T SOFTWARE ENG, V24, P342, DOI 10.1109/32.685258
+   Gray R.S., 1995, P CIKM WORKSH INT IN
+   Gruber O, 2005, IBM SYST J, V44, P289
+   Hall RS, 2004, IEEE COMMUN MAG, V42, P144, DOI 10.1109/MCOM.2004.1299359
+   Ibrahim A, 2009, COMPUT J, V52, P210, DOI 10.1093/comjnl/bxn032
+   Kang K., 2006, P 8 INT C ADV COMM T, P1631
+   Kim MJ, 2006, J RHEUMATOL, V33, P1364
+   Kiniry J., 1997, IEEE Internet Computing, V1, DOI 10.1109/4236.612210
+   Knopflerfish 3, 2013, OSGI R4
+   Kotay K., 1994, P 3 CIKM WORKSH INT
+   Kurose J.F., 2004, COMPUTER NETWORKING
+   Lange DB, 1999, COMMUN ACM, V42, P88, DOI 10.1145/295685.298136
+   Lange D. B., 1998, World Wide Web, V1, DOI 10.1023/A:1019267832048
+   Lee J, 2003, IEEE T SYST MAN CY B, V33, P214, DOI 10.1109/TSMCB.2003.810446
+   Lee J, 2004, FUZZY SET SYST, V144, P105, DOI 10.1016/j.fss.2003.10.016
+   Lee J, 2009, J INF SCI ENG, V25, P1427
+   Lee J., 2005, International Journal of Fuzzy Systems, V7
+   OSGi Alliance, 2013, OSGI SERV PLATF COR
+   Peine H, 1997, LECT NOTES COMPUT SC, V1219, P50
+   RELLERMEYER JS, 2007, P OOPSLA WORKSH ECL, P50, DOI 10.1145/1328279.1328290
+   Rellermeyer JS, 2007, LECT NOTES COMPUT SC, V4834, P1
+   The Eclipse Foundation, 2013, ECL COMM FRAM
+   Tripathi AR, 1999, INT CON DISTR COMP S, P190
+   Williamson C, 2001, IEEE INTERNET COMPUT, V5, P70, DOI 10.1109/4236.968834
+   Wong D, 1997, LECT NOTES COMPUT SC, V1219, P86
+   Wu CL, 2007, IEEE T SYST MAN CY C, V37, P193, DOI 10.1109/TSMCC.2006.886997
+   Xu DX, 2003, IEEE T SOFTWARE ENG, V29, P31
+   Yamasaki I, 2005, CONSUM COMM NETWORK, P150
+NR 38
+TC 0
+Z9 0
+PU IEEE COMPUTER SOC
+PI LOS ALAMITOS
+PA 10662 LOS VAQUEROS CIRCLE, PO BOX 3014, LOS ALAMITOS, CA 90720-1314 USA
+SN 0018-9340
+J9 IEEE T COMPUT
+JI IEEE Trans. Comput.
+PD OCT
+PY 2013
+VL 62
+IS 10
+BP 1988
+EP 2000
+DI 10.1109/TC.2012.107
+PG 13
+WC Computer Science, Hardware & Architecture; Engineering, Electrical &
+   Electronic
+SC Computer Science; Engineering
+GA 208YK
+UT WOS:000323718600007
+ER
+
+PT J
+AU Shaikh, AD
+   Blow, KJ
+   Eberhard, MA
+   Fowler, SA
+AF Shaikh, Ahmed D.
+   Blow, Keith J.
+   Eberhard, Marc A.
+   Fowler, Scott A.
+TI Language independent on-off voice over IP source model with lognormal
+   transitions
+SO IET COMMUNICATIONS
+LA English
+DT Article
+DE Internet telephony; Markov processes; telecommunication traffic;
+   language independent on-off voice over IP source model; composite
+   dialogue measurements; semi Markov model; traffic modelling; spoken
+   languages; VoIP call recordings; VoIP traffic; lognormal transitions
+ID CONVERSATIONAL SPEECH; ALGORITHM; PATTERNS
+AB The recent explosive growth of voice over IP (VoIP) solutions calls for accurate modelling of VoIP traffic. This study presents measurements of ON and OFF periods of VoIP activity from a significantly large database of VoIP call recordings consisting of native speakers speaking in some of the world's most widely spoken languages. The impact of the languages and the varying dynamics of caller interaction on the ON and OFF period statistics are assessed. It is observed that speaker interactions dominate over language dependence which makes monologue-based data unreliable for traffic modelling. The authors derive a semi-Markov model which accurately reproduces the statistics of composite dialogue measurements.
+C1 [Shaikh, Ahmed D.; Blow, Keith J.; Eberhard, Marc A.] Aston Univ, Sch Engn & Appl Sci, Birmingham B4 7ET, W Midlands, England.
+   [Fowler, Scott A.] Linkoping Univ, ITN, Dept Sci & Technol, SE-60174 Norrkoping, Sweden.
+RP Shaikh, AD (reprint author), Aston Univ, Sch Engn & Appl Sci, Birmingham B4 7ET, W Midlands, England.
+EM k.j.blow@aston.ac.uk
+FU TSB under project HIPNET
+FX This work was funded by the TSB under project HIPNET.
+CR BRADY PT, 1969, AT&T TECH J, V48, P2445
+   DEMPSTER AP, 1977, J ROY STAT SOC B MET, V39, P1
+   Goode B, 2002, P IEEE, V90, P1495, DOI 10.1109/JPROC.2002.802005
+   GRUBER JG, 1982, IEEE T COMMUN, V30, P728, DOI 10.1109/TCOM.1982.1095514
+   LEE HH, 1986, IEEE T COMMUN, V34, P630, DOI 10.1109/TCOM.1986.1096590
+   MacWhinney B, 2007, CREATING AND DIGITIZING LANGUAGE CORPORA VOLUME 1: SYNCHRONIC DATABASES, P163
+   Menth M, 2009, IEEE ACM T NETWORK, V17, P1042, DOI 10.1109/TNET.2008.2006222
+   Mockapetris PV, 2006, IEEE SPECTRUM, V43, P28, DOI 10.1109/MSPEC.2006.1611758
+   Moon TK, 1996, IEEE SIGNAL PROC MAG, V13, P47, DOI 10.1109/79.543975
+   Pragtong P, 2006, IEICE T INF SYST, VE89D, P2886, DOI 10.1093/ietisy/e89-d.12.2886
+   Rosner B. S., 1994, VOWEL PERCEPTION PRO, P294
+   Sanes D. H., 2006, DEV NERVOUS SYSTEM, P303
+   SRIRAM K, 1986, IEEE J SEL AREA COMM, V4, P833, DOI 10.1109/JSAC.1986.1146402
+   STERN HP, 1994, IEEE T VEH TECHNOL, V43, P1094, DOI 10.1109/25.330173
+   Zellner B., 1994, FUNDAMENTALS SPEECH, P41
+NR 15
+TC 0
+Z9 0
+PU INST ENGINEERING TECHNOLOGY-IET
+PI HERTFORD
+PA MICHAEL FARADAY HOUSE SIX HILLS WAY STEVENAGE, HERTFORD SG1 2AY, ENGLAND
+SN 1751-8628
+J9 IET COMMUN
+JI IET Commun.
+PD SEP 24
+PY 2013
+VL 7
+IS 14
+BP 1449
+EP 1455
+DI 10.1049/iet-com.2012.0686
+PG 7
+WC Engineering, Electrical & Electronic
+SC Engineering
+GA 244QL
+UT WOS:000326404200002
+ER
+
+PT J
+AU Serror, J
+   Zang, H
+   Bolot, JC
+AF Serror, Jeremy
+   Zang, Hui
+   Bolot, Jean C.
+TI Measurement and modeling of paging channel overloads on a cellular
+   network
+SO COMPUTER NETWORKS
+LA English
+DT Article
+DE Paging; Overload; Attack; Queuing systems; CDMA; Cellular network
+   security
+ID USER LOCATION UPDATE; PCS NETWORKS; IMPATIENT CUSTOMERS; STRATEGY;
+   REGISTRATION; MANAGEMENT; SCHEME
+AB IP and cellular networks used to be isolated from each other. In recent decade however, the two networks have started to overlap with the emergence of devices that access the Internet using cellular infrastructures. One important question then is whether actions or threats on the Internet side can impact the telecom or cellular side. We address this problem in the paper and specifically consider the paging channel, which is a key conduit shared by both Internet and cellular traffic. Our contributions are as follows: we illustrate through experiments on a CDMA2000 cellular network that attacks launched from the Internet can significantly increase the paging load and increase the delay of paging messages including cellular call setup requests; we derive a simple but accurate queuing model for the paging system in a CDMA2000 network and use this model to demonstrate that the paging channel exhibits sharp rather than graceful degradation under load; and through this model, we identify critical parameters that impact paging performance. Although our study is focused on CDMA2000 networks, similar problems exist in other types of cellular networks that employ a single control channel with limited bandwidth for both synchronous and asynchronous control messages. (C) 2013 Elsevier B.V. All rights reserved.
+C1 [Serror, Jeremy] Ecole Normale Super, F-75231 Paris, France.
+   [Zang, Hui] Guavus Inc, San Mateo, CA 94404 USA.
+   [Bolot, Jean C.] Technicolor Res Ctr, Palo Alto, CA USA.
+RP Zang, H (reprint author), Guavus Inc, San Mateo, CA 94404 USA.
+EM jeremy.serror@gmail.com; hui.zang@gua-vus.com;
+   jean.bolot@technicolor.com
+CR Akyildiz IF, 1995, WIREL NETW, V1, P187, DOI 10.1007/BF01202541
+   Altman E., 2006, QUEUEING SYST, V52
+   Altman E, 2008, PROBAB ENG INFORM SC, V22, P477, DOI 10.1017/S0269964808000296
+   [Anonymous], 2001, TIAEIA41E 3GPP2
+   [Anonymous], 2000, 0408 3GPP GSM
+   [Anonymous], 2004, CS0005D 3GPP2
+   Baccelli F, 1999, OPER RES, V47, P619, DOI 10.1287/opre.47.4.619
+   Barford P., 2001, P ACM SIGCOMM IMW 01
+   Bar-Noy A, 1995, WIREL NETW, V1, P175, DOI 10.1007/BF01202540
+   Bu T., 2004, ACM WISE 04
+   Choi BD, 2001, QUEUEING SYST, V38, P49, DOI 10.1023/A:1010820112080
+   DasBit S., 2000, P INT C ICCT WCC 200, P754
+   Enck W., 2005, P ACM CCS 05 AL VA N
+   Guo C., 2004, HOTNETS
+   Ho JSM, 1995, WIREL NETW, V1, P413, DOI 10.1007/BF01985754
+   Hwang HW, 2000, IEEE COMMUN LETT, V4, P149
+   Jung J., 2004, P 2004 IEEE S SEC PR
+   Keshav S., 2005, COMPUTER COMMUNICATI
+   Kienzle D. M., 2003, P ACM WORM 03 WASH D
+   Lee GY, 2002, IEEE COMMUN LETT, V6, P431, DOI 10.1109/LCOMM.2002.804217
+   Lee PPC, 2009, COMPUT NETW, V53, P2601, DOI 10.1016/j.comnet.2009.05.008
+   Liang B, 1999, IEEE INFOCOM SER, P1377, DOI 10.1109/INFCOM.1999.752157
+   Liu H., 2012, P 21 INT C COMP COMM
+   Martin T., 2004, P 2 INT C PERV COMP
+   Moore D., 2001, P 10 USENIX SEC S WA
+   Mutaf P, 2004, MOBILE NETW APPL, V9, P627, DOI 10.1023/B:MONE.0000042501.94708.b2
+   Mutaf P., 2003, P IEEE WORKSH APPL S
+   Ng CK, 2005, IEEE T MOBILE COMPUT, V4, P41, DOI 10.1109/TMC.2005.12
+   Pollini GP, 1997, IEEE J SEL AREA COMM, V15, P1415, DOI 10.1109/49.634782
+   Rose C, 1996, WIREL NETW, V2, P109, DOI 10.1007/BF01225634
+   Rose C, 1999, IEEE T VEH TECHNOL, V48, P166, DOI 10.1109/25.740083
+   Saraydar C. U., 1996, COMMUNICATIONS
+   Sen SK, 1999, WIREL NETW, V5, P313, DOI 10.1023/A:1019119632106
+   Singh S, 2004, USENIX ASSOCIATION PROCEEDINGS OF THE SIXTH SYMPOSIUM ON OPERATING SYSTEMS DESIGN AND IMPLEMENTATION (OSDE '04), P45
+   Staniford S., 2002, Journal of Computer Security, V10
+   TABBANE S, 1995, IEEE J SEL AREA COMM, V13, P880, DOI 10.1109/49.391746
+   Veerasamy J., 2005, P IEEE WCNC
+   Verkama M., 1997, IEEE 6 INT C UN PERS, P163
+   Wan G., 1997, P 3 ANN ACM IEEE INT, P195, DOI 10.1145/262116.262147
+   Weaver N., 2003, P ACM WORM 03 WASH D
+   WU HK, 2001, IEEE INFOCOM SER, P21
+   Xiao Y., 2003, P INT C DIST COMP SY, P825
+   Zang H, 2007, MOBICOM'07: PROCEEDINGS OF THE THIRTEENTH ACM INTERNATIONAL CONFERENCE ON MOBILE COMPUTING AND NETWORKING, P123
+NR 43
+TC 0
+Z9 0
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 1389-1286
+J9 COMPUT NETW
+JI Comput. Netw.
+PD SEP 9
+PY 2013
+VL 57
+IS 13
+BP 2499
+EP 2513
+DI 10.1016/j.comnet.2013.04.011
+PG 15
+WC Computer Science, Hardware & Architecture; Computer Science, Information
+   Systems; Engineering, Electrical & Electronic; Telecommunications
+SC Computer Science; Engineering; Telecommunications
+GA 217HG
+UT WOS:000324349900003
+ER
+
+PT J
+AU Fairhurst, G
+   Secchi, R
+   Yun, A
+AF Fairhurst, Gorry
+   Secchi, Raffaello
+   Yun, Ana
+TI A flexible QoS architecture for DVB-RCS2
+SO INTERNATIONAL JOURNAL OF SATELLITE COMMUNICATIONS AND NETWORKING
+LA English
+DT Article
+DE flexible; QoS; DVB-RCS2; special issue
+ID IP
+AB This paper presents a QoS, architecture for the Higher Layers Satellite in the second generation Digital Video Broadcasting with Return Channel via Satellite standard. It describes the flexibility offered by integrating link and network functions to support internet protocol-based differentiated QoS. The operation of key mechanisms is outlined and analysed to show how these may be combined to realise differentiated services by defining mappings between per-hop behaviours, to queues in the traffic plane and return channel satellite terminal request classes in the control plane. Simulation is used to show that an appropriate mapping can be used to can tune the offered service to different traffic classes and that an appropriate assignment can significantly improve the satellite bandwidth efficiency and/or the performance/QoS supplied to a traffic class. Copyright (c) 2013 John Wiley & Sons, Ltd.
+C1 [Fairhurst, Gorry; Secchi, Raffaello] Univ Aberdeen, Aberdeen AB9 1FX, Scotland.
+   [Yun, Ana] Thales Alenia Space Espana, Satellite Networks, Madrid, Spain.
+RP Secchi, R (reprint author), Univ Aberdeen, Sch Engn, Aberdeen AB9 1FX, Scotland.
+EM gorry@erg.abdn.ac.uk; r.secchi@abdn.ac.uk
+FU ESA HLS-MAC Study
+FX The authors acknowledge support from the ESA HLS-MAC Study and the
+   contributions and review comments from Stephane Combes and Ziaul
+   Hussain.
+CR [Anonymous], 2012, 3015452 ETSI EN
+   [Anonymous], 2012, 3015451 ETSI TS
+   [Anonymous], 1998, G107 ITUT
+   [Anonymous], 2003, 301790 ETSI EN
+   [Anonymous], 2010, SATL SYST REC QUAL S
+   [Anonymous], 101545X ETSI TS
+   [Anonymous], 2012, 1015453 ETSI TS
+   [Anonymous], 2009, 302755 ETSI EN
+   [Anonymous], 2007, 102464 ETSI TS
+   [Anonymous], 2005, 102354 ETSI TS
+   Babiarz J, 2006, 4594 IETF RFC
+   Blake S, 1998, 2475 IETF RFC
+   CableLabs, 2012, DAT OV CABL SERV INT
+   Cantillo J, 2008, INT J SATELL COMM N, V26, P231, DOI 10.1002/sat.915
+   Combes S, 2010, 5728 IETF RFC
+   Davie B, 2002, 3246 IETF RFC
+   Heinanen J, 1999, 2597 IETF RFC
+   Iuoras A, 1999, INT J SATELL COMMUN, V17, P129, DOI 10.1002/(SICI)1099-1247(199903/06)17:2/3<129::AID-SAT630>3.0.CO;2-6
+   Iuoras N, 2003, INT J SATELL CO NETW, V21, P401, DOI 10.1002/sat.758
+   Secchi R, 2012, 4 INT ICST C PERS SA
+   Skinnemoen, 2005, IEEE WIREL COMMUN, V12, P46
+   Sooriyabandara M, 2003, INT J SATELL CO NETW, V21, P427, DOI 10.1002/sat.754
+   SRIRAM K, 1986, IEEE J SEL AREA COMM, V4, P833, DOI 10.1109/JSAC.1986.1146402
+NR 23
+TC 1
+Z9 1
+PU WILEY-BLACKWELL
+PI HOBOKEN
+PA 111 RIVER ST, HOBOKEN 07030-5774, NJ USA
+SN 1542-0973
+J9 INT J SATELL COMM N
+JI Int. J. Satell. Commun. Netw.
+PD SEP
+PY 2013
+VL 31
+IS 5
+SI SI
+BP 219
+EP 232
+DI 10.1002/sat.1026
+PG 14
+WC Engineering, Aerospace; Telecommunications
+SC Engineering; Telecommunications
+GA 226DM
+UT WOS:000325014600003
+ER
+
+PT J
+AU Tanaka, T
+   Hirano, A
+   Jinno, M
+AF Tanaka, Takafumi
+   Hirano, Akira
+   Jinno, Masahiko
+TI Impact of Transponder Architecture on the Scalability of Optical Nodes
+   in Elastic Optical Networks
+SO IEEE COMMUNICATIONS LETTERS
+LA English
+DT Article
+DE Elastic optical network; bandwidth-variable wavelength cross-connect;
+   multi-flow transponder; optical path assignment
+ID EFFICIENT
+AB The elastic optical network has proven to be a promising network architecture for handling the rapid growth in IP traffic in the optical layer in a spectrum-efficient manner. This study reveals the optical node requirements in elastic optical networks by comparing multiple network architectures using an integrated resource allocation scheme that considers both network and node parameters. Evaluations show that the multi-flow (MF) transponder-based elastic optical network architecture is superior to two other architectures in terms of scalability of optical nodes and network costs.
+C1 [Tanaka, Takafumi; Hirano, Akira] NTT Corp, NTT Network Innovat Labs, Yokosuka, Kanagawa, Japan.
+   [Jinno, Masahiko] Kagawa Univ, Elect & Informat Engn Dept, Takamatsu, Kagawa 760, Japan.
+RP Tanaka, T (reprint author), NTT Corp, NTT Network Innovat Labs, 1-1 Hikarinooka, Yokosuka, Kanagawa, Japan.
+EM tanaka.takafumi@lab.ntt.co.jp
+CR Betker A., 2003, REFERENCE TRANSPORT
+   Frisken S., P 2011 OFC NFOEC
+   Gingeri S., 2010, IEEE COMMUN MAG, P40
+   Jinno M, 2009, IEEE COMMUN MAG, V47, P66, DOI 10.1109/MCOM.2009.5307468
+   Jinno M, 2012, IEEE COMMUN MAG, V50, P56, DOI 10.1109/MCOM.2012.6194383
+   Notarnicola G., 2012, NETWORKS OPTICAL JUN
+   Rambach F., 2013, J OPT COMMUN NETW, V5
+   Tanaka T., P 2012 ECOC
+NR 8
+TC 0
+Z9 0
+PU IEEE-INST ELECTRICAL ELECTRONICS ENGINEERS INC
+PI PISCATAWAY
+PA 445 HOES LANE, PISCATAWAY, NJ 08855-4141 USA
+SN 1089-7798
+J9 IEEE COMMUN LETT
+JI IEEE Commun. Lett.
+PD SEP
+PY 2013
+VL 17
+IS 9
+BP 1846
+EP 1848
+DI 10.1109/LCOMM.2013.070913.130580
+PG 3
+WC Telecommunications
+SC Telecommunications
+GA 224ZK
+UT WOS:000324931900043
+ER
+
+PT J
+AU Cespedes, S
+   Taha, S
+   Shen, XM
+AF Cespedes, Sandra
+   Taha, Sanaa
+   Shen, Xuemin (Sherman)
+TI A Multihop-Authenticated Proxy Mobile IP Scheme for Asymmetric VANETs
+SO IEEE TRANSACTIONS ON VEHICULAR TECHNOLOGY
+LA English
+DT Article
+DE Asymmetric links; infrastructure-to-vehicle-to-vehicle (I2V2V); IP
+   mobility; multihop networks; mutual authentication; Proxy Mobile IP
+   (PMIP); vehicular ad hoc network (VANET)
+ID WIRELESS NETWORKS
+AB Vehicular communications networks are envisioned for the access to drive-thru Internet and IP-based infotainment applications. These services are supported by roadside access routers (ARs) that connect vehicular ad hoc networks (VANETs) to external IP networks. However, VANETs suffer from asymmetric links due to variable transmission ranges caused by mobility, obstacles, and dissimilar transmission power, which make it difficult to maintain the bidirectional connections and to provide the IP mobility required by most IP applications. Moreover, vehicular mobility results in short-lived connections to the AR, affecting the availability of IP services in VANETs. In this paper, we study the secure and timely handover of IP services in an asymmetric VANET and propose a multihop-authenticated Proxy Mobile IP (MA-PMIP) scheme. MA-PMIP provides an enhanced IP mobility scheme over infrastructure-to-vehicle-to-vehicle (I2V2V) communications that uses location and road traffic information. The MA-PMIP also reacts, depending on the bidirectionality of links, to improve availability of IP services. Moreover, our scheme ensures that the handover signaling is authenticated when V2V paths are employed to reach the infrastructure so that possible attacks are mitigated without affecting the performance of the ongoing sessions. Both analysis and extensive simulations in OMNeT++ are conducted, and the results demonstrate that the MA-PMIP improves service availability and provides secure seamless access to IP applications in asymmetric VANETs.
+C1 [Cespedes, Sandra] Icesi Univ, Dept Informat & Commun Technol, Cali, Colombia.
+   [Cespedes, Sandra; Taha, Sanaa; Shen, Xuemin (Sherman)] Univ Waterloo, Dept Elect & Comp Engn, Waterloo, ON N2L 3G1, Canada.
+   [Taha, Sanaa] Cairo Univ, Fac Comp & Informat, Cairo, Egypt.
+RP Cespedes, S (reprint author), Icesi Univ, Dept Informat & Commun Technol, Cali, Colombia.
+EM slcesped@bbcr.uwaterloo.ca; staha@uwaterloo.ca; xshen@bbcr.uwaterloo.ca
+FU Ontario Research Fund Research Excellence; Icesi University
+FX This work was supported in part by the Ontario Research Fund Research
+   Excellence and in part by Icesi University. The review of this paper was
+   coordinated by Dr. T. Taleb.
+CR Alshanyour A, 2010, P WCCCI IEEE WORLD C, P1
+   Amoroso A., 2011, P INT C COMP COMM NE, P1
+   Asefi M., 2011, P IEEE ICC KYOT JAP, P1
+   Baldessari R., 2008, P TRIDENTCOM 08, P1, DOI DOI 10.1109/PES.2008.4596430
+   Baldessari R., 2008, P TRIDENTCOM MAR, P12
+   Ben Jemaa I., 2010, P INT C ITS TEL NOV, P6
+   Blom R., 1985, P EUROCRYPT 84 WORKS, P335
+   Camp T, 2002, WIREL COMMUN MOB COM, V2, P483, DOI 10.1002/wcm.72
+   Gupta A, 2007, J PARALLEL DISTR COM, V67, P981, DOI 10.1016/j.jpdc.2007.05.009
+   Heer T., 2008, P ACM CONEXT DEC, P23
+   IETF, 2012, IETF DAT INT DRAFTS
+   Intelligent Transport Systems (ITS), 2011, INT TRANSP SYST ITS
+   Jeon S, 2011, IET COMMUN, V5, P2656, DOI 10.1049/iet-com.2011.0109
+   Jiang YX, 2006, IEEE T WIREL COMMUN, V5, P2569, DOI 10.1109/TWC.2006.05063
+   Kim Y.-J., 2005, P USENIX S NETW SYST, P217
+   Lee JH, 2012, IEEE T VEH TECHNOL, V61, P74, DOI 10.1109/TVT.2011.2157949
+   Liang H, 2012, IEEE T COMMUN, V60, P2644, DOI 10.1109/TCOMM.2012.082812.110813
+   Lu N, 2012, 2012 PROCEEDINGS IEEE INFOCOM, P1476
+   Lu RX, 2012, IEEE T INTELL TRANSP, V13, P127, DOI 10.1109/TITS.2011.2164068
+   Lu RX, 2012, IEEE T VEH TECHNOL, V61, P86, DOI 10.1109/TVT.2011.2162864
+   Luan TH, 2012, IEEE T MOBILE COMPUT, V11, P305, DOI 10.1109/TMC.2011.36
+   Mahmoud ME, 2010, IEEE T VEH TECHNOL, V59, P4012, DOI 10.1109/TVT.2010.2062549
+   Mitra Pramita, 2011, International Journal of Embedded and Real-Time Communication Systems, V2, DOI 10.4018/jertcs.2011100104
+   Pack S, 2009, IEEE T VEH TECHNOL, V58, P3627, DOI 10.1109/TVT.2009.2015328
+   Pillai K. R. C., 2009, P IEEE INT C INT MUL, P1
+   Ristanovic N., 2011, P INT C WIR DEM NETW, P96
+   Shan HG, 2009, IEEE COMMUN MAG, V47, P126
+   Sommer C., 2011, P ACM MOBICOM, P1
+   Soto I, 2009, IEEE COMMUN MAG, V47, P152, DOI 10.1109/MCOM.2009.4939291
+   Sun YP, 2010, IEEE T VEH TECHNOL, V59, P3589, DOI 10.1109/TVT.2010.2051468
+   Taha S., 2012, P IEEE INT C COMM JU, P873
+   Tang CM, 2008, IEEE T WIREL COMMUN, V7, P1408, DOI 10.1109/TWC.2008.061080
+   Xie B, 2006, IEEE WCNC, P634
+   Yoo J., 2010, P IEEE INT C COMP NE, P233
+   Zhu HJ, 2008, IEEE T WIREL COMMUN, V7, P3858, DOI 10.1109/T-WC.2008.07418
+NR 35
+TC 0
+Z9 0
+PU IEEE-INST ELECTRICAL ELECTRONICS ENGINEERS INC
+PI PISCATAWAY
+PA 445 HOES LANE, PISCATAWAY, NJ 08855-4141 USA
+SN 0018-9545
+J9 IEEE T VEH TECHNOL
+JI IEEE Trans. Veh. Technol.
+PD SEP
+PY 2013
+VL 62
+IS 7
+BP 3271
+EP 3286
+DI 10.1109/TVT.2013.2252931
+PG 16
+WC Engineering, Electrical & Electronic; Telecommunications; Transportation
+   Science & Technology
+SC Engineering; Telecommunications; Transportation
+GA 220CH
+UT WOS:000324557800031
+ER
+
+PT J
+AU Kawamoto, Y
+   Nishiyama, H
+   Kato, N
+   Kadowaki, N
+AF Kawamoto, Yuichi
+   Nishiyama, Hiroki
+   Kato, Nei
+   Kadowaki, Naoto
+TI A Traffic Distribution Technique to Minimize Packet Delivery Delay in
+   Multilayered Satellite Networks
+SO IEEE TRANSACTIONS ON VEHICULAR TECHNOLOGY
+LA English
+DT Article
+DE Multilayered satellite networks (MLSNs); nongeostationary Earth orbit
+   (NGEO) satellite networks; packet delivery delay; queuing theory;
+   traffic distribution
+ID IP NETWORKS; NEXT-GENERATION; PERFORMANCE
+AB Multi-Layered Satellite Networks (MLSNs) have enormous potential to provide a ubiquitous wireless environment due to their advantages, such as extensive coverage, high network capacity, and lower delay performance. Since MLSNs are flexible and can be expanded easily to construct useful communication networks, researchers have paid a great deal of attention to find out how to use them efficiently. However, traffic congestion may occur in such networks since the distribution of MLSN users is heavily influenced by geographical restrictions, and they may often lead to severe communication delay and throughput degradation. Traditional research has proposed a counter-measure for avoiding traffic congestion caused by traffic flow on each layer. However, they do not consider congestion due to the inter-layer traffic that may, indeed, occur in MLSNs. Therefore, to effectively resolve the problem of traffic congestion, we propose a new-MLSN model by envisioning a method to distribute the flow of packets between the two layers of the considered MLSNs for minimizing the packet delivery delay of the network. Moreover, we analyze the effect of the method on the packet delivery delay by considering propagation and queuing latencies. The analysis clearly shows the advantage of our proposed model. Furthermore, computer-based simulation results validate our analysis and demonstrate the effectiveness of our proposed model.
+C1 [Kawamoto, Yuichi; Nishiyama, Hiroki; Kato, Nei] Tohoku Univ, Grad Sch Informat Sci, Sendai, Miyagi 9808577, Japan.
+   [Kadowaki, Naoto] Natl Inst Informat & Commun Technol, Koganei, Tokyo 1848795, Japan.
+RP Kawamoto, Y (reprint author), Tohoku Univ, Grad Sch Informat Sci, Sendai, Miyagi 9808577, Japan.
+EM youpsan@it.ecei.tohoku.ac.jp; bigtree@it.ecei.tohoku.ac.jp;
+   kato@it.ecei.tohoku.ac.jp; naoto@nict.go.jp
+CR Akyildiz IF, 2002, IEEE ACM T NETWORK, V10, P411, DOI 10.1109/TNET.2002.1012371
+   Alagoz F, 2007, IEEE WIREL COMMUN, V14, P79, DOI 10.1109/MWC.2007.386616
+   Bayhan S, 2007, INT J COMMUN SYST, V20, P1367, DOI 10.1002/dac.874
+   Bisio I, 2012, IEEE COMMUN LETT, V16, P596, DOI 10.1109/LCOMM.2012.030912.111913
+   Bisio I, 2008, IEEE SYST J, V2, P464, DOI 10.1109/JSYST.2008.2004850
+   Chen C, 2005, WIREL NETW, V11, P507, DOI 10.1007/s11276-005-1772-1
+   Dijkstra E. W., 1959, NUMER MATH, V1, P269, DOI DOI 10.1007/BF01386390
+   Filali F, 2004, IEEE J SEL AREA COMM, V22, P413, DOI 10.1109/JSAC.2003.819994
+   Hutcheson J., 1995, P 4 INT MOB SAT C IM, P503
+   Ishikawa S., 1999, TECHNICAL REPORT IEI, V99, P85
+   Karafolas N, 2000, J LIGHTWAVE TECHNOL, V18, P1792, DOI 10.1109/50.908734
+   Karapantazis S, 2005, IEE P-COMMUN, V152, P1006, DOI 10.1049/ip-com:20045003
+   Kawamoto Y., 2012, P IEEE WCNC, P2401
+   Lee J. W., 2000, P IEEE INFOCOM, P392
+   Mohorcic M, 2002, IEEE T WIREL COMMUN, V1, P808, DOI 10.1109/TWC.2002.804176
+   Nishiyama H, 2011, P IEEE, V99, P1998, DOI 10.1109/JPROC.2011.2157885
+   Nishiyama H, 2013, IEEE T VEH TECHNOL, V62, P1303, DOI 10.1109/TVT.2012.2227861
+   Shimada M, 2010, P IEEE, V98, P780, DOI 10.1109/JPROC.2009.2033724
+   Svigelj A, 2004, IEEE J SEL AREA COMM, V22, P261, DOI 10.1109/JSAC.2003.819974
+   Taleb T, 2009, IEEE ACM T NETWORK, V17, P281, DOI 10.1109/TNET.2008.918084
+   Toyoshima M, 2008, IEEE AERO EL SYS MAG, V23, P10, DOI 10.1109/MAES.2008.4607894
+   Wood L, 2003, INTERNETWORKING AND COMPUTING OVER SATELLITE NETWORKS, P13
+NR 22
+TC 0
+Z9 0
+PU IEEE-INST ELECTRICAL ELECTRONICS ENGINEERS INC
+PI PISCATAWAY
+PA 445 HOES LANE, PISCATAWAY, NJ 08855-4141 USA
+SN 0018-9545
+J9 IEEE T VEH TECHNOL
+JI IEEE Trans. Veh. Technol.
+PD SEP
+PY 2013
+VL 62
+IS 7
+BP 3315
+EP 3324
+DI 10.1109/TVT.2013.2256812
+PG 10
+WC Engineering, Electrical & Electronic; Telecommunications; Transportation
+   Science & Technology
+SC Engineering; Telecommunications; Transportation
+GA 220CH
+UT WOS:000324557800034
+ER
+
+PT J
+AU Sou, SI
+AF Sou, Sok-Ian
+TI Mobile Data Offloading With Policy and Charging Control in 3GPP Core
+   Network
+SO IEEE TRANSACTIONS ON VEHICULAR TECHNOLOGY
+LA English
+DT Article
+DE Cellular core; deadline miss; mobility; policy and charging control
+   (PCC); signaling overhead
+AB The Third-Generation Partnership Project (3GPP) has recently standardized the policy and charging control (PCC) system to provide dynamic policy enforcement for network resource allocation combined with real-time charging. The upward trend in smartphone use and the subsequent explosion of data traffic on third-generation (3G) networks have pressed carriers to offload the data traffic from the cellular domain. One key challenge is to elaborate on PCC functionality and mobility management for offloading sessions. This paper proposes an enhanced Wi-Fi offloading model to bring mobile Internet Protocol (IP) integration to a core network with PCC. Specifically, we develop a comprehensive analytical model to quantify the performance of data offloading concerning the amount of 3G resources saved by offloading and the deadline assurance for measuring the quality of user experience with PCC support. Numerical results demonstrate that deadline assurance can be satisfied while saving a significant amount of 3G resources in many situations.
+C1 Natl Cheng Kung Univ, Inst Comp & Commun Engn, Dept Elect Engn, Tainan 701, Taiwan.
+RP Sou, SI (reprint author), Natl Cheng Kung Univ, Inst Comp & Commun Engn, Dept Elect Engn, Tainan 701, Taiwan.
+EM sisou@mail.ncku.edu.tw
+FU National Science Council, Taiwan [NSC 100-2221-E-006-200, NSC
+   101-2221-E-006-216]
+FX This work was supported in part by the National Science Council, Taiwan,
+   under Contract NSC 100-2221-E-006-200 and Contract NSC
+   101-2221-E-006-216. The review of this paper was coordinated by Dr. T.
+   Taleb.
+CR [Anonymous], 2010, 23261 3G TS
+   [Anonymous], 2010, 23402 3G TS
+   [Anonymous], 2011, 23829 3G TR
+   [Anonymous], 2010, 23203 3G TS
+   Balasubramanian A., 2010, P 8 INT C MOB SYST A, P209, DOI 10.1145/1814433.1814456
+   Botta A, 2011, IEEE COMMUN MAG, V49, P101, DOI 10.1109/MCOM.2011.6035823
+   Crovella ME, 1997, IEEE ACM T NETWORK, V5, P835, DOI 10.1109/90.650143
+   Fang YG, 1999, IEEE T COMMUN, V47, P1062
+   Gallager R. G., 1999, DISCRETE STOCHASTIC
+   Han B, 2012, IEEE T MOBILE COMPUT, V11, P821, DOI 10.1109/TMC.2011.101
+   Haverinen H, 2002, IEEE WIREL COMMUN, V9, P52, DOI 10.1109/MWC.2002.1160081
+   Lee K, 2010, COMPUT COMMUN REV, V40, P425, DOI 10.1145/1851275.1851244
+   Oliva A., 2011, IEEE COMMUNICATIONS, V49, P124
+   Piamrat K., 2008, P 68 IEEE VEH TECHN, P1
+   Samdanis K, 2012, IEEE COMMUN SURV TUT, V14, P884, DOI 10.1109/SURV.2011.072711.00168
+   Sou SI, 2011, COMPUT NETW, V55, P3847, DOI 10.1016/j.comnet.2011.07.025
+   Taleb T., 2012, P IEEE ICC, P5398
+   Taleb T., 2012, P IEEE ICC, P5146
+   Taleb T., 2011, P IEEE ICC, P1
+   Zhou H, 2011, IEEE COMMUN MAG, V49, P110
+NR 20
+TC 0
+Z9 0
+PU IEEE-INST ELECTRICAL ELECTRONICS ENGINEERS INC
+PI PISCATAWAY
+PA 445 HOES LANE, PISCATAWAY, NJ 08855-4141 USA
+SN 0018-9545
+J9 IEEE T VEH TECHNOL
+JI IEEE Trans. Veh. Technol.
+PD SEP
+PY 2013
+VL 62
+IS 7
+BP 3481
+EP 3486
+DI 10.1109/TVT.2013.2255899
+PG 7
+WC Engineering, Electrical & Electronic; Telecommunications; Transportation
+   Science & Technology
+SC Engineering; Telecommunications; Transportation
+GA 220CH
+UT WOS:000324557800052
+ER
+
+PT J
+AU Bautista, JEV
+   Sawhney, S
+   Shukair, M
+   Singh, I
+   Govindaraju, VK
+   Sarkar, S
+AF Bautista, Jose E. Vargas
+   Sawhney, Salil
+   Shukair, Mutaz
+   Singh, Ishwinder
+   Govindaraju, Vishwanth K.
+   Sarkar, Sandip
+TI Performance of CS Fallback from LTE to UMTS
+SO IEEE COMMUNICATIONS MAGAZINE
+LA English
+DT Article
+AB Circuit Switched Fallback (CSFB) is the most commonly used method to support voice services over Long Term Evolution (LTE) networks today, as the deployment of IP Multimedia Subsystem (IMS) is still in its infancy. In this article, we discuss the performance of CSFB voice traffic redirection from LTE to UMTS using data from live commercial networks. The key factors impacting CSFB call setup delay are highlighted. Data from multiple cell geometries including stationary and mobility conditions are presented for Mobile Originated (MO) calls towards land-lines, Mobile Terminated (MT) calls from land-lines and Mobile-to-Mobile (M2M) CSFB calls. Analysis results in well optimized deployments show that on an average, MO/MT call-setup time for CSFB from LTE to UMTS is around 1 sec greater than legacy UMTS. However, the results can vary depending on the network configuration and the conditions of the measurement. To illustrate the optimization of CSFB performance in real networks, we also highlight the principal call set up optimization and implementation factors impacting CSFB call setup delay and success rates. This article demonstrates that in well optimized networks, CSFB to UMTS call setup success rates can be very close to those achieved in the legacy UMTS systems.
+C1 [Bautista, Jose E. Vargas; Sawhney, Salil; Shukair, Mutaz; Singh, Ishwinder; Govindaraju, Vishwanth K.; Sarkar, Sandip] Qualcomm Corp Engn, San Diego, CA 92121 USA.
+RP Bautista, JEV (reprint author), Qualcomm Corp Engn, San Diego, CA 92121 USA.
+EM josev@qti.qualcomm.com; ssawhney@qti.qualcomm.com;
+   mshukair@qti.qualcomm.com; isingh@qti.qualcomm.com;
+   vkamalag@qti.qualcomm.com; ssarkar@qti.qualcomm.com
+CR [Anonymous], TS24301 3GPP
+   [Anonymous], TS25331 3GPP UTRAN
+   [Anonymous], 36133 3GPP TS
+   [Anonymous], 23060 3GPP TS
+   [Anonymous], TS36331 3GPP
+   [Anonymous], 23272 3GPP
+   Tanaka I., 2009, NTT DOCOMO TECHNICAL, V11, P13
+NR 7
+TC 0
+Z9 0
+PU IEEE-INST ELECTRICAL ELECTRONICS ENGINEERS INC
+PI PISCATAWAY
+PA 445 HOES LANE, PISCATAWAY, NJ 08855-4141 USA
+SN 0163-6804
+J9 IEEE COMMUN MAG
+JI IEEE Commun. Mag.
+PD SEP
+PY 2013
+VL 51
+IS 9
+BP 136
+EP 143
+PG 8
+WC Engineering, Electrical & Electronic; Telecommunications
+SC Engineering; Telecommunications
+GA 218KH
+UT WOS:000324430800018
+ER
+
+PT J
+AU Hrycek, E
+   Franek, A
+   Blaszczak, E
+   Dworak, J
+   Hrycek, A
+AF Hrycek, Eugeniusz
+   Franek, Andrzej
+   Blaszczak, Edward
+   Dworak, Justyna
+   Hrycek, Antoni
+TI Serum levels of selected chemokines in systemic lupus erythematosus
+   patients
+SO RHEUMATOLOGY INTERNATIONAL
+LA English
+DT Article
+DE SLE; Chemokines; Therapy; Associations; Leukocytes
+ID MONOCYTE CHEMOATTRACTANT PROTEIN-1; REVISED CRITERIA; DISEASE-ACTIVITY;
+   CLASSIFICATION; CXCR4/CXCL12; EXPRESSION; MCP-1
+AB Chemokines promote leukocyte traffic into the site of inflammation. Serum levels of monocyte chemotactic protein 1 (MCP-1), stromal cell-derived factor-1 (SDF-1), interferon-gamma-inducible protein 10 (IP-10), and interleukin-8 (IL-8) were evaluated in 48 treated women with systemic lupus erythematosus (SLE) and mild-to-moderate disease severity. The results were compared between the whole SLE group and the control (29 women). The relationships between chemokines, their concentrations, and peripheral blood leukocyte count and between the chemokines and individual leukocyte populations (polymorphonuclear leukocytes-PMNs, lymphocytes-Ls, monocytes-Ms, eosinophils) counts were determined. The relationships between the analyzed chemokines were also determined in the control. SLE subjects had significantly higher MCP-1, SDF-1, IP-10, and lower IL-8 concentrations compared to the control. Moderate, positive correlations between MCP-1/SDF-1, SDF-1/IP-10 and a negative correlation between MCP-1/IL8 were observed in the patient group. Moderate, negative correlations were found between SDF-1/total leukocyte count, SDF-1/absolute number of PMNs as well as between IP-10/total leukocyte count, IP-10/absolute PMNs, Ls, and Ms counts in peripheral blood of SLE group. We suggest that the obtained results and correlations observed between the examined parameters might be used to monitor SLE course and progression. However, further randomized clinical studies should be carried out on in untreated and treated patients with SLE.
+C1 [Hrycek, Eugeniusz] Med Univ Silesia, Student Sci Sect, Dept Internal Autoimmune & Metab Dis, PL-40752 Katowice, Poland.
+   [Franek, Andrzej; Blaszczak, Edward] Med Univ Silesia, Dept Med Biophys, PL-40752 Katowice, Poland.
+   [Dworak, Justyna; Hrycek, Antoni] Med Univ Silesia, Dept Internal Autoimmune & Metab Dis, PL-40752 Katowice, Poland.
+RP Hrycek, A (reprint author), Med Univ Silesia, Dept Internal Autoimmune & Metab Dis, Ul Medykow 14, PL-40752 Katowice, Poland.
+EM genmar@ka.onet.pl
+CR Alzawawy A, 2009, INT J RHEUM DIS, V12, P311, DOI 10.1111/j.1756-185X.2009.01429.x
+   Bauer JW, 2009, ARTHRITIS RHEUM, V60, P3098, DOI 10.1002/art.24803
+   Brown KS, 2007, J RHEUMATOL, V34, P740
+   Chong BF, 2009, EXPERT OPIN THER TAR, V13, P1147, DOI 10.1517/14728220903196761
+   Ferreira S, 2009, ACTA REUMATOL PORT, V34, P200
+   Furuse S, 2003, J RHEUMATOL, V30, P1524
+   Hochberg MC, 1997, ARTHRITIS RHEUM, V40, P1725, DOI 10.1002/art.1780400928
+   Hrycek A, 2007, AUTOIMMUNITY, V40, P217, DOI 10.1080/08916930701306817
+   Hsich S-C, 2008, RHEUMATOLOGY, V47, P150
+   Kaneko H, 1999, J RHEUMATOL, V26, P568
+   Klebanoff SJ, 1978, NEUTROPHIL FUNCTION
+   Kong KO, 2009, CLIN EXP IMMUNOL, V156, P134, DOI 10.1111/j.1365-2249.2009.03880.x
+   Kotulová D, 1983, J Hyg Epidemiol Microbiol Immunol, V27, P253
+   Lima G, 2007, HUM IMMUNOL, V68, P980, DOI 10.1016/j.humimm.2007.10.007
+   Link DC, 2005, IMMUNOL RES, V32, P169, DOI 10.1385/IR:32:1-3:169
+   Lit LCW, 2006, ANN RHEUM DIS, V65, P209, DOI 10.1136/ard.2005.038315
+   MATAMOROS MC, 1983, PHARMACOLOGY, V27, P29, DOI 10.1159/000137827
+   Narumi S, 2000, CYTOKINE, V12, P1561, DOI 10.1006/cyto.2000.0757
+   Robak E, 2007, EUR CYTOKINE NETW, V18, P9
+   Suzuki M, 2010, RHEUMATOL INT, V30, P309, DOI 10.1007/s00296-009-0953-0
+   Szekanecz Z, 2006, CURR DRUG TARGETS, V7, P91, DOI 10.2174/138945006775270231
+   TAN EM, 1982, ARTHRITIS RHEUM, V25, P1271, DOI 10.1002/art.1780251101
+   Wang A, 2010, ARTHRITIS RHEUM-US, V62, P3436, DOI 10.1002/art.27685
+   Ye DQ, 2005, ARCH DERMATOL RES, V296, P366, DOI 10.1007/s00403-004-0531-y
+NR 24
+TC 1
+Z9 1
+PU SPRINGER HEIDELBERG
+PI HEIDELBERG
+PA TIERGARTENSTRASSE 17, D-69121 HEIDELBERG, GERMANY
+SN 0172-8172
+J9 RHEUMATOL INT
+JI Rheumatol. Int.
+PD SEP
+PY 2013
+VL 33
+IS 9
+BP 2423
+EP 2427
+DI 10.1007/s00296-012-2393-5
+PG 5
+WC Rheumatology
+SC Rheumatology
+GA 206FU
+UT WOS:000323505000031
+ER
+
+PT J
+AU Fu, CH
+AF Fu, Chen Hua
+TI A Study on Adaptive Time Token Priority-Based Queuing Scheme
+SO WIRELESS PERSONAL COMMUNICATIONS
+LA English
+DT Article
+DE Priority-based queuing scheme; Adaptive time token; Differentiated
+   service; Packet forwarding performance
+ID ALLOCATION; NETWORKS; SYSTEM
+AB Several famous priority-based queuing schemes operated in a gateway to support differentiated services among internet traffic. Examining packet forwarding operations in these queueing schemes, they only support a priority-based service either in a packet enqueuing process or in a packet dequeuing process. If a queuing scheme can support priority-based services in both packet enqueuing/dequeuing processes; it would enhance differentiated service performance for internet traffic. This study proposes a priority-based queuing scheme with an adaptive time token allotment measure to support a differentiated packet forwarding process for different types of IP traffic both in packet enqueuing/dequeuing processes. Depending on packet sizes and packet forwarding priorities of IP traffic, the proposed queuing scheme assigns fix and adaptive time token thresholds dynamically to logical queuing buffers separately. With assigned time tokens, logical queuing buffers allow arrival IP packets to be enqueued in a differentiated way. Moreover, the proposed queuing scheme uses a transferred WRR dequeuing measure to enhance a differentiated packet forwarding process. The simulation results show that the proposed queuing scheme supports a differentiated packet forwarding process for different types of IP traffic. The differentiated packet forwarding performance supported by the proposed scheme is close to the IETF DiffServ scheme; this result shows that the proposed scheme can support differentiated packet forwarding performance for different types of IP traffic with a lower operation cost.
+C1 Natl Def Univ, Coll Management, Informat Management Dept, Taipei, Taiwan.
+RP Fu, CH (reprint author), Natl Def Univ, Coll Management, Informat Management Dept, Taipei, Taiwan.
+EM fchemail@gmail.com
+CR Adibi S, 2008, IET COMMUN, V2, P690, DOI 10.1049/iet-com:20070096
+   Andrikopoulos I, 1999, IEEE Communications Surveys & Tutorials, V2, DOI 10.1109/COMST.1999.5340707
+   Assi CM, 2003, IEEE J SEL AREA COMM, V21, P1467, DOI 10.1109/JSAC.2003.818837
+   Baek-Young Choi, 2007, Computer Networks, V51, DOI 10.1016/j.comnet.2007.04.004
+   Blake S., 1998, 2475 RFC
+   Davie B., 2002, 3246 RFC
+   Ferrari T., 2001, P IEEE GLOB TEL C GL
+   FLOYD S, 1995, IEEE ACM T NETWORK, V3, P365, DOI 10.1109/90.413212
+   Fu CH, 2010, WIRELESS PERS COMMUN, V55, P325, DOI 10.1007/s11277-009-9804-2
+   Ghazal S., 2011, CLUSTER COMPUT, V15, P391
+   Habib A., 2005, International Journal of Network Management, V15, DOI 10.1002/nem.541
+   He D., 2009, NETW INFR DIG CONT 2, P65
+   Heinanen J., 1999, RFC2597
+   Hofmann U., 2002, 10 INT C TEL SYST MO
+   Ke CH, 2005, IEEE COMMUN LETT, V9, P381, DOI 10.1109/LCOMM.2005.04005
+   Kim C., 2006, LNCS, V4238, P27
+   Konstantina P., 2003, IEEE J SEL AREA COMM, V21, P908
+   Lee TH, 2008, IET COMMUN, V2, P598, DOI 10.1049/iet-com:20070488
+   Liao JX, 2011, COMPUT COMMUN, V34, P1243, DOI 10.1016/j.comcom.2010.12.017
+   LIN AYM, 1991, IEEE J SEL AREA COMM, V9, P1524, DOI 10.1109/49.108688
+   Mohamed A., 2008, COMPUT COMMUN, V31, P3954
+   Park E.-C., 2003, IEEE GLOBECOM, V6, P3176
+   Roth R, 2003, IEEE COMMUN MAG, V41, P62, DOI 10.1109/MCOM.2003.1166655
+   Tsai T., 2006, J COMMUNICATIONS, V1, P30
+   Turner J. S., 1992, IEEE NETWORK     SEP, P50
+   Ubik S., 2001, LOW COST PRECISE QOS
+   Zhao W., 2000, CUCS00300 COL U
+NR 27
+TC 0
+Z9 0
+PU SPRINGER
+PI NEW YORK
+PA 233 SPRING ST, NEW YORK, NY 10013 USA
+SN 0929-6212
+J9 WIRELESS PERS COMMUN
+JI Wirel. Pers. Commun.
+PD SEP
+PY 2013
+VL 72
+IS 2
+BP 1051
+EP 1075
+DI 10.1007/s11277-013-1055-6
+PG 25
+WC Telecommunications
+SC Telecommunications
+GA 203SF
+UT WOS:000323312800014
+ER
+
+PT J
+AU Chang, J
+   Venkatasubramanian, KK
+   West, AG
+   Kannan, S
+   Lee, I
+   Loo, BT
+   Sokolsky, O
+AF Chang, Jian
+   Venkatasubramanian, Krishna K.
+   West, Andrew G.
+   Kannan, Sampath
+   Lee, Insup
+   Loo, Boon Thau
+   Sokolsky, Oleg
+TI AS-CRED: Reputation and Alert Service for Interdomain Routing
+SO IEEE SYSTEMS JOURNAL
+LA English
+DT Article
+DE Alert service; autonomous systems; border gateway protocol; reputation
+ID IP PREFIX HIJACKING; REAL-TIME; SECURITY; BGP
+AB As the backbone routing system of the Internet, the operational aspect of the interdomain routing is highly complex. Building a trustworthy ecosystem for interdomain routing requires the proper maintenance of trust relationships among tens of thousands of peer IP domains called autonomous systems (ASes). ASes today implicitly trust any routing information received from other ASes as part of border gateway protocol (BGP) updates. Such blind trust is problematic given the dramatic rise in the number of anomalous updates being disseminated, which pose grave security consequences for the interdomain routing operation. In this paper, we present AS-CRED, an AS reputation and alert service that not only detects anomalous BGP updates, but also provides a quantitative view of AS' tendencies to perpetrate anomalous behavior. AS-CRED focuses on detecting two types of anomalous updates: 1) hijacked updates where ASes announcing a prefix that they do not own, and 2) vacillating updates that are part of a quick succession of announcements and withdrawals involving a specific prefix, rendering the information practically ineffective for routing. AS-CRED works by analyzing the past updates announced by ASes for the presence of these anomalies. Based on this analysis, it generates AS reputation values that provide an aggregate and quantitative view of the AS' anomalous behavior history. The reputation values are then used in a tiered alert system for tracking any subsequent anomalous updates observed. Analyzing AS-CRED's operation with real-world BGP traffic over six months, we demonstrate the effectiveness and improvement of the proposed approach over similar alert systems.
+C1 [Chang, Jian; West, Andrew G.; Kannan, Sampath; Lee, Insup; Loo, Boon Thau; Sokolsky, Oleg] Univ Penn, Dept Comp & Informat Sci, Philadelphia, PA 19104 USA.
+   [Venkatasubramanian, Krishna K.] Worcester Polytech Inst, Dept Comp Sci, Worcester, MA 01609 USA.
+RP Chang, J (reprint author), Univ Penn, Dept Comp & Informat Sci, Philadelphia, PA 19104 USA.
+EM jianchan@cis.upenn.edu; kven@wpi.edu; westand@cis.upenn.edu;
+   kannan@cis.upenn.edu; lee@cis.upenn.edu; boon-loo@cis.upenn.edu;
+   sokolsky@cis.upenn.edu
+FU ONR MURI [N00014-07-1-0907]
+FX This research was supported in part by ONR MURI N00014-07-1-0907.
+CR Abu-Nimeh S, 2010, WIREL COMMUN MOB COM, V10, P1128, DOI 10.1002/wcm.829
+   Aiello W., 2003, P 10 ACM C COMP COMM, P165, DOI DOI 10.1145/948109.948133
+   BGPmon Network Solutions Inc., 2010, BGPMON BGP MON AN TO
+   Bono V. J., 1997, 7007 EXPLANATION APO
+   Boothe P., 2006, P NANOG 36 FEB
+   Brown M. A., 2008, PAKISTAN HIJACKS YOU
+   Chang CC, 2011, ACM T INTEL SYST TEC, V2, DOI 10.1145/1961189.1961199
+   Chang J., 2011, P 4 INT C TRUST JUN, P262
+   Goodell G., 2003, PROFESSION KNOWLEDGE, P1
+   Hu N., 2009, P 9 INT C COMP INF T, P98
+   Hu X, 2007, P IEEE S SECUR PRIV, P3, DOI 10.1109/SP.2007.7
+   Karlin J, 2008, COMPUT NETW, V52, P2908, DOI 10.1016/j.comnet.2008.06.012
+   Kent S, 2000, IEEE J SEL AREA COMM, V18, P582, DOI 10.1109/49.839934
+   Khan N. K., 2011, INT J ADV ENG TECHNO, V1, P236
+   Kim H, 2011, ELECTRON LETT, V47, P656, DOI 10.1049/el.2011.0399
+   Lad M., 2006, P 15 C USENIX SEC S, V15
+   Lepinski M., 2012, OVERVIEW BGPSEC
+   Mahajan R, 2002, COMPUT COMMUN REV, V32, P3
+   Ng J., 2002, EXTENSIONS BGP SUPPO
+   Pei D., 2004, TD62TJJF8 AT T LABS
+   Qiu T., 2010, P 18 IEEE ICNP OCT, P134, DOI DOI 10.1109/ICNP.2010.5762762
+   Qiu T., 2009, P 18 USENIX SEC S AU, P135
+   Ramachandran A, 2006, COMPUT COMMUN REV, V36, P291, DOI 10.1145/1151659.1159947
+   The Internet Society Network Working Group, 2006, BORD GAT PROT 4 BGP
+   The RIPE Network Coordination Centre, 2010, RIPE RIS
+   Toonk A., 2010, CHINESE ISP HIJACKS
+   University of Oregon RouteViews Project, 2010, ROUTEVIEWS
+   Yu H., 2005, P SEC NETW PROT NPSE, P73, DOI DOI 10.1109/NPSEC.2005.1532057
+   Zhang BC, 2005, COMPUT COMMUN REV, V35, P53
+   Zhang Z., 2007, P IEEE INT C COMP VI, P1
+   Zhang Z, 2008, COMPUT COMMUN REV, V38, P327
+   Zhao MY, 2005, IEEE NETWORK, V19, P42, DOI 10.1109/MNET.2005.1541720
+   Zheng CX, 2007, COMPUT COMMUN REV, V37, P277
+NR 33
+TC 0
+Z9 0
+PU IEEE-INST ELECTRICAL ELECTRONICS ENGINEERS INC
+PI PISCATAWAY
+PA 445 HOES LANE, PISCATAWAY, NJ 08855-4141 USA
+SN 1932-8184
+J9 IEEE SYST J
+JI IEEE Syst. J.
+PD SEP
+PY 2013
+VL 7
+IS 3
+SI SI
+BP 396
+EP 409
+DI 10.1109/JSYST.2012.2221856
+PG 14
+WC Computer Science, Information Systems; Engineering, Electrical &
+   Electronic; Operations Research & Management Science; Telecommunications
+SC Computer Science; Engineering; Operations Research & Management Science;
+   Telecommunications
+GA 181BA
+UT WOS:000321641800006
+ER
+
+PT J
+AU Ricciardi, S
+   Palmieri, F
+   Fiore, U
+   Castiglione, A
+   Santos-Boada, G
+AF Ricciardi, Sergio
+   Palmieri, Francesco
+   Fiore, Ugo
+   Castiglione, Aniello
+   Santos-Boada, German
+TI Modeling energy consumption in next-generation wireless access-over-WDM
+   networks with hybrid power sources
+SO MATHEMATICAL AND COMPUTER MODELLING
+LA English
+DT Article
+DE Mobile access networks; Energy model; Next-generation networks;
+   Energy-awareness; Hybrid power source
+ID IP NETWORKS
+AB Energy consumption is now one of the most important issues for network carriers, since the majority of the energy needed for their operation is consumed in the wireless access and optical transport networks. The continuous growth in the wireless customers and traffic volumes and the consequent energy demand on modern carriers' broadband infrastructures require reconsidering their energy efficiency, by starting from the formulation of new, more complete and representative network models that should become the foundations for modern energy-aware control plane architectures.
+   Accordingly, this work presents a novel comprehensive energy model for next-generation wireless access-over-optical-transport networks characterized by hybrid power systems (i.e., multiple dynamically available power sources). The objective is to identify the energy-related information that need to be handled at the control plane layer to support energy-aware networking practices. Such information can be made available to suitable energy-aware routing and wavelength assignment algorithms that may exploit them to optimize the overall network energy-consumption and reducing the associated carbon footprint. The proposed model may be taken as a reference for the implementation of new energy-aware control plane protocols (routing and signaling) that make use of power-related considerations to achieve energy-efficiency and energy-awareness in wavelength-routed network infrastructures. (c) 2012 Elsevier Ltd. All rights reserved.
+C1 [Ricciardi, Sergio; Santos-Boada, German] Tech Univ Catalonia, BarcelonaTECH UPC, Dept Comp Architecture, Barcelona 08034, Spain.
+   [Palmieri, Francesco] Univ Naples 2, Dept Ind & Informat Engn, I-81031 Aversa, CE, Italy.
+   [Fiore, Ugo] Univ Naples Federico II, Informat Serv Ctr, I-80126 Naples, Italy.
+   [Castiglione, Aniello] Univ Salerno, Dept Comp Sci, I-84084 Fisciano, SA, Italy.
+RP Castiglione, A (reprint author), Univ Salerno, Dept Comp Sci, Via Ponte Don Melillo, I-84084 Fisciano, SA, Italy.
+EM sergior@ac.upc.edu; fpalmier@unina.it; ufiore@unina.it;
+   castiglione@acm.org; german@ac.upc.edu
+RI Castiglione, Aniello/F-1034-2011
+FU COST Action on Energy Efficiency in Large Scale Distributed Systems
+   [IC0804]; Spanish Ministry of Science and Innovation under the DOMINO
+   project [TEC2010-18522]; Catalan Government [SGR 1140]; DIUE/ESF
+   [FI-201000740]
+FX This work was supported in part by the COST Action IC0804 on Energy
+   Efficiency in Large Scale Distributed Systems, the Spanish Ministry of
+   Science and Innovation under the DOMINO project (TEC2010-18522), the
+   Catalan Government under the contract SGR 1140 and the DIUE/ESF under
+   the grant FI-201000740.
+CR Aleksic S, 2009, J OPT COMMUN NETW, V1, P245, DOI 10.1364/JOCN.1.000245
+   [Anonymous], 2009, WP 21 TP GREEN OPT N
+   Baliga J, 2009, J LIGHTWAVE TECHNOL, V27, P2391, DOI 10.1109/JLT.2008.2010142
+   Baliga J, 2011, IEEE COMMUN MAG, V49, P70, DOI 10.1109/MCOM.2011.5783987
+   Bogdanowicz Z, 2004, MATH COMPUT MODEL, V40, P1047, DOI 10.1016/j.mcm.2004.02.030
+   CHABAREK J, 2008, INFOCOM 2008, P457, DOI DOI 10.1109/INFOCOM.2008.93
+   Chiaraviglio L., 2009, IEEE INT C COMM WORK, P1, DOI DOI 10.1109/ICCW.2009.5208038
+   Christensen K., 2005, 8023 IEEE
+   Deruyck M., 2010, WIR C EW 2010, P924
+   Desset C., 2012, 2012 IEEE Wireless Communications and Networking Conference (WCNC), DOI 10.1109/WCNC.2012.6214289
+   Etoh M., 2008, INT S ISS MOB NETW S, P365
+   Feng M., 2010, P 1 INT C EN EFF COM, P187, DOI 10.1145/1791314.1791344
+   Kilper DC, 2011, IEEE J SEL TOP QUANT, V17, P275, DOI 10.1109/JSTQE.2010.2074187
+   Muhammad A., 2010, 2010 IEEE GLOB TEL C, P1
+   Ogiela L, 2012, COGN SYST MONOGR, V17, P1, DOI 10.1007/978-3-642-25246-4
+   Palmieri F, 2005, COMPUT NETW, V47, P257, DOI 10.1016/j.comnet.2004.07.008
+   PICKAVET M, 2008, 2 INT S ADV NETW TEL, P1, DOI 10.1109/ANTS.2008.4937762
+   Ricciardi S., 2012, BROADBAND COMMUNICAT, P534
+   Ricciardi S., 2011, 201U IEEE INT C COMM, P1
+   Ricciardi S., 2011, TELECOMMUN SYST, P1, DOI 10.1007/s11235-011-9645-7
+   Tucker R., 2008, CISC GREEN RES S
+   Van Heddeghem W., 2010, 2010 14 C OPT NETW D, P1
+   Van Heddeghem W., 2012, PHOTONIC NETW COMMUN, V23, P1
+   Vereecken W., 2010, 4 INT S COMM CONTR S, P1
+NR 24
+TC 0
+Z9 0
+PU PERGAMON-ELSEVIER SCIENCE LTD
+PI OXFORD
+PA THE BOULEVARD, LANGFORD LANE, KIDLINGTON, OXFORD OX5 1GB, ENGLAND
+SN 0895-7177
+J9 MATH COMPUT MODEL
+JI Math. Comput. Model.
+PD SEP
+PY 2013
+VL 58
+IS 5-6
+BP 1389
+EP 1404
+DI 10.1016/j.mcm.2012.12.004
+PG 16
+WC Computer Science, Interdisciplinary Applications; Computer Science,
+   Software Engineering; Mathematics, Applied
+SC Computer Science; Mathematics
+GA 181WJ
+UT WOS:000321700400044
+ER
+
+PT J
+AU Chen, CL
+AF Chen, Chin-Ling
+TI Combining quality of services path first routing and admission control
+   to support VoIP traffic
+SO FUTURE GENERATION COMPUTER SYSTEMS-THE INTERNATIONAL JOURNAL OF GRID
+   COMPUTING AND ESCIENCE
+LA English
+DT Article
+DE QoS; VoIP; Call admission control; Blocking probability
+ID CONTROL ALGORITHM; ARCHITECTURE; NETWORKS; MECHANISMS
+AB Existing interactive communication applications, like VoIP, are designed to manage losses and delay in real IP networks. We present a novel call admission control for VolP based on blocking percentage calculation (BPC). Blocking rates were measured carrying VoIP for every router across the source-destination path. Ingress router selects the optimal path for the new request by calculating blocking rates across all source-destination paths. The proposed scheme dynamically adjusts the admission threshold to guarantee the voice quality of each flow. A simple algorithm design and evaluation results show that the proposed scheme is effective to achieve high utilization of network resources, while satisfying end-to-end targets in terms of blocking rate, delay, packet loss rate and fairness. (C) 2012 Elsevier B.V. All rights reserved.
+C1 Natl Pingtung Inst Commerce, Dept Informat Management, Pingtung 900, Taiwan.
+RP Chen, CL (reprint author), Natl Pingtung Inst Commerce, Dept Informat Management, Pingtung 900, Taiwan.
+EM clchen@mail.npic.edu.tw
+CR Ali Z, 2008, IEEE ACM T NETWORK, V16, P424, DOI 10.1109/TNET.2007.900414
+   Bacioccola A., 2007, P NSTOOLS 07 1 INT W
+   Baroncelli F, 2008, IEEE IFIP NETW OPER, P271
+   Crosby S, 1997, IEEE ATM '97 WORKSHOP, PROCEEDINGS, P103, DOI 10.1109/ATM.1997.624661
+   Firoiu V., IEEE ACM T NETWORKIN, V6
+   Fujiwara T, 2009, IEICE T COMMUN, VE92B, P1361, DOI 10.1587/transcom.E92.B.1361
+   Ganesh AJ, 2006, IEEE ACM T NETWORK, V14, P568, DOI 10.1109/TNET.2006.876180
+   Gopalan K, 2006, ACM T MULTIM COMPUT, V2, P258, DOI 10.1145/1201730.1201732
+   Gross D., 1998, FUNDAMENTALS QUEUING
+   Grossglauser M, 2003, IEEE ACM T NETWORK, V11, P550, DOI 10.1109/TNET.2003.815289
+   Grossglauser M, 1999, IEEE ACM T NETWORK, V7, P293, DOI 10.1109/90.779194
+   Guerin R., 1992, P INFOCOM 92, P1, DOI 10.1109/INFCOM.1992.263412
+   GUERIN R, 1991, IEEE J SEL AREA COMM, V9, P968, DOI 10.1109/49.103545
+   Hou YWT, 2001, IEICE T COMMUN, VE84B, P2830
+   JAIN R, 1984, TR301 DEC
+   Jamin S, 1997, IEEE ACM T NETWORK, V5, P56
+   Khan S, 2003, FUTURE GENER COMP SY, V19, P1063, DOI 10.1016/S0167-739X(03)00110-9
+   Kilpi J, 2002, IMW 2002: PROCEEDINGS OF THE SECOND INTERNET MEASUREMENT WORKSHOP, P49
+   Kulkarni P, 2007, IEEE ICC, P556, DOI 10.1109/ICC.2007.97
+   Lakkakorpi J., 2004, GLOBECOM2004 IEEE GL, P5033
+   Mas I, 2007, COMPUT NETW, V51, P3902, DOI 10.1016/j.comnet.2007.04.009
+   Mase K., 2002, IEEE ICC, P1194
+   Mase K., 2004, ICC 2004 IEEE INT C, P1877
+   Morita N, 2006, IEEE IFIP NETW OPER, P590, DOI 10.1109/NOMS.2006.1687598
+   Munir K, 2012, FUTURE GENER COMP SY, V28, P1121, DOI 10.1016/j.future.2011.06.012
+   Nam SY, 2008, IEEE ACM T NETWORK, V16, P410, DOI 10.1109/TNET.2007.900403
+   Ross K.W., IEEE T COMMUNICATION, V37
+   Sandstrom H, 2005, IEEE ICC, P48
+   Xuan Y., 2011, IEEE ACM T NETWORKIN, V19
+   Yamaoka K., 2010, CCNC 2010, V7
+   Yu W, 2005, FUTURE GENER COMP SY, V21, P209, DOI 10.1016/j.future.2004.10.010
+   Zhang ZL, 2001, IEICE T COMMUN, VE84B, P2011
+NR 32
+TC 0
+Z9 0
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0167-739X
+J9 FUTURE GENER COMP SY
+JI Futur. Gener. Comp. Syst.
+PD SEP
+PY 2013
+VL 29
+IS 7
+BP 1742
+EP 1750
+DI 10.1016/j.future.2012.03.026
+PG 9
+WC Computer Science, Theory & Methods
+SC Computer Science
+GA 167MI
+UT WOS:000320635700011
+ER
+
+PT J
+AU Davy, A
+   Jennings, B
+   Botvich, D
+AF Davy, Alan
+   Jennings, Brendan
+   Botvich, Dmitri
+TI QoSPlan: A Measurement Based Quality of Service aware Network Planning
+   Framework
+SO JOURNAL OF NETWORK AND SYSTEMS MANAGEMENT
+LA English
+DT Article
+DE Provisioning; Effective bandwidth; Traffic matrix
+ID EFFECTIVE BANDWIDTH ESTIMATION; TRAFFIC MATRICES; LARGE DEVIATIONS;
+   INTERNET
+AB In this article we present QoSPlan-a measurement based framework for preparing information relevant to Quality of Service (QoS)-aware IP network planning, which aims at reducing a core operational expenditure for the network operator. QoSPlan is designed to reduce the cost of deployment and maintenance of network monitoring systems. The process involves analysis of pre-existing accounting data to estimate a network-wide traffic matrix. Part of this estimation process relates to the generalization of QoS-related effective bandwidth coefficients taken from traffic analyzed on the network. We offer recommendations on how to appropriately realize QoSPlan to maximize its accuracy and effectiveness when applied to different network traffic scenarios. This is achieved through a thorough sensitivity analysis of the methods proposed using real traffic scenarios and indicative network topologies. We also provide an economic analysis of the deployment and maintenance costs associated with QoSPlan in comparison to a direct measurement approach, demonstrating cost savings of up to 60 % given different topology sizes.
+C1 [Davy, Alan; Jennings, Brendan; Botvich, Dmitri] Waterford Inst Technol, Telecommun Software & Syst Grp, Waterford, Ireland.
+RP Davy, A (reprint author), Waterford Inst Technol, Telecommun Software & Syst Grp, Cork Rd, Waterford, Ireland.
+EM adavy@tssg.org; bjennings@tssg.org; dbotvich@tssg.org
+FU Science Foundation Ireland [03/CE3/I405, 08/SRC/I1403]; Irish Research
+   Council for Science, Engineering and Technology; Marie Curie Actions
+   under FP7
+FX This work has received support from Science Foundation Ireland via grant
+   numbers 03/CE3/I405 (Autonomic Management of Communications Networks and
+   Services) and 08/SRC/I1403 (Federated, Autonomic Management of
+   End-to-End Communications Services) and the Irish Research Council for
+   Science, Engineering and Technology, co-funded by Marie Curie Actions
+   under FP7.
+CR Awduche D., 1999, 2702 IETF NETW WORK
+   BOTVICH DD, 1995, QUEUEING SYST, V20, P293, DOI 10.1007/BF01245322
+   CAIDA, 2012, CAIDA AN 2012 INT TR
+   Claise B, 2004, 3954 IETF RFC NETW W
+   Cranor C., 2003, SIGMOD C, P647, DOI 10.1145/872757.872838
+   Davy A, 2007, LECT NOTES COMPUT SC, V4516, P348
+   Davy A, 2006, LECT NOTES COMPUT SC, V4268, P120
+   Davy A., 2007, P 2007 IEEE GLOB TEL, P2690
+   Davy A, 2008, IEEE T BROADCAST, V54, P599, DOI 10.1109/TBC.2008.2001245
+   DUFFIELD NG, 1995, IEEE J SEL AREA COMM, V13, P981, DOI 10.1109/49.400654
+   Farinacci D., 2012, LOCATOR ID SEPARATIO
+   Feldmann A, 2001, IEEE ACM T NETWORK, V9, P265, DOI 10.1109/90.929850
+   Gibbens R., 1996, ROYAL STAT SOC LECT, V4, P169
+   Gong WB, 2005, COMPUT NETW, V48, P377
+   Grabani J.-P., 2008, MARKET OVERVIEW IT M
+   GUERIN R, 1991, IEEE J SEL AREA COMM, V9, P968, DOI 10.1109/49.103545
+   Kelly F. P., 1996, NOTES EFFECTIVE BAND, V4
+   LELAND WE, 1994, IEEE ACM T NETWORK, V2, P1, DOI 10.1109/90.282603
+   Liu NX, 2004, GLOB TELECOMM CONF, P2108
+   Mansfield G., 2001, Proceedings 15th International Conference on Information Networking, DOI 10.1109/ICOIN.2001.905432
+   Medina A, 2002, P SOC PHOTO-OPT INS, V4868, P200, DOI 10.1117/12.475271
+   MOME: IST MOME, 2008, CLUST EUR PROJ AIM M
+   Network Instruments, 2008, 10 100 1000 ETH PROB
+   OPNET, 2011, DISCR EV SMUL MOD LI
+   Papagiannaki K., 2004, P 4 ACM SIGCOMM C IN, P161, DOI 10.1145/1028788.1028808
+   Sadasivan G., 2006, ARCHITECTURE IP FLOW
+   SIMONIAN A, 1995, IEEE J SEL AREA COMM, V13, P1017, DOI 10.1109/49.400657
+   Uhlig S, 2006, COMPUT COMMUN REV, V36, P83, DOI 10.1145/1111322.1111341
+   Zhang Y, 2009, COMPUT COMMUN REV, V39, P267
+NR 29
+TC 0
+Z9 0
+PU SPRINGER
+PI NEW YORK
+PA 233 SPRING ST, NEW YORK, NY 10013 USA
+SN 1064-7570
+J9 J NETW SYST MANAG
+JI J. Netw. Syst. Manag.
+PD SEP
+PY 2013
+VL 21
+IS 3
+BP 474
+EP 509
+DI 10.1007/s10922-012-9243-3
+PG 36
+WC Computer Science, Information Systems; Telecommunications
+SC Computer Science; Telecommunications
+GA 159LE
+UT WOS:000320046100006
+ER
+
+PT J
+AU Zhong, WC
+   Raahemi, B
+   Liu, J
+AF Zhong, Weicai
+   Raahemi, Bijan
+   Liu, Jing
+TI Classifying peer-to-peer applications using imbalanced concept-adapting
+   very fast decision tree on IP data stream
+SO PEER-TO-PEER NETWORKING AND APPLICATIONS
+LA English
+DT Article
+DE Peer-to-Peer traffic classification; Class imbalance problem;
+   Concept-adapting decision tree; Resampling; Stream data mining
+ID TRAFFIC CLASSIFICATION
+AB Peer-to-Peer (P2P) applications generate streaming data in large volumes, where new communities of peers regularly attend and existing communities of peers regularly leave, requiring the classification techniques to consider concept drift, and update the model incrementally. Concept-adapting Very Fast Decision Tree (CVFDT) is one of the well-known streaming data mining techniques that can be applied to P2P traffic. However, we observe that P2P traffic data is class imbalanced, namely, only about 30 % of examples can be labeled as "P2P", biasing the trained models (e.g. decision tree) towards the majority class (i.e. "NonP2P"). In this paper, we propose a new technique, the imbalanced CVFDT (iCVFDT), by integrating the CVFDT with an efficient resampling technique to address the issue of the class imbalanced data. The iCVFDT classification technique enjoys the advantages of CVFDT (such as stability), and at the same time, is not sensitive to imbalanced data. We captured the Internet traffic at a main gateway and prepared a real data stream with 3.5 million examples to which the iCVFDT classification technique was applied. The experimental results demonstrate a significant improvement in the performance of the iCVFDT compared to that of the CVFDT.
+C1 [Zhong, Weicai] IBM SPSS Stat Res, IBM China Dev Lab, Xian 710065, Peoples R China.
+   [Raahemi, Bijan] Univ Ottawa, Ottawa, ON K1N 6N5, Canada.
+   [Liu, Jing] Xidian Univ, Xian 710071, Peoples R China.
+RP Raahemi, B (reprint author), Univ Ottawa, 55 Laurier Ave, Ottawa, ON K1N 6N5, Canada.
+EM wakenov@gmail.com; braahemi@uottawa.ca; neouma@163.com
+FU Natural Sciences and Engineering Research Council of Canada (NSERC);
+   Fundamental Research Funds for the Central Universities; National
+   Natural Science Foundation of China [61103119, 60970067]
+FX This work was partially supported by the Natural Sciences and
+   Engineering Research Council of Canada (NSERC), and Fundamental Research
+   Funds for the Central Universities and the National Natural Science
+   Foundation of China under Grants 61103119 and 60970067.
+CR Auld T, 2007, IEEE T NEURAL NETWOR, V18, P223, DOI 10.1109/TNN.2006.883010
+   Azzouna NB, 2004, IEEE GLOBAL TELECOMM, V3, P1544, DOI 10.1109/GLOCOM.2004.1378241
+   Batista G.E.A.P.A., 2004, SIGKDD EXPLORATIONS, V6, P20, DOI DOI 10.1145/1007730.1007735
+   Chawla NV, 2002, J ARTIF INTELL RES, V16, P321
+   Crovella M., 2006, INTERNET MEASUREMENT
+   Domingos P., 2000, 6 ACM SIGKDD INT C K, P71
+   Garcia V, 2007, CLASS IMBALANCE PROB, P283
+   Hashemi S, 2009, IEEE T KNOWL DATA EN, V21, P624, DOI 10.1109/TKDE.2008.181
+   HOEFFDING W, 1963, J AM STAT ASSOC, V58, P13, DOI 10.2307/2282952
+   Huang J, 2005, IEEE T KNOWL DATA EN, V17, P299
+   Hulten G, 2001, 7 ACM SIGKDD INT C K, P97
+   Japkowicz N., 2000, Proceedings of the International Conference on Artificial Intelligence. IC-AI'2000
+   Japkowicz N., 2002, Intelligent Data Analysis, V6
+   Kamei S, 2003, IEEE PAC RIM C COMM, V2, P597
+   Kamei S, 2006, CISCO IOS NETFLOW OV
+   Karagiannis T, 2004, P 4 ACM SIGCOMM C IN, P121, DOI 10.1145/1028788.1028804
+   Kotsiantis S., 2003, ANN MATH COMPUT TELE, V1, P46
+   Kubat M., 1997, P 14 INT C MACH LEAR, P179
+   Li X, 2007, INTELL DATA ANAL, V11, P75
+   Liang C, 2010, J MACHINE LEARNING R, V13, P209
+   Liu H, 2002, DATA MIN KNOWL DISC, V6, P393, DOI 10.1023/A:1016304305535
+   Maron O., 1994, ADV NEURAL INFORMATI, V6, P59
+   Moore W, 2005, P ACM SIGM ALB CAN J, P50
+   Raahemi B, 2009, PEER PEER NETW APPL, V2, P87, DOI 10.1007/s12083-008-0022-6
+   Raahemi Bijan, 2007, International Journal of Business Data Communications and Networking, V3, DOI 10.4018/jbdcn.2007100104
+   Raahemi Bijan, 2007, Proceedings of the 2007 International Conference on Artificial Intelligence and Pattern Recognition (AIPR-07)
+   Raahemi B, 2008, PROC INT C TOOLS ART, P525, DOI 10.1109/ICTAI.2008.12
+   Schlimmer J. C., 1986, Proceedings AAAI-86: Fifth National Conference on Artificial Intelligence
+   SEN S, 2004, P 13 INT C WORLD WID, P512, DOI DOI 10.1145/988672.988742
+   Wang Y, 2006, MOBILE COMPUT COMMUN, V11, P71
+   Witten I.H., 2005, PRACTICAL MACHINE LE
+   Zander S, 2005, LECT NOTES COMPUT SC, V3431, P325
+   Zuev D, 2005, LECT NOTES COMPUT SC, V3431, P321
+NR 33
+TC 0
+Z9 0
+PU SPRINGER
+PI NEW YORK
+PA 233 SPRING ST, NEW YORK, NY 10013 USA
+SN 1936-6442
+J9 PEER PEER NETW APPL
+JI Peer Peer Netw. Appl.
+PD SEP
+PY 2013
+VL 6
+IS 3
+BP 233
+EP 246
+DI 10.1007/s12083-012-0147-5
+PG 14
+WC Computer Science, Information Systems; Telecommunications
+SC Computer Science; Telecommunications
+GA 136XJ
+UT WOS:000318396400001
+ER
+
+PT J
+AU Huang, H
+   Parlier, R
+   Shen, JK
+   Lutty, GA
+   Vinores, SA
+AF Huang, Hu
+   Parlier, Rachel
+   Shen, Ji-kui
+   Lutty, Gerard A.
+   Vinores, Stanley A.
+TI VEGF Receptor Blockade Markedly Reduces Retinal Microglia/Macrophage
+   Infiltration into Laser-Induced CNV
+SO PLOS ONE
+LA English
+DT Article
+ID INDUCED CHOROIDAL NEOVASCULARIZATION; ENDOTHELIAL GROWTH-FACTOR;
+   COMPLEMENT FACTOR-H; MACULAR DEGENERATION; MOUSE RETINA; MURINE MODEL;
+   ANGIOGENESIS; INHIBITION; MICROGLIA; CELLS
+AB Although blocking VEGF has a positive effect in wet age-related macular degeneration (AMD), the effect of blocking its receptors remains unclear. This was an investigation of the effect of VEGF receptor (VEGFR) 1 and/or 2 blockade on retinal microglia/macrophage infiltration in laser-induced choroidal neovascularization (CNV), a model of wet AMD. CNV lesions were isolated by laser capture microdissection at 3, 7, and 14 days after laser and analyzed by RT-PCR and immunofluorescence staining for mRNA and protein expression, respectively. Neutralizing antibodies for VEGFR1 or R2 and the microglia inhibitor minocycline were injected intraperitoneally (IP). Anti-CD11b, CD45 and Iba1 antibodies were used to confirm the cell identity of retinal microglia/macrophage, in the RPE/choroidal flat mounts or retinal cross sections. CD11b(+), CD45(+) or Iba1(+) cells were counted. mRNA of VEGFR1 and its three ligands, PlGF, VEGF-A (VEGF) and VEGF-B, were expressed at all stages, but VEGFR2 were detected only in the late stage. PlGF and VEGF proteins were expressed at 3 and 7 days after laser. Anti-VEGFR1 (MF1) delivered IP 3 days after laser inhibited infiltration of leukocyte populations, largely retinal microglia/macrophage to CNV, while anti-VEGFR2 (DC101) had no effect. At 14 days after laser, both MF1 and DC101 antibodies markedly inhibited retinal microglia/macrophage infiltration into CNV. Therefore, VEGFR1 and R2 play differential roles in the pathogenesis of CNV: VEGFR1 plays a dominant role at 3 days after laser; but both receptors play pivotal roles at 14 days after laser. In vivo imaging demonstrated accumulation of GFP-expressing microglia into CNV in both CX3CR1(gfp/gfp) and CX3CR1(gfp/+) mice. Minocycline treatment caused a significant increase in lectin(+) cells in the subretinal space anterior to CNV and a decrease in dextran-perfused neovessels compared to controls. Targeting the chemoattractant molecules that regulate trafficking of retinal microglia/macrophage appears to be a compelling therapeutic strategy to control CNV and treat wet AMD.
+C1 [Huang, Hu; Parlier, Rachel; Shen, Ji-kui; Lutty, Gerard A.; Vinores, Stanley A.] Johns Hopkins Univ, Sch Med, Wilmer Eye Inst, Baltimore, MD 21205 USA.
+RP Huang, H (reprint author), Johns Hopkins Univ, Sch Med, Wilmer Eye Inst, Baltimore, MD 21205 USA.
+EM hhuang27@jhmi.edu
+FU National Institutes of Health [RO1-EY017164, RO1-EY016557, EY001765];
+   research to Prevent Blindness; Lilly/ImClone
+FX Supported by National Institutes of Health grants RO1-EY017164 (to SAV
+   and GAL), RO1-EY016557 (to GAL), EY001765 (to Wilmer), Unrestricted
+   funds from research to Prevent Blindness (to Wilmer), and a stipend from
+   Lilly/ImClone. The authors also thank the Raab Family Foundation and the
+   Wilmer Pooled Professors Fund for the purchase of the Micron III. The
+   funders had no role in study design, data collection and analysis,
+   decision to publish, or preparation of the manuscript.
+CR Ambati J, 2003, NAT MED, V9, P1390, DOI 10.1038/nm950
+   Baba T, 2010, AM J PATHOL, V176, P3085, DOI 10.2353/ajpath.2010.090989
+   Barleon B, 1996, BLOOD, V87, P3336
+   Berglin L, 2003, INVEST OPHTH VIS SCI, V44, P403, DOI 10.1167/iovs.02-0180
+   Caicedo A, 2005, EXP EYE RES, V81, P38, DOI 10.1016/j.exer.2005.01.013
+   Campa C, 2010, MEDIATORS INFLAMM
+   Campa C, 2008, INVEST OPHTH VIS SCI, V49, P1178, DOI 10.1167/iovs.07-1194
+   Campochiaro P A, 1999, Mol Vis, V5, P34
+   Cao JT, 2010, INVEST OPHTH VIS SCI, V51, P6009, DOI 10.1167/iovs.09-4956
+   Combadiere C, 2007, J CLIN INVEST, V117, P2920, DOI 10.1172/JCI31692
+   Edelman JL, 2000, EXP EYE RES, V71, P523, DOI 10.1006/exer.2000.0907
+   Fu YL, 2007, INVEST OPHTH VIS SCI, V48, P5184, DOI 10.1167/iovs.07-0469
+   Guerin E, 2008, MICROVASC RES, V75, P302, DOI 10.1016/j.mvr.2007.12.001
+   Gupta N, 2003, EXP EYE RES, V76, P463, DOI 10.1016/S0014-4835(02)00332-9
+   Hogg RE, 2008, OPHTHALMOLOGY, V115, P1046, DOI 10.1016/j.ophtha.2007.07.031
+   Hou X, 2010, P NATL ACAD SCI USA, V107, P12216, DOI 10.1073/pnas.1004143107
+   Hu WZ, 2009, EXP EYE RES, V88, P79, DOI 10.1016/j.exer.2008.10.014
+   Huang H, 2011, PLOS ONE, V6, DOI 10.1371/journal.pone.0021411
+   Huang H, 2011, INVEST OPHTH VIS SCI, V52, P7565, DOI 10.1167/iovs.11-8002
+   Kleinman ME, 2008, NATURE, V452, P591, DOI 10.1038/nature06765
+   Kumar A, 2010, J BIOL CHEM, V285, P15500, DOI 10.1074/jbc.M110.113787
+   Kwak N, 2000, INVEST OPHTH VIS SCI, V41, P3158
+   Lambert V, 2002, AM J PATHOL, V161, P1247, DOI 10.1016/S0002-9440(10)64401-X
+   Lavalette S, 2011, AM J PATHOL, V178, P2416, DOI 10.1016/j.ajpath.2011.01.013
+   Lee JE, 2008, INVEST OPHTH VIS SCI, V49, P4169, DOI 10.1167/iovs.08-2076
+   Liu J, 2011, J BIOL CHEM, V286, P20991, DOI 10.1074/jbc.M111.226266
+   Liutkeviciene R, 2010, MED LITH, V46, P89
+   Luhmann UFO, 2009, INVEST OPHTH VIS SCI, V50, P5934, DOI 10.1167/iovs.09-3462
+   Luttun A, 2002, NAT MED, V8, P831, DOI 10.1038/nm731
+   Lyzogubov VV, 2010, AM J PATHOL, V177, P1870, DOI 10.2353/ajpath.2010.091168
+   Lyzogubov VV, 2011, J BIOL CHEM, V286, DOI 10.1074/jbc.M110.204701
+   Ma WX, 2009, PLOS ONE, V4, DOI 10.1371/journal.pone.0007945
+   Mochimaru H, 2009, INVEST OPHTH VIS SCI, V50, P4410, DOI 10.1167/iovs.08-3044
+   Montezuma SR, 2009, SEMIN OPHTHALMOL, V24, P52, DOI 10.1080/08820530902800017
+   Nowak JZ, 2006, PHARMACOL REP, V58, P353
+   Rymo SF, 2011, PLOS ONE, V6, DOI 10.1371/journal.pone.0015846
+   Ryu JK, 2009, J NEUROSCI, V29, P3, DOI 10.1523/JNEUROSCI.2888-08.2009
+   Santos AM, 2008, J COMP NEUROL, V506, P224, DOI 10.1002/cne.21538
+   Semkova I, 2011, INVEST OPHTH VIS SCI, V52, P6101, DOI 10.1167/iovs.10-5996
+   Sengupta N, 2010, INVEST OPHTH VIS SCI, V51, P2697, DOI 10.1167/iovs.09-4137
+   Sengupta N, 2003, INVEST OPHTH VIS SCI, V44, P4908, DOI 10.1167/iovs.03-0342
+   Sepp T, 2006, INVEST OPHTH VIS SCI, V47, P536, DOI 10.1167/iovs.05-1143
+   Suner IJ, 2004, INVEST OPHTH VIS SCI, V45, P311, DOI 10.1167/iovs.03-0733
+   Tobe T, 1998, AM J PATHOL, V153, P1641, DOI 10.1016/S0002-9440(10)65753-7
+   Van de Veire S, 2010, CELL, V141, P178, DOI 10.1016/j.cell.2010.02.039
+   Vinores SA, 2006, J CELL PHYSIOL, V206, P749, DOI 10.1002/jcp.20525
+   Wahlin KJ, 2008, J COMP NEUROL, V506, P822, DOI 10.1002/cne.21582
+   Wang AL, 2005, NEUROCHEM INT, V47, P152, DOI 10.1016/j.neuint.2005.04.018
+   Waters JC, 2009, J CELL BIOL, V185, P1135, DOI 10.1083/jcb.200903097
+   Wilson AS, 2003, INVEST OPHTH VIS SCI, V44, P1426, DOI 10.1167/iovs.02-0622
+   Yi XJ, 1997, GRAEF ARCH CLIN EXP, V235, P313, DOI 10.1007/BF01739641
+NR 51
+TC 0
+Z9 0
+PU PUBLIC LIBRARY SCIENCE
+PI SAN FRANCISCO
+PA 1160 BATTERY STREET, STE 100, SAN FRANCISCO, CA 94111 USA
+SN 1932-6203
+J9 PLOS ONE
+JI PLoS One
+PD AUG 20
+PY 2013
+VL 8
+IS 8
+AR e71808
+DI 10.1371/journal.pone.0071808
+PG 15
+WC Multidisciplinary Sciences
+SC Science & Technology - Other Topics
+GA 219RU
+UT WOS:000324527300039
+ER
+
+PT J
+AU Nooruzzaman, M
+   Koyama, O
+   Katsuyama, Y
+AF Nooruzzaman, Md.
+   Koyama, Osanori
+   Katsuyama, Yutaka
+TI Congestion removing performance of stackable ROADM in WDM networks under
+   dynamic traffic
+SO COMPUTER NETWORKS
+LA English
+DT Article
+DE SLA; Congestion removing; ROADM; Recovery time; Lightpath
+   reconfiguration
+ID OPTICAL NETWORK; CONTROL-SYSTEM
+AB Congestion removing performance has been investigated in IP-over-CWDM networks with reconfigurable optical add/drop multiplexers (ROADMs) for the best-effort transmissions specified by the service level agreement (SLA). Mathematical models and experimental results for two approaches: automated addition of new lightpath and creation of a static bypass route in other existing lightpaths, were presented in this paper. The experimental results clarified that the congestions were removed successfully in both the approaches. Addition of new lightpath approach can provide effective adjustment of larger traffic whereas the creation of a static bypass route approach can provide fine granularity adjustment of small traffic to be switched without lightpath reconfiguration. The degraded throughput was recovered within the recovery time specified by the SLA. (C) 2013 Elsevier B.V. All rights reserved.
+C1 [Nooruzzaman, Md.; Koyama, Osanori; Katsuyama, Yutaka] Osaka Prefecture Univ, Grad Sch Engn, Osaka, Japan.
+RP Nooruzzaman, M (reprint author), Osaka Prefecture Univ, Grad Sch Engn, Osaka, Japan.
+EM noor@eis.osakafu-u.ac.jp; koyama@eis.osakafu-u.ac.jp;
+   katsu@eis.osakafu-u.ac.jp
+CR Jourdan A, 1998, IEEE J SEL AREA COMM, V16, P1286, DOI 10.1109/49.725196
+   Banerjee A., 2005, J OPTICAL NETWORKING, V4
+   Borraz-Sanchez Conrado, 2013, COMPUTER NETWORKS
+   Fawaz W, 2004, IEEE COMMUN MAG, V42, P36, DOI 10.1109/MCOM.2004.1262160
+   Gambini P., 1998, IEEE J SELECTED AREA, V16
+   Gencata B, 2003, IEEE ACM T NETWORK, V11, P236
+   Gonzalez AJ, 2010, IEEE LAT AM T, V8, P410, DOI 10.1109/TLA.2010.5595131
+   Guoa Lei, 2013, OPTIK
+   Hashimoto M, 2008, INT J INNOV COMPUT I, V4, P1299
+   Hashimoto M, 2009, IEEJ T ELECTR ELECTR, V4, P425, DOI 10.1002/tee.20427
+   Herzog M, 2004, IEEE COMMUN SURV TUT, V6, P2, DOI 10.1109/COMST.2004.5342236
+   Medina A., 2002, P ACM SIGCOMM 02 AUG
+   Mohan G., 1999, J LIGHTWAVE TECHNOLO, V17
+   Mukherjee B, 2000, IEEE J SEL AREA COMM, V18, P1810, DOI 10.1109/49.887904
+   Mukherjee B, 1996, IEEE ACM T NETWORK, V4, P684, DOI 10.1109/90.541317
+   Nooruzzaman M, 2008, IEICE T COMMUN, VE91B, P3330, DOI 10.1093/ietcom/e91-b.10.3330
+   Nooruzzaman Md., 2008, 11 ICCIT KHULN BANGL, P144
+   Peng Peng-Chun, 2012, OPTICS COMMUNICATION
+   White K., 2000, RFC2758
+   Zervas GS, 2011, OPT EXPRESS, V19, P509
+NR 20
+TC 0
+Z9 0
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 1389-1286
+J9 COMPUT NETW
+JI Comput. Netw.
+PD AUG 5
+PY 2013
+VL 57
+IS 11
+BP 2364
+EP 2373
+DI 10.1016/j.comnet.2013.04.010
+PG 10
+WC Computer Science, Hardware & Architecture; Computer Science, Information
+   Systems; Engineering, Electrical & Electronic; Telecommunications
+SC Computer Science; Engineering; Telecommunications
+GA 182ED
+UT WOS:000321723600005
+ER
+
+PT J
+AU Cheng, BN
+   Coyle, A
+   McGarry, S
+   Pedan, I
+   Veytser, L
+   Wheeler, J
+AF Cheng, Bow-Nan
+   Coyle, Andrea
+   McGarry, Stephen
+   Pedan, Igor
+   Veytser, Leonid
+   Wheeler, James
+TI Characterizing Routing with Radio-to-Router Information in a
+   Heterogeneous Airborne Network
+SO IEEE TRANSACTIONS ON WIRELESS COMMUNICATIONS
+LA English
+DT Article
+DE Radio-to-router; heterogeneous airborne network
+AB The current generation of long-range, high capacity, military radios are stove-piped systems that work well in a homogeneous environment, but lack interoperability with other radio systems. Each radio provides a subset of disparate link information in non-standard interfaces and has built-in home-grown routers running different routing protocols. In a heterogeneous radio system airborne environment, wireless link characteristics change rapidly, often requiring direct link feedback from the radio to make routing decisions. In recent years, much work has been done in developing a common radio-to-router interface (R2RI) that standardizes a subset of per-link information to pass to the network layer for use in dynamic MANET routing. While simulations and emulation tests can provide a baseline for how systems might perform, field-tests are crucial to demonstrate capabilities in real-world operating environments. In this paper, we present measurement results from a field test involving several air and ground assets with various radio systems that test an implementation of RFC4938, a radio-to-router interface protocol, and its interaction with a dynamic MANET routing protocol. The assets formed a high capacity, dynamically routed aerial IP backbone made of heterogeneous radio technologies over 250 nautical miles (Nm), allowing the passing of military traffic.
+C1 [Cheng, Bow-Nan; Coyle, Andrea; McGarry, Stephen; Pedan, Igor; Veytser, Leonid; Wheeler, James] MIT Lincoln Lab, Airborne Networks Grp, Lexington, MA USA.
+RP Cheng, BN (reprint author), MIT Lincoln Lab, Airborne Networks Grp, Lexington, MA USA.
+EM bownan@gmail.com
+FU United States Air Force under Air Force [FA8721-05-C-0002]
+FX A preliminary version of this paper appeared in IEEE MILCOM 2011 [1].
+   This work is sponsored by the United States Air Force under Air Force
+   Contract #FA8721-05-C-0002. Opinions, interpretations, recommendations
+   and conclusions are those of the authors and are not necessarily
+   endorsed by the United States Government.
+CR [Anonymous], 2012, 6621 RFC INT ENG TAS
+   [Anonymous], 2007, MOB HOC NETW ROUT TO
+   Berry B., 2010, 5578 IETF RFC
+   Berry B., 2007, 4938 IETF RFC
+   Cain J., P 2003 IEEE MIL COMM, V1, P643
+   Charland R., 2012 IEEE MIL COMM C
+   Charland R., 2011 IEEE MIL COMM C
+   Cheng BN, 2012, IEEE COMMUN MAG, V50, P70
+   Cheng B.-N., 2011 IEEE MIL COMM C
+   Cheng B.-N., 2012 ACM MOB AIRB NE
+   Cheng B.-N., 2012 AIAA AER MEAS T
+   Cheng B.-N., 2012 IEEE MIL COMM C
+   Cooley J., 2005, P 2005 IEEE MIL COMM, V5, P2882
+   Dubois D., 2011, RADIO ROUTE IN PRESS
+   Ghanadan R., P 2006 IEEE MIL COMM, P1
+   Idhaw E., 2009, P 2009 IEEE MIL COMM, P1
+   Kiwior D., P 2007 IEEE MIL COMM, P1
+   Kiwior D., 2005, P 2005 IEEE MIL COMM, V4, P2366
+   Lindem A., 2009, 5838 RFC
+   Ogier R., 2009, 5614 RFC
+   Pizzi S. V., P 2007 IEEE MIL COMM, P1
+   Ratliff S., 2012, DYNAMIC LIN IN PRESS
+   Sakhaee E, 2006, IEEE J SEL AREA COMM, V24, P1748, DOI 10.1109/JSAC.2006.875122
+   Schiavone L., 2004, P 2004 MIL COMM C, V1, P404
+   Tiwari A., P 2008 IEEE MIL COMM, P1
+   Veytser L., 2012 IEEE MIL COMM C
+   Veytser L., 2011 IEEE MIL COMM C
+   Wheeler J., 2011 IEEE MIL COMM C
+NR 28
+TC 0
+Z9 0
+PU IEEE-INST ELECTRICAL ELECTRONICS ENGINEERS INC
+PI PISCATAWAY
+PA 445 HOES LANE, PISCATAWAY, NJ 08855-4141 USA
+SN 1536-1276
+J9 IEEE T WIREL COMMUN
+JI IEEE Trans. Wirel. Commun.
+PD AUG
+PY 2013
+VL 12
+IS 8
+BP 4183
+EP 4195
+DI 10.1109/TWC.2013.052613.130019
+PG 13
+WC Engineering, Electrical & Electronic; Telecommunications
+SC Engineering; Telecommunications
+GA 208KQ
+UT WOS:000323678000046
+ER
+
+PT J
+AU Hou, WG
+   Guo, L
+   Zheng, ZY
+   Zhang, X
+AF Hou, Weigang
+   Guo, Lei
+   Zheng, Zeyu
+   Zhang, Xue
+TI Green Grooming in a More Realistic and Multidomain Optical Network
+SO JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING
+LA English
+DT Article
+DE Green grooming; Inverse power-efficiency ratio; More realistic network;
+   Multi-domain
+ID GRANULARITY CONNECTION REQUESTS; ROBUST ROUTING ALGORITHM; WDM NETWORKS;
+   MESH NETWORKS; IP
+AB Currently, the concept of greening the Internet is emerging with the increasingly acute energy crisis. Reducing the power consumption in IP over wavelength-division multiplexing (WDM) optical networks is of great significance. From the perspective of traffic engineering, green grooming has performed well in terms of power savings. However, in a more realistic network, some traffic characteristics are not taken into account. Moreover, most methods of green grooming are applied to a single network. As the network scale continuously becomes larger, the backbone presents a multidomain structure. Considering the peak traffic distribution in the multidomain network, i.e., that the peak traffic tends to scatter over boundary nodes, we propose a novel hose-model separation to emulate the limited traffic information in a more realistic optical network. To maximize the power efficiency, we determine the inverse power-efficiency ratio by theoretical analysis. We then utilize a heuristic, referred to as minimizing the total inverse power-efficiency ratio (MTPR), to establish lightpaths. The simulation results have demonstrated the effectiveness of MTPR under different topologies and various traffic patterns.
+C1 [Hou, Weigang; Guo, Lei; Zhang, Xue] Northeastern Univ, Coll Informat Sci & Engn, Shenyang 110819, Peoples R China.
+   [Hou, Weigang; Zheng, Zeyu] City Univ Hong Kong, Dept Comp Sci, Hong Kong, Hong Kong, Peoples R China.
+RP Hou, WG (reprint author), Northeastern Univ, Coll Informat Sci & Engn, Shenyang 110819, Peoples R China.
+EM guolei@ise.neu.edu.cn
+FU National Natural Science Foundation of China [61172051, 61071124];
+   Program for New Century Excellent Talents in University [NCET-11-0075,
+   NCET-12-0102]; Fundamental Research Funds for the Central Universities
+   [N110204001, N120804002, N110604008]; Specialized Research Fund for the
+   Doctoral Program of Higher Education [20110042110023, 20110042120035,
+   20120042120049]
+FX The authors thank all the reviewers. This work was supported in part by
+   the National Natural Science Foundation of China (61172051, 61071124),
+   the Program for New Century Excellent Talents in University
+   (NCET-11-0075, NCET-12-0102), the Fundamental Research Funds for the
+   Central Universities (N110204001, N120804002, N110604008), and the
+   Specialized Research Fund for the Doctoral Program of Higher Education
+   (20110042110023, 20110042120035, 20120042120049).
+CR Chen Y., 2011, OPT FIB COMM C NAT F
+   Coiro A., 2011, IEEE INT C COMM ICC, P1
+   Dai R, 2009, J OPT NETW, V8, P438
+   Hasan M. M., 2010, IEEE INT C COMM ICC, P1
+   Hou WG, 2012, PHOTONIC NETW COMMUN, V23, P230, DOI 10.1007/s11107-011-0353-8
+   Huang S., 2009, IEEE GLOB TEL C GLOB, P1
+   Huang SG, 2011, IEEE T COMMUN, V59, P541, DOI 10.1109/TCOMM.2010.112310.090459
+   Jiang DD, 2009, IEEE COMMUN LETT, V13, P52, DOI 10.1109/LCOMM.2008.081271
+   Liu Q., 2009, IEEE INT S ANT PROP, P1
+   Shen GX, 2009, J OPT COMMUN NETW, V1, P176, DOI 10.1364/JOCN.1.000176
+   Xia M, 2011, IEEE J SEL TOP QUANT, V17, P437, DOI 10.1109/JSTQE.2010.2050867
+   Yetginer E., 2009, IEEE GLOB TEL C GLOB, P1
+   Zhang X., 2006, OPT ENG, V45, P1
+   Zhang XN, 2007, COMPUT COMMUN, V30, P3498, DOI 10.1016/j.comcom.2007.08.031
+   Zhang XN, 2008, OPT FIBER TECHNOL, V14, P119, DOI 10.1016/j.yofte.2007.09.003
+   Zhang Y, 2011, OPT SWITCH NETW, V8, P171, DOI 10.1016/j.osn.2011.03.006
+NR 16
+TC 0
+Z9 0
+PU OPTICAL SOC AMER
+PI WASHINGTON
+PA 2010 MASSACHUSETTS AVE NW, WASHINGTON, DC 20036 USA
+SN 1943-0620
+J9 J OPT COMMUN NETW
+JI J. Opt. Commun. Netw.
+PD AUG
+PY 2013
+VL 5
+IS 8
+BP 858
+EP 869
+DI 10.1364/JOCN.5.000858
+PG 12
+WC Computer Science, Hardware & Architecture; Computer Science, Information
+   Systems; Optics; Telecommunications
+SC Computer Science; Optics; Telecommunications
+GA 206CJ
+UT WOS:000323493600004
+ER
+
+PT J
+AU Morell, A
+   Vilajosana, X
+   Vicario, JL
+   Watteyne, T
+AF Morell, A.
+   Vilajosana, X.
+   Vicario, J. L.
+   Watteyne, T.
+TI Label switching over IEEE802.15.4e networks
+SO TRANSACTIONS ON EMERGING TELECOMMUNICATIONS TECHNOLOGIES
+LA English
+DT Article
+AB An open issue still to be addressed in low-power lossy networks (LLNs) is how the application requirements, the available transport services, the network layer routes, and the data link-layer resources are mapped efficiently. This can be explained by the fact that, in most LLNs, link-layer resources cannot be easily managed; this results in a best effort IP layer, and traffic engineering performed solely through flow control at the transport layer. The new IEEE802.15.4e standard defines a link-layer mechanism by which motes in the network synchronise and communicate by following a schedule. Each slot in that schedule can be seen as an atomic link-layer resource, which can be allocated to any arbitrary link in the network. The schedule can be built to match the bandwidth, latency and power requirements of each mote in the network. Managing that schedule is performed centrally in IEEE802.15.4e networks today. This paper explores a solution to achieve the same goal in a distributed manner. Specifically, we argue that this problem is very similar to traffic engineering on today's Internet. We show how multiprotocol label switching can be mapped to LLNs to manage the network's schedule. By using the completely fair distributed scheduler, we show by simulation how this novel link-layer resource allocation scheme yields a proper distribution of end-to-end delays among the motes and an average throughput that achieves the 70% of the maximum possible throughput in the worst conditions tested. Copyright (c) 2013 John Wiley & Sons, Ltd.
+C1 [Morell, A.; Vicario, J. L.] Univ Autonoma Barcelona, Dept Telecommun, Bellaterra, Barcelona, Spain.
+   [Vilajosana, X.] Univ Oberta Catalunya, Comp Sci Multimedia & Telecommun Dept, Barcelona, Spain.
+   [Vilajosana, X.] Univ Calif Berkeley, BSAC, Berkeley, CA 94720 USA.
+   [Vilajosana, X.] Worldsensing, Barcelona, Spain.
+   [Watteyne, T.] Dust Networks Linear Technol, Hayward, CA USA.
+RP Morell, A (reprint author), Q Bldg,Room QC 1017,UAB Campus Bellaterra, Cerdanyola Del Valles 08193, Barcelona, Spain.
+EM antoni.morell@uab.cat
+FU FP7-IAPP-SWAP EU [251557]; EU FP7 Calipso Project [FP7-ICT-2011.1.3 PN:
+   288879]; Future Internet-Public Private Partnership (Fi-PPP) European
+   project Outsmart [PN 285038]; Spanish Government [TEC2011-28219];
+   Catalan Government [2009 SGR 298]; Spanish Ministry of Education under
+   Fullbright-ME grant [INF-2010-0319]
+FX This research is being supported by the FP7-IAPP-SWAP EU contract number
+   251557, the EU FP7 Calipso Project (FP7-ICT-2011.1.3 PN: 288879) and the
+   Future Internet-Public Private Partnership (Fi-PPP) European project
+   Outsmart (PN 285038) under the 7th Framework Programme FP7-2011-ICT-FI.
+   UAB research is supported by the Spanish Government under project
+   TEC2011-28219 and the Catalan Government under grant 2009 SGR 298.
+   Xavier Vilajosana is funded by the Spanish Ministry of Education under
+   Fullbright-ME grant (INF-2010-0319).
+CR Akl R, 2006, P IAESTED WOC BANFF, P1
+   Anderson L, 2001, 3036 RFC IETF
+   [Anonymous], 2012, 802154E2012 IEEE
+   Awduche D, 2000, RSVP TE EXT IN PRESS
+   Berger L, 2003, 3471 RFC IETF
+   Berger L., 2003, 3473 RFC
+   Braden R., 1997, 2205 RFC
+   Chitnis M, 2009, 2009 INTERNATIONAL CONFERENCE ON NETWORK-BASED INFORMATION SYSTEMS, P121, DOI 10.1109/NBiS.2009.77
+   DurmazIncel A, 2011, ELSEVIER AD HOC NETW, V9, P73
+   Gnawali O., 2009, P 7 ACM C EMB NETW S, P1, DOI DOI 10.1145/1644038.1644040
+   Goldsmith A, 2005, WIRELESS COMMUNICATI
+   Hoesel van L. F. W., 2004, LIGHTWEIGHT MEDIUM A, P205
+   Incel OD, 2006, LECT NOTES COMPUT SC, V4272, P1
+   ISA, 2011, ISA10011A2011
+   Kim AN, 2008, IEEE INT C EMERG, P899, DOI 10.1109/ETFA.2008.4638503
+   Kozierok C, 2005, NO STARCH PRESS SERI
+   Kurose J. F., 2012, COMPUTER NETWORKING
+   Levis P, 2009, TINYOS PROGRAMMING, P1, DOI 10.1017/CBO9780511626609
+   Mannie E, 2006, 4606 RFC IETF
+   Palattella M, 2012, COMMUNICATIONS SURVE, VPP, P1, DOI 10.1109/SURV.2012.111412.00158
+   Palattella MR, 2012, P IEEE 23 INT S PERS, P327
+   Park KJ, 2011, EUR T TELECOMMUN, V22, P179, DOI 10.1002/ett.1467
+   Postel J., 1981, 793 RFC
+   Postel J, 1980, 768 RFC
+   Rosen E., 2001, 3031 RFC
+   Scaglione A, 2003, IEEE T SIGNAL PROCES, V51, P2082, DOI 10.1109/TSP.2003.814519
+   Shelby Z., 2012, CONSTRAINED IN PRESS
+   Shelby Z., 2010, 6LOWPAN WIRELESS EMB
+   Sivagami A, 2010, INT J RECENT TRENDS, V3, P140
+   VETTER RJ, 1995, COMMUN ACM, V38, P30, DOI 10.1145/204826.204831
+   Watteyne T, 2012, T EMERG TELECOMMUN T, V23, P480, DOI 10.1002/ett.2558
+   Watteyne T, 2009, PE-WASUN09: PROCEEDINGS OF THE SIXTH ACM INTERNATIONAL SYMPOSIUM ON PERFORMANCE EVALUATION OF WIRELESS AD-HOC, SENSOR, AND UBIQUITOUS NETWORKS, P116, DOI 10.1145/1641876.1641898
+   Winter T., 2011, RPL IPV6 RO IN PRESS
+   Zhang L, 2012, T EMERGING TELECOMMU, DOI 10.1002/ett.2556
+   Zhou G., 2006, P 25 IEEE INT C COMP, P1, DOI 10.1109/INFOCOM.2006.250
+NR 35
+TC 0
+Z9 0
+PU WILEY-BLACKWELL
+PI HOBOKEN
+PA 111 RIVER ST, HOBOKEN 07030-5774, NJ USA
+SN 2161-3915
+J9 T EMERG TELECOMMUN T
+JI Trans. Emerg. Telecommun. Technol.
+PD AUG
+PY 2013
+VL 24
+IS 5
+BP 458
+EP 475
+DI 10.1002/ett.2650
+PG 18
+WC Telecommunications
+SC Telecommunications
+GA 196KG
+UT WOS:000322773000003
+ER
+
+PT J
+AU Al-Surmi, I
+   Othman, M
+   Hamid, NAWA
+   Ali, BM
+AF Al-Surmi, Ibrahim
+   Othman, Mohamed
+   Hamid, Nor Asila Wati Abdul
+   Ali, Borhanuddin Mohd
+TI Enhancing inter-PMIPv6-domain for superior handover performance across
+   IP-based wireless domain networks
+SO WIRELESS NETWORKS
+LA English
+DT Article
+DE PMIPv6; Inter-domain mobility; Handover coordinator; Traffic
+   redirection; Handover latency; Protocol signalling cost
+ID MOBILITY MANAGEMENT
+AB As a network-based localized mobility management protocol, Proxy Mobile IPv6 (PMIPv6) enables a Mobile Host (MH) to roam within a localized domain without MH intervention in the mobility-related signalling. However, the PMIPv6 maintains MH mobility support in a restriction domain. Therefore, whenever the MH roams away from the PMIPv6 domain, its reachability status will be broken-down causing high handover latency and inevitable traffic loss for its communication session. This article proposes a proactive mechanism to mange the MH handover and maintain its data session continually across inter-PMIPv6-domains. The proposed mechanism introduces an intermediate global mobility anchor entity, called, which is responsible to coordinate MH handover as well as redirect its traffic across inter-PMIPv6-domains. Through various simulation evaluations, via ns-2, several experiments were conducted, revealing numerous results that verify the proposed mechanism superior performance over the conventional inter-PMIPv6-domain handover schemes in terms of handover latency, achieved throughput, protocol signalling cost and end-to-end traffic delivery latency.
+C1 [Al-Surmi, Ibrahim; Othman, Mohamed; Hamid, Nor Asila Wati Abdul] Univ Putra Malaysia, Fac Comp Sci & Informat Technol, Dept Commun Technol & Network, UPM Serdang, Serdang 43400, DE, Malaysia.
+   [Ali, Borhanuddin Mohd] Univ Putra Malaysia, Dept Comp & Commun Syst Engn, Fac Engn, UPM Serdang, Serdang 43400, DE, Malaysia.
+RP Al-Surmi, I (reprint author), Univ Putra Malaysia, Fac Comp Sci & Informat Technol, Dept Commun Technol & Network, UPM Serdang, Serdang 43400, DE, Malaysia.
+EM iaa_a@yahoo.com; mothman@fsktm.upm.edu.my; asila@fsktm.upm.edu.my;
+   borhan@eng.upm.edu.my
+FU Ministry of Higher Education of Malaysia [FRGS/1/11/SG/UPM/01/1]
+FX The authors would like to acknowledge the Ministry of Higher Education
+   of Malaysia for the partial financial support under the Fundamental
+   Research Grant FRGS/1/11/SG/UPM/01/1.
+CR Al-Surmi I, 2012, J NETW COMPUT APPL, V35, P295, DOI 10.1016/j.jnca.2011.09.001
+   Chiang KH, 2004, IEEE T VEH TECHNOL, V53, P413, DOI 10.1109/TVT.2004.823544
+   Gundavelli S., 2008, 5213 RFC
+   Johnson D., 2004, 3775 RFC
+   Kempf J., 2007, 4831 RFC
+   Kempf J., 2007, 4830 RFC
+   Kong KS, 2008, IEEE WIREL COMMUN, V15, P36, DOI 10.1109/MWC.2008.4492976
+   Koodli R., 2005, 4068 RFC
+   Lee KW, 2010, INT J COMMUN SYST, V23, P1127, DOI 10.1002/dac.1076
+   Neumann N., 2009, I PMIP INTERDOMAIN M, P994
+   Neumann N., 2008, INTERDOMAIN IN PRESS
+   Soliman H., 2005, 4140 RFC
+   Zhong F, 2010, J NETW COMPUT APPL, V33, P397, DOI 10.1016/j.jnca.2010.03.001
+NR 13
+TC 0
+Z9 0
+PU SPRINGER
+PI DORDRECHT
+PA VAN GODEWIJCKSTRAAT 30, 3311 GZ DORDRECHT, NETHERLANDS
+SN 1022-0038
+J9 WIREL NETW
+JI Wirel. Netw.
+PD AUG
+PY 2013
+VL 19
+IS 6
+BP 1317
+EP 1336
+DI 10.1007/s11276-012-0535-z
+PG 20
+WC Computer Science, Information Systems; Engineering, Electrical &
+   Electronic; Telecommunications
+SC Computer Science; Engineering; Telecommunications
+GA 185ND
+UT WOS:000321974700019
+ER
+
+EF

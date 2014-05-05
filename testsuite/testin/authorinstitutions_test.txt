@@ -1,0 +1,314 @@
+FN Thomson Reuters Web of Knowledge
+VR 1.0
+PT J
+AU Wu, ZD
+   Xu, GD
+   Lu, CL
+   Chen, EH
+   Zhang, YC
+   Zhang, H
+AF Wu, Zongda
+   Xu, Guandong
+   Lu, Chenglang
+   Chen, Enhong
+   Zhang, Yanchun
+   Zhang, Hong
+TI Position-wise contextual advertising: Placing relevant ads at
+   appropriate positions of a web page
+SO NEUROCOMPUTING
+LA English
+DT Article
+DE Wikipedia knowledge; Similarity; Contextual advertising
+ID MATCHING APPROACH
+AB Web advertising, a form of online advertising, which uses the Internet as a medium to post product or service information and attract customers, has become one of the most important marketing channels. As one prevalent type of web advertising, contextual advertising refers to the placement of the most relevant ads at appropriate positions of a web page, so as to provide a better user experience and increase the user's ad-click rate. However, most existing contextual advertising techniques only take into account how to select as relevant ads for a given page as possible, without considering the positional effect of the ad placement on the page, resulting in an unsatisfactory performance in ad local context relevance. In this paper, we address the novel problem of position-wise contextual advertising, i.e., how to select and place relevant ads properly for a target web page. In our proposed approach, the relevant ads are selected based on not only global context relevance but also local context relevance, so that the embedded ads yield contextual relevance to both the whole target page and the insertion positions where the ads are placed. In addition, to improve the accuracy of global and local context relevance measure, the rich wikipedia knowledge is used to enhance the semantic feature representation of pages and ad candidates. Last, we evaluate our approach using a set of ads and pages downloaded from the Internet, and demonstrate the effectiveness of our approach. (c) 2013 Elsevier B.V. All rights reserved.
+C1 [Wu, Zongda; Lu, Chenglang] Wenzhou Univ, Wenzhou 325035, Peoples R China.
+   [Wu, Zongda; Chen, Enhong] Univ Sci & Technol China, Hefei 230026, Anhui, Peoples R China.
+   [Xu, Guandong] Univ Technol Sydney, Sydney, NSW 2007, Australia.
+   [Lu, Chenglang] Northwestern Polytech Univ, Xian 710072, Peoples R China.
+   [Zhang, Yanchun] Victoria Univ, Melbourne, Vic 8001, Australia.
+   [Zhang, Hong] Inst Sci & Technol Informat Zhejiang Prov, Hangzhou 310006, Zhejiang, Peoples R China.
+RP Lu, CL (reprint author), Wenzhou Univ, Wenzhou 325035, Peoples R China.
+EM zongda1983@163.com; guandong.xu@vu.edu.au; chenglang.lu@qq.com;
+   cheneh@ustc.edu.cn
+FU NSFC [61202171, 61272018, 60775037, 71090401/71090400]; China
+   Postdoctoral Science Foundation [2012M521251, 2013T60623]; Doctoral
+   Program of Higher Education of China [20093402110017, 20113402110024];
+   Zhejiang Provincial Natural Science Foundation of China [Q13F020034,
+   Y1100769, Y1090328]
+FX The work is supported by Grants from the NSFC projects
+   (Nos.61202171,61272018,60775037,71090401/71090400), the China
+   Postdoctoral Science Foundation funded projects (Nos.2012M521251 and
+   2013T60623), the Doctoral Program of Higher Education of China
+   (Nos.20093402110017,20113402110024) and the Zhejiang Provincial Natural
+   Science Foundation of China (Nos.Q13F020034,Y1100769, Y1090328).
+CR Anagnostopoulos A., 2007, CIKM 07, P331
+   Boyd S., 2004, CONVEX OPTIMIZATION
+   Broder A., 2007, SIGIR 07, P559
+   Chatterjee P, 2003, MARKET SCI, V22, P520, DOI 10.1287/mksc.22.4.520.24906
+   Fan TK, 2010, KNOWL INF SYST, V23, P321, DOI 10.1007/s10115-009-0222-2
+   Gupta S., 2009, ESWA, V36, P10627
+   Gupta S, 2005, WORLD WIDE WEB, V8, P179, DOI 10.1007/s11280-004-4873-3
+   Hu J., 2008, SIGIR 08, P179
+   Hu J., 2009, WWW 09, P471
+   Hu XH, 2009, KDD-09: 15TH ACM SIGKDD CONFERENCE ON KNOWLEDGE DISCOVERY AND DATA MINING, P389
+   Mei T., 2012, ACM TOMCCAP, V8
+   Mei T., 2008, MM 08, P439
+   Mei T., 2011, P IEEE, V98, P1416
+   Murdock V., 2007, SIGKDD WORKSH 07, P21
+   Pak A. N., 2011, P 4 INT C HUM LANG T, P533
+   Pak AN, 2010, WORLD WIDE WEB, V13, P251, DOI 10.1007/s11280-010-0084-2
+   Papadopoulos S, 2009, LECT NOTES COMPUT SC, V5478, P216, DOI 10.1007/978-3-642-00958-7_21
+   Ribeiro-Neto B., 2005, SIGIR 2005. Proceedings of the Twenty-Eighth Annual International ACM SIGIR Conference on Research and Development in Information Retrieval
+   SALTON G, 1975, COMMUN ACM, V18, P613, DOI 10.1145/361219.361220
+   Wu HC, 2008, ACM T INFORM SYST, V26, DOI 10.1145/1361684.1361686
+   Wu Z. D., 2011, CIKM 11, P2105
+   Wu ZD, 2012, COMPUT J, V55, P277, DOI 10.1093/comjnl/bxr056
+NR 22
+TC 0
+Z9 0
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0925-2312
+J9 NEUROCOMPUTING
+JI Neurocomputing
+PD NOV 23
+PY 2012
+VL 120
+SI SI
+BP 524
+EP 535
+DI 10.1016/j.neucom.2013.04.018
+PG 12
+WC Computer Science, Artificial Intelligence
+SC Computer Science
+GA 223XZ
+UT WOS:000324847100057
+ER
+
+PT J
+AU Acampora, G
+   Loia, V
+   Vitiello, A
+AF Acampora, Giovanni
+   Loia, Vincenzo
+   Vitiello, Autilia
+TI Enhancing ontology alignment through a memetic aggregation of similarity
+   measures
+SO INFORMATION SCIENCES
+LA English
+DT Article
+DE Ontology alignment; Similarity measure; Similarity aggregation; Memetic
+   algorithm
+ID DESIGN ISSUES; ALGORITHM; TAXONOMY; MODEL
+AB Modern infrastructures for information and communication technologies are aimed at providing enhanced services by integrating the knowledge spread on the web through an ontological representation of information. However, ontology usefulness in managing different knowledge sources is limited by the so-called semantic heterogeneity problem arising when several interacting software components use different ontologies for representing the same information. In order to bridge this gap and, consequently, enable a full interoperability across the software components, it is necessary to bring the corresponding ontologies into a mutual agreement by identifying a set of semantic relationships among their entities. This result is achieved by means of a so-called ontology alignment process that, for each pair of entities belonging to the ontologies under alignment, computes their semantic closeness through an optimized aggregation of different similarity measures. Unfortunately, this similarity aggregation is a hard optimization process, above all, when no information is known about ontology features. The aim of this paper is to define an ontology alignment process based on a memetic algorithm able to efficiently aggregate similarity measures without using a priori knowledge about ontologies under alignment. As shown by a statistical multiple comparison procedure, our approach yields high performance in terms of alignment quality with respect to top-performers of well-known Ontology Alignment Evaluation Initiative campaigns. (c) 2013 Elsevier Inc. All rights reserved.
+C1 [Acampora, Giovanni] Eindhoven Univ Technol, Sch Ind Engn, NL-5600 MB Eindhoven, Netherlands.
+   [Loia, Vincenzo; Vitiello, Autilia] Univ Salerno, Dept Comp Sci, I-84084 Fisciano, Italy.
+RP Loia, V (reprint author), Univ Salerno, Dept Comp Sci, I-84084 Fisciano, Italy.
+EM g.acampora@tue.nl; loia@unisa.it; avitiello@unisa.it
+CR Abdullah S, 2012, INFORM SCIENCES, V191, P146, DOI 10.1016/j.ins.2011.12.018
+   Acampora G, 2012, INT J INTELL SYST, V27, P189, DOI 10.1002/int.20517
+   Bock J, 2012, INFORM SCIENCES, V192, P152, DOI 10.1016/j.ins.2010.08.013
+   Cruz I.F., 2010, P 5 INT WORKSH ONT M
+   David J., 2007, THESIS U NANTES
+   Dawkins R, 1976, SELFISH GENE
+   Deb K., 1995, COMPLEX SYSTEMS, V9
+   Demsar J, 2006, J MACH LEARN RES, V7, P1
+   Do HH, 2007, INFORM SYST, V32, P857, DOI 10.1016/j.is.2006.09.002
+   Ehrig M, 2007, SEMAT WEB BEYOND-COM, V4, P1
+   ESHELMAN LJ, 1993, FDN GENETIC ALGORITH, V2, P187
+   Euzenat J., 2007, ONTOLOGY MATCHING
+   Euzenat J., 2011, LECT NOTES COMPUTER, V6720, P158
+   Euzenat J., 2008, STATE ART ONTOLOGY A
+   Euzenat J., 2010, P 5 INT WORKSH ONT M
+   Euzenat J., 2011, P 6 INT WORKSH ONT M
+   Friedman M, 1937, J AM STAT ASSOC, V32, P675, DOI 10.2307/2279372
+   Garcia S, 2009, J HEURISTICS, V15, P617, DOI 10.1007/s10732-008-9080-4
+   Gen M, 1997, GENETIC ALGORITHMS E
+   Genesereth M., 1987, LOGICAL FDN ARTIFICI
+   Ginsca AL, 2010, 9TH ROEDUNET IEEE INTERNATIONAL CONFERENCE, P118
+   Gracia J., 2011, P 6 INT WORKSH ONT M
+   GRUBER TR, 1993, KNOWL ACQUIS, V5, P199, DOI 10.1006/knac.1993.1008
+   Hamdi F., 2010, P 5 INT WORKSH ONT M
+   Herrera F, 2003, INT J INTELL SYST, V18, P309, DOI 10.1002/int.10091
+   HOLM S, 1979, SCAND J STAT, V6, P65
+   Hu W., 2010, P 5 INT WORKSH ONT M
+   Jean-Mary YR, 2009, J WEB SEMANT, V7, P235, DOI 10.1016/j.websem.2009.04.001
+   Kirkpatrick S., 1982, 9355 IBM RC
+   Krasnogor N, 2005, IEEE T EVOLUT COMPUT, V9, P474, DOI 10.1109/TEVC.2005.850260
+   Levenstein I., 1966, CYBERNETICS CONTROL, V10, P707
+   Madhavan J., 2001, P 27 INT C VER LARG
+   Martinez-Gil J., 2008, CEUR WORKSHOP P, V419
+   Moscato P., 1989, 826 CALT CONC COMP P, V826
+   Nguyen QH, 2007, IEEE C EVOL COMPUTAT, P2390, DOI 10.1109/CEC.2007.4424770
+   Noessner J., 2010, P 5 INT WORKSH ONT M
+   Noy NF, 2000, SEVENTEENTH NATIONAL CONFERENCE ON ARTIFICIAL INTELLIGENCE (AAAI-2001) / TWELFTH INNOVATIVE APPLICATIONS OF ARTIFICIAL INTELLIGENCE CONFERENCE (IAAI-2000), P450
+   Powell M.J.D., 1964, COMPUT J, V7
+   Quix C., 2010, P 5 INT WORKSH ONT M
+   Rahm E, 2001, VLDB J, V10, P334, DOI 10.1007/s007780100057
+   SALTON G, 1988, INFORM PROCESS MANAG, V24, P513, DOI 10.1016/0306-4573(88)90021-0
+   SALTON G, 1975, COMMUN ACM, V18, P613, DOI 10.1145/361219.361220
+   Saruladha K., 2011, INT J COMPUTER APPL, V34, P14
+   Sheskin D.J., 2000, HDB PARAMETRIC NONPA
+   Shvaiko P, 2013, IEEE T KNOWL DATA EN, V25, P158, DOI 10.1109/TKDE.2011.253
+   Shvaiko P., 2004, P MEAN COORD NEG WOR
+   Stoilos G., 2005, P 4 INT SEM WEB C IS, P623
+   Tang J., 2007, SOFT COMPUT, V11, P957
+   Ting CK, 2010, INFORM SCIENCES, V180, P4818, DOI 10.1016/j.ins.2010.08.021
+   van Rijsbergen C.J., 1979, INFORM RETRIEVAL
+   Vazquez Naya J.M., 2010, SOFT COMPUTING METHO, P240
+   Wang J., 2006, P IEEE AS PAC C SERV
+   Wang Z., 2010, P 5 INT WORKSH ONT M
+   Wei W., 2010, P 5 INT WORKSH ONT M
+   Wen Y, 2011, INFORM SCIENCES, V181, P567, DOI 10.1016/j.ins.2010.10.001
+   Winkler W., 1999, TECHNICAL REPORT
+   Xu P., 2010, P 5 INT WORKSH ONT M
+NR 57
+TC 0
+Z9 0
+PU ELSEVIER SCIENCE INC
+PI NEW YORK
+PA 360 PARK AVE SOUTH, NEW YORK, NY 10010-1710 USA
+SN 0020-0255
+J9 INFORM SCIENCES
+JI Inf. Sci.
+PD NOV 20
+PY 1999
+VL 250
+BP 1
+EP 20
+DI 10.1016/j.ins.2013.06.052
+PG 20
+WC Computer Science, Information Systems
+SC Computer Science
+GA 226MV
+UT WOS:000325041400001
+ER
+
+
+PT J
+AU Acampora, G
+   Loia, V
+   Vitiello, A
+AF Acampora, Giovanni
+   Loia, Vincenzo
+   Vitiello, Autilia
+TI Enhancing ontology alignment through a memetic aggregation of similarity
+   measures
+SO INFORMATION SCIENCES
+LA English
+DT Article
+DE Ontology alignment; Similarity measure; Similarity aggregation; Memetic
+   algorithm
+ID DESIGN ISSUES; ALGORITHM; TAXONOMY; MODEL
+AB Modern infrastructures for information and communication technologies are aimed at providing enhanced services by integrating the knowledge spread on the web through an ontological representation of information. However, ontology usefulness in managing different knowledge sources is limited by the so-called semantic heterogeneity problem arising when several interacting software components use different ontologies for representing the same information. In order to bridge this gap and, consequently, enable a full interoperability across the software components, it is necessary to bring the corresponding ontologies into a mutual agreement by identifying a set of semantic relationships among their entities. This result is achieved by means of a so-called ontology alignment process that, for each pair of entities belonging to the ontologies under alignment, computes their semantic closeness through an optimized aggregation of different similarity measures. Unfortunately, this similarity aggregation is a hard optimization process, above all, when no information is known about ontology features. The aim of this paper is to define an ontology alignment process based on a memetic algorithm able to efficiently aggregate similarity measures without using a priori knowledge about ontologies under alignment. As shown by a statistical multiple comparison procedure, our approach yields high performance in terms of alignment quality with respect to top-performers of well-known Ontology Alignment Evaluation Initiative campaigns. (c) 2013 Elsevier Inc. All rights reserved.
+RP Loia, V (reprint author), Univ Salerno, Dept Comp Sci, I-84084 Fisciano, Italy.
+EM g.acampora@tue.nl; loia@unisa.it; avitiello@unisa.it
+CR Abdullah S, 2012, INFORM SCIENCES, V191, P146, DOI 10.1016/j.ins.2011.12.018
+   Acampora G, 2012, INT J INTELL SYST, V27, P189, DOI 10.1002/int.20517
+   Bock J, 2012, INFORM SCIENCES, V192, P152, DOI 10.1016/j.ins.2010.08.013
+   Cruz I.F., 2010, P 5 INT WORKSH ONT M
+   David J., 2007, THESIS U NANTE
+   Xu P., 2010, P 5 INT WORKSH ONT M
+NR 57
+TC 0
+Z9 0
+PU ELSEVIER SCIENCE INC
+PI NEW YORK
+PA 360 PARK AVE SOUTH, NEW YORK, NY 10010-1710 USA
+SN 0020-0255
+J9 INFORM SCIENCES
+JI Inf. Sci.
+PD NOV 20
+PY 2013
+VL 250
+BP 1
+EP 20
+DI 10.1016/j.ins.2013.06.052
+PG 20
+WC Computer Science, Information Systems
+SC Computer Science
+GA 226MV
+UT WOS:000325041400001
+ER
+
+
+PT J
+AU Huang, TCK
+AF Huang, Tony Cheng-Kui
+TI A novel group ranking model for revealing sequence and quantity
+   knowledge
+SO EUROPEAN JOURNAL OF OPERATIONAL RESEARCH
+LA English
+DT Article
+DE Group ranking; Data mining; Sequential data; Quantitative data;
+   Linguistic terms
+ID GROUP DECISION-MAKING; PREFERENCE; INFORMATION; PROPOSALS; REVIEWERS;
+   PATTERNS
+AB The aggregation of individuals' preferences into a consensus ranking is a group ranking problem which has been widely utilized in various applications, such as decision support systems, recommendation systems, and voting systems. Gathering the comparison of preferences and aggregate them to gain consensuses is a conventional issue. For example, b > c >= d >= a indicates that b is favorable to c, and c (d) is somewhat favorable but not fully favorable to d (a), where > and >= are comparators, and a, b, c, and d are items. Recently, a new type of ranking model was proposed to provide temporal orders of items. The order, b&c -> a, means that b and c can occur simultaneously and are also before a. Although this model can derive the order ranking of items, the knowledge about quantity-related items is also of importance to approach more real-life circumstances. For example, when enterprises or individuals handle their portfolios in financial management, two considerations, the sequences and the amount of money for investment objects, should be raised initially. In this study, we propose a model for discovering consensus sequential patterns with quantitative linguistic terms. Experiments using synthetic and real datasets showed the model's computational efficiency, scalability, and effectiveness. (c) 2013 Elsevier B.V. All rights reserved.
+C1 Natl Chung Cheng Univ, Dept Business Adm, Chiayi, Taiwan.
+RP Huang, TCK (reprint author), Natl Chung Cheng Univ, Dept Business Adm, 168 Univ Rd, Chiayi, Taiwan.
+EM bmahck@ccu.edu.tw
+FU National Science Council of the Republic of China [NSC
+   102-2410-H-194-100-MY2]
+FX The author would like to thank the Editor, Dr. Immanuel Bomze, and three
+   anonymous referees for their helps and valuable comments to improve this
+   paper. He also appreciates Krannert School of Management, Purdue
+   University, providing the research resources to support the revision of
+   this paper during his visiting period. This research was supported by
+   the National Science Council of the Republic of China under the grant
+   NSC 102-2410-H-194-100-MY2.
+CR Agrawal R, 1994, P 20 INT C VER LARG, V1215, P487
+   AGRAWAL R, 1995, PROC INT CONF DATA, P3, DOI 10.1109/ICDE.1995.380415
+   BOGART KP, 1975, SIAM J APPL MATH, V29, P254, DOI 10.1137/0129023
+   Borda J. C., 1981, MEMOIRE ELECTIONS SC
+   Chang C. C., 2011, THESIS NATL CHUNG CH
+   Chen LS, 2005, EUR J OPER RES, V160, P803, DOI 10.1016/j.ejor.2003.07.003
+   Chen YL, 2009, EUR J OPER RES, V198, P241, DOI 10.1016/j.ejor.2008.09.004
+   Chen YL, 2006, FUZZY SET SYST, V157, P1641, DOI 10.1016/j.fss.2006.02.008
+   Chen YL, 2010, DECIS SUPPORT SYST, V48, P622, DOI 10.1016/j.dss.2009.12.003
+   Chen YL, 2008, EXPERT SYST APPL, V34, P2396, DOI 10.1016/j.eswa.2007.04.004
+   Cook W. D., 1996, EUR J OPER RES, V96, P392
+   Cook WD, 2005, MANAGE SCI, V51, P655, DOI 10.1287/mnsc.1040.0290
+   COOK WD, 1986, PSYCHOMETRIKA, V51, P197, DOI 10.1007/BF02293980
+   Cook WD, 2006, EUR J OPER RES, V172, P369, DOI 10.1016/j.ejor.2005.03.048
+   Cook WD, 2007, COMPUT OPER RES, V34, P954, DOI 10.1016/j.cor.2005.05.030
+   Fagin R., 2003, P 2003 ACM SIGMOD IN, P301, DOI DOI 10.1145/872757.872795
+   Greco S, 2008, EUR J OPER RES, V191, P416, DOI 10.1016/j.ejor.2007.08.013
+   Han J, 2006, DATA MINING CONCEPTS
+   Herrera F, 2008, IEEE T FUZZY SYST, V16, P354, DOI 10.1109/TFUZZ.2007.896353
+   Hong T. P., 1999, 1999 IEEE INT C SYST, P768
+   Huang YS, 2013, EUR J OPER RES, V229, P462, DOI 10.1016/j.ejor.2013.02.043
+   Jabeur K, 2007, EUR J OPER RES, V180, P1272, DOI 10.1016/j.ejor.2006.05.032
+   Kao C, 1997, EUR J OPER RES, V103, P628, DOI 10.1016/S0377-2217(97)00145-8
+   Kemeny J. G., 1962, P MATH MOD SOC SCI, P9
+   Kim C, 2007, J SYST SOFTWARE, V80, P1726, DOI 10.1016/j.jss.2006.12.562
+   Laudon K. C., 2007, MANAGEMENT INFORM SY
+   Liu G., 2003, P 8 INT C DAT SYST A, P65
+   Mitra S, 2002, IEEE T NEURAL NETWOR, V13, P3, DOI 10.1109/72.977258
+   Moon J., 1968, TOPICS TOURNAMENTS
+   Smith R. E., 2009, HUMAN RESOURCES ADM
+   Srikant R., 1996, P 5 INT C EXT DAT TE, P3
+   WATSON HJ, 1993, MIS QUART, V17, P255, DOI 10.2307/249771
+NR 32
+TC 0
+Z9 0
+PU ELSEVIER SCIENCE BV
+PI AMSTERDAM
+PA PO BOX 211, 1000 AE AMSTERDAM, NETHERLANDS
+SN 0377-2217
+J9 EUR J OPER RES
+JI Eur. J. Oper. Res.
+PD DEC 16
+PY 2013
+VL 231
+IS 3
+BP 654
+EP 666
+DI 10.1016/j.ejor.2013.06.054
+PG 13
+WC Management; Operations Research & Management Science
+SC Business & Economics; Operations Research & Management Science
+GA 204JB
+UT WOS:000323360500013
+ER

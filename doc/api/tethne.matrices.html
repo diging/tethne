@@ -1,0 +1,264 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>matrices Package &mdash; tethne 0.4.2-alpha documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4.2-alpha',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="tethne 0.4.2-alpha documentation" href="index.html" />
+    <link rel="up" title="tethne Package" href="tethne.html" />
+    <link rel="next" title="networks Package" href="tethne.networks.html" />
+    <link rel="prev" title="analyze Package" href="tethne.analyze.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tethne.networks.html" title="networks Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tethne.analyze.html" title="analyze Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">tethne 0.4.2-alpha documentation</a> &raquo;</li>
+          <li><a href="tethne.html" accesskey="U">tethne Package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="matrices-package">
+<h1>matrices Package<a class="headerlink" href="#matrices-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">matrices</span></tt> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-tethne.matrices"></span><p>Methods for generating matrices from <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects and other data.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#module-tethne.matrices.dfr" title="tethne.matrices.dfr"><tt class="xref py py-obj docutils literal"><span class="pre">dfr</span></tt></a></td>
+<td>Methods for generating Numpy data objects from JSTOR Data-for-Research datasets.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="module-tethne.matrices.dfr">
+<span id="dfr-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">dfr</span></tt> Module<a class="headerlink" href="#module-tethne.matrices.dfr" title="Permalink to this headline">¶</a></h2>
+<p>Methods for generating Numpy data objects from JSTOR Data-for-Research datasets.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.matrices.dfr.array" title="tethne.matrices.dfr.array"><tt class="xref py py-obj docutils literal"><span class="pre">array</span></tt></a>(data[,&nbsp;normalize,&nbsp;verbose])</td>
+<td>Yields a Numpy array, along with feature-index and document-index mappings.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.matrices.dfr.matrix" title="tethne.matrices.dfr.matrix"><tt class="xref py py-obj docutils literal"><span class="pre">matrix</span></tt></a>(data[,&nbsp;normalize,&nbsp;verbose])</td>
+<td>Yields a Numpy matrix, along with feature-index and document-index mappings.</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="tethne.matrices.dfr.Map">
+<em class="property">class </em><tt class="descclassname">tethne.matrices.dfr.</tt><tt class="descname">Map</tt><a class="reference internal" href="_modules/tethne/matrices/dfr.html#Map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.matrices.dfr.Map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Maps integer indices to string values.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.matrices.dfr.array">
+<tt class="descclassname">tethne.matrices.dfr.</tt><tt class="descname">array</tt><big>(</big><em>data</em>, <em>normalize=False</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/tethne/matrices/dfr.html#array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.matrices.dfr.array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yields a Numpy array, along with feature-index and document-index mappings.</p>
+<p><strong>Usage</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.matrices</span> <span class="kn">as</span> <span class="nn">mt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">dfr</span><span class="o">.</span><span class="n">ngrams</span><span class="p">(</span><span class="s">&quot;/Path/to/DfR/data&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">,</span> <span class="n">doc_index</span><span class="p">,</span> <span class="n">feat_index</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">dfr</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : dict</p>
+<blockquote>
+<div><p>Keys are document identifiers (e.g. DOIs), values are lists of feature-
+frequency tuples.</p>
+</div></blockquote>
+<p><strong>normalize</strong> : bool</p>
+<blockquote>
+<div><p>If True, matrix values are relative to the maximum value in the matrix.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>A</strong> : Numpy array</p>
+<blockquote>
+<div><p>Columns are documents, rows are features.</p>
+</div></blockquote>
+<p><strong>document_index</strong> : class:<cite>.Map</cite></p>
+<blockquote>
+<div><p>Maps column indices to document identifiers (keys of provided data).</p>
+</div></blockquote>
+<p><strong>feature_index</strong> : <a class="reference internal" href="#tethne.matrices.dfr.Map" title="tethne.matrices.dfr.Map"><tt class="xref py py-class docutils literal"><span class="pre">Map</span></tt></a></p>
+<blockquote class="last">
+<div><p>Maps row indices to features.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.matrices.dfr.matrix">
+<tt class="descclassname">tethne.matrices.dfr.</tt><tt class="descname">matrix</tt><big>(</big><em>data</em>, <em>normalize=False</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/tethne/matrices/dfr.html#matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.matrices.dfr.matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yields a Numpy matrix, along with feature-index and document-index mappings.</p>
+<p><strong>Usage</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.matrices</span> <span class="kn">as</span> <span class="nn">mt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">dfr</span><span class="o">.</span><span class="n">ngrams</span><span class="p">(</span><span class="s">&quot;/Path/to/DfR/data&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="p">,</span> <span class="n">doc_index</span><span class="p">,</span> <span class="n">feat_index</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">dfr</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : dict</p>
+<blockquote>
+<div><p>Keys are document identifiers (e.g. DOIs), values are lists of feature-
+frequency tuples.</p>
+</div></blockquote>
+<p><strong>normalize</strong> : bool</p>
+<blockquote>
+<div><p>If True, matrix values are relative to the maximum value in the matrix.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>M</strong> : Numpy matrix</p>
+<blockquote>
+<div><p>Columns are documents, rows are features.</p>
+</div></blockquote>
+<p><strong>document_index</strong> : class:<cite>.Map</cite></p>
+<blockquote>
+<div><p>Maps column indices to document identifiers (keys of provided data).</p>
+</div></blockquote>
+<p><strong>feature_index</strong> : <a class="reference internal" href="#tethne.matrices.dfr.Map" title="tethne.matrices.dfr.Map"><tt class="xref py py-class docutils literal"><span class="pre">Map</span></tt></a></p>
+<blockquote class="last">
+<div><p>Maps row indices to features.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">matrices Package</a><ul>
+<li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">matrices</span></tt> Package</a></li>
+<li><a class="reference internal" href="#module-tethne.matrices.dfr"><tt class="docutils literal"><span class="pre">dfr</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tethne.analyze.html"
+                        title="previous chapter">analyze Package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tethne.networks.html"
+                        title="next chapter">networks Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tethne.matrices.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tethne.networks.html" title="networks Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tethne.analyze.html" title="analyze Package"
+             >previous</a> |</li>
+        <li><a href="index.html">tethne 0.4.2-alpha documentation</a> &raquo;</li>
+          <li><a href="tethne.html" >tethne Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, ASU Digital Innovation Group.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

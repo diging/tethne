@@ -1,0 +1,211 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Quickstart (Python) &mdash; tethne 0.4.2-alpha documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4.2-alpha',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="tethne 0.4.2-alpha documentation" href="index.html" />
+    <link rel="up" title="Tutorial" href="tutorial.html" />
+    <link rel="next" title="Coauthorship Networks" href="tutorial.coauthors.html" />
+    <link rel="prev" title="Quickstart (Command-line)" href="tutorial.quickstart.commandline.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.coauthors.html" title="Coauthorship Networks"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.quickstart.commandline.html" title="Quickstart (Command-line)"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">tethne 0.4.2-alpha documentation</a> &raquo;</li>
+          <li><a href="tutorial.html" accesskey="U">Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="quickstart-python">
+<h1>Quickstart (Python)<a class="headerlink" href="#quickstart-python" title="Permalink to this headline">¶</a></h1>
+<p>After starting Python, import Tethne modules with:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
+</pre></div>
+</div>
+<p>To parse some data from the Web of Science, use the <a class="reference internal" href="tethne.readers.html#module-tethne.readers.wos" title="tethne.readers.wos"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.readers.wos</span></tt></a> module. See
+the <a class="reference internal" href="tethne.html#tethne.data.Paper" title="tethne.data.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> class for more information about what Tethne extracts from your WoS
+data.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/Path/To/FirstDataSet.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">&lt;tethne.data.Paper instance at 0x1015ed200&gt;</span>
+</pre></div>
+</div>
+<p>You can either generate a network directly from your data using the methods in
+<tt class="xref py py-mod docutils literal"><span class="pre">tethne.networks.wos</span></tt> , or you can package your data in a <a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a>
+for comparative or longitudinal analysis. If you want to generate a dynamic network, then
+use a <a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> .</p>
+<div class="section" id="simple-networks">
+<h2>Simple Networks<a class="headerlink" href="#simple-networks" title="Permalink to this headline">¶</a></h2>
+<p>To generate a single network directly from your data, use the <tt class="xref py py-mod docutils literal"><span class="pre">tethne.networks.wos</span></tt>
+module. For example, to build a bibliographic coupling network:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.networks</span> <span class="kn">as</span> <span class="nn">nt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">citations</span><span class="o">.</span><span class="n">bibliographic_coupling</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span>
+<span class="go">&lt;networkx.classes.graph.Graph object at 0x101b4fe50&gt;</span>
+</pre></div>
+</div>
+<p>NetworkX provides
+<a class="reference external" href="http://networkx.github.io/documentation/networkx-1.7/reference/algorithms.html">algorithms</a>
+for graph analysis. To generate betweenness-centrality values for each node, try:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b_centrality</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">betweenness_centrality</span><span class="p">(</span><span class="n">BC</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">BC</span><span class="p">,</span> <span class="s">&#39;betweenness&#39;</span><span class="p">,</span> <span class="n">b_centrality</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">(&#39;BRADSHAW 1965 ADV GENET&#39;, {&#39;betweenness&#39;: 0.12345})</span>
+</pre></div>
+</div>
+<p>You can then export your network for visualization using one of the methods
+in <a class="reference internal" href="tethne.writers.html#module-tethne.writers" title="tethne.writers"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.writers</span></tt></a> . For example, to generate a simple interaction file (SIF):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">to_sif</span><span class="p">(</span><span class="n">BC</span><span class="p">,</span> <span class="s">&#39;/Path/to/Output/File&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sliced-networks-for-comparative-or-longitudinal-analysis">
+<h2>Sliced Networks for Comparative or Longitudinal Analysis<a class="headerlink" href="#sliced-networks-for-comparative-or-longitudinal-analysis" title="Permalink to this headline">¶</a></h2>
+<p>Especially if you want to create a dynamic network (a network that changes over time), use
+a <a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> to organize your data.</p>
+<p>To create a <a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.data</span> <span class="kn">import</span> <span class="n">DataCollection</span><span class="p">,</span> <span class="n">GraphCollection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">DataCollection</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can then use the <a class="reference internal" href="tethne.html#tethne.data.DataCollection.slice" title="tethne.data.DataCollection.slice"><tt class="xref py py-func docutils literal"><span class="pre">tethne.data.DataCollection.slice()</span></tt></a> method to slice your data,
+e.g. by publication date. To use a 4-year sliding time-window:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">D</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;time_window&#39;</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create a <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> to manage your graphs. <a class="reference internal" href="tethne.html#module-tethne.builders" title="tethne.builders"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.builders</span></tt></a> provides
+some helpful classes for creating a <a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> from a
+<a class="reference internal" href="tethne.html#tethne.data.DataCollection" title="tethne.data.DataCollection"><tt class="xref py py-class docutils literal"><span class="pre">DataCollection</span></tt></a> . For example <a class="reference internal" href="tethne.html#tethne.builders.authorCollectionBuilder" title="tethne.builders.authorCollectionBuilder"><tt class="xref py py-class docutils literal"><span class="pre">authorCollectionBuilder</span></tt></a> build a
+<a class="reference internal" href="tethne.html#tethne.data.GraphCollection" title="tethne.data.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> using an author-based network (e.g. coauthorship networks) in
+<a class="reference internal" href="tethne.networks.html#module-tethne.networks.authors" title="tethne.networks.authors"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.networks.authors</span></tt></a> :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.builders</span> <span class="kn">import</span> <span class="n">authorCollectionBuilder</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">builder</span> <span class="o">=</span> <span class="n">authorCollectionBuilder</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;coauthors&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To write <a class="reference external" href="https://code.google.com/p/dynnetwork/wiki/DynamicXGMML">dynamic XGMML</a>
+for visualization in <a class="reference external" href="http://cytoscape.org">Cytoscape</a>, use the writing methods in
+<a class="reference internal" href="tethne.writers.html#module-tethne.writers.collection" title="tethne.writers.collection"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.writers.collection</span></tt></a> :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">to_dxgmml</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="s">&#39;/Path/to/Network.xgmml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Quickstart (Python)</a><ul>
+<li><a class="reference internal" href="#simple-networks">Simple Networks</a></li>
+<li><a class="reference internal" href="#sliced-networks-for-comparative-or-longitudinal-analysis">Sliced Networks for Comparative or Longitudinal Analysis</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial.quickstart.commandline.html"
+                        title="previous chapter">Quickstart (Command-line)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tutorial.coauthors.html"
+                        title="next chapter">Coauthorship Networks</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tutorial.quickstart.python.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.coauthors.html" title="Coauthorship Networks"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.quickstart.commandline.html" title="Quickstart (Command-line)"
+             >previous</a> |</li>
+        <li><a href="index.html">tethne 0.4.2-alpha documentation</a> &raquo;</li>
+          <li><a href="tutorial.html" >Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, ASU Digital Innovation Group.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

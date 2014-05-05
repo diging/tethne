@@ -1,0 +1,38 @@
+{% extends 'layouts/user.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<!-- 
+<div class="page-header">
+  <h1>Welcome {{ user }} </h1>
+</div>  -->
+<a href="{{ url_for('.gc_list') }}"> <<< Back to List GraphCollections</a><br><br>
+<p > Analyze the GraphCollection using betweenness centrality, global closeness centrality and so on.</p>
+
+<div class="panel panel-primary">
+	<div class="panel-heading"><bold>Analyse GraphCollection</div>
+ 		 <div class="panel-body">
+    		<div class="well well-lg">
+  					<form role="form" class="form-inline" method = "post">
+  					<span class="help-block">
+  					</span>
+  					<select class="form-control"> <option>Betweenness Centrality</option> <option>Global closeness centrality</option> </select> 
+						</br> </br>
+  						<div class="form-horizontal">
+    						<!--  Not a proper design ...change the class="btn btn-default alignment to middle  -->
+    						 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+							 &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp 
+ 							 <input button type="submit" value="Analyze!" class="btn btn-default">
+ 							
+					 </form>
+ 			 </div>
+    	  </div>
+	</div>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,56 @@
+(dp0
+S'WENZHOU UNIV, PEOPLES R CHINA'
+p1
+ccopy_reg
+_reconstructor
+p2
+(ctethne.services.geocode
+Location
+p3
+c__builtin__
+object
+p4
+Ntp5
+Rp6
+(dp7
+S'latitude'
+p8
+F27.994267
+sS'place'
+p9
+VWenzhou, Zhejiang, China
+p10
+sS'longitude'
+p11
+F120.699367
+sbsS'UNIV SALERNO, ITALY'
+p12
+g2
+(g3
+g4
+Ntp13
+Rp14
+(dp15
+g8
+F40.7687118
+sg9
+VUniversity of Salerno, Via Giovanni Paolo II, 132, 84084 Fisciano Salerno, Italy
+p16
+sg11
+F14.7920179
+sbsS'UNIV TECHNOL SYDNEY, AUSTRALIA'
+p17
+g2
+(g3
+g4
+Ntp18
+Rp19
+(dp20
+g8
+F-33.8838982
+sg9
+VUniversity of Technology Sydney, 15 Broadway, Ultimo NSW 2007, Australia
+p21
+sg11
+F151.2010127
+sbs.

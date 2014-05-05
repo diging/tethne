@@ -1,0 +1,228 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tutorial &mdash; tethne 0.4.2-alpha documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.4.2-alpha',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="tethne 0.4.2-alpha documentation" href="index.html" />
+    <link rel="next" title="Getting Bibliographic Data" href="tutorial.getting_data.html" />
+    <link rel="prev" title="Installation" href="install.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.getting_data.html" title="Getting Bibliographic Data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">tethne 0.4.2-alpha documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<p>Tethne is primarily developed as a Python package, but can also be invoked from the
+command-line (Mac OSX, Linux; untested for Windows).</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.getting_data.html">Getting Bibliographic Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.getting_data.html#web-of-science">Web of Science</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.getting_data.html#jstor-data-for-research">JSTOR Data-for-Research</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.quickstart.commandline.html">Quickstart (Command-line)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.quickstart.python.html">Quickstart (Python)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.quickstart.python.html#simple-networks">Simple Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.quickstart.python.html#sliced-networks-for-comparative-or-longitudinal-analysis">Sliced Networks for Comparative or Longitudinal Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.coauthors.html">Coauthorship Networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.coauthors.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.coauthors.html#reading-wos-data">Reading WoS Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.coauthors.html#slicing-wos-data">Slicing WoS Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.coauthors.html#building-the-coauthor-graph">Building the Coauthor Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.coauthors.html#write-the-graph-to-graphml">Write the Graph to GraphML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.coauthors.html#visualizing-the-merged-network-in-cytoscape">Visualizing the Merged Network in Cytoscape</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.coauthors.html#inter-institutional-collaboration-in-gephi">Inter-institutional Collaboration in Gephi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.coauthors.html#coauthorship-network-evolution">Coauthorship network evolution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.bibliocoupling.html">Bibliographic Coupling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.bibliocoupling.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.bibliocoupling.html#reading-wos-data">Reading WoS Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.bibliocoupling.html#slicing-wos-data">Slicing WoS Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.bibliocoupling.html#building-the-bibliographic-coupling-graph">Building the Bibliographic Coupling Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.bibliocoupling.html#write-the-graph-to-graphml">Write the Graph to GraphML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.bibliocoupling.html#visualizing-the-merged-network">Visualizing the Merged Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.bibliocoupling.html#cluster-detection">Cluster Detection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.bibliocoupling.html#bibliographic-coupling-over-time">Bibliographic Coupling over Time</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.geonetworks.html">Geographic Networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.geonetworks.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.geonetworks.html#are-your-data-suitable">Are your data suitable?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.geonetworks.html#coauthorship-network-with-geocoding">Coauthorship network with geocoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.geonetworks.html#export-to-graphml">Export to GraphML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.geonetworks.html#geo-layout-in-gephi">Geo Layout in Gephi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.geonetworks.html#eigenvector-centrality">Eigenvector Centrality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.geonetworks.html#plotting-geodata-on-a-basemap">Plotting geodata on a basemap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.geonetworks.html#institutional-networks">Institutional Networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.geonetworks.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.geonetworks.html#visualization">Visualization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.mallet.html">Generating and Visualizing Topic Models with Tethne and MALLET</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.mallet.html#before-you-start">Before You Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.mallet.html#loading-jstor-dfr">Loading JSTOR DfR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.mallet.html#generating-documents">Generating Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.mallet.html#topic-modeling-in-mallet">Topic Modeling in MALLET</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.mallet.html#parsing-mallet-output">Parsing MALLET Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.mallet.html#semantic-network">Semantic Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.mallet.html#wrapping-up-looking-forward">Wrapping up, Looking forward</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="step-by-step-guide-python">
+<h2>Step-By-Step Guide (Python)<a class="headerlink" href="#step-by-step-guide-python" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.networks.html">Creating Networks from Bibliographic Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.networks.html#parsing-data">Parsing Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.networks.html#creating-networks">Creating Networks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.networks.html#generating-a-single-network-directly-from-a-list-of-paper-objects">Generating a single network directly from a list of <tt class="docutils literal"><span class="pre">Paper</span></tt> objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.networks.html#generating-a-graphcollection-from-a-datacollection">Generating a <tt class="docutils literal"><span class="pre">GraphCollection</span></tt> from a <tt class="docutils literal"><span class="pre">DataCollection</span></tt></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.networks.html#networks-of-documents">Networks of Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.networks.html#networks-of-authors">Networks of Authors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.analyze.html">Analyzing Bibliographic Networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.analyze.html#analyzing-individual-networks">Analyzing individual networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.analyze.html#analyzing-a-graphcollection">Analyzing a <tt class="docutils literal"><span class="pre">GraphCollection</span></tt></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.analyze.html#methods">Methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tutorial</a><ul>
+<li><a class="reference internal" href="#step-by-step-guide-python">Step-By-Step Guide (Python)</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="install.html"
+                        title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tutorial.getting_data.html"
+                        title="next chapter">Getting Bibliographic Data</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tutorial.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.getting_data.html" title="Getting Bibliographic Data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Installation"
+             >previous</a> |</li>
+        <li><a href="index.html">tethne 0.4.2-alpha documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, ASU Digital Innovation Group.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

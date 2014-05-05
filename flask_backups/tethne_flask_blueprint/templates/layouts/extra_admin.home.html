@@ -1,0 +1,219 @@
+
+<!-- Not a dynamic one,need to change-->
+
+<SCRIPT language="javascript">
+        function addRow(tableID) {
+ 
+            var table = document.getElementById(tableID);
+ 
+            var rowCount = table.rows.length;
+            var row = table.insertRow(rowCount);
+ 
+            var cell1 = row.insertCell(0);
+            var element1 = document.createElement("input");
+            element1.type = "checkbox";
+            element1.name="chkbox[]";
+            cell1.appendChild(element1);
+ 
+            var cell2 = row.insertCell(1);
+            cell2.innerHTML = rowCount + 1;
+ 
+            var cell3 = row.insertCell(2);
+            var element2 = document.createElement("input");
+            element2.type = "text";
+            element2.name = "txtbox[]";
+            cell3.appendChild(element2);
+            
+            var cell4 = row.insertCell(3);
+            var element3 = document.createElement("input");
+            element3.type = "text";
+            element3.name = "txtbox[]";
+            cell3.appendChild(element3);
+ 
+ 
+        }
+ 
+        function deleteRow(tableID) {
+            try {
+            var table = document.getElementById(tableID);
+            var rowCount = table.rows.length;
+ 
+            for(var i=0; i<rowCount; i++) {
+                var row = table.rows[i];
+                var chkbox = row.cells[0].childNodes[0];
+                if(null != chkbox && true == chkbox.checked) {
+                    table.deleteRow(i);
+                    rowCount--;
+                    i--;
+                }
+ 
+ 
+            }
+            }catch(e) {
+                alert(e);
+            }
+        }
+ 
+    </SCRIPT>
+
+ 
+    <INPUT type="button" value="Add Users" onclick="addRow('dataTable')" />
+ 
+    <INPUT type="button" value="Delete Row" onclick="deleteRow('dataTable')" />
+ 
+    <TABLE id="dataTable" width="350px" border="1">
+        <TR>
+            <TD><INPUT type="checkbox" name="chk"/></TD>
+            <TD> 1 </TD>
+            <TD> <INPUT type="text" /> </TD>
+        </TR>
+    </TABLE>
+ 
+</BODY>
+</HTML>
+
+<!-- Not a dynamic  - check box needed to be added-->
+<script type="text/javascript">
+function createTable()
+{
+    var num_rows = document.getElementById('rows').value;
+    var num_cols = document.getElementById('cols').value;
+    var theader = '<table border="1">\n';
+    var tbody = '';
+
+    for( var i=0; i<num_rows;i++)
+    {
+        tbody += '<tr>';
+        for( var j=0; j<num_cols;j++)
+        {
+            tbody += '<td>';
+            tbody += 'Cell ' + i + ',' + j;
+            tbody += '</td>'
+        }
+        tbody += '</tr>\n';
+    }
+    var tfooter = '</table>';
+    document.getElementById('wrapper').innerHTML = theader + tbody + tfooter;
+}
+</script>
+</head>
+
+<body>
+<form name="tablegen">
+<label>Rows: <input type="text" name="rows" id="rows"/></label><br />
+<label>Cols: <input type="text" name="cols" id="cols"/></label><br/>
+<input name="generate" type="button" value="Create Table!" onclick='createTable();'/>
+</form>
+
+<div id="wrapper"></div>
+
+
+<html><div align="center" class="myDiv" style="width: 520px; height: 435px; padding:4px; border: 0px ; overflow:auto "> </html>
+
+<!-- Dynamic , but not working-->  
+
+<script type="text/javascript">
+function dynamicTable() 
+{
+    var a, b, tableElem, rowElem, colElem;
+
+    a = document.getElementById('tb1').value;
+    b = document.getElementById('tb2').value;
+
+    if (a == "" || b == "") {
+        alert("There are no values in the UserID table");
+    } 
+    else 
+    {
+        tableElem = document.createElement('table');
+
+        for (var i = 0; i < a; i++) {
+            rowElem = document.createElement('tr');
+
+            for (var j = 0; j < b; j++) {
+                colElem = document.createElement('td');
+                rowElem.appendChild(colElem);
+            }
+
+            tableElem.appendChild(rowElem);
+        }
+
+        document.body.appendChild(tableElem);
+
+
+    }
+}
+
+$(document).ready(function() {
+    dynamicTable();}
+);
+
+</script>
+
+
+
+
+
+
+<input type="text" id="tb1" value="10">
+<input type="text" id="tb2" value="6">
+<br>
+<br>
+&nbsp;
+&nbsp;
+
+
+
+<div>Users List</div>
+<button id="button_1" class="button">Users List</button>
+<div id="description_button_1">This isSample Test.</div>
+
+<div>Users List 2</div>
+<button id="button_2" class="button">Click</button>
+<div id="description_button_2">This is toggle-able text.</div>
+
+<div>SUBJECT</div>
+<button id="button_3" class="button">Do not Click</button>
+<div id="description_button_3">This is toggle-able text.</div>
+
+
+
+<script src="http://code.jquery.com/jquery-1.9.1.min.js">
+$(document).ready(function() {        
+console.log( "ready!" );  
+    $('.button').each(function(){
+        var toggle_div_id = 'description_' + $(this).attr('id');
+        $(this).click(function(){
+            $('#'+toggle_div_id).toggle();
+        });
+    });
+});
+
+</script>
+
+
+
+
+<table id="table_id">
+    <thead>
+        <tr>
+            <th>Column 1</th>
+            <th>Column 2</th>
+            <th>etc</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Row 1 Data 1</td>
+            <td>Row 1 Data 2</td>
+            <td>etc</td>
+        </tr>
+        <tr>
+            <td>Row 2 Data 1</td>
+            <td>Row 2 Data 2</td>
+            <td>etc</td>
+        </tr>
+    </tbody>
+</table>
+
+

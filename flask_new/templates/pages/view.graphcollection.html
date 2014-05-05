@@ -1,0 +1,62 @@
+{% extends 'layouts/user.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<!-- 
+<div class="page-header">
+  <h1>Welcome {{ user }} </h1>
+</div> -->
+<p class="lead"> Stats about the selected GraphCollection.</p>
+
+ 
+<!-- 
+ <form action="" method="get" class="form" >
+<body>
+	<table class="table table-hover">
+			<tr >
+				{% for col in columns %}
+				<th class="success">{{ col }}</th>
+				{% endfor %}
+				<tr class = ".table-hover">
+				{% for res in results %}
+					<tr class = ".table-hover"> 
+						
+					<td class="warning">
+					
+					{% for eachres in res %}
+        				{{ eachres }}
+        			{% for chk in checkboxes %}  
+           				  <input type="radio" name="query"> 	
+					 </td>
+					 {% endfor %}
+					{% endfor %}
+					</tr>	
+				{% endfor %}
+				</tr>
+			</tr>
+	</table>
+</body>
+
+ -->
+
+<form action="" method="get" class="form" >
+<body>
+       
+<a href="{{ url_for('.gc_list') }}"> <<< Back to GraphCollections List</a><br>
+<a href="{{ url_for('.dc_list') }}"> <<< Back to DataCollections List</a><br></br>	
+<p class="text-muted"> Pick one GraphCollection to analyze it.</p>
+<a href="{{ url_for('.gc_analyze') }}"class="btn btn-danger" role="button">Analyze GraphCollection</a>
+<br><br>
+
+<p class="text-danger"> Graph showing test data</p>
+<img src="/static/img/cocitation.png"> 
+<br>
+<br>
+
+
+
+
+</body>
+</form>
+
+
+{% endblock %}

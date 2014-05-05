@@ -1,0 +1,2493 @@
+<?xml version="1.0" encoding="utf-8"?><gexf version="1.1" xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gexf.net/1.1draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema-instance">
+  <graph defaultedgetype="undirected" mode="static">
+    <attributes class="edge" mode="static">
+      <attribute id="1" title="date" type="integer" />
+      <attribute id="2" title="networkx_key" type="integer" />
+      <attribute id="3" title="jtitle" type="string" />
+    </attributes>
+    <attributes class="node" mode="static">
+      <attribute id="0" title="type" type="string" />
+    </attributes>
+    <nodes>
+      <node id="TSURU, M" label="TSURU, M">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="ARSHI, S" label="ARSHI, S">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="VEYTSER, L" label="VEYTSER, L">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="PENG, GY" label="PENG, GY">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="PARLIER, R" label="PARLIER, R">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="SINGH, I" label="SINGH, I">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Natl Taiwan Univ" label="Natl Taiwan Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="SECCHI, R" label="SECCHI, R">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="HSU, KH" label="HSU, KH">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Massachusetts" label="Univ Massachusetts">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="RAAHEMI, B" label="RAAHEMI, B">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="CASTIGLIONE, A" label="CASTIGLIONE, A">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="BONETTO, E" label="BONETTO, E">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Politecn Torino" label="Politecn Torino">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="HOFT, DF" label="HOFT, DF">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Penn" label="Univ Penn">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="TRIVEDI, G" label="TRIVEDI, G">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="LOO, BT" label="LOO, BT">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Dust Networks Linear Technol" label="Dust Networks Linear Technol">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="VILAJOSANA, X" label="VILAJOSANA, X">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Calif Berkeley" label="Univ Calif Berkeley">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="ZANG, H" label="ZANG, H">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="LEE, SJ" label="LEE, SJ">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Osaka Prefecture Univ" label="Osaka Prefecture Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="BOTVICH, D" label="BOTVICH, D">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="JAEN, J" label="JAEN, J">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Naples 2" label="Univ Naples 2">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="SKORIN-KAPOV, N" label="SKORIN-KAPOV, N">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="CAREGLIO, D" label="CAREGLIO, D">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Bretagne Sud" label="Univ Bretagne Sud">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="MDE UPCT" label="MDE UPCT">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="Natl Cent Univ" label="Natl Cent Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="VARVARES, MA" label="VARVARES, MA">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Cairo Univ" label="Cairo Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="RICCIARDI, S" label="RICCIARDI, S">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Natl Taichung Univ" label="Natl Taichung Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="GARCIA-MANRUBIA, B" label="GARCIA-MANRUBIA, B">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="UNNIKRISHNAN, D" label="UNNIKRISHNAN, D">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="PRIBYL, L" label="PRIBYL, L">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Aston Univ" label="Aston Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="Natl Inst Informat &amp; Commun Technol" label="Natl Inst Informat &amp; Commun Technol">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="Qualcomm Corp Engn" label="Qualcomm Corp Engn">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="VICARIO, JL" label="VICARIO, JL">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="City Univ Hong Kong" label="City Univ Hong Kong">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="AL-SURMI, I" label="AL-SURMI, I">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Shandong Med Coll" label="Shandong Med Coll">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="SANTOS-BOADA, G" label="SANTOS-BOADA, G">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="MOCHOLI, JA" label="MOCHOLI, JA">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="HSIAO, HW" label="HSIAO, HW">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Waterford Inst Technol" label="Waterford Inst Technol">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="Sou, SI" label="Sou, SI">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Putra Malaysia" label="Univ Putra Malaysia">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="Northeastern Univ" label="Northeastern Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="Tech Univ Catalonia" label="Tech Univ Catalonia">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="SOKOLSKY, O" label="SOKOLSKY, O">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Technicolor Res Ctr" label="Technicolor Res Ctr">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="SVENSSON, T" label="SVENSSON, T">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Telefon I D" label="Telefon I D">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="Nanjing Med Univ" label="Nanjing Med Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="KRYNICKI, K" label="KRYNICKI, K">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="VENKATASUBRAMANIAN, KK" label="VENKATASUBRAMANIAN, KK">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="CRENNE, J" label="CRENNE, J">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Naples Federico II" label="Univ Naples Federico II">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="KADOWAKI, N" label="KADOWAKI, N">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="SHUKAIR, M" label="SHUKAIR, M">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="WANG, F" label="WANG, F">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="FOWLER, SA" label="FOWLER, SA">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="JENNINGS, B" label="JENNINGS, B">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="BAUTISTA, JEV" label="BAUTISTA, JEV">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Politecn Cartagena UPCT" label="Univ Politecn Cartagena UPCT">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="PEDAN, I" label="PEDAN, I">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Ecole Normale Super" label="Ecole Normale Super">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="TANAKA, T" label="TANAKA, T">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="FAIRHURST, G" label="FAIRHURST, G">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="LIU, S" label="LIU, S">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="LI, JY" label="LI, JY">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="SHEN, JK" label="SHEN, JK">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="TSUKAMOTO, K" label="TSUKAMOTO, K">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="KAWAMOTO, Y" label="KAWAMOTO, Y">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="LIAO, Y" label="LIAO, Y">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Southeast Univ" label="Southeast Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="IDZIKOWSKI, F" label="IDZIKOWSKI, F">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="OIE, Y" label="OIE, Y">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="NOORUZZAMAN, M" label="NOORUZZAMAN, M">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ British Columbia" label="Univ British Columbia">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="MUNIZ, A" label="MUNIZ, A">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Chang Jung Christian Univ" label="Chang Jung Christian Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="NISHIYAMA, H" label="NISHIYAMA, H">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Kyushu Inst Technol" label="Kyushu Inst Technol">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="PALMIERI, F" label="PALMIERI, F">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="SARKAR, S" label="SARKAR, S">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="ALASAAD, A" label="ALASAAD, A">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Guavus Inc" label="Guavus Inc">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="WHEELER, J" label="WHEELER, J">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="HRYCEK, E" label="HRYCEK, E">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="LUTTY, GA" label="LUTTY, GA">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Minnesota" label="Univ Minnesota">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="HRYCEK, A" label="HRYCEK, A">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Johns Hopkins Univ" label="Johns Hopkins Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="DE DIOS, OG" label="DE DIOS, OG">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Kagawa Univ" label="Kagawa Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="KATO, N" label="KATO, N">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="SHEN, XM" label="SHEN, XM">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="BENDZICK, L" label="BENDZICK, L">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="CHIARAVIGLIO, L" label="CHIARAVIGLIO, L">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Icesi Univ" label="Icesi Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="PAVON-MARINO, P" label="PAVON-MARINO, P">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="EBERHARD, MA" label="EBERHARD, MA">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="France Telecom" label="France Telecom">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="DAVY, A" label="DAVY, A">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="KATAYAMA, Y" label="KATAYAMA, Y">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="TAHA, S" label="TAHA, S">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="LI, H" label="LI, H">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="HERMANSON, DA" label="HERMANSON, DA">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Natl Univ Kaohsiung" label="Natl Univ Kaohsiung">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="BOLOT, JC" label="BOLOT, JC">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="COYLE, A" label="COYLE, A">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="BLASZCZAK, E" label="BLASZCZAK, E">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="ZHONG, WC" label="ZHONG, WC">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="HIRANO, A" label="HIRANO, A">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="HUANG, BR" label="HUANG, BR">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="PEDROLA, O" label="PEDROLA, O">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="FRANEK, A" label="FRANEK, A">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="CHENG, BN" label="CHENG, BN">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="VELASCO, L" label="VELASCO, L">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Tech Univ Berlin" label="Tech Univ Berlin">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="NICANFAR, H" label="NICANFAR, H">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="YU, XS" label="YU, XS">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="MIT Lincoln Lab" label="MIT Lincoln Lab">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="HAMID, NAWA" label="HAMID, NAWA">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="NTT Corp" label="NTT Corp">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="St Louis Univ" label="St Louis Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="CHANG, J" label="CHANG, J">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="AHMAD, A" label="AHMAD, A">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="KNORR, DA" label="KNORR, DA">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="HAN, B" label="HAN, B">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Indian Inst Technol Guwahati" label="Indian Inst Technol Guwahati">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="MCGARRY, S" label="MCGARRY, S">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="MO, W" label="MO, W">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="ZHANG, X" label="ZHANG, X">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="SHAIKH, AD" label="SHAIKH, AD">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="BIANCO, A" label="BIANCO, A">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="MORELL, A" label="MORELL, A">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="KOYAMA, O" label="KOYAMA, O">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="KAUFMAN, DS" label="KAUFMAN, DS">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="FAN, WC" label="FAN, WC">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Xidian Univ" label="Xidian Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="FU, XW" label="FU, XW">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="GONG, XX" label="GONG, XX">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="YONENAGA, K" label="YONENAGA, K">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="ZHANG, L" label="ZHANG, L">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="KANNAN, S" label="KANNAN, S">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Aberdeen" label="Univ Aberdeen">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="CESPEDES, S" label="CESPEDES, S">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="GOPALAKRISHNAN, S" label="GOPALAKRISHNAN, S">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="TOTH, K" label="TOTH, K">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Natl Def Univ" label="Natl Def Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="Fu, CH" label="Fu, CH">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Politecn Cataluna" label="Univ Politecn Cataluna">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="Univ Ottawa" label="Univ Ottawa">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="Qualcomm Inc" label="Qualcomm Inc">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="MA, CL" label="MA, CL">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Zagreb" label="Univ Zagreb">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="TESSIER, R" label="TESSIER, R">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="YANG, M" label="YANG, M">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Natl Pingtung Inst Commerce" label="Natl Pingtung Inst Commerce">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="DHALL, S" label="DHALL, S">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="SERROR, J" label="SERROR, J">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="TAKAHASHI, N" label="TAKAHASHI, N">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Linkoping Univ" label="Linkoping Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="HOU, WG" label="HOU, WG">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="GUO, L" label="GUO, L">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="SAWHNEY, S" label="SAWHNEY, S">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="LUO, JZ" label="LUO, JZ">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="HUANG, Y" label="HUANG, Y">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="KAWAMURA, R" label="KAWAMURA, R">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Natl Cheng Kung Univ" label="Natl Cheng Kung Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="SUN, HM" label="SUN, HM">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="YUN, A" label="YUN, A">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="RUIZ, M" label="RUIZ, M">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="GOVINDARAJU, VK" label="GOVINDARAJU, VK">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="HUANG, H" label="HUANG, H">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="INOUE, T" label="INOUE, T">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Med Univ Silesia" label="Med Univ Silesia">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="BLOW, KJ" label="BLOW, KJ">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Oklahoma" label="Univ Oklahoma">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="OTHMAN, M" label="OTHMAN, M">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="GAO, LX" label="GAO, LX">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="VADLAMANI, R" label="VADLAMANI, R">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Worcester Polytech Inst" label="Worcester Polytech Inst">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="Worldsensing" label="Worldsensing">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="Univ Oberta Catalunya" label="Univ Oberta Catalunya">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="APARICIO-PARDO, R" label="APARICIO-PARDO, R">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="GELLER, MA" label="GELLER, MA">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="CHEN, YR" label="CHEN, YR">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="RADHAKRISHNAN, S" label="RADHAKRISHNAN, S">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Autonoma Barcelona" label="Univ Autonoma Barcelona">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="JINNO, M" label="JINNO, M">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="LEE, I" label="LEE, I">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="LEE, J" label="LEE, J">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Tohoku Univ" label="Tohoku Univ">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="YANG, YT" label="YANG, YT">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Thales Alenia Space Espana" label="Thales Alenia Space Espana">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="WEST, AG" label="WEST, AG">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="MCCULLAR, V" label="MCCULLAR, V">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="FURDEK, M" label="FURDEK, M">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="ALI, BM" label="ALI, BM">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="HSUEH, EC" label="HSUEH, EC">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="TAKARA, H" label="TAKARA, H">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="MILLER, JS" label="MILLER, JS">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Salerno" label="Univ Salerno">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="Chen, CL" label="Chen, CL">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Chalmers" label="Chalmers">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="RAO, GB" label="RAO, GB">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Waterloo" label="Univ Waterloo">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="ZHENG, ZY" label="ZHENG, ZY">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="KARABUK, S" label="KARABUK, S">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="LIU, J" label="LIU, J">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="LEUNG, VCM" label="LEUNG, VCM">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="WANG, XG" label="WANG, XG">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="WATTEYNE, T" label="WATTEYNE, T">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Politecn Valencia" label="Univ Politecn Valencia">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="YE, J" label="YE, J">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Univ Roma La Sapienza" label="Univ Roma La Sapienza">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="VINORES, SA" label="VINORES, SA">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="COMELLAS, J" label="COMELLAS, J">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="DWORAK, J" label="DWORAK, J">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="KATSUYAMA, Y" label="KATSUYAMA, Y">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="FIORE, U" label="FIORE, U">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="Changzhou Coll Informat Technol" label="Changzhou Coll Informat Technol">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+      <node id="GU, HX" label="GU, HX">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="CHEN, HM" label="CHEN, HM">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="LV, SZ" label="LV, SZ">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="KAPOOR, HK" label="KAPOOR, HK">
+        <attvalues>
+          <attvalue for="0" value="author" />
+        </attvalues>
+      </node>
+      <node id="IBM SPSS Stat Res" label="IBM SPSS Stat Res">
+        <attvalues>
+          <attvalue for="0" value="institution" />
+        </attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <edge id="0" source="TSURU, M" target="Kyushu Inst Technol">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEICE TRANSACTIONS ON COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="1" source="ARSHI, S" target="Indian Inst Technol Guwahati">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CIRCUITS SYSTEMS AND SIGNAL PROCESSING" />
+        </attvalues>
+      </edge>
+      <edge id="2" source="VEYTSER, L" target="MIT Lincoln Lab">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON WIRELESS COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="3" source="PENG, GY" target="St Louis Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CANCER RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="4" source="PARLIER, R" target="Johns Hopkins Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="PLOS ONE" />
+        </attvalues>
+      </edge>
+      <edge id="5" source="SINGH, I" target="Qualcomm Corp Engn">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE COMMUNICATIONS MAGAZINE" />
+        </attvalues>
+      </edge>
+      <edge id="6" source="Natl Taiwan Univ" target="LEE, J">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON COMPUTERS" />
+        </attvalues>
+      </edge>
+      <edge id="7" source="SECCHI, R" target="Univ Aberdeen">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="INTERNATIONAL JOURNAL OF SATELLITE COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="8" source="HSU, KH" target="Natl Taichung Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON COMPUTERS" />
+        </attvalues>
+      </edge>
+      <edge id="9" source="Univ Massachusetts" target="FU, XW">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF SUPERCOMPUTING" />
+        </attvalues>
+      </edge>
+      <edge id="10" source="Univ Massachusetts" target="TESSIER, R">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON COMPUTERS" />
+        </attvalues>
+      </edge>
+      <edge id="11" source="Univ Massachusetts" target="GAO, LX">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON COMPUTERS" />
+        </attvalues>
+      </edge>
+      <edge id="12" source="Univ Massachusetts" target="LIAO, Y">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON COMPUTERS" />
+        </attvalues>
+      </edge>
+      <edge id="13" source="Univ Massachusetts" target="UNNIKRISHNAN, D">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON COMPUTERS" />
+        </attvalues>
+      </edge>
+      <edge id="14" source="RAAHEMI, B" target="Univ Ottawa">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="PEER-TO-PEER NETWORKING AND APPLICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="15" source="CASTIGLIONE, A" target="Univ Salerno">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="MATHEMATICAL AND COMPUTER MODELLING" />
+        </attvalues>
+      </edge>
+      <edge id="16" source="BONETTO, E" target="Politecn Torino">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="17" source="Politecn Torino" target="AHMAD, A">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="18" source="Politecn Torino" target="BIANCO, A">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="19" source="HOFT, DF" target="St Louis Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CANCER RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="20" source="Univ Penn" target="LEE, I">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE SYSTEMS JOURNAL" />
+        </attvalues>
+      </edge>
+      <edge id="21" source="Univ Penn" target="WEST, AG">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE SYSTEMS JOURNAL" />
+        </attvalues>
+      </edge>
+      <edge id="22" source="Univ Penn" target="LOO, BT">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE SYSTEMS JOURNAL" />
+        </attvalues>
+      </edge>
+      <edge id="23" source="Univ Penn" target="KANNAN, S">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE SYSTEMS JOURNAL" />
+        </attvalues>
+      </edge>
+      <edge id="24" source="Univ Penn" target="CHANG, J">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE SYSTEMS JOURNAL" />
+        </attvalues>
+      </edge>
+      <edge id="25" source="Univ Penn" target="SOKOLSKY, O">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE SYSTEMS JOURNAL" />
+        </attvalues>
+      </edge>
+      <edge id="26" source="TRIVEDI, G" target="Indian Inst Technol Guwahati">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CIRCUITS SYSTEMS AND SIGNAL PROCESSING" />
+        </attvalues>
+      </edge>
+      <edge id="27" source="Dust Networks Linear Technol" target="WATTEYNE, T">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="TRANSACTIONS ON EMERGING TELECOMMUNICATIONS TECHNOLOGIES" />
+        </attvalues>
+      </edge>
+      <edge id="28" source="VILAJOSANA, X" target="Worldsensing">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="TRANSACTIONS ON EMERGING TELECOMMUNICATIONS TECHNOLOGIES" />
+        </attvalues>
+      </edge>
+      <edge id="29" source="VILAJOSANA, X" target="Univ Oberta Catalunya">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="TRANSACTIONS ON EMERGING TELECOMMUNICATIONS TECHNOLOGIES" />
+        </attvalues>
+      </edge>
+      <edge id="30" source="VILAJOSANA, X" target="Univ Calif Berkeley">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="TRANSACTIONS ON EMERGING TELECOMMUNICATIONS TECHNOLOGIES" />
+        </attvalues>
+      </edge>
+      <edge id="31" source="ZANG, H" target="Guavus Inc">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTER NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="32" source="LEE, SJ" target="Natl Cheng Kung Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON COMPUTERS" />
+        </attvalues>
+      </edge>
+      <edge id="33" source="Osaka Prefecture Univ" target="KOYAMA, O">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTER NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="34" source="Osaka Prefecture Univ" target="KATSUYAMA, Y">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTER NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="35" source="Osaka Prefecture Univ" target="NOORUZZAMAN, M">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTER NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="36" source="BOTVICH, D" target="Waterford Inst Technol">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF NETWORK AND SYSTEMS MANAGEMENT" />
+        </attvalues>
+      </edge>
+      <edge id="37" source="JAEN, J" target="Univ Politecn Valencia">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="APPLIED SOFT COMPUTING" />
+        </attvalues>
+      </edge>
+      <edge id="38" source="Univ Naples 2" target="PALMIERI, F">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="MATHEMATICAL AND COMPUTER MODELLING" />
+        </attvalues>
+      </edge>
+      <edge id="39" source="SKORIN-KAPOV, N" target="MDE UPCT">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="OPTICAL SWITCHING AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="40" source="SKORIN-KAPOV, N" target="Univ Zagreb">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="OPTICAL SWITCHING AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="41" source="CAREGLIO, D" target="Univ Politecn Cataluna">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTERS &amp; OPERATIONS RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="42" source="Univ Bretagne Sud" target="CRENNE, J">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON COMPUTERS" />
+        </attvalues>
+      </edge>
+      <edge id="43" source="Natl Cent Univ" target="CHEN, HM">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON COMPUTERS" />
+        </attvalues>
+      </edge>
+      <edge id="44" source="VARVARES, MA" target="St Louis Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CANCER RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="45" source="Cairo Univ" target="TAHA, S">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON VEHICULAR TECHNOLOGY" />
+        </attvalues>
+      </edge>
+      <edge id="46" source="RICCIARDI, S" target="Tech Univ Catalonia">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="MATHEMATICAL AND COMPUTER MODELLING" />
+        </attvalues>
+      </edge>
+      <edge id="47" source="GARCIA-MANRUBIA, B" target="Univ Politecn Cartagena UPCT">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="OPTICAL SWITCHING AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="48" source="PRIBYL, L" target="Univ Minnesota">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CYTOTHERAPY" />
+        </attvalues>
+      </edge>
+      <edge id="49" source="Aston Univ" target="BLOW, KJ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IET COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="50" source="Aston Univ" target="EBERHARD, MA">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IET COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="51" source="Aston Univ" target="SHAIKH, AD">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IET COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="52" source="Natl Inst Informat &amp; Commun Technol" target="KADOWAKI, N">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON VEHICULAR TECHNOLOGY" />
+        </attvalues>
+      </edge>
+      <edge id="53" source="Qualcomm Corp Engn" target="BAUTISTA, JEV">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE COMMUNICATIONS MAGAZINE" />
+        </attvalues>
+      </edge>
+      <edge id="54" source="Qualcomm Corp Engn" target="SHUKAIR, M">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE COMMUNICATIONS MAGAZINE" />
+        </attvalues>
+      </edge>
+      <edge id="55" source="Qualcomm Corp Engn" target="GOVINDARAJU, VK">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE COMMUNICATIONS MAGAZINE" />
+        </attvalues>
+      </edge>
+      <edge id="56" source="Qualcomm Corp Engn" target="SAWHNEY, S">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE COMMUNICATIONS MAGAZINE" />
+        </attvalues>
+      </edge>
+      <edge id="57" source="Qualcomm Corp Engn" target="SARKAR, S">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE COMMUNICATIONS MAGAZINE" />
+        </attvalues>
+      </edge>
+      <edge id="58" source="VICARIO, JL" target="Univ Autonoma Barcelona">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="TRANSACTIONS ON EMERGING TELECOMMUNICATIONS TECHNOLOGIES" />
+        </attvalues>
+      </edge>
+      <edge id="59" source="City Univ Hong Kong" target="HOU, WG">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF LIGHTWAVE TECHNOLOGY" />
+        </attvalues>
+      </edge>
+      <edge id="60" source="City Univ Hong Kong" target="HOU, WG">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="1" />
+          <attvalue for="3" value="JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="61" source="City Univ Hong Kong" target="ZHENG, ZY">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF LIGHTWAVE TECHNOLOGY" />
+        </attvalues>
+      </edge>
+      <edge id="62" source="City Univ Hong Kong" target="ZHENG, ZY">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="1" />
+          <attvalue for="3" value="JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="63" source="AL-SURMI, I" target="Univ Putra Malaysia">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="WIRELESS NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="64" source="Shandong Med Coll" target="MA, CL">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CANCER RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="65" source="SANTOS-BOADA, G" target="Tech Univ Catalonia">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="MATHEMATICAL AND COMPUTER MODELLING" />
+        </attvalues>
+      </edge>
+      <edge id="66" source="MOCHOLI, JA" target="Univ Politecn Valencia">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="APPLIED SOFT COMPUTING" />
+        </attvalues>
+      </edge>
+      <edge id="67" source="HSIAO, HW" target="Natl Univ Kaohsiung">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="SECURITY AND COMMUNICATION NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="68" source="Waterford Inst Technol" target="JENNINGS, B">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF NETWORK AND SYSTEMS MANAGEMENT" />
+        </attvalues>
+      </edge>
+      <edge id="69" source="Waterford Inst Technol" target="DAVY, A">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF NETWORK AND SYSTEMS MANAGEMENT" />
+        </attvalues>
+      </edge>
+      <edge id="70" source="Sou, SI" target="Natl Cheng Kung Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON VEHICULAR TECHNOLOGY" />
+        </attvalues>
+      </edge>
+      <edge id="71" source="Univ Putra Malaysia" target="OTHMAN, M">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="WIRELESS NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="72" source="Univ Putra Malaysia" target="ALI, BM">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="WIRELESS NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="73" source="Univ Putra Malaysia" target="HAMID, NAWA">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="WIRELESS NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="74" source="Northeastern Univ" target="HOU, WG">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF LIGHTWAVE TECHNOLOGY" />
+        </attvalues>
+      </edge>
+      <edge id="75" source="Northeastern Univ" target="HOU, WG">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="1" />
+          <attvalue for="3" value="JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="76" source="Northeastern Univ" target="ZHANG, X">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="77" source="Northeastern Univ" target="GONG, XX">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF LIGHTWAVE TECHNOLOGY" />
+        </attvalues>
+      </edge>
+      <edge id="78" source="Northeastern Univ" target="GUO, L">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF LIGHTWAVE TECHNOLOGY" />
+        </attvalues>
+      </edge>
+      <edge id="79" source="Northeastern Univ" target="GUO, L">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="1" />
+          <attvalue for="3" value="JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="80" source="Northeastern Univ" target="LV, SZ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF LIGHTWAVE TECHNOLOGY" />
+        </attvalues>
+      </edge>
+      <edge id="81" source="Technicolor Res Ctr" target="BOLOT, JC">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTER NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="82" source="SVENSSON, T" target="Chalmers">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="WIRELESS PERSONAL COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="83" source="Telefon I D" target="DE DIOS, OG">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTERS &amp; OPERATIONS RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="84" source="Nanjing Med Univ" target="WANG, F">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CANCER RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="85" source="KRYNICKI, K" target="Univ Politecn Valencia">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="APPLIED SOFT COMPUTING" />
+        </attvalues>
+      </edge>
+      <edge id="86" source="VENKATASUBRAMANIAN, KK" target="Worcester Polytech Inst">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE SYSTEMS JOURNAL" />
+        </attvalues>
+      </edge>
+      <edge id="87" source="Univ Naples Federico II" target="FIORE, U">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="MATHEMATICAL AND COMPUTER MODELLING" />
+        </attvalues>
+      </edge>
+      <edge id="88" source="WANG, F" target="St Louis Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CANCER RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="89" source="FOWLER, SA" target="Linkoping Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IET COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="90" source="Univ Politecn Cartagena UPCT" target="APARICIO-PARDO, R">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="OPTICAL SWITCHING AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="91" source="Univ Politecn Cartagena UPCT" target="PAVON-MARINO, P">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="OPTICAL SWITCHING AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="92" source="PEDAN, I" target="MIT Lincoln Lab">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON WIRELESS COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="93" source="Ecole Normale Super" target="SERROR, J">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTER NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="94" source="TANAKA, T" target="NTT Corp">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE COMMUNICATIONS LETTERS" />
+        </attvalues>
+      </edge>
+      <edge id="95" source="FAIRHURST, G" target="Univ Aberdeen">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="INTERNATIONAL JOURNAL OF SATELLITE COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="96" source="LIU, S" target="St Louis Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CANCER RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="97" source="LI, JY" target="Chalmers">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="WIRELESS PERSONAL COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="98" source="SHEN, JK" target="Johns Hopkins Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="PLOS ONE" />
+        </attvalues>
+      </edge>
+      <edge id="99" source="TSUKAMOTO, K" target="Kyushu Inst Technol">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEICE TRANSACTIONS ON COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="100" source="KAWAMOTO, Y" target="Tohoku Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON VEHICULAR TECHNOLOGY" />
+        </attvalues>
+      </edge>
+      <edge id="101" source="Southeast Univ" target="WANG, XG">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF SUPERCOMPUTING" />
+        </attvalues>
+      </edge>
+      <edge id="102" source="Southeast Univ" target="YANG, M">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF SUPERCOMPUTING" />
+        </attvalues>
+      </edge>
+      <edge id="103" source="Southeast Univ" target="ZHANG, L">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF SUPERCOMPUTING" />
+        </attvalues>
+      </edge>
+      <edge id="104" source="Southeast Univ" target="LUO, JZ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF SUPERCOMPUTING" />
+        </attvalues>
+      </edge>
+      <edge id="105" source="IDZIKOWSKI, F" target="Tech Univ Berlin">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="106" source="OIE, Y" target="Kyushu Inst Technol">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEICE TRANSACTIONS ON COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="107" source="Univ British Columbia" target="LEUNG, VCM">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="WIRELESS NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="108" source="Univ British Columbia" target="GOPALAKRISHNAN, S">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="WIRELESS NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="109" source="Univ British Columbia" target="NICANFAR, H">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="WIRELESS NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="110" source="Univ British Columbia" target="ALASAAD, A">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="WIRELESS NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="111" source="MUNIZ, A" target="Kyushu Inst Technol">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEICE TRANSACTIONS ON COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="112" source="Chang Jung Christian Univ" target="SUN, HM">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="SECURITY AND COMMUNICATION NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="113" source="NISHIYAMA, H" target="Tohoku Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON VEHICULAR TECHNOLOGY" />
+        </attvalues>
+      </edge>
+      <edge id="114" source="WHEELER, J" target="MIT Lincoln Lab">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON WIRELESS COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="115" source="HRYCEK, E" target="Med Univ Silesia">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="RHEUMATOLOGY INTERNATIONAL" />
+        </attvalues>
+      </edge>
+      <edge id="116" source="LUTTY, GA" target="Johns Hopkins Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="PLOS ONE" />
+        </attvalues>
+      </edge>
+      <edge id="117" source="Univ Minnesota" target="HERMANSON, DA">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CYTOTHERAPY" />
+        </attvalues>
+      </edge>
+      <edge id="118" source="Univ Minnesota" target="HERMANSON, DA">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="1" />
+          <attvalue for="3" value="CYTOTHERAPY" />
+        </attvalues>
+      </edge>
+      <edge id="119" source="Univ Minnesota" target="KAUFMAN, DS">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CYTOTHERAPY" />
+        </attvalues>
+      </edge>
+      <edge id="120" source="Univ Minnesota" target="KAUFMAN, DS">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="1" />
+          <attvalue for="3" value="CYTOTHERAPY" />
+        </attvalues>
+      </edge>
+      <edge id="121" source="Univ Minnesota" target="MCCULLAR, V">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CYTOTHERAPY" />
+        </attvalues>
+      </edge>
+      <edge id="122" source="Univ Minnesota" target="GELLER, MA">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CYTOTHERAPY" />
+        </attvalues>
+      </edge>
+      <edge id="123" source="Univ Minnesota" target="MILLER, JS">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CYTOTHERAPY" />
+        </attvalues>
+      </edge>
+      <edge id="124" source="Univ Minnesota" target="BENDZICK, L">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CYTOTHERAPY" />
+        </attvalues>
+      </edge>
+      <edge id="125" source="Univ Minnesota" target="BENDZICK, L">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="1" />
+          <attvalue for="3" value="CYTOTHERAPY" />
+        </attvalues>
+      </edge>
+      <edge id="126" source="Univ Minnesota" target="KNORR, DA">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CYTOTHERAPY" />
+        </attvalues>
+      </edge>
+      <edge id="127" source="Univ Minnesota" target="KNORR, DA">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="1" />
+          <attvalue for="3" value="CYTOTHERAPY" />
+        </attvalues>
+      </edge>
+      <edge id="128" source="HRYCEK, A" target="Med Univ Silesia">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="RHEUMATOLOGY INTERNATIONAL" />
+        </attvalues>
+      </edge>
+      <edge id="129" source="Johns Hopkins Univ" target="HUANG, H">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="PLOS ONE" />
+        </attvalues>
+      </edge>
+      <edge id="130" source="Johns Hopkins Univ" target="VINORES, SA">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="PLOS ONE" />
+        </attvalues>
+      </edge>
+      <edge id="131" source="Kagawa Univ" target="JINNO, M">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE COMMUNICATIONS LETTERS" />
+        </attvalues>
+      </edge>
+      <edge id="132" source="KATO, N" target="Tohoku Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON VEHICULAR TECHNOLOGY" />
+        </attvalues>
+      </edge>
+      <edge id="133" source="SHEN, XM" target="Univ Waterloo">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON VEHICULAR TECHNOLOGY" />
+        </attvalues>
+      </edge>
+      <edge id="134" source="CHIARAVIGLIO, L" target="Univ Roma La Sapienza">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="135" source="Icesi Univ" target="CESPEDES, S">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON VEHICULAR TECHNOLOGY" />
+        </attvalues>
+      </edge>
+      <edge id="136" source="France Telecom" target="APARICIO-PARDO, R">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="OPTICAL SWITCHING AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="137" source="KATAYAMA, Y" target="NTT Corp">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEICE TRANSACTIONS ON COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="138" source="TAHA, S" target="Univ Waterloo">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON VEHICULAR TECHNOLOGY" />
+        </attvalues>
+      </edge>
+      <edge id="139" source="LI, H" target="Xidian Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTERS &amp; ELECTRICAL ENGINEERING" />
+        </attvalues>
+      </edge>
+      <edge id="140" source="Natl Univ Kaohsiung" target="FAN, WC">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="SECURITY AND COMMUNICATION NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="141" source="COYLE, A" target="MIT Lincoln Lab">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON WIRELESS COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="142" source="BLASZCZAK, E" target="Med Univ Silesia">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="RHEUMATOLOGY INTERNATIONAL" />
+        </attvalues>
+      </edge>
+      <edge id="143" source="ZHONG, WC" target="IBM SPSS Stat Res">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="PEER-TO-PEER NETWORKING AND APPLICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="144" source="HIRANO, A" target="NTT Corp">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="145" source="HIRANO, A" target="NTT Corp">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="1" />
+          <attvalue for="3" value="IEEE COMMUNICATIONS LETTERS" />
+        </attvalues>
+      </edge>
+      <edge id="146" source="HUANG, BR" target="Chalmers">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="WIRELESS PERSONAL COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="147" source="PEDROLA, O" target="Univ Politecn Cataluna">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTERS &amp; OPERATIONS RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="148" source="FRANEK, A" target="Med Univ Silesia">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="RHEUMATOLOGY INTERNATIONAL" />
+        </attvalues>
+      </edge>
+      <edge id="149" source="CHENG, BN" target="MIT Lincoln Lab">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON WIRELESS COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="150" source="VELASCO, L" target="Univ Politecn Cataluna">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTERS &amp; OPERATIONS RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="151" source="YU, XS" target="Xidian Univ">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTERS &amp; ELECTRICAL ENGINEERING" />
+        </attvalues>
+      </edge>
+      <edge id="152" source="MIT Lincoln Lab" target="MCGARRY, S">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON WIRELESS COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="153" source="NTT Corp" target="YONENAGA, K">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="154" source="NTT Corp" target="KAWAMURA, R">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEICE TRANSACTIONS ON COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="155" source="NTT Corp" target="TAKARA, H">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="156" source="NTT Corp" target="TAKAHASHI, N">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEICE TRANSACTIONS ON COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="157" source="NTT Corp" target="INOUE, T">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEICE TRANSACTIONS ON COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="158" source="NTT Corp" target="JINNO, M">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF OPTICAL COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="159" source="St Louis Univ" target="MO, W">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CANCER RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="160" source="St Louis Univ" target="HUANG, Y">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CANCER RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="161" source="St Louis Univ" target="MA, CL">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CANCER RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="162" source="St Louis Univ" target="HSUEH, EC">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CANCER RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="163" source="St Louis Univ" target="YE, J">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CANCER RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="164" source="St Louis Univ" target="HAN, B">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CANCER RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="165" source="St Louis Univ" target="TOTH, K">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CANCER RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="166" source="Indian Inst Technol Guwahati" target="KAPOOR, HK">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CIRCUITS SYSTEMS AND SIGNAL PROCESSING" />
+        </attvalues>
+      </edge>
+      <edge id="167" source="Indian Inst Technol Guwahati" target="RAO, GB">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="CIRCUITS SYSTEMS AND SIGNAL PROCESSING" />
+        </attvalues>
+      </edge>
+      <edge id="168" source="MORELL, A" target="Univ Autonoma Barcelona">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="TRANSACTIONS ON EMERGING TELECOMMUNICATIONS TECHNOLOGIES" />
+        </attvalues>
+      </edge>
+      <edge id="169" source="Xidian Univ" target="GU, HX">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTERS &amp; ELECTRICAL ENGINEERING" />
+        </attvalues>
+      </edge>
+      <edge id="170" source="Xidian Univ" target="YANG, YT">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTERS &amp; ELECTRICAL ENGINEERING" />
+        </attvalues>
+      </edge>
+      <edge id="171" source="Xidian Univ" target="LIU, J">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="PEER-TO-PEER NETWORKING AND APPLICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="172" source="CESPEDES, S" target="Univ Waterloo">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON VEHICULAR TECHNOLOGY" />
+        </attvalues>
+      </edge>
+      <edge id="173" source="Natl Def Univ" target="Fu, CH">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="WIRELESS PERSONAL COMMUNICATIONS" />
+        </attvalues>
+      </edge>
+      <edge id="174" source="Univ Politecn Cataluna" target="RUIZ, M">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTERS &amp; OPERATIONS RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="175" source="Univ Politecn Cataluna" target="COMELLAS, J">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTERS &amp; OPERATIONS RESEARCH" />
+        </attvalues>
+      </edge>
+      <edge id="176" source="Qualcomm Inc" target="VADLAMANI, R">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="IEEE TRANSACTIONS ON COMPUTERS" />
+        </attvalues>
+      </edge>
+      <edge id="177" source="Univ Zagreb" target="FURDEK, M">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="OPTICAL SWITCHING AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="178" source="Natl Pingtung Inst Commerce" target="Chen, CL">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="FUTURE GENERATION COMPUTER SYSTEMS-THE INTERNATIONAL JOURNAL OF GRID COMPUTING AND ESCIENCE" />
+        </attvalues>
+      </edge>
+      <edge id="179" source="DHALL, S" target="Univ Oklahoma">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTER NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="180" source="YUN, A" target="Thales Alenia Space Espana">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="INTERNATIONAL JOURNAL OF SATELLITE COMMUNICATIONS AND NETWORKING" />
+        </attvalues>
+      </edge>
+      <edge id="181" source="Med Univ Silesia" target="DWORAK, J">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="RHEUMATOLOGY INTERNATIONAL" />
+        </attvalues>
+      </edge>
+      <edge id="182" source="Univ Oklahoma" target="CHEN, YR">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTER NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="183" source="Univ Oklahoma" target="RADHAKRISHNAN, S">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTER NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="184" source="Univ Oklahoma" target="KARABUK, S">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="COMPUTER NETWORKS" />
+        </attvalues>
+      </edge>
+      <edge id="185" source="WANG, XG" target="Changzhou Coll Informat Technol">
+        <attvalues>
+          <attvalue for="1" value="2013" />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="JOURNAL OF SUPERCOMPUTING" />
+        </attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>
