@@ -62,6 +62,38 @@ class paperCollectionBuilder(builder):
             C[key] = nt.papers.__dict__[graph_type](data, **kwargs)
 
         return C
+        
+class topicCollectionBuilder(builder):
+    """
+    Builds a :class:`.GraphCollection` with method in
+    :mod:`tethne.networks.topics` from a :class:`.DataCollection` .
+    """
+    
+#    def __init__(self, D, model=None):
+#        super(topicCollectionBuilder, self).__init__(D)
+#        self.model = model
+    
+    def build(self, graph_axis, graph_type, **kwargs):
+        """
+        Generates a graph for each slice along graph_axis in
+        :class:`.DataCollection` D.
+        
+        Other axes in D are treated as attributes.
+        """
+        
+        if self.D.model is None:
+            raise RuntimeError('No corpus model in this DataCollection')
+        
+        C = GraphCollection()
+        
+        for key in sorted(self.D.axes[graph_axis].keys()):
+            pids = self.D.axes[graph_axis][key]
+            data = [ self.D.data[p] for p in pids ]
+            papers = [ self.D.model.lookup[p] for p in pids ]
+            C[key] = nt.topics.__dict__[graph_type](self.D.model, papers=papers, **kwargs)
+            print key, len(papers), len(C[key].edges())
+        
+        return C
 
 class authorCollectionBuilder(builder):
     """
