@@ -74,14 +74,49 @@ class ModelManager(object):
 
         self._load_model()
         
-        return self.model        
+        return self.model
+
+    def plot_topics(self, topics, axis='date', type='plot', start=None,
+                    end=None, plot_kwargs={}, legend_kwargs={}, normed=True ):
+        """
+        Plot the prevalence of topics over time.
+        
+        Parameters
+        ----------
+        topics : list
+            A list of (int) topic indices.
+        axis : str
+            Slice axis to use as plot domain.
+        type : str
+            Plot type: 'plot' or 'bar'
+        start : int
+            (optional) Start date.
+        end : int
+            (optional) End date (inclusive).
+        plot_kwargs : dict
+            (optional) Keyword arguments for plotting method.
+        legend_kwargs : dict
+            (optional) Keyword arguments for :func:`pyplot.legend`
+        normed : bool
+            If True (default) representation is normalized by the number of
+            documents in each slice.
+        """
+
+        for z in topics:
+            X,Y = self._plot_topic(z, axis=axis, start=start, end=end,
+                                   normed=normed)
+            label = ', '.join(self.model.words_in_topic(z))
+            plt.__dict__[type](X, Y, label=label, **plot_kwargs)
+        plt.xlim(np.min(X), np.max(X))
+        plt.legend(**legend_kwargs)
+        
         
 class LDAModelManager(ModelManager):
     """
     Model Manager for LDA topic modeling with MALLET.
     """
     
-    def __init__(self, D, outpath, mallet_path):
+    def __init__(self, D, outpath, mallet_path='./bin/mallet-2.0.7'):
         """
         
         Parameters
@@ -95,13 +130,6 @@ class LDAModelManager(ModelManager):
         super(LDAModelManager, self).__init__(D, outpath)
         
         self.mallet_path = mallet_path
-        
-    def __del__(self):
-        """
-        Delete temporary directory and all files contained therein.
-        """
-        
-        shutil.rmtree(self.temp)
     
     def _generate_corpus(self, gram, meta):
         from tethne.writers.corpora import to_documents    
@@ -196,7 +224,62 @@ class LDAModelManager(ModelManager):
                                     self.wt, 
                                     self.tk, 
                                     self.Z,
-                                    self.meta_path  )     
+                                    self.meta_path  )
+
+    def _plot_topic(self, z, axis='date', start=None, end=None, normed=True):
+        """
+        Yields the sum of topic proportions over time.
+        
+        Parameters
+        ----------
+        z : int
+            Topic index.
+        axis : str
+            Slice axis to use as plot domain.
+        start : int
+            (optional) Start date.
+        end : int
+            (optional) End date (inclusive).
+        normed : bool
+            If True (default) representation is normalized by the number of
+            documents in each slice.
+        
+        Returns
+        -------
+        X : array-like
+        Y : array-like
+        """
+    
+        X = []
+        Y = []
+
+        skeys = self.D.axes[axis].keys()
+        
+        if start is None:
+            start = min(skeys)
+        if end is None:
+            end = max(skeys)
+        
+        for k in skeys:
+            papers = self.D.axes[axis][k]
+            N = len(papers)
+            if start <= k <= end:
+                X.append(k)
+                if N > 0:
+                    y = 0.
+                    for p in papers:
+                        i = model.lookup[p]
+                        y += model.doc_topic[i, z]
+
+                    if normed:
+                        y = y/N
+                    Y.append(y)
+                else:
+                    Y.append(0.)
+    
+        return np.array(X),np.array(Y)
+
+
         
 class DTMModelManager(ModelManager):
     """
@@ -222,11 +305,11 @@ class DTMModelManager(ModelManager):
         from tethne.writers.corpora import to_dtm_input    
         
         to_dtm_input(self.temp+'/tethne',
-                            self.D,
-                            self.D.grams[gram][0],     # e.g. uni, bi, tri.
-                            self.D.grams[gram][1],
-                            fields=meta)
-                     
+                        self.D,
+                        self.D.grams[gram][0],     # e.g. uni, bi, tri.
+                        self.D.grams[gram][1],
+                        fields=meta)
+                    
 
         self.mult_path = '{0}/tethne-mult.dat'.format(self.temp)
         self.seq_path = '{0}/tethne-seq.dat'.format(self.temp)        
@@ -302,16 +385,15 @@ class DTMModelManager(ModelManager):
     def _load_model(self):
         """Load and return a :class:`.LDAModel`\."""
         
-        pass  
-    
-        
+        pass
         
 if __name__ == '__main__':
     import sys
     sys.path.append("/Users/erickpeirson/tethne")
     from tethne.builders import DFRBuilder
 
-    datapath = "/Users/erickpeirson/Genecology Project Archive/JStor DfR Datasets/2013.5.3.k2HUvXh9"
+#    datapath = "/Users/erickpeirson/Genecology Project Archive/JStor DfR Datasets/2013.5.3.k2HUvXh9"
+    datapath = "/Users/erickpeirson/Desktop/cleanup/JStor DfR Datasets/2013.5.3.k2HUvXh9"
     
     dc_builder = DFRBuilder(datapath)
     D = dc_builder.build(slice_by=('date','jtitle'))
@@ -322,10 +404,19 @@ if __name__ == '__main__':
     plt.savefig('/Users/erickpeirson/Desktop/test.png')
     
 #    print D.grams['uni'].keys()
-    
-    MM = DTMModelManager(D, '/Users/erickpeirson/Desktop/')
+
+    MM = LDAModelManager(D, '/Users/erickpeirson/Desktop/')
     MM.prep()
-    model = MM.build(max_iter=500)
+    model = MM.build(max_iter=100)
+
+    fig = plt.figure(figsize=(40,15), dpi=600)
+    MM.plot_topics([0,1,2], normed=False)
+    plt.savefig('/Users/erickpeirson/Desktop/test2.png')
+
+
+#    MM = DTMModelManager(D, '/Users/erickpeirson/Desktop/')
+#    MM.prep()
+#    model = MM.build(max_iter=500)
 #    model.print_topics()
 #    
 #    del MM
