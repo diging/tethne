@@ -189,6 +189,7 @@ class DataCollection(object):
         self.data = { p[index_by]:p for p in data }
         
         self.model = model
+        self.grams = grams
     
     def slice(self, key, method=None, **kwargs):
         """
@@ -906,7 +907,21 @@ class LDAModel(BaseModel):
         topics = zip(top_indices, top_values)
         
         return topics
+
+    def words_in_topic(self, z):
+        words = self.top_word[z,:]
+        return [ self.vocabulary.by_int[w] for w in words.argsort()[-5:][::-1] ]
+    
+    def print_topics(self):
+        """
+        Prints a list of topics.
+        """
+        Z = self.top_word.shape[0]
         
+        for z in xrange(Z):
+            print z, ', '.join(self.words_in_topic(z))
+            
+    
     def docs_in_topic(self, z, topD=None):
         """
         Returns a list of the topD documents most representative of topic z.

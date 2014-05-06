@@ -11,16 +11,88 @@ Classes for building a :class:`.GraphCollection` .
 
 import networkx as nx
 import tethne.networks as nt
-from tethne.data import GraphCollection
+import tethne.readers as rd
+from tethne.data import GraphCollection, DataCollection
 import types
 
-class builder(object):
-    """Base class for builders."""
+class DCBuilder(object):
+    """
+    Base class for DataCollection builders.
+    """
+    
+    def __init__(self, datapath):
+        """
+        
+        Parameters
+        ----------
+        datapath : str
+            Path to data.
+        """
+
+        self.datapath = datapath
+        
+class DFRBuilder(DCBuilder):
+    """
+    DataCollection builder for JSTOR Data-for-Research datasets.
+    """
+    
+    def build(self, grams=['uni'], apply_stoplist=True, slice_by=('date',),
+                                                                      **kwargs):
+        """
+        
+        Parameters
+        ----------
+        grams : list or tuple
+            N-grams that should be read from the DfR dataset.
+        apply_stoplist : bool
+            If True, will exclude all N-grams that contain words in the NLTK
+            stoplist.
+        slice_by : list or tuple
+            Keys in :class:`.Paper` by which to slice data.
+        """
+            
+        # Load papers.
+        papers = rd.dfr.read(self.datapath)
+
+        # Load N-grams.
+        gram_data = {}
+        for gram_type in grams:
+            g = rd.dfr.ngrams(self.datapath, 
+                                        N=gram_type,
+                                        apply_stoplist=apply_stoplist)
+            g_tok, vocab, counts = rd.dfr.tokenize(g)                                        
+            gram_data[gram_type] = (g_tok, vocab, counts)
+        
+        # Create DataCollection.
+        D = DataCollection(papers, grams=gram_data, index_by='doi')
+        
+        # Slice DataCollection.
+        kw = { 'method': kwargs.get('method', 'time_window'),
+               'window_size': kwargs.get('window_size', 4),
+               'step_size': kwargs.get('step_size', 1) }
+
+        for axis in slice_by:
+            D.slice(axis, **kw)
+        
+        return D
+        
+
+class GCBuilder(object):
+    """
+    Base class for GraphCollection builders.
+    """
 
     def __init__(self, D):
+        """
+        
+        Parameters
+        ----------
+        D : :class:`.DataCollection`
+        """
+
         self.D = D
 
-class paperCollectionBuilder(builder):
+class paperCollectionBuilder(GCBuilder):
     """
     Builds a :class:`.GraphCollection` with method in 
     :mod:`tethne.networks.papers` from a :class:`.DataCollection` .
@@ -63,7 +135,7 @@ class paperCollectionBuilder(builder):
 
         return C
         
-class topicCollectionBuilder(builder):
+class topicCollectionBuilder(GCBuilder):
     """
     Builds a :class:`.GraphCollection` with method in
     :mod:`tethne.networks.topics` from a :class:`.DataCollection` .
@@ -95,7 +167,7 @@ class topicCollectionBuilder(builder):
         
         return C
 
-class authorCollectionBuilder(builder):
+class authorCollectionBuilder(GCBuilder):
     """
     Builds a :class:`.GraphCollection` with method in 
     :mod:`tethne.networks.authors` from a :class:`.DataCollection` .

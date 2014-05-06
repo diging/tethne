@@ -3,7 +3,7 @@
 
 from collections import Counter
 
-def to_documents(target, ngrams, papers=None, fields=['date','atitle']):
+def to_documents(target, ngrams, papers=None, vocab=None, fields=['date','atitle']):
     """
     
     Parameters
@@ -19,10 +19,6 @@ def to_documents(target, ngrams, papers=None, fields=['date','atitle']):
     fields : list
         Optional. If `papers` is provided, a list of fields in :class:`.Paper`
         to include in the metadata file.
-
-    Returns
-    -------
-    None : If all goes well....
     
     Raises
     ------
@@ -39,12 +35,23 @@ def to_documents(target, ngrams, papers=None, fields=['date','atitle']):
     except IOError:
         raise IOError('Invalid target. Could not open files for writing.')
     
-    metaFile.write('# doc\tdoi\n')
+
+    metaFile.write('# {0}\n'.format('\t'.join(['doc','doi'] + fields)))
+    
+    if type(ngrams) is tuple:
+        ngrams, vocab, counts = ngrams
+    
+    if vocab is None:
+        def word(s):
+            return str(s)
+    else:
+        def word(s):
+            return str(vocab[s])
     
     d = 0   # Document index in _docs.txt file.
     try:
         for key,values in ngrams.iteritems():
-            docFile.write(' '.join([ gram for gram,freq in values 
+            docFile.write(' '.join([ word(gram) for gram,freq in values 
                                                 for i in xrange(freq) ]) + '\n')
 
             meta = [ str(d), str(key) ]
@@ -60,20 +67,20 @@ def to_documents(target, ngrams, papers=None, fields=['date','atitle']):
     docFile.close()
     metaFile.close()
     
-    return
+    return True
 
 def to_dtm_input(target, D, t_ngrams, vocab, fields=['date','atitle']):
     """
     
     Parameters
     ----------
-    D : :class:`.DataCollection`
-        Contains :class:`.Paper` objects generated from the same DfR dataset
-        as t_ngrams, indexed by doi and sliced by date.
     target : str
         Target path for documents; e.g. './mycorpus' will result in 
         './mycorpus-mult.dat', './mycorpus-seq.dat', 'mycorpus-vocab.dat', and
-        './mycorpus-meta.dat'.
+        './mycorpus-meta.dat'.    
+    D : :class:`.DataCollection`
+        Contains :class:`.Paper` objects generated from the same DfR dataset
+        as t_ngrams, indexed by doi and sliced by date.
     t_ngrams : dict
         Keys are paper DOIs, values are lists of (index, frequency) tuples.
     vocab : dict
@@ -113,9 +120,8 @@ def to_dtm_input(target, D, t_ngrams, vocab, fields=['date','atitle']):
     #
     with open(target + '-meta.dat', 'wb') as metaFile:
         with open(target + '-mult.dat', 'wb') as multFile:
-            for year, papers in sorted(D.axes['date'].items()):
-                # Index papers by DOI, for easy retrieval later.
-                print year, papers
+            for year in D.axes['date'].keys():
+                papers = D.axes['date'][year]
                 
                 seq[year] = []
                 for doi in papers:  # D must be indexed by doi.
@@ -129,7 +135,7 @@ def to_dtm_input(target, D, t_ngrams, vocab, fields=['date','atitle']):
                                                 ['\n']))
                         meta = [ str(doi) ]
                         if papers:
-                            p = papers_by_doi[doi]
+                            p = D.data[doi]
                             meta += [ str(p[f]) for f in fields ]
                         metaFile.write('\t'.join(meta) + '\n')
                         

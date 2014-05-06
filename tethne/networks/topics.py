@@ -118,7 +118,3 @@ def topic_coupling(model, papers=None, threshold=None):
                 G.add_edge(i,j,weight=iD_sym)
     
     return G
-    
-    
-    
-    
