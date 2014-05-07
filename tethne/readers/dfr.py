@@ -107,7 +107,7 @@ def from_dir(path):
 
     return papers
 
-def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
+def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False, min_len=3, min_count=2):
     """
     Yields N-grams from a JSTOR DfR dataset.
 
@@ -151,9 +151,13 @@ def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False):
         if file.split('.')[-1] == 'XML':
             root = ET.parse(gram_path + "/" + file).getroot()
             doi = root.attrib['id']
-            grams = [ ( strip_non_ascii(gram.text.strip()), int(gram.attrib['weight']) )
-                            for gram in root.findall(elem)    # v Hashes v
-                            if not ignore_hash or '#' not in list(gram.text) ]
+            grams = []
+            for gram in root.findall(elem):
+                text = gram.text.strip()
+                if ( not ignore_hash or '#' not in list(text) ) and len(text) >= min_len:
+                    
+                    c = ( strip_non_ascii(text), int(gram.attrib['weight']) )
+                    grams.append(c)
 
             if apply_stoplist:
                 stoplist = stopwords.words()
@@ -176,6 +180,15 @@ def tokenize(ngrams):
     ----------
     ngrams : dict
         Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
+        
+    Returns
+    -------
+    t_ngrams : dict
+        Tokenized ngrams, as doi:{i:count}.
+    vocab : dict
+        Vocabulary as i:term.
+    counts : :class:`.Counter`
+        Term counts for corpus, as i:count.
     """
 
     vocab = {}
