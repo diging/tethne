@@ -3,7 +3,7 @@
 
 from collections import Counter
 
-def to_documents(target, ngrams):
+def to_documents(target, ngrams, papers=None, vocab=None, fields=['date','atitle']):
     """
     
     Parameters
@@ -13,15 +13,21 @@ def to_documents(target, ngrams):
         './mycorpus_docs.txt' and './mycorpus_meta.csv'.
     ngrams : dict
         Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
-    
-    Returns
-    -------
-    None : If all goes well.
+    papers : list
+        Optional. List of :class:`.Paper` objects. Should have DOIs that 
+        correspond to keys in `ngrams`.
+    fields : list
+        Optional. If `papers` is provided, a list of fields in :class:`.Paper`
+        to include in the metadata file.
     
     Raises
     ------
     IOError
     """
+    
+    # Index papers by DOI, for easy retrieval later.
+    if papers is not None:
+        papers_by_doi = { p['doi']:p for p in papers }
     
     try:
         docFile = open(target + '_docs.txt', 'wb')
@@ -29,14 +35,30 @@ def to_documents(target, ngrams):
     except IOError:
         raise IOError('Invalid target. Could not open files for writing.')
     
-    metaFile.write('# doc\tdoi\n')
+
+    metaFile.write('# {0}\n'.format('\t'.join(['doc','doi'] + fields)))
+    
+    if type(ngrams) is tuple:
+        ngrams, vocab, counts = ngrams
+    
+    if vocab is None:
+        def word(s):
+            return str(s)
+    else:
+        def word(s):
+            return str(vocab[s])
     
     d = 0   # Document index in _docs.txt file.
     try:
         for key,values in ngrams.iteritems():
-            docFile.write(' '.join([ gram for gram,freq in values 
+            docFile.write(' '.join([ word(gram) for gram,freq in values 
                                                 for i in xrange(freq) ]) + '\n')
-            metaFile.write('{0}\t{1}\n'.format(d, key))
+
+            meta = [ str(d), str(key) ]
+            if papers:
+                p = papers_by_doi[key]
+                meta += [ str(p[f]) for f in fields ]
+            metaFile.write('\t'.join(meta) + '\n')  #'{0}\t{1}\n'.format(d, key))
             d += 1
     except AttributeError:  # .iteritems() raises an AttributeError if ngrams
                             #  is not dict-like.
@@ -45,22 +67,27 @@ def to_documents(target, ngrams):
     docFile.close()
     metaFile.close()
     
-    return
+    return True
 
-def to_dtm_input(target, D, t_ngrams, vocab):
+def to_dtm_input(target, D, t_ngrams, vocab, fields=['date','atitle']):
     """
     
     Parameters
     ----------
-    D : :class:`.DataCollection`
-        Contains :class:`.Paper` objects generated from the same DfR dataset
-        as t_ngrams, indexed by doi and sliced by date.
     target : str
         Target path for documents; e.g. './mycorpus' will result in 
         './mycorpus-mult.dat', './mycorpus-seq.dat', 'mycorpus-vocab.dat', and
-        './mycorpus-meta.dat'.
+        './mycorpus-meta.dat'.    
+    D : :class:`.DataCollection`
+        Contains :class:`.Paper` objects generated from the same DfR dataset
+        as t_ngrams, indexed by doi and sliced by date.
     t_ngrams : dict
         Keys are paper DOIs, values are lists of (index, frequency) tuples.
+    vocab : dict
+        Vocabulary as i:term.
+    fields : list
+        Optional. A list of fields in :class:`.Paper` to include in the metadata
+        file.
         
     Returns
     -------
@@ -93,7 +120,9 @@ def to_dtm_input(target, D, t_ngrams, vocab):
     #
     with open(target + '-meta.dat', 'wb') as metaFile:
         with open(target + '-mult.dat', 'wb') as multFile:
-            for year, papers in sorted(D.axes['date'].items()):
+            for year in D.axes['date'].keys():
+                papers = D.axes['date'][year]
+                
                 seq[year] = []
                 for doi in papers:  # D must be indexed by doi.
                     try:
@@ -104,7 +133,12 @@ def to_dtm_input(target, D, t_ngrams, vocab):
                                                 [ '{0}:{1}'.format(g,c)
                                                     for g,c in grams ] + \
                                                 ['\n']))
-                        metaFile.write('{0}\n'.format(doi))
+                        meta = [ str(doi) ]
+                        if papers:
+                            p = D.data[doi]
+                            meta += [ str(p[f]) for f in fields ]
+                        metaFile.write('\t'.join(meta) + '\n')
+                        
                     except KeyError:    # May not have data for each Paper.
                         pass
 

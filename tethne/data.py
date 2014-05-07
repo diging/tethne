@@ -16,6 +16,7 @@ from cStringIO import StringIO
 from pprint import pprint
 import sys
 import numpy as np
+import scipy as sc
 
 class Paper(object):
     """
@@ -174,7 +175,7 @@ class DataCollection(object):
         
     """
     
-    def __init__(self, data, index_by='wosid'):
+    def __init__(self, data, model=None, grams=None, index_by='wosid'):
         self.axes = {}
         self.index_by = index_by
         self.datakeys = data[0].keys()
@@ -186,6 +187,9 @@ class DataCollection(object):
             raise(KeyError(str(index_by) + " not a valid key in data."))
         
         self.data = { p[index_by]:p for p in data }
+        
+        self.model = model
+        self.grams = grams
     
     def slice(self, key, method=None, **kwargs):
         """
@@ -256,7 +260,7 @@ class DataCollection(object):
         if key == 'date':
             if method == 'time_window':
                 kw = {  'window_size': kwargs.get('window_size', 1),
-                        'step_size': 1 }
+                        'step_size': kwargs.get('step_size', 1) }
                 self.axes[key] = self._time_slice(**kw)
 
             elif method == 'time_period' or method is None:
@@ -490,6 +494,10 @@ class DataCollection(object):
         
         return list( set.intersection(*slices) )
     
+    def _get_slice_keys(self, slice):
+        if slice in self.get_axes():
+            return self.axes[slice].keys()
+    
     def get_axes(self):
         """
         Returns a list of all slice axes for this :class:`.DataCollection` .
@@ -504,39 +512,39 @@ class DataCollection(object):
         
         return len(self.axes.keys())
     
-    def distribution(self):
-        """
-        Returns a Numpy array describing the number of :class:`.Paper`
-        associated with each slice-coordinate.
-        
-        WARNING: expensive for a :class:`.DataCollection` with many axes or
-        long axes. Consider using :func:`.distribution_2d` .
-        
-        Returns
-        -------
-        dist : Numpy array
-            An N-dimensional array. Axes are given by 
-            :func:`DataCollection.get_axes` and values are the number of
-            :class:`.Paper` at that slice-coordinate.
+#    def distribution(self):
+#        """
+#        Returns a Numpy array describing the number of :class:`.Paper`
+#        associated with each slice-coordinate.
+#        
+#        WARNING: expensive for a :class:`.DataCollection` with many axes or
+#        long axes. Consider using :func:`.distribution_2d` .
+#        
+#        Returns
+#        -------
+#        dist : Numpy array
+#            An N-dimensional array. Axes are given by 
+#            :func:`DataCollection.get_axes` and values are the number of
+#            :class:`.Paper` at that slice-coordinate.
+#            
+#        Raises
+#        ------
+#        RuntimeError : DataCollection has not been sliced.
+#        """
+#        
+#        if len(self.axes) == 0:
+#            raise(RuntimeError("DataCollection has not been sliced."))
+#        
+#        shape = tuple( len(v) for v in self.axes.values() )
+#        dist = np.zeros(shape)
+#        axes = self.get_axes()
+#
+#        for indices in np.ndindex(shape):
+#            dist[indices] = len( self._get_by_i(zip(axes, indices)))
+#            
+#        return dist
             
-        Raises
-        ------
-        RuntimeError : DataCollection has not been sliced.
-        """
-        
-        if len(self.axes) == 0:
-            raise(RuntimeError("DataCollection has not been sliced."))
-        
-        shape = tuple( len(v) for v in self.axes.values() )
-        dist = np.zeros(shape)
-        axes = self.get_axes()
-
-        for indices in np.ndindex(shape):
-            dist[indices] = len( self._get_by_i(zip(axes, indices)))
-            
-        return dist
-            
-    def distribution_2d(self, x_axis, y_axis):
+    def distribution(self, x_axis, y_axis=None):
         """
         Returns a Numpy array describing the number of :class:`.Paper`
         associated with each slice-coordinate, for x and y axes spcified.
@@ -555,19 +563,85 @@ class DataCollection(object):
         
         if len(self.axes) == 0:
             raise(RuntimeError("DataCollection has not been sliced."))
-        if x_axis not in self.get_axes() or y_axis not in self.get_axes():
-            raise(KeyError("Invalid slice axes for this DataCollection."))
+        if x_axis not in self.get_axes():
+            raise(KeyError("X axis invalid for this DataCollection."))
         
         x_size = len(self.axes[x_axis])
-        y_size = len(self.axes[y_axis])
+        
+        if y_axis is not None:
+            if y_axis not in self.get_axes():
+                raise(KeyError("Y axis invalid for this DataCollection."))     
+
+            y_size = len(self.axes[y_axis])
+        else:   # Only 1 slice axis.
+            y_size = 1
+
         shape = (x_size, y_size)
-        dist = np.zeros(shape)
         
+        I = []
+        J = []
+        K = []
         for i in xrange(x_size):
-            for j in xrange(y_size):
-                dist[i, j] = len(self._get_by_i([(x_axis, i),(y_axis, j)]))
-        
+            if y_axis is None:
+                k = len(self._get_by_i([(x_axis, i)]))
+                if k > 0:
+                    I.append(i)
+                    J.append(0)
+                    K.append(k)
+            else:
+                for j in xrange(y_size):
+                    k = len(self._get_by_i([(x_axis, i),(y_axis, j)]))
+                    if k > 0:
+                        I.append(i)
+                        J.append(j)
+                        K.append(k)
+
+        dist = sc.sparse.coo_matrix((K, (I,J)), shape=shape)
         return dist
+
+    def distribution_2d(self, x_axis, y_axis=None):
+        """
+        Deprecated as of 0.4.3-alpha. Use :func:`.distribution` instead.
+        """
+
+        return distribution(self, x_axis, y_axis=y_axis)
+
+    def plot_distribution(self, x_axis=None, y_axis=None, type='bar', fig=None, 
+                                                                      **kwargs):
+        """
+        Plot distribution along slice axes, using MatPlotLib.
+        
+        Parameters
+        ----------
+        x_axis : str
+        y_axis : str
+            (optional)
+        type : str
+            'plot' or 'bar'
+        **kwargs
+            Passed to PyPlot method.
+        """
+        
+        import matplotlib.pyplot as plt
+        
+        if fig is None:
+            fig = plt.figure()
+        
+        if x_axis is None:
+            x_axis = self.get_axes()[0]
+
+        xkeys = self._get_slice_keys(x_axis)        
+        
+        if y_axis is None:
+            plt.__dict__[type](xkeys, self.distribution(x_axis).todense(), **kwargs)
+            plt.xlim(min(xkeys), max(xkeys))
+        else:
+            ykeys = self._get_slice_keys(y_axis)    
+            ax = fig.add_subplot(111)
+            ax.imshow(self.distribution(x_axis, y_axis).todense(), **kwargs)
+            ax.set_aspect(0.5)
+            plt.yticks(np.arange(len(xkeys)), xkeys)
+            plt.xticks(np.arange(len(ykeys)), ykeys)            
 
 class GraphCollection(object):
     """
@@ -759,7 +833,14 @@ class GraphCollection(object):
         
         return composed
 
-class LDAModel(object):
+class BaseModel(object):
+    """
+    Base class for corpus models.
+    
+    """
+    pass
+
+class LDAModel(BaseModel):
     """
     Organizes parsed output from MALLET's LDA modeling algorithm.
     
@@ -826,7 +907,21 @@ class LDAModel(object):
         topics = zip(top_indices, top_values)
         
         return topics
+
+    def words_in_topic(self, z):
+        words = self.top_word[z,:]
+        return [ self.vocabulary.by_int[w] for w in words.argsort()[-5:][::-1] ]
+    
+    def print_topics(self):
+        """
+        Prints a list of topics.
+        """
+        Z = self.top_word.shape[0]
         
+        for z in xrange(Z):
+            print z, ', '.join(self.words_in_topic(z))
+            
+    
     def docs_in_topic(self, z, topD=None):
         """
         Returns a list of the topD documents most representative of topic z.

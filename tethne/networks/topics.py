@@ -3,6 +3,8 @@ Build networks from topics in a topic model.
 """
 
 import networkx as nx
+from scipy import stats
+import numpy as np
 
 def paper_coupling(model, threshold=0.1):
     """
@@ -72,3 +74,47 @@ def term_coupling(model, threshold=0.01):
         tc.node[t]['words'] = model.top_keys[t][1]  # Add list of top words.
 
     return tc
+    
+def topic_coupling(model, papers=None, threshold=None):
+    """
+    Builds a network of topics using inverse symmetric KL-divergence on papers.
+    
+    If `papers` is not None, uses only those papers provided to calculate
+    KL-divergence.
+    
+    Parameters
+    ----------
+    model : :class:`.LDAModel`
+    papers : list
+        A list of paper indices to use in KL-divergence calculation.
+    threshold : float
+        Minimum inverse symmetric KL-divergence for an edge. (default = 0.25)
+    """
+    
+    Z = model.top_word.shape[0]
+    G = nx.Graph()
+    
+    if threshold is None:
+        # Scaling factor to remove negative correlation between N_d and number 
+        # of edges.
+        threshold = len(papers)**-0.2 + 0.1
+        
+    if papers is None:
+        dt_matrix = model.doc_topic
+    else:
+        N_d = len(papers)
+        dt_matrix = np.zeros((N_d, Z))
+        for d in xrange(N_d):
+            dt_matrix[d, :] = model.doc_topic[papers[d], :]
+
+    for i in xrange(Z):
+        for j in xrange(i+1, Z):
+            D_ij = stats.entropy(dt_matrix[:,i], dt_matrix[:,j])
+            D_ji = stats.entropy(dt_matrix[:,j], dt_matrix[:,i])
+            iD_sym = float(1/(D_ij + D_ji))
+            
+            if iD_sym >= threshold:
+                G.add_node(j, label=', '.join(model.top_keys[i][1]))
+                G.add_edge(i,j,weight=iD_sym)
+    
+    return G
