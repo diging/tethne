@@ -15,7 +15,7 @@
     </div>
     <div class="panel-body">
         <div class="well well-lg">
-            <form role="form" class="form-inline" method = "post" action="/datacollection/create_datacollec/" >
+            <form role="form" class="form-inline" method = "post" action="" >
                 <span class="help-block">Tethne Supports these input data formats. Please select one among them.</span>
                 <!-- 
 <div class="radio">
@@ -34,7 +34,8 @@
                 </br> 
  -->
  				
-                <select class="form-control" name="filetype"> <option value="{{ request.form.input_type}}"> 
+                <select class="form-control" id="input_type" name="input_type"> 
+                        <option value="{{ request.form.input_type}}"> 
                 		WOS : Web Of Science field-tagged format.</option>  
                 		<option value="{{ request.form.input_type}}">
                 			DFR  : JSTOR Data-For-Research dataset in XML format.</option> 
@@ -46,7 +47,10 @@
                     </label>
                     </br></br>
                       <span class="help-block">Please provide a name to this DataCollection</span>
-                     <input type = "text" class="form" placeholder="DataCollection Name"></input>
+                     <label for="DataCollectionName"><input type = "text" id="dcname" name="dcname" value="{{request.form.dc_name}}" class="form" placeholder="DataCollection Name"></input>
+                  <!--    <label for="UserName"><input type="text" id="username" name="username" class="input-xlarge"
+                    placeholder="Enter Username" value="{{request.form.username}}"
+                    required> -->
 
                     <!-- Not a proper design ...change the class="btn btn-default alignment to middle --!>
                     <div></br></div>

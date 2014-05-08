@@ -45,7 +45,8 @@ from logging import Formatter, FileHandler
 import tethne.readers as rd
 import random as random
 import models as db
-from controllers import control
+import controllers as control
+
 
 # Importing helpers module
 import helpers as help           
@@ -59,7 +60,7 @@ Test Views
 """
 # test view
 @dataset.route('/info')
-def info():
+def info(): 
 	return "I am inside Show_info"
 	
 # To catch the URLs which are not defined 
@@ -251,23 +252,35 @@ def dc_create():
     if request.method == 'POST' :
 
         try:
-            input_type = request.form['filetype']
+            input_type = request.form["input_type"]
             input_path = request.form['fileinput']
             input_name = request.form['dcname']
+            username = request.form['username']
             print "try" ,input_path
             print "input_type", input_type
+            print "dc_name::" , dc_name,username
         except:
             print "comes to except"
             pass
         
+        # import os
+        # print os.path
+        # print "outside:" ,input_path
+        # print "outside::", input_type
         
+        #print control.CreatePersistentDataCollection
+        input_name = "myDC1" #temp hardcoding as form-value is not read
+
         #Call Controller here.
         status = control.CreatePersistentDataCollection(input_type,input_path,input_name)
         
         #If status is true then the user to be notified about the success.
+        if status:
+            flash("DataCollection Created successfully")
 
         #Else,the user should be notified about the reason for the failure.
-
+        else:
+            flash("DataCollection not created")
         return render_template('pages/list.datasets.html', user = user, input_type = input_type, input_path = "dummy")
         #return redirect(url_for('control.create_datacollection',_external=True)) 
     return render_template('pages/generate.datasets.html', user = user, form= form)
