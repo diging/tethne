@@ -37,18 +37,18 @@
 
 
  <body>
-<button id="ok1">Slice DataSets</button>
+<!-- <button id="ok1">Slice DataSets</button> -->
 <!-- <p>This is a paragraph with little content.</p> -->
-<input type="radio" id="rd" value=0>
-
+<!-- <input type="radio" id="rd" value=0>
+ -->
    <!-- <form action="" method="post" class="form" >  -->  
 <form role="form" class="form-inline" method = "post">
    <p class="text-muted"> Pick one DataCollection to delete/analyze it. A GraphCollection can also be created from the selected DataCollection.</p>
 
         <a href="{{ url_for('.dc_del') }}"class="btn btn-danger " role="button" id="delete">Delete DataCollections</a>
 
-        <a href="{{ url_for('.dc_create_slices') }}"class="btn btn-success " role="button" id="slice">Slice DataCollection</a></br> </br>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
+     <a href="{{ url_for('.dc_create_slices') }}"class="btn btn-success " role="button" id="slice">Slice DataCollection</a>
+    <!--  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
 </script>
 <script>
 $(document).ready(function(){
@@ -59,16 +59,16 @@ $(document).ready(function(){
   });
 });
 </script>
-
+ -->
 
 
          <!-- <a href="{{ url_for('.dc_list') }}"class="btn btn-info" role="button" id="slice" value ="{{request.form.slice}}">Slice DataCollections</a>
  -->
               
         
-        <a href="{{ url_for('.gc_create') }}"class="btn btn-success " role="button" id="create">Create GraphCollection</a></br> </br>
-  <p> click me</p>
-   
+        <a href="{{ url_for('.gc_create') }}"class="btn btn-info " role="button" id="create">Create GraphCollection</a></br> </br>
+ <!--  <p> click me</p>
+    -->
     	<div class="table-responsive">
         <table class="table table-hover" >
             <tr>
