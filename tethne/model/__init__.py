@@ -57,7 +57,7 @@ class ModelManager(object):
         
         self.prepped = True
 
-    def build(self, Z=20, max_iter=1000, prep=False):
+    def build(self, Z=20, max_iter=1000, prep=False, **kwargs):
         """
         
         """
@@ -69,7 +69,7 @@ class ModelManager(object):
                 raise RuntimeError('Not so fast! Call prep() or set prep=True.')
 
         self.Z = Z
-        self._run_model(max_iter)  # The action happens here.
+        self._run_model(max_iter, **kwargs)  # The action happens here.
         self.plot_ll()
 
         self._load_model()
@@ -167,7 +167,7 @@ class LDAModelManager(ModelManager):
         if exit != 0:
             raise RuntimeError("MALLET import-file failed: {0}.".format(exit))
 
-    def _run_model(self, max_iter):
+    def _run_model(self, max_iter, **kwargs):
         #$ bin/mallet train-topics --input mytopic-input.mallet --num-topics 100 
         #> --output-doc-topics /Users/erickpeirson/doc_top 
         #> --word-topic-counts-file /Users/erickpeirson/word_top 
@@ -286,7 +286,7 @@ class DTMModelManager(ModelManager):
     Model Manager for DTM.
     """
     
-    def __init__(self, D, outpath, dtm_path='./bin/main'):
+    def __init__(self, D, outpath, dtm_path='./bin/dtm/main'):
         """
         
         Parameters
@@ -375,11 +375,10 @@ class DTMModelManager(ModelManager):
             try:    # Find conv
                 conv = re.findall(r'conv\s+=\s+([-]?\d+\.\d+e[-]\d+)', l)
                 self.conv.append(float(conv[0]))
-                print conv
+                print conv[0]
             except IndexError:
                 pass
-            
-            
+    
         self.num_iters += max_iter
             
     def _load_model(self):
@@ -391,32 +390,42 @@ if __name__ == '__main__':
     import sys
     sys.path.append("/Users/erickpeirson/tethne")
     from tethne.builders import DFRBuilder
+    import tethne.readers as rd
 
 #    datapath = "/Users/erickpeirson/Genecology Project Archive/JStor DfR Datasets/2013.5.3.k2HUvXh9"
     datapath = "/Users/erickpeirson/Desktop/cleanup/JStor DfR Datasets/2013.5.3.k2HUvXh9"
     
-    dc_builder = DFRBuilder(datapath)
-    D = dc_builder.build(slice_by=('date','jtitle'))
-    
-    import matplotlib.pyplot as plt
-    fig = plt.figure(figsize=(40,15), dpi=600)
-    D.plot_distribution('date', fig=fig)#,'jtitle')
-    plt.savefig('/Users/erickpeirson/Desktop/test.png')
-    
+#    dc_builder = DFRBuilder(datapath)
+#    D = dc_builder.build(slice_by=('date','jtitle'))
+#    
+#    import matplotlib.pyplot as plt
+#    fig = plt.figure(figsize=(40,15), dpi=600)
+#    D.plot_distribution('date', fig=fig)#,'jtitle')
+#    plt.savefig('/Users/erickpeirson/Desktop/test.png')
+
 #    print D.grams['uni'].keys()
 
-    MM = LDAModelManager(D, '/Users/erickpeirson/Desktop/')
-    MM.prep()
-    model = MM.build(max_iter=100)
+#    MM = LDAModelManager(D, '/Users/erickpeirson/Desktop/')
+#    MM.prep()
+#    model = MM.build(max_iter=100)
 
-    fig = plt.figure(figsize=(40,15), dpi=600)
-    MM.plot_topics([0,1,2], normed=False)
-    plt.savefig('/Users/erickpeirson/Desktop/test2.png')
+#    fig = plt.figure(figsize=(40,15), dpi=600)
+#    MM.plot_topics([0,1,2], normed=False)
+#    plt.savefig('/Users/erickpeirson/Desktop/test2.png')
 
 
 #    MM = DTMModelManager(D, '/Users/erickpeirson/Desktop/')
 #    MM.prep()
-#    model = MM.build(max_iter=500)
-#    model.print_topics()
-#    
+#    print MM.temp
+#    model = MM.build(Z=5, max_iter=500, lda_seq_min_iter=1, lda_seq_max_iter=2, lda_max_em_iter=2)
+
+
+    #model.print_topics()
+#
 #    del MM
+
+    opath = "/private/var/folders/f9/g7lw23jx7z3fw72byy3l11p80000gn/T/tmp88rYpV"
+    path = "{0}/model_run/".format(opath)
+    metadata = "{0}/tethne-meta.dat".format(opath)
+    vocabulary = "{0}/tethne-vocab.dat".format(opath)
+    model = rd.dtm.load(path, metadata, vocabulary)

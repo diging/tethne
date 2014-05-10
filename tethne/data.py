@@ -838,6 +838,7 @@ class BaseModel(object):
     Base class for corpus models.
     
     """
+
     pass
 
 class LDAModel(BaseModel):
@@ -846,7 +847,7 @@ class LDAModel(BaseModel):
     
     Used by :mod:`.readers.mallet`\.
     """
-    
+
     def __init__(self, doc_topic, top_word, top_keys, metadata, vocabulary):
         """
         Initialize the :class:`.LDAModel`\.
@@ -898,7 +899,7 @@ class LDAModel(BaseModel):
             topZ = td.shape[0]
             
         if type(topZ) is int:   # Return a set number of topics.
-            top_indices = np.argsort(td)[0:topZ]
+            top_indices = td.argsort()[-topZ:][::1]
         elif type(topZ) is float:   # Return topics above a threshold.
             top_indices = [ z for z in np.argsort(td) if td[z] > topZ ]
 
@@ -908,10 +909,21 @@ class LDAModel(BaseModel):
         
         return topics
 
-    def words_in_topic(self, z):
-        words = self.top_word[z,:]
-        return [ self.vocabulary.by_int[w] for w in words.argsort()[-5:][::-1] ]
-    
+    def words_in_topic(self, z, topW=None):
+        if topW is None:
+            topW = 5
+
+        if type(topW) is int:
+            words = self.top_word[z,:].argsort()[-topW:][::-1]
+
+        return [ ( w, self.top_word[z,w]) for w in words ]
+
+    def print_topic(self, z):
+        words = [ self.vocabulary.by_int[w] for w,p
+                    in self.words_in_topic(z, topW=topW) ]
+        print ', '.join(words)
+        return words
+
     def print_topics(self):
         """
         Prints a list of topics.
@@ -954,3 +966,45 @@ class LDAModel(BaseModel):
         documents = zip(top_idents, top_values)
         
         return documents
+
+class DTMModel(BaseModel):
+
+    def __init__(self, e_theta, topics, metadata, vocabulary):
+        self.e_theta = e_theta
+        self.topics = topics
+        self.metadata = metadata
+        self.vocabulary = vocabulary
+
+        self.lookup = { v:k for k,v in metadata.iteritems() }
+
+    def topics_in_doc(self, d, topZ=None):
+        if topZ is None:
+            topZ = 5
+            
+        if type(topZ) is int:   # Return a set number of topics.
+            top_indices = self.e_theta[:, d].argsort()[-topZ:][::1]
+        elif type(topZ) is float:   # Return topics above a threshold.
+            top_indices = [ z for z in np.argsort(self.e_theta[:, d])
+                                if self.e_theta[z, d] > topZ ]
+
+        top_values = [ self.e_theta[z, d] for z in top_indices ]
+        
+        topics = zip(top_indices, top_values)
+        
+        return topics
+
+    def words_in_topic(self, z, t, topW=None):
+        if topW is None:
+            topW = 5
+
+        if type(topW) is int:
+            words = self.topics[z, :, t].argsort()[-topW:][::-1]
+
+        return [ ( w, self.topics[z, w, t]) for w in words ]
+
+    def print_topic(self, z, t):
+        words = [ self.vocabulary.by_int[w] for w,p
+                    in self.words_in_topic(z,t,topW=topw) ]
+        print ', '.join(words)
+        return words
+
