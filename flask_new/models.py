@@ -1,6 +1,6 @@
 """
-Classes for  accessing persistence of tethne data in ZODB and to perform
-various operations on them.
+Classes for the User Management, persistence of tethne :class:`.GraphCollection` and 
+:class:`.DataCollection` objects in ZODB. 
 
 
 .. autosummary::
@@ -8,7 +8,7 @@ various operations on them.
    User
    PersistentDataCollection
    PersistentGraphCollection
-   Events
+   Event
    
 """
 
@@ -23,31 +23,15 @@ from ZODB.FileStorage import FileStorage
 from ZODB.DB import DB
 import ZODB.config,transaction
 from hashlib import sha256
+import time
+ 
 
-# Import tethne classes
-import tethne.data as data
-import tethne.readers as rd
-# from tethne.data import DataCollection 
-# from tethne.data import GraphCollection 
-
-#Errors:
-
-#import tethne.networks as nt 
-# >>> import models as m
-# Traceback (most recent call last):
-#   File "<stdin>", line 1, in <module>
-#   File "models.py", line 15, in <module>
-#     import tethne.networks as nt
-#   File "E:\program_files\Anaconda\lib\site-packages\tethne\networks.py", line
-# 1, in <module>
-#     for paper in meta_list:
-# NameError: name 'meta_list' is not defined
 
 
 class User(Persistent):
     """
     Class for handling user data. 
-    The following fields (and corresponding data types) are allowed:
+    The following fields (and corresponding data types) are required:
     
     ===========     =====   ====================================================
     Field           Type    Description
@@ -66,37 +50,42 @@ class User(Persistent):
     def __init__(self,name,password,emailid,institution,\
                                     que,ans): 
         """
-        Initialize the User object with registration details.
+        Class for handling user data.
+        Initialize the :class:`.User` object with registration details.
         
         Parameters
         ----------
-        name     : str
-        password : str
-        email-id : str
-        institution: str
-        que : str
+        name : str
+            Username of the user.
+        password : str 
+            Password of the user, stored after encryption.
+        emailid : str     
+            Email-id of the user.
+        institution : str
+            Institution to which the user belongs to.
+        que : str     
+            Secret Question for password recovery
         ans : str
-
+            Answer for the secret question.
+            
         Returns
         -------
-        None. 
-            An User Object with "name" as the key gets stored in the 
-            User data tree. 
+        An :class:`.User` Object with "name" as the key. 
+        It gets stored in the User data Binarytree. 
 
         Raises
         ------
-            None.
+        None.
         
         """
 
-    
         self.name = name
         self.password = sha256(password)
         self.id = emailid
         self.institution = institution
         self.secretque = que 
         self.secretans = ans    
-        self.role = 1 #all users who register will be "Normal Users"
+        self.role = 1    #all users who register will be "Normal Users"
         self._p_changed = 1 #for mutable objects
 
     def __repr__(self):
@@ -106,59 +95,71 @@ class User(Persistent):
 class PersistentGraphCollection(Persistent):
     
     """
-    Class for accessing :class:`.GraphCollection` 
-    from tethne and persist the :class:`.GraphCollection` object in this class.
+    Persistent Class for accessing tethne's :class:`.GraphCollection` 
+    and persist the :class:`.GraphCollection` object here.
 
-    The following fields (and corresponding data types) are allowed:
+    The following fields (and corresponding data types) are required:
     
     ===========     =====   ====================================================
     Field           Type    Description
     ===========     =====   ====================================================
-    g_id            str     GraphCollection ID. Unique name for each collection.
+    
     name            str     Name provided by the user for the collection.
     owner           str     User who created this collection.
     date            str     The date of GraphCollection creation.
     graph_obj       Obj     class:`.GraphCollection` object 
-    data_obj       Obj     class:`.DataCollection` object used to create this
+    datacoll_obj    Obj     class:`.DataCollection` object used to create this
                             class:`.GraphCollection` object.
     ===========     =====   ====================================================
 
     None values are not allowed for these fields.
     """
     
-    def __init__(self,g_id,name,owner,date,graph_obj,data_obj):
+    def __init__(self,name,owner,graph_obj,datacoll_obj):
 
         """
-        Initialize the PersistentGraphCollection object.
+        Persistent Class for accessing tethne's :class:`.GraphCollection` 
+        and persist the :class:`.GraphCollection` object here.
         
         Parameters
         ----------
-        g_id : str
-        name : str
-        owner: str
-        date : str
-        graph_obj: class:`.GraphCollection` object 
+        name : str 
+            Name provided by the user for the collection.    
+        owner : str     
+            User who created this collection. Got from the session variables.
+        graph_obj : Obj     
+            class:`.GraphCollection` object 
+        datacoll_obj : Obj     
+            class:`.DataCollection` object used to create this
+            class:`.GraphCollection` object.
         
+        Fields: (auto-generated)
+        -------
+
+        g_id : str     
+            GraphCollection ID. Generated using the hash of GraphCollection 
+            "name" provided by user. Unique name for each collection. 
+        date : str     
+            The date of GraphCollection creation. It is auto-generated.
 
         Returns
         -------
-        None. 
-            A PersistentGraphCollection Object with "g_id" 
-            as the key gets stored in the PersistentGraphCollection data tree. 
+        A class:`.PersistentGraphCollection` Object with "g_id" 
+        as the key gets stored in the PersistentGraphCollection data tree. 
 
         Raises
         ------
-            None.
+        None.
         
         """
         
-        self.id = g_id
+        self.g_id = sha256(name)          #<sha256 HASH object @ 00002BA7AF0>         
         self.name = name
         self.owner = owner
-        self.date = date
+        self.date = time.strftime("%c") #ex:'04/29/14 14:09:29'
         self.graph_obj = graph_obj
-        pass
-    
+        self.dataobj = datacoll_obj; 
+        
         
 class PersistentDataCollection(Persistent):
     
@@ -171,60 +172,66 @@ class PersistentDataCollection(Persistent):
     ===========     =====   ====================================================
     Field           Type    Description
     ===========     =====   ====================================================
-    d_id            str     DataCollection ID. Unique name for each collection.
     name            str     Name provided by the user for the collection.
     owner           str     User who created this collection.
     date            str     The date of DataCollection creation.
-    dataset_obj     str     class:`.DataCollection` object 
+    datacoll_obj    str     class:`.DataCollection` object 
     ===========     =====   ====================================================
 
     None values are not allowed for these fields.
     """
     
-    def __init__(self,d_id, name, owner,date,dataset_obj):
+    def __init__(self,d_id, name, owner,date,datacoll_obj):
 
         """
-        Initialize the PersistentDataCollection object.
+        Persistent Class for accessing tethne's :class:`.DataCollection` 
+        and persist the :class:`.DataCollection` object here.
         
         Parameters
         ----------
-        d_id : str
-        name : str
-        owner: str
-        date : str
-        dataset_obj: class:`.DataCollection` object 
+        owner : str     
+            User who created this collection. Got from the session variables.
         
+        datacoll_obj : Obj     
+            class:`.DataCollection` object 
+
+        Fields: (auto-generated)
+        -------    
+        d_id : str     
+            DataCollection ID. Generated using the hash of DataCollection 
+            "name" provided by user. Unique name for each collection. 
+        date : str     
+            The date of DataCollection creation. It is auto-generated.
 
         Returns
         -------
-        None. 
-            A PersistentDataCollection Object with "d_id" 
-            as the key gets stored in the PersistentDataCollection data tree.
+        A class:`.PersistentDataCollection` Object with "d_id" 
+        as the key gets stored in the PersistentDataCollection data tree. 
 
         Raises
         ------
-            None.
+        None.
         
         """
         
-        self.id = data_id
+        self.d_id = sha256(name) 
         self.name = name
         self.owner = owner
-        self.date = date
-        self.dataobj = dataset_obj; 
+        self.date = time.strftime("%c") #ex:'04/29/14 14:09:29'
+        self.dataobj = datacoll_obj; 
         self._p_changed = 1 # for mutable objects
   
 
-class Events(Persistent):
+class Event(Persistent):
     
     """
-    Class for the admin to track the events in the application.
-    The following fields (and corresponding data types) are allowed:
+    Class for the users to track the events in the application.
+    The following fields (and corresponding data types) are required:
     
     ===========     =====   ====================================================
     Field           Type    Description
     ===========     =====   ====================================================
-    user_id         str     Activity corresponding to the user.
+    user_id         str     Logged in user who wants the Events details.
     datetime        str     The date-time used for viewing events details.
     obj             obj     Either class:`.GraphCollection` object or 
                             class:`.DataCollection` object which was 
@@ -238,23 +245,29 @@ class Events(Persistent):
     def __init__(self,user_id,datetime,obj,action):
 
         """
-        Initialize the PersistentDataCollection object.
+        Class for the users to track the events in the application.
         
         Parameters
         ----------
-        user_id : str
+        user_id : str     
+            Logged in user who wants the view Event details.
         datetime : str
-        obj:  class:`.DataCollection` object or class:`.GraphCollection` object
-        action : str
+            The date-time used for viewing events details. 
+            i.e Activity since Apr 20, 2014.
+        obj : obj     
+            Either class:`.GraphCollection` object or 
+            class:`.DataCollection` object which was 
+            modified/created during the datetime period.
+        action : str     
+            The list of activity during that datetime period. 
         
         Returns
         -------
-        An Events Object with the activity details for the datetime window, for
-        the respective user.
-
+        An class:`.Event` Object with the activity details 
+        
         Raises
         ------
-            None.
+        None.
         
         """
 
