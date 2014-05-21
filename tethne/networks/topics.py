@@ -3,7 +3,7 @@ Build networks from topics in a topic model.
 """
 
 import networkx as nx
-from scipy import stats
+#from scipy import stats
 import numpy as np
 
 def paper_coupling(model, threshold=0.1):

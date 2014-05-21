@@ -36,8 +36,7 @@ class DFRBuilder(DCBuilder):
     DataCollection builder for JSTOR Data-for-Research datasets.
     """
     
-    def build(self, grams=['uni'], apply_stoplist=True, slice_by=('date',),
-                                                                      **kwargs):
+    def build(self, grams=['uni'], slice_by=['date',], **kwargs):
         """
         
         Parameters
@@ -58,8 +57,7 @@ class DFRBuilder(DCBuilder):
         gram_data = {}
         for gram_type in grams:
             g = rd.dfr.ngrams(self.datapath, 
-                                        N=gram_type,
-                                        apply_stoplist=apply_stoplist)
+                                        N=gram_type)
             g_tok, vocab, counts = rd.dfr.tokenize(g)                                        
             gram_data[gram_type] = (g_tok, vocab, counts)
         
