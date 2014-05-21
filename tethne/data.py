@@ -16,7 +16,7 @@ from cStringIO import StringIO
 from pprint import pprint
 import sys
 import numpy as np
-import scipy as sc
+#import scipy as sc
 
 class Paper(object):
     """
@@ -596,8 +596,8 @@ class DataCollection(object):
                         J.append(j)
                         K.append(k)
 
-        dist = sc.sparse.coo_matrix((K, (I,J)), shape=shape)
-        return dist
+        #dist = sc.sparse.coo_matrix((K, (I,J)), shape=shape)
+        #return dist
 
     def distribution_2d(self, x_axis, y_axis=None):
         """
@@ -833,124 +833,31 @@ class GraphCollection(object):
         
         return composed
 
-class BaseModel(object):
+class ModelCollection(object):
     """
-    Base class for corpus models.
+    A collection of models.
     
     """
-    pass
 
-class LDAModel(BaseModel):
-    """
-    Organizes parsed output from MALLET's LDA modeling algorithm.
-    
-    Used by :mod:`.readers.mallet`\.
-    """
-    
-    def __init__(self, doc_topic, top_word, top_keys, metadata, vocabulary):
-        """
-        Initialize the :class:`.LDAModel`\.
+    def __init__(self):
+        self.models = {}
+        self.metadata = {}
         
-        Parameters
-        ----------
-        doc_top : Numpy matrix
-            Rows are documents, columns are topics. Values indicate the 
-            contribution of a topic to a document, such that all rows sum to 
-            1.0.
-        top_word : Numpy matrix
-            Rows are topics, columns are words. Values indicate the normalized
-            contribution of each word to a topic, such that rows sum to 1.0.
-        top_keys : dict
-            Maps matrix indices for topics onto the top words in that topic.
-        metadata : dict
-            Maps matrix indices for documents onto a :class:`.Paper` key.
-        """
-        
-        self.doc_topic = doc_topic
-        self.top_word = top_word
-        self.top_keys = top_keys
-        self.metadata = metadata
-        self.vocabulary = vocabulary
-        
-        self.lookup = { v:k for k,v in metadata.iteritems() }
-        
-    def topics_in_doc(self, d, topZ=None):
-        """
-        Returns a list of the topZ most prominent topics in a document.
-        
-        Parameters
-        ----------
-        d : str or int
-            An identifier from a :class:`.Paper` key.
-        topZ : int or float
-            Number of prominent topics to return (int), or threshold (float).
-            
-        Returns
-        -------
-        topics : list
-            List of (topic, proportion) tuples.
-        """
-        
-        index = self.lookup[d]
-        td = self.doc_topic[index, :]
-        
-        if topZ is None:
-            topZ = td.shape[0]
-            
-        if type(topZ) is int:   # Return a set number of topics.
-            top_indices = np.argsort(td)[0:topZ]
-        elif type(topZ) is float:   # Return topics above a threshold.
-            top_indices = [ z for z in np.argsort(td) if td[z] > topZ ]
 
-        top_values = [ td[z] for z in top_indices ]
-        
-        topics = zip(top_indices, top_values)
-        
-        return topics
+    def __setitem__(self, index, model, metadata=None):
+        """
+        """
 
-    def words_in_topic(self, z):
-        words = self.top_word[z,:]
-        return [ self.vocabulary.by_int[w] for w in words.argsort()[-5:][::-1] ]
+        self.models[index] = model
+        self.metadata[index] = metadata
+
+    def __getitem__(self, key):
+        return self.models[key]
+
+    def __delitem__(self, key):
+        del self.models[key]
+
+    def __len__(self):
+        return len(self.models)        
+
     
-    def print_topics(self):
-        """
-        Prints a list of topics.
-        """
-        Z = self.top_word.shape[0]
-        
-        for z in xrange(Z):
-            print z, ', '.join(self.words_in_topic(z))
-            
-    
-    def docs_in_topic(self, z, topD=None):
-        """
-        Returns a list of the topD documents most representative of topic z.
-        
-        Parameters
-        ----------
-        z : int
-            A topic index.
-        topD : int or float
-            Number of prominent topics to return (int), or threshold (float).
-            
-        Returns
-        -------
-        documents : list
-            List of (document, proportion) tuples.
-        """    
-        td = self.doc_topic[:, z]
-        
-        if topD is None:
-            topD = td.shape[0]
-        
-        if type(topD) is int:   # Return a set number of documents.
-            top_indices = np.argsort(td)[topD]
-        elif type(topD) is float:   # Return documents above a threshold.
-            top_indices = [ d for d in np.argsort(td) if td[d] > topD ]
-        
-        top_values = [ td[d] for d in top_indices ]
-        top_idents = [ self.metadata[d] for d in top_indices ]
-        
-        documents = zip(top_idents, top_values)
-        
-        return documents

@@ -2,6 +2,13 @@
 Helper functions.
 """
 
+def swap(u,v):
+    """
+    exchange the values of u and v
+    """
+
+    return v,u
+
 def contains(l, f):
     """
     Searches list l for a pattern specified in a lambda function f.

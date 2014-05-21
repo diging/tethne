@@ -5,6 +5,11 @@ import tempfile
 import subprocess
 import numpy as np
 
+import sys
+sys.path.append('/Users/erickpeirson/tethne')
+from tethne.model import TAPModel, LDAModel
+from tethne.data import ModelCollection, GraphCollection
+
 
 class ModelManager(object):
     """
@@ -35,7 +40,7 @@ class ModelManager(object):
         Delete temporary directory and all files contained therein.
         """
         
-#        shutil.rmtree(self.temp)        
+        shutil.rmtree(self.temp)        
         
     def plot_ll(self):
         """
@@ -75,7 +80,20 @@ class ModelManager(object):
         self._load_model()
         
         return self.model        
+
+class SocialModelManager(object):
+    """
+    Base class for social model managers.
+    """
+    
+    def __init__(self, **kwargs):
+        pass
         
+    def build(self, max_iter=1000, **kwargs):
+        self._run_model(max_iter, **kwargs)
+        self._load_model()
+        
+
 class LDAModelManager(ModelManager):
     """
     Model Manager for LDA topic modeling with MALLET.
@@ -101,7 +119,7 @@ class LDAModelManager(ModelManager):
         Delete temporary directory and all files contained therein.
         """
         
-        shutil.rmtree(self.temp)
+#        shutil.rmtree(self.temp)
     
     def _generate_corpus(self, gram, meta):
         from tethne.writers.corpora import to_documents    
@@ -197,6 +215,32 @@ class LDAModelManager(ModelManager):
                                     self.tk, 
                                     self.Z,
                                     self.meta_path  )     
+    def slice(self, axis):
+        M = ModelCollection()
+        a = D.get_slices(axis)
+        for key in sorted(a.keys()):
+            ids = a[key]
+
+            indices = { i:model.lookup[i] for i in ids if i in model.lookup.keys() }
+
+            dt = np.zeros(( len(indices.keys()), self.model.doc_topic.shape[1] ))
+            
+            m = {}
+            k = 0
+            for i in ids:
+                if i in indices.keys():
+                    dt[k,:] = model.doc_topic[indices[i], :]
+                    m[k] = i
+                    k += 1
+                
+            tw = self.model.top_word
+            tk = self.model.top_keys
+            v = self.model.vocabulary
+
+            smodel = LDAModel(dt, tw, tk, m, v)
+            
+            M[key] = smodel
+        return M
         
 class DTMModelManager(ModelManager):
     """
@@ -303,29 +347,157 @@ class DTMModelManager(ModelManager):
         """Load and return a :class:`.LDAModel`\."""
         
         pass  
+
+
+class TAPModelManager(SocialModelManager):
+    """
+    For managing the :class:`.TAPModel` .
+    """
     
+    def __init__(self, D, G, M, **kwargs):
+        """
         
+        Parameters
+        ----------
+        D : :class:`.DataCollection`
+        G : :class:`.GraphCollection`
+        M : :class:`.ModelCollection`
+        """
+
+        super(TAPModelManager, self).__init__(**kwargs)
+        self.D = D
+        self.M = M
+        self.G = G
+        self.SM = ModelCollection()
+        self.SG = GraphCollection()
+        
+    def author_theta(self, papers, model, indexed_by='doi'):
+        """
+        Generates distributions over topics for authors, based on distributions
+        over topics for their papers.
+        """
+        
+        a_topics = {}
+
+        for p in papers:
+            try:
+                t = model.topics_in_doc(p[indexed_by])
+                dist = np.zeros(( len(t) ))
+                for i,v in t:
+                    dist[i] = v
+
+                for author in p.authors():
+                    if author in a_topics:
+                        a_topics[author].append(dist)
+                    else:
+                        a_topics[author] = [ dist ]
+            except KeyError:    # May not be corpus model repr for all papers.
+                pass
+
+        a_theta = np.zeros(( len(a_topics), model.num_topics() ))
+        a = 0
+        for author, dists in a_topics.iteritems():
+            a_dist = np.zeros(( model.num_topics() ))
+            for dist in dists:
+                a_dist += dist
+            a_dist = a_dist/len(dists)
+            a_theta[a, :] = a_dist/np.sum(a_dist)   # Should sum to <= 1.0.
+
+        
+        return a_theta
+    
+    def _run_model(self, max_iter=1000, sequential=True, **kwargs):
+        print 'run model'
+
+        axis = kwargs.get('axis', None) # e.g. 'date'
+
+        if axis is None:
+            # single model.
+            pass
+        else:
+            # model for each slice.
+            if axis not in D.get_axes():
+                raise RuntimeError('No such axis in DataCollection.')
+                
+            s = 0
+            for slice in sorted(D.get_slices(axis).keys()):
+                print 'modeling slice {0}'.format(slice) # TODO: logging.
+
+                if s > 0 and sequential:
+                    alt_r, alt_a, alt_G = model.r, model.a, model.G
+
+                papers = D.get_slice(axis, slice, papers=True)
+
+                theta = self.author_theta(papers, self.M[slice])
+                model = TAPModel(self.G[slice], theta)
+                
+                if s > 0 and sequential:
+                    model.prime(alt_r, alt_a, alt_G)
+                
+                model.build()
+                self.SM[slice] = model
+                
+                s += 1
+                
+    
+    def graph_collection(self, k):
+        C = GraphCollection()
+        for slice in self.SM.keys():
+            C[slice] = self.SM[slice].graph(k)
+    
+        return C
+                    
+    
+    def _load_model(self):
+        pass
+
         
 if __name__ == '__main__':
     import sys
     sys.path.append("/Users/erickpeirson/tethne")
-    from tethne.builders import DFRBuilder
+    from tethne.builders import DFRBuilder, authorCollectionBuilder
+    from tethne.data import DataCollection
 
     datapath = "/Users/erickpeirson/Genecology Project Archive/JStor DfR Datasets/2013.5.3.k2HUvXh9"
     
     dc_builder = DFRBuilder(datapath)
-    D = dc_builder.build(slice_by=('date','jtitle'))
+    D = dc_builder.build(slice_by=['date',], cumulative=True, method='time_period', window_size=10)
     
     import matplotlib.pyplot as plt
     fig = plt.figure(figsize=(40,15), dpi=600)
     D.plot_distribution('date', fig=fig)#,'jtitle')
     plt.savefig('/Users/erickpeirson/Desktop/test.png')
+
+
+    builder = authorCollectionBuilder(D)
+    GC = builder.build('date', 'coauthors', threshold=2)
     
-#    print D.grams['uni'].keys()
-    
-    MM = DTMModelManager(D, '/Users/erickpeirson/Desktop/')
+
+    MM = LDAModelManager(D, '/Users/erickpeirson/Desktop/', '/Applications/mallet-2.0.7')
     MM.prep()
-    model = MM.build(max_iter=500)
-#    model.print_topics()
+    model = MM.build(max_iter=100)
+    M = MM.slice('date')
+
+    SM = TAPModelManager(D, GC, M)
+    SM.build(axis='date')
+    
+    
+##    print D.grams['uni'].keys()
 #    
-#    del MM
+#    MM = DTMModelManager(D, '/Users/erickpeirson/Desktop/')
+#    MM.prep()
+#    model = MM.build(max_iter=500)
+##    model.print_topics()
+##    
+##    del MM
+
+#    for slice in sorted(D.get_slices('date').keys()):
+#        print 'modeled slice {0}'.format(slice)
+#        papers = D.get_slice('date', slice, papers=True)
+#
+#        g_tok, vocab, counts = D.grams['uni']
+#        g_tok_ = { k:g for k,g in g_tok.iteritems() if k in [ p['doi'] for p in papers ] }
+#        grams = (g_tok_, vocab, counts)
+#        
+#        D_ = DataCollection(papers, grams={'uni':grams})
+

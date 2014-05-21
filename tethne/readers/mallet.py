@@ -3,11 +3,12 @@ Reader for output from topic modeling with MALLET.
 """
 
 import sys
-sys.path.append('/Users/erickpeirson/Dropbox/DigitalHPS/Scripts/tethne')
+sys.path.append('/Users/erickpeirson/tethne')
 
 import csv
 import numpy as np
-from tethne.data import LDAModel, Paper
+from tethne.data import Paper
+from tethne.model import LDAModel
 from tethne.utilities import Dictionary
 
 

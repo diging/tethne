@@ -107,7 +107,7 @@ def from_dir(path):
 
     return papers
 
-def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False, min_len=3, min_count=2):
+def ngrams(datapath, N='bi', ignore_hash=True):
     """
     Yields N-grams from a JSTOR DfR dataset.
 
@@ -119,9 +119,6 @@ def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False, min_len=3, 
         'uni', 'bi', 'tri', or 'quad'
     ignore_hash : bool
         If True, will exclude all N-grams that contain the hash '#' character.
-    apply_stoplist : bool
-        If True, will exclude all N-grams that contain words in the NLTK
-        stoplist.
 
     Returns
     -------
@@ -154,25 +151,15 @@ def ngrams(datapath, N='bi', ignore_hash=True, apply_stoplist=False, min_len=3, 
             grams = []
             for gram in root.findall(elem):
                 text = gram.text.strip()
-                if ( not ignore_hash or '#' not in list(text) ) and len(text) >= min_len:
-                    
+                if ( not ignore_hash or '#' not in list(text) ):
                     c = ( strip_non_ascii(text), int(gram.attrib['weight']) )
                     grams.append(c)
-
-            if apply_stoplist:
-                stoplist = stopwords.words()
-                grams_ = []
-                for g,c in grams:
-                    for w in g.split():
-                        if w not in stoplist:
-                            grams_.append( (g,c) )
-                grams = grams_
 
             ngrams[doi] = grams
 
     return ngrams
 
-def tokenize(ngrams):
+def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
     """
     Builds a vocabulary, and replaces words with vocab indices.
     
@@ -180,6 +167,9 @@ def tokenize(ngrams):
     ----------
     ngrams : dict
         Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
+    apply_stoplist : bool
+        If True, will exclude all N-grams that contain words in the NLTK
+        stoplist.        
         
     Returns
     -------
@@ -187,25 +177,56 @@ def tokenize(ngrams):
         Tokenized ngrams, as doi:{i:count}.
     vocab : dict
         Vocabulary as i:term.
-    counts : :class:`.Counter`
+    token_tf : :class:`.Counter`
         Term counts for corpus, as i:count.
     """
 
     vocab = {}
-    counts = Counter()
+    vocab_ = {}
+    word_tf = Counter()
+    word_df = Counter()
+    token_tf = Counter()
+    token_df = Counter()
     t_ngrams = {}
     
+    # Get global word counts, first.
+    for grams in ngrams.values():
+        for g,c in grams:
+            word_tf[g] += c
+            word_df[g] += 1
+            
+    if apply_stoplist:
+        stoplist = stopwords.words()
+            
+    # Now tokenize.
     for doi,grams in ngrams.iteritems():
         t_ngrams[doi] = []
         for g,c in grams:
-            i = len(vocab)
-            if g not in vocab:
-                vocab[i] = g
-            counts[i] += c
+            ignore = False
+                        
+            # Ignore extremely rare words (probably garbage).
+            if word_tf[g] < min_tf or word_df[g] < min_df or len(g) < min_len:
+                ignore = True
 
-            t_ngrams[doi].append( (i,c) )
+            # Stoplist.
+            elif apply_stoplist:
+                for w in g.split():
+                    if w in stoplist:
+                        ignore = True            
 
-    return t_ngrams, vocab, counts
+            if not ignore:
+                if g not in vocab.values():
+                    i = len(vocab)
+                    vocab[i] = g
+                    vocab_[g] = i
+                else:
+                    i = vocab_[g]
+                token_tf[i] += c
+                token_df[i] += 1
+
+                t_ngrams[doi].append( (i,c) )
+
+    return t_ngrams, vocab, token_tf
 
 def _handle_paper(article):
     """
