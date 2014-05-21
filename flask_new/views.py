@@ -45,6 +45,8 @@ from logging import Formatter, FileHandler
 import tethne.readers as rd
 import random as random
 import models as db
+import controllers as control
+
 
 # Importing helpers module
 import helpers as help           
@@ -58,7 +60,7 @@ Test Views
 """
 # test view
 @dataset.route('/info')
-def info():
+def info(): 
 	return "I am inside Show_info"
 	
 # To catch the URLs which are not defined 
@@ -120,6 +122,10 @@ def login():
             print "comes to except"
             pass
     print "username" , username
+    print "control" , control
+    #print url_for("control.create_datacollection")
+
+
         # Dummy routing to admin page and other pages.
     if username == 'admin':
             return redirect(url_for('.admin'))
@@ -244,18 +250,39 @@ def dc_create():
     form = GenerateDataSetsForm(request.form)
     user = session['username']
     if request.method == 'POST' :
-    
-        # Parse data.
-        # Actually it should be the file taken from the server.
-        # Currently this is a dummy one.
-        #papers = rd.wos.read("/Users/kbatna/tethne/testsuite/testin/2_testrecords.txt")
-    
-        # Create a DataCollection
-        #from tethne.data import DataCollection, GraphCollection
-        #D = DataCollection(papers)
-        log = "Dataset #127846748 created successfully"
-        return render_template('pages/list.datasets.html', user = user, text= log)
-    
+
+        try:
+            input_type = request.form["input_type"]
+            input_path = request.form['fileinput']
+            input_name = request.form['dcname']
+            username = request.form['username']
+            print "try" ,input_path
+            print "input_type", input_type
+            print "dc_name::" , dc_name,username
+        except:
+            print "comes to except"
+            pass
+        
+        # import os
+        # print os.path
+        # print "outside:" ,input_path
+        # print "outside::", input_type
+        
+        #print control.CreatePersistentDataCollection
+        input_name = "myDC1" #temp hardcoding as form-value is not read
+
+        #Call Controller here.
+        status = control.CreatePersistentDataCollection(input_type,input_path,input_name)
+        
+        #If status is true then the user to be notified about the success.
+        if status:
+            flash("DataCollection Created successfully")
+
+        #Else,the user should be notified about the reason for the failure.
+        else:
+            flash("DataCollection not created")
+        return render_template('pages/list.datasets.html', user = user, input_type = input_type, input_path = "dummy")
+        #return redirect(url_for('control.create_datacollection',_external=True)) 
     return render_template('pages/generate.datasets.html', user = user, form= form)
 
 

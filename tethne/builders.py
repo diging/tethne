@@ -56,9 +56,9 @@ class DFRBuilder(DCBuilder):
         # Load N-grams.
         gram_data = {}
         for gram_type in grams:
-            g = rd.dfr.ngrams(self.datapath, 
-                                        N=gram_type)
+            g = rd.dfr.ngrams(self.datapath, N=gram_type)
             g_tok, vocab, counts = rd.dfr.tokenize(g)                                        
+
             gram_data[gram_type] = (g_tok, vocab, counts)
         
         # Create DataCollection.

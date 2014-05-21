@@ -26,6 +26,7 @@ from ZODB.DB import DB
 
 #registering blueprints for datacollection
 from views import dataset
+import controllers as control
 #print "gdb root in app", app.config['DBROOT'], app.config['CSRF_ENABLED']
 app.register_blueprint(dataset)
 

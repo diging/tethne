@@ -31,7 +31,7 @@ class LDAModel(BaseModel):
     
     Used by :mod:`.readers.mallet`\.
     """
-    
+
     def __init__(self, doc_topic, top_word, top_keys, metadata, vocabulary):
         """
         Initialize the :class:`.LDAModel`\.
@@ -78,39 +78,36 @@ class LDAModel(BaseModel):
         
         index = self.lookup[d]
         td = self.doc_topic[index, :]
-        print 'initialized index, td={0}'.format(td.shape)
         
         if topZ is None:
-            top_indices = range(td.shape[0])
+            topZ = td.shape[0]
+            
         if type(topZ) is int:   # Return a set number of topics.
-            print 'topZ is int'
-            top_indices = [ z for z in np.argsort(td)[0:topZ] ]
+            top_indices = td.argsort()[-topZ:][::1]
         elif type(topZ) is float:   # Return topics above a threshold.
-            print 'topZ is float'
             top_indices = [ z for z in np.argsort(td) if td[z] > topZ ]
 
-        print 'ok'
         top_values = [ td[z] for z in top_indices ]
-        print 'set top_values'
         
         topics = zip(top_indices, top_values)
-        print 'set topics with zip'
-        
-        del top_indices, td
         
         return topics
 
-    def num_topics(self):
-        """
-        Return the number of topics in the model.
-        """
-        
-        return self.top_word.shape[0]
+    def words_in_topic(self, z, topW=None):
+        if topW is None:
+            topW = 5
 
-    def words_in_topic(self, z):
-        words = self.top_word[z,:]
-        return [ self.vocabulary.by_int[w] for w in words.argsort()[-5:][::-1] ]
-    
+        if type(topW) is int:
+            words = self.top_word[z,:].argsort()[-topW:][::-1]
+
+        return [ ( w, self.top_word[z,w]) for w in words ]
+
+    def print_topic(self, z):
+        words = [ self.vocabulary.by_int[w] for w,p
+                    in self.words_in_topic(z, topW=topW) ]
+        print ', '.join(words)
+        return words
+
     def print_topics(self):
         """
         Prints a list of topics.
@@ -119,6 +116,7 @@ class LDAModel(BaseModel):
         
         for z in xrange(Z):
             print z, ', '.join(self.words_in_topic(z))
+            
     
     def docs_in_topic(self, z, topD=None):
         """
@@ -153,6 +151,46 @@ class LDAModel(BaseModel):
         
         return documents
 
+class DTMModel(BaseModel):
+
+    def __init__(self, e_theta, topics, metadata, vocabulary):
+        self.e_theta = e_theta
+        self.topics = topics
+        self.metadata = metadata
+        self.vocabulary = vocabulary
+
+        self.lookup = { v:k for k,v in metadata.iteritems() }
+
+    def topics_in_doc(self, d, topZ=None):
+        if topZ is None:
+            topZ = 5
+            
+        if type(topZ) is int:   # Return a set number of topics.
+            top_indices = self.e_theta[:, d].argsort()[-topZ:][::1]
+        elif type(topZ) is float:   # Return topics above a threshold.
+            top_indices = [ z for z in np.argsort(self.e_theta[:, d])
+                                if self.e_theta[z, d] > topZ ]
+
+        top_values = [ self.e_theta[z, d] for z in top_indices ]
+        
+        topics = zip(top_indices, top_values)
+        
+        return topics
+
+    def words_in_topic(self, z, t, topW=None):
+        if topW is None:
+            topW = 5
+
+        if type(topW) is int:
+            words = self.topics[z, :, t].argsort()[-topW:][::-1]
+
+        return [ ( w, self.topics[z, w, t]) for w in words ]
+
+    def print_topic(self, z, t):
+        words = [ self.vocabulary.by_int[w] for w,p
+                    in self.words_in_topic(z,t,topW=topw) ]
+        print ', '.join(words)
+        return words
 
 class TAPModel(BaseSocialModel):
     def __init__(self, G, theta, damper=0.5):
@@ -197,6 +235,8 @@ class TAPModel(BaseSocialModel):
         self._calculate_b()
         print 'Calculated b'        
 
+    def _node_index(self, G, i):
+        return G.nodes().index(i)
 
     def _calculate_g(self):
         """eq. 1"""
@@ -208,7 +248,8 @@ class TAPModel(BaseSocialModel):
             sumout = np.zeros((self.T))
         
             for t, attr in self.G[i].iteritems():
-                this = int(t) - 1
+                this = self._node_index(self.G, t)
+                #this = int(t) - 1
                 for k in xrange(self.T):
                     w = float(attr['weight'])     
                     sumout[k] = sumout[k] + w * self.theta[this,k]
@@ -216,7 +257,8 @@ class TAPModel(BaseSocialModel):
             for t, attr in self.G[i].iteritems():
                 for k in xrange(self.T):
                     w = float(attr['weight'])
-                    this = int(i) - 1                
+                    this = self._node_index(self.G, i)                    
+                    #this = int(i) - 1                
                     sumin[k] = sumin[k] + w * self.theta[this,k]
                 
                     # calculate y z, i=i ;; [n,] should be the last row.
@@ -226,7 +268,8 @@ class TAPModel(BaseSocialModel):
             for t,attr in self.G[i].iteritems():
                 for k in xrange(self.T):
                     w = float(attr['weight'])
-                    this = int(t) - 1
+                    this = self._node_index(self.G, i)                    
+                    #this = int(t) - 1
                     self.g[i][j,k] = w * self.theta[this,k] / (sumin[k] + sumout[k])
                 j+=1
             
@@ -343,12 +386,13 @@ class TAPModel(BaseSocialModel):
         
             for j in n: # a_ij
                 j_index = n.index(j)
+                n_j = self.G.neighbors(j)                
                 for k in xrange(self.T):
                     if i == maxk[j][k]:
                         use = secondmax[i][k]
                     else:
                         use = firstmax[i][k]
-                        n_j = self.G.neighbors(j)
+                        
                     qwert = max ( self.r[j][len(n_j), k], 0 )
                     asdf = (-1*min ( self.r[j][len(n_j), k], 0 )) - use
                     self.a[i][j_index,k] = ( min(qwert, asdf) * (1. - self.damper) ) + ( self.a[i][j_index,k] * self.damper )
@@ -388,7 +432,7 @@ class TAPModel(BaseSocialModel):
             nc = 0
     
         cont = True
-        if nc == 100:
+        if nc == 50:
             cont = False
             
         return nc, cont
@@ -464,16 +508,62 @@ class TAPModel(BaseSocialModel):
         return self.MU[k]
 
     def build(self):
+        print "start iterations"
         nc = 0
         self.iteration = 0.
         cont = True
 
         while cont:
             self.iteration += 1
+            if self.iteration % 10 == 0:
+                print 'iteration {0}, nc={1}'.format(self.iteration, nc)
+
             self._update_r()
             self._update_a()
             nc,cont = self._check_convergence(nc)
 
         self._calculate_mu()
+                
+if __name__ == '__main__':
+    import sys
+    sys.path.append("/Users/erickpeirson/tethne")
+    from tethne.builders import DFRBuilder
+    import tethne.readers as rd
 
-        self.write('./output/')
+#    datapath = "/Users/erickpeirson/Genecology Project Archive/JStor DfR Datasets/2013.5.3.k2HUvXh9"
+    datapath = "/Users/erickpeirson/Desktop/cleanup/JStor DfR Datasets/2013.5.3.k2HUvXh9"
+    
+#    dc_builder = DFRBuilder(datapath)
+#    D = dc_builder.build(slice_by=('date','jtitle'))
+#    
+#    import matplotlib.pyplot as plt
+#    fig = plt.figure(figsize=(40,15), dpi=600)
+#    D.plot_distribution('date', fig=fig)#,'jtitle')
+#    plt.savefig('/Users/erickpeirson/Desktop/test.png')
+
+#    print D.grams['uni'].keys()
+
+#    MM = LDAModelManager(D, '/Users/erickpeirson/Desktop/')
+#    MM.prep()
+#    model = MM.build(max_iter=100)
+
+#    fig = plt.figure(figsize=(40,15), dpi=600)
+#    MM.plot_topics([0,1,2], normed=False)
+#    plt.savefig('/Users/erickpeirson/Desktop/test2.png')
+
+
+#    MM = DTMModelManager(D, '/Users/erickpeirson/Desktop/')
+#    MM.prep()
+#    print MM.temp
+#    model = MM.build(Z=5, max_iter=500, lda_seq_min_iter=1, lda_seq_max_iter=2, lda_max_em_iter=2)
+
+
+    #model.print_topics()
+#
+#    del MM
+
+    opath = "/private/var/folders/f9/g7lw23jx7z3fw72byy3l11p80000gn/T/tmp88rYpV"
+    path = "{0}/model_run/".format(opath)
+    metadata = "{0}/tethne-meta.dat".format(opath)
+    vocabulary = "{0}/tethne-vocab.dat".format(opath)
+    model = rd.dtm.load(path, metadata, vocabulary)

@@ -56,6 +56,7 @@ import wos
 import pubmed
 import dfr
 import mallet
+import dtm
 import tethne.data as dt
 
 class DataError(Exception):
