@@ -72,7 +72,7 @@ Methods
 
 """
 
-import tethne.data as ds
+import tethne.models as ds
 import xml.etree.ElementTree as ET
 import tethne.utilities as util
 import os

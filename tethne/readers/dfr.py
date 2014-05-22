@@ -12,7 +12,7 @@ import sys
 sys.path.append('/Users/erickpeirson/Dropbox/DigitalHPS/Scripts/tethne')
 
 
-import tethne.data as dt
+import tethne.models as dt
 import os
 import xml.etree.ElementTree as ET
 import re
