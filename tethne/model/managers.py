@@ -119,7 +119,7 @@ class LDAModelManager(ModelManager):
         Delete temporary directory and all files contained therein.
         """
         
-#        shutil.rmtree(self.temp)
+        shutil.rmtree(self.temp)
     
     def _generate_corpus(self, gram, meta):
         from tethne.writers.corpora import to_documents    
