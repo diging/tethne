@@ -12,7 +12,6 @@ Classes for the User Management, persistence of tethne :class:`.GraphCollection`
    
 """
 
-
 from flask import current_app as app
 from flask.ext.zodb import Object, List, Dict
 from BTrees.OOBTree import OOBTree as BTree
@@ -24,9 +23,6 @@ from ZODB.DB import DB
 import ZODB.config,transaction
 from hashlib import sha256
 import time
- 
-
-
 
 class User(Persistent):
     """

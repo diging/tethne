@@ -20,9 +20,6 @@ import datetime,logging
 from logging import Formatter, FileHandler
 from hashlib import sha256
 import time
- 
-
-
 
 import random as random
 import models as db
@@ -35,9 +32,6 @@ from ZODB.FileStorage import FileStorage
 from ZODB.DB import DB
 #Importing the models module
 import models as mod                    
-
-
-
 
 def set_db_defaults():
     
