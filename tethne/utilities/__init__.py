@@ -1,6 +1,7 @@
 """
 Helper functions.
 """
+import string
 
 def swap(u,v):
     """
@@ -76,7 +77,7 @@ def concat_list(listA, listB, delim=' '):
 
     return listC
 
-def strip_non_ascii(string):
+def strip_non_ascii(s):
     """
     Returns the string without non-ASCII characters.
 
@@ -91,9 +92,14 @@ def strip_non_ascii(string):
         A string that does not contain non-ASCII characters.
 
     """
-    stripped = (c for c in string if 0 < ord(c) < 127)
+    stripped = (c for c in s if 0 < ord(c) < 127)
     clean_string = ''.join(stripped)
     return clean_string
+
+def strip_punctuation(s):
+    exclude = set(string.punctuation)
+    return ''.join(ch for ch in s if ch not in exclude)
+
 
 def dict_from_node(node, recursive=False):
     """

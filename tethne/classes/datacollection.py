@@ -6,6 +6,10 @@ logger.setLevel('DEBUG')
 import numpy as np
 import matplotlib.pyplot as plt
 from paper import Paper
+from collections import Counter
+from nltk.corpus import stopwords
+
+from ..utilities import strip_punctuation
 
 class DataCollection(object):
     """
@@ -84,7 +88,7 @@ class DataCollection(object):
             self._tokenize_features(features, exclude_features=exclude_features)
         else:
             logger.debug('features is None, skipping tokenization.')
-            self.features = None
+            self.features = {}
 
     def _index_papers_by_author(self):
         """
@@ -149,11 +153,19 @@ class DataCollection(object):
         
         self.features = {}
         
+        def _handle(tok,w):
+            if tok in findex_:
+                self.features[ftype]['counts'][findex_[tok]] += w
+                return True
+            return False
+        
         for ftype, fdict in features.iteritems():   # e.g. unigrams, bigrams
             logger.debug('tokenizing features of type {0}'.format(ftype))
 
             self.features[ftype] = { 'features': {},
-                                     'index': {} }
+                                     'index': {},
+                                     'counts': Counter(),
+                                     'documentCounts': Counter() }
             
             # List of unique tokens.
             ftokenset = set([f for fval in fdict.values() for f,v in fval])
@@ -169,21 +181,41 @@ class DataCollection(object):
                 if type(fval) is not list or type(fval[0]) is not tuple:
                     raise ValueError('Malformed features data.')
 
-                tokenized = [ (findex_[f],w) for f,w in fval if f in findex_ ]
+                tokenized = [ (findex_[f],w) for f,w in fval if _handle(f,w) ]
                 self.features[ftype]['features'][key] = tokenized
+                for t,w in tokenized:
+                    self.features[ftype]['documentCounts'][t] += 1
             
             self.features[ftype]['index'] = findex  # Persist.
             
         logger.debug('done indexing features')
         
         
-    def abstract_to_features(self):
+    def abstract_to_features(self,remove_stopwords=True):
         """
         Generates a set of unigram features from the abstracts of Papers.
+        
+        Automatically tokenizes and updates the :class:`.DataCollection`\.
+        
+        Parameters
+        ----------
+        remove_stopwords : bool
+            (default: True) If True, passes tokenizer the NLTK stoplist.
         """
-    
-        # TODO: implement this.
-        pass
+
+        unigrams = {}
+        for p,paper in self.papers.iteritems():
+            if paper['abstract'] is not None:
+                term_counts = Counter()
+                terms = strip_punctuation(paper['abstract'].lower()).split()
+                for term in terms: term_counts[term] += 1
+                unigrams[p] = term_counts.items()
+                
+        stoplist = set(stopwords.words())
+                
+        self._tokenize_features({'abstractTerms':unigrams}, stoplist)
+
+        return unigrams
     
     def slice(self, key, method=None, **kwargs):
         """

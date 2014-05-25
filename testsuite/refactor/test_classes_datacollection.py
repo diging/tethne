@@ -27,38 +27,36 @@ class TestDataCollectionWoS(unittest.TestCase):
         papers = wos.read(wosdatapath)
         self.D = DataCollection(papers)
     
-    def test_index_papers(self):
+    def test_indexing(self):
         """
-        Should be N_p number of papers.
+        index_papers: Should be N_p number of papers.
+        index_papers_by_authors: N_a authors
+        index_citations: N_c citations
         """
+        # papers
         self.assertEqual(self.D.N_p, 10)
         self.assertEqual(len(self.D.papers), self.D.N_p)
-
-    def test_index_papers_by_author(self):
-        """
-        Should be N_a number of authors.
-        """
+    
+        # authors
         self.assertEqual(self.D.N_a, 51)
         self.assertEqual(len(self.D.authors), self.D.N_a)
-
-    def test_index_citations(self):
-        """
-        Should be N_c number of citations.
-        """
+    
+        # citations
         self.assertEqual(self.D.N_c, 531)
         self.assertEqual(len(self.D.citations), self.D.N_c)
-
-    def test_tokenize_features(self):
-        """
-        Should be no features.
-        """
-        self.assertEqual(self.D.features, None)
 
     def test_abstract_to_features(self):
         """
         Should generate features from available abstracts.
         """
-        pass
+
+        self.D.abstract_to_features()
+        self.assertIn('abstractTerms', self.D.features)
+        self.assertNotIn('the', self.D.features['abstractTerms']['index'].values())
+
+        abs_available = len([p for p in self.D.papers.values() if p['abstract'] is not None ])
+        abs_tokenized = len(self.D.features['abstractTerms']['features'])
+        self.assertEqual(abs_tokenized, abs_available)
 
     def test_slice(self):
         """
@@ -69,12 +67,6 @@ class TestDataCollectionWoS(unittest.TestCase):
         self.assertIn(2012, self.D.axes['date'])
         self.assertIn(2013, self.D.axes['date'])
         self.assertEqual(len(self.D.axes['date'][2012]), 5)
-
-    def test_get_slice(self):
-        pass
-
-    def test_get_slices(self):
-        pass
 
 class TestDataCollectionDfR(unittest.TestCase):
     def setUp(self):
@@ -90,24 +82,21 @@ class TestDataCollectionDfR(unittest.TestCase):
                                         index_by='doi',
                                         exclude_features=set(stopwords.words()))
 
-    def test_index_papers(self):
+    def test_indexing(self):
         """
-        Should be N_p number of papers.
+        index_papers: Should be N_p number of papers.
+        index_papers_by_author: N_a authors
+        index_citations: no citations
         """
+        # papers
         self.assertEqual(self.D.N_p, 241)
         self.assertEqual(len(self.D.papers), self.D.N_p)
-
-    def test_index_papers_by_author(self):
-        """
-        Should be N_a number of authors.
-        """
+    
+        # papers by author
         self.assertEqual(self.D.N_a, 196)
         self.assertEqual(len(self.D.authors), self.D.N_a)
 
-    def test_index_citations(self):
-        """
-        Should be no citations.
-        """
+        # citations
         self.assertEqual(self.D.N_c, 0)
         self.assertEqual(len(self.D.citations), self.D.N_c)
 
@@ -116,8 +105,15 @@ class TestDataCollectionDfR(unittest.TestCase):
         Should be N_f features in the appropriate features dict.
         """
         self.assertIn('unigrams', self.D.features)
+        self.assertIn('features', self.D.features['unigrams'])
+        self.assertIn('index', self.D.features['unigrams'])
+        self.assertIn('counts', self.D.features['unigrams'])
+        self.assertIn('documentCounts', self.D.features['unigrams'])
         self.assertEqual(len(self.D.features), 1)
         self.assertEqual(len(self.D.features['unigrams']['index']), 51641)
+
+        self.assertEqual(len(self.D.features['unigrams']['counts']), 51641)
+        self.assertEqual(len(self.D.features['unigrams']['documentCounts']), 51641)
 
 if __name__ == '__main__':
     

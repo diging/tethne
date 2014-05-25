@@ -1,9 +1,9 @@
 from tethne.classes import DataCollection
 import tethne.readers as rd
 
-class DCBuilder(object):
+class DataCollectionManager(object):
     """
-    Base class for DataCollection builders.
+    Base class for DataCollection managers.
     """
     
     def __init__(self, datapath):
@@ -17,7 +17,7 @@ class DCBuilder(object):
 
         self.datapath = datapath
         
-class DFRBuilder(DCBuilder):
+class DFRManager(DCBuilder):
     """
     DataCollection builder for JSTOR Data-for-Research datasets.
     """
