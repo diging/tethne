@@ -17,3 +17,6 @@ using networkx.
    tethne.writers
    
 """
+
+from classes import *
+from model import *

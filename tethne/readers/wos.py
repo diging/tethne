@@ -72,7 +72,7 @@ Methods
 
 """
 
-import tethne.models as ds
+from tethne.classes.paper import Paper
 import xml.etree.ElementTree as ET
 import tethne.utilities as util
 import os
@@ -367,7 +367,7 @@ def _parse_cr(ref):
     DOI numbers in a list of form [doi1, doi2, ...], address this?
 
     """
-    paper = ds.Paper()
+    paper = Paper()
     #tokens of form: aulast auinit, date, jtitle, volume, spage, doi
     tokens = ref.split(',')
     try:
@@ -477,7 +477,7 @@ def convert(wos_data):
     
     # Perform the key convertions
     for wos_dict in wos_data:
-        paper = ds.Paper()
+        paper = Paper()
 
         #direct translations
         for key in translator.iterkeys():

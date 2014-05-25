@@ -12,7 +12,8 @@ import sys
 sys.path.append('/Users/erickpeirson/Dropbox/DigitalHPS/Scripts/tethne')
 
 
-import tethne.models as dt
+from tethne.classes.paper import Paper
+
 import os
 import xml.etree.ElementTree as ET
 import re
@@ -241,7 +242,7 @@ def _handle_paper(article):
     -------
     paper : :class:`.Paper`
     """
-    paper = dt.Paper()
+    paper = Paper()
     pdata = dict_from_node(article)
 
     # Direct mappings.
