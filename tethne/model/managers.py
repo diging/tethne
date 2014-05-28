@@ -5,29 +5,26 @@ import tempfile
 import subprocess
 import numpy as np
 
-import sys
-sys.path.append('/Users/erickpeirson/tethne')
-from tethne.model import TAPModel, LDAModel
-from tethne.data import ModelCollection, GraphCollection
+from . import Model
 
+class ModelManager(object):
+    self.model = Model
 
 class ModelManager(object):
     """
     Base class for Model Managers.
     """
     
-    def __init__(self, D, outpath):
+    def __init__(self, outpath, **kwargs):
         """
         Initialize the ModelManager.
         
         Parameters
         ----------
-        D : :class:`.DataCollection`
         outpath : str
             Path to output directory.
         """
         
-        self.D = D
         self.temp = tempfile.mkdtemp()    # Temp directory for stuff.
         self.outpath = outpath
         self.prepped = False
@@ -94,41 +91,43 @@ class SocialModelManager(object):
         self._load_model()
         
 
-class LDAModelManager(ModelManager):
+class MALLETModelManager(ModelManager):
     """
     Model Manager for LDA topic modeling with MALLET.
     """
     
-    def __init__(self, D, outpath, mallet_path):
+    def __init__(self, datacollection, fkey='unigrams', mallet_path='./model/bin/mallet-2.0.7/bin'):
         """
         
         Parameters
         ----------
-        D : :class:`.DataCollection`
-        outpath : str
-            Path to output directory.
+        datacollection : :class:`.DataCollection`
+        fkey : str
+            Key from datacollection.features containing wordcounts.
         mallet_path : str
             Path to MALLET install directory (contains bin/mallet).
         """
         super(LDAModelManager, self).__init__(D, outpath)
         
+        self.datacollection = datacollection
         self.mallet_path = mallet_path
-        
-    def __del__(self):
-        """
-        Delete temporary directory and all files contained therein.
-        """
-        
-        shutil.rmtree(self.temp)
+        self.fkey = fkey
     
-    def _generate_corpus(self, gram, meta):
-        from tethne.writers.corpora import to_documents    
+    def prep(self):
+        self._generate_corpus()
+        self._export_corpus()
+    
+    def build(self):
+        self._run_model()
+        self._load_model()
+    
+    def _generate_corpus(self):
+        from ..writers.corpora import to_documents
         
-        if not to_documents(self.temp+'/tethne',    # Temporary files.
-                            self.D.grams[gram],     # e.g. uni, bi, tri.
-                            papers=self.D.papers(),
-                            fields=meta):
-            return False
+        to_documents(   self.temp+'/tethne',            # Temporary files.
+                        self.datacollection.features[self.fkey],
+                        papers=self.datacollection.papers(),
+                        fields=[self.datacollection.index_by] )
 
         self.corpus_path = '{0}/tethne_docs.txt'.format(self.temp)
         self.meta_path = '{0}/tethne_meta.csv'.format(self.temp)
@@ -165,8 +164,7 @@ class LDAModelManager(ModelManager):
             
         self.dt = '{0}/dt.dat'.format(self.temp)
         self.wt = '{0}/wt.dat'.format(self.temp)
-        self.tk = '{0}/tk.dat'.format(self.temp)        
-         
+        
         prog = re.compile('\<([^\)]+)\>')
         ll_prog = re.compile(r'(\d+)')
         try:
@@ -176,8 +174,7 @@ class LDAModelManager(ModelManager):
                         '--num-topics {0}'.format(self.Z),
                         '--num-iterations {0}'.format(max_iter),
                         '--output-doc-topics {0}'.format(self.dt),
-                        '--word-topic-counts-file {0}'.format(self.wt),
-                        '--output-topic-keys {0}'.format(self.tk) ], 
+                        '--word-topic-counts-file {0}'.format(self.wt) ],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE)
         
@@ -208,13 +205,15 @@ class LDAModelManager(ModelManager):
         self.num_iters += max_iter
             
     def _load_model(self):
-        """Load and return a :class:`.LDAModel`\."""
         from tethne.readers import mallet
         self.model = mallet.load(   self.dt, 
                                     self.wt, 
                                     self.tk, 
                                     self.Z,
-                                    self.meta_path  )     
+                                    self.meta_path  )
+    
+        self.M = ModelCollection()
+    
     def slice(self, axis):
         M = ModelCollection()
         a = D.get_slices(axis)
