@@ -22,6 +22,8 @@ from nltk.corpus import stopwords
 import uuid
 from collections import Counter
 
+from unidecode import unidecode
+
 def read(datapath):
     """
     Yields :class:`.Paper` s from JSTOR DfR package.
@@ -48,8 +50,10 @@ def read(datapath):
        >>> papers = rd.dfr.read("/Path/to/DfR")
     """
 
-    with open(datapath + "/citations.XML", 'rb') as f:
-        data = f.read().replace('&', '&amp;')
+    with open(datapath + "/citations.XML", mode='r') as f:
+        data = f.read()
+        data = data.replace('&', '&amp;')
+        
         root = ET.fromstring(data)
 
     accession = str(uuid.uuid4())
@@ -153,7 +157,7 @@ def ngrams(datapath, N='bi', ignore_hash=True):
             for gram in root.findall(elem):
                 text = gram.text.strip()
                 if ( not ignore_hash or '#' not in list(text) ):
-                    c = ( strip_non_ascii(text), int(gram.attrib['weight']) )
+                    c = ( text, int(gram.attrib['weight']) )
                     grams.append(c)
 
             ngrams[doi] = grams
@@ -248,10 +252,12 @@ def _handle_paper(article):
     # Direct mappings.
     translator = _dfr2paper_map()
     for key, value in translator.iteritems():
-        try:
-            paper[value] = str(pdata[key]).upper()
-        except KeyError:    # Article may not have all keys of interest.
-            pass
+        if key in pdata:    # Article may not have all keys of interest.
+            datum = pdata[key]
+            if type(datum) is str:
+                datum = unicode(datum)
+            datum = unidecode(datum)
+            paper[value] = datum.upper()
 
     # Handle author names.
     paper['aulast'], paper['auinit'] = _handle_authors(pdata['author'])
@@ -324,7 +330,9 @@ def _handle_authors(authors):
     auinit = []
     if type(authors) is list:
         for author in authors:
-            author = str(strip_non_ascii(author))
+            if type(author) is str:
+                author = unicode(author)
+            author = unidecode(author)
             try:
                 l,i = _handle_author(author)
                 aulast.append(l)
@@ -332,7 +340,9 @@ def _handle_authors(authors):
             except ValueError:
                 pass
     elif type(authors) is str or type(authors) is unicode:
-        author = str(strip_non_ascii(authors))
+        if type(authors) is str:
+            authors = unicode(authors)
+        author = unidecode(authors)
         try:
             l,i = _handle_author(author)
             aulast.append(l)
@@ -373,7 +383,7 @@ def _handle_author(author):
     except IndexError:
         raise ValueError("malformed author name")
 
-    return str(aulast), str(auinit)
+    return aulast, auinit
 
 def _dfr2paper_map():
     """
