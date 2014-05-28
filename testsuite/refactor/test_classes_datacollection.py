@@ -44,6 +44,8 @@ class TestDataCollectionWoS(unittest.TestCase):
         # citations
         self.assertEqual(self.D.N_c, 531)
         self.assertEqual(len(self.D.citations), self.D.N_c)
+    
+#        print self.D.features['citations']
 
     def test_abstract_to_features(self):
         """
@@ -99,7 +101,7 @@ class TestDataCollectionDfR(unittest.TestCase):
         # citations
         self.assertEqual(self.D.N_c, 0)
         self.assertEqual(len(self.D.citations), self.D.N_c)
-
+    
     def test_tokenize_features(self):
         """
         Should be N_f features in the appropriate features dict.
