@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from paper import Paper
 from collections import Counter
 from nltk.corpus import stopwords
+import scipy as sc
 
 from ..utilities import strip_punctuation
 
@@ -56,6 +57,10 @@ class DataCollection(object):
     -------
     :class:`.DataCollection`
     """
+    
+    papers = {}
+    features = {}
+    authors = {}
     
     def __init__(self, papers, features=None, index_by='wosid',
                                               index_citation_by='ayjid',
@@ -118,21 +123,40 @@ class DataCollection(object):
         
         self.citations = {}         # { c : citation }
         self.papers_citing = {}     # { c : [ p ] }
+        
+        cited = {}  # { p : [ (c,1) ] }
+        citation_counts = Counter()
+        citation_index = {}
+        citation_index_ = {}
 
-        for k,p in self.papers.iteritems():
-            try:
-                for citation in p['citations']:
+        for p,paper in self.papers.iteritems():
+            if paper['citations'] is not None:
+                cited[p] = []
+
+                for citation in paper['citations']:
                     c = citation[self.index_citation_by]
+                    try:
+                        c_i = citation_index_[c]
+                    except KeyError:
+                        c_i = len(citation_index)
+                        citation_index[c_i] = c
+                        citation_index_[c] = c_i
+
+                    cited[p].append((c_i,1))
+                    citation_counts[c_i] += 1
 
                     if c not in self.citations:
                         self.citations[c] = citation
                     
                     if c not in self.papers_citing:
-                        self.papers_citing[c] = [ k ]
+                        self.papers_citing[c] = [ p ]
                     else:
-                        self.papers_citing[c].append(k)
-            except TypeError:    # May not have any citations (None).
-                pass
+                        self.papers_citing[c].append(p)
+    
+        self.features['citations'] = { 'index': citation_index,
+                                       'features': cited,
+                                       'counts': citation_counts,
+                                       'documentCounts': citation_counts }
 
         self.N_c = len(self.citations)
         logger.debug('indexed {0} citations'.format(self.N_c))
@@ -143,9 +167,9 @@ class DataCollection(object):
         Parameters
         ----------
         features : dict
-            Contains dictionary `{ type: { i: [ (f, w) ] } }` where `i` is an index
-            for papers (see kwarg `index_by`), `f` is a feature (e.g. an N-gram), 
-            and `w` is a weight on that feature (e.g. a count).
+            Contains dictionary `{ type: { i: [ (f, w) ] } }` where `i` is an 
+            index for papers (see kwarg `index_by`), `f` is a feature (e.g. an
+            N-gram), and `w` is a weight on that feature (e.g. a count).
         exclude_features : set
             (optional) Features to ignore, e.g. stopwords.
         """
@@ -189,7 +213,6 @@ class DataCollection(object):
             self.features[ftype]['index'] = findex  # Persist.
             
         logger.debug('done indexing features')
-        
         
     def abstract_to_features(self,remove_stopwords=True):
         """
@@ -430,7 +453,8 @@ class DataCollection(object):
         slices = self.axes[key]
 
         if include_papers:  # Retrieve Papers.
-            return { k:[ self.papers[p] for p in v ] for k,v in slices.iteritems() }
+            return { k:[ self.papers[p] for p in v ]
+                     for k,v in slices.iteritems() }
         return slices
 
     def get_slice(self, key, index, include_papers=False):
@@ -557,18 +581,29 @@ class DataCollection(object):
         RuntimeError : DataCollection has not been sliced.
         KeyError: Invalid slice axes for this DataCollection.
         """
+        logger.debug('generate distribution over slices')
         if len(self.axes) == 0:
+            logger.debug('datacollection has not been sliced')
             raise(RuntimeError("DataCollection has not been sliced."))
         if x_axis not in self.get_axes():
+            logger.debug('datacollection has no axis {0}'.format(x_axis))
             raise(KeyError("X axis invalid for this DataCollection."))
+
         x_size = len(self.axes[x_axis])
+        logger.debug('x axis size: {0}'.format(x_axis))
+
         if y_axis is not None:
+            logger.debug('y axis: {0}'.format(y_axis))
             if y_axis not in self.get_axes():
+                logger.debug('datacollection has not axis {0}'.format(y_axis))
                 raise(KeyError("Y axis invalid for this DataCollection."))
             y_size = len(self.axes[y_axis])
+            logger.debug('y axis size: {0}'.format(y_axis))
         else:   # Only 1 slice axis.
+            logger.debug('only 1 slice axis')
             y_size = 1
         shape = (x_size, y_size)
+        logger.debug('distribution shape: {0}'.format(shape))
         I = []
         J = []
         K = []
@@ -588,8 +623,8 @@ class DataCollection(object):
                         K.append(k)
 
         # TODO: Move away from SciPy, to facilitate PyPy compatibility.
-        #dist = sc.sparse.coo_matrix((K, (I,J)), shape=shape)
-        #return dist
+        dist = sc.sparse.coo_matrix((K, (I,J)), shape=shape)
+        return dist
 
     def distribution_2d(self, x_axis, y_axis=None):
         """
@@ -598,7 +633,7 @@ class DataCollection(object):
 
         return distribution(self, x_axis, y_axis=y_axis)
 
-    def plot_distribution(self, x_axis=None, y_axis=None, type='bar', fig=None, 
+    def plot_distribution(self, x_axis=None, y_axis=None, type='bar', fig=None,
                                                                       **kwargs):
         """
         Plot distribution along slice axes, using MatPlotLib.
@@ -623,12 +658,16 @@ class DataCollection(object):
         xkeys = self._get_slice_keys(x_axis)        
         
         if y_axis is None:
-            plt.__dict__[type](xkeys, self.distribution(x_axis).todense(), **kwargs)
+            plt.__dict__[type](xkeys, self.distribution(x_axis).todense(),
+                                                                       **kwargs)
             plt.xlim(min(xkeys), max(xkeys))
         else:
             ykeys = self._get_slice_keys(y_axis)    
             ax = fig.add_subplot(111)
-            ax.imshow(self.distribution(x_axis, y_axis).todense(), **kwargs)
-            ax.set_aspect(0.5)
+            ax.imshow(self.distribution(x_axis, y_axis).todense(), aspect=0.5,
+                                                                       **kwargs)
             plt.yticks(np.arange(len(xkeys)), xkeys)
-            plt.xticks(np.arange(len(ykeys)), ykeys)
+
+            tickstops = range(0, 50, int(50./len(plt.xticks()[0])))
+            ax.set_xticks(tickstops)
+            ax.set_xticklabels([ ykeys[i] for i in tickstops ])

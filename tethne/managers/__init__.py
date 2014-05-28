@@ -1,3 +1,3 @@
-from datacollection import *
-from graphcollection import *
-from modelcollection import *
+from collectionmanager import *
+from dcmanager import *
+from gcmanager import *
