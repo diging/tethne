@@ -128,7 +128,7 @@ def dict_from_node(node, recursive=False):
             else:
                 value = len(snode)
         elif snode.text is not None:
-            value = strip_non_ascii(snode.text)
+            value = snode.text
         else:
             value = ''
 

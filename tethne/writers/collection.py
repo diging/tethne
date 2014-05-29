@@ -10,6 +10,7 @@ Write :class:`.GraphCollection` to a structured data format.
 import networkx as nx
 import pickle as pk
 
+
 def to_dxgmml(C, path): # [#61510094]
     """
     Writes a :class:`.GraphCollection` to 
@@ -62,9 +63,8 @@ def to_dxgmml(C, path): # [#61510094]
     Period start and end dates in this method are inclusive, whereas XGMML end
     dates are exclusive. Hence +1 is added to all end dates when writing XGMML.
     """
-    
-    if type(C) is not tethne.classes.GraphCollection:
-        raise AttributeError('C must be a tethne.classes.GraphCollection.')
+
+    # TODO: make sure C is a GraphCollection.
 
     nodes = {}
     for n in C.nodes():
@@ -189,6 +189,10 @@ def _strip_list_attributes(G):
 
 def _safe_type(value):
     """Converts Python type names to XGMML-safe type names."""
+
     if type(value) is str: dtype = 'string'
+    if type(value) is unicode: dtype = 'string'
     if type(value) is int: dtype = 'integer'
     if type(value) is float: dtype = 'real'
+
+    return dtype
