@@ -20,3 +20,4 @@ using networkx.
 
 from classes import *
 from model import *
+from managers import *

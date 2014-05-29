@@ -4,13 +4,18 @@ logger = logging.getLogger(__name__)
 logger.setLevel('DEBUG')
 
 import numpy as np
+import numpy
+import tables
 import matplotlib.pyplot as plt
 from paper import Paper
 from collections import Counter
 from nltk.corpus import stopwords
 import scipy as sc
+import tempfile
+import uuid
 
 from ..utilities import strip_punctuation
+from ..classes import HDF5Paper
 
 class DataCollection(object):
     """
@@ -58,17 +63,24 @@ class DataCollection(object):
     :class:`.DataCollection`
     """
     
-    papers = {}
-    features = {}
-    authors = {}
-    
     def __init__(self, papers, features=None, index_by='wosid',
                                               index_citation_by='ayjid',
                                               exclude_features=set([])):
+        
+        self.papers = {}             # { p : paper }, where p is index_by
+        self.features = {}
+        self.authors = {}
+        self.citations = {}          # { c : citation }
+        self.papers_citing = {}      # { c : [ p ] }
+        
         self.axes = {}
         self.index_by = index_by    # Field in Paper, e.g. 'wosid', 'doi'.
         self.index_citation_by = index_citation_by
+    
+        self.index(papers, features, index_by, index_citation_by, exclude_features)
         
+    def index(self, papers, features, index_by, index_citation_by, exclude_features):
+
         # Check if data is a list of Papers.
         if type(papers) is not list or type(papers[0]) is not Paper:
             raise(ValueError("papers must be a list of Paper objects."))
@@ -77,23 +89,30 @@ class DataCollection(object):
         self.datakeys = papers[0].keys()
         if index_by not in self.datakeys:
             raise(KeyError(str(index_by) + " not a valid key in data."))
-        
+    
+        # Tokenize and index citations (both directions).
+        self._index_citations(papers)
+    
         # Index the Papers in data.
-        self.papers = { p[index_by]:p for p in papers }
+        for paper in papers:
+            self.papers[paper[index_by]] = paper
         self.N_p = len(self.papers)
         
         # Index the Papers by author.
         self._index_papers_by_author()
-
-        # Tokenize and index citations (both directions).
-        self._index_citations()
         
         # Tokenize and index features.
         if features is not None:
             self._tokenize_features(features, exclude_features=exclude_features)
         else:
             logger.debug('features is None, skipping tokenization.')
-            self.features = {}
+            pass
+        
+    def _define_features(self, name, index, features, counts, documentCounts):
+        self.features[name] = { 'index': index,
+                                'features': features,
+                                'counts': counts,
+                                'documentCounts': documentCounts }
 
     def _index_papers_by_author(self):
         """
@@ -102,34 +121,39 @@ class DataCollection(object):
         """
         
         logger.debug('indexing authors in {0} papers'.format(self.N_p))
-        self.authors = {}
+        
+        author_dict = {}
         
         for k,p in self.papers.iteritems():
             for author in p.authors():
-                if author in self.authors:
-                    self.authors[author].append(k)
+                if author in author_dict:
+                    author_dict[author].append(k)
                 else:
-                    self.authors[author] = [k]
+                    author_dict[author] = [k]
     
-        self.N_a = len(self.authors)
+        self.N_a = len(author_dict)
+        for k,v in author_dict.iteritems():
+            self.authors[k] = v
         logger.debug('indexed {0} authors'.format(self.N_a))
     
-    def _index_citations(self):
+    def _index_citations(self, papers):
         """
         Generates dict `{ c : citation }` and `{ c : [ p ] }`.
         """
         
-        logger.debug('indexing citations in {0} papers'.format(self.N_p))
-        
-        self.citations = {}         # { c : citation }
-        self.papers_citing = {}     # { c : [ p ] }
+        logger.debug('indexing citations in {0} papers'.format(len(papers)))
         
         cited = {}  # { p : [ (c,1) ] }
         citation_counts = Counter()
         citation_index = {}
         citation_index_ = {}
+        
+        citations = {}
+        
+        papers_citing = {}
 
-        for p,paper in self.papers.iteritems():
+        for paper in papers:
+            p = paper[self.index_by]
             if paper['citations'] is not None:
                 cited[p] = []
 
@@ -145,22 +169,28 @@ class DataCollection(object):
                     cited[p].append((c_i,1))
                     citation_counts[c_i] += 1
 
-                    if c not in self.citations:
-                        self.citations[c] = citation
+                    if c not in citations:
+                        citations[c] = citation
                     
-                    if c not in self.papers_citing:
-                        self.papers_citing[c] = [ p ]
+                    if c not in papers_citing:
+                        papers_citing[c] = [ p ]
                     else:
-                        self.papers_citing[c].append(p)
+                        papers_citing[c].append(p)
     
-        self.features['citations'] = { 'index': citation_index,
-                                       'features': cited,
-                                       'counts': citation_counts,
-                                       'documentCounts': citation_counts }
+        # Separating this part allows for more flexibility in what sits behind
+        #  self.papers_citing (e.g. HDF5 VArray).
+        for k,v in papers_citing.iteritems():
+            self.papers_citing[k] = v
+
+        for k,v in citations.iteritems():
+            self.citations[k] = v
+    
+        self._define_features('citations', citation_index, cited,
+                                citation_counts, citation_counts)
 
         self.N_c = len(self.citations)
         logger.debug('indexed {0} citations'.format(self.N_c))
-        
+
     def _tokenize_features(self, features, exclude_features=set([])):
         """
         
@@ -175,21 +205,19 @@ class DataCollection(object):
         """
         logger.debug('tokenizing {0} sets of features'.format(len(features)))
         
-        self.features = {}
-        
         def _handle(tok,w):
             if tok in findex_:
-                self.features[ftype]['counts'][findex_[tok]] += w
+                counts[findex_[tok]] += w
                 return True
             return False
         
         for ftype, fdict in features.iteritems():   # e.g. unigrams, bigrams
             logger.debug('tokenizing features of type {0}'.format(ftype))
 
-            self.features[ftype] = { 'features': {},
-                                     'index': {},
-                                     'counts': Counter(),
-                                     'documentCounts': Counter() }
+            features = {}
+            index = {}
+            counts = Counter()
+            documentCounts = Counter()
             
             # List of unique tokens.
             ftokenset = set([f for fval in fdict.values() for f,v in fval])
@@ -206,11 +234,11 @@ class DataCollection(object):
                     raise ValueError('Malformed features data.')
 
                 tokenized = [ (findex_[f],w) for f,w in fval if _handle(f,w) ]
-                self.features[ftype]['features'][key] = tokenized
+                features[key] = tokenized
                 for t,w in tokenized:
-                    self.features[ftype]['documentCounts'][t] += 1
-            
-            self.features[ftype]['index'] = findex  # Persist.
+                    documentCounts[t] += 1
+        
+            self._define_features(ftype, findex, features, counts, documentCounts)
             
         logger.debug('done indexing features')
         
@@ -305,7 +333,6 @@ class DataCollection(object):
             See methods table, above.
 
         """
-        
         if key == 'date':
             if method == 'time_window':
                 kw = {  'window_size': kwargs.get('window_size', 1),
@@ -383,7 +410,6 @@ class DataCollection(object):
                                            for paper in self.papers.values() ]))
         cumulative = kwargs.get('cumulative', False)
 
-
         slices = {}     # { s : [ p ] }
         last = None
         for s in xrange(start, end-window_size+2, step_size):
@@ -406,7 +432,7 @@ class DataCollection(object):
         
         return self.papers.keys()
     
-    def papers(self):
+    def all_papers(self):
         """
         Yield the complete set of :class:`.Paper` instances in this
         :class:`.DataCollection` .
@@ -671,3 +697,208 @@ class DataCollection(object):
             tickstops = range(0, 50, int(50./len(plt.xticks()[0])))
             ax.set_xticks(tickstops)
             ax.set_xticklabels([ ykeys[i] for i in tickstops ])
+
+#################################################
+#       HDF5-related classes and methods        #
+#################################################
+
+pytype = {  tables.atom.BoolAtom: bool,
+            tables.atom.UInt8Atom: int,
+            tables.atom.Int16Atom: int,
+            tables.atom.UInt16Atom: int,
+            tables.atom.Int32Atom: int,
+            tables.atom.UInt32Atom: long,
+            tables.atom.Int64Atom: long,
+            tables.atom.UInt64Atom: long,
+            tables.atom.Float32Atom: float,
+            tables.atom.Float64Atom: float,
+            tables.atom.Complex64Atom: complex,
+            tables.atom.Complex128Atom: complex,
+            tables.atom.StringAtom: str,
+            tables.atom.Time32Atom: int,
+            tables.atom.Time64Atom: float }
+
+class Index(tables.IsDescription):
+    i = tables.Int32Col()
+    mindex = tables.StringCol(100)
+
+class papers_table(dict):
+    """
+    Mimics the `papers` dict in :class:`.Paper`\, providing HDF5 persistence.
+
+    Values should be set only once for a key.
+
+    Parameters
+    ----------
+    h5file : tables.file.File
+        A :class:`tables.file.File` object.
+    index_by : str
+        Key in :class:`.Paper` used to index papers in this 
+        :class:`.DataCollection`\.
+    """
+    def __init__(self, h5file, index_by, name):
+        self.h5file = h5file
+        self.index_by = index_by
+        self.group = self.h5file.createGroup("/", name)
+        self.table = self.h5file.createTable(self.group, 'papers_table',
+                                                                      HDF5Paper)
+        self.indexrows = self.table.cols.mindex.createIndex()
+        
+    def _to_paper(self, hdf5paper):
+        """
+        Yields a :class:`.Paper` from an :class:`.HDF5Paper`\.
+        """
+        paper = Paper()
+        keys = self.table.description._v_dtypes.keys()
+        for kname in keys:
+            if kname == 'mindex': continue    # Not a valid field for Paper.
+            v = hdf5paper[kname]
+            
+            if type(v) is numpy.int32:
+                v = int(v)
+            elif type(v) is numpy.string_:
+                v = str(v)
+            
+            # Look for lists, and recast.
+            if type(v) is str:
+                if len(v) > 0:
+
+                    if v[0] == '[' and v[-1] == ']':
+                        v = [ s.strip().replace("'","")
+                                for s in v[1:-1].split(',') ]
+
+            paper[kname] = v
+        return paper
+        
+    def __setitem__(self, key, value):
+        hpaper = self.table.row
+        hpaper['mindex'] = key
+
+        for k, v in value.iteritems():
+            if k in self.table.cols.__dict__:
+                if v is not None:
+                    if type(v) is list:
+                        v = str(v)
+                    hpaper[k] = v
+        hpaper.append()
+        self.table.flush() 
+    
+    def __getitem__(self, key):
+        return [ self._to_paper(x) for x
+                    in self.table.where('mindex == b"{0}"'.format(key)) ][0]
+    
+    def __len__(self):
+        return len(self.table)
+    
+    def __contains__(self, key):
+        size = len([ self._to_paper(x) for x
+                        in self.table.where('mindex == b"{0}"'.format(key)) ])
+        return size > 0
+    
+    def iteritems(self):
+        i = 0
+        while i < len(self.table):
+            x = self.table[i]
+            yield x['mindex'],self._to_paper(x)
+            i += 1
+            
+    def values(self):
+        return [ self._to_paper(x) for x in self.table ]
+    
+    def keys(self):
+        return [ x['mindex'] for x in self.table ]
+
+class vlarray_dict(dict):
+    """
+    Provides dict-like access to an HDF5 VLArray.
+    """
+    def __init__(self, h5file, group, name, atom):
+        self.h5file = h5file
+        self.group = group
+        self.name = name
+        self.atom = atom
+        
+        try:
+            self.pytype = pytype[type(atom)]
+        except KeyError:
+            raise NotImplementedError('No equivalent Python type for atom.')
+        
+        self.index = self.h5file.createTable(self.group,
+                                                '{0}_index'.format(self.name),
+                                                Index)
+        self.vlarray = self.h5file.createVLArray(self.group, self.name,
+                                                             self.atom)
+
+        self.index.cols.mindex.createIndex()        
+        
+    def __setitem__(self, key, value):
+#            i = int([ x['i'] for x in self.index.where('(mindex == b"{0}")'.format(key)) ][0])
+#            self.vlarray[i] = value
+        if key not in self:
+            i = len(self.vlarray)
+            ind = self.index.row
+            ind['i'] = i
+            ind['mindex'] = key
+            ind.append()
+            self.index.flush()
+        
+        self.vlarray.append(value)
+        self.vlarray.flush()
+
+    def __getitem__(self, key):
+        rset = [ x['i'] for x
+                    in self.index.where('(mindex == b"{0}")'.format(key)) ]
+
+        i = int(rset[0])
+        return [ self.pytype(v) for v in self.vlarray[i] ]
+
+    def __contains__(self,key):
+        size = len([ self._to_paper(x) for x
+                    in self.index.where('mindex == b"{0}"'.format(key)) ])
+        return size > 0
+    
+    def values(self):
+        return [ [ self.pytype(v) for v in x ] for x in self.vlarray ]
+    
+    def keys(self):
+        return [ x['mindex'] for x in self.index ]  
+    
+    def __len__(self):
+        return len(self.vlarray)
+
+class HDF5DataCollection(DataCollection):
+    def __init__(self, papers, features=None, index_by='wosid',
+                                              index_citation_by='ayjid',
+                                              exclude_features=set([]),
+                                              datapath=None):
+        # Where to save the HDF5 data file?
+        if datapath is None:
+            self.datapath = tempfile.mkdtemp()
+        else:
+            self.datapath = datapath
+            
+        self.uuid = uuid.uuid4()    # Unique identifier for this DataCollection.
+        self.path = '{0}/DataCollection-{1}.h5'.format(self.datapath, self.uuid)
+        self.h5file = tables.openFile(self.path, mode = "w",
+                                   title='DataCollection-{0}'.format(self.uuid))
+        self.group = self.h5file.createGroup("/", 'arrays')
+        
+        self.papers = papers_table(self.h5file, index_by, 'papers')
+        
+        
+        
+        self.features = {}  # TODO: implement the HDF5 features group/tables.
+        self.authors = vlarray_dict(self.h5file, self.group, 'authors',
+                                                 tables.StringAtom(100))
+        self.citations = papers_table(self.h5file, index_citation_by,
+                                                   'citations')
+        self.papers_citing = vlarray_dict(self.h5file, self.group,
+                                                       'papers_citing',
+                                                       tables.StringAtom(100))
+        
+        self.axes = {}
+        self.index_by = index_by    # Field in Paper, e.g. 'wosid', 'doi'.
+        self.index_citation_by = index_citation_by        
+        
+        self.index(papers, features, index_by, index_citation_by,
+                                               exclude_features)

@@ -3,6 +3,7 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel('DEBUG')
 
+import tables
 class Paper(object):
     """
     Base class for Papers. 
@@ -96,7 +97,7 @@ class Paper(object):
             raise KeyError(ks + " is not a valid key in Paper.")
         elif key in self.list_fields and vt is not list and value is not None:
             raise ValueError("Value for field '"+ ks +"' must be a list.")
-        elif key in self.string_fields and vt is not str and value is not None:
+        elif key in self.string_fields and vt is not str and vt is not unicode and value is not None:
             raise ValueError("Value for field '"+ ks +"' must be a string.")
         elif key in self.int_fields and vt is not int and value is not None:
             raise ValueError("Value for field '"+ ks +"' must be an integer.")
@@ -134,3 +135,21 @@ class Paper(object):
             au = self.internal['auinit'][i] + ' ' +  self.internal['aulast'][i]
             auths.append( au.upper() )
         return auths
+
+class HDF5Paper(tables.IsDescription):
+    mindex = tables.StringCol(100)
+    aulast = tables.StringCol(1000)
+    auinit = tables.StringCol(1000)
+    atitle = tables.StringCol(200)
+    jtitle = tables.StringCol(200)
+    volume = tables.StringCol(6)
+    issue = tables.StringCol(6)
+    spage = tables.StringCol(6)
+    epage = tables.StringCol(6)
+    ayjid = tables.StringCol(200)
+    doi = tables.StringCol(100)
+    pmid = tables.StringCol(100)
+    wosid = tables.StringCol(100)
+    abstract = tables.StringCol(5000)
+    accession = tables.StringCol(100)
+    date = tables.Int32Col()
