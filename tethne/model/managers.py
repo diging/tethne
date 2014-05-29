@@ -96,16 +96,22 @@ class MALLETModelManager(ModelManager):
     Model Manager for LDA topic modeling with MALLET.
     """
     
-    def __init__(self, datacollection, fkey='unigrams', mallet_path='./model/bin/mallet-2.0.7/bin'):
+    def __init__(self, datacollection, fkey='unigrams', 
+                       mallet_path='./model/bin/mallet-2.0.7/bin',
+                       metakeys=['date','jtitle']):
         """
         
         Parameters
         ----------
         datacollection : :class:`.DataCollection`
         fkey : str
-            Key from datacollection.features containing wordcounts.
+            Key from datacollection.features containing wordcounts (or whatever
+            you want to model with).
         mallet_path : str
             Path to MALLET install directory (contains bin/mallet).
+        metakeys : list
+            A list of keys onto :class:`.Paper` to include in the exported
+            metadata file. Default: ['date', 'jtitle']
         """
         super(LDAModelManager, self).__init__(D, outpath)
         
@@ -122,20 +128,31 @@ class MALLETModelManager(ModelManager):
         self._load_model()
     
     def _generate_corpus(self):
+        """
+        Writes a corpus to disk amenable to MALLET topic modeling.
+        """
         from ..writers.corpora import to_documents
         
-        to_documents(   self.temp+'/tethne',            # Temporary files.
-                        self.datacollection.features[self.fkey],
-                        papers=self.datacollection.papers(),
-                        fields=[self.datacollection.index_by] )
+        # Metadata to export with corpus.
+        metadata = ( metakeys, { p: { k:paper[k] for k in metakeys } 
+                       for p,paper in self.datacollection.papers.iteritems() } )
+        
+        # Export the corpus.
+        paths = to_documents(
+                        self.temp+'/tethne',            # Temporary files.
+                        self.datacollection.features[self.fkey]['features'],
+                        metadata=metadata,
+                        vocab=self.datacollection.features[self.fkey]['index'] )
 
-        self.corpus_path = '{0}/tethne_docs.txt'.format(self.temp)
-        self.meta_path = '{0}/tethne_meta.csv'.format(self.temp)
+        # Need these to generate MALLET calls in self._export_corpus()
+        self.corpus_path, self.meta_path = paths
         
         self._export_corpus()
-        
     
     def _export_corpus(self):
+        """
+        Calls MALLET's `import-file` method.
+        """
         # bin/mallet import-file --input /Users/erickpeirson/mycorpus_docs.txt
         #     --output mytopic-input.mallet --keep-sequence --remove-stopwords
         
@@ -157,6 +174,9 @@ class MALLETModelManager(ModelManager):
             raise RuntimeError("MALLET import-file failed: {0}.".format(exit))
 
     def _run_model(self, max_iter):
+        """
+        Calls MALLET's `train-topic` method.
+        """
         #$ bin/mallet train-topics --input mytopic-input.mallet --num-topics 100 
         #> --output-doc-topics /Users/erickpeirson/doc_top 
         #> --word-topic-counts-file /Users/erickpeirson/word_top 
@@ -205,11 +225,9 @@ class MALLETModelManager(ModelManager):
         self.num_iters += max_iter
             
     def _load_model(self):
-        from tethne.readers import mallet
-        self.model = mallet.load(   self.dt, 
+        from .corpus.ldamodel import from_mallet
+        self.model = from_mallet(   self.dt, 
                                     self.wt, 
-                                    self.tk, 
-                                    self.Z,
                                     self.meta_path  )
     
         self.M = ModelCollection()
@@ -302,7 +320,7 @@ class DTMModelManager(ModelManager):
         i = 1
 
         corpus_prefix = '{0}/tethne'.format(self.temp)
-        outname = '{0}/model_run'.format(self.outpath)
+        self.outname = '{0}/model_run'.format(self.outpath)
         
         FNULL = open(os.devnull, 'w')
         
@@ -312,7 +330,7 @@ class DTMModelManager(ModelManager):
                     '--rng_seed=0',
                     '--initialize_lda=true',
                     '--corpus_prefix={0}'.format(corpus_prefix),
-                    '--outname={0}'.format(outname),
+                    '--outname={0}'.format(self.outname),
                     '--top_chain_var={0}'.format(top_chain_var),
                     '--alpha={0}'.format(alpha),
                     '--lda_sequence_min_iter={0}'.format(lda_seq_min_iter),
@@ -343,9 +361,11 @@ class DTMModelManager(ModelManager):
         self.num_iters += max_iter
             
     def _load_model(self):
-        """Load and return a :class:`.LDAModel`\."""
+        """Load and return a :class:`.DTMModel`\."""
+        from .corpus.dtmmodel import from_gerrish
+        self.model = from_gerrish(self.outname, self.meta_path, self.vocab_path)
         
-        pass  
+        return self.model
 
 
 class TAPModelManager(SocialModelManager):
