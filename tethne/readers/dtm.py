@@ -5,7 +5,7 @@ import numpy as np
 import sys
 
 sys.path.append('/Users/erickpeirson/tethne')
-from tethne.data import DTMModel
+from ..model.corpus.dtmmodel import DTMModel
 from tethne.utilities import Dictionary
 
 class DTMLoader(object):

@@ -16,8 +16,8 @@ Methods
 
 import networkx as nx
 import tethne.utilities as util
-import tethne.data as ds
 from collections import defaultdict, Counter
+from ..classes import Paper
 
 
 import logging
@@ -66,7 +66,7 @@ def author_papers(papers, node_id='ayjid', paper_attribs=[], **kwargs):
     author_papers_graph = nx.DiGraph(type='author_papers')
 
     # Validate node_id.
-    meta_dict = ds.Paper()
+    meta_dict = Paper()
     meta_keys = meta_dict.keys()
     meta_keys.remove('citations')
     if node_id not in meta_keys:

@@ -18,7 +18,8 @@ import networkx as nx
 import tethne.utilities as util
 import helpers
 import operator
-import tethne.data as ds
+
+from ..classes import Paper
 
 def direct_citation(papers, node_id='ayjid', node_attribs=['date'], **kwargs):
     """
@@ -83,7 +84,7 @@ def direct_citation(papers, node_id='ayjid', node_attribs=['date'], **kwargs):
     citation_network_internal = nx.DiGraph(type='citations')
 
     # Check node_id validity.
-    meta_dict = ds.Paper()
+    meta_dict = Paper()
     meta_keys = meta_dict.keys()
     if node_id not in meta_keys:
         raise KeyError('node_id:' + node_id + 'is not in the set of' +
@@ -218,7 +219,7 @@ def bibliographic_coupling(papers, citation_id='ayjid', threshold=1,
     nattr = {}
 
     # Validate identifiers.
-    meta_dict = ds.Paper()
+    meta_dict = Paper()
     meta_keys = meta_dict.keys()
     if node_id not in meta_keys:
         raise KeyError('node_id' + node_id + ' is not a meta_dict key.')

@@ -7,7 +7,7 @@ sys.path.append('/Users/erickpeirson/tethne')
 
 import csv
 import numpy as np
-from tethne.data import Paper
+from ..classes import Paper
 from tethne.model import LDAModel
 from tethne.utilities import Dictionary
 
