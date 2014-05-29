@@ -8,7 +8,8 @@ with care.
 
 """
 
-import tethne.data as ds
+from ..classes import Paper
+
 import xml.etree.ElementTree as ET
 import uuid
 
@@ -93,7 +94,7 @@ def read(filepath):
 
     meta_list = []
     for article in root.iter('article'):
-        paper = ds.Paper()
+        paper = Paper()
 
         # collect information from the 'front' section of the article
         # collect the simple data
@@ -166,7 +167,7 @@ def read(filepath):
         # element-citation handling different from mixed-citation handling
         citations = article.findall('./back/ref-list/ref/element-citation')
         for cite in citations:
-            cite_dict = ds.Paper()
+            cite_dict = Paper()
 
             # simple meta data
             for key in cit_meta_loc.iterkeys():

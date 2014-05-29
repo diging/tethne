@@ -57,7 +57,8 @@ import pubmed
 import dfr
 import mallet
 import dtm
-import tethne.data as dt
+
+from ..classes import Paper
 
 class DataError(Exception):
     def __init__(self, value):
@@ -111,7 +112,7 @@ def merge(P1, P2, fields=['ayjid']):
                     break
 
             if match:   # Add values first from P2 paper, then from P1 paper.
-                new_p = dt.Paper()
+                new_p = Paper()
                 for key, value in p_2.iteritems():
                     if value != '' and value != None:
                         new_p[key] = value
