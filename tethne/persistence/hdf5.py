@@ -37,6 +37,12 @@ class HDF5Paper(tables.IsDescription):
     abstract = tables.StringCol(5000)
     accession = tables.StringCol(100)
     date = tables.Int32Col()
+    
+class Index(tables.IsDescription):
+    i = tables.Int32Col()
+    mindex = tables.StringCol(100)
+    
+
 
 class HDF5DataCollection(DataCollection):
     def __init__(self, papers, features=None, index_by='wosid',
@@ -59,14 +65,17 @@ class HDF5DataCollection(DataCollection):
         
         
         
-        self.features = {}  # TODO: implement the HDF5 features group/tables.
-        self.authors = vlarray_dict(self.h5file, self.group, 'authors',
-                                                 tables.StringAtom(100))
+        self.features = {}     # TODO: implement the HDF5 features group/tables.
+        self.authors = vlarray_dict(self.h5file, self.group, 
+                                    'authors', tables.StringAtom(100))
+
+        # { str(f) : feature }
         self.citations = papers_table(self.h5file, index_citation_by,
                                                    'citations')
+
+        # { str(f) : [ str(p) ] }
         self.papers_citing = vlarray_dict(self.h5file, self.group,
-                                                       'papers_citing',
-                                                       tables.StringAtom(100))
+                                        'papers_citing', tables.StringAtom(100))
         
         self.axes = {}
         self.index_by = index_by    # Field in Paper, e.g. 'wosid', 'doi'.
@@ -75,9 +84,6 @@ class HDF5DataCollection(DataCollection):
         self.index(papers, features, index_by, index_citation_by,
                                                exclude_features)
 
-class Index(tables.IsDescription):
-    i = tables.Int32Col()
-    mindex = tables.StringCol(100)
 
 class papers_table(dict):
     """

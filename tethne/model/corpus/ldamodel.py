@@ -159,8 +159,6 @@ class LDAModel(BaseModel):
         
         return documents
 
-
-
 def from_mallet(top_doc, word_top, metadata=None, metadata_key='doi'):
     """
     Parse results from LDA modeling with MALLET.
@@ -197,7 +195,7 @@ def from_mallet(top_doc, word_top, metadata=None, metadata_key='doi'):
 
 def _handle_top_doc(path):
     """
-    
+    Used by :func:`.from_mallet` to reconstruct theta posterior distributions.
     
     Returns
     -------
@@ -235,6 +233,8 @@ def _handle_top_doc(path):
     
 def _handle_word_top(path):
     """
+    Used by :func:`.from_mallet` to reconstruct phi posterior distributions.
+    
     Returns
     -------
     wt : Numpy array
@@ -274,6 +274,8 @@ def _handle_word_top(path):
 
 def _handle_metadata(path):
     """
+    Used by :func:`.from_mallet` to read metadata file.    
+    
     Returns
     -------
     md : dict

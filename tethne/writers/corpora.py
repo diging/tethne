@@ -3,7 +3,7 @@
 
 from collections import Counter
 
-def to_documents(target, ngrams, papers=None, vocab=None, fields=['date','atitle']):
+def to_documents(target, ngrams, metadata=None, vocab=None):
     """
     
     Parameters
@@ -12,35 +12,33 @@ def to_documents(target, ngrams, papers=None, vocab=None, fields=['date','atitle
         Target path for documents; e.g. './mycorpus' will result in 
         './mycorpus_docs.txt' and './mycorpus_meta.csv'.
     ngrams : dict
-        Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
-    papers : list
-        Optional. List of :class:`.Paper` objects. Should have DOIs that 
-        correspond to keys in `ngrams`.
-    fields : list
-        Optional. If `papers` is provided, a list of fields in :class:`.Paper`
-        to include in the metadata file.
+        Keys are paper identifiers, values are lists of (ngram, frequency)
+        tuples. If `vocab` is provided, assumes that `ngram` is an index into
+        `vocab`.
+    metadata : tuple
+        (`keys`, dict): `keys` is a list of metadata keys, and dict contains
+        metadata values dict for each paper. ( [ str ], { str(p) : dict } ) 
     
     Raises
     ------
     IOError
     """
     
-    # Index papers by DOI, for easy retrieval later.
-    if papers is not None:
-        papers_by_doi = { p['doi']:p for p in papers }
+    metakeys, metadict = metadata
+    
+    docpath = target + '_docs.txt'
+    metapath = target + '_meta.csv'
     
     try:
-        docFile = open(target + '_docs.txt', 'wb')
-        metaFile = open(target + '_meta.csv', 'wb')
+        docFile = open(docpath, 'wb')
+        metaFile = open(metapath, 'wb')
     except IOError:
         raise IOError('Invalid target. Could not open files for writing.')
     
-
-    metaFile.write('# {0}\n'.format('\t'.join(['doc','doi'] + fields)))
+    metaFile.write('# {0}\n'.format('\t'.join(metakeys)))
     
-    if type(ngrams) is tuple:
-        ngrams, vocab, counts = ngrams
-    
+    # MALLET expects strings; if `vocab` is provided, assumes that ngrams
+    #   in `ngrams` are keys into `vocab`.
     if vocab is None:
         def word(s):
             return str(s)
@@ -50,24 +48,23 @@ def to_documents(target, ngrams, papers=None, vocab=None, fields=['date','atitle
     
     d = 0   # Document index in _docs.txt file.
     try:
-        for key,values in ngrams.iteritems():
-            docFile.write(' '.join([ word(gram) for gram,freq in values 
+        for p,grams in ngrams.iteritems():
+            docFile.write(' '.join([ word(gram) for gram,freq in grams 
                                                 for i in xrange(freq) ]) + '\n')
 
-            meta = [ str(d), str(key) ]
-            if papers:
-                p = papers_by_doi[key]
-                meta += [ str(p[f]) for f in fields ]
-            metaFile.write('\t'.join(meta) + '\n')  #'{0}\t{1}\n'.format(d, key))
+            meta = [ str(d), str(p) ]
+            if metadata is not None:
+                meta += [ str(metadict[p][f]) for f in metakeys ]
+            metaFile.write('\t'.join(meta) + '\n')
             d += 1
     except AttributeError:  # .iteritems() raises an AttributeError if ngrams
                             #  is not dict-like.
-        raise ValueError('Parameter \'ngrams\' must be dictionary-like.')
+        raise ValueError('Parameter \'ngrams\' must be a dict.')
     
     docFile.close()
     metaFile.close()
     
-    return True
+    return docpath, metapath
 
 def to_dtm_input(target, D, t_ngrams, vocab, fields=['date','atitle']):
     """

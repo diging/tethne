@@ -104,10 +104,10 @@ class DataCollection(object):
             pass
         
     def _define_features(self, name, index, features, counts, documentCounts):
-        self.features[name] = { 'index': index,
-                                'features': features,
-                                'counts': counts,
-                                'documentCounts': documentCounts }
+        self.features[name] = { 'index': index,         # { int(f_i) : str(f) }
+                                'features': features,   # { str(p) : [ ( f_i, c) ] }
+                                'counts': counts,       # { int(f_i) : int(C) }
+                                'documentCounts': documentCounts } # { int(f_i) : int(C) }
 
     def _index_papers_by_author(self):
         """
