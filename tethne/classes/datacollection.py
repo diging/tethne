@@ -763,6 +763,7 @@ class papers_table(dict):
                                 for s in v[1:-1].split(',') ]
                     else:
                         v = []
+        return v
     
     def _to_paper(self, hdf5paper):
         """

@@ -128,12 +128,20 @@ class Paper(object):
         return self.internal.iteritems()
     
     def authors(self):
-        """Returns a list of author names (FI LAST)."""
+        """
+        Returns a list of author names (FI LAST).
+        
+        If there are no authors, returns an empty list.
+        """
         
         auths = []
-        for i in xrange(len(self.internal['aulast'])):
-            au = self.internal['auinit'][i] + ' ' +  self.internal['aulast'][i]
-            auths.append( au.upper() )
+        print 'aulast', self.internal['aulast']
+        if self.internal['aulast'] is not None:
+            
+            for i in xrange(len(self.internal['aulast'])):
+                au = self.internal['auinit'][i] + ' ' +  self.internal['aulast'][i]
+                auths.append( au.upper() )
+        print 'auths', auths
         return auths
 
 class HDF5Paper(tables.IsDescription):
