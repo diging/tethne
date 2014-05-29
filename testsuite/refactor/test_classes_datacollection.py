@@ -16,58 +16,58 @@ logger.setLevel('ERROR')
 class TestPaper(unittest.TestCase):
     pass
 
-#class TestDataCollectionWoS(unittest.TestCase):
-#    def setUp(self):
-#        """
-#        Genereate a DataCollection from some WoS data.
-#        """
-#    
-#        wosdatapath = '{0}/wos.txt'.format(datapath)
-#
-#        papers = wos.read(wosdatapath)
-#        self.D = DataCollection(papers)
-#    
-#    def test_indexing(self):
-#        """
-#        index_papers: Should be N_p number of papers.
-#        index_papers_by_authors: N_a authors
-#        index_citations: N_c citations
-#        """
-#        # papers
-#        self.assertEqual(self.D.N_p, 10)
-#        self.assertEqual(len(self.D.papers), self.D.N_p)
-#    
-#        # authors
-#        self.assertEqual(self.D.N_a, 51)
-#        self.assertEqual(len(self.D.authors), self.D.N_a)
-#    
-#        # citations
-#        self.assertEqual(self.D.N_c, 531)
-#        self.assertEqual(len(self.D.citations), self.D.N_c)
-#    
-#    def test_abstract_to_features(self):
-#        """
-#        Should generate features from available abstracts.
-#        """
-#
-#        self.D.abstract_to_features()
-#        self.assertIn('abstractTerms', self.D.features)
-#        self.assertNotIn('the', self.D.features['abstractTerms']['index'].values())
-#
-#        abs_available = len([p for p in self.D.papers.values() if p['abstract'] is not None ])
-#        abs_tokenized = len(self.D.features['abstractTerms']['features'])
-#        self.assertEqual(abs_tokenized, abs_available)
-#
-#    def test_slice(self):
-#        """
-#        """
-#
-#        self.D.slice('date')
-#        self.assertIn('date', self.D.axes)
-#        self.assertIn(2012, self.D.axes['date'])
-#        self.assertIn(2013, self.D.axes['date'])
-#        self.assertEqual(len(self.D.axes['date'][2012]), 5)
-#
+class TestDataCollectionWoS(unittest.TestCase):
+    def setUp(self):
+        """
+        Genereate a DataCollection from some WoS data.
+        """
+    
+        wosdatapath = '{0}/wos.txt'.format(datapath)
+
+        papers = wos.read(wosdatapath)
+        self.D = DataCollection(papers)
+    
+    def test_indexing(self):
+        """
+        index_papers: Should be N_p number of papers.
+        index_papers_by_authors: N_a authors
+        index_citations: N_c citations
+        """
+        # papers
+        self.assertEqual(self.D.N_p, 10)
+        self.assertEqual(len(self.D.papers), self.D.N_p)
+    
+        # authors
+        self.assertEqual(self.D.N_a, 51)
+        self.assertEqual(len(self.D.authors), self.D.N_a)
+    
+        # citations
+        self.assertEqual(self.D.N_c, 531)
+        self.assertEqual(len(self.D.citations), self.D.N_c)
+    
+    def test_abstract_to_features(self):
+        """
+        Should generate features from available abstracts.
+        """
+
+        self.D.abstract_to_features()
+        self.assertIn('abstractTerms', self.D.features)
+        self.assertNotIn('the', self.D.features['abstractTerms']['index'].values())
+
+        abs_available = len([p for p in self.D.papers.values() if p['abstract'] is not None ])
+        abs_tokenized = len(self.D.features['abstractTerms']['features'])
+        self.assertEqual(abs_tokenized, abs_available)
+
+    def test_slice(self):
+        """
+        """
+
+        self.D.slice('date')
+        self.assertIn('date', self.D.axes)
+        self.assertIn(2012, self.D.axes['date'])
+        self.assertIn(2013, self.D.axes['date'])
+        self.assertEqual(len(self.D.axes['date'][2012]), 5)
+
 class TestDataCollectionDfR(unittest.TestCase):
     def setUp(self):
         """
@@ -93,13 +93,12 @@ class TestDataCollectionDfR(unittest.TestCase):
         self.assertEqual(len(self.D.papers), self.D.N_p)
     
         # papers by author
-        self.assertEqual(self.D.N_a, 194)
+        self.assertEqual(self.D.N_a, 193)
         self.assertEqual(len(self.D.authors), self.D.N_a)
 
         # citations
         self.assertEqual(self.D.N_c, 0)
         self.assertEqual(len(self.D.citations), self.D.N_c)
-
 
     def test_tokenize_features(self):
         """
@@ -141,7 +140,7 @@ class TestDataCollectionDfRHDF5(unittest.TestCase):
         self.assertEqual(len(self.D.papers), self.D.N_p)
     
         # papers by author
-        self.assertEqual(self.D.N_a, 195)
+        self.assertEqual(self.D.N_a, 193)
         self.assertEqual(len(self.D.authors), self.D.N_a)
 
         # citations
@@ -164,7 +163,7 @@ class TestDataCollectionDfRHDF5(unittest.TestCase):
         self.assertEqual(len(self.D.features['unigrams']['counts']), 51658)
         self.assertEqual(len(self.D.features['unigrams']['documentCounts']), 51658)
 
-class TestDataCollectionWoS(unittest.TestCase):
+class TestDataCollectionWoSHDF5(unittest.TestCase):
     def setUp(self):
         """
         Genereate a DataCollection from some WoS data.

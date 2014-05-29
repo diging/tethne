@@ -743,7 +743,27 @@ class papers_table(dict):
         self.table = self.h5file.createTable(self.group, 'papers_table',
                                                                       HDF5Paper)
         self.indexrows = self.table.cols.mindex.createIndex()
+    
+    def _recast_value(self, v):
+        """
+        Recasts values from HDF5 table as Python types.
+        """
+
+        if type(v) is numpy.int32:
+            v = int(v)
+        elif type(v) is numpy.string_:
+            v = str(v)
         
+        # Look for lists.
+        if type(v) is str:
+            if len(v) > 0:
+                if v[0] == '[' and v[-1] == ']':
+                    if len(v) > 2:
+                        v = [ s.strip().replace("'","")
+                                for s in v[1:-1].split(',') ]
+                    else:
+                        v = []
+    
     def _to_paper(self, hdf5paper):
         """
         Yields a :class:`.Paper` from an :class:`.HDF5Paper`\.
@@ -752,20 +772,7 @@ class papers_table(dict):
         keys = self.table.description._v_dtypes.keys()
         for kname in keys:
             if kname == 'mindex': continue    # Not a valid field for Paper.
-            v = hdf5paper[kname]
-            
-            if type(v) is numpy.int32:
-                v = int(v)
-            elif type(v) is numpy.string_:
-                v = str(v)
-            
-            # Look for lists, and recast.
-            if type(v) is str:
-                if len(v) > 0:
-
-                    if v[0] == '[' and v[-1] == ']':
-                        v = [ s.strip().replace("'","")
-                                for s in v[1:-1].split(',') ]
+            v = self._recast_value(hdf5paper[kname])
 
             paper[kname] = v
         return paper
