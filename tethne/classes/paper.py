@@ -135,13 +135,11 @@ class Paper(object):
         """
         
         auths = []
-        print 'aulast', self.internal['aulast']
         if self.internal['aulast'] is not None:
             
             for i in xrange(len(self.internal['aulast'])):
                 au = self.internal['auinit'][i] + ' ' +  self.internal['aulast'][i]
                 auths.append( au.upper() )
-        print 'auths', auths
         return auths
 
 class HDF5Paper(tables.IsDescription):
