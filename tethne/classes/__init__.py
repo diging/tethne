@@ -22,3 +22,5 @@ from paper import *
 from datacollection import *
 from graphcollection import *
 from modelcollection import *
+
+from ..persistence import HDF5Paper, HDF5DataCollection

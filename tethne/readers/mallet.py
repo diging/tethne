@@ -1,3 +1,5 @@
+# TODO: retire this.
+
 """
 Reader for output from topic modeling with MALLET.
 """

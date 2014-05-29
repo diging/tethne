@@ -141,21 +141,3 @@ class Paper(object):
                 au = self.internal['auinit'][i] + ' ' +  self.internal['aulast'][i]
                 auths.append( au.upper() )
         return auths
-
-class HDF5Paper(tables.IsDescription):
-    mindex = tables.StringCol(100)
-    aulast = tables.StringCol(1000)
-    auinit = tables.StringCol(1000)
-    atitle = tables.StringCol(200)
-    jtitle = tables.StringCol(200)
-    volume = tables.StringCol(6)
-    issue = tables.StringCol(6)
-    spage = tables.StringCol(6)
-    epage = tables.StringCol(6)
-    ayjid = tables.StringCol(200)
-    doi = tables.StringCol(100)
-    pmid = tables.StringCol(100)
-    wosid = tables.StringCol(100)
-    abstract = tables.StringCol(5000)
-    accession = tables.StringCol(100)
-    date = tables.Int32Col()
