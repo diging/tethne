@@ -10,6 +10,9 @@ network models, topic models, and social influence models. Tethne also provides 
 for visualizing those models using mainstream network visualization software (e.g. 
 Cyotoscape and Gephi) and the MatPlotLib Python library.
 
+![alt text](https://raw.githubusercontent.com/diging/tethne/python/doc/highlevel.png "Highlevel architecture for Tethne.")
+![alt text](https://raw.githubusercontent.com/diging/tethne/python/doc/legend.png "Legend.")
+
 Key features
 ------------
 * Flexible core model for text and citation-data.
