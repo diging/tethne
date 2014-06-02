@@ -1,30 +1,49 @@
 ![alt text](https://raw.github.com/diging/tethne/python/doc/logo.jpeg "Tethneus, an orb weaving spider.")
 
-# Tethne
+Tethne
+======
+Tethne is a Python package that draws together tools and techniques from bibliometrics, 
+computational linguistics, and social influence modeling into a single easy-to-use corpus
+analysis framework. Scholars can use Tethne to parse and organize data from the ISI Web of
+Science and JSTOR Data-for-Research databases, and generate time-variant citation-based
+network models, topic models, and social influence models. Tethne also provides mechanisms
+for visualizing those models using mainstream network visualization software (e.g. 
+Cyotoscape and Gephi) and the MatPlotLib Python library.
 
-Tethne is a script for analyzing bibliographic data. The primary emphasis is on parsing
-and analyzing citation data from the Web of Science. Future versions will support data
-from PubMed, Scopus, and other scholarly databases. Tethne can be used to generate and
-analyze a variety of networks, such as bibliographic coupling, citation, author-paper, 
-and co-author networks, using [NetworkX](http://networkx.github.io/).
+Key features
+------------
+* Flexible core model for text and citation-data.
+* Provides core analytic features of popular citation-analysis software (e.g. Citespace).
+* Integrates popular topic modeling software (e.g. MALLET, Gensim).
+* Export network models to mainstream formats (e.g. for visualization in Cytoscape).
+* Leverages powerful computational and network-analysis libraries in Python. 
+* HDF5 data management ensures efficient memory usage, persistence, and interoperability.
 
+Documentation
+-------------
 For more information, see the Tethne [website](https://github.com/diging/tethne) and
 [documentation](http://diging.github.io/tethne/api/) (under development).
 
-## Requirements
+Requirements
+------------
 * [Python 2.7](http://www.python.org/)
 * [NetworkX](http://networkx.github.io/)
+* [Numpy](http://numpy.org)
 * [ElementTree](http://docs.python.org/2/library/xml.etree.elementtree.html)
+* [PyTables](http://www.pytables.org/moin)
 
-## Questions?
+Questions?
+----------
 Ask [Erick](https://cbs.asu.edu/gradinfo/?page_id=49)
 
-## Contributors
+Contributors
+------------
 * [erickpeirson](http://github.com/erickpeirson)
 * [aabaker99](http://github.com/aabaker99)
 * [rsubra13](http://github.com/rsubra13)
 
-## License
+License
+-------
 Tethne is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -37,7 +56,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 
 ![alt text](http://www.gnu.org/graphics/gplv3-127x51.png "GNU GPL 3")
 
-## About
+About
+-----
 Tethne is developed by the 
 [ASU Digital Innovation Group (DigInG)](http://devo-evo.lab.asu.edu/diging),
 part of the [Laubichler Lab](http://devo-evo.lab.asu.edu) in the Center for Biology & 
@@ -45,4 +65,4 @@ Society, School of Life Sciences.
 
 This material is based upon work supported by the National Science Foundation Graduate 
 Research Fellowship Program under Grant No. 2011131209, and NSF Doctoral Dissertation 
-Research Improvement Grant No. 1256752.\
+Research Improvement Grant No. 1256752.
