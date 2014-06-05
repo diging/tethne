@@ -3,6 +3,7 @@ import tables
 from ..classes import Paper, DataCollection
 import tempfile
 import uuid
+import cPickle as pickle
 
 pytype = {  tables.atom.BoolAtom: bool,
             tables.atom.UInt8Atom: int,
@@ -21,6 +22,10 @@ pytype = {  tables.atom.BoolAtom: bool,
             tables.atom.Time64Atom: float }
 
 class HDF5Paper(tables.IsDescription):
+    """
+    Provides persistence for :class:`.Paper` within a
+    :class:`.HDF5DataCollection`\.
+    """
     mindex = tables.StringCol(100)
     aulast = tables.StringCol(1000)
     auinit = tables.StringCol(1000)
@@ -37,12 +42,125 @@ class HDF5Paper(tables.IsDescription):
     abstract = tables.StringCol(5000)
     accession = tables.StringCol(100)
     date = tables.Int32Col()
+    citations = tables.StringCol(5000)  # List of citation keys.
     
 class Index(tables.IsDescription):
+    """
+    For storing int : str pairs.
+    """
     i = tables.Int32Col()
     mindex = tables.StringCol(100)
-    
 
+class IntIndex(tables.IsDescription):    
+    """
+    For storing int : int pairs.
+    """
+    i = tables.Int32Col()
+    mindex = tables.Int32Col()
+
+class StrIndex(tables.IsDescription):
+    """
+    For storing str : str pairs.
+    """
+    i = tables.StringCol(100)
+    mindex = tables.StringCol(100)
+    
+class HDF5Features(dict):
+    def __init__(self, h5file):
+        self.h5file = h5file
+        if '/features' not in self.h5file:
+            self.group = self.h5file.createGroup('/', 'features')
+        else:
+            self.group = self.h5file.getNode('/features')
+        
+    def __setitem__(self, key, value):
+        if '/{0}'.format(key) in self.h5file:
+            #raise ValueError('Feature with name {0} already set.'.format(key))
+            key = key + 'boodaooaaoaaopaooloobao'
+
+        dict.__setitem__(self, key, HDF5Feature(self.h5file, self.group, key))
+
+        for k,v in value.iteritems():
+            self[key][k] = v
+            
+class HDF5Feature(dict):
+    def __init__(self, h5file, fgroup, name):
+
+        self.h5file = h5file
+        self.group = self.h5file.createGroup(fgroup, name)
+
+        dict.__setitem__(self, 'index', HDF5Dict(h5file, self.group, 'index', Index))
+        dict.__setitem__(self, 'features', HDF5PickleDict(h5file, self.group, 'features', StrIndex))
+        dict.__setitem__(self, 'counts', HDF5Dict(h5file, self.group, 'counts', IntIndex))
+        dict.__setitem__(self, 'documentCounts', HDF5Dict(h5file, self.group, 'counts', IntIndex))
+
+    def __setitem__(self, key, value):
+        if key in self:
+            for k,v in value.iteritems():
+                self[key][k] = v
+
+class HDF5Dict(dict):
+    def __init__(self, h5file, group, name, tabletype):
+        self.h5file = h5file
+        self.group = group
+        if name in self.group:
+            self.table = self.group.__dict__['_v_children'][name]
+        else:
+            self.table = self.h5file.createTable(self.group, name, tabletype)
+            self.table.cols.i.createIndex()
+    
+    def _pack_value(self, value):
+        """
+        Simply returns value.
+        """
+        return value
+    
+    def _unpack_value(self, value):
+        """
+        Simply returns value.
+        """
+        return value
+        
+    def __setitem__(self, key, value):
+        if type(key) is int or type(key) is float:
+            qstring = 'i == {0}'
+        else:
+            qstring = 'i == b"{0}"'
+
+        if len( [ i for i in self.table.where(qstring.format(str(key))) ] ) > 0:
+            raise ValueError('Value for {0} already set.'.format(str(key)))
+        
+        row = self.table.row
+        row['i'] = key
+        row['mindex'] = self._pack_value(value) # TODO: unicode/encoding problems here.
+        row.append()
+        self.table.flush()
+        self.h5file.flush()
+    
+    def __getitem__(self, key):
+        if type(key) is int or type(key) is float:
+            qstring = 'i == {0}'
+        else:
+            qstring = 'i == b"{0}"'
+                
+        value = [ i['mindex'] for i in self.table.where(qstring.format(str(key))) ][0]
+        return self._unpack_value(value)
+
+    def keys(self):
+        return [ i['i'] for i in self.table ]
+
+    def values(self):
+        return [ self._unpack_value(i['mindex']) for i in self.table ]
+
+    def items(self):
+        return { i['i']:self._unpack_value(i['mindex']) for i in self.table }
+
+class HDF5PickleDict(HDF5Dict):
+    def _pack_value(self, value):
+        return pickle.dumps(value)
+    
+    def _unpack_value(self, value):
+        return pickle.loads(value)                                            
 
 class HDF5DataCollection(DataCollection):
     def __init__(self, papers, features=None, index_by='wosid',
@@ -61,17 +179,17 @@ class HDF5DataCollection(DataCollection):
                                    title='DataCollection-{0}'.format(self.uuid))
         self.group = self.h5file.createGroup("/", 'arrays')
         
-        self.papers = papers_table(self.h5file, index_by, 'papers')
-        
-        
-        
-        self.features = {}     # TODO: implement the HDF5 features group/tables.
+        self.features = HDF5Features(self.h5file)
         self.authors = vlarray_dict(self.h5file, self.group, 
                                     'authors', tables.StringAtom(100))
 
         # { str(f) : feature }
         self.citations = papers_table(self.h5file, index_citation_by,
                                                    'citations')
+
+        self.papers = papers_table(self.h5file, index_by, 'papers', 
+                                        citations=self.citations,
+                                        index_citation_by=index_citation_by)
 
         # { str(f) : [ str(p) ] }
         self.papers_citing = vlarray_dict(self.h5file, self.group,
@@ -83,7 +201,7 @@ class HDF5DataCollection(DataCollection):
         
         self.index(papers, features, index_by, index_citation_by,
                                                exclude_features)
-
+    
 
 class papers_table(dict):
     """
@@ -99,34 +217,33 @@ class papers_table(dict):
         Key in :class:`.Paper` used to index papers in this 
         :class:`.DataCollection`\.
     """
-    def __init__(self, h5file, index_by, name):
+    def __init__(self, h5file, index_by, name, citations=None, 
+                                               index_citation_by='ayjid'):
         self.h5file = h5file
         self.index_by = index_by
         self.group = self.h5file.createGroup("/", name)
         self.table = self.h5file.createTable(self.group, 'papers_table',
-                                                                      HDF5Paper)
+                                                               HDF5Paper)
         self.indexrows = self.table.cols.mindex.createIndex()
+        
+        self.citations = citations
+        self.index_citation_by = index_citation_by
     
-    def _recast_value(self, v):
+    def _recast_value(self, to, value):
         """
         Recasts values from HDF5 table as Python types.
         """
-
-        if type(v) is numpy.int32:
-            v = int(v)
-        elif type(v) is numpy.string_:
-            v = str(v)
         
-        # Look for lists.
-        if type(v) is str:
-            if len(v) > 0:
-                if v[0] == '[' and v[-1] == ']':
-                    if len(v) > 2:
-                        v = [ s.strip().replace("'","")
-                                for s in v[1:-1].split(',') ]
-                    else:
-                        v = []
+        if to is list and type(value) is not list:  # avoid re-unpickling.
+            if value is None or len(value) == 0:
+                v = []
+            else:   
+                v = pickle.loads(str(value))
+        else:
+            v = to(value)
+        
         return v
+    
     
     def _to_paper(self, hdf5paper):
         """
@@ -136,7 +253,19 @@ class papers_table(dict):
         keys = self.table.description._v_dtypes.keys()
         for kname in keys:
             if kname == 'mindex': continue    # Not a valid field for Paper.
-            v = self._recast_value(hdf5paper[kname])
+
+            if kname in paper.list_fields: to = list
+            elif kname in paper.string_fields: to = str
+            elif kname in paper.int_fields: to = int
+            
+            v = self._recast_value(to, hdf5paper[kname])
+
+            if kname == 'citations':  # 'citations' should contain Papers.
+                if self.citations is None: continue     # May not have any.
+                try:
+                    v = [ self._to_paper(self.citations[a]) for a in v ]
+                except IndexError:
+                    v = []
 
             paper[kname] = v
         return paper
@@ -148,8 +277,16 @@ class papers_table(dict):
         for k, v in value.iteritems():
             if k in self.table.cols.__dict__:
                 if v is not None:
+                    # Lists will be pickled for storage.
                     if type(v) is list:
-                        v = str(v)
+                        # Citations will be stored as list of citation indices.                        
+                        if k == 'citations':    
+                            if self.citations is None: continue
+                            try:
+                                v = [ a[self.index_citation_by] for a in v ]
+                            except IndexError:
+                                v = []
+                        v = pickle.dumps(v)
                     hpaper[k] = v
         hpaper.append()
         self.table.flush() 

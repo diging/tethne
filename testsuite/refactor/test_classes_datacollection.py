@@ -25,7 +25,7 @@ class TestDataCollectionWoS(unittest.TestCase):
         wosdatapath = '{0}/wos.txt'.format(datapath)
 
         papers = wos.read(wosdatapath)
-        self.D = DataCollection(papers)
+        self.D = DataCollection(papers, index_by='wosid')
     
     def test_indexing(self):
         """

@@ -58,7 +58,7 @@ class DataCollection(object):
     :class:`.DataCollection`
     """
     
-    def __init__(self, papers, features=None, index_by='wosid',
+    def __init__(self, papers, features=None, index_by='ayjid',
                                               index_citation_by='ayjid',
                                               exclude_features=set([])):
         
@@ -72,9 +72,13 @@ class DataCollection(object):
         self.index_by = index_by    # Field in Paper, e.g. 'wosid', 'doi'.
         self.index_citation_by = index_citation_by
     
-        self.index(papers, features, index_by, index_citation_by, exclude_features)
+        self.index(papers, features, index_by=index_by, 
+                                     index_citation_by=index_citation_by, 
+                                     exclude_features=exclude_features)
         
-    def index(self, papers, features, index_by, index_citation_by, exclude_features):
+    def index(self, papers, features, index_by='ayjid', 
+                                      index_citation_by='ayjid',
+                                      exclude_features=set([])):
 
         # Check if data is a list of Papers.
         if type(papers) is not list or type(papers[0]) is not Paper:

@@ -3,7 +3,7 @@ import unittest
 import sys
 sys.path.append('../../')
 
-from tethne.persistence import HDF5DataCollection
+from tethne.persistence import HDF5DataCollection, HDF5Paper
 from nltk.corpus import stopwords
 from tethne.readers import wos, dfr
 
@@ -70,7 +70,7 @@ class TestDataCollectionWoSHDF5(unittest.TestCase):
         wosdatapath = '{0}/wos.txt'.format(datapath)
 
         papers = wos.read(wosdatapath)
-        self.D = HDF5DataCollection(papers)
+        self.D = HDF5DataCollection(papers, index_by='wosid')
     
     def test_indexing(self):
         """
@@ -112,6 +112,9 @@ class TestDataCollectionWoSHDF5(unittest.TestCase):
         self.assertIn(2012, self.D.axes['date'])
         self.assertIn(2013, self.D.axes['date'])
         self.assertEqual(len(self.D.axes['date'][2012]), 5)
+
+        
+
 
 if __name__ == '__main__':
     
