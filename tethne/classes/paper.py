@@ -36,6 +36,8 @@ class Paper(object):
     ===========     =====   ====================================================
 
     None values are also allowed for all fields.
+    
+    TODO: should subclass :class:`.dict`\.
     """
 
     def __init__(self):
