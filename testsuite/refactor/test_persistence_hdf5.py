@@ -7,9 +7,12 @@ from tethne.persistence import HDF5DataCollection, HDF5Paper
 from nltk.corpus import stopwords
 from tethne.readers import wos, dfr
 
+# Set log level to ERROR to avoid debug output.
 import logging
 logging.basicConfig()
 logger = logging.getLogger('tethne.classes.datacollection')
+logger.setLevel('ERROR')
+logger = logging.getLogger('tethne.persistence.hdf5')
 logger.setLevel('ERROR')
 
 
