@@ -26,6 +26,129 @@ pytype = {  tables.atom.BoolAtom: bool,
             tables.atom.Time32Atom: int,
             tables.atom.Time64Atom: float }
 
+class HDF5DataCollection(DataCollection):
+    """
+    Provides HDF5 persistence for :class:`.DataCollection`\.
+    
+    The :class:`.HDF5DataCollection` uses a variety of tables and arrays to
+    store data. The structure of a typical HDF5 repository for an instance
+    of this class is:
+    
+    * ``/``
+    
+      * ``arrays``/
+      
+        * ``authors``: VLArray, :class:`.vlarray_dict`
+        * ``authors_index``: table, see :class:`.vlarray_dict`
+        * ``papers_citing``: VLArray, :class:`.vlarray_dict`
+        * ``papers_citing_index``: table, see :class:`.vlarray_dict`
+      
+      * ``citations``/
+      
+        * ``papers_table``: table, :class:`.papers_table`
+      
+      * ``features``/
+      
+        * ``[ feature type ]``/
+
+          * ``index``: table, :class:`.Index` -- int(f_i) : str(f)
+          * ``features``: table, :class:`.StrIndex` -- str(p) : [ ( f_i, c) ]
+          * ``counts``: table, :class:`.IntIndex` --  int(f_i) : int(C)
+          * ``documentCounts``: table, :class:`.IntIndex` -- int(f_i) : int(C)
+    
+    """
+        
+
+    def __init__(self, papers, features=None, index_by='wosid',
+                                              index_citation_by='ayjid',
+                                              exclude_features=set([]),
+                                              datapath=None):
+        """
+        
+        Parameters
+        ----------
+        papers : list
+            A list of :class:`.Paper`
+        features : dict
+            Contains dictionary `{ type: { i: [ (f, w) ] } }` where `i` is an index
+            for papers (see kwarg `index_by`), `f` is a feature (e.g. an N-gram), 
+            and `w` is a weight on that feature (e.g. a count).
+        index_by : str
+            A key in :class:`.Paper` for indexing. If `features` is provided, then
+            this must by the field from which indices `i` are drawn. For example, if
+            a dictionary in `features` describes DfR wordcounts for the 
+            :class:`.Paper`\s in `data`, and is indexed by DOI, then `index_by`
+            should be 'doi'.
+        index_citations_by : str
+            Just as ``index_by``, except for citations.
+        exclude_features : set
+            (optional) Features to ignore, e.g. stopwords.
+        datapath : str
+            (optional) Target path for HDF5 repository. If not provided, will
+            generate a temporary directory in ``/tmp`` (or equivalent). The full
+            path to the HDF5 repo can be found in the ``path`` attribute after
+            initialization.
+        """
+        
+        logger.debug('Initialize HDF5DataCollection with {0} papers'
+                                                           .format(len(papers)))
+
+        # Where to save the HDF5 data file?
+        if datapath is None:
+            self.datapath = tempfile.mkdtemp()
+            logger.debug('Generated datapath {0}.'.format(self.datapath))
+        else:
+            self.datapath = datapath
+            
+        self.uuid = uuid.uuid4()    # Unique identifier for this DataCollection.
+        logger.debug('Datapath has UUID {0}.'.format(self.uuid))
+
+        self.path = '{0}/DataCollection-{1}.h5'.format(self.datapath, self.uuid)
+        self.h5file = tables.openFile(self.path, mode = "w",
+                                   title='DataCollection-{0}'.format(self.uuid))
+        self.group = self.h5file.createGroup("/", 'arrays')
+        
+        logger.debug('Initialize features...')
+        self.features = HDF5Features(self.h5file)
+        logger.debug('Initialize authors...')
+        self.authors = vlarray_dict(self.h5file, self.group, 
+                                    'authors', tables.StringAtom(100))
+
+        # { str(f) : feature }
+        logger.debug('Initialize citations...')
+        self.citations = papers_table(self.h5file, index_citation_by,
+                                                   'citations')
+
+        logger.debug('Initialize papers...')
+        self.papers = papers_table(self.h5file, index_by, 'papers', 
+                                        citations=self.citations,
+                                        index_citation_by=index_citation_by)
+
+        # { str(f) : [ str(p) ] }
+        logger.debug('Initialize papers_citing...')        
+        self.papers_citing = vlarray_dict(self.h5file, self.group,
+                                        'papers_citing', tables.StringAtom(100))
+        
+        self.axes = {}
+        self.index_by = index_by    # Field in Paper, e.g. 'wosid', 'doi'.
+        self.index_citation_by = index_citation_by        
+        
+        logger.debug('Index DataCollection...')
+        self.index(papers, features, index_by, index_citation_by,
+                                               exclude_features)
+    
+        logger.debug('HDF5DataCollection initialized, flushing to force save.')
+        self.h5file.flush()
+        
+    def abstract_to_features(self,remove_stopwords=True):
+        super(HDF5DataCollection, self).abstract_to_features(remove_stopwords=True)
+        self.h5file.flush()
+        
+        
+################################################################################
+####                    Helper classes and methods.                         ####
+################################################################################
+
 class HDF5Paper(tables.IsDescription):
     """
     Provides persistence for :class:`.Paper` within a
@@ -203,124 +326,6 @@ class HDF5PickleDict(HDF5Dict):
     
     def _unpack_value(self, value):
         return pickle.loads(value)                                            
-
-class HDF5DataCollection(DataCollection):
-    """
-    Provides HDF5 persistence for :class:`.DataCollection`\.
-    
-    The :class:`.HDF5DataCollection` uses a variety of tables and arrays to
-    store data. The structure of a typical HDF5 repository for an instance
-    of this class is:
-    
-    * ``/``
-    
-      * ``arrays``/
-      
-        * ``authors``: VLArray, :class:`.vlarray_dict`
-        * ``authors_index``: table, see :class:`.vlarray_dict`
-        * ``papers_citing``: VLArray, :class:`.vlarray_dict`
-        * ``papers_citing_index``: table, see :class:`.vlarray_dict`
-      
-      * ``citations``/
-      
-        * ``papers_table``: table, :class:`.papers_table`
-      
-      * ``features``/
-      
-        * ``[ feature type ]``/
-
-          * ``index``: table, :class:`.Index` -- int(f_i) : str(f)
-          * ``features``: table, :class:`.StrIndex` -- str(p) : [ ( f_i, c) ]
-          * ``counts``: table, :class:`.IntIndex` --  int(f_i) : int(C)
-          * ``documentCounts``: table, :class:`.IntIndex` -- int(f_i) : int(C)
-    
-    """
-        
-
-    def __init__(self, papers, features=None, index_by='wosid',
-                                              index_citation_by='ayjid',
-                                              exclude_features=set([]),
-                                              datapath=None):
-        """
-        
-        Parameters
-        ----------
-        papers : list
-            A list of :class:`.Paper`
-        features : dict
-            Contains dictionary `{ type: { i: [ (f, w) ] } }` where `i` is an index
-            for papers (see kwarg `index_by`), `f` is a feature (e.g. an N-gram), 
-            and `w` is a weight on that feature (e.g. a count).
-        index_by : str
-            A key in :class:`.Paper` for indexing. If `features` is provided, then
-            this must by the field from which indices `i` are drawn. For example, if
-            a dictionary in `features` describes DfR wordcounts for the 
-            :class:`.Paper`\s in `data`, and is indexed by DOI, then `index_by`
-            should be 'doi'.
-        index_citations_by : str
-            Just as ``index_by``, except for citations.
-        exclude_features : set
-            (optional) Features to ignore, e.g. stopwords.
-        datapath : str
-            (optional) Target path for HDF5 repository. If not provided, will
-            generate a temporary directory in ``/tmp`` (or equivalent). The full
-            path to the HDF5 repo can be found in the ``path`` attribute after
-            initialization.
-        """
-        
-        logger.debug('Initialize HDF5DataCollection with {0} papers'
-                                                           .format(len(papers)))
-
-        # Where to save the HDF5 data file?
-        if datapath is None:
-            self.datapath = tempfile.mkdtemp()
-            logger.debug('Generated datapath {0}.'.format(self.datapath))
-        else:
-            self.datapath = datapath
-            
-        self.uuid = uuid.uuid4()    # Unique identifier for this DataCollection.
-        logger.debug('Datapath has UUID {0}.'.format(self.uuid))
-
-        self.path = '{0}/DataCollection-{1}.h5'.format(self.datapath, self.uuid)
-        self.h5file = tables.openFile(self.path, mode = "w",
-                                   title='DataCollection-{0}'.format(self.uuid))
-        self.group = self.h5file.createGroup("/", 'arrays')
-        
-        logger.debug('Initialize features...')
-        self.features = HDF5Features(self.h5file)
-        logger.debug('Initialize authors...')
-        self.authors = vlarray_dict(self.h5file, self.group, 
-                                    'authors', tables.StringAtom(100))
-
-        # { str(f) : feature }
-        logger.debug('Initialize citations...')
-        self.citations = papers_table(self.h5file, index_citation_by,
-                                                   'citations')
-
-        logger.debug('Initialize papers...')
-        self.papers = papers_table(self.h5file, index_by, 'papers', 
-                                        citations=self.citations,
-                                        index_citation_by=index_citation_by)
-
-        # { str(f) : [ str(p) ] }
-        logger.debug('Initialize papers_citing...')        
-        self.papers_citing = vlarray_dict(self.h5file, self.group,
-                                        'papers_citing', tables.StringAtom(100))
-        
-        self.axes = {}
-        self.index_by = index_by    # Field in Paper, e.g. 'wosid', 'doi'.
-        self.index_citation_by = index_citation_by        
-        
-        logger.debug('Index DataCollection...')
-        self.index(papers, features, index_by, index_citation_by,
-                                               exclude_features)
-    
-        logger.debug('HDF5DataCollection initialized, flushing to force save.')
-        self.h5file.flush()
-        
-    def abstract_to_features(self,remove_stopwords=True):
-        super(HDF5DataCollection, self).abstract_to_features(remove_stopwords=True)
-        self.h5file.flush()
 
 class papers_table(dict):
     """
