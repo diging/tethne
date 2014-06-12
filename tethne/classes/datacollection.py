@@ -10,6 +10,8 @@ from collections import Counter
 from nltk.corpus import stopwords
 import scipy as sc
 
+from unidecode import unidecode
+
 from ..utilities import strip_punctuation
 
 class DataCollection(object):
@@ -35,32 +37,34 @@ class DataCollection(object):
        >>> D
        <tethne.data.DataCollection at 0x10af0ef50>
        
-       
-    Parameters
-    ----------
-    papers : list
-        A list of :class:`.Paper`
-    features : dict
-        Contains dictionary `{ type: { i: [ (f, w) ] } }` where `i` is an index
-        for papers (see kwarg `index_by`), `f` is a feature (e.g. an N-gram), 
-        and `w` is a weight on that feature (e.g. a count).
-    index_by : str
-        A key in :class:`.Paper` for indexing. If `features` is provided, then
-        this must by the field from which indices `i` are drawn. For example, if
-        a dictionary in `features` describes DfR wordcounts for the 
-        :class:`.Paper`\s in `data`, and is indexed by DOI, then `index_by`
-        should be 'doi'.
-    exclude_features : set
-        (optional) Features to ignore, e.g. stopwords.
-        
-    Returns
-    -------
-    :class:`.DataCollection`
     """
     
     def __init__(self, papers, features=None, index_by='ayjid',
                                               index_citation_by='ayjid',
                                               exclude_features=set([])):
+
+        """
+        Parameters
+        ----------
+        papers : list
+            A list of :class:`.Paper`
+        features : dict
+            Contains dictionary `{ type: { i: [ (f, w) ] } }` where `i` is an index
+            for papers (see kwarg `index_by`), `f` is a feature (e.g. an N-gram), 
+            and `w` is a weight on that feature (e.g. a count).
+        index_by : str
+            A key in :class:`.Paper` for indexing. If `features` is provided, then
+            this must by the field from which indices `i` are drawn. For example, if
+            a dictionary in `features` describes DfR wordcounts for the 
+            :class:`.Paper`\s in `data`, and is indexed by DOI, then `index_by`
+            should be 'doi'.
+        exclude_features : set
+            (optional) Features to ignore, e.g. stopwords.
+            
+        Returns
+        -------
+        :class:`.DataCollection`
+        """                                              
         
         self.papers = {}             # { p : paper }, where p is index_by
         self.features = {}
@@ -108,6 +112,7 @@ class DataCollection(object):
             pass
         
     def _define_features(self, name, index, features, counts, documentCounts):
+        logger.debug('define features with name {0}'.format(name))
         self.features[name] = { 'index': index,         # { int(f_i) : str(f) }
                                 'features': features,   # { str(p) : [ ( f_i, c) ] }
                                 'counts': counts,       # { int(f_i) : int(C) }
@@ -219,24 +224,29 @@ class DataCollection(object):
             documentCounts = Counter()
             
             # List of unique tokens.
-            ftokenset = set([f for fval in fdict.values() for f,v in fval])
+            ftokenset = set([ unidecode(unicode(f)) for fval in fdict.values() 
+                                                    for f,v in fval])
             ftokens = list(ftokenset - exclude_features)     # e.g. stopwords.
             logger.debug('found {0} unique tokens'.format(len(ftokens)))
 
             # Create forward and reverse indices.
             findex = { i:ftokens[i] for i in xrange(len(ftokens)) }
             findex_ = { v:k for k,v in findex.iteritems() }     # lookup.
+            logger.debug('created forward and reverse indices.')
             
             # Tokenize.
             for key, fval in fdict.iteritems(): # fval is a list of tuples.
                 if type(fval) is not list or type(fval[0]) is not tuple:
                     raise ValueError('Malformed features data.')
 
-                tokenized = [ (findex_[f],w) for f,w in fval if _handle(f,w) ]
+                tokenized = [ (findex_[unidecode(unicode(f))],w) 
+                                for f,w in fval 
+                                if _handle(unidecode(unicode(f)),w) ]
                 features[key] = tokenized
                 for t,w in tokenized:
                     documentCounts[t] += 1
-        
+
+            logger.debug('passing results to _define_features()')
             self._define_features(ftype, findex, features, counts, documentCounts)
             
         logger.debug('done indexing features')
@@ -252,6 +262,7 @@ class DataCollection(object):
         remove_stopwords : bool
             (default: True) If True, passes tokenizer the NLTK stoplist.
         """
+        logger.debug('abstract_to_features: start.')
 
         unigrams = {}
         for p,paper in self.papers.iteritems():
@@ -260,7 +271,8 @@ class DataCollection(object):
                 terms = strip_punctuation(paper['abstract'].lower()).split()
                 for term in terms: term_counts[term] += 1
                 unigrams[p] = term_counts.items()
-                
+            
+        logger.debug('abstract_to_features: generated features.')
         stoplist = set(stopwords.words())
                 
         self._tokenize_features({'abstractTerms':unigrams}, stoplist)

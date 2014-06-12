@@ -56,10 +56,10 @@ class TestDataCollectionDfRHDF5(unittest.TestCase):
         self.assertIn('counts', self.D.features['unigrams'])
         self.assertIn('documentCounts', self.D.features['unigrams'])
         self.assertEqual(len(self.D.features), 2)
-        self.assertEqual(len(self.D.features['unigrams']['index']), 51658)
 
-        self.assertEqual(len(self.D.features['unigrams']['counts']), 51658)
-        self.assertEqual(len(self.D.features['unigrams']['documentCounts']), 51658)
+        self.assertEqual(len(self.D.features['unigrams']['index']), 51639)
+        self.assertEqual(len(self.D.features['unigrams']['counts']), 51639)
+        self.assertEqual(len(self.D.features['unigrams']['documentCounts']), 51639)
 
 class TestDataCollectionWoSHDF5(unittest.TestCase):
     def setUp(self):
