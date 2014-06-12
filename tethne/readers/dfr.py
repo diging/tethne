@@ -220,6 +220,12 @@ def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
                         ignore = True            
 
             if not ignore:
+                
+                # Coerce unicode to string.
+                if type(g) is str:
+                    g = unicode(g)
+                g = unidecode(g)
+                
                 if g not in vocab.values():
                     i = len(vocab)
                     vocab[i] = g
