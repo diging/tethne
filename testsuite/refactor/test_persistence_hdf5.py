@@ -15,7 +15,6 @@ logger.setLevel('ERROR')
 logger = logging.getLogger('tethne.persistence.hdf5')
 logger.setLevel('ERROR')
 
-
 class TestDataCollectionDfRHDF5(unittest.TestCase):
     def setUp(self):
         """
