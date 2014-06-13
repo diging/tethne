@@ -262,8 +262,13 @@ def _handle_paper(article):
             datum = pdata[key]
             if type(datum) is str:
                 datum = unicode(datum)
-            datum = unidecode(datum)
-            paper[value] = datum.upper()
+            if type(datum) is unicode:
+                datum = unidecode(datum).upper()
+
+            try:    # For now, ignore weird types that come through in datum.
+                paper[value] = datum
+            except ValueError:  
+                pass
 
     # Handle author names.
     paper['aulast'], paper['auinit'] = _handle_authors(pdata['author'])

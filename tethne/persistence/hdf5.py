@@ -56,6 +56,9 @@ class HDF5DataCollection(DataCollection):
           * ``counts``: table, :class:`.IntIndex` --  int(f_i) : int(C)
           * ``documentCounts``: table, :class:`.IntIndex` -- int(f_i) : int(C)
     
+    Since some data types (e.g. list, tuple) are not supported in PyTables/HDF5,
+    we make use of cPickle serialization. For example, sparse feature vectors
+    (lists of tuples) are pickled for storage in a StringCol.
     """
         
 
@@ -70,15 +73,15 @@ class HDF5DataCollection(DataCollection):
         papers : list
             A list of :class:`.Paper`
         features : dict
-            Contains dictionary `{ type: { i: [ (f, w) ] } }` where `i` is an index
-            for papers (see kwarg `index_by`), `f` is a feature (e.g. an N-gram), 
-            and `w` is a weight on that feature (e.g. a count).
+            Contains dictionary `{ type: { i: [ (f, w) ] } }` where `i` is an 
+            index for papers (see kwarg `index_by`), `f` is a feature (e.g. an 
+            N-gram), and `w` is a weight on that feature (e.g. a count).
         index_by : str
-            A key in :class:`.Paper` for indexing. If `features` is provided, then
-            this must by the field from which indices `i` are drawn. For example, if
-            a dictionary in `features` describes DfR wordcounts for the 
-            :class:`.Paper`\s in `data`, and is indexed by DOI, then `index_by`
-            should be 'doi'.
+            A key in :class:`.Paper` for indexing. If `features` is provided, 
+            then this must by the field from which indices `i` are drawn. For 
+            example, if a dictionary in `features` describes DfR wordcounts for
+            the :class:`.Paper`\s in `data`, and is indexed by DOI, then 
+            `index_by` should be 'doi'.
         index_citations_by : str
             Just as ``index_by``, except for citations.
         exclude_features : set
