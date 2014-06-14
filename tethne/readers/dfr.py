@@ -75,8 +75,9 @@ class GramGenerator(object):
     
     def next(self):
         if self.i < self.N:
-            self._get(self.i)
+            cur = int(self.i)
             self.i += 1
+            return self._get(cur)
         else:
             raise StopIteration()
             
@@ -113,24 +114,24 @@ class GramGenerator(object):
         """
         Retrieve data for the ith file in the dataset.
         """
-
         root = ET.parse(self.path + "/" + self.files[i]).getroot()
         doi = root.attrib['id']
-        
+
         if self.K:  # Keys only.
             return doi
 
         grams = []
         for gram in root.findall(self.elem):
-            text = gram.text.strip()
+            text = unidecode(unicode(gram.text.strip()))
             if ( not self.ignore_hash or '#' not in list(text) ):
                 c = ( text, int(gram.attrib['weight']) )
                 grams.append(c)
-
+        
         if self.V:  # Values only.
             return grams
 
         return doi, grams   # Default behavior.
+
 
 def read(datapath):
     """
@@ -271,7 +272,7 @@ def ngrams(datapath, N='bi', ignore_hash=True, mode='heavy'):
                 doi = root.attrib['id']
                 grams = []
                 for gram in root.findall(elem):
-                    text = gram.text.strip()
+                    text = unidecode(unicode(gram.text.strip()))
                     if ( not ignore_hash or '#' not in list(text) ):
                         c = ( text, int(gram.attrib['weight']) )
                         grams.append(c)
