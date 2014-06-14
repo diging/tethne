@@ -3,6 +3,8 @@
 
 from collections import Counter
 
+from unidecode import unidecode
+
 def to_documents(target, ngrams, metadata=None, vocab=None):
     """
     
@@ -23,28 +25,28 @@ def to_documents(target, ngrams, metadata=None, vocab=None):
     ------
     IOError
     """
-    
-    metakeys, metadict = metadata
-    
+
     docpath = target + '_docs.txt'
     metapath = target + '_meta.csv'
-    
+
     try:
         docFile = open(docpath, 'wb')
-        metaFile = open(metapath, 'wb')
     except IOError:
         raise IOError('Invalid target. Could not open files for writing.')
     
-    metaFile.write('# {0}\n'.format('\t'.join(metakeys)))
+    if metadata is not None:
+        metakeys, metadict = metadata
+        metaFile = open(metapath, 'wb')
+        metaFile.write('# {0}\n'.format('\t'.join(metakeys)))
     
     # MALLET expects strings; if `vocab` is provided, assumes that ngrams
     #   in `ngrams` are keys into `vocab`.
     if vocab is None:
         def word(s):
-            return str(s)
+            return s    # unidecode(unicode(s))
     else:
         def word(s):
-            return str(vocab[s])
+            return vocab[s] # unidecode(unicode(vocab[s]))
     
     d = 0   # Document index in _docs.txt file.
     try:
@@ -55,14 +57,16 @@ def to_documents(target, ngrams, metadata=None, vocab=None):
             meta = [ str(d), str(p) ]
             if metadata is not None:
                 meta += [ str(metadict[p][f]) for f in metakeys ]
-            metaFile.write('\t'.join(meta) + '\n')
+                metaFile.write('\t'.join(meta) + '\n')
             d += 1
     except AttributeError:  # .iteritems() raises an AttributeError if ngrams
                             #  is not dict-like.
         raise ValueError('Parameter \'ngrams\' must be a dict.')
     
     docFile.close()
-    metaFile.close()
+    
+    if metadata is not None:
+        metaFile.close()
     
     return docpath, metapath
 

@@ -41,7 +41,8 @@ class DataCollection(object):
     
     def __init__(self, papers, features=None, index_by='ayjid',
                                               index_citation_by='ayjid',
-                                              exclude_features=set([])):
+                                              exclude=set([]),
+                                              filt=None):
 
         """
         Parameters
@@ -60,8 +61,11 @@ class DataCollection(object):
             `index_by` should be 'doi'.
         index_citations_by : str
             Just as ``index_by``, except for citations.
-        exclude_features : set
+        exclude : set
             (optional) Features to ignore, e.g. stopwords.
+        filt : function
+            Takes a lambda function that returns True if a feature should be 
+            included.            
             
         Returns
         -------
@@ -80,11 +84,13 @@ class DataCollection(object):
     
         self.index(papers, features, index_by=index_by, 
                                      index_citation_by=index_citation_by, 
-                                     exclude_features=exclude_features)
+                                     exclude=exclude,
+                                     filt=filt)
         
     def index(self, papers, features=None, index_by='ayjid', 
                                            index_citation_by='ayjid',
-                                           exclude_features=set([])):
+                                           exclude=set([]),
+                                           filt=None):
         """
         """
 
@@ -110,7 +116,7 @@ class DataCollection(object):
         
         # Tokenize and index features.
         if features is not None:
-            self._tokenize_features(features, exclude_features=exclude_features)
+            self._tokenize_features(features, exclude=exclude, filt=filt)
         else:
             logger.debug('features is None, skipping tokenization.')
             pass
@@ -199,7 +205,7 @@ class DataCollection(object):
         self.N_c = len(self.citations)
         logger.debug('indexed {0} citations'.format(self.N_c))
 
-    def _tokenize_features(self, features, exclude_features=set([])):
+    def _tokenize_features(self, features, exclude=set([]), filt=None):
         """
         
         Parameters
@@ -208,10 +214,16 @@ class DataCollection(object):
             Contains dictionary `{ type: { i: [ (f, w) ] } }` where `i` is an 
             index for papers (see kwarg `index_by`), `f` is a feature (e.g. an
             N-gram), and `w` is a weight on that feature (e.g. a count).
-        exclude_features : set
+        exclude : set
             (optional) Features to ignore, e.g. stopwords.
+        filt : function
+            Takes a lambda function that returns True if a feature should be 
+            included.
         """
         logger.debug('tokenizing {0} sets of features'.format(len(features)))
+        
+        if filt is None:
+            filt = lambda s: True
         
         def _handle(tok,w):
             if tok in findex_:
@@ -230,7 +242,7 @@ class DataCollection(object):
             # List of unique tokens.
             ftokenset = set([ unidecode(unicode(f)) for k,fval in fdict.items()
                                                     for f,v in fval])
-            ftokens = list(ftokenset - exclude_features)     # e.g. stopwords.
+            ftokens = [ s for s in list(ftokenset - exclude) if filt(s) ]    # e.g. stopwords.
             logger.debug('found {0} unique tokens'.format(len(ftokens)))
 
             # Create forward and reverse indices.
@@ -243,9 +255,9 @@ class DataCollection(object):
                 if type(fval) is not list or type(fval[0]) is not tuple:
                     raise ValueError('Malformed features data.')
 
-                tokenized = [ (findex_[unidecode(unicode(f))],w) 
+                tokenized = [ (findex_[f],w)    # unidecode(unicode(f))
                                 for f,w in fval 
-                                if _handle(unidecode(unicode(f)),w) ]
+                                if _handle(f,w) ]   # unidecode(unicode(f))
                 features[key] = tokenized
                 for t,w in tokenized:
                     documentCounts[t] += 1
@@ -254,6 +266,61 @@ class DataCollection(object):
                                   counts, documentCounts)
             
         logger.debug('done indexing features')
+    
+    def filter_features(self, fold, fnew, filt):
+        """
+        Applies ``filt`` to an existing featureset ``fold`` to generate a new, 
+        limited featureset ``fnew``.
+        
+        Parameters
+        ----------
+        fold : str
+            Key into ``features`` for existing featureset.
+        fnew : str
+            Key into ``features`` for resulting featuresset.
+        filt : method
+            Filter function to apply to the featureset. Should take a feature
+            dict as its sole parameter.
+        """
+        
+        def _handle(tok,w): # Counts tokens, and excludes unwanted tokens.
+            if tok in findex_:
+                counts[findex_[tok]] += w
+                return True
+            return False        
+        
+        logger.debug('Generating a new featureset {0} from {1}.'
+                                                .format(fnew, fold))
+        # index, features, counts, documentCounts
+
+        fdict = self.features[fold]
+        
+        
+        features = {}
+        index = {}
+        counts = Counter()
+        documentCounts = Counter()
+
+        ftokens = [ s for i,s in fdict['index'].iteritems() if filt(fdict, i, s) ]
+        Ntokens = len(ftokens)
+        logger.debug('found {0} unique tokens'.format(Ntokens))
+        
+        findex = { i:ftokens[i] for i in xrange(Ntokens) }
+        findex_ = { v:k for k,v in findex.iteritems() }
+        logger.debug('created forward and reverse indices.')
+
+        for key, fval in fdict['features'].iteritems():
+            if type(fval) is not list or type(fval[0]) is not tuple:
+                raise ValueError('Malformed features data.')       
+                     
+            tokenized = [ (findex_[f],w) for f,w in fval if _handle(f,w) ]
+            features[key] = tokenized
+            for f,w in tokenized:
+                documentCounts += 1
+                
+        self._define_features(fnew, findex, features, counts, documentCounts)                
+
+        logger.debug('done indexing features')                
         
     def abstract_to_features(self, remove_stopwords=True):
         """

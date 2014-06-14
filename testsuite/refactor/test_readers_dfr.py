@@ -3,7 +3,9 @@ import unittest
 import sys
 sys.path.append('../../')
 
-from tethne.readers.dfr import read, ngrams, GramGenerator
+from tethne.readers.dfr import read, ngrams, GramGenerator, _handle_authors
+from tethne.writers import corpora
+from tethne import Paper
 
 # Set log level to ERROR to avoid debug output.
 import logging
@@ -11,30 +13,48 @@ logging.basicConfig()
 logger = logging.getLogger('tethne.readers.dfr')
 #logger.setLevel('ERROR')
 
-#class TestNGrams(unittest.TestCase):
-#    def setUp(self):
-#        self.dfrdatapath = '{0}/dfr'.format(datapath)
-#
-#    def test_ngrams_heavy(self):
-#        """
-#        In 'heavy' mode (default), :func:`.ngrams` should return a dict.
-#        """
-#        self.unigrams = ngrams(self.dfrdatapath, N='uni')    
-#        self.assertEqual(len(self.unigrams), 241)
-#        self.assertIsInstance(self.unigrams, dict)
-#        self.assertIsInstance(self.unigrams.values()[0], list)
-#        self.assertIsInstance(self.unigrams.values()[0][0], tuple)
-#        
-#    def test_ngrams_light(self):
-#        """
-#        'light' mode should behave just like 'heavy'
-#        """
-#        self.unigrams = ngrams(self.dfrdatapath, N='uni', mode='light')
-#        self.assertEqual(len(self.unigrams), 241)
-#        self.assertIsInstance(self.unigrams, GramGenerator)
-#        self.assertIsInstance(self.unigrams.values()[0], list)
-#        self.assertIsInstance(self.unigrams.values()[0][0], tuple)    
+class TestNGrams(unittest.TestCase):
+    def setUp(self):
+        self.dfrdatapath = '{0}/dfr'.format(datapath)
+
+    def test_ngrams_heavy(self):
+        """
+        In 'heavy' mode (default), :func:`.ngrams` should return a dict.
+        """
+        self.unigrams = ngrams(self.dfrdatapath, N='uni')    
+        self.assertEqual(len(self.unigrams), 241)
+        self.assertIsInstance(self.unigrams, dict)
+        self.assertIsInstance(self.unigrams.values()[0], list)
+        self.assertIsInstance(self.unigrams.values()[0][0], tuple)
         
+    def test_ngrams_light(self):
+        """
+        'light' mode should behave just like 'heavy'
+        """
+        self.unigrams = ngrams(self.dfrdatapath, N='uni', mode='light')
+        self.assertEqual(len(self.unigrams), 241)
+        self.assertIsInstance(self.unigrams, GramGenerator)
+        self.assertIsInstance(self.unigrams.values()[0], list)
+        self.assertIsInstance(self.unigrams.values()[0][0], tuple)   
+
+    def test_write_corpus(self):
+        """
+        Result of :func:`.ngrams` should be ready to write as a corpus.
+        """
+        self.unigrams = ngrams(self.dfrdatapath, N='uni')            
+        ret = corpora.to_documents('/tmp/', self.unigrams)
+        self.assertIsInstance(ret, tuple)
+       
+    def test_write_corpus_light(self):
+        """
+        Result of :func:`.ngrams` in 'light' mode should be ready to write as 
+        a corpus.
+        """
+        self.unigrams = ngrams(self.dfrdatapath, N='uni', mode='light')
+        
+        ret = corpora.to_documents('/tmp/', self.unigrams)
+        self.assertIsInstance(ret, tuple)
+         
 class TestGramGenerator(unittest.TestCase):
     def setUp(self):
         self.dfrdatapath = '{0}/dfr'.format(datapath)
@@ -45,6 +65,14 @@ class TestGramGenerator(unittest.TestCase):
         """
         g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
         self.assertEqual(len(g), 241)
+        
+    def test_generators(self):
+        """
+        Should yield something when iterated upon.
+        """
+        g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
+        for i in g:
+            self.assertNotEqual(i,None)
     
     def test_items(self):
         """
@@ -82,24 +110,82 @@ class TestGramGenerator(unittest.TestCase):
         g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
         self.assertIsInstance(g.keys(), GramGenerator)    
         self.assertIsInstance(g.keys()[0], str)                
-        
-        
-#        print g.values().V     
-        
-#
-#    def test_write_corpus(self):
-#        """will fail if non-ascii characters aren't stripped."""
-#        ret = wr.corpora.to_documents('./testout/mycorpus', self.unigrams)
-#        self.assertEqual(ret, None)
-#
-#    def test_write_corpus_papers(self):
-#        ret = wr.corpora.to_documents('./testout/mycorpus', self.unigrams,
-#                                                             papers=self.papers)
-#        self.assertEqual(ret, None)
-#
-#    def test_write_dtm(self):
-#        ret = wr.corpora.to_dtm_input('./testout/mydtm', self.D, self.unigrams,
-#                                      self.voc)
+    
+    def test_getitem(self):
+        """
+        :func:`GramGenerator.__getitem__` should return a key,value tuple.
+        """
+        g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
+        self.assertIsInstance(g[0], tuple)
+        self.assertIsInstance(g[0][0], str)     # Key.
+        self.assertIsInstance(g[0][1], list)    # Value.
+        self.assertIsInstance(g[0][1][0], tuple)        
+
+class TestRead(unittest.TestCase):
+    def setUp(self):
+        self.dfrdatapath = '{0}/dfr'.format(datapath)    
+        self.papers = read(self.dfrdatapath)
+
+    def test_number(self):
+        """
+        Each article should be converted.
+        """
+
+        self.assertEqual(len(self.papers), 241)
+
+    def test_type(self):
+        """
+        Should produce a list of :class:`.Paper`
+        """
+
+        self.assertIs(type(self.papers[0]), Paper)
+
+    def test_handle_authors(self):
+        """
+        _handle_authors should generate lists of author surnames (aulast) and
+        author first-initialis (auinit) of the same length.
+        """
+
+        aulast = self.papers[1]['aulast']
+        expected = ['PIGOTT']
+        self.assertListEqual(aulast, expected )
+
+        auinit = self.papers[1]['auinit']
+        expected = ['C']
+        self.assertListEqual(auinit, expected )
+
+        self.assertEqual(len(aulast), len(auinit))
+
+    def test_handle_authors_raises(self):
+        """
+        If parameter is not a list or a string, should raise a ValueError.
+        """
+
+        with self.assertRaises(ValueError):
+            _handle_authors(1234)
+
+    def test_handle_pubdate(self):
+        """
+        _handle_pubdate should yield a four-digit integer from a DfR pubdate
+        string.
+        """
+
+        pubdate = self.papers[0]['date']
+        self.assertIs(type(pubdate), int)   # Integer
+
+        self.assertEqual(len(str(pubdate)), 4) # Four-digit
+
+    def test_handle_pagerange(self):
+        """
+        _handle_pagerange should yield start and end pages, as strings.
+        """
+
+        start = self.papers[0]['spage']
+        end = self.papers[0]['epage']
+
+        self.assertIs(type(start), str) # Strings
+        self.assertIs(type(end), str)
+
                                       
 if __name__ == '__main__':
     
