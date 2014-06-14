@@ -82,9 +82,11 @@ class DataCollection(object):
                                      index_citation_by=index_citation_by, 
                                      exclude_features=exclude_features)
         
-    def index(self, papers, features, index_by='ayjid', 
-                                      index_citation_by='ayjid',
-                                      exclude_features=set([])):
+    def index(self, papers, features=None, index_by='ayjid', 
+                                           index_citation_by='ayjid',
+                                           exclude_features=set([])):
+        """
+        """
 
         # Check if data is a list of Papers.
         if type(papers) is not list or type(papers[0]) is not Paper:
@@ -101,8 +103,8 @@ class DataCollection(object):
         # Index the Papers in data.
         for paper in papers:
             self.papers[paper[index_by]] = paper
-        self.N_p = len(self.papers)
-        
+        self.N_p = len(self.papers)  
+      
         # Index the Papers by author.
         self._index_papers_by_author()
         
@@ -112,7 +114,7 @@ class DataCollection(object):
         else:
             logger.debug('features is None, skipping tokenization.')
             pass
-        
+    
     def _define_features(self, name, index, features, counts, documentCounts):
         logger.debug('define features with name {0}'.format(name))
         self.features[name] = { 'index': index,         # { int(f_i) : str(f) }
@@ -157,7 +159,7 @@ class DataCollection(object):
         citations = {}
         
         papers_citing = {}
-
+        
         for paper in papers:
             p = paper[self.index_by]
             if paper['citations'] is not None:
@@ -226,7 +228,7 @@ class DataCollection(object):
             documentCounts = Counter()
             
             # List of unique tokens.
-            ftokenset = set([ unidecode(unicode(f)) for fval in fdict.values() 
+            ftokenset = set([ unidecode(unicode(f)) for k,fval in fdict.items()
                                                     for f,v in fval])
             ftokens = list(ftokenset - exclude_features)     # e.g. stopwords.
             logger.debug('found {0} unique tokens'.format(len(ftokens)))
@@ -248,12 +250,12 @@ class DataCollection(object):
                 for t,w in tokenized:
                     documentCounts[t] += 1
 
-            logger.debug('passing results to _define_features()')
-            self._define_features(ftype, findex, features, counts, documentCounts)
+            self._define_features(ftype, findex, features, 
+                                  counts, documentCounts)
             
         logger.debug('done indexing features')
         
-    def abstract_to_features(self,remove_stopwords=True):
+    def abstract_to_features(self, remove_stopwords=True):
         """
         Generates a set of unigram features from the abstracts of Papers.
         

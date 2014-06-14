@@ -143,8 +143,17 @@ class HDF5DataCollection(DataCollection):
         logger.debug('HDF5DataCollection initialized, flushing to force save.')
         self.h5file.flush()
         
-    def abstract_to_features(self,remove_stopwords=True):
-        super(HDF5DataCollection, self).abstract_to_features(remove_stopwords=True)
+    def abstract_to_features(self, remove_stopwords=True):
+        """
+        See :func:`.DataCollection.abstract_to_features`\.
+        
+        Parameters
+        ----------
+        remove_stopwords : bool
+            (default: True) If True, passes tokenizer the NLTK stoplist.        
+        """
+
+        super(HDF5DataCollection, self).abstract_to_features(remove_stopwords)
         self.h5file.flush()
         
         
@@ -203,6 +212,7 @@ class HDF5Features(dict):
 
     def __init__(self, h5file):
         logger.debug('Initialize HDF5Features.')
+
         self.h5file = h5file
         if '/features' not in self.h5file:
             self.group = self.h5file.createGroup('/', 'features')
@@ -211,9 +221,8 @@ class HDF5Features(dict):
         
     def __setitem__(self, key, value):
         logger.debug('HDF5Features.___setitem__ for key {0}.'.format(key))
-        if '/{0}'.format(key) in self.h5file:
-            #raise ValueError('Feature with name {0} already set.'.format(key))
-            key = key
+#        if '/{0}'.format(key) in self.h5file:
+#            raise ValueError('Feature with name {0} already set.'.format(key))
 
         dict.__setitem__(self, key, HDF5Feature(self.h5file, self.group, key))
         
@@ -233,14 +242,19 @@ class HDF5Feature(dict):
         self.group = self.h5file.createGroup(fgroup, name)
         self.name = name
 
-        dict.__setitem__(self, 'index', HDF5Dict(h5file, self.group, 'index', Index))
-        dict.__setitem__(self, 'features', HDF5PickleDict(h5file, self.group, 'features', StrIndex))
-        dict.__setitem__(self, 'counts', HDF5Dict(h5file, self.group, 'counts', IntIndex))
-        dict.__setitem__(self, 'documentCounts', HDF5Dict(h5file, self.group, 'documentCounts', IntIndex))
+        dict.__setitem__(self, 'index', 
+                    HDF5Dict(h5file, self.group, 'index', Index))
+        dict.__setitem__(self, 'features', 
+                    HDF5PickleDict(h5file, self.group, 'features', StrIndex))
+        dict.__setitem__(self, 'counts', 
+                    HDF5Dict(h5file, self.group, 'counts', IntIndex))
+        dict.__setitem__(self, 'documentCounts', 
+                    HDF5Dict(h5file, self.group, 'documentCounts', IntIndex))
         logger.debug('...done.')
 
     def __setitem__(self, key, value):
         logger.debug('HDF5Feature ({0}): __setitem__ for key {1}, and value with length {2}.'.format(self.name, key, len(value)))    
+
         if key in self:
             for k,v in value.iteritems():
                 self[key][k] = v
