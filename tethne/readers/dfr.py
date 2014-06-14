@@ -24,6 +24,114 @@ from collections import Counter
 
 from unidecode import unidecode
 
+class GramGenerator(object):
+    """
+    Yields N-gram data from on-disk dataset, to make loading big datasets a bit
+    more memory-friendly.
+    
+    Reusable, in the sense that :func:`.items`\, :func:`.iteritems`\,
+    :func:`.keys`\, and :func:`.values` all return new :class:`.GramGenerator`
+    instances with the same path. This allows a :class:`.GramGenerator` to 
+    sneakily pass as an ngrams dict in most practical situations.
+    """
+
+    def __init__(self, path, elem, values=False, keys=False, ignore_hash=True):
+        """
+        
+        Parameters
+        ----------
+        path : str
+            Path to unzipped JSTOR DfR folder containing N-grams (e.g. 
+            'bigrams'). 
+        elem : str
+            Element in DfR dataset containing data of interest. E.g. 'bigrams'.
+        values : bool
+            If True, :func:`.next` returns only values. Otherwise, returns
+            (key,value) tuples.
+        """
+
+        self.path = path
+        self.elem = elem
+        self.ignore_hash = ignore_hash
+                
+        self.files = os.listdir(path)
+        self.N = len([ d for d in self.files if d.split('.')[-1] == 'XML' ])
+        self.i = 0
+        
+        self.V = values
+        self.K = keys
+        
+        if self.V and self.K:
+            raise ValueError('values and keys cannot both be true.')
+    
+    def __len__(self):
+        return self.N
+    
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        return self.next()
+    
+    def next(self):
+        if self.i < self.N:
+            self._get(self.i)
+            self.i += 1
+        else:
+            raise StopIteration()
+            
+    def items(self):
+        """
+        Returns a :class:`GramGenerator` that produces key,value tuples.
+        """    
+        return GramGenerator(self.path, self.elem, ignore_hash=self.ignore_hash)
+    
+    def iteritems(self):
+        """
+        Returns a :class:`GramGenerator` that produces key,value tuples.
+        """    
+        return GramGenerator(self.path, self.elem, ignore_hash=self.ignore_hash)
+    
+    def values(self):
+        """
+        Returns a :class:`GramGenerator` that produces only values.
+        """
+        return GramGenerator(self.path, self.elem, values=True, 
+                                                   ignore_hash=self.ignore_hash)
+                                                   
+    def keys(self):
+        """
+        Returns a :class:`GramGenerator` that produces only keys.
+        """
+        return GramGenerator(self.path, self.elem, keys=True, 
+                                                   ignore_hash=self.ignore_hash)
+                                                   
+    def __getitem__(self, key):
+        return self._get(key)
+    
+    def _get(self, i):
+        """
+        Retrieve data for the ith file in the dataset.
+        """
+
+        root = ET.parse(self.path + "/" + self.files[i]).getroot()
+        doi = root.attrib['id']
+        
+        if self.K:  # Keys only.
+            return doi
+
+        grams = []
+        for gram in root.findall(self.elem):
+            text = gram.text.strip()
+            if ( not self.ignore_hash or '#' not in list(text) ):
+                c = ( text, int(gram.attrib['weight']) )
+                grams.append(c)
+
+        if self.V:  # Values only.
+            return grams
+
+        return doi, grams   # Default behavior.
+
 def read(datapath):
     """
     Yields :class:`.Paper` s from JSTOR DfR package.
@@ -112,7 +220,7 @@ def from_dir(path):
 
     return papers
 
-def ngrams(datapath, N='bi', ignore_hash=True):
+def ngrams(datapath, N='bi', ignore_hash=True, mode='heavy'):
     """
     Yields N-grams from a JSTOR DfR dataset.
 
@@ -124,6 +232,10 @@ def ngrams(datapath, N='bi', ignore_hash=True):
         'uni', 'bi', 'tri', or 'quad'
     ignore_hash : bool
         If True, will exclude all N-grams that contain the hash '#' character.
+    mode : str
+        If 'heavy' (default), loads all data into memory and returns a dict. If
+        'light', returns a (somewhat) reusable :class:`.GramGenerator`\. See
+        :class:`.GramGenerator` for usage.
 
     Returns
     -------
@@ -147,23 +259,27 @@ def ngrams(datapath, N='bi', ignore_hash=True):
         elem = N + "gram"
     gram_path = datapath + gram_dir
 
-    ngrams = {}
+    if mode == 'light':
+        return GramGenerator(gram_path, elem, ignore_hash=ignore_hash)
+        
+    elif mode == 'heavy':
+        ngrams = {}
 
-    for file in os.listdir(gram_path):
-        if file.split('.')[-1] == 'XML':
-            root = ET.parse(gram_path + "/" + file).getroot()
-            doi = root.attrib['id']
-            grams = []
-            for gram in root.findall(elem):
-                text = gram.text.strip()
-                if ( not ignore_hash or '#' not in list(text) ):
-                    c = ( text, int(gram.attrib['weight']) )
-                    grams.append(c)
+        for file in os.listdir(gram_path):
+            if file.split('.')[-1] == 'XML':
+                root = ET.parse(gram_path + "/" + file).getroot()
+                doi = root.attrib['id']
+                grams = []
+                for gram in root.findall(elem):
+                    text = gram.text.strip()
+                    if ( not ignore_hash or '#' not in list(text) ):
+                        c = ( text, int(gram.attrib['weight']) )
+                        grams.append(c)
 
-            ngrams[doi] = grams
+                ngrams[doi] = grams
 
-    return ngrams
-
+        return ngrams
+        
 def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
     """
     Builds a vocabulary, and replaces words with vocab indices.

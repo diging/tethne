@@ -47,7 +47,6 @@ class TestDataCollectionDfRHDF5(unittest.TestCase):
         self.assertEqual(self.D.N_c, 0)
         self.assertEqual(len(self.D.citations), self.D.N_c)
 
-
     def test_tokenize_features(self):
         """
         Should be N_f features in the appropriate features dict.
@@ -114,9 +113,6 @@ class TestDataCollectionWoSHDF5(unittest.TestCase):
         self.assertIn(2012, self.D.axes['date'])
         self.assertIn(2013, self.D.axes['date'])
         self.assertEqual(len(self.D.axes['date'][2012]), 5)
-
-        
-
 
 if __name__ == '__main__':
     
