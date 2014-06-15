@@ -318,12 +318,12 @@ class MALLETModelManager(ModelManager):
                     ylabel = 'Sum of topic representation in documents.'                
                     R.append( sum([ w for i,w in items if i in docs ]) )
         
-        if plot:
+        if plot:    # Generates a simple lineplot and saves it in the outpath.
             import matplotlib.pyplot as plt
             fig = plt.figure(**figargs)
             plt.plot(np.array(keys), np.array(R))
             plt.xlabel('Time Slice')
-            plt.ylabel(ylabel)
+            plt.ylabel(ylabel)      # Set based on mode.
             plt.savefig('{0}/topic_{1}_over_time.png'.format(self.outpath, k))        
         
         return np.array(keys), np.array(R)
