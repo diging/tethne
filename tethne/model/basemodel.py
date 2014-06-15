@@ -37,8 +37,10 @@ class BaseModel(object):
                                       ' for this model class.')
         
         # Optionally, select only the top-weighted dimensions.
-        if top is int:
+        if type(top) is int:
             D,W = zip(*description) # Dimensions and Weights.
+            D = list(D)     # To support element deletion, below.
+            W = list(W)            
             top_description = []
             while len(top_description) < top:   # Avoiding Numpy argsort.
                 d = W.index(max(W)) # Index of top weight.
@@ -76,7 +78,7 @@ class BaseModel(object):
 
         return relationship
 
-    def dimension(self, d, **kwargs):
+    def dimension(self, d, top=None, **kwargs):
         """
         Describes a dimension (e.g. a topic).
         
@@ -98,6 +100,19 @@ class BaseModel(object):
         except AttributeError:
             raise NotImplementedError('_dimension_description() not' + \
                                       ' implemented for this model class.')
+
+        # Optionally, select only the top-weighted dimensions.
+        if type(top) is int:
+            D,W = zip(*description) # Dimensions and Weights.
+            D = list(D)     # To support element deletion, below.
+            W = list(W)
+            top_description = []
+            while len(top_description) < top:   # Avoiding Numpy argsort.
+                d = W.index(max(W)) # Index of top weight.
+                top_description.append((D[d], W[d]))
+                del D[d], W[d]
+
+            description = top_description
 
         return description
         
