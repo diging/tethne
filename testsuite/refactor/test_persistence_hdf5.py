@@ -27,7 +27,7 @@ class TestDataCollectionDfRHDF5(unittest.TestCase):
         ngrams = dfr.ngrams(dfrdatapath, 'uni')
         self.D = HDF5DataCollection(papers, features={'unigrams': ngrams},
                                             index_by='doi',
-                                            exclude_features=set(stopwords.words()))
+                                            exclude=set(stopwords.words()))
 
     def test_indexing(self):
         """
@@ -113,6 +113,47 @@ class TestDataCollectionWoSHDF5(unittest.TestCase):
         self.assertIn(2012, self.D.axes['date'])
         self.assertIn(2013, self.D.axes['date'])
         self.assertEqual(len(self.D.axes['date'][2012]), 5)
+        
+class TestDataCollectionTokenization(unittest.TestCase):
+    def setUp(self):
+        self.dfrdatapath = '{0}/dfr'.format(datapath)
+        self.papers = dfr.read(self.dfrdatapath)
+        self.ngrams = dfr.ngrams(self.dfrdatapath, 'uni')
+        
+    def test_tokenize_filter(self):
+        """
+        Applying a filter should result in a smaller featureset.
+        """
+        filt = lambda s: len(s) > 3 # Must have at least four characters.
+
+        D = HDF5DataCollection(self.papers, features={'unigrams': self.ngrams},
+                                            index_by='doi',
+                                            exclude=set(stopwords.words()),
+                                            filt=filt)
+        self.assertEqual(len(D.features['unigrams']['index']), 49503)
+                
+    def test_filter_features(self):
+        """
+        :func:`DataCollection.filterfeatures` should generate a new, more
+        limited featureset.
+        """
+        
+        def filt(s, C, DC):
+            """
+            Token must occur at least thrice overall, and in at least 2
+            documents, and must have more than three characters.
+            """
+
+            if C > 2 and DC > 1 and len(s) > 3:
+                return True
+            return False
+            
+        D = HDF5DataCollection(self.papers, features={'unigrams': self.ngrams},
+                                            index_by='doi',
+                                            exclude=set(stopwords.words()))
+
+        D.filter_features('unigrams', 'unigrams_lim', filt)
+        self.assertEqual(len(D.features['unigrams_lim']['index']), 14709)        
 
 if __name__ == '__main__':
     
