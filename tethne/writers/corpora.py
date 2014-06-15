@@ -68,7 +68,7 @@ def to_documents(target, ngrams, metadata=None, vocab=None):
     
     return docpath, metapath
 
-def to_dtm_input(target, D, t_ngrams, vocab, fields=['date','atitle']):
+def to_dtm_input(target, D, feature='unigrams', fields=['date','atitle']):
     """
     
     Parameters
@@ -80,13 +80,11 @@ def to_dtm_input(target, D, t_ngrams, vocab, fields=['date','atitle']):
     D : :class:`.DataCollection`
         Contains :class:`.Paper` objects generated from the same DfR dataset
         as t_ngrams, indexed by doi and sliced by date.
-    t_ngrams : dict
-        Keys are paper DOIs, values are lists of (index, frequency) tuples.
-    vocab : dict
-        Vocabulary as i:term.
+    feature : str
+        (default: 'unigrams') Features in :class:`.DataCollection` to use for
+        modeling.
     fields : list
-        Optional. A list of fields in :class:`.Paper` to include in the metadata
-        file.
+        (optional) Fields in :class:`.Paper` to include in the metadata file.
         
     Returns
     -------
@@ -101,6 +99,9 @@ def to_dtm_input(target, D, t_ngrams, vocab, fields=['date','atitle']):
         metaFile = open(target + '-meta.dat', 'wb')
     except IOError:
         raise IOError('Invalid target. Could not open files for writing.')
+
+    vocab = D.features[feature]['index']
+    features = D.features[feature]['features']
 
     seq = {}
     # Generate -mult.dat file (wordcounts for each document).
@@ -125,7 +126,7 @@ def to_dtm_input(target, D, t_ngrams, vocab, fields=['date','atitle']):
                 seq[year] = []
                 for doi in papers:  # D must be indexed by doi.
                     try:
-                        grams = t_ngrams[doi]
+                        grams = features[doi]
                         seq[year].append(doi)
                         wordcount = len(grams)  # Number of unique words.
                         multFile.write(' '.join([ str(wordcount) ] + \
@@ -134,7 +135,7 @@ def to_dtm_input(target, D, t_ngrams, vocab, fields=['date','atitle']):
                                                 ['\n']))
                         meta = [ str(doi) ]
                         if papers:
-                            p = D.data[doi]
+                            p = D.papers[doi]
                             meta += [ str(p[f]) for f in fields ]
                         metaFile.write('\t'.join(meta) + '\n')
                         

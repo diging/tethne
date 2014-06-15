@@ -53,16 +53,16 @@ class ModelManager(object):
         plt.ylabel('LL/Topic')
         plt.savefig('{0}/ll.png'.format(self.outpath))
     
-    def prep(self, gram='uni', meta=['date', 'atitle', 'jtitle']):
+    def prep(self, feature='unigrams', meta=['date', 'atitle', 'jtitle']):
         """
         Generates a corpus that can be used as input for a modeling algorithm.
         """
         
-        self._generate_corpus(gram, meta)
+        self._generate_corpus(feature, meta)
         
         self.prepped = True
 
-    def build(self, Z=20, max_iter=1000, prep=False):
+    def build(self, Z=20, max_iter=1000, prep=False, **kwargs):
         """
         
         """
@@ -74,7 +74,7 @@ class ModelManager(object):
                 raise RuntimeError('Not so fast! Call prep() or set prep=True.')
 
         self.Z = Z
-        self._run_model(max_iter)  # The action happens here.
+        self._run_model(max_iter=max_iter, **kwargs)  # The action happens here.
         self.plot_ll()
 
         self._load_model()
@@ -99,22 +99,22 @@ class MALLETModelManager(ModelManager):
     Model Manager for LDA topic modeling with MALLET.
     """
     
-    def __init__(self, datacollection, fkey='unigrams', 
+    def __init__(self, datacollection, feature='unigrams', 
                        outpath='/tmp/',
                        temppath=None,
                        mallet_path='./model/bin/mallet-2.0.7',
-                       metakeys=['date','jtitle']):
+                       meta=['date','jtitle']):
         """
         
         Parameters
         ----------
         datacollection : :class:`.DataCollection`
-        fkey : str
+        feature : str
             Key from datacollection.features containing wordcounts (or whatever
             you want to model with).
         mallet_path : str
             Path to MALLET install directory (contains bin/mallet).
-        metakeys : list
+        meta : list
             A list of keys onto :class:`.Paper` to include in the exported
             metadata file. Default: ['date', 'jtitle']
         """
@@ -122,15 +122,15 @@ class MALLETModelManager(ModelManager):
         
         self.datacollection = datacollection
         self.mallet_path = mallet_path
-        self.fkey = fkey
-        self.metakeys = metakeys
+        self.feature = feature
+        self.meta = meta
 
-    def prep(self, gram='uni', meta=['date', 'atitle', 'jtitle']):
+    def prep(self, feature='unigrams', meta=['date', 'atitle', 'jtitle']):
         """
         Generates a corpus that can be used as input for modeling.
         """
         
-        self._generate_corpus()
+        self._generate_corpus(feature, meta)
         self._export_corpus()        
         self.prepped = True
     
@@ -138,22 +138,22 @@ class MALLETModelManager(ModelManager):
 #        self._run_model()
 #        self._load_model()
     
-    def _generate_corpus(self):
+    def _generate_corpus(self, feature, meta):
         """
         Writes a corpus to disk amenable to MALLET topic modeling.
         """
         from ..writers.corpora import to_documents
         
         # Metadata to export with corpus.
-        metadata = ( self.metakeys, { p: { k:paper[k] for k in self.metakeys } 
+        metadata = ( self.meta, { p: { k:paper[k] for k in self.meta } 
                        for p,paper in self.datacollection.papers.iteritems() } )
         
         # Export the corpus.
         paths = to_documents(
                     self.temp+'/tethne',            # Temporary files.
-                    self.datacollection.features[self.fkey]['features'],
+                    self.datacollection.features[feature]['features'],
                     metadata=metadata,
-                    vocab=self.datacollection.features[self.fkey]['index'] )
+                    vocab=self.datacollection.features[feature]['index'] )
 
         # Need these to generate MALLET calls in self._export_corpus()
         self.corpus_path, self.meta_path = paths
@@ -184,7 +184,7 @@ class MALLETModelManager(ModelManager):
         if exit != 0:
             raise RuntimeError("MALLET import-file failed: {0}.".format(exit))
 
-    def _run_model(self, max_iter):
+    def _run_model(self, max_iter=20, **kwargs):
         """
         Calls MALLET's `train-topic` method.
         """
@@ -362,7 +362,7 @@ class DTMModelManager(ModelManager):
     Model Manager for DTM.
     """
     
-    def __init__(self, D, outpath, dtm_path='./bin/main'):
+    def __init__(self, D, outpath, temppath=None, dtm_path='./bin/main'):
         """
         
         Parameters
@@ -373,18 +373,16 @@ class DTMModelManager(ModelManager):
         dtm_path : str
             Path to MALLET install directory (contains bin/mallet).
         """
-        super(DTMModelManager, self).__init__(D, outpath)
+        super(DTMModelManager, self).__init__(outpath, temppath)
         
+        self.D = D
         self.dtm_path = dtm_path
+        self.outname = '{0}/model_run'.format(self.outpath)        
     
-    def _generate_corpus(self, gram, meta):
+    def _generate_corpus(self, feature, meta):
         from tethne.writers.corpora import to_dtm_input    
         
-        to_dtm_input(self.temp+'/tethne',
-                            self.D,
-                            self.D.grams[gram][0],     # e.g. uni, bi, tri.
-                            self.D.grams[gram][1],
-                            fields=meta)
+        to_dtm_input(self.temp+'/tethne', self.D, feature, fields=meta)
                      
 
         self.mult_path = '{0}/tethne-mult.dat'.format(self.temp)
@@ -393,7 +391,7 @@ class DTMModelManager(ModelManager):
         self.meta_path = '{0}/tethne-meta.dat'.format(self.temp)
         
 
-    def _run_model(self, max_iter, **kwargs):
+    def _run_model(self, **kwargs):
         ## Run the dynamic topic model.
         #./main \
         #  --ntopics=20 \
@@ -414,11 +412,12 @@ class DTMModelManager(ModelManager):
         lda_max_em_iter = kwargs.get('lda_max_em_iter', 10)  
         alpha = kwargs.get('alpha', 0.01) 
         
+        max_v = lda_seq_min_iter*lda_max_em_iter*len(self.D.get_slices('date'))
+        
         self.conv = []
         i = 1
 
         corpus_prefix = '{0}/tethne'.format(self.temp)
-        self.outname = '{0}/model_run'.format(self.outpath)
         
         FNULL = open(os.devnull, 'w')
         
@@ -451,12 +450,15 @@ class DTMModelManager(ModelManager):
             try:    # Find conv
                 conv = re.findall(r'conv\s+=\s+([-]?\d+\.\d+e[-]\d+)', l)
                 self.conv.append(float(conv[0]))
-                print conv
+
+                progress = int(100 * float(len(self.conv))/float(max_v))
+                print 'Modeling progress (approx): {0}%.\r'.format( progress ),
+
             except IndexError:
                 pass
             
             
-        self.num_iters += max_iter
+        self.num_iters += lda_max_em_iter   # TODO: does this make sense?
             
     def _load_model(self):
         """Load and return a :class:`.DTMModel`\."""

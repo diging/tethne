@@ -2,6 +2,7 @@ from ..basemodel import BaseModel
 import numpy as np
 import os
 import re
+import csv
 
 class DTMModel(BaseModel):
 
@@ -13,7 +14,50 @@ class DTMModel(BaseModel):
 
         self.lookup = { v:k for k,v in metadata.iteritems() }
 
+    def _item_description(self, i, **kwargs):
+        """
+        Proportion of each topic in document.
+        """
+        
+        return [ (k, self.e_theta[k, i]) 
+                    for k in xrange(self.e_theta[:, i].size) ]
+        
+    def _dimension_description(self, k, t=0, **kwargs):
+        """
+        Yields probability distribution over terms.
+        """
+
+        return [ (w, self.topics[k, w, t]) 
+                    for w in xrange(self.topics[k, :, t].size) ]
+        
+    def _dimension_items(self, k, threshold, **kwargs):
+        """
+        Returns items that contain ``k`` at or above ``threshold``.
+        
+        Parameters
+        ----------
+        k : int
+            Topic index.
+        threshold : float
+            Minimum representation of ``k`` in document.
+            
+        Returns
+        -------
+        description : list
+            A list of ( item, weight ) tuples.
+        """
+        print self.metadata
+
+        description = [ (self.metadata[i], self.e_theta[k,i]) 
+                            for i in xrange(self.e_theta[k,:].size)
+                            if self.e_theta[k,i] >= threshold ]
+        return description    
+        
     def topics_in_doc(self, d, topZ=None):
+        """
+        Deprecated; use :func:`BaseModel.item`\.
+        """
+
         if topZ is None:
             topZ = 5
             
@@ -29,17 +73,17 @@ class DTMModel(BaseModel):
         
         return topics
 
-    def words_in_topic(self, z, t, topW=None):
-        if topW is None:
-            topW = 5
-
+    def words_in_topic(self, z, t, topW=5):
+        """
+        Deprecated; use :func:`BaseModel.dimension`\.
+        """    
         if type(topW) is int:
             words = self.topics[z, :, t].argsort()[-topW:][::-1]
 
         return [ ( w, self.topics[z, w, t]) for w in words ]
 
     def print_topic(self, z, t):
-        words = [ self.vocabulary.by_int[w] for w,p
+        words = [ self.vocabulary[w] for w,p
                     in self.words_in_topic(z,t,topW=topw) ]
         print ', '.join(words)
         return words
@@ -161,8 +205,10 @@ class GerrishLoader(object):
         with open(self.metadata_path, "rU") as f:
             reader = csv.reader(f, delimiter='\t')
             lines = [ l for l in reader ][1:]
+            i = 0
             for l in lines:
-                self.metadata[l[0]] = l[1]
+                self.metadata[i] = l[0]
+                i += 1
 
         return self.metadata
 
@@ -171,7 +217,7 @@ class GerrishLoader(object):
             raise RuntimeError("No vocabulary provided.")
 
         # Build vocabulary
-        self.vocabulary = Dictionary()
+        self.vocabulary = {}
         with open(self.vocabulary_path, 'rU') as f:
             i = 0
             for v in f.readlines():
