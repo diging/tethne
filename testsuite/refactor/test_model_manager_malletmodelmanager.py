@@ -33,36 +33,36 @@ class TestMALLETModelManager(unittest.TestCase):
                                 temppath=temppath,
                                 mallet_path=mallet_path)
         
-#    def test_prep(self):
-#        """
-#        .prep() should result in three sizeable temporary corpus files.
-#        """
-#        self.M.prep()
-#        self.assertIn('input.mallet', os.listdir(temppath))
-#        self.assertGreater(os.path.getsize(temppath+'/input.mallet'), 2500000)
-#        
-#        self.assertIn('tethne_docs.txt', os.listdir(temppath))
-#        self.assertGreater(os.path.getsize(temppath+'/tethne_docs.txt'), 5000000)
-#                
-#        self.assertIn('tethne_meta.csv', os.listdir(temppath))        
-#        self.assertGreater(os.path.getsize(temppath+'/tethne_meta.csv'), 10000)
+    def test_prep(self):
+        """
+        .prep() should result in three sizeable temporary corpus files.
+        """
+        self.M.prep()
+        self.assertIn('input.mallet', os.listdir(temppath))
+        self.assertGreater(os.path.getsize(temppath+'/input.mallet'), 2500000)
+        
+        self.assertIn('tethne_docs.txt', os.listdir(temppath))
+        self.assertGreater(os.path.getsize(temppath+'/tethne_docs.txt'), 5000000)
+                
+        self.assertIn('tethne_meta.csv', os.listdir(temppath))        
+        self.assertGreater(os.path.getsize(temppath+'/tethne_meta.csv'), 10000)
     
-#    def test_build(self):
-#        """
-#        .build() should result in new sizeable files in both the temp and out
-#        directories.
-#        """
-#        self.M.prep()
-#        self.M.build(max_iter=50)
-#        
-#        self.assertIn('dt.dat', os.listdir(temppath))
-#        self.assertGreater(os.path.getsize(temppath+'/dt.dat'), 100000)
-#        
-#        self.assertIn('wt.dat', os.listdir(temppath))
-#        self.assertGreater(os.path.getsize(temppath+'/wt.dat'), 900000)
-#        
-#        self.assertIn('model.mallet', os.listdir(outpath))
-#        self.assertGreater(os.path.getsize(outpath+'/model.mallet'), 9000000)
+    def test_build(self):
+        """
+        .build() should result in new sizeable files in both the temp and out
+        directories.
+        """
+        self.M.prep()
+        self.M.build(max_iter=50)
+        
+        self.assertIn('dt.dat', os.listdir(temppath))
+        self.assertGreater(os.path.getsize(temppath+'/dt.dat'), 100000)
+        
+        self.assertIn('wt.dat', os.listdir(temppath))
+        self.assertGreater(os.path.getsize(temppath+'/wt.dat'), 900000)
+        
+        self.assertIn('model.mallet', os.listdir(outpath))
+        self.assertGreater(os.path.getsize(outpath+'/model.mallet'), 9000000)
     
     def test_topic_time(self):
         """
