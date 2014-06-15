@@ -295,28 +295,31 @@ class DataCollection(object):
 
         fdict = self.features[fold]
         
-        
         features = {}
         index = {}
         counts = Counter()
         documentCounts = Counter()
 
-        ftokens = [ s for i,s in fdict['index'].iteritems() if filt(fdict, i, s) ]
+        ftokens = [ s for i,s in fdict['index'].iteritems() if filt(s, fdict['counts'][i], fdict['documentCounts'][i] ) ]
         Ntokens = len(ftokens)
+
         logger.debug('found {0} unique tokens'.format(Ntokens))
         
         findex = { i:ftokens[i] for i in xrange(Ntokens) }
         findex_ = { v:k for k,v in findex.iteritems() }
+
         logger.debug('created forward and reverse indices.')
 
-        for key, fval in fdict['features'].iteritems():
+        feats = fdict['features']
+        
+        for key, fval in feats.iteritems():
             if type(fval) is not list or type(fval[0]) is not tuple:
                 raise ValueError('Malformed features data.')       
                      
-            tokenized = [ (findex_[f],w) for f,w in fval if _handle(f,w) ]
+            tokenized = [ (findex_[fdict['index'][f]],w) for f,w in fval if _handle(fdict['index'][f],w) ]
             features[key] = tokenized
             for f,w in tokenized:
-                documentCounts += 1
+                documentCounts[f] += 1
                 
         self._define_features(fnew, findex, features, counts, documentCounts)                
 

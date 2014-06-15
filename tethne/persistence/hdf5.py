@@ -9,6 +9,8 @@ from ..classes import Paper, DataCollection
 import tempfile
 import uuid
 import cPickle as pickle
+import urllib
+from unidecode import unidecode
 
 pytype = {  tables.atom.BoolAtom: bool,
             tables.atom.UInt8Atom: int,
@@ -24,7 +26,8 @@ pytype = {  tables.atom.BoolAtom: bool,
             tables.atom.Complex128Atom: complex,
             tables.atom.StringAtom: str,
             tables.atom.Time32Atom: int,
-            tables.atom.Time64Atom: float }
+            tables.atom.Time64Atom: float,
+            numpy.int32: int }
 
 class HDF5DataCollection(DataCollection):
     """
@@ -64,7 +67,8 @@ class HDF5DataCollection(DataCollection):
 
     def __init__(self, papers, features=None, index_by='wosid',
                                               index_citation_by='ayjid',
-                                              exclude_features=set([]),
+                                              exclude=set([]),
+                                              filt=None,
                                               datapath=None):
         """
         
@@ -84,7 +88,7 @@ class HDF5DataCollection(DataCollection):
             `index_by` should be 'doi'.
         index_citations_by : str
             Just as ``index_by``, except for citations.
-        exclude_features : set
+        exclude : set
             (optional) Features to ignore, e.g. stopwords.
         datapath : str
             (optional) Target path for HDF5 repository. If not provided, will
@@ -138,7 +142,7 @@ class HDF5DataCollection(DataCollection):
         
         logger.debug('Index DataCollection...')
         self.index(papers, features, index_by, index_citation_by,
-                                               exclude_features)
+                                               exclude, filt)
     
         logger.debug('HDF5DataCollection initialized, flushing to force save.')
         self.h5file.flush()
@@ -155,6 +159,25 @@ class HDF5DataCollection(DataCollection):
 
         super(HDF5DataCollection, self).abstract_to_features(remove_stopwords)
         self.h5file.flush()
+        
+    def filter_features(self, fold, fnew, filt):
+        """
+        See :func:`.DataCollection.filter_features`\.
+        
+        Parameters
+        ----------
+        fold : str
+            Key into ``features`` for existing featureset.
+        fnew : str
+            Key into ``features`` for resulting featuresset.
+        filt : method
+            Filter function to apply to the featureset. Should take a feature
+            dict as its sole parameter.
+        """    
+
+        self.h5file.flush()                
+        super(HDF5DataCollection, self).filter_features(fold, fnew, filt)
+        self.h5file.flush()        
         
         
 ################################################################################
@@ -189,7 +212,7 @@ class Index(tables.IsDescription):
     For storing int : str pairs.
     """
     i = tables.Int32Col()
-    mindex = tables.StringCol(100)
+    mindex = tables.StringCol(1000)
 
 class IntIndex(tables.IsDescription):    
     """
@@ -203,7 +226,7 @@ class StrIndex(tables.IsDescription):
     For storing str : str pairs.
     """
     i = tables.StringCol(100)
-    mindex = tables.StringCol(100)
+    mindex = tables.StringCol(100000)
     
 class HDF5Features(dict):
     """
@@ -221,16 +244,16 @@ class HDF5Features(dict):
         
     def __setitem__(self, key, value):
         logger.debug('HDF5Features.___setitem__ for key {0}.'.format(key))
-#        if '/{0}'.format(key) in self.h5file:
-#            raise ValueError('Feature with name {0} already set.'.format(key))
 
-        dict.__setitem__(self, key, HDF5Feature(self.h5file, self.group, key))
+        dict.__setitem__(self, key, HDF5FeatureSet(self.h5file, 
+                                                   self.group, key))
         
         logger.debug('assign values for key {0}.'.format(key))
         for k,v in value.iteritems():
             self[key][k] = v
+
             
-class HDF5Feature(dict):
+class HDF5FeatureSet(dict):
     """
     Stores data about the distribution of a specific feature-set, e.g. unigrams,
     across papers in the :class:`.DataCollection`\.
@@ -242,107 +265,101 @@ class HDF5Feature(dict):
         self.group = self.h5file.createGroup(fgroup, name)
         self.name = name
 
-        dict.__setitem__(self, 'index', 
-                    HDF5Dict(h5file, self.group, 'index', Index))
-        dict.__setitem__(self, 'features', 
-                    HDF5PickleDict(h5file, self.group, 'features', StrIndex))
-        dict.__setitem__(self, 'counts', 
-                    HDF5Dict(h5file, self.group, 'counts', IntIndex))
-        dict.__setitem__(self, 'documentCounts', 
-                    HDF5Dict(h5file, self.group, 'documentCounts', IntIndex))
+        dict.__setitem__(self, 'features', HDF5FeatureValues(h5file, self.group))
+
         logger.debug('...done.')
 
     def __setitem__(self, key, value):
         logger.debug('HDF5Feature ({0}): __setitem__ for key {1}, and value with length {2}.'.format(self.name, key, len(value)))    
 
-        if key in self:
+        if key not in self:
+            if key == 'features':
+                dict.__setitem__(self, 'features', HDF5FeatureValues(self.h5file, self.group, value))
+            else:
+                values = numpy.array([ value[k] for k in sorted(value.keys()) ])
+                dict.__setitem__(self, key, HDF5ArrayDict(self.h5file, self.group, key, values))
+
+        else:
             for k,v in value.iteritems():
                 self[key][k] = v
+        
+    def __getitem__(self, key):
+#        print key, type(dict.__getitem__(self, key))
+        return dict.__getitem__(self, key)
 
-class HDF5Dict(dict):
-    """
-    Provides dict-like behavior for HDF5 tables. 
-    
-    Subclass and override :func:`._pack_value` and :func:`.unpack_value` to
-    customize storage behavior.
-    """
-    def __init__(self, h5file, group, name, tabletype):
-        logger.debug('Initialize HDF5Dict with name {0}, tabletype {1}'
-                        .format(name, tabletype))
+class HDF5ArrayDict(dict):
+    def __init__(self, h5file, group, name, values):
         self.h5file = h5file
         self.group = group
         self.name = name
-        self.tabletype = tabletype
-
-        if name in self.group:
-            self.table = self.group.__dict__['_v_children'][name]
-        else:
-            self.table = self.h5file.createTable(self.group, name, tabletype)
-            self.table.cols.i.createIndex()
-
-    def __len__(self):
-        return len( [ i for i in self.table ] )            
-    
-    def _pack_value(self, value):
-        """
-        Simply returns value.
-        """
-        return value
-    
-    def _unpack_value(self, value):
-        """
-        Simply returns value.
-        """
-        return value
+        
+        self.array = self.h5file.create_array(self.group, self.name, values)
         
     def __setitem__(self, key, value):
-        if type(key) is int or type(key) is float:
-            qstring = 'i == {0}'
-        else:
-            qstring = 'i == b"{0}"'
-
-#        if len( [ i for i in self.table.where(qstring.format(str(key))) ] ) > 0:
-#            print [ i for i in self.table.where(qstring.format(str(key))) ]  
-#            raise ValueError('Value for {0} already set.'.format(str(key)))
-        
-        row = self.table.row
-        row['i'] = key
-        try:
-            row['mindex'] = self._pack_value(value) # TODO: unicode/encoding problems here.
-        except TypeError:
-            print self.group, '|', self.name, '|', value, '|', type(value),  '|', self.tabletype
-            raise TypeError()
-
-        row.append()
+        self.array[key] = value
     
     def __getitem__(self, key):
-        if type(key) is int or type(key) is float:
-            qstring = 'i == {0}'
-        else:
-            qstring = 'i == b"{0}"'
-                
-        value = [ i['mindex'] for i in self.table.where(qstring.format(str(key))) ][0]
-        return self._unpack_value(value)
-
-    def keys(self):
-        return [ i['i'] for i in self.table ]
-
-    def values(self):
-        return [ self._unpack_value(i['mindex']) for i in self.table ]
-
+        return self.array[key]
+        
     def items(self):
-        return { i['i']:self._unpack_value(i['mindex']) for i in self.table }
-
-class HDF5PickleDict(HDF5Dict):
-    """
-    Subclasses :class:`.HDF5Dict` to provide Pickle serialization of values.
-    """
-
-    def _pack_value(self, value):
-        return pickle.dumps(value)
+        return { i:self.array[i] for i in xrange(len(self.array)) }.items()
     
-    def _unpack_value(self, value):
-        return pickle.loads(value)                                            
+    def iteritems(self):
+        i = 0
+        while i < len(self.array):
+            yield i, self.array[i]
+            i += 1
+    
+    def __len__(self):
+        return len(self.array)
+        
+    def values(self):
+        return [ self.array[i] for i in xrange(len(self.array)) ]
+    
+    def keys(self):
+        return range(len(self.array))
+        
+
+class HDF5FeatureValues(dict):
+
+    def __init__(self, h5file, group):
+        self.h5file = h5file        
+        self.group = self.h5file.createGroup(group, 'features')
+
+        self.documents = self.h5file.create_table(self.group, 'documents', 
+                                                              Index)
+        self.documents.cols.i.create_index()
+        self.documents.cols.mindex.create_index()
+        
+        self.d = {}
+    
+    def __setitem__(self, key, value):
+        if key not in self:
+            # Index the document.
+            i = len(self.documents)
+            doc = self.documents.row
+            doc['i'] = i
+            doc['mindex'] = key
+            doc.append()
+            self.d[i] = key
+            self.documents.flush()
+        
+            indices, values = zip(*value)
+            I = self.h5file.create_array(self.group, 'indices{0}'.format(i), 
+                                                     numpy.array(indices))
+            K = self.h5file.create_array(self.group, 'values{0}'.format(i), 
+                                                     numpy.array(values))
+            dict.__setitem__(self, key, (I,K))
+        
+    def __getitem__(self, key):
+        I,K = dict.__getitem__(self, key)
+        return zip(I,K)
+    
+    def iteritems(self):
+        i = 0
+        while i < len(self.documents):
+            yield self.d[i], self.__getitem__(self.d[i])
+            i += 1
 
 class papers_table(dict):
     """
@@ -512,3 +529,110 @@ class vlarray_dict(dict):
     def __len__(self):
         return len(self.vlarray)
 
+# TODO: vvvvv clean this up/trash it. vvvv
+
+
+#class HDF5Dict(dict):
+#    """
+#    Provides dict-like behavior for HDF5 tables. 
+#    
+#    Subclass and override :func:`._pack_value` and :func:`.unpack_value` to
+#    customize storage behavior.
+#    """
+#    def __init__(self, h5file, group, name, tabletype):
+#        logger.debug('Initialize HDF5Dict with name {0}, tabletype {1}'
+#                        .format(name, tabletype))
+#        self.h5file = h5file
+#        self.group = group
+#        self.name = name
+#        self.tabletype = tabletype
+#
+#        if name in self.group:
+#            self.table = self.group.__dict__['_v_children'][name]
+#        else:
+#            self.table = self.h5file.createTable(self.group, name, tabletype)
+#            self.table.cols.i.create_index()
+#
+#    def __len__(self):
+#        return len( [ i for i in self.table ] )            
+#    
+#    def _pack_value(self, value):
+#        """
+#        Simply returns value.
+#        """
+#        return value
+#    
+#    def _unpack_value(self, value):
+#        """
+#        Simply returns value.
+#        """
+#        return value
+#        
+#    def __setitem__(self, key, value):
+#        if type(key) is int or type(key) is float:
+#            qstring = 'i == b"{0}"'
+#        else:
+#            qstring = 'i == b"{0}"'
+#
+##        if len( [ i for i in self.table.where(qstring.format(str(key))) ] ) > 0:
+##            print [ i for i in self.table.where(qstring.format(str(key))) ]  
+##            raise ValueError('Value for {0} already set.'.format(str(key)))
+#        
+#        row = self.table.row
+#        row['i'] = key
+#        try:
+#            row['mindex'] = self._pack_value(value) 
+#        except TypeError:
+#            print self.group, '|', self.name, '|', value, '|', type(value),  '|', self.tabletype
+#            raise TypeError()
+#        except IndexError:
+#            pass
+#
+#        row.append()
+#    
+#    def __getitem__(self, key):
+#        if type(key) in pytype:
+#            key = pytype[type(key)](key)
+#
+#        if type(key) is int or type(key) is float:
+#            qstring = 'i == {0}'
+#        else:
+#            qstring = 'i == b"{0}"'
+#        
+#        value = [ i['mindex'] for i in self.table.where(qstring.format(str(key))) ][0]
+#        return self._unpack_value(value)
+#
+#    def keys(self):
+#        return [ i['i'] for i in self.table ]
+#
+#    def values(self):
+#        return [ self._unpack_value(i['mindex']) for i in self.table ]
+#
+#    def items(self):
+#        return { i['i']:self._unpack_value(i['mindex']) for i in self.table }.items()
+#    
+#    def iteritems(self):
+#        i = 0
+#        while i < len(self.table):
+#            x = self.table[i]
+#            yield x['i'],self._unpack_value(x['mindex'])
+#            i += 1    
+#
+#class HDF5PickleDict(HDF5Dict):
+#    """
+#    Subclasses :class:`.HDF5Dict` to provide Pickle serialization of values.
+#    """
+#
+#    def _pack_value(self, value):
+#        return pickle.dumps(value)
+#    
+#    def _unpack_value(self, value):
+#        return pickle.loads(value)  
+#
+#class HDF5SparseDict(HDF5Dict):
+#    def _pack_value(self, value):
+#        return str(zip(*value)[0]) + '|' + str(zip(*value)[1])
+#        
+#    def _unpack_value(self, value):
+#        return zip(*[ [ int(d) for d in c[1:-1].split(', ') ] 
+#                        for c in value.split('|')  ])

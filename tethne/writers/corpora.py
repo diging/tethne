@@ -3,8 +3,6 @@
 
 from collections import Counter
 
-from unidecode import unidecode
-
 def to_documents(target, ngrams, metadata=None, vocab=None):
     """
     
