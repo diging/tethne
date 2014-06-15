@@ -1,6 +1,8 @@
 from ..basemodel import BaseModel
 import numpy as np
 
+import csv
+
 class LDAModel(BaseModel):
     """
     Latent Dirichlet Allocation topic model.
@@ -66,6 +68,28 @@ class LDAModel(BaseModel):
         # TODO: imlement a similarity metric for topics.
 
         return None
+        
+    def _dimension_items(self, k, threshold, **kwargs):
+        """
+        Returns items that contain ``k`` at or above ``threshold``.
+        
+        Parameters
+        ----------
+        k : int
+            Topic index.
+        threshold : float
+            Minimum representation of ``k`` in document.
+            
+        Returns
+        -------
+        description : list
+            A list of ( item, weight ) tuples.
+        """
+
+        description = [ (self.metadata[i], self.theta[i, k]) 
+                            for i in xrange(self.theta[:, k].size)
+                            if self.theta[i, k] >= threshold ]
+        return description
         
 #    def topics_in_doc(self, d, topZ=None):
 #        """

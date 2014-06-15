@@ -5,17 +5,17 @@ import tempfile
 import subprocess
 import numpy as np
 
-from . import Model
-
-class ModelManager(object):
-    self.model = Model
+#from . import Model
+#
+#class ModelManager(object):
+#    self.model = Model
 
 class ModelManager(object):
     """
     Base class for Model Managers.
     """
     
-    def __init__(self, outpath, **kwargs):
+    def __init__(self, outpath, temppath=None, **kwargs):
         """
         Initialize the ModelManager.
         
@@ -25,19 +25,22 @@ class ModelManager(object):
             Path to output directory.
         """
         
-        self.temp = tempfile.mkdtemp()    # Temp directory for stuff.
+        if temppath is None:
+            self.temp = tempfile.mkdtemp()    # Temp directory for stuff.
+        else:
+            self.temp = temppath
         self.outpath = outpath
         self.prepped = False
         self.ll = []
         self.ll_iters = []
         self.num_iters = 0
 
-    def __del__(self):
-        """
-        Delete temporary directory and all files contained therein.
-        """
-        
-        shutil.rmtree(self.temp)        
+#    def __del__(self):
+#        """
+#        Delete temporary directory and all files contained therein.
+#        """
+#        
+#        shutil.rmtree(self.temp)        
         
     def plot_ll(self):
         """
@@ -97,7 +100,9 @@ class MALLETModelManager(ModelManager):
     """
     
     def __init__(self, datacollection, fkey='unigrams', 
-                       mallet_path='./model/bin/mallet-2.0.7/bin',
+                       outpath='/tmp/',
+                       temppath=None,
+                       mallet_path='./model/bin/mallet-2.0.7',
                        metakeys=['date','jtitle']):
         """
         
@@ -113,19 +118,25 @@ class MALLETModelManager(ModelManager):
             A list of keys onto :class:`.Paper` to include in the exported
             metadata file. Default: ['date', 'jtitle']
         """
-        super(LDAModelManager, self).__init__(D, outpath)
+        super(MALLETModelManager, self).__init__(outpath, temppath)
         
         self.datacollection = datacollection
         self.mallet_path = mallet_path
         self.fkey = fkey
-    
-    def prep(self):
+        self.metakeys = metakeys
+
+    def prep(self, gram='uni', meta=['date', 'atitle', 'jtitle']):
+        """
+        Generates a corpus that can be used as input for modeling.
+        """
+        
         self._generate_corpus()
-        self._export_corpus()
+        self._export_corpus()        
+        self.prepped = True
     
-    def build(self):
-        self._run_model()
-        self._load_model()
+#    def build(self):
+#        self._run_model()
+#        self._load_model()
     
     def _generate_corpus(self):
         """
@@ -134,15 +145,15 @@ class MALLETModelManager(ModelManager):
         from ..writers.corpora import to_documents
         
         # Metadata to export with corpus.
-        metadata = ( metakeys, { p: { k:paper[k] for k in metakeys } 
+        metadata = ( self.metakeys, { p: { k:paper[k] for k in self.metakeys } 
                        for p,paper in self.datacollection.papers.iteritems() } )
         
         # Export the corpus.
         paths = to_documents(
-                        self.temp+'/tethne',            # Temporary files.
-                        self.datacollection.features[self.fkey]['features'],
-                        metadata=metadata,
-                        vocab=self.datacollection.features[self.fkey]['index'] )
+                    self.temp+'/tethne',            # Temporary files.
+                    self.datacollection.features[self.fkey]['features'],
+                    metadata=metadata,
+                    vocab=self.datacollection.features[self.fkey]['index'] )
 
         # Need these to generate MALLET calls in self._export_corpus()
         self.corpus_path, self.meta_path = paths
@@ -164,8 +175,8 @@ class MALLETModelManager(ModelManager):
                     'import-file',
                     '--input {0}'.format(self.corpus_path),
                     '--output {0}'.format(self.input_path),
-                    '--keep-sequence',  # Required (oddly) for LDA.
-                    '--remove-stopwords' ]) # Probably redundant.
+                    '--keep-sequence',          # Required (oddly) for LDA.
+                    '--remove-stopwords' ])     # Probably redundant.
 
         except OSError:     # Raised if mallet_path is bad.
             raise OSError("MALLET path invalid or non-existent.")
@@ -184,6 +195,7 @@ class MALLETModelManager(ModelManager):
             
         self.dt = '{0}/dt.dat'.format(self.temp)
         self.wt = '{0}/wt.dat'.format(self.temp)
+        self.om = '{0}/model.mallet'.format(self.outpath)
         
         prog = re.compile('\<([^\)]+)\>')
         ll_prog = re.compile(r'(\d+)')
@@ -194,7 +206,8 @@ class MALLETModelManager(ModelManager):
                         '--num-topics {0}'.format(self.Z),
                         '--num-iterations {0}'.format(max_iter),
                         '--output-doc-topics {0}'.format(self.dt),
-                        '--word-topic-counts-file {0}'.format(self.wt) ],
+                        '--word-topic-counts-file {0}'.format(self.wt),
+                        '--output-model {0}'.format(self.om) ],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE)
         
@@ -229,35 +242,120 @@ class MALLETModelManager(ModelManager):
         self.model = from_mallet(   self.dt, 
                                     self.wt, 
                                     self.meta_path  )
-    
-        self.M = ModelCollection()
-    
-    def slice(self, axis):
-        M = ModelCollection()
-        a = D.get_slices(axis)
-        for key in sorted(a.keys()):
-            ids = a[key]
 
-            indices = { i:model.lookup[i] for i in ids if i in model.lookup.keys() }
-
-            dt = np.zeros(( len(indices.keys()), self.model.doc_topic.shape[1] ))
+    def topic_over_time(self, k, threshold=0.05, mode='documents', 
+                                 normed=True, plot=False, 
+                                figargs={'figsize':(10,10)} ):
+        """
+        Representation of topic ``k`` over 'date' slice axis.
+        
+        Parameters
+        ----------
+        k : int
+            Topic index.
+        threshold : float
+            Minimum representation of ``k`` in a document.
+        mode : str
+            'documents' counts the number documents that contain ``k``;
+            'proportions' sums the representation of ``k`` in each document
+            that contains it.
+        normed : bool
+            (default: True) Normalizes values by the number of documents in each
+            slice.
+        plot : bool
+            (default: False) If True, generates a MatPlotLib figure and saves
+            it to the :class:`MALLETModelManager` outpath.
+        figargs : dict
+            kwargs dict for :func:`matplotlib.pyplot.figure`\.
             
-            m = {}
-            k = 0
-            for i in ids:
-                if i in indices.keys():
-                    dt[k,:] = model.doc_topic[indices[i], :]
-                    m[k] = i
-                    k += 1
-                
-            tw = self.model.top_word
-            tk = self.model.top_keys
-            v = self.model.vocabulary
+        Returns
+        -------
+        keys : array
+            Keys into 'date' slice axis.
+        R : array
+            Representation of topic ``k`` over time.
+        """
+        
+        if k >= self.Z:
+            raise ValueError('No such topic in this model.')
+        
+        items = self.model.dimension_items(k, threshold)
+        slices = self.datacollection.get_slices('date')
+        keys = sorted(slices.keys())
 
-            smodel = LDAModel(dt, tw, tk, m, v)
-            
-            M[key] = smodel
-        return M
+        R = []
+
+        if mode == 'documents': # Documents that contain k.
+            for t in keys:
+                docs = slices[t]
+                Ndocs = float(len(docs))
+                Ncontains = 0.
+                for i,w in items:
+                    if i in docs:
+                        Ncontains += 1.
+                if normed:  # As a percentage of docs in each slice.
+                    ylabel = 'Percentage of documents containing topic.'
+                    if Ndocs > 0.:
+                        R.append( Ncontains/Ndocs )
+                    else:
+                        R.append( 0. )
+                else:       # Raw count.
+                    ylabel = 'Number of documents containing topic.'                
+                    R.append( Ncontains )
+
+        elif mode == 'proportions': # Representation of topic k.
+            for t in keys:
+                docs = slices[t]
+                Ndocs = float(len(docs))
+                if normed:      # Normalized by number of docs in each slice.
+                    ylabel = 'Normed representation of topic in documents.'                
+                    if Ndocs > 0.:
+                        R.append( sum([ w for i,w in items if i in docs ])
+                                                                        /Ndocs )
+                    else:
+                        R.append( 0. )
+                else:
+                    ylabel = 'Sum of topic representation in documents.'                
+                    R.append( sum([ w for i,w in items if i in docs ]) )
+        
+        if plot:
+            import matplotlib.pyplot as plt
+            fig = plt.figure(**figargs)
+            plt.plot(np.array(keys), np.array(R))
+            plt.xlabel('Time Slice')
+            plt.ylabel(ylabel)
+            plt.savefig('{0}/topic_{1}_over_time.png'.format(self.outpath, k))        
+        
+        return np.array(keys), np.array(R)
+        
+#        self.M = ModelCollection()
+#    
+#    def slice(self, axis):
+#        M = ModelCollection()
+#        a = D.get_slices(axis)
+#        for key in sorted(a.keys()):
+#            ids = a[key]
+#
+#            indices = { i:model.lookup[i] for i in ids if i in model.lookup.keys() }
+#
+#            dt = np.zeros(( len(indices.keys()), self.model.doc_topic.shape[1] ))
+#            
+#            m = {}
+#            k = 0
+#            for i in ids:
+#                if i in indices.keys():
+#                    dt[k,:] = model.doc_topic[indices[i], :]
+#                    m[k] = i
+#                    k += 1
+#                
+#            tw = self.model.top_word
+#            tk = self.model.top_keys
+#            v = self.model.vocabulary
+#
+#            smodel = LDAModel(dt, tw, tk, m, v)
+#            
+#            M[key] = smodel
+#        return M
         
 class DTMModelManager(ModelManager):
     """

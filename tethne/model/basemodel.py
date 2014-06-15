@@ -100,6 +100,30 @@ class BaseModel(object):
                                       ' implemented for this model class.')
 
         return description
+        
+    def dimension_items(self, d, threshold, **kwargs):
+        """
+        Describes a dimension in terms of the items that contain it.
+        
+        Parameters
+        ----------
+        d : int
+            Dimension index.
+        threshold : float
+            Minimum representation of ``d`` in item.
+            
+        Returns
+        -------
+        description : list
+            A list of ( item, weight ) tuples.
+        """
+        
+        try:
+            description = self._dimension_items(d, threshold, **kwargs)
+        except AttributeError:
+            raise NotImplementedError('_dimension_items() not' + \
+                                      ' implemented for this model class.')
+        return description
 
     def dimension_relationship(self, d, e, **kwargs):
         """
