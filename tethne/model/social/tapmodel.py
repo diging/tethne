@@ -363,10 +363,6 @@ class TAPModel(BaseModel):
                         for k in xrange(self.T):
                             self.r[i][j_,k] = alt_r[i][alt_j_,k]
                             self.a[i][j_,k] = alt_a[i][alt_j_,k]                        
-    
-#    def write(self, tgt):
-#        for k in self.MU.keys():
-#            nx.write_graphml(self.MU[k], '{0}_topic_{1}.graphml'.format(tgt,k))
 
     def graph(self, k):
         return self.MU[k]
