@@ -1,3 +1,8 @@
+# Profiling.
+from pycallgraph import PyCallGraph
+from pycallgraph.output import GraphvizOutput
+cg_path = './callgraphs/'
+
 import unittest
 
 import sys
@@ -21,7 +26,10 @@ class TestNGrams(unittest.TestCase):
         """
         In 'heavy' mode (default), :func:`.ngrams` should return a dict.
         """
-        self.unigrams = ngrams(self.dfrdatapath, N='uni')    
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'readers.dfr.ngrams[heavy].png')):
+            self.unigrams = ngrams(self.dfrdatapath, N='uni')
+
         self.assertEqual(len(self.unigrams), 241)
         self.assertIsInstance(self.unigrams, dict)
         self.assertIsInstance(self.unigrams.values()[0], list)
@@ -31,7 +39,10 @@ class TestNGrams(unittest.TestCase):
         """
         'light' mode should behave just like 'heavy'
         """
-        self.unigrams = ngrams(self.dfrdatapath, N='uni', mode='light')
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'readers.dfr.ngrams[light].png')):
+            self.unigrams = ngrams(self.dfrdatapath, N='uni', mode='light')
+
         self.assertEqual(len(self.unigrams), 241)
         self.assertIsInstance(self.unigrams, GramGenerator)
         self.assertIsInstance(self.unigrams.values()[0], list)
@@ -41,6 +52,7 @@ class TestNGrams(unittest.TestCase):
         """
         Result of :func:`.ngrams` should be ready to write as a corpus.
         """
+
         self.unigrams = ngrams(self.dfrdatapath, N='uni')            
         ret = corpora.to_documents('/tmp/', self.unigrams)
         self.assertIsInstance(ret, tuple)
@@ -50,8 +62,8 @@ class TestNGrams(unittest.TestCase):
         Result of :func:`.ngrams` in 'light' mode should be ready to write as 
         a corpus.
         """
+
         self.unigrams = ngrams(self.dfrdatapath, N='uni', mode='light')
-        
         ret = corpora.to_documents('/tmp/', self.unigrams)
         self.assertIsInstance(ret, tuple)
          
@@ -63,7 +75,11 @@ class TestGramGenerator(unittest.TestCase):
         """
         Should return the number of XML files in /wordcounts
         """
-        g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
+        
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'readers.dfr.GramGenerator.__init__.png')):
+            g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
+            
         self.assertEqual(len(g), 241)
         
     def test_generators(self):
@@ -71,8 +87,11 @@ class TestGramGenerator(unittest.TestCase):
         Should yield something when iterated upon.
         """
         g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
-        for i in g:
-            self.assertNotEqual(i,None)
+
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'readers.dfr.GramGenerator.item.png')):
+            for i in g:
+                self.assertNotEqual(i, None)
     
     def test_items(self):
         """
@@ -123,8 +142,11 @@ class TestGramGenerator(unittest.TestCase):
 
 class TestRead(unittest.TestCase):
     def setUp(self):
-        self.dfrdatapath = '{0}/dfr'.format(datapath)    
-        self.papers = read(self.dfrdatapath)
+        self.dfrdatapath = '{0}/dfr'.format(datapath)
+
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'readers.dfr.read.png')):
+            self.papers = read(self.dfrdatapath)
 
     def test_number(self):
         """
