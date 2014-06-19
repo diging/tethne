@@ -5,6 +5,16 @@ import tempfile
 import subprocess
 import numpy as np
 
+from networkx import Graph
+
+import logging
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel('DEBUG')
+
+from ..classes import GraphCollection
+from social import TAPModel
+
 #from . import Model
 #
 #class ModelManager(object):
@@ -226,10 +236,10 @@ class MALLETModelManager(ModelManager):
                     this_iter = float(prog.match(l).group(1))
                     self.ll_iters.append(this_iter)
                     progress = int(100 * this_iter/max_iter)
-                    print 'Modeling progress: {0}%.\r'.format( progress ),
+                    logger.debug('Modeling progress: {0}%.\r'.format( progress ),)
                 except AttributeError:  # Not every line will match.
                     pass
-            print 'Modeling complete.'
+            logger.debug('Modeling complete.')
             
         except OSError:     # Raised if mallet_path is bad.
             raise OSError("MALLET path invalid or non-existent.")
@@ -449,7 +459,6 @@ class DTMModelManager(ModelManager):
                 self.conv.append(float(conv[0]))
 
                 progress = int(100 * float(len(self.conv))/float(max_v))
-                print 'Modeling progress (approx): {0}%.\r'.format( progress ),
 
             except IndexError:
                 pass
@@ -470,7 +479,7 @@ class TAPModelManager(SocialModelManager):
     For managing the :class:`.TAPModel` .
     """
     
-    def __init__(self, D, G, M, **kwargs):
+    def __init__(self, D, G, model, **kwargs):
         """
         
         Parameters
@@ -482,81 +491,143 @@ class TAPModelManager(SocialModelManager):
 
         super(TAPModelManager, self).__init__(**kwargs)
         self.D = D
-        self.M = M
         self.G = G
-        self.SM = ModelCollection()
+        self.topicmodel = model
+
+        self.SM = {}
         self.SG = GraphCollection()
         
-    def author_theta(self, papers, model, indexed_by='doi'):
+    def author_theta(self, papers, authors=None, indexed_by='doi'):
         """
         Generates distributions over topics for authors, based on distributions
         over topics for their papers.
+        
+        Parameters
+        ----------
+        papers : list
+            Contains :class:`.Paper` instances.
+        authors : dict
+            Maps author names (LAST F) onto coauthor :class:`.Graph` indices.
+        indexed_by : str
+            Key in :class:`.Paper` used to index :class:`.DataCollection`\.
+            
+        Returns
+        -------
+        a_theta : dict
+            Maps author indices (from coauthor :class:`.Graph`) onto arrays
+            describing distribution over topics (normalized to 1).
         """
         
         a_topics = {}
+        
+        logger.debug('TAPModelManager.author_theta(): start for {0} papers'
+                                                           .format(len(papers)))
 
         for p in papers:
             try:
-                t = model.topics_in_doc(p[indexed_by])
+                item = self.topicmodel.lookup[p[indexed_by]]
+                t = self.topicmodel.item(item)
+                
                 dist = np.zeros(( len(t) ))
                 for i,v in t:
                     dist[i] = v
 
                 for author in p.authors():
-                    if author in a_topics:
-                        a_topics[author].append(dist)
+                    # Only include authors in the coauthors graph.
+                    if authors is not None:
+                        if author not in authors:
+                            continue
+                
+                    a = authors[author]
+                    if a in a_topics:
+                        a_topics[a].append(dist)
                     else:
-                        a_topics[author] = [ dist ]
+                        a_topics[a] = [ dist ]
+
             except KeyError:    # May not be corpus model repr for all papers.
+                logger.debug('TAPModelManager.author_theta(): KeyError on {0}'
+                                                        .format(p[_indexed_by]))
                 pass
 
-        a_theta = np.zeros(( len(a_topics), model.num_topics() ))
-        a = 0
-        for author, dists in a_topics.iteritems():
-            a_dist = np.zeros(( model.num_topics() ))
+        shape = ( len(a_topics), self.topicmodel.Z )
+        logger.debug('TAPModelManager.author_theta(): initialize with shape {0}'
+                                                                 .format(shape))
+
+        a_theta = {}
+        for a, dists in a_topics.iteritems():
+            a_dist = np.zeros(( self.topicmodel.Z ))
             for dist in dists:
                 a_dist += dist
             a_dist = a_dist/len(dists)
-            a_theta[a, :] = a_dist/np.sum(a_dist)   # Should sum to <= 1.0.
+            a_theta[a] = a_dist/np.sum(a_dist)   # Should sum to <= 1.0.
 
-        
         return a_theta
     
     def _run_model(self, max_iter=1000, sequential=True, **kwargs):
-        print 'run model'
-
+        logger.debug('TAPModelManager._run_model(): ' + \
+                     'start with max_iter {0} and sequential {1}'
+                                                  .format(max_iter, sequential))
+        
         axis = kwargs.get('axis', None) # e.g. 'date'
 
         if axis is None:
+            logger.debug('TAPModelManager._run_model(): axis is None')
+
             # single model.
             pass
         else:
             # model for each slice.
-            if axis not in D.get_axes():
+            if axis not in self.D.get_axes():
                 raise RuntimeError('No such axis in DataCollection.')
                 
             s = 0
-            for slice in sorted(D.get_slices(axis).keys()):
-                print 'modeling slice {0}'.format(slice) # TODO: logging.
+            last = None
+            for slice in sorted(self.D.get_slices(axis).keys()):
+                logger.debug('TAPModelManager._run_model(): ' + \
+                             'modeling slice {0}'.format(slice))
 
                 if s > 0 and sequential:
-                    alt_r, alt_a, alt_G = model.r, model.a, model.G
+                    alt_r, alt_a, alt_G = self.SM[last].r, self.SM[last].a, self.SM[last].G
 
-                papers = D.get_slice(axis, slice, papers=True)
+                papers = self.D.get_slice(axis, slice, include_papers=True)
+                include = {n[1]['label']:n[0] for n in self.G[slice].nodes(data=True) }
 
-                theta = self.author_theta(papers, self.M[slice])
+                if len(include) < 1:    # Skip slices with no coauthorship.
+                    logger.debug('TAPModelManager._run_model(): ' + \
+                                 'skipping slice {0}.'.format(slice))
+                    continue
+
+                theta = self.author_theta(papers, authors=include) #self.M[slice])
                 model = TAPModel(self.G[slice], theta)
                 
                 if s > 0 and sequential:
                     model.prime(alt_r, alt_a, alt_G)
                 
+                logger.debug('TAPModelManager._run_model(): ' + \
+                             'model.build() for slice {0}'.format(slice))
                 model.build()
+                logger.debug('TAPModelManager._run_model(): ' + \
+                             'model.build() for slice {0} done'.format(slice))
+
                 self.SM[slice] = model
-                
+                last = slice
                 s += 1
-                
-    
+
     def graph_collection(self, k):
+        """
+        Generate a :class:`.GraphCollection` from the set of :class:`.TapModel`
+        instances, for topic ``k``.
+        
+        Parameters
+        ----------
+        k : int
+            Topic index.
+        
+        Returns
+        -------
+        C : :class:`.GraphCollection`
+        """
+        
         C = GraphCollection()
         for slice in self.SM.keys():
             C[slice] = self.SM[slice].graph(k)
@@ -616,4 +687,33 @@ if __name__ == '__main__':
 #        grams = (g_tok_, vocab, counts)
 #        
 #        D_ = DataCollection(papers, grams={'uni':grams})
+
+
+
+#
+#    def _digraph_to_graph(self, digraph):
+#        graph = Graph()
+#        
+#        # Select the edge with the greatest weight for each pair of nodes.
+#        edges = {}
+#        for edge in digraph.edges(data=True):
+#            fwd = (edge[0], edge[1])
+#            rev = (edge[1], edge[0])
+#            
+#            key = None
+#            if fwd in edges:
+#                key = fwd
+#            elif rev in edges:
+#                key = rev
+#            
+#            if key is None:
+#                edges[fwd] = edge[2]['weight']
+#            else:
+#                if edges[key] < edge[2]['weight']:
+#                    edges[key] = edge[2]['weight']
+#    
+#        # Build the Graph.
+#        for pair, weight in edges.iteritems():
+#            graph.add_edge(pair[0])
+#        return graph
 
