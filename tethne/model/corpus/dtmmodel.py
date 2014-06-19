@@ -46,7 +46,6 @@ class DTMModel(BaseModel):
         description : list
             A list of ( item, weight ) tuples.
         """
-        print self.metadata
 
         description = [ (self.metadata[i], self.e_theta[k,i]) 
                             for i in xrange(self.e_theta[k,:].size)

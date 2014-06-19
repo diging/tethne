@@ -18,11 +18,8 @@ from tethne.model.managers import DTMModelManager
 
 import logging
 logging.basicConfig()
-#logger = logging.getLogger('tethne.classes.graphcollection')
-#logger.setLevel('ERROR')
-#logger = logging.getLogger('tethne.classes.datacollection')
-#logger.setLevel('ERROR')
-
+logger = logging.getLogger('tethne.classes.datacollection')
+logger.setLevel('ERROR')
 
 class TestMALLETModelManager(unittest.TestCase):
     def setUp(self):
@@ -38,8 +35,8 @@ class TestMALLETModelManager(unittest.TestCase):
         with PyCallGraph(output=GraphvizOutput(
                 output_file=cg_path + 'model.manager.DTMModelManager.__init__.png')):
             self.M = DTMModelManager(self.D, outpath=outpath,
-                                    temppath=temppath,
-                                    dtm_path=dtm_path)
+                                        temppath=temppath,
+                                        dtm_path=dtm_path)
         
     def test_prep(self):
         """
@@ -71,16 +68,17 @@ class TestMALLETModelManager(unittest.TestCase):
         with PyCallGraph(output=GraphvizOutput(
                 output_file=cg_path + 'model.manager.DTMModelManager.build.png')):
             self.M.build(Z=5, lda_seq_min_iter=2, lda_seq_max_iter=4, lda_max_em_iter=4)
-    
 
     def test_load(self):
-        self.M.prep()
+        """
+        :func:`._load_model` should execute successfully after :func:`.init`\.
+        """
 
         with PyCallGraph(output=GraphvizOutput(
                 output_file=cg_path + 'model.manager.DTMModelManager._load_model.png')):
             self.M._load_model()
         
-        print self.M.model.dimension_items(0, threshold=0.01)
+        self.assertEqual(self.M.model.e_theta.shape, (5, 176))
 
 
 if __name__ == '__main__':
