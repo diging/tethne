@@ -377,20 +377,18 @@ class DTMModelManager(ModelManager):
         
         self.D = D
         self.dtm_path = dtm_path
-        self.outname = '{0}/model_run'.format(self.outpath)        
+        self.outname = '{0}/model_run'.format(self.outpath)
+
+        self.mult_path = '{0}/tethne-mult.dat'.format(self.temp)
+        self.seq_path = '{0}/tethne-seq.dat'.format(self.temp)        
+        self.vocab_path = '{0}/tethne-vocab.dat'.format(self.temp)        
+        self.meta_path = '{0}/tethne-meta.dat'.format(self.temp)        
     
     def _generate_corpus(self, feature, meta):
         from tethne.writers.corpora import to_dtm_input    
         
         to_dtm_input(self.temp+'/tethne', self.D, feature, fields=meta)
-                     
-
-        self.mult_path = '{0}/tethne-mult.dat'.format(self.temp)
-        self.seq_path = '{0}/tethne-seq.dat'.format(self.temp)        
-        self.vocab_path = '{0}/tethne-vocab.dat'.format(self.temp)        
-        self.meta_path = '{0}/tethne-meta.dat'.format(self.temp)
-        
-
+    
     def _run_model(self, **kwargs):
         ## Run the dynamic topic model.
         #./main \
