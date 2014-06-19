@@ -17,10 +17,13 @@ class TAPModel(BaseModel):
         ----------
         G : :class:`.nx.Graph()`
             Should have 'weight' attribute in [0.,1.].
-        theta : array-like
-            Should have shape (N, T), where N == len(G.nodes()) and T is the
-            number of topics.
+        theta : dict
+            Should have N keys, with values shaped T; N == len(G.nodes()) and T
+            is the number of topics.
         """
+        
+        assert len(theta) == len(G.nodes())
+        
         self.G = G     # TODO: should take G as an input.
         self.theta = theta
 
@@ -38,8 +41,8 @@ class TAPModel(BaseModel):
         logger.debug('Loaded graph with {0} nodes and {1} edges.'
                                                         .format(self.N, self.M))
         
-        self.T = self.theta.shape[1]
-        self.N_d = self.theta.shape[0]
+        self.T = self.theta.values()[0].shape[0]
+        self.N_d = len(self.theta)
 
         self.yold = { i:{k:0 for k in xrange(self.T) } for i in self.G.nodes() }
 
@@ -59,7 +62,7 @@ class TAPModel(BaseModel):
         """
         Yields author probability distribution over topics.
         """
-        this_theta = self.theta[i,:]
+        this_theta = self.theta[i]
         return [ (t, this_theta[t]) for t in xrange(this_theta.size) ]
     
     def _item_relationship(self, i, j, **kwargs):
@@ -100,17 +103,19 @@ class TAPModel(BaseModel):
             sumout = np.zeros((self.T))
         
             for t, attr in self.G[i].iteritems():
-                this = self._node_index(self.G, t)
+                #this = self._node_index(self.G, t)
+                this = t
                 #this = int(t) - 1
                 for k in xrange(self.T):
                     w = float(attr['weight'])     
-                    sumout[k] = sumout[k] + w * self.theta[this,k]
+                    sumout[k] = sumout[k] + w * self.theta[this][k]
 
             for t, attr in self.G[i].iteritems():
                 for k in xrange(self.T):
                     w = float(attr['weight'])
-                    this = self._node_index(self.G, i)                    
-                    sumin[k] = sumin[k] + w * self.theta[this,k]
+#                    this = self._node_index(self.G, i)
+                    this = i
+                    sumin[k] = sumin[k] + w * self.theta[this][k]
                 
                     # calculate y z, i=i ;; [n,] should be the last row.
                     self.g[i][len(n),k] = sumin[k] / (sumin[k] + sumout[k])
@@ -119,8 +124,9 @@ class TAPModel(BaseModel):
             for t,attr in self.G[i].iteritems():
                 for k in xrange(self.T):
                     w = float(attr['weight'])
-                    this = self._node_index(self.G, i)                    
-                    self.g[i][j,k] = w*self.theta[this,k] / (sumin[k]+sumout[k])
+#                    this = self._node_index(self.G, i)
+                    this = i
+                    self.g[i][j,k] = w*self.theta[this][k] / (sumin[k]+sumout[k])
                 j+=1
             
     def _calculate_b(self):
@@ -321,7 +327,7 @@ class TAPModel(BaseModel):
                             
             # Theta
             for i in self.G.nodes():
-                subg.node[i]['theta'] = self.theta[i, k]
+                subg.node[i]['theta'] = self.theta[i][k]
                 
             self.MU[k] = subg
     

@@ -1,3 +1,8 @@
+# Profiling.
+from pycallgraph import PyCallGraph
+from pycallgraph.output import GraphvizOutput
+cg_path = './callgraphs/'
+
 import unittest
 
 import sys
@@ -31,7 +36,10 @@ class TestGraphCollection(unittest.TestCase):
         """
         should return a list of integers
         """
-        nodes = self.G.nodes()
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'classes.GraphCollection.nodes.png')):
+            nodes = self.G.nodes()
+
         self.assertIsInstance(nodes, list)
         self.assertIsInstance(nodes[0], int)
 
@@ -39,6 +47,7 @@ class TestGraphCollection(unittest.TestCase):
         """
         index should be as large as set of unique nodes in all graphs
         """
+
         unodes = set([ n for g in self.G.graphs.values() for n in g.nodes() ])
         self.assertEqual(len(self.G.node_index), len(unodes))
 

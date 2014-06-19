@@ -293,7 +293,7 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
                     except KeyError:
                         pass
                     
-                for b in xrange(a+1 , len(entry['aulast'])):
+                for b in xrange(a+1, len(entry['aulast'])):
                     # (author_a,author_b) tuple is key for coauthor_dict.
                     authors = full_names[a], full_names[b]
                     authors_inv = full_names[b], full_names[a]

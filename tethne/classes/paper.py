@@ -140,6 +140,6 @@ class Paper(object):
         if self.internal['aulast'] is not None:
             
             for i in xrange(len(self.internal['aulast'])):
-                au = self.internal['auinit'][i] + ' ' +  self.internal['aulast'][i]
+                au = self.internal['aulast'][i] + ' ' +  self.internal['auinit'][i]
                 auths.append( au.upper() )
         return auths

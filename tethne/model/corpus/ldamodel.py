@@ -42,8 +42,8 @@ class LDAModel(BaseModel):
         """
         Yields proportion of each topic in document.
         """
-        theta_i = self.theta[i, :]
-        return [ (t, theta_i[t]) for t in xrange(theta_i.size) ]
+
+        return [ (t, self.theta[i, t]) for t in xrange(self.theta.shape[1] ) ]
     
     def _item_relationship(self, i, j, **kwargs):
         """

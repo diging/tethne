@@ -44,9 +44,6 @@ class GraphCollection(object):
             If value is not a Graph.
         """
 
-        if type(graph) is not nx.classes.graph.Graph:
-            raise(ValueError("Graph must be type networkx.classes.graph.Graph"))
-
         self._index_graph(index, graph)
 
         # TODO: do we need this?
