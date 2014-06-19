@@ -25,7 +25,6 @@ class TestModelGood(BaseModel):
     def _dimension_relationship(self, d, e, **kwargs):
         return [ (0, 0.03), (1, 0.05) ]
 
-
 class TestBaseModel(unittest.TestCase):
     def test_direct_instantiation(self):
         self.assertRaises(RuntimeError, BaseModel)
