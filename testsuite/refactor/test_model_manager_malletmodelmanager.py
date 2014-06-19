@@ -18,10 +18,8 @@ from tethne.model.managers import MALLETModelManager
 
 import logging
 logging.basicConfig()
-#logger = logging.getLogger('tethne.classes.graphcollection')
-#logger.setLevel('ERROR')
-#logger = logging.getLogger('tethne.classes.datacollection')
-#logger.setLevel('ERROR')
+logger = logging.getLogger('tethne.classes.datacollection')
+logger.setLevel('ERROR')
 
 
 class TestMALLETModelManager(unittest.TestCase):
