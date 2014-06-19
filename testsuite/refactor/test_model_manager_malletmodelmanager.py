@@ -1,3 +1,8 @@
+# Profiling.
+from pycallgraph import PyCallGraph
+from pycallgraph.output import GraphvizOutput
+cg_path = './callgraphs/'
+
 import unittest
 
 import sys
@@ -29,15 +34,22 @@ class TestMALLETModelManager(unittest.TestCase):
                                         index_by='doi',
                                         exclude=set(stopwords.words()))
         self.D.slice('date', 'time_period', window_size=10)
-        self.M = MALLETModelManager(self.D, outpath=outpath,
-                                temppath=temppath,
-                                mallet_path=mallet_path)
+        
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'model.manager.MALLETModelManager.__init__.png')):
+            self.M = MALLETModelManager(self.D, outpath=outpath,
+                                    temppath=temppath,
+                                    mallet_path=mallet_path)
         
     def test_prep(self):
         """
         .prep() should result in three sizeable temporary corpus files.
         """
-        self.M.prep()
+
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'model.manager.MALLETModelManager.prep.png')):
+            self.M.prep()
+
         self.assertIn('input.mallet', os.listdir(temppath))
         self.assertGreater(os.path.getsize(temppath+'/input.mallet'), 2500000)
         
@@ -52,8 +64,12 @@ class TestMALLETModelManager(unittest.TestCase):
         .build() should result in new sizeable files in both the temp and out
         directories.
         """
+        
         self.M.prep()
-        self.M.build(max_iter=50)
+        
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'model.manager.MALLETModelManager.build.png')):
+            self.M.build(max_iter=50)
         
         self.assertIn('dt.dat', os.listdir(temppath))
         self.assertGreater(os.path.getsize(temppath+'/dt.dat'), 100000)
@@ -63,7 +79,7 @@ class TestMALLETModelManager(unittest.TestCase):
         
         self.assertIn('model.mallet', os.listdir(outpath))
         self.assertGreater(os.path.getsize(outpath+'/model.mallet'), 9000000)
-    
+
     def test_topic_time(self):
         """
         Each mode should generate two numpy.ndarrays of equal non-zero length.
@@ -73,7 +89,10 @@ class TestMALLETModelManager(unittest.TestCase):
         self.M.prep()
         self.M.build(max_iter=50)
         
-        K,R = self.M.topic_over_time(k, mode='documents', normed=True)
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'model.manager.MALLETModelManager.topic_over_time.png')):
+            K,R = self.M.topic_over_time(k, mode='documents', normed=True)
+
         self.assertIsInstance(K, numpy.ndarray)
         self.assertIsInstance(R, numpy.ndarray)
         self.assertGreater(len(K), 0)

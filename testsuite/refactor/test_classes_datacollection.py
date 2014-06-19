@@ -1,17 +1,23 @@
+# Profiling.
+from pycallgraph import PyCallGraph
+from pycallgraph.output import GraphvizOutput
+cg_path = './callgraphs/'
+
 import unittest
 
 import sys
 sys.path.append('../../')
-
 from tethne.readers import wos, dfr
 from tethne.classes import DataCollection
 
 from nltk.corpus import stopwords
 
+# Logging.
 import logging
 logging.basicConfig()
 logger = logging.getLogger('tethne.classes.datacollection')
 logger.setLevel('ERROR')
+
 
 class TestPaper(unittest.TestCase):
     pass
@@ -23,9 +29,11 @@ class TestDataCollectionWoS(unittest.TestCase):
         """
     
         wosdatapath = '{0}/wos.txt'.format(datapath)
-
         papers = wos.read(wosdatapath)
-        self.D = DataCollection(papers, index_by='wosid')
+
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'classes.DataCollection.__init__[wos].png')):
+            self.D = DataCollection(papers, index_by='wosid')
     
     def test_indexing(self):
         """
@@ -49,8 +57,11 @@ class TestDataCollectionWoS(unittest.TestCase):
         """
         Should generate features from available abstracts.
         """
+        
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'classes.DataCollection.abstract_to_features[wos].png')):
+            self.D.abstract_to_features()
 
-        self.D.abstract_to_features()
         self.assertIn('abstractTerms', self.D.features)
         self.assertNotIn('the', self.D.features['abstractTerms']['index'].values())
 
@@ -62,7 +73,10 @@ class TestDataCollectionWoS(unittest.TestCase):
         """
         """
 
-        self.D.slice('date')
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'classes.DataCollection.slice[wos].png')):
+            self.D.slice('date')
+
         self.assertIn('date', self.D.axes)
         self.assertIn(2012, self.D.axes['date'])
         self.assertIn(2013, self.D.axes['date'])
@@ -78,9 +92,12 @@ class TestDataCollectionDfR(unittest.TestCase):
     
         papers = dfr.read(dfrdatapath)
         ngrams = dfr.ngrams(dfrdatapath, 'uni')
-        self.D = DataCollection(papers, features={'unigrams': ngrams},
-                                        index_by='doi',
-                                        exclude=set(stopwords.words()))
+
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'classes.DataCollection.__init__[dfr].png')):
+            self.D = DataCollection(papers, features={'unigrams': ngrams},
+                                            index_by='doi',
+                                            exclude=set(stopwords.words()))
 
     def test_indexing(self):
         """
@@ -104,6 +121,7 @@ class TestDataCollectionDfR(unittest.TestCase):
         """
         Should be N_f features in the appropriate features dict.
         """
+
         self.assertIn('unigrams', self.D.features)
         self.assertIn('features', self.D.features['unigrams'])
         self.assertIn('index', self.D.features['unigrams'])
@@ -116,6 +134,7 @@ class TestDataCollectionDfR(unittest.TestCase):
         self.assertEqual(len(self.D.features['unigrams']['documentCounts']), 51639)
 
 class TestDataCollectionTokenization(unittest.TestCase):
+
     def setUp(self):
         self.dfrdatapath = '{0}/dfr'.format(datapath)
         self.papers = dfr.read(self.dfrdatapath)
@@ -126,10 +145,13 @@ class TestDataCollectionTokenization(unittest.TestCase):
         Applying a filter should result in a smaller featureset.
         """
         filt = lambda s: len(s) > 3
-        D = DataCollection(self.papers, features={'unigrams': self.ngrams},
-                                        index_by='doi',
-                                        exclude=set(stopwords.words()),
-                                        filt=filt)
+        
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'classes.DataCollection.__init__[dfr_filter].png')):
+            D = DataCollection(self.papers, features={'unigrams': self.ngrams},
+                                            index_by='doi',
+                                            exclude=set(stopwords.words()),
+                                            filt=filt)
         self.assertEqual(len(D.features['unigrams']['index']), 49503)
         
     def test_filter_features(self):
@@ -151,7 +173,10 @@ class TestDataCollectionTokenization(unittest.TestCase):
         D = DataCollection(self.papers, features={'unigrams': self.ngrams},
                                         index_by='doi',
                                         exclude=set(stopwords.words()))
-        D.filter_features('unigrams', 'unigrams_lim', filt)
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'classes.DataCollection.filter_features[dfr].png')):
+            D.filter_features('unigrams', 'unigrams_lim', filt)
+
         self.assertEqual(len(D.features['unigrams_lim']['index']), 14709)
 
 if __name__ == '__main__':
