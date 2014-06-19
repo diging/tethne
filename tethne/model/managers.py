@@ -124,6 +124,14 @@ class MALLETModelManager(ModelManager):
         self.mallet_path = mallet_path
         self.feature = feature
         self.meta = meta
+        
+        self.input_path = '{0}/input.mallet'.format(self.temp)
+        self.corpus_path = self.temp+'/tethne_docs.txt'
+        self.meta_path = self.temp+'/tethne_meta.csv'
+    
+        self.dt = '{0}/dt.dat'.format(self.temp)
+        self.wt = '{0}/wt.dat'.format(self.temp)
+        self.om = '{0}/model.mallet'.format(self.outpath)
 
     def prep(self, feature='unigrams', meta=['date', 'atitle', 'jtitle']):
         """
@@ -149,14 +157,11 @@ class MALLETModelManager(ModelManager):
                        for p,paper in self.datacollection.papers.iteritems() } )
         
         # Export the corpus.
-        paths = to_documents(
-                    self.temp+'/tethne',            # Temporary files.
-                    self.datacollection.features[feature]['features'],
-                    metadata=metadata,
-                    vocab=self.datacollection.features[feature]['index'] )
-
-        # Need these to generate MALLET calls in self._export_corpus()
-        self.corpus_path, self.meta_path = paths
+        to_documents(
+            self.temp+'/tethne',            # Temporary files.
+            self.datacollection.features[feature]['features'],
+            metadata=metadata,
+            vocab=self.datacollection.features[feature]['index'] )
         
         self._export_corpus()
     
@@ -168,8 +173,6 @@ class MALLETModelManager(ModelManager):
         #     --output mytopic-input.mallet --keep-sequence --remove-stopwords
         
         self.mallet = self.mallet_path + "/bin/mallet"
-        self.input_path = '{0}/input.mallet'.format(self.temp)
-        
         try:
             exit = subprocess.call( [ self.mallet, 
                     'import-file',
@@ -192,10 +195,6 @@ class MALLETModelManager(ModelManager):
         #> --output-doc-topics /Users/erickpeirson/doc_top 
         #> --word-topic-counts-file /Users/erickpeirson/word_top 
         #> --output-topic-keys /Users/erickpeirson/topic_keys
-            
-        self.dt = '{0}/dt.dat'.format(self.temp)
-        self.wt = '{0}/wt.dat'.format(self.temp)
-        self.om = '{0}/model.mallet'.format(self.outpath)
         
         prog = re.compile('\<([^\)]+)\>')
         ll_prog = re.compile(r'(\d+)')
@@ -382,7 +381,7 @@ class DTMModelManager(ModelManager):
         self.mult_path = '{0}/tethne-mult.dat'.format(self.temp)
         self.seq_path = '{0}/tethne-seq.dat'.format(self.temp)        
         self.vocab_path = '{0}/tethne-vocab.dat'.format(self.temp)        
-        self.meta_path = '{0}/tethne-meta.dat'.format(self.temp)        
+        self.meta_path = '{0}/tethne-meta.dat'.format(self.temp)
     
     def _generate_corpus(self, feature, meta):
         from tethne.writers.corpora import to_dtm_input    

@@ -24,9 +24,6 @@ def to_documents(target, ngrams, metadata=None, vocab=None):
     IOError
     """
 
-    docpath = target + '_docs.txt'
-    metapath = target + '_meta.csv'
-
     try:
         docFile = open(docpath, 'wb')
     except IOError:

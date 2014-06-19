@@ -125,6 +125,17 @@ class TestMALLETModelManager(unittest.TestCase):
         size = os.path.getsize(outpath+'/topic_{0}_over_time.png'.format(k))
         self.assertGreater(size, 0)
 
+    def test_load(self):
+        """
+        :func:`._load_model` should execute successfully after :func:`.init`\.
+        """
+
+        with PyCallGraph(output=GraphvizOutput(
+                output_file=cg_path + 'model.manager.MALLETModelManager._load_model.png')):
+            self.M._load_model()
+        
+        self.assertEqual(self.M.model.theta.shape, (241, 20))
+
 if __name__ == '__main__':
     datapath = './data'
     temppath = './sandbox/temp'
