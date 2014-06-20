@@ -225,6 +225,9 @@ class DataCollection(object):
         if filt is None:
             filt = lambda s: True
         
+        if type(exclude) is not set:
+            exclude = set(exclude)
+        
         def _handle(tok,w):
             if tok in findex_:
                 counts[findex_[tok]] += w

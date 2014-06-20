@@ -44,7 +44,8 @@ class TAPModel(BaseModel):
         self.T = self.theta.values()[0].shape[0]
         self.N_d = len(self.theta)
 
-        self.yold = { i:{k:0 for k in xrange(self.T) } for i in self.G.nodes() }
+        self.yold = { i:{k:0 for k in xrange(self.T) } for i in sorted(self.G.nodes()) }
+        self.yold_values = { i:{k:0. for k in xrange(self.T) } for i in sorted(self.G.nodes()) }
 
         logger.debug('Loaded distributions over {0} topics for {1} nodes.'
                                                       .format(self.T, self.N_d))
@@ -95,8 +96,8 @@ class TAPModel(BaseModel):
 
     def _calculate_g(self):
         """eq. 1"""
-        for i in self.G.nodes():
-            n = self.G.neighbors(i)
+        for i in sorted(self.G.nodes()):
+            n = sorted(self.G.neighbors(i))
             self.g[i] = np.zeros((len(n)+1, self.T))
 
             sumin = np.zeros((self.T))
@@ -131,8 +132,8 @@ class TAPModel(BaseModel):
             
     def _calculate_b(self):
         """eq. 8"""
-        for i in self.G.nodes():
-            n = self.G.neighbors(i)
+        for i in sorted(self.G.nodes()):
+            n = sorted(self.G.neighbors(i))
             self.b[i] = np.zeros((len(n)+1, self.T))
             self.r[i] = np.zeros((len(n)+1, self.T))
             self.a[i] = np.zeros((len(n)+1, self.T))
@@ -149,8 +150,8 @@ class TAPModel(BaseModel):
     def _update_r(self):
         """eq. 5"""
     
-        for i in self.G.nodes():
-            n = self.G.neighbors(i)
+        for i in sorted(self.G.nodes()):
+            n = sorted(self.G.neighbors(i))
         
             fmx = np.zeros((self.T))
             smx = np.zeros((self.T))
@@ -165,17 +166,21 @@ class TAPModel(BaseModel):
                     fmx[k] = self.b[i][0,k] + self.a[i][0,k]
                     smx[k] = self.b[i][1,k] + self.a[i][1,k]
                     maxk[k] = 0
-                    if smx[k] > fmx[k]:
+                    # Setting a minimum difference >> 1e-5 to avoid weird
+                    # precision issues.
+                    if smx[k] - fmx[k] > float(1e-5):
                         fmx[k], smx[k] = swap(fmx[k], smx[k])
                         maxk[k] = 1
 
                 for j in xrange(2, len(n)+1):
                     for k in xrange(self.T):
                         temp = self.a[i][j,k] + self.b[i][j,k]
-                        if temp > smx[k]:
+                        # (see above) precision issues.
+                        if temp - smx[k] > float(1e-5):
                             temp, smx[k] = swap(temp, smx[k])
                     
-                        if smx[k] > fmx[k]:
+                        # (see above) precision issues.
+                        if smx[k] - fmx[k] > float(1e-5):
                             fmx[k], smx[k] = swap(fmx[k], smx[k])
                             maxk[k] = j
             
@@ -196,13 +201,13 @@ class TAPModel(BaseModel):
         smx = {}
         maxk = {}
 
-        for j in self.G.nodes():
+        for j in sorted(self.G.nodes()):
             fmx[j] = np.zeros((self.T))
             smx[j] = np.zeros((self.T))
         
             maxk[j] = np.array( [-1] * self.T )
 
-            n = self.G.neighbors(j)
+            n = sorted(self.G.neighbors(j))
         
             # maxk[N] records the maximum value of min{r z, kj, 0}
             if len(n) < 1:
@@ -223,7 +228,8 @@ class TAPModel(BaseModel):
                 
                     for k in xrange(self.T):
                         smx[j][k] = min( self.r[neighbour][pos, k], 0. )
-                        if smx[j][k] > fmx[j][k]:
+                        # (see above) precision issues.
+                        if smx[j][k] - fmx[j][k] > float(1e-5):
                             fmx[j][k], smx[j][k] = swap(fmx[j][k],smx[j][k])
                             maxk[j][k] = neighbour
             
@@ -233,20 +239,22 @@ class TAPModel(BaseModel):
                     
                         for k in xrange(self.T):
                             temp = min ( self.r[neighbour][pos,k] , 0. )
-                            if temp > smx[j][k]:
-                                temp, smx[j][k] = swap(temp, smx[j][k])   
-                            if smx[j][k] > fmx[j][k]:
+                            # (see above) precision issues.
+                            if temp - smx[j][k] > float(1e-5):
+                                temp, smx[j][k] = swap(temp, smx[j][k])
+                            # (see above) precision issues.
+                            if smx[j][k] - fmx[j][k] > float(1e-5):
                                 fmx[j][k], smx[j][k] = swap(fmx[j][k],smx[j][k])
                                 maxk[j][k] = neighbour                                          
 
-        for i in self.G.nodes():
-            n = self.G.neighbors(i)
+        for i in sorted(self.G.nodes()):
+            n = sorted(self.G.neighbors(i))
             for k in xrange(self.T): # a_ii
                 self.a[i][len(n), k] = fmx[i][k]
         
             for j in n: # a_ij
                 j_index = n.index(j)
-                n_j = self.G.neighbors(j)                
+                n_j = sorted(self.G.neighbors(j))
                 for k in xrange(self.T):
                     if i == maxk[j][k]:
                         use = smx[i][k]
@@ -266,27 +274,26 @@ class TAPModel(BaseModel):
         """
 
         dc = 0
-        for i in self.G.nodes():
-            n = self.G.neighbors(i)
+        for i in sorted(self.G.nodes()):
+            n = sorted(self.G.neighbors(i))
             for k in xrange(self.T):
-                fmx = self.r[i][len(n), k] + self.a[i][len(n), k]
-                rep = -1
-            
+                last = 0.
+                
+                j_max = 0
+                # Get most influential neighbor, j_max.
                 for j in xrange(len(n)):
-                    temp = self.r[i][j,k] + self.a[i][j,k]
-                    if temp > fmx:
-                        temp, fmx = swap(temp, fmx)
-                        rep = j
-                if rep == -1:
-                    rep = i
-                else:
-                    rep = n[rep]
-            
-                if self.iteration >= 21:
-                    if self.yold[i][k] != rep:
+                    f = self.r[i][j, k] + self.a[i][j, k]
+                    if f > last:
+                        j_max = int(j)
+                        j_max_value = float(f)
+                        last = float(f)
+    
+                if self.iteration > 20:
+                    if self.yold[i][k] != j_max \
+                        and j_max_value - self.yold_values[i][k] > float(1e-5):
                         dc += 1
-            
-                self.yold[i][k] = rep
+                        self.yold[i][k] = int(j_max)
+                        self.yold_values[i][k] = float(j_max_value)
 
         if dc == 0: # No change?
             nc += 1
@@ -296,7 +303,7 @@ class TAPModel(BaseModel):
         cont = True
         if nc == 50:
             cont = False
-            
+        
         return nc, cont
 
     def _calculate_mu(self):
@@ -307,9 +314,9 @@ class TAPModel(BaseModel):
             subg = nx.DiGraph()
             
             # Influence
-            for i in self.G.nodes():
-                n = self.G.neighbors(i)
-                for j in self.G.nodes():
+            for i in sorted(self.G.nodes()):
+                n = sorted(self.G.neighbors(i))
+                for j in sorted(self.G.nodes()):
                     if j in n:
                         j_ = n.index(j)
                         i_ = self.G.neighbors(j).index(i)
@@ -326,7 +333,7 @@ class TAPModel(BaseModel):
                             subg.add_edge(i, j, weight=float(i_j))
                             
             # Theta
-            for i in self.G.nodes():
+            for i in sorted(self.G.nodes()):
                 subg.node[i]['theta'] = self.theta[i][k]
                 
             self.MU[k] = subg
@@ -349,12 +356,12 @@ class TAPModel(BaseModel):
         
         for i in alt_G.nodes():
             alt_n = alt_G.neighbors(i)            
-            if i in self.G.nodes():
+            if i in sorted(self.G.nodes()):
                 # alt_r and alt_a must be from a model with the same topics.
                 assert alt_r[i].shape[1] == self.r[i].shape[1]
                 assert alt_a[i].shape[1] == self.a[i].shape[1]
                 
-                n = self.G.neighbors(i)
+                n = sorted(self.G.neighbors(i))
                 for j in alt_n:
                     if j in n:
                         j_ = n.index(j)
@@ -367,7 +374,7 @@ class TAPModel(BaseModel):
     def graph(self, k):
         return self.MU[k]
 
-    def build(self):
+    def build(self, max_iter):
         logger.debug('start iterations')
         nc = 0
         self.iteration = 0.
@@ -381,5 +388,8 @@ class TAPModel(BaseModel):
             self._update_r()
             self._update_a()
             nc,cont = self._check_convergence(nc)
+            
+            if self.iteration >= max_iter:
+                cont = False
 
         self._calculate_mu()

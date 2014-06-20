@@ -2,13 +2,14 @@
 Helper functions.
 """
 import string
+import copy
 
 def swap(u,v):
     """
     exchange the values of u and v
     """
 
-    return v,u
+    return copy.deepcopy(v),copy.deepcopy(u)
 
 def contains(l, f):
     """
