@@ -57,8 +57,7 @@ class LDAModel(BaseModel):
         """
         Yields probability distribution over terms.
         """
-        phi_k = self.phi[k, :]
-        return [ (w, phi_k[w]) for w in xrange(phi_k.size) ]
+        return [ (w, self.phi[k, w]) for w in xrange(self.phi.shape[1]) ]
     
     def _dimension_relationship(self, k, e, **kwargs):
         """
@@ -134,9 +133,8 @@ class LDAModel(BaseModel):
 #
 #        return [ ( w, self.phi[z,w]) for w in words ]
 
-    def print_topic(self, z):
-        words = [ self.vocabulary.by_int[w] for w,p
-                    in self.words_in_topic(z, topW=topW) ]
+    def print_topic(self, k, topW=10):
+        words = [ self.vocabulary[w] for w,p in self.dimension(k, topW=topW) ]
         print ', '.join(words)
         return words
 

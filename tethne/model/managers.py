@@ -10,7 +10,7 @@ from networkx import Graph
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
+logger.setLevel('ERROR')
 
 from ..classes import GraphCollection
 from social import TAPModel
@@ -254,7 +254,7 @@ class MALLETModelManager(ModelManager):
 
     def topic_over_time(self, k, threshold=0.05, mode='documents', 
                                  normed=True, plot=False, 
-                                figargs={'figsize':(10,10)} ):
+                                 figargs={'figsize':(10,10)} ):
         """
         Representation of topic ``k`` over 'date' slice axis.
         
@@ -285,7 +285,7 @@ class MALLETModelManager(ModelManager):
             Representation of topic ``k`` over time.
         """
         
-        if k >= self.Z:
+        if k >= self.model.Z:
             raise ValueError('No such topic in this model.')
         
         items = self.model.dimension_items(k, threshold)
@@ -605,7 +605,7 @@ class TAPModelManager(SocialModelManager):
                 
                 logger.debug('TAPModelManager._run_model(): ' + \
                              'model.build() for slice {0}'.format(slice))
-                model.build()
+                model.build(max_iter=max_iter)
                 logger.debug('TAPModelManager._run_model(): ' + \
                              'model.build() for slice {0} done'.format(slice))
 
