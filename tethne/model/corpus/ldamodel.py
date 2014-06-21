@@ -31,6 +31,7 @@ class LDAModel(BaseModel):
 
         self.phi = phi
         self.Z = phi.shape[0]   # Number of topics.
+        self.W = phi.shape[1]   # Number of terms.
 
         self.metadata = metadata
         self.vocabulary = vocabulary
@@ -134,8 +135,7 @@ class LDAModel(BaseModel):
 #        return [ ( w, self.phi[z,w]) for w in words ]
 
     def print_topic(self, k, topW=10):
-        words = [ self.vocabulary[w] for w,p in self.dimension(k, topW=topW) ]
-        print ', '.join(words)
+        words = [ w for w,p in self.dimension(k, topW=topW) ]
         return words
 
     def print_topics(self):
@@ -151,6 +151,8 @@ class LDAModel(BaseModel):
     def docs_in_topic(self, z, topD=None):
         """
         Returns a list of the topD documents most representative of topic z.
+        
+        DEPRECATED: use :func:`.dimension_items`.
         
         Parameters
         ----------
@@ -261,8 +263,6 @@ def _handle_word_top(path):
     -------
     wt : Numpy array
         Rows are topics, columns are words. Rows sum to ~1.
-    vocabulary : :class:`.Dictionary`
-        Maps words to word-indices in wt.
     """
     from scipy.sparse import coo_matrix
     
