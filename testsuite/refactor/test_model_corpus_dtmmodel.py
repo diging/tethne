@@ -186,7 +186,7 @@ class test_GerrishLoader(unittest.TestCase):
             self.assertIsInstance(self.G.tdict[k], numpy.ndarray)
 
 if __name__ == '__main__':
-    profile = True
+    profile = False
     
     datapath = './data'
     temppath = './sandbox/temp'

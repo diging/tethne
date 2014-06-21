@@ -374,7 +374,7 @@ class TAPModel(BaseModel):
     def graph(self, k):
         return self.MU[k]
 
-    def build(self, max_iter):
+    def build(self, max_iter=500):
         logger.debug('start iterations')
         nc = 0
         self.iteration = 0.
