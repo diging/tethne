@@ -16,36 +16,43 @@ from tethne import DataCollection, HDF5DataCollection
 from tethne.readers import dfr
 from tethne.model.managers import MALLETModelManager
 
+import cPickle as pickle
+picklepath = './data/pickles'
+with open('{0}/dfr_DataCollection.pickle'.format(picklepath), 'r') as f:
+    D = pickle.load(f)
+
 import logging
 logging.basicConfig()
 logger = logging.getLogger('tethne.classes.datacollection')
 logger.setLevel('ERROR')
 
 
+
 class TestMALLETModelManager(unittest.TestCase):
     def setUp(self):
         dfrdatapath = '{0}/dfr'.format(datapath)
-        
-        papers = dfr.read(dfrdatapath)
-        ngrams = dfr.ngrams(dfrdatapath, 'uni')
-        self.D = DataCollection(papers, features={'unigrams': ngrams},
-                                        index_by='doi',
-                                        exclude=set(stopwords.words()))
-        self.D.slice('date', 'time_period', window_size=10)
-        
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'model.manager.MALLETModelManager.__init__.png')):
-            self.M = MALLETModelManager(self.D, outpath=outpath,
-                                    temppath=temppath,
-                                    mallet_path=mallet_path)
-        
+
+        if profile:
+            pcgpath = cg_path + 'model.manager.MALLETModelManager.__init__.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                self.M = MALLETModelManager(D, outpath=outpath,
+                                               temppath=temppath,
+                                               mallet_path=mallet_path)
+        else:
+            self.M = MALLETModelManager(D, outpath=outpath,
+                                           temppath=temppath,
+                                           mallet_path=mallet_path)
+
     def test_prep(self):
         """
         .prep() should result in three sizeable temporary corpus files.
         """
 
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'model.manager.MALLETModelManager.prep.png')):
+        if profile:
+            pcgpath = cg_path + 'model.manager.MALLETModelManager.prep.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                self.M.prep()
+        else:
             self.M.prep()
 
         self.assertIn('input.mallet', os.listdir(temppath))
@@ -56,7 +63,7 @@ class TestMALLETModelManager(unittest.TestCase):
                 
         self.assertIn('tethne_meta.csv', os.listdir(temppath))        
         self.assertGreater(os.path.getsize(temppath+'/tethne_meta.csv'), 10000)
-    
+
     def test_build(self):
         """
         .build() should result in new sizeable files in both the temp and out
@@ -65,8 +72,11 @@ class TestMALLETModelManager(unittest.TestCase):
         
         self.M.prep()
         
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'model.manager.MALLETModelManager.build.png')):
+        if profile:
+            pcgpath = cg_path + 'model.manager.MALLETModelManager.build.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                self.M.build(max_iter=50)
+        else:
             self.M.build(max_iter=50)
         
         self.assertIn('dt.dat', os.listdir(temppath))
@@ -78,6 +88,76 @@ class TestMALLETModelManager(unittest.TestCase):
         self.assertIn('model.mallet', os.listdir(outpath))
         self.assertGreater(os.path.getsize(outpath+'/model.mallet'), 9000000)
 
+    def test_list_topic(self):
+        """
+        :func:`.list_topic` should yield a list with ``Nwords`` words.
+        """
+        Nwords = 10
+        self.M._load_model()
+        
+        if profile:
+            pcgpath = cg_path + 'model.manager.MALLETModelManager.list_topic.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                result = self.M.list_topic(0, Nwords=Nwords)
+        else:
+            result = self.M.list_topic(0, Nwords=Nwords)
+
+        self.assertIsInstance(result, list)
+        self.assertIsInstance(result[0], str)
+        self.assertEqual(len(result), Nwords)
+
+    def test_print_topic(self):
+        """
+        :func:`.print_topic` should yield a string with ``Nwords`` words.
+        """
+        Nwords = 10
+        self.M._load_model()
+        
+        if profile:
+            pcgpath = cg_path + 'model.manager.MALLETModelManager.print_topic.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                result = self.M.print_topic(0, Nwords=Nwords)
+        else:
+            result = self.M.print_topic(0, Nwords=Nwords)
+        
+        self.assertIsInstance(result, str)
+        self.assertEqual(len(result.split(', ')), Nwords)
+
+    def test_list_topics(self):
+        """
+        :func:`.list_topics` should yield a dict { k : [ w ], }.
+        """
+
+        Nwords = 10
+        self.M._load_model()
+
+        if profile:
+            pcgpath = cg_path + 'model.manager.MALLETModelManager.list_topics.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                result = self.M.list_topics(Nwords=Nwords)
+        else:
+            result = self.M.list_topics(Nwords=Nwords)
+
+        self.assertIsInstance(result, dict)
+        self.assertIsInstance(result.keys()[0], int)
+        self.assertIsInstance(result.values()[0], list)
+        self.assertIsInstance(result.values()[0][0], str)
+        self.assertEqual(len(result), self.M.model.Z)
+
+    def test_print_topics(self):
+        Nwords = 10
+        self.M._load_model()
+
+        if profile:
+            pcgpath = cg_path + 'model.manager.MALLETModelManager.print_topics.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                result = self.M.print_topics(Nwords=Nwords)
+        else:
+            result = self.M.print_topics(Nwords=Nwords)
+
+        self.assertIsInstance(result, str)
+        self.assertEqual(len(result.split('\n')), self.M.model.Z)
+
     def test_topic_time(self):
         """
         Each mode should generate two numpy.ndarrays of equal non-zero length.
@@ -87,8 +167,11 @@ class TestMALLETModelManager(unittest.TestCase):
         self.M.prep()
         self.M.build(max_iter=50)
         
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'model.manager.MALLETModelManager.topic_over_time.png')):
+        if profile:
+            pcgpath = cg_path + 'model.manager.MALLETModelManager.topic_over_time.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                K,R = self.M.topic_over_time(k, mode='documents', normed=True)
+        else:
             K,R = self.M.topic_over_time(k, mode='documents', normed=True)
 
         self.assertIsInstance(K, numpy.ndarray)
@@ -128,8 +211,11 @@ class TestMALLETModelManager(unittest.TestCase):
         :func:`._load_model` should execute successfully after :func:`.init`\.
         """
 
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'model.manager.MALLETModelManager._load_model.png')):
+        if profile:
+            pcgpath = cg_path + 'model.manager.MALLETModelManager._load_model.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                self.M._load_model()
+        else:
             self.M._load_model()
         
         self.assertEqual(self.M.model.theta.shape, (241, 20))
@@ -139,4 +225,7 @@ if __name__ == '__main__':
     temppath = './sandbox/temp'
     outpath = './sandbox/out'
     mallet_path = '/Applications/mallet-2.0.7'
+    
+    profile = False
+    
     unittest.main()

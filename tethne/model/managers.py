@@ -142,6 +142,8 @@ class MALLETModelManager(ModelManager):
         self.dt = '{0}/dt.dat'.format(self.temp)
         self.wt = '{0}/wt.dat'.format(self.temp)
         self.om = '{0}/model.mallet'.format(self.outpath)
+    
+        self.vocab = self.datacollection.features[self.feature]['index']
 
     def prep(self, feature='unigrams', meta=['date', 'atitle', 'jtitle']):
         """
@@ -151,11 +153,7 @@ class MALLETModelManager(ModelManager):
         self._generate_corpus(feature, meta)
         self._export_corpus()        
         self.prepped = True
-    
-#    def build(self):
-#        self._run_model()
-#        self._load_model()
-    
+
     def _generate_corpus(self, feature, meta):
         """
         Writes a corpus to disk amenable to MALLET topic modeling.
@@ -251,6 +249,92 @@ class MALLETModelManager(ModelManager):
         self.model = from_mallet(   self.dt, 
                                     self.wt, 
                                     self.meta_path  )
+    
+    def list_topic(self, k, Nwords=10):
+        """
+        Yields the top ``Nwords`` for topic ``k``.
+        
+        Parameters
+        ----------
+        k : int
+            A topic index.
+        Nwords : int
+            Number of words to return.
+        
+        Returns
+        -------
+        as_list : list
+            List of words in topic.
+        """
+        words = self.model.dimension(k, top=Nwords)
+        as_list = [ self.vocab[w] for w,p in words ]
+
+        return as_list
+    
+    def print_topic(self, k, Nwords=10):
+        """
+        Yields the top ``Nwords`` for topic ``k``.
+        
+        Parameters
+        ----------
+        k : int
+            A topic index.
+        Nwords : int
+            Number of words to return.
+        
+        Returns
+        -------
+        as_string : str
+            Joined list of words in topic.
+        """
+
+        as_string = ', '.join(self.list_topic(k, Nwords))
+    
+        return as_string
+    
+    def list_topics(self, Nwords=10):
+        """
+        Yields the top ``Nwords`` for each topic.
+        
+        Parameters
+        ----------
+        Nwords : int
+            Number of words to return for each topic.
+        
+        Returns
+        -------
+        as_dict : dict
+            Keys are topic indices, values are list of words.
+        """
+        
+        as_dict = {}
+        for k in xrange(self.model.Z):
+            as_dict[k] = self.list_topic(k, Nwords)
+    
+        return as_dict
+    
+    def print_topics(self, Nwords=10):
+        """
+        Yields the top ``Nwords`` for each topic.
+        
+        Parameters
+        ----------
+        Nwords : int
+            Number of words to return for each topic.
+        
+        Returns
+        -------
+        as_string : str
+            Newline-delimited lists of words for each topic.
+        """
+            
+        as_dict = self.list_topics(Nwords)
+        s = []
+        for key, value in as_dict.iteritems():
+            s.append('{0}: {1}'.format(key, ', '.join(value)))
+        as_string = '\n'.join(s)
+        
+        return as_string
 
     def topic_over_time(self, k, threshold=0.05, mode='documents', 
                                  normed=True, plot=False, 

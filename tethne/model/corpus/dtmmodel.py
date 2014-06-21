@@ -4,15 +4,31 @@ import os
 import re
 import csv
 
+# Logging.
+import logging
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel('ERROR')
+
 class DTMModel(BaseModel):
 
     def __init__(self, e_theta, topics, metadata, vocabulary):
         self.e_theta = e_theta
+        self.Z = e_theta.shape[0]   # Number of topics.
+        self.M = e_theta.shape[1]   # Number of documents.
+        
         self.topics = topics
+        self.W = topics.shape[1]    # Number of words.
+        self.T = topics.shape[2]    # Number of time periods.
+
         self.metadata = metadata
         self.vocabulary = vocabulary
 
         self.lookup = { v:k for k,v in metadata.iteritems() }
+    
+        logging.debug('DTMModel.__init__(): loaded model with' + \
+                      ' {0} topics, {1} documents,'.format(self.Z, self.M) + \
+                      ' {0} words, {1} time periods.'.format(self.W, self.T))
 
     def _item_description(self, i, **kwargs):
         """
@@ -104,6 +120,8 @@ class GerrishLoader(object):
         self.handler = { 'prob': self._handle_prob,
                          'info': self._handle_info,
                          'obs': self._handle_obs     }
+
+        self.tdict = {}
     
     def load(self):
         try:
@@ -111,7 +129,7 @@ class GerrishLoader(object):
             lda_seq_dir = os.listdir('{0}/lda-seq'.format(self.target))
         except OSError:
             raise OSError("Invalid target path.")
-        
+
         # Metadata.
         self._handle_metadata()
         self._handle_vocabulary()
@@ -123,7 +141,6 @@ class GerrishLoader(object):
         self._handle_gammas()
         
         # p(w|z)
-        self.tdict = {}
         for fname in lda_seq_dir:
             fs = re.split('-|\.', fname)
 
@@ -169,7 +186,7 @@ class GerrishLoader(object):
         """
         - topic-???-var-e-log-prob.dat: the e-betas (word distributions) for
         topic ??? for all times.  This is in row-major form,
-       """
+        """
         with open('{0}/lda-seq/{1}'.format(self.target, fname), 'rb') as f:
             data = np.array(f.read().split()).reshape((self.N_w, self.N_t))
             self.tdict[z] = np.exp(data.astype('float32'))
