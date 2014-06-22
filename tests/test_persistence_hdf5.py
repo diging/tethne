@@ -1,8 +1,5 @@
 from settings import *
 
-from pycallgraph import PyCallGraph
-from pycallgraph.output import GraphvizOutput
-
 import unittest
 
 from tethne.persistence import HDF5DataCollection, HDF5Paper
@@ -21,14 +18,8 @@ class TestDataCollectionDfRHDF5(unittest.TestCase):
         papers = dfr.read(dfrdatapath)
         ngrams = dfr.ngrams(dfrdatapath, 'uni')
 
-        if profile:
-            with PyCallGraph(output=GraphvizOutput(
-                    output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.__init__[dfr].png')):
-                self.D = HDF5DataCollection(papers,
-                                                features={'unigrams': ngrams},
-                                                index_by='doi',
-                                                exclude=set(stopwords.words()))
-        else:
+        pcgpath = cg_path + 'persistence.hdf5.HDF5DataCollection.__init__[dfr].png'
+        with Profile(pcgpath):
             self.D = HDF5DataCollection(papers, features={'unigrams': ngrams},
                                                 index_by='doi',
                                                 exclude=set(stopwords.words()))
@@ -79,11 +70,8 @@ class TestDataCollectionWoSHDF5(unittest.TestCase):
 
         papers = wos.read(wosdatapath)
         
-        if profile:
-            with PyCallGraph(output=GraphvizOutput(
-                    output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.__init__[wos].png')):
-                self.D = HDF5DataCollection(papers, index_by='wosid')
-        else:
+        pcgpath = cg_path + 'persistence.hdf5.HDF5DataCollection.__init__[wos].png'
+        with Profile(pcgpath):
             self.D = HDF5DataCollection(papers, index_by='wosid')
 
     def test_indexing(self):
@@ -110,11 +98,8 @@ class TestDataCollectionWoSHDF5(unittest.TestCase):
         Should generate features from available abstracts.
         """
 
-        if profile:
-            with PyCallGraph(output=GraphvizOutput(
-                    output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.abstract_to_features[wos].png')):
-                self.D.abstract_to_features()
-        else:
+        pcgpath = cg_path + 'persistence.hdf5.HDF5DataCollection.abstract_to_features[wos].png'
+        with Profile(pcgpath):
             self.D.abstract_to_features()
 
         self.assertIn('abstractTerms', self.D.features)
@@ -128,11 +113,8 @@ class TestDataCollectionWoSHDF5(unittest.TestCase):
         """
         """
 
-        if profile:
-            with PyCallGraph(output=GraphvizOutput(
-                    output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.slice[wos].png')):
-                self.D.slice('date')
-        else:
+        pcgpath = cg_path + 'persistence.hdf5.HDF5DataCollection.slice[wos].png'
+        with Profile(pcgpath):
             self.D.slice('date')
 
         self.assertIn('date', self.D.axes)
@@ -153,15 +135,8 @@ class TestDataCollectionTokenization(unittest.TestCase):
         """
         filt = lambda s: len(s) > 3 # Must have at least four characters.
 
-        if profile:
-            with PyCallGraph(output=GraphvizOutput(
-                    output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.__init__[dfr_filter].png')):
-                D = HDF5DataCollection(self.papers,
-                                            features={'unigrams': self.ngrams},
-                                            index_by='doi',
-                                            exclude=set(stopwords.words()),
-                                            filt=filt)
-        else:
+        pcgpath = cg_path + 'persistence.hdf5.HDF5DataCollection.__init__[dfr_filter].png'
+        with Profile(pcgpath):
             D = HDF5DataCollection(self.papers,
                                         features={'unigrams': self.ngrams},
                                         index_by='doi',
@@ -190,12 +165,9 @@ class TestDataCollectionTokenization(unittest.TestCase):
         D = HDF5DataCollection(self.papers, features={'unigrams': self.ngrams},
                                             index_by='doi',
                                             exclude=set(stopwords.words()))
-                                            
-        if profile:
-            with PyCallGraph(output=GraphvizOutput(
-                    output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.filter_features[dfr].png')):
-                D.filter_features('unigrams', 'unigrams_lim', filt)
-        else:
+        
+        pcgpath = cg_path + 'persistence.hdf5.HDF5DataCollection.filter_features[dfr].png'
+        with Profile(pcgpath):
             D.filter_features('unigrams', 'unigrams_lim', filt)
         
         self.assertEqual(len(D.features['unigrams_lim']['index']), 14709)        
