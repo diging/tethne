@@ -8,11 +8,10 @@ import tethne.utilities as util
 import os
 from pprint import pprint
 
-
 class TestConvert(unittest.TestCase):
 
     def setUp(self):
-       filepath =  "./tests/testin/authorinstitutions_test.txt"
+       filepath =  '{0}/testin/authorinstitutions_test.txt'.format(datapath)
        self.wos_list  = rd.wos.parse(filepath)
        self.meta_list = rd.wos.convert(self.wos_list)
 
@@ -73,8 +72,8 @@ class TestConvert(unittest.TestCase):
 
     def test_from_dir(self):
     
-        self.dir_path = "./tests/testin/only3"
-        self.wrong_path = "./tests/testin232/only3"
+        self.dir_path = '{0}/testin/only3'.format(datapath)
+        self.wrong_path = '{0}/testin232/only3'.format(datapath)
         
         # Check if objects
         a  = rd.wos.from_dir(self.dir_path)

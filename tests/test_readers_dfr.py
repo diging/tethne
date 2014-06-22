@@ -1,9 +1,5 @@
 from settings import *
 
-# Profiling.
-from pycallgraph import PyCallGraph
-from pycallgraph.output import GraphvizOutput
-
 import unittest
 
 from tethne.readers.dfr import read, ngrams, GramGenerator, _handle_authors
@@ -19,11 +15,8 @@ class TestNGrams(unittest.TestCase):
         In 'heavy' mode (default), :func:`.ngrams` should return a dict.
         """
 
-        if profile:
-            with PyCallGraph(output=GraphvizOutput(
-                    output_file=cg_path + 'readers.dfr.ngrams[heavy].png')):
-                self.unigrams = ngrams(self.dfrdatapath, N='uni')
-        else:
+        pcgpath = cg_path + 'readers.dfr.ngrams[heavy].png'
+        with Profile(pcgpath):
             self.unigrams = ngrams(self.dfrdatapath, N='uni')
 
         self.assertEqual(len(self.unigrams), 241)
@@ -35,11 +28,9 @@ class TestNGrams(unittest.TestCase):
         """
         'light' mode should behave just like 'heavy'
         """
-        if profile:
-            with PyCallGraph(output=GraphvizOutput(
-                    output_file=cg_path + 'readers.dfr.ngrams[light].png')):
-                self.unigrams = ngrams(self.dfrdatapath, N='uni', mode='light')
-        else:
+        
+        pcgpath = cg_path + 'readers.dfr.ngrams[light].png'
+        with Profile(pcgpath):
             self.unigrams = ngrams(self.dfrdatapath, N='uni', mode='light')
 
         self.assertEqual(len(self.unigrams), 241)
@@ -75,11 +66,8 @@ class TestGramGenerator(unittest.TestCase):
         Should return the number of XML files in /wordcounts
         """
         
-        if profile:
-            with PyCallGraph(output=GraphvizOutput(
-                    output_file=cg_path + 'readers.dfr.GramGenerator.__init__.png')):
-                g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
-        else:
+        pcgpath = cg_path + 'readers.dfr.GramGenerator.__init__.png'
+        with Profile(pcgpath):
             g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
         
         self.assertEqual(len(g), 241)
@@ -150,11 +138,8 @@ class TestRead(unittest.TestCase):
     def setUp(self):
         self.dfrdatapath = '{0}/dfr'.format(datapath)
 
-        if profile:
-            with PyCallGraph(output=GraphvizOutput(
-                    output_file=cg_path + 'readers.dfr.read.png')):
-                self.papers = read(self.dfrdatapath)
-        else:
+        pcgpath = cg_path + 'readers.dfr.read.png'
+        with Profile(pcgpath):
             self.papers = read(self.dfrdatapath)
 
     def test_number(self):
