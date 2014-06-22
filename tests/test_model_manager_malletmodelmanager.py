@@ -15,7 +15,7 @@ from tethne.readers import dfr
 from tethne.model.managers import MALLETModelManager
 
 import cPickle as pickle
-picklepath = './data/pickles'
+picklepath = '{0}/pickles'.format(datapath)
 with open('{0}/dfr_DataCollection.pickle'.format(picklepath), 'r') as f:
     D = pickle.load(f)
 

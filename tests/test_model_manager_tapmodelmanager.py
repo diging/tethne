@@ -17,46 +17,59 @@ from tethne.model.managers import TAPModelManager, MALLETModelManager
 from tethne.model import TAPModel
 from tethne.networks.authors import coauthors
 
+import cPickle as pickle
+picklepath = '{0}/pickles'.format(datapath)
+with open('{0}/dfr_DataCollection.pickle'.format(picklepath), 'r') as f:
+    D = pickle.load(f)
+
 class TestTAPModelManager(unittest.TestCase):
     def setUp(self):
         dfrdatapath = '{0}/dfr'.format(datapath)
         
-        papers = dfr.read(dfrdatapath)
-        ngrams = dfr.ngrams(dfrdatapath, 'uni')
-        self.D = DataCollection(papers, features={'unigrams': ngrams},
-                                        index_by='doi',
-                                        exclude=set(stopwords.words()))
-        self.D.slice('date', 'time_period', window_size=10)
-        
         # Coauthor graph.
         self.G = GraphCollection()
-        for k,v in self.D.get_slices('date', include_papers=True).iteritems():
+        for k,v in D.get_slices('date', include_papers=True).iteritems():
             self.G[k] = coauthors(v)
         
         # LDAModel
-        self.L = MALLETModelManager(self.D, outpath=outpath,
-                                            temppath=temppath,
-                                            mallet_path=mallet_path)
+        self.L = MALLETModelManager(D, outpath=outpath,
+                                       temppath=temppath,
+                                       mallet_path=mallet_path)
         self.L._load_model()
         
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'model.manager.TAPModelManager.__init__.png')):
-            self.M = TAPModelManager(self.D, self.G, self.L.model, outpath=outpath,
-                                                                    temppath=temppath,
-                                                                    mallet_path=mallet_path)
+        if profile:
+            pcgpath = cg_path + 'model.manager.TAPModelManager.__init__.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                self.M = TAPModelManager(D, self.G, self.L.model,
+                                                        outpath=outpath,
+                                                        temppath=temppath,
+                                                        mallet_path=mallet_path)
+        else:
+            self.M = TAPModelManager(D, self.G, self.L.model,
+                                                    outpath=outpath,
+                                                    temppath=temppath,
+                                                    mallet_path=mallet_path)
 
     def test_author_theta(self):
         """
         Should generate an ``a_theta`` matrix for slice ``0`` with shape (3,20).
         """
 
-        s = self.D.get_slices('date').keys()[0]
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'model.manager.TAPModelManager.author_theta.png')):
-            atheta = self.M.author_theta(
-                        self.D.get_slice('date', s, include_papers=True))
+        s = D.get_slices('date').keys()[0]
+        papers = D.get_slice('date', s, include_papers=True)
+        authors_list = list(set([ a for p in papers for a in p.authors() ]))
+        authors = { authors_list[i]:i for i in xrange(len(authors_list)) }
+        
+        if profile:
+            pcgpath = cg_path + 'model.manager.TAPModelManager.author_theta.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                atheta = self.M.author_theta(papers, authors)
+        else:
+            atheta = self.M.author_theta(papers, authors)
 
-        self.assertEqual(atheta.shape, (3,20))
+        self.assertEqual(len(atheta), 3)
+        self.assertIsInstance(atheta, dict)
+        self.assertEqual(atheta[0].shape, (20,))
 
     def test_build_and_graph_collection(self):
         """
@@ -64,16 +77,21 @@ class TestTAPModelManager(unittest.TestCase):
         :func:`.graph_collection` should generate a :class:`.GraphCollection`\.
         """
 
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'model.manager.TAPModelManager.build.png')):
+        if profile:
+            pcgpath = cg_path + 'model.manager.TAPModelManager.build.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                self.M.build(axis='date')
+        else:
             self.M.build(axis='date')
 
         self.assertIsInstance(self.M.SM.values()[0], TAPModel)
         self.assertIsInstance(self.M.SM.values()[0].MU[0], DiGraph)
-
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'model.manager.TAPModelManager.graph_collection.png')):
-
+        
+        if profile:
+            pcgpath = cg_path + 'model.manager.TAPModelManager.graph_collection.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                GC = self.M.graph_collection(0)
+        else:
             GC = self.M.graph_collection(0)
 
         self.assertIsInstance(GC, GraphCollection)
