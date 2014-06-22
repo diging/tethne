@@ -10,6 +10,8 @@ from collections import Counter
 from nltk.corpus import stopwords
 import scipy as sc
 
+import copy
+
 from unidecode import unidecode
 
 from ..utilities import strip_punctuation
@@ -40,9 +42,8 @@ class DataCollection(object):
     """
     
     def __init__(self, papers, features=None, index_by='ayjid',
-                                              index_citation_by='ayjid',
-                                              exclude=set([]),
-                                              filt=None):
+                       index_citation_by='ayjid', exclude=set([]),
+                       filt=None, index=True):
 
         """
         Parameters
@@ -59,13 +60,15 @@ class DataCollection(object):
             example, if a dictionary in `features` describes DfR wordcounts for
             the :class:`.Paper`\s in `data`, and is indexed by DOI, then 
             `index_by` should be 'doi'.
-        index_citations_by : str
+        index_citation_by : str
             Just as ``index_by``, except for citations.
         exclude : set
             (optional) Features to ignore, e.g. stopwords.
         filt : function
             Takes a lambda function that returns True if a feature should be 
             included.            
+        index : bool
+            (default: True) If True, runs :func:`.index`\.
             
         Returns
         -------
@@ -82,10 +85,10 @@ class DataCollection(object):
         self.index_by = index_by    # Field in Paper, e.g. 'wosid', 'doi'.
         self.index_citation_by = index_citation_by
     
-        self.index(papers, features, index_by=index_by, 
-                                     index_citation_by=index_citation_by, 
-                                     exclude=exclude,
-                                     filt=filt)
+        if index:
+            self.index( papers, features, index_by=index_by,
+                        index_citation_by=index_citation_by,
+                        exclude=exclude, filt=filt)
         
     def index(self, papers, features=None, index_by='ayjid', 
                                            index_citation_by='ayjid',
@@ -303,7 +306,8 @@ class DataCollection(object):
         counts = Counter()
         documentCounts = Counter()
 
-        ftokens = [ s for i,s in fdict['index'].iteritems() if filt(s, fdict['counts'][i], fdict['documentCounts'][i] ) ]
+        ftokens = [ s for i,s in fdict['index'].iteritems()
+                    if filt(s, fdict['counts'][i], fdict['documentCounts'][i] )]
         Ntokens = len(ftokens)
 
         logger.debug('found {0} unique tokens'.format(Ntokens))
@@ -319,7 +323,8 @@ class DataCollection(object):
             if type(fval) is not list or type(fval[0]) is not tuple:
                 raise ValueError('Malformed features data.')       
                      
-            tokenized = [ (findex_[fdict['index'][f]],w) for f,w in fval if _handle(fdict['index'][f],w) ]
+            tokenized = [ (findex_[fdict['index'][f]],w)
+                          for f,w in fval if _handle(fdict['index'][f],w) ]
             features[key] = tokenized
             for f,w in tokenized:
                 documentCounts[f] += 1
@@ -787,11 +792,27 @@ class DataCollection(object):
             ax.set_xticks(tickstops)
             ax.set_xticklabels([ ykeys[i] for i in tickstops ])
 
+
     def to_hdf5(self, datapath=None):
-        #try:
-        from ..persistence.hdf5 import HDF5DataCollection
-#        except ImportError:
-#            pass
+        """
+        Transforms a :class:`.DataCollection` into a 
+        :class:`.HDF5DataCollection`\.
+        
+        Parameters
+        ----------
+        datapath : str
+            If provided, will create the new :class:`.HDF5DataCollection` at
+            that location.
+        
+        Returns
+        -------
+        HD : :class:`.HDF5DataCollection`
+        """
+
+        try:
+            from ..persistence.hdf5 import HDF5DataCollection
+        except ImportError:
+            raise RuntimeError('Must have pytables installed to use HDF5.')
 
         # Initialize, but don't index.
         HD = HDF5DataCollection([], index_by=self.index_by,
@@ -799,30 +820,89 @@ class DataCollection(object):
                                     datapath=datapath,
                                     index=False)
                                     
-        # Transfer papers.
-        for k,v in self.papers.iteritems():
-            HD.papers[k] = v
-
-        # Transfer citations.
-        for k,v in self.citations.iteritems():
-            HD.citations[k] = v
-        for k,v in self.papers_citing.iteritems():
-            HD.papers_citing[k] = v
-
-        # Transfer authors.
-        for k,v in self.authors.iteritems():
-            HD.authors[k] = v
-
-        # Transfer features.
-        for k, v in self.features.iteritems():
-            HD._define_features(k, v['index'], v['features'], v['counts'], v['documentCounts'])
-            
-        # Transfer axes.
-        for k, v in self.axes.iteritems():
-            HD.axes[k] = v
-
-        HD.N_a = len(self.authors)
-        HD.N_c = len(self.citations)
-        HD.N_p = len(self.papers)
-
+        HD = _migrate_values(self, HD)
         return HD
+
+    def from_hdf5(self, HD):
+        try:
+            from ..persistence.hdf5 import HDF5DataCollection
+        except ImportError:
+            raise RuntimeError('Must have pytables installed to use HDF5.')
+
+        _migrate_values(HD, self)
+
+def from_hdf5(HD_or_path):
+    """
+    Transforms a :class:`.HDF5DataCollection` into a :class:`.DataCollection`\.
+    
+    If `HD_or_path` is a string, will attempt to load the 
+    :class:`.HDF5DataCollection` from that path.
+    
+    Parameters
+    ----------
+    HD_or_path : str or :class:`.HDF5DataCollection`
+        If str, must be a path to a :class:`.HDF5DataCollection` HDF5 repo.
+    
+    Returns
+    -------
+    D : :class:`.DataCollection`
+    """
+
+    try:
+        from ..persistence.hdf5 import HDF5DataCollection
+    except ImportError:
+        raise RuntimeError('Must have pytables installed to use HDF5.')
+
+    if HD_or_path is str:
+        hd = HDF5DataCollection([], index=False, datapath=HD_or_path)
+    elif type(HD_or_path) is HDF5DataCollection:
+        hd = HD_or_path
+
+    D = _migrate_values(hd, DataCollection([], index=False))
+    return D
+
+def _migrate_values(fromD, toD):
+    """
+    Transfers properties from one :class:`.DataCollection` to another.
+    
+    `fromD` and `toD` can by anything that behaves like a 
+    :class:`.DataCollection`\, including a :class:`.HDF5DataCollection`\.
+    
+    Parameters
+    ----------
+    fromD : :class:`.DataCollection`
+        Source :class:`.DataCollection`
+    toD : :class:`.DataCollection`
+        Target :class:`.DataCollection`
+        
+    Returns
+    -------
+    toD : :class:`.DataCollection`
+        Updated target :class:`.DataCollection`
+    """
+
+    # Transfer papers.
+    toD.papers = { k:v for k,v in fromD.papers.iteritems() }
+
+    # Transfer citations.
+    toD.citations = { k:v for k,v in fromD.citations.iteritems() }
+    toD.papers_citing = {k:v for k,v in fromD.papers_citing.iteritems() }
+
+    # Transfer authors.
+    toD.authors = {k:v for k,v in fromD.authors.iteritems() }
+
+    # Transfer features.
+    for k, v in fromD.features.iteritems():
+        toD._define_features(k, v['index'], v['features'], v['counts'], v['documentCounts'])
+        
+    # Transfer axes.
+    toD.axes = { k:v for k,v in fromD.axes.iteritems() }
+
+    toD.N_a = len(fromD.authors)
+    toD.N_c = len(fromD.citations)
+    toD.N_p = len(fromD.papers)
+    
+    toD.index_by = fromD.index_by
+    toD.index_citation_by = fromD.index_citation_by
+
+    return toD

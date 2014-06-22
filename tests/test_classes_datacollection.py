@@ -3,7 +3,7 @@ from settings import *
 import unittest
 
 from tethne.readers import wos, dfr
-from tethne.classes import DataCollection
+from tethne.classes import DataCollection, from_hdf5
 from tethne.persistence import HDF5DataCollection
 
 from nltk.corpus import stopwords
@@ -154,6 +154,38 @@ class TestDataCollectionDfR(unittest.TestCase):
         # Axes should be the same.
         self.assertEqual(   len(HD.axes), len(self.D.axes)  )
         self.assertEqual(   len(HD.axes['date']), len(self.D.axes['date'])  )
+
+    def test_from_hdf5(self):
+        self.D.slice('date', method='time_period', window_size=5)
+        HD = self.D.to_hdf5()
+
+        D_ = from_hdf5(HD)
+
+        self.assertIsInstance(D_, DataCollection)
+
+        # Papers should be the same.
+        self.assertEqual(   len(HD.papers), len(D_.papers)  )
+        
+        # Citations should be the same.
+        self.assertEqual(   len(HD.citations), len(D_.citations)    )
+        self.assertEqual(   len(HD.papers_citing), len(D_.papers_citing)   )
+        
+        # Authors should be the same.
+        self.assertEqual(   len(HD.authors), len(D_.authors)    )
+
+        # Features should be the same.
+        self.assertEqual(   len(HD.features['unigrams']['index']),
+                            len(D_.features['unigrams']['index'])   )
+        self.assertEqual(   len(HD.features['unigrams']['features']),
+                            len(D_.features['unigrams']['features'])   )
+        self.assertEqual(   len(HD.features['unigrams']['counts']),
+                            len(D_.features['unigrams']['counts'])   )
+        self.assertEqual(   len(HD.features['unigrams']['documentCounts']),
+                            len(D_.features['unigrams']['documentCounts']) )
+
+        # Axes should be the same.
+        self.assertEqual(   len(HD.axes), len(D_.axes)  )
+        self.assertEqual(   len(HD.axes['date']), len(D_.axes['date'])  )
 
 class TestDataCollectionTokenization(unittest.TestCase):
 
