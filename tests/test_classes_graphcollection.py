@@ -25,6 +25,17 @@ class TestGraphCollection(unittest.TestCase):
         for k,v in D.get_slices('date', include_papers=True).iteritems():
             self.G[k] = coauthors(v)
 
+    def test_build(self):
+        """
+        :func:`.build` should generate graphs for each slice in `D`
+        """
+        self.G.build(D, 'date', 'authors', 'coauthors')
+
+        self.assertEqual(len(self.G.graphs), len(D.get_slices('date')))
+        self.assertEqual(self.G.graphs.keys(), D.get_slices('date').keys())
+        self.assertEqual(len(self.G.nodes()), 63)
+        self.assertEqual(len(self.G.edges()), 44)
+
     def test_nodes(self):
         """
         should return a list of integers

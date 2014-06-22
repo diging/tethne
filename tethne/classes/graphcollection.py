@@ -9,6 +9,8 @@ import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
 
+import tethne.networks as nt
+
 class GraphCollection(object):
     """
     Collection of NetworkX :class:`nx.classes.graph.Graph` objects, 
@@ -91,6 +93,36 @@ class GraphCollection(object):
 
     def __len__(self):
         return len(self.graphs)
+    
+    def build(self, D, axis, node_type, graph_type, method_kwargs={}, **kwargs):
+        """
+        Generates a graph for each slice of a :class:`.DataCollection`.
+        
+        Parameters
+        ----------
+        D : :class:`.DataCollection`
+            Must already be sliced by `axis`.
+        axis : str
+            Name of slice axis to use in generating graphs.
+        node_type : str
+            'authors', 'papers', or 'institutions'
+        graph_type : str
+            __name__ of a method in :mod:`tethne.networks`
+        method_kwargs : dict
+            Kwargs to pass to `graph_type` method.
+        
+        Returns
+        -------
+        self : :class:`.GraphCollection`
+        """
+        method = nt.__dict__[node_type].__dict__[graph_type]
+        for key, data in D.get_slices('date', include_papers=True).iteritems():
+            # Include sliced fields as node attributes.
+            method_kwargs['node_attribs'] = D.get_axes()
+            method_kwargs['node_id'] = D.index_by
+            self[key] = method(data, **method_kwargs)
+
+        return self
 
     def nodes(self):
         """
@@ -283,7 +315,7 @@ class GraphCollection(object):
         etype : str
             'node' or 'edge'
         stat : method
-            Method to apply to the values in each :class:`.Graph`        
+            Method to apply to the values in each :class:`.Graph`
         type : str
             'plot' or 'bar'
         plotargs
