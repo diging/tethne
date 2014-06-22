@@ -66,10 +66,8 @@ class HDF5DataCollection(DataCollection):
         
 
     def __init__(self, papers, features=None, index_by='wosid',
-                                              index_citation_by='ayjid',
-                                              exclude=set([]),
-                                              filt=None,
-                                              datapath=None):
+                       index_citation_by='ayjid', exclude=set([]),
+                       filt=None, datapath=None, index=True):
         """
         
         Parameters
@@ -95,6 +93,8 @@ class HDF5DataCollection(DataCollection):
             generate a temporary directory in ``/tmp`` (or equivalent). The full
             path to the HDF5 repo can be found in the ``path`` attribute after
             initialization.
+        index : bool
+            (default: True) If True, runs :func:`.index`\.
         """
         
         logger.debug('Initialize HDF5DataCollection with {0} papers'
@@ -136,13 +136,14 @@ class HDF5DataCollection(DataCollection):
         self.papers_citing = vlarray_dict(self.h5file, self.group,
                                         'papers_citing', tables.StringAtom(100))
         
-        self.axes = {}
+        self.axes = HDF5Axes(self.h5file)
         self.index_by = index_by    # Field in Paper, e.g. 'wosid', 'doi'.
         self.index_citation_by = index_citation_by        
         
-        logger.debug('Index DataCollection...')
-        self.index(papers, features, index_by, index_citation_by,
-                                               exclude, filt)
+        if index:
+            logger.debug('Index DataCollection...')
+            self.index(papers, features, index_by, index_citation_by,
+                                                   exclude, filt)
     
         logger.debug('HDF5DataCollection initialized, flushing to force save.')
         self.h5file.flush()
@@ -227,7 +228,39 @@ class StrIndex(tables.IsDescription):
     """
     i = tables.StringCol(100)
     mindex = tables.StringCol(100000)
-    
+
+class HDF5Axes(dict):
+    """
+    Organizes axes.
+    """
+
+    def __init__(self, h5file):
+        logger.debug('Initialize HDF5Axes.')
+
+        self.h5file = h5file
+        if '/axes' not in self.h5file:
+            self.group = self.h5file.createGroup('/', 'axes')
+        else:
+            self.group = self.h5file.getNode('/axes')
+
+    def __setitem__(self, key, value):
+        logger.debug('HDF5Axes.__setitem__ for key {0}'.format(key))
+
+        dict.__setitem__(self, key, HDF5Axis(self.h5file, self.group, key))
+        for k,v in value.iteritems():
+            self[key][k] = v
+
+
+class HDF5Axis(dict):
+    def __init__(self, h5file, fgroup, name):
+        self.h5file = h5file
+        self.group = self.h5file.createGroup(fgroup, name)
+        self.name = name
+
+    def __setitem__(self, key, value):
+        name = '{0}_{1}'.format(self.name, key)
+        dict.__setitem__(self, key, HDF5ArrayDict(self.h5file, self.group, name, value))
+
 class HDF5Features(dict):
     """
     Organizes feature-sets, each as a :class:`.HDF5Feature`\.
