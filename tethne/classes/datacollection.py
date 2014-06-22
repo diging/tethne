@@ -787,3 +787,42 @@ class DataCollection(object):
             ax.set_xticks(tickstops)
             ax.set_xticklabels([ ykeys[i] for i in tickstops ])
 
+    def to_hdf5(self, datapath=None):
+        #try:
+        from ..persistence.hdf5 import HDF5DataCollection
+#        except ImportError:
+#            pass
+
+        # Initialize, but don't index.
+        HD = HDF5DataCollection([], index_by=self.index_by,
+                                    index_citation_by=self.index_citation_by,
+                                    datapath=datapath,
+                                    index=False)
+                                    
+        # Transfer papers.
+        for k,v in self.papers.iteritems():
+            HD.papers[k] = v
+
+        # Transfer citations.
+        for k,v in self.citations.iteritems():
+            HD.citations[k] = v
+        for k,v in self.papers_citing.iteritems():
+            HD.papers_citing[k] = v
+
+        # Transfer authors.
+        for k,v in self.authors.iteritems():
+            HD.authors[k] = v
+
+        # Transfer features.
+        for k, v in self.features.iteritems():
+            HD._define_features(k, v['index'], v['features'], v['counts'], v['documentCounts'])
+            
+        # Transfer axes.
+        for k, v in self.axes.iteritems():
+            HD.axes[k] = v
+
+        HD.N_a = len(self.authors)
+        HD.N_c = len(self.citations)
+        HD.N_p = len(self.papers)
+
+        return HD
