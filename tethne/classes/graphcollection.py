@@ -1,7 +1,7 @@
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
+logger.setLevel('ERROR')
 
 import networkx as nx
 

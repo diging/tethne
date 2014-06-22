@@ -27,7 +27,6 @@ logger = logging.getLogger('tethne.classes.datacollection')
 logger.setLevel('ERROR')
 
 
-
 class TestMALLETModelManager(unittest.TestCase):
     def setUp(self):
         dfrdatapath = '{0}/dfr'.format(datapath)

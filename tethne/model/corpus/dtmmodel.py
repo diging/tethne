@@ -152,7 +152,7 @@ class GerrishLoader(object):
 
         self.topics = np.array( [ self.tdict[z] for z in sorted(self.tdict.keys()) ])
     
-        self.model = DTMModel(self.e_theta, self.topics, self.metadata, '')
+        self.model = DTMModel(self.e_theta, self.topics, self.metadata, self.vocabulary)
 
         return self.model
 
@@ -205,11 +205,12 @@ class GerrishLoader(object):
 
     def _handle_metadata(self):
         """
+        
         Returns
         -------
-        md : dict
-            Keys are document indices, values are identifiers from a :class:`.Paper`
-            property.
+        metadata : dict
+            Keys are document indices, values are identifiers from a 
+            :class:`.Paper` property (e.g. DOI).
         """
         
         if self.metadata_path is None:
@@ -229,6 +230,13 @@ class GerrishLoader(object):
         return self.metadata
 
     def _handle_vocabulary(self):
+        """
+        
+        Returns
+        -------
+        vocabulary : dict
+            Keys are word indices, values are word strings.
+        """
         if self.vocabulary_path is None:
             raise RuntimeError("No vocabulary provided.")
 
@@ -237,9 +245,9 @@ class GerrishLoader(object):
         with open(self.vocabulary_path, 'rU') as f:
             i = 0
             for v in f.readlines():
-                self.vocabulary[i] = v
+                self.vocabulary[i] = v.strip('\n')
                 i += 1
-                
+
         return self.vocabulary
 
 def from_gerrish(target, metadata, vocabulary, metadata_key='doi'):

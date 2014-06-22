@@ -143,7 +143,7 @@ class MALLETModelManager(ModelManager):
         self.wt = '{0}/wt.dat'.format(self.temp)
         self.om = '{0}/model.mallet'.format(self.outpath)
     
-        self.vocab = self.datacollection.features[self.feature]['index']
+        self.vocabulary = self.datacollection.features[self.feature]['index']
 
     def prep(self, feature='unigrams', meta=['date', 'atitle', 'jtitle']):
         """
@@ -267,7 +267,7 @@ class MALLETModelManager(ModelManager):
             List of words in topic.
         """
         words = self.model.dimension(k, top=Nwords)
-        as_list = [ self.vocab[w] for w,p in words ]
+        as_list = [ self.vocabulary[w] for w,p in words ]
 
         return as_list
     
@@ -477,6 +477,114 @@ class DTMModelManager(ModelManager):
         self.vocab_path = '{0}/tethne-vocab.dat'.format(self.temp)        
         self.meta_path = '{0}/tethne-meta.dat'.format(self.temp)
     
+    def list_topic(self, k, t, Nwords=10):
+        """
+        Yields the top ``Nwords`` for topic ``k``.
+        
+        Parameters
+        ----------
+        k : int
+            A topic index.
+        t : int
+            A time index.
+        Nwords : int
+            Number of words to return.
+        
+        Returns
+        -------
+        as_list : list
+            List of words in topic.
+        """
+        words = self.model.dimension(k, t=t, top=Nwords)
+        as_list = [ self.vocabulary[w] for w,p in words ]
+
+        return as_list
+    
+    def list_topic_diachronic(self, k, Nwords=10):
+        as_dict = { t:self.list_topic(k, t, Nwords)
+                        for t in xrange(self.model.T) }
+        return as_dict
+    
+    def print_topic(self, k, t, Nwords=10):
+        """
+        Yields the top ``Nwords`` for topic ``k``.
+        
+        Parameters
+        ----------
+        k : int
+            A topic index.
+        t : int
+            A time index.
+        Nwords : int
+            Number of words to return.
+        
+        Returns
+        -------
+        as_string : str
+            Joined list of words in topic.
+        """
+
+        as_string = ', '.join(self.list_topic(k, t=t, Nwords=Nwords))
+    
+        return as_string
+    
+    def print_topic_diachronic(self, k, Nwords=10):
+        as_dict = self.list_topic_diachronic(k, Nwords)
+        s = []
+        for key, value in as_dict.iteritems():
+            s.append('{0}: {1}'.format(key, ', '.join(value)))
+        as_string = '\n'.join(s)
+        
+        return as_string
+    
+    def list_topics(self, t, Nwords=10):
+        """
+        Yields the top ``Nwords`` for each topic.
+        
+        Parameters
+        ----------
+        t : int
+            A time index.
+        Nwords : int
+            Number of words to return for each topic.
+        
+        Returns
+        -------
+        as_dict : dict
+            Keys are topic indices, values are list of words.
+        """
+        
+        as_dict = {}
+        for k in xrange(self.model.Z):
+            as_dict[k] = self.list_topic(k, t, Nwords)
+    
+        return as_dict
+    
+    def print_topics(self, t, Nwords=10):
+        """
+        Yields the top ``Nwords`` for each topic.
+        
+        Parameters
+        ----------
+        t : int
+            A time index.
+        Nwords : int
+            Number of words to return for each topic.
+        
+        Returns
+        -------
+        as_string : str
+            Newline-delimited lists of words for each topic.
+        """
+            
+        as_dict = self.list_topics(t, Nwords)
+        s = []
+        for key, value in as_dict.iteritems():
+            s.append('{0}: {1}'.format(key, ', '.join(value)))
+        as_string = '\n'.join(s)
+        
+        return as_string
+    
     def _generate_corpus(self, feature, meta):
         from tethne.writers.corpora import to_dtm_input    
         
@@ -554,7 +662,7 @@ class DTMModelManager(ModelManager):
         """Load and return a :class:`.DTMModel`\."""
         from .corpus.dtmmodel import from_gerrish
         self.model = from_gerrish(self.outname, self.meta_path, self.vocab_path)
-        
+        self.vocabulary = self.model.vocabulary
         return self.model
 
 
@@ -570,7 +678,7 @@ class TAPModelManager(SocialModelManager):
         ----------
         D : :class:`.DataCollection`
         G : :class:`.GraphCollection`
-        M : :class:`.ModelCollection`
+        model : :class:`.LDAModel`
         """
 
         super(TAPModelManager, self).__init__(**kwargs)
