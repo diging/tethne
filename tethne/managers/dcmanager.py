@@ -42,7 +42,7 @@ class SampleDFRManager(DataCollectionManager):
         from nltk.corpus import stopwords
         exclude = set(stopwords.words())
         self.D = DataCollection(self.papers, self.features, index_by='doi',
-                                                       exclude_features=exclude)
+                                                           exclude=exclude)
         self.D.slice(self.slice_axis, method=self.slice_method,
                      window_size=self.window_size, step_size=self.step_size)
         self.D.slice(self.slice_axis2)

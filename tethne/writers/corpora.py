@@ -57,6 +57,7 @@ def to_documents(target, ngrams, metadata=None, vocab=None):
                 meta += [ str(metadict[p][f]) for f in metakeys ]
                 metaFile.write('\t'.join(meta) + '\n')
             d += 1
+
     except AttributeError:  # .iteritems() raises an AttributeError if ngrams
                             #  is not dict-like.
         raise ValueError('Parameter \'ngrams\' must be a dict.')

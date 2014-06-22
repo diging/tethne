@@ -23,8 +23,8 @@ class TestDataCollectionWoS(unittest.TestCase):
         wosdatapath = '{0}/wos.txt'.format(datapath)
         papers = wos.read(wosdatapath)
 
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'classes.DataCollection.__init__[wos].png')):
+        pcgpath = cg_path + 'classes.DataCollection.__init__[wos].png'
+        with Profile(pcgpath):
             self.D = DataCollection(papers, index_by='wosid')
     
     def test_indexing(self):
@@ -50,8 +50,8 @@ class TestDataCollectionWoS(unittest.TestCase):
         Should generate features from available abstracts.
         """
         
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'classes.DataCollection.abstract_to_features[wos].png')):
+        pcgpath = cg_path+'classes.DataCollection.abstract_to_features[wos].png'
+        with Profile(pcgpath):
             self.D.abstract_to_features()
 
         self.assertIn('abstractTerms', self.D.features)
@@ -65,8 +65,8 @@ class TestDataCollectionWoS(unittest.TestCase):
         """
         """
 
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'classes.DataCollection.slice[wos].png')):
+        pcgpath = cg_path + 'classes.DataCollection.slice[wos].png'
+        with Profile(pcgpath):
             self.D.slice('date')
 
         self.assertIn('date', self.D.axes)
@@ -85,8 +85,8 @@ class TestDataCollectionDfR(unittest.TestCase):
         papers = dfr.read(dfrdatapath)
         ngrams = dfr.ngrams(dfrdatapath, 'uni')
 
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'classes.DataCollection.__init__[dfr].png')):
+        pcgpath = cg_path + 'classes.DataCollection.__init__[dfr].png'
+        with Profile(pcgpath):
             self.D = DataCollection(papers, features={'unigrams': ngrams},
                                             index_by='doi',
                                             exclude=set(stopwords.words()))
@@ -138,14 +138,15 @@ class TestDataCollectionTokenization(unittest.TestCase):
         """
         filt = lambda s: len(s) > 3
         
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'classes.DataCollection.__init__[dfr_filter].png')):
+        pcgpath = cg_path+ 'classes.DataCollection.__init__[dfr_filter].png'
+        with Profile(pcgpath):
             D = DataCollection(self.papers, features={'unigrams': self.ngrams},
                                             index_by='doi',
                                             exclude=set(stopwords.words()),
                                             filt=filt)
+
         self.assertEqual(len(D.features['unigrams']['index']), 49503)
-        
+
     def test_filter_features(self):
         """
         :func:`DataCollection.filterfeatures` should generate a new, more
@@ -161,15 +162,24 @@ class TestDataCollectionTokenization(unittest.TestCase):
             if C > 2 and DC > 1 and len(s) > 3:
                 return True
             return False
-            
+        
         D = DataCollection(self.papers, features={'unigrams': self.ngrams},
                                         index_by='doi',
                                         exclude=set(stopwords.words()))
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'classes.DataCollection.filter_features[dfr].png')):
+                                        
+        k = D.papers.keys()[0]  # Get some paper's key.
+        before = [ D.features['unigrams']['index'][g[0]]
+                    for g in D.features['unigrams']['features'][k] ]
+        
+        pcgpath = cg_path + 'classes.DataCollection.filter_features[dfr].png'
+        with Profile(pcgpath):
             D.filter_features('unigrams', 'unigrams_lim', filt)
 
+        after =  [ D.features['unigrams_lim']['index'][g[0]]
+                    for g in D.features['unigrams_lim']['features'][k] ]
+
         self.assertEqual(len(D.features['unigrams_lim']['index']), 14709)
+        self.assertEqual(len(set(after) - set(before)), 0)
 
 if __name__ == '__main__':
     unittest.main()
