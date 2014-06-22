@@ -6,6 +6,49 @@ from tethne.persistence import HDF5DataCollection, HDF5Paper
 
 from nltk.corpus import stopwords
 from tethne.readers import wos, dfr
+import os
+
+import cPickle as pickle
+with open('{0}/dfr_DataCollection.pickle'.format(picklepath), 'r') as f:
+    D = pickle.load(f)
+
+class TestSaveLoadDataCollection(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def test_reload(self):
+        HD = D.to_hdf5(datapath=temppath)
+        hdpath = HD.path
+        self.delpath = hdpath
+
+        HD_ = HDF5DataCollection([], index=False, datapath=hdpath)
+
+        # Papers should be the same.
+        self.assertEqual(   len(HD_.papers), len(D.papers)  )
+        
+        # Citations should be the same.
+        self.assertEqual(   len(HD_.citations), len(D.citations)    )
+        self.assertEqual(   len(HD_.papers_citing), len(D.papers_citing)   )
+        
+        # Authors should be the same.
+        self.assertEqual(   len(HD_.authors), len(D.authors)    )
+
+        # Features should be the same.
+        self.assertEqual(   len(HD_.features['unigrams']['index']),
+                            len(D.features['unigrams']['index'])   )
+        self.assertEqual(   len(HD_.features['unigrams']['features']),
+                            len(D.features['unigrams']['features'])   )
+        self.assertEqual(   len(HD_.features['unigrams']['counts']),
+                            len(D.features['unigrams']['counts'])   )
+        self.assertEqual(   len(HD_.features['unigrams']['documentCounts']),
+                            len(D.features['unigrams']['documentCounts']) )
+
+        # Axes should be the same.
+        self.assertEqual(   len(HD_.axes), len(D.axes)  )
+        self.assertEqual(   len(HD_.axes['date']), len(D.axes['date'])  )
+
+    def tearDown(self):
+        os.remove(self.delpath)
 
 class TestDataCollectionDfRHDF5(unittest.TestCase):
     def setUp(self):
@@ -23,7 +66,6 @@ class TestDataCollectionDfRHDF5(unittest.TestCase):
             self.D = HDF5DataCollection(papers, features={'unigrams': ngrams},
                                                 index_by='doi',
                                                 exclude=set(stopwords.words()))
-        
 
     def test_indexing(self):
         """
