@@ -1,12 +1,11 @@
+from settings import *
+
 # Profiling.
 from pycallgraph import PyCallGraph
 from pycallgraph.output import GraphvizOutput
-cg_path = './callgraphs/'
 
 import unittest
 
-import sys
-sys.path.append('../../')
 from tethne.model.corpus import ldamodel
 
 import numpy
@@ -145,11 +144,4 @@ class TestLDAModel(unittest.TestCase):
         print self.model.print_topic(0)
 
 if __name__ == '__main__':
-    profile = False
-    
-    datapath = './data'
-    temppath = './sandbox/temp'
-    outpath = './sandbox/out'
-    mallet_path = '/Applications/mallet-2.0.7'
-    
     unittest.main()

@@ -1,7 +1,6 @@
-import unittest
+from settings import *
 
-import sys
-sys.path.append('../../')
+import unittest
 
 from tethne.classes.paper import Paper
 

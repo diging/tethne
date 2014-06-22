@@ -1,12 +1,10 @@
+from settings import *
+
 # Profiling.
 from pycallgraph import PyCallGraph
 from pycallgraph.output import GraphvizOutput
-cg_path = './callgraphs/'
 
 import unittest
-
-import sys
-sys.path.append('../../')
 
 from nltk.corpus import stopwords
 import numpy
@@ -18,11 +16,6 @@ from tethne.readers import dfr
 from tethne.model.managers import TAPModelManager, MALLETModelManager
 from tethne.model import TAPModel
 from tethne.networks.authors import coauthors
-
-import logging
-logging.basicConfig()
-#logger = logging.getLogger('tethne.classes.datacollection')
-#logger.setLevel('ERROR')
 
 class TestTAPModelManager(unittest.TestCase):
     def setUp(self):
@@ -86,8 +79,4 @@ class TestTAPModelManager(unittest.TestCase):
         self.assertIsInstance(GC, GraphCollection)
 
 if __name__ == '__main__':
-    datapath = './data'
-    temppath = './sandbox/temp'
-    outpath = './sandbox/out'
-    mallet_path = '/Applications/mallet-2.0.7'
     unittest.main()

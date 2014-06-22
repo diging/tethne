@@ -1,22 +1,14 @@
+from settings import *
+
 # Profiling.
 from pycallgraph import PyCallGraph
 from pycallgraph.output import GraphvizOutput
-cg_path = './callgraphs/'
 
 import unittest
-
-import sys
-sys.path.append('../../')
 
 from tethne.readers.dfr import read, ngrams, GramGenerator, _handle_authors
 from tethne.writers import corpora
 from tethne import Paper
-
-# Set log level to ERROR to avoid debug output.
-import logging
-logging.basicConfig()
-logger = logging.getLogger('tethne.readers.dfr')
-#logger.setLevel('ERROR')
 
 class TestNGrams(unittest.TestCase):
     def setUp(self):
@@ -26,8 +18,12 @@ class TestNGrams(unittest.TestCase):
         """
         In 'heavy' mode (default), :func:`.ngrams` should return a dict.
         """
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'readers.dfr.ngrams[heavy].png')):
+
+        if profile:
+            with PyCallGraph(output=GraphvizOutput(
+                    output_file=cg_path + 'readers.dfr.ngrams[heavy].png')):
+                self.unigrams = ngrams(self.dfrdatapath, N='uni')
+        else:
             self.unigrams = ngrams(self.dfrdatapath, N='uni')
 
         self.assertEqual(len(self.unigrams), 241)
@@ -39,8 +35,11 @@ class TestNGrams(unittest.TestCase):
         """
         'light' mode should behave just like 'heavy'
         """
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'readers.dfr.ngrams[light].png')):
+        if profile:
+            with PyCallGraph(output=GraphvizOutput(
+                    output_file=cg_path + 'readers.dfr.ngrams[light].png')):
+                self.unigrams = ngrams(self.dfrdatapath, N='uni', mode='light')
+        else:
             self.unigrams = ngrams(self.dfrdatapath, N='uni', mode='light')
 
         self.assertEqual(len(self.unigrams), 241)
@@ -76,28 +75,31 @@ class TestGramGenerator(unittest.TestCase):
         Should return the number of XML files in /wordcounts
         """
         
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'readers.dfr.GramGenerator.__init__.png')):
+        if profile:
+            with PyCallGraph(output=GraphvizOutput(
+                    output_file=cg_path + 'readers.dfr.GramGenerator.__init__.png')):
+                g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
+        else:
             g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
-            
+        
         self.assertEqual(len(g), 241)
         
     def test_generators(self):
         """
         Should yield something when iterated upon.
         """
+        
         g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
 
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'readers.dfr.GramGenerator.item.png')):
-            for i in g:
-                self.assertNotEqual(i, None)
+        for i in g:
+            self.assertNotEqual(i, None)
     
     def test_items(self):
         """
         :func:`GramGenerator.items` should return a new indexable
         :class:`.GramGenerator` that returns tuples.
         """
+        
         g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
         self.assertIsInstance(g.items(), GramGenerator)
         self.assertIsInstance(g.items()[0], tuple)
@@ -107,6 +109,7 @@ class TestGramGenerator(unittest.TestCase):
         :func:`GramGenerator.iteritems` should return a new indexable
         :class:`.GramGenerator` that returns tuples.
         """
+        
         g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
         self.assertIsInstance(g.iteritems(), GramGenerator)
         self.assertIsInstance(g.items()[0], tuple)                
@@ -116,6 +119,7 @@ class TestGramGenerator(unittest.TestCase):
         :func:`GramGenerator.values` should return a new indexable
         :class:`.GramGenerator` that returns lists of tuples.
         """
+        
         g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
         self.assertIsInstance(g.values(), GramGenerator)    
         self.assertIsInstance(g.values()[0], list)                
@@ -126,6 +130,7 @@ class TestGramGenerator(unittest.TestCase):
         :func:`GramGenerator.keys` should return a new indexable
         :class:`.GramGenerator` that returns strings.
         """
+        
         g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
         self.assertIsInstance(g.keys(), GramGenerator)    
         self.assertIsInstance(g.keys()[0], str)                
@@ -134,6 +139,7 @@ class TestGramGenerator(unittest.TestCase):
         """
         :func:`GramGenerator.__getitem__` should return a key,value tuple.
         """
+        
         g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
         self.assertIsInstance(g[0], tuple)
         self.assertIsInstance(g[0][0], str)     # Key.
@@ -144,8 +150,11 @@ class TestRead(unittest.TestCase):
     def setUp(self):
         self.dfrdatapath = '{0}/dfr'.format(datapath)
 
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'readers.dfr.read.png')):
+        if profile:
+            with PyCallGraph(output=GraphvizOutput(
+                    output_file=cg_path + 'readers.dfr.read.png')):
+                self.papers = read(self.dfrdatapath)
+        else:
             self.papers = read(self.dfrdatapath)
 
     def test_number(self):
@@ -210,6 +219,4 @@ class TestRead(unittest.TestCase):
 
                                       
 if __name__ == '__main__':
-    
-    datapath = './data'
     unittest.main()                                      

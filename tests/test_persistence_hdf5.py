@@ -1,23 +1,14 @@
+from settings import *
+
 from pycallgraph import PyCallGraph
 from pycallgraph.output import GraphvizOutput
-cg_path = './callgraphs/'
 
 import unittest
 
-import sys
-sys.path.append('../../')
-
 from tethne.persistence import HDF5DataCollection, HDF5Paper
+
 from nltk.corpus import stopwords
 from tethne.readers import wos, dfr
-
-# Set log level to ERROR to avoid debug output.
-import logging
-logging.basicConfig()
-logger = logging.getLogger('tethne.classes.datacollection')
-logger.setLevel('ERROR')
-logger = logging.getLogger('tethne.persistence.hdf5')
-logger.setLevel('ERROR')
 
 class TestDataCollectionDfRHDF5(unittest.TestCase):
     def setUp(self):
@@ -30,11 +21,18 @@ class TestDataCollectionDfRHDF5(unittest.TestCase):
         papers = dfr.read(dfrdatapath)
         ngrams = dfr.ngrams(dfrdatapath, 'uni')
 
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.__init__[dfr].png')):
+        if profile:
+            with PyCallGraph(output=GraphvizOutput(
+                    output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.__init__[dfr].png')):
+                self.D = HDF5DataCollection(papers,
+                                                features={'unigrams': ngrams},
+                                                index_by='doi',
+                                                exclude=set(stopwords.words()))
+        else:
             self.D = HDF5DataCollection(papers, features={'unigrams': ngrams},
                                                 index_by='doi',
                                                 exclude=set(stopwords.words()))
+        
 
     def test_indexing(self):
         """
@@ -80,10 +78,14 @@ class TestDataCollectionWoSHDF5(unittest.TestCase):
         wosdatapath = '{0}/wos.txt'.format(datapath)
 
         papers = wos.read(wosdatapath)
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.__init__[wos].png')):
+        
+        if profile:
+            with PyCallGraph(output=GraphvizOutput(
+                    output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.__init__[wos].png')):
+                self.D = HDF5DataCollection(papers, index_by='wosid')
+        else:
             self.D = HDF5DataCollection(papers, index_by='wosid')
-    
+
     def test_indexing(self):
         """
         index_papers: Should be N_p number of papers.
@@ -108,8 +110,11 @@ class TestDataCollectionWoSHDF5(unittest.TestCase):
         Should generate features from available abstracts.
         """
 
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.abstract_to_features[wos].png')):
+        if profile:
+            with PyCallGraph(output=GraphvizOutput(
+                    output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.abstract_to_features[wos].png')):
+                self.D.abstract_to_features()
+        else:
             self.D.abstract_to_features()
 
         self.assertIn('abstractTerms', self.D.features)
@@ -123,8 +128,11 @@ class TestDataCollectionWoSHDF5(unittest.TestCase):
         """
         """
 
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.slice[wos].png')):
+        if profile:
+            with PyCallGraph(output=GraphvizOutput(
+                    output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.slice[wos].png')):
+                self.D.slice('date')
+        else:
             self.D.slice('date')
 
         self.assertIn('date', self.D.axes)
@@ -145,12 +153,21 @@ class TestDataCollectionTokenization(unittest.TestCase):
         """
         filt = lambda s: len(s) > 3 # Must have at least four characters.
 
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.__init__[dfr_filter].png')):
-            D = HDF5DataCollection(self.papers, features={'unigrams': self.ngrams},
-                                                index_by='doi',
-                                                exclude=set(stopwords.words()),
-                                                filt=filt)
+        if profile:
+            with PyCallGraph(output=GraphvizOutput(
+                    output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.__init__[dfr_filter].png')):
+                D = HDF5DataCollection(self.papers,
+                                            features={'unigrams': self.ngrams},
+                                            index_by='doi',
+                                            exclude=set(stopwords.words()),
+                                            filt=filt)
+        else:
+            D = HDF5DataCollection(self.papers,
+                                        features={'unigrams': self.ngrams},
+                                        index_by='doi',
+                                        exclude=set(stopwords.words()),
+                                        filt=filt)
+        
                 
         self.assertEqual(len(D.features['unigrams']['index']), 49503)
                 
@@ -173,13 +190,15 @@ class TestDataCollectionTokenization(unittest.TestCase):
         D = HDF5DataCollection(self.papers, features={'unigrams': self.ngrams},
                                             index_by='doi',
                                             exclude=set(stopwords.words()))
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.filter_features[dfr].png')):
+                                            
+        if profile:
+            with PyCallGraph(output=GraphvizOutput(
+                    output_file=cg_path + 'persistence.hdf5.HDF5DataCollection.filter_features[dfr].png')):
+                D.filter_features('unigrams', 'unigrams_lim', filt)
+        else:
             D.filter_features('unigrams', 'unigrams_lim', filt)
-            
+        
         self.assertEqual(len(D.features['unigrams_lim']['index']), 14709)        
 
 if __name__ == '__main__':
-    
-    datapath = './data'
     unittest.main()

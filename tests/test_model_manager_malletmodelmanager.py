@@ -1,12 +1,10 @@
+from settings import *
+
 # Profiling.
 from pycallgraph import PyCallGraph
 from pycallgraph.output import GraphvizOutput
-cg_path = './callgraphs/'
 
 import unittest
-
-import sys
-sys.path.append('../../')
 
 from nltk.corpus import stopwords
 import numpy
@@ -20,12 +18,6 @@ import cPickle as pickle
 picklepath = './data/pickles'
 with open('{0}/dfr_DataCollection.pickle'.format(picklepath), 'r') as f:
     D = pickle.load(f)
-
-import logging
-logging.basicConfig()
-logger = logging.getLogger('tethne.classes.datacollection')
-logger.setLevel('ERROR')
-
 
 class TestMALLETModelManager(unittest.TestCase):
     def setUp(self):
@@ -220,11 +212,4 @@ class TestMALLETModelManager(unittest.TestCase):
         self.assertEqual(self.M.model.theta.shape, (241, 20))
 
 if __name__ == '__main__':
-    datapath = './data'
-    temppath = './sandbox/temp'
-    outpath = './sandbox/out'
-    mallet_path = '/Applications/mallet-2.0.7'
-    
-    profile = False
-    
     unittest.main()

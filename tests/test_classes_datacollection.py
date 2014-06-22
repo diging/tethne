@@ -1,23 +1,15 @@
+from settings import *
+
 # Profiling.
 from pycallgraph import PyCallGraph
 from pycallgraph.output import GraphvizOutput
-cg_path = './callgraphs/'
 
 import unittest
 
-import sys
-sys.path.append('../../')
 from tethne.readers import wos, dfr
 from tethne.classes import DataCollection
 
 from nltk.corpus import stopwords
-
-# Logging.
-import logging
-logging.basicConfig()
-logger = logging.getLogger('tethne.classes.datacollection')
-logger.setLevel('ERROR')
-
 
 class TestPaper(unittest.TestCase):
     pass
@@ -180,6 +172,4 @@ class TestDataCollectionTokenization(unittest.TestCase):
         self.assertEqual(len(D.features['unigrams_lim']['index']), 14709)
 
 if __name__ == '__main__':
-    
-    datapath = './data'
     unittest.main()

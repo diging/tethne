@@ -1,22 +1,15 @@
+from settings import *
+
 # Profiling.
 from pycallgraph import PyCallGraph
 from pycallgraph.output import GraphvizOutput
-cg_path = './callgraphs/'
 
 import unittest
 import numpy as np
 import networkx as nx
 import random
 
-import sys
-sys.path.append('../../')
-
 from tethne.model.social.tapmodel import TAPModel
-
-import logging
-logging.basicConfig()
-logger = logging.getLogger('tethne.model.social.tapmodel')
-logger.setLevel('ERROR')
 
 N = 10  # nodes
 E = 20  # edges
@@ -206,7 +199,4 @@ class TestTAPModel(unittest.TestCase):
             self.T.build()
 
 if __name__ == '__main__':
-    profile = False
-
-    datapath = './data'
     unittest.main()

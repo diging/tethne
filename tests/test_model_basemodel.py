@@ -1,7 +1,6 @@
-import unittest
+from settings import *
 
-import sys
-sys.path.append('../../')
+import unittest
 
 from tethne.model import BaseModel
 
@@ -86,6 +85,4 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsInstance(B.dimension_relationship(0,1)[0][0], int)
 
 if __name__ == '__main__':
-    
-    datapath = './data'
     unittest.main()

@@ -1,7 +1,6 @@
-# TODO: Cleanup and update these tests.
+from settings import *
 
-import sys
-sys.path.append("../../")
+# TODO: Cleanup and update these tests.
 
 import unittest
 import tethne.readers as rd
@@ -13,7 +12,7 @@ from pprint import pprint
 class TestConvert(unittest.TestCase):
 
     def setUp(self):
-       filepath =  "../testin/authorinstitutions_test.txt"
+       filepath =  "./tests/testin/authorinstitutions_test.txt"
        self.wos_list  = rd.wos.parse(filepath)
        self.meta_list = rd.wos.convert(self.wos_list)
 
@@ -74,8 +73,8 @@ class TestConvert(unittest.TestCase):
 
     def test_from_dir(self):
     
-        self.dir_path = "../testin/only3"
-        self.wrong_path = "../testin232/only3"
+        self.dir_path = "./tests/testin/only3"
+        self.wrong_path = "./tests/testin232/only3"
         
         # Check if objects
         a  = rd.wos.from_dir(self.dir_path)
