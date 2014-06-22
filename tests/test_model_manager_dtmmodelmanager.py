@@ -1,12 +1,10 @@
+from settings import *
+
 # Profiling.
 from pycallgraph import PyCallGraph
 from pycallgraph.output import GraphvizOutput
-cg_path = './callgraphs/'
 
 import unittest
-
-import sys
-sys.path.append('../../')
 
 from nltk.corpus import stopwords
 import numpy
@@ -15,11 +13,6 @@ import os
 from tethne import DataCollection, HDF5DataCollection
 from tethne.readers import dfr
 from tethne.model.managers import DTMModelManager
-
-import logging
-logging.basicConfig()
-logger = logging.getLogger('tethne.classes.datacollection')
-logger.setLevel('ERROR')
 
 import cPickle as pickle
 picklepath = './data/pickles'
@@ -40,25 +33,25 @@ class TestMALLETModelManager(unittest.TestCase):
                                         temppath=temppath,
                                         dtm_path=dtm_path)
 
-#    def test_list_topic(self):
-#        """
-#        :func:`.list_topic` should yield a list with ``Nwords`` words.
-#        """
-#
-#        Nwords = 10
-#        
-#        self.M._load_model()
-#
-#        if profile:
-#            pcgpath = cg_path + 'model.manager.DTMModelManager.list_topic.png'
-#            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-#                result = self.M.list_topic(0, 0, Nwords=Nwords)
-#        else:
-#            result = self.M.list_topic(0, 0, Nwords=Nwords)
-#
-#        self.assertIsInstance(result, list)
-#        self.assertIsInstance(result[0], str)
-#        self.assertEqual(len(result), Nwords)
+    def test_list_topic(self):
+        """
+        :func:`.list_topic` should yield a list with ``Nwords`` words.
+        """
+
+        Nwords = 10
+        
+        self.M._load_model()
+
+        if profile:
+            pcgpath = cg_path + 'model.manager.DTMModelManager.list_topic.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                result = self.M.list_topic(0, 0, Nwords=Nwords)
+        else:
+            result = self.M.list_topic(0, 0, Nwords=Nwords)
+
+        self.assertIsInstance(result, list)
+        self.assertIsInstance(result[0], str)
+        self.assertEqual(len(result), Nwords)
 
     def test_list_topic_diachronic(self):
         """
@@ -165,16 +158,16 @@ class TestMALLETModelManager(unittest.TestCase):
             self.M.prep()
             
         self.assertIn('tethne-meta.dat', os.listdir(temppath))
-        self.assertGreater(os.path.getsize(temppath+'/tethne-meta.dat'), 15000)
+        self.assertGreater(os.path.getsize(temppath+'/tethne-meta.dat'),15000)
         
         self.assertIn('tethne-mult.dat', os.listdir(temppath))
-        self.assertGreater(os.path.getsize(temppath+'/tethne-mult.dat'), 1400000)
+        self.assertGreater(os.path.getsize(temppath+'/tethne-mult.dat'),1400000)
                 
         self.assertIn('tethne-seq.dat', os.listdir(temppath))        
-        self.assertGreater(os.path.getsize(temppath+'/tethne-seq.dat'), 10)
+        self.assertGreater(os.path.getsize(temppath+'/tethne-seq.dat'),10)
 
         self.assertIn('tethne-vocab.dat', os.listdir(temppath))        
-        self.assertGreater(os.path.getsize(temppath+'/tethne-vocab.dat'), 400000)        
+        self.assertGreater(os.path.getsize(temppath+'/tethne-vocab.dat'),400000)
     
     def test_build(self):
         """
@@ -183,27 +176,31 @@ class TestMALLETModelManager(unittest.TestCase):
         """
         self.M.prep()
         
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'model.manager.DTMModelManager.build.png')):
-            self.M.build(Z=5, lda_seq_min_iter=2, lda_seq_max_iter=4, lda_max_em_iter=4)
+        if profile:
+            pcgpath = cg_path + 'model.manager.DTMModelManager.build.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                self.M.build(   Z=5, lda_seq_min_iter=2,
+                                     lda_seq_max_iter=4,
+                                     lda_max_em_iter=4  )
+        else:
+            self.M.build(   Z=5, lda_seq_min_iter=2,
+                                 lda_seq_max_iter=4,
+                                 lda_max_em_iter=4  )
 
     def test_load(self):
         """
         :func:`._load_model` should execute successfully after :func:`.init`\.
         """
 
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'model.manager.DTMModelManager._load_model.png')):
+        if profile:
+            pcgpath = cg_path + 'model.manager.DTMModelManager._load_model.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                self.M._load_model()
+        else:
             self.M._load_model()
         
         self.assertEqual(self.M.model.e_theta.shape, (5, 176))
 
 
 if __name__ == '__main__':
-    profile = False
-
-    datapath = './data'
-    temppath = './sandbox/temp'
-    outpath = './sandbox/out'
-    dtm_path = '/Users/erickpeirson/tethne/tethne/model/bin/main'
     unittest.main()

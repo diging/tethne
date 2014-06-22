@@ -1,24 +1,14 @@
+from settings import *
+
 # Profiling.
 from pycallgraph import PyCallGraph
 from pycallgraph.output import GraphvizOutput
-cg_path = './callgraphs/'
 
 import unittest
 
-import sys
-sys.path.append('../../')
-
 from tethne.readers import wos, dfr
 from tethne.classes import DataCollection, GraphCollection
-
 from tethne.networks.authors import coauthors
-
-import logging
-logging.basicConfig()
-logger = logging.getLogger('tethne.classes.graphcollection')
-logger.setLevel('ERROR')
-logger = logging.getLogger('tethne.classes.datacollection')
-logger.setLevel('ERROR')
 
 class TestGraphCollection(unittest.TestCase):
     def setUp(self):
@@ -52,5 +42,4 @@ class TestGraphCollection(unittest.TestCase):
         self.assertEqual(len(self.G.node_index), len(unodes))
 
 if __name__ == '__main__':
-    datapath = './data'
     unittest.main()

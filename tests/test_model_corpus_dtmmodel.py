@@ -1,12 +1,9 @@
 # Profiling.
 from pycallgraph import PyCallGraph
 from pycallgraph.output import GraphvizOutput
-cg_path = './callgraphs/'
 
 import unittest
 
-import sys
-sys.path.append('../../')
 from tethne.model.corpus import dtmmodel
 
 import numpy
@@ -212,11 +209,4 @@ class test_GerrishLoader(unittest.TestCase):
             self.assertIsInstance(self.G.tdict[k], numpy.ndarray)
 
 if __name__ == '__main__':
-    profile = False
-    
-    datapath = './data'
-    temppath = './sandbox/temp'
-    outpath = './sandbox/out'
-    mallet_path = '/Applications/mallet-2.0.7'
-    
     unittest.main()
