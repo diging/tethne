@@ -193,7 +193,6 @@ def to_graphml(graph, path, encoding='utf-8', prettyprint=True):
     """
     graph = _strip_list_attributes(graph)
     
-#    nx.write_graphml(graph, output_path + ".graphml")
     writer = TethneGraphMLWriter(encoding=encoding, prettyprint=prettyprint)
     writer.add_graph_element(graph)
     writer.dump(open(path, 'wb'))
