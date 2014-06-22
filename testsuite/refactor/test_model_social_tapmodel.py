@@ -206,6 +206,7 @@ class TestTAPModel(unittest.TestCase):
             self.T.build()
 
 if __name__ == '__main__':
-    profile = True
+    profile = False
+
     datapath = './data'
     unittest.main()

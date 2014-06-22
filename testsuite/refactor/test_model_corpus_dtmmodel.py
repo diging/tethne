@@ -40,6 +40,15 @@ class TestLoad(unittest.TestCase):
         self.assertEqual(model.W, 51638)
         self.assertEqual(model.T, 5)
 
+        self.assertIsInstance(model.vocabulary, dict)
+        self.assertGreater(len(model.vocabulary), 0)
+        self.assertIsInstance(model.vocabulary.keys()[0], int)
+        self.assertIsInstance(model.vocabulary.values()[1], str)
+        
+        self.assertIsInstance(model.metadata, dict)
+        self.assertGreater(len(model.metadata), 0)
+        self.assertIsInstance(model.metadata.keys()[0], int)
+
 class test_GerrishLoader(unittest.TestCase):
     def setUp(self):
         self.meta_path = '{0}/dtm/tethne-meta.dat'.format(datapath)
@@ -155,6 +164,23 @@ class test_GerrishLoader(unittest.TestCase):
             model = self.G.load()
         
         self.assertIsInstance(model, dtmmodel.DTMModel)
+        
+        # Model has a vocabulary.
+        self.assertIsInstance(model.vocabulary, dict)
+        self.assertGreater(len(model.vocabulary), 0)
+        self.assertIsInstance(model.vocabulary.keys()[0], int)
+        self.assertIsInstance(model.vocabulary.values()[1], str)
+        
+        # Model has metadata.
+        self.assertIsInstance(model.metadata, dict)
+        self.assertGreater(len(model.metadata), 0)
+        self.assertIsInstance(model.metadata.keys()[0], int)
+        
+        # Model has metaparams.
+        self.assertEqual(model.Z, 5)
+        self.assertEqual(model.M, 176)
+        self.assertEqual(model.W, 51638)
+        self.assertEqual(model.T, 5)        
         
         # Metadata.
         self.assertIsInstance(self.G.metadata, dict)

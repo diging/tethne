@@ -21,23 +21,141 @@ logging.basicConfig()
 logger = logging.getLogger('tethne.classes.datacollection')
 logger.setLevel('ERROR')
 
+import cPickle as pickle
+picklepath = './data/pickles'
+with open('{0}/dfr_DataCollection.pickle'.format(picklepath), 'r') as f:
+    D = pickle.load(f)
+
 class TestMALLETModelManager(unittest.TestCase):
     def setUp(self):
-        dfrdatapath = '{0}/dfr'.format(datapath)
-        
-        papers = dfr.read(dfrdatapath)
-        ngrams = dfr.ngrams(dfrdatapath, 'uni')
-        self.D = DataCollection(papers, features={'unigrams': ngrams},
-                                        index_by='doi',
-                                        exclude=set(stopwords.words()))
-        self.D.slice('date', 'time_period', window_size=10)
-        
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'model.manager.DTMModelManager.__init__.png')):
-            self.M = DTMModelManager(self.D, outpath=outpath,
+
+        if profile:
+            pcgpath = cg_path + 'model.manager.DTMModelManager.__init__.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                self.M = DTMModelManager(D, outpath=outpath,
+                                            temppath=temppath,
+                                            dtm_path=dtm_path)
+        else:
+            self.M = DTMModelManager(D, outpath=outpath,
                                         temppath=temppath,
                                         dtm_path=dtm_path)
+
+#    def test_list_topic(self):
+#        """
+#        :func:`.list_topic` should yield a list with ``Nwords`` words.
+#        """
+#
+#        Nwords = 10
+#        
+#        self.M._load_model()
+#
+#        if profile:
+#            pcgpath = cg_path + 'model.manager.DTMModelManager.list_topic.png'
+#            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+#                result = self.M.list_topic(0, 0, Nwords=Nwords)
+#        else:
+#            result = self.M.list_topic(0, 0, Nwords=Nwords)
+#
+#        self.assertIsInstance(result, list)
+#        self.assertIsInstance(result[0], str)
+#        self.assertEqual(len(result), Nwords)
+
+    def test_list_topic_diachronic(self):
+        """
+        :func:`.list_topic_diachronic` should yield a dict with ``T`` entries,
+        each with a list of ``Nwords`` words.
+        """
+
+        Nwords = 10
         
+        self.M._load_model()
+
+        if profile:
+            pcgpath = cg_path + 'model.manager.DTMModelManager.list_topic_diachronic.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                result = self.M.list_topic_diachronic(0, Nwords=Nwords)
+        else:
+            result = self.M.list_topic_diachronic(0, Nwords=Nwords)
+
+        self.assertIsInstance(result, dict)
+        self.assertEqual(len(result), self.M.model.T)
+        self.assertIsInstance(result.keys()[0], int)
+        self.assertIsInstance(result[0], list)
+        self.assertEqual(len(result[0]), Nwords)
+
+    def test_print_topic_diachronic(self):
+        """
+        :func:`.print_topic` should yield a string with ``Nwords`` words.
+        """
+    
+        Nwords = 10
+        
+        self.M._load_model()
+
+        if profile:
+            pcgpath = cg_path + 'model.manager.DTMModelManager.print_topic.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                result = self.M.print_topic_diachronic(0, Nwords=Nwords)
+        else:
+            result = self.M.print_topic_diachronic(0, Nwords=Nwords)
+        
+        self.assertIsInstance(result, str)
+        self.assertEqual(len(result.split('\n')), self.M.model.T)
+
+    def test_print_topic(self):
+        """
+        :func:`.print_topic` should yield a string with ``Nwords`` words.
+        """
+    
+        Nwords = 10
+        
+        self.M._load_model()
+
+        if profile:
+            pcgpath = cg_path + 'model.manager.DTMModelManager.print_topic.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                result = self.M.print_topic(0, 0, Nwords=Nwords)
+        else:
+            result = self.M.print_topic(0, 0, Nwords=Nwords)
+        
+        self.assertIsInstance(result, str)
+        self.assertEqual(len(result.split(', ')), Nwords)
+
+    def test_list_topics(self):
+        """
+        :func:`.list_topics` should yield a dict { k : [ w ], }.
+        """
+
+        Nwords = 10
+        self.M._load_model()
+
+        if profile:
+            pcgpath = cg_path + 'model.manager.DTMModelManager.list_topics.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                result = self.M.list_topics(0, Nwords=Nwords)
+        else:
+            result = self.M.list_topics(0, Nwords=Nwords)
+
+        self.assertIsInstance(result, dict)
+        self.assertIsInstance(result.keys()[0], int)
+        self.assertIsInstance(result.values()[0], list)
+        self.assertIsInstance(result.values()[0][0], str)
+        self.assertEqual(len(result), self.M.model.Z)
+
+    def test_print_topics(self):
+        Nwords = 10
+        self.M._load_model()
+
+        if profile:
+            pcgpath = cg_path + 'model.manager.DTMModelManager.print_topics.png'
+            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
+                result = self.M.print_topics(0, Nwords=Nwords)
+        else:
+            result = self.M.print_topics(0, Nwords=Nwords)
+
+        self.assertIsInstance(result, str)
+        self.assertEqual(len(result.split('\n')), self.M.model.Z)
+
     def test_prep(self):
         """
         .prep() should result in four sizeable temporary corpus files.
@@ -82,6 +200,8 @@ class TestMALLETModelManager(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    profile = False
+
     datapath = './data'
     temppath = './sandbox/temp'
     outpath = './sandbox/out'
