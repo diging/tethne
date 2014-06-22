@@ -191,10 +191,8 @@ class GraphCollection(object):
             fig = plt.figure()
 
         plt.__dict__[type](xvalues, yvalues, **plotargs)
-        plt.xlim(np.min(xvalues), np.max(yvalues))
+        plt.xlim(np.min(xvalues), np.max(xvalues))
         plt.ylabel(ylabel)
-        
-        return fig
         
     def node_distribution(self):
         """
