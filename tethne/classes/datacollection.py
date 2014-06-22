@@ -564,7 +564,7 @@ class DataCollection(object):
         if key not in self.axes.keys():
             raise(KeyError("Data has not been sliced by " + str(key)))
         
-        slices = self.axes[key]
+        slices = { k:self.axes[key][k] for k in sorted(self.axes[key].keys()) }
 
         if include_papers:  # Retrieve Papers.
             return { k:[ self.papers[p] for p in v ]
@@ -651,7 +651,8 @@ class DataCollection(object):
         return plist
     
     def _get_slice_i(self, key, i):
-        return self.axes[key].values()[i]
+        k = sorted(self.axes[key].keys())[i]
+        return self.axes[key][k]
         
     def _get_by_i(self, key_indices):
         slices = []
@@ -663,7 +664,7 @@ class DataCollection(object):
     
     def _get_slice_keys(self, slice):
         if slice in self.get_axes():
-            return self.axes[slice].keys()
+            return sorted(self.axes[slice].keys())
     
     def get_axes(self):
         """
@@ -737,12 +738,13 @@ class DataCollection(object):
                         K.append(k)
 
         # TODO: Move away from SciPy, to facilitate PyPy compatibility.
-        dist = sc.sparse.coo_matrix((K, (I,J)), shape=shape)
+        dist = np.array(sc.sparse.coo_matrix((K, (I,J)), shape=shape).todense())
+
         return dist
 
     def distribution_2d(self, x_axis, y_axis=None):
         """
-        Deprecated as of 0.4.3-alpha. Use :func:`.distribution` instead.
+        DEPRECATED as of 0.4.3-alpha. Use :func:`.distribution` instead.
         """
 
         return distribution(self, x_axis, y_axis=y_axis)
@@ -769,17 +771,16 @@ class DataCollection(object):
         if x_axis is None:
             x_axis = self.get_axes()[0]
 
-        xkeys = self._get_slice_keys(x_axis)        
+        xkeys = self._get_slice_keys(x_axis)
         
         if y_axis is None:
-            plt.__dict__[type](xkeys, self.distribution(x_axis).todense(),
-                                                                       **kwargs)
-            plt.xlim(min(xkeys), max(xkeys))
+            yvals = self.distribution(x_axis)
+            plt.__dict__[type](xkeys, yvals, **kwargs)
+            plt.xlim(xkeys[0], xkeys[-1])   # Already sorted.
         else:
             ykeys = self._get_slice_keys(y_axis)    
             ax = fig.add_subplot(111)
-            ax.imshow(self.distribution(x_axis, y_axis).todense(), aspect=0.5,
-                                                                       **kwargs)
+            ax.imshow(self.distribution(x_axis, y_axis), aspect=0.5, **kwargs)
             plt.yticks(np.arange(len(xkeys)), xkeys)
 
             tickstops = range(0, 50, int(50./len(plt.xticks()[0])))

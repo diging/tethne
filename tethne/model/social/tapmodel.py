@@ -280,6 +280,7 @@ class TAPModel(BaseModel):
                 last = 0.
                 
                 j_max = 0
+                j_max_value = 0.
                 # Get most influential neighbor, j_max.
                 for j in xrange(len(n)):
                     f = self.r[i][j, k] + self.a[i][j, k]

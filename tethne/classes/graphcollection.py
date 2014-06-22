@@ -1,9 +1,13 @@
+# TODO: distribution, plot_distribution, etc
+
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel('ERROR')
 
 import networkx as nx
+import numpy as np
+import matplotlib.pyplot as plt
 
 class GraphCollection(object):
     """
@@ -128,7 +132,174 @@ class GraphCollection(object):
                 edges = edges | set(G.edges())
             self.edge_list = list(edges)
         return self.edge_list
+        
+    def _plot(self, data, ylabel, type='bar', fig=None, plotargs={}, **kwargs):
+        """
+        
+        Parameters
+        ----------
+        data : tuple
+            ( xvalues, yvalues )
+        type : str
+            'plot' or 'bar'
+        fig : :class:`matplotlib.figure.figure`
+            If provided, will use this as the basis for the plot. Otherwise,
+            will generate a new :class:`matplotlib.figure.Figure`\.
+        plotargs
+            Passed to PyPlot method.
+            
+        Returns
+        -------
+        fig : :class:`matplotlib.figure.Figure`
+        """
 
+        xvalues, yvalues = data
+
+        if fig is None:
+            fig = plt.figure()
+
+        plt.__dict__[type](xvalues, yvalues, **plotargs)
+        plt.xlim(np.min(xvalues), np.max(yvalues))
+        plt.ylabel(ylabel)
+        
+        return fig
+        
+    def node_distribution(self):
+        """
+        Returns keys and graph sizes (nodes), sorted by key.
+        
+        Returns
+        -------
+        keys : list
+            Graph indices.
+        values  : list
+            Number of nodes in each graph.
+        """
+
+        keys = sorted(self.graphs.keys())
+        values = [ len(self[k].nodes()) for k in keys ]
+
+        return keys, values
+    
+    def plot_node_distribution(self, type='bar', fig=None, plotargs={},
+                                                              **kwargs):
+        """
+        Plot :func:`.node_distribution` using MatPlotLib.
+        
+        Parameters
+        ----------
+        type : str
+            'plot' or 'bar'
+        plotargs
+            Passed to PyPlot method.
+            
+        Returns
+        -------
+        fig : :class:`matplotlib.figure.figure`
+        """
+        
+        data = self.node_distribution()
+        fig = self._plot(data, 'Nodes', type, fig, plotargs, **kwargs)
+
+        return fig
+    
+    def edge_distribution(self):
+        """
+        Returns keys and graph sizes (edges), sorted by key.
+        
+        Returns
+        -------
+        keys : list
+            Graph indices.
+        values  : list
+            Number of nodes in each :class:`.Graph`
+        """
+
+        keys = sorted(self.graphs.keys())
+        values = [ len(self[k].edges()) for k in keys ]
+
+        return keys, values
+
+    def plot_edge_distribution(self, type='bar', fig=None, plotargs={},
+                                                              **kwargs):
+        """
+        Plot :func:`.edge_distribution` using MatPlotLib.
+        
+        Parameters
+        ----------
+        type : str
+            'plot' or 'bar'
+        plotargs
+            Passed to PyPlot method.
+            
+        Returns
+        -------
+        fig : :class:`matplotlib.figure.figure`
+        """
+
+        data = self.edge_distribution()
+        fig = self._plot(data, 'Edges', type, fig, plotargs, **kwargs)
+
+        return fig
+    
+    def attr_distribution(self, attr='weight', etype='edge', stat=np.mean):
+        """
+        Generate summary statistics for a node or edge attribute.
+        
+        Parameters
+        ----------
+        attr : str
+            Attribute name.
+        etype : str
+            'node' or 'edge'
+        stat : method
+            Method to apply to the values in each :class:`.Graph`
+        
+        Return
+        -------
+        keys : list
+            Graph indices.
+        values  : list
+            Statistic values for each :class:`.Graph`
+        """
+    
+        keys = sorted(self.graphs.keys())
+        values = []
+        for k in keys:
+            A = nx.__dict__['get_{0}_attributes'.format(etype)](self[k], attr).values()
+            values.append(stat(A))
+
+        return keys, values
+        
+    def plot_attr_distribution(self, attr='weight', etype='edge', stat=np.mean,
+                                type='bar', fig=None, plotargs={}, **kwargs):
+        """
+        Plot :func:`.attr_distribution` using MatPlotLib.
+        
+        Parameters
+        ----------
+        attr : str
+            Attribute name.
+        etype : str
+            'node' or 'edge'
+        stat : method
+            Method to apply to the values in each :class:`.Graph`        
+        type : str
+            'plot' or 'bar'
+        plotargs
+            Passed to PyPlot method.
+            
+        Returns
+        -------
+        fig : :class:`matplotlib.figure.figure`
+        """
+                                
+        data = self.attr_distribution(attr, etype, stat)
+        ylabel = ' '.join([stat.__name__, etype, attr])
+        fig = self._plot(data, ylabel, type, fig, plotargs, **kwargs)
+
+        return fig
+    
     def save(self,filepath):   #[61512528]
         """
         Pickles (serializes) the :class:`.GraphCollection` .
