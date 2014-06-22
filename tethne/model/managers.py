@@ -25,7 +25,7 @@ class ModelManager(object):
     Base class for Model Managers.
     """
     
-    def __init__(self, outpath, temppath=None, **kwargs):
+    def __init__(self, feature='unigrams', outpath, temppath=None, **kwargs):
         """
         Initialize the ModelManager.
         
@@ -41,6 +41,9 @@ class ModelManager(object):
             self.temp = temppath
         self.outpath = outpath
         self.prepped = False
+        
+        self.feature = feature
+
         self.ll = []
         self.ll_iters = []
         self.num_iters = 0
@@ -63,12 +66,12 @@ class ModelManager(object):
         plt.ylabel('LL/Topic')
         plt.savefig('{0}/ll.png'.format(self.outpath))
     
-    def prep(self, feature='unigrams', meta=['date', 'atitle', 'jtitle']):
+    def prep(self, meta=['date', 'atitle', 'jtitle']):
         """
         Generates a corpus that can be used as input for a modeling algorithm.
         """
         
-        self._generate_corpus(feature, meta)
+        self._generate_corpus(self.feature, meta)
         
         self.prepped = True
 
@@ -145,12 +148,12 @@ class MALLETModelManager(ModelManager):
     
         self.vocabulary = self.datacollection.features[self.feature]['index']
 
-    def prep(self, feature='unigrams', meta=['date', 'atitle', 'jtitle']):
+    def prep(self, meta=['date', 'atitle', 'jtitle']):
         """
         Generates a corpus that can be used as input for modeling.
         """
         
-        self._generate_corpus(feature, meta)
+        self._generate_corpus(self.feature, meta)
         self._export_corpus()        
         self.prepped = True
 

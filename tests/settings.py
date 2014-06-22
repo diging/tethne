@@ -1,5 +1,6 @@
 profile = False
 datapath = './tests/data'
+picklepath = './tests/data/pickles'
 cg_path = './tests/callgraphs/'
 
 temppath = './tests/sandbox/temp'
