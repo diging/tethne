@@ -335,7 +335,7 @@ class TAPModel(BaseModel):
                             
             # Theta
             for i in sorted(self.G.nodes()):
-                subg.node[i]['theta'] = self.theta[i][k]
+                subg.node[i]['theta'] = float(self.theta[i][k])
                 
             self.MU[k] = subg
     
