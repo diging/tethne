@@ -1,9 +1,5 @@
 from settings import *
 
-# Profiling.
-from pycallgraph import PyCallGraph
-from pycallgraph.output import GraphvizOutput
-
 import unittest
 
 from tethne.model.corpus import ldamodel
@@ -22,11 +18,8 @@ class TestLoad(unittest.TestCase):
         values.
         """
     
-        if profile:
-            pcgpath = cg_path + 'model.corpus.ldamodel._handle_top_doc.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                td = ldamodel._handle_top_doc(self.dt_path)
-        else:
+        pcgpath = cg_path + 'model.corpus.ldamodel._handle_top_doc.png'
+        with Profile(pcgpath):
             td = ldamodel._handle_top_doc(self.dt_path)
 
         self.assertIsInstance(td, numpy.matrixlib.defmatrix.matrix)
@@ -39,11 +32,8 @@ class TestLoad(unittest.TestCase):
         values.
         """
     
-        if profile:
-            pcgpath = cg_path + 'model.corpus.ldamodel._handle_word_top.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                wt = ldamodel._handle_word_top(self.wt_path)
-        else:
+        pcgpath = cg_path + 'model.corpus.ldamodel._handle_word_top.png'
+        with Profile(pcgpath):
             wt = ldamodel._handle_word_top(self.wt_path)
 
         self.assertIsInstance(wt, numpy.matrixlib.defmatrix.matrix)
@@ -55,11 +45,8 @@ class TestLoad(unittest.TestCase):
         :func:`._handle_metadata` should return a dictionary mapping int : str.
         """
     
-        if profile:
-            pcgpath = cg_path + 'model.corpus.ldamodel._handle_metadata.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                meta = ldamodel._handle_metadata(self.meta_path)
-        else:
+        pcgpath = cg_path + 'model.corpus.ldamodel._handle_metadata.png'
+        with Profile(pcgpath):
             meta = ldamodel._handle_metadata(self.meta_path)
             
         self.assertIsInstance(meta, dict)
@@ -72,13 +59,8 @@ class TestLoad(unittest.TestCase):
         :func:`.from_mallet` should return a :class:`.LDAModel`.
         """
         
-        if profile:
-            pcgpath = cg_path + 'model.corpus.ldamodel.from_mallet.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                model = ldamodel.from_mallet(   self.dt_path,
-                                                self.wt_path,
-                                                self.meta_path  )
-        else:
+        pcgpath = cg_path + 'model.corpus.ldamodel.from_mallet.png'
+        with Profile(pcgpath):
             model = ldamodel.from_mallet(   self.dt_path,
                                             self.wt_path,
                                             self.meta_path  )
@@ -138,10 +120,6 @@ class TestLDAModel(unittest.TestCase):
         self.assertEqual(len(result), 44)
         for r in result:
             self.assertGreaterEqual(r[1], threshold)
-    
-    def test_print_topic(self):
-
-        print self.model.print_topic(0)
 
 if __name__ == '__main__':
     unittest.main()

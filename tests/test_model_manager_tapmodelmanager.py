@@ -1,9 +1,5 @@
 from settings import *
 
-# Profiling.
-from pycallgraph import PyCallGraph
-from pycallgraph.output import GraphvizOutput
-
 import unittest
 
 from nltk.corpus import stopwords
@@ -28,27 +24,21 @@ class TestTAPModelManager(unittest.TestCase):
         
         # Coauthor graph.
         self.G = GraphCollection()
-        for k,v in D.get_slices('date', include_papers=True).iteritems():
-            self.G[k] = coauthors(v)
+        self.G.build(D, 'date', 'authors', 'coauthors')
         
         # LDAModel
-        self.L = MALLETModelManager(D, outpath=outpath,
-                                       temppath=temppath,
-                                       mallet_path=mallet_path)
+        self.L = MALLETModelManager(    D, feature='unigrams',
+                                           outpath=outpath,
+                                           temppath=temppath,
+                                           mallet_path=mallet_path  )
         self.L._load_model()
         
-        if profile:
-            pcgpath = cg_path + 'model.manager.TAPModelManager.__init__.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.M = TAPModelManager(D, self.G, self.L.model,
-                                                        outpath=outpath,
-                                                        temppath=temppath,
-                                                        mallet_path=mallet_path)
-        else:
+        pcgpath = cg_path + 'model.manager.TAPModelManager.__init__.png'
+        with Profile(pcgpath):
             self.M = TAPModelManager(D, self.G, self.L.model,
-                                                    outpath=outpath,
-                                                    temppath=temppath,
-                                                    mallet_path=mallet_path)
+                                                outpath=outpath,
+                                                temppath=temppath,
+                                                mallet_path=mallet_path)
 
     def test_author_theta(self):
         """
@@ -60,11 +50,8 @@ class TestTAPModelManager(unittest.TestCase):
         authors_list = list(set([ a for p in papers for a in p.authors() ]))
         authors = { authors_list[i]:i for i in xrange(len(authors_list)) }
         
-        if profile:
-            pcgpath = cg_path + 'model.manager.TAPModelManager.author_theta.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                atheta = self.M.author_theta(papers, authors)
-        else:
+        pcgpath = cg_path + 'model.manager.TAPModelManager.author_theta.png'
+        with Profile(pcgpath):
             atheta = self.M.author_theta(papers, authors)
 
         self.assertEqual(len(atheta), 3)
@@ -77,21 +64,15 @@ class TestTAPModelManager(unittest.TestCase):
         :func:`.graph_collection` should generate a :class:`.GraphCollection`\.
         """
 
-        if profile:
-            pcgpath = cg_path + 'model.manager.TAPModelManager.build.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.M.build(axis='date')
-        else:
+        pcgpath = cg_path + 'model.manager.TAPModelManager.build.png'
+        with Profile(pcgpath):
             self.M.build(axis='date')
 
         self.assertIsInstance(self.M.SM.values()[0], TAPModel)
         self.assertIsInstance(self.M.SM.values()[0].MU[0], DiGraph)
         
-        if profile:
-            pcgpath = cg_path + 'model.manager.TAPModelManager.graph_collection.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                GC = self.M.graph_collection(0)
-        else:
+        pcgpath = cg_path + 'model.manager.TAPModelManager.graph_collection.png'
+        with Profile(pcgpath):
             GC = self.M.graph_collection(0)
 
         self.assertIsInstance(GC, GraphCollection)

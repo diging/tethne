@@ -1,9 +1,5 @@
 from settings import *
 
-# Profiling.
-from pycallgraph import PyCallGraph
-from pycallgraph.output import GraphvizOutput
-
 import unittest
 
 from nltk.corpus import stopwords
@@ -23,14 +19,10 @@ class TestMALLETModelManager(unittest.TestCase):
     def setUp(self):
         dfrdatapath = '{0}/dfr'.format(datapath)
 
-        if profile:
-            pcgpath = cg_path + 'model.manager.MALLETModelManager.__init__.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.M = MALLETModelManager(D, outpath=outpath,
-                                               temppath=temppath,
-                                               mallet_path=mallet_path)
-        else:
-            self.M = MALLETModelManager(D, outpath=outpath,
+        pcgpath = cg_path + 'model.manager.MALLETModelManager.__init__.png'
+        with Profile(pcgpath):
+            self.M = MALLETModelManager(D, feature='unigrams',
+                                           outpath=outpath,
                                            temppath=temppath,
                                            mallet_path=mallet_path)
 
@@ -39,11 +31,8 @@ class TestMALLETModelManager(unittest.TestCase):
         .prep() should result in three sizeable temporary corpus files.
         """
 
-        if profile:
-            pcgpath = cg_path + 'model.manager.MALLETModelManager.prep.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.M.prep()
-        else:
+        pcgpath = cg_path + 'model.manager.MALLETModelManager.prep.png'
+        with Profile(pcgpath):
             self.M.prep()
 
         self.assertIn('input.mallet', os.listdir(temppath))
@@ -63,11 +52,8 @@ class TestMALLETModelManager(unittest.TestCase):
         
         self.M.prep()
         
-        if profile:
-            pcgpath = cg_path + 'model.manager.MALLETModelManager.build.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.M.build(max_iter=50)
-        else:
+        pcgpath = cg_path + 'model.manager.MALLETModelManager.build.png'
+        with Profile(pcgpath):
             self.M.build(max_iter=50)
         
         self.assertIn('dt.dat', os.listdir(temppath))
@@ -86,11 +72,8 @@ class TestMALLETModelManager(unittest.TestCase):
         Nwords = 10
         self.M._load_model()
         
-        if profile:
-            pcgpath = cg_path + 'model.manager.MALLETModelManager.list_topic.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                result = self.M.list_topic(0, Nwords=Nwords)
-        else:
+        pcgpath = cg_path + 'model.manager.MALLETModelManager.list_topic.png'
+        with Profile(pcgpath):
             result = self.M.list_topic(0, Nwords=Nwords)
 
         self.assertIsInstance(result, list)
@@ -104,11 +87,8 @@ class TestMALLETModelManager(unittest.TestCase):
         Nwords = 10
         self.M._load_model()
         
-        if profile:
-            pcgpath = cg_path + 'model.manager.MALLETModelManager.print_topic.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                result = self.M.print_topic(0, Nwords=Nwords)
-        else:
+        pcgpath = cg_path + 'model.manager.MALLETModelManager.print_topic.png'
+        with Profile(pcgpath):
             result = self.M.print_topic(0, Nwords=Nwords)
         
         self.assertIsInstance(result, str)
@@ -122,11 +102,8 @@ class TestMALLETModelManager(unittest.TestCase):
         Nwords = 10
         self.M._load_model()
 
-        if profile:
-            pcgpath = cg_path + 'model.manager.MALLETModelManager.list_topics.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                result = self.M.list_topics(Nwords=Nwords)
-        else:
+        pcgpath = cg_path + 'model.manager.MALLETModelManager.list_topics.png'
+        with Profile(pcgpath):
             result = self.M.list_topics(Nwords=Nwords)
 
         self.assertIsInstance(result, dict)
@@ -139,11 +116,8 @@ class TestMALLETModelManager(unittest.TestCase):
         Nwords = 10
         self.M._load_model()
 
-        if profile:
-            pcgpath = cg_path + 'model.manager.MALLETModelManager.print_topics.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                result = self.M.print_topics(Nwords=Nwords)
-        else:
+        pcgpath = cg_path + 'model.manager.MALLETModelManager.print_topics.png'
+        with Profile(pcgpath):
             result = self.M.print_topics(Nwords=Nwords)
 
         self.assertIsInstance(result, str)
@@ -158,11 +132,8 @@ class TestMALLETModelManager(unittest.TestCase):
         self.M.prep()
         self.M.build(max_iter=50)
         
-        if profile:
-            pcgpath = cg_path + 'model.manager.MALLETModelManager.topic_over_time.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                K,R = self.M.topic_over_time(k, mode='documents', normed=True)
-        else:
+        pcgpath = cg_path+'model.manager.MALLETModelManager.topic_over_time.png'
+        with Profile(pcgpath):
             K,R = self.M.topic_over_time(k, mode='documents', normed=True)
 
         self.assertIsInstance(K, numpy.ndarray)
@@ -202,11 +173,8 @@ class TestMALLETModelManager(unittest.TestCase):
         :func:`._load_model` should execute successfully after :func:`.init`\.
         """
 
-        if profile:
-            pcgpath = cg_path + 'model.manager.MALLETModelManager._load_model.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.M._load_model()
-        else:
+        pcgpath = cg_path + 'model.manager.MALLETModelManager._load_model.png'
+        with Profile(pcgpath):
             self.M._load_model()
         
         self.assertEqual(self.M.model.theta.shape, (241, 20))
