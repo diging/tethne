@@ -333,8 +333,9 @@ class TAPModel(BaseModel):
                         else:
                             subg.add_edge(i, j, weight=float(i_j))
                             
-            # Theta
+            # Add theta as node attribute.
             for i in sorted(self.G.nodes()):
+                 # Networkx doesn't like Numpy dtypes.
                 subg.node[i]['theta'] = float(self.theta[i][k])
                 
             self.MU[k] = subg
