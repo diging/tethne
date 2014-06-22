@@ -1,9 +1,5 @@
 from settings import *
 
-# Profiling.
-from pycallgraph import PyCallGraph
-from pycallgraph.output import GraphvizOutput
-
 import unittest
 import numpy as np
 import networkx as nx
@@ -23,11 +19,8 @@ class TestTAPModel(unittest.TestCase):
         
         self.atheta = { n : np.random.random((Z))/Z for n in self.graph.nodes() }
         
-        if profile:
-            pcgpath = cg_path + 'model.social.tapmodel.TAPModel.__init__.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.T = TAPModel(self.graph, self.atheta)
-        else:
+        pcgpath = cg_path + 'model.social.tapmodel.TAPModel.__init__.png'
+        with Profile(pcgpath):
             self.T = TAPModel(self.graph, self.atheta)
 
     def test_init(self):
@@ -60,11 +53,8 @@ class TestTAPModel(unittest.TestCase):
         """
         before = np.sum(self.T.r[0])
         
-        if profile:
-            pcgpath = cg_path + 'model.social.tapmodel.TAPModel._update_r.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.T._update_r()
-        else:
+        pcgpath = cg_path + 'model.social.tapmodel.TAPModel._update_r.png'
+        with Profile(pcgpath):
             self.T._update_r()
 
         after = np.sum(self.T.r[0])
@@ -77,11 +67,8 @@ class TestTAPModel(unittest.TestCase):
         before = np.max(self.T.a[0])
         self.T._update_r()
         
-        if profile:
-            pcgpath = cg_path + 'model.social.tapmodel.TAPModel._update_a.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.T._update_a()
-        else:
+        pcgpath = cg_path + 'model.social.tapmodel.TAPModel._update_a.png'
+        with Profile(pcgpath):
             self.T._update_a()
 
         after = np.max(self.T.a[0])
@@ -95,11 +82,8 @@ class TestTAPModel(unittest.TestCase):
         self.T._update_a()
         self.T.iteration = 0
         
-        if profile:
-            pcgpath = cg_path + 'model.social.tapmodel.TAPModel._check_convergence.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                nc,cont = self.T._check_convergence(0)
-        else:
+        pcgpath = cg_path + 'model.social.tapmodel.TAPModel._check_convergence.png'
+        with Profile(pcgpath):
             nc,cont = self.T._check_convergence(0)
         
         self.assertIsInstance(nc, int)
@@ -113,11 +97,8 @@ class TestTAPModel(unittest.TestCase):
         self.T._update_r()
         self.T._update_a()
         
-        if profile:
-            pcgpath = cg_path + 'model.social.tapmodel.TAPModel._calculate_mu.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.T._calculate_mu()
-        else:
+        pcgpath = cg_path + 'model.social.tapmodel.TAPModel._calculate_mu.png'
+        with Profile(pcgpath):
             self.T._calculate_mu()
 
         self.assertIsInstance(self.T.MU, dict)
@@ -139,11 +120,8 @@ class TestTAPModel(unittest.TestCase):
 
         T_ = TAPModel(graph_, atheta_)
         
-        if profile:
-            pcgpath = cg_path + 'model.social.tapmodel.TAPModel.prime.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                T_.prime(self.T.r, self.T.a, self.graph)
-        else:
+        pcgpath = cg_path + 'model.social.tapmodel.TAPModel.prime.png'
+        with Profile(pcgpath):
             T_.prime(self.T.r, self.T.a, self.graph)
 
     def test_item_description(self):
@@ -151,11 +129,8 @@ class TestTAPModel(unittest.TestCase):
         should return a list of ( t , w ) tuples.
         """
         
-        if profile:
-            pcgpath = cg_path + 'model.social.tapmodel.TAPModel._item_description.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                description = self.T._item_description(0)
-        else:
+        pcgpath = cg_path + 'model.social.tapmodel.TAPModel._item_description.png'
+        with Profile(pcgpath):
             description = self.T._item_description(0)
         
         self.assertIsInstance(description, list)
@@ -178,11 +153,8 @@ class TestTAPModel(unittest.TestCase):
         e = self.T.MU[0].edges()[0]
         i,j = e[0], e[1]
         
-        if profile:
-            pcgpath = cg_path + 'model.social.tapmodel.TAPModel._item_relationship.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                description = self.T._item_relationship(i,j)
-        else:
+        pcgpath = cg_path + 'model.social.tapmodel.TAPModel._item_relationship.png'
+        with Profile(pcgpath):
             description = self.T._item_relationship(i,j)
         
         self.assertIsInstance(description, list)
@@ -191,11 +163,8 @@ class TestTAPModel(unittest.TestCase):
         self.assertIsInstance(description[0][1], float)
 
     def test_build(self):
-        if profile:
-            pcgpath = cg_path + 'model.social.tapmodel.TAPModel.build.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.T.build()
-        else:
+        pcgpath = cg_path + 'model.social.tapmodel.TAPModel.build.png'
+        with Profile(pcgpath):
             self.T.build()
 
 if __name__ == '__main__':

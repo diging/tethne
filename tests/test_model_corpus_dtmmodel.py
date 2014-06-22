@@ -1,6 +1,4 @@
-# Profiling.
-from pycallgraph import PyCallGraph
-from pycallgraph.output import GraphvizOutput
+from settings import *
 
 import unittest
 
@@ -19,17 +17,11 @@ class TestLoad(unittest.TestCase):
         :func:`.from_gerrish` should load a :class:`.DTMModel`\.
         """
 
-        if profile:
-            pcgpath = cg_path + 'model.corpus.dtmmodel.from_gerrish.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                model = dtmmodel.from_gerrish(  self.target_path,
-                                                self.meta_path,
-                                                self.vocab_path )
-        else:
+        pcgpath = cg_path + 'model.corpus.dtmmodel.from_gerrish.png'
+        with Profile(pcgpath):
             model = dtmmodel.from_gerrish(  self.target_path,
                                             self.meta_path,
                                             self.vocab_path )
-        
         
         self.assertIsInstance(model, dtmmodel.DTMModel)
         self.assertEqual(model.Z, 5)
@@ -62,11 +54,8 @@ class test_GerrishLoader(unittest.TestCase):
         update ``G.metadata``.
         """
         
-        if profile:
-            pcgpath = cg_path + 'model.corpus.dtmmodel.DTMModel._handle_metadata.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                result = self.G._handle_metadata()
-        else:
+        pcgpath = cg_path +'model.corpus.dtmmodel.DTMModel._handle_metadata.png'
+        with Profile(pcgpath):
             result = self.G._handle_metadata()
 
         self.assertIsInstance(result, dict)
@@ -80,11 +69,8 @@ class test_GerrishLoader(unittest.TestCase):
         and update ``G.vocabulary``.
         """
         
-        if profile:
-            pcgpath = cg_path + 'model.corpus.dtmmodel.DTMModel._handle_vocabulary.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                result = self.G._handle_vocabulary()
-        else:
+        pcgpath = cg_path + 'model.corpus.dtmmodel.DTMModel._handle_vocabulary.png'
+        with Profile(pcgpath):
             result = self.G._handle_vocabulary()
         
         self.assertIsInstance(result, dict)
@@ -98,11 +84,8 @@ class test_GerrishLoader(unittest.TestCase):
         topics, words, and time periods.
         """
         
-        if profile:
-            pcgpath = cg_path + 'model.corpus.dtmmodel.DTMModel._handle_metaparams.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.G._handle_metaparams()
-        else:
+        pcgpath = cg_path + 'model.corpus.dtmmodel.DTMModel._handle_metaparams.png'
+        with Profile(pcgpath):
             self.G._handle_metaparams()
 
         self.assertEqual(self.G.N_z, 5)
@@ -119,11 +102,8 @@ class test_GerrishLoader(unittest.TestCase):
         
         self.G._handle_metaparams()
         
-        if profile:
-            pcgpath = cg_path + 'model.corpus.dtmmodel.DTMModel._handle_gammas.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.G._handle_gammas()
-        else:
+        pcgpath = cg_path + 'model.corpus.dtmmodel.DTMModel._handle_gammas.png'
+        with Profile(pcgpath):
             self.G._handle_gammas()
 
         self.assertEqual(self.G.N_d, 176)
@@ -137,11 +117,8 @@ class test_GerrishLoader(unittest.TestCase):
 
         self.G._handle_metaparams()
 
-        if profile:
-            pcgpath = cg_path + 'model.corpus.dtmmodel.DTMModel._handle_prob.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.G._handle_prob('topic-000-var-e-log-prob.dat', 0)
-        else:
+        pcgpath = cg_path + 'model.corpus.dtmmodel.DTMModel._handle_prob.png'
+        with Profile(pcgpath):
             self.G._handle_prob('topic-000-var-e-log-prob.dat', 0)
 
         self.assertEqual(self.G.tdict[0].shape[0], self.G.N_w)
@@ -153,11 +130,8 @@ class test_GerrishLoader(unittest.TestCase):
         Should pass all of the tests for the individual handlers, and return a
         """
         
-        if profile:
-            pcgpath = cg_path + 'model.corpus.dtmmodel.DTMModel.load.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                model = self.G.load()
-        else:
+        pcgpath = cg_path + 'model.corpus.dtmmodel.DTMModel.load.png'
+        with Profile(pcgpath):
             model = self.G.load()
         
         self.assertIsInstance(model, dtmmodel.DTMModel)

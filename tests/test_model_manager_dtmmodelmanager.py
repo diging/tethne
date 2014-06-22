@@ -1,9 +1,5 @@
 from settings import *
 
-# Profiling.
-from pycallgraph import PyCallGraph
-from pycallgraph.output import GraphvizOutput
-
 import unittest
 
 from nltk.corpus import stopwords
@@ -21,14 +17,10 @@ with open('{0}/dfr_DataCollection.pickle'.format(picklepath), 'r') as f:
 class TestMALLETModelManager(unittest.TestCase):
     def setUp(self):
 
-        if profile:
-            pcgpath = cg_path + 'model.manager.DTMModelManager.__init__.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.M = DTMModelManager(D, outpath=outpath,
-                                            temppath=temppath,
-                                            dtm_path=dtm_path)
-        else:
-            self.M = DTMModelManager(D, outpath=outpath,
+        pcgpath = cg_path + 'model.manager.DTMModelManager.__init__.png'
+        with Profile(pcgpath):
+            self.M = DTMModelManager(D, feature='unigrams',
+                                        outpath=outpath,
                                         temppath=temppath,
                                         dtm_path=dtm_path)
 
@@ -41,11 +33,8 @@ class TestMALLETModelManager(unittest.TestCase):
         
         self.M._load_model()
 
-        if profile:
-            pcgpath = cg_path + 'model.manager.DTMModelManager.list_topic.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                result = self.M.list_topic(0, 0, Nwords=Nwords)
-        else:
+        pcgpath = cg_path + 'model.manager.DTMModelManager.list_topic.png'
+        with Profile(pcgpath):
             result = self.M.list_topic(0, 0, Nwords=Nwords)
 
         self.assertIsInstance(result, list)
@@ -62,11 +51,8 @@ class TestMALLETModelManager(unittest.TestCase):
         
         self.M._load_model()
 
-        if profile:
-            pcgpath = cg_path + 'model.manager.DTMModelManager.list_topic_diachronic.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                result = self.M.list_topic_diachronic(0, Nwords=Nwords)
-        else:
+        pcgpath = cg_path + 'model.manager.DTMModelManager.list_topic_diachronic.png'
+        with Profile(pcgpath):
             result = self.M.list_topic_diachronic(0, Nwords=Nwords)
 
         self.assertIsInstance(result, dict)
@@ -84,11 +70,8 @@ class TestMALLETModelManager(unittest.TestCase):
         
         self.M._load_model()
 
-        if profile:
-            pcgpath = cg_path + 'model.manager.DTMModelManager.print_topic.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                result = self.M.print_topic_diachronic(0, Nwords=Nwords)
-        else:
+        pcgpath = cg_path + 'model.manager.DTMModelManager.print_topic.png'
+        with Profile(pcgpath):
             result = self.M.print_topic_diachronic(0, Nwords=Nwords)
         
         self.assertIsInstance(result, str)
@@ -103,11 +86,8 @@ class TestMALLETModelManager(unittest.TestCase):
         
         self.M._load_model()
 
-        if profile:
-            pcgpath = cg_path + 'model.manager.DTMModelManager.print_topic.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                result = self.M.print_topic(0, 0, Nwords=Nwords)
-        else:
+        pcgpath = cg_path + 'model.manager.DTMModelManager.print_topic.png'
+        with Profile(pcgpath):
             result = self.M.print_topic(0, 0, Nwords=Nwords)
         
         self.assertIsInstance(result, str)
@@ -121,11 +101,8 @@ class TestMALLETModelManager(unittest.TestCase):
         Nwords = 10
         self.M._load_model()
 
-        if profile:
-            pcgpath = cg_path + 'model.manager.DTMModelManager.list_topics.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                result = self.M.list_topics(0, Nwords=Nwords)
-        else:
+        pcgpath = cg_path + 'model.manager.DTMModelManager.list_topics.png'
+        with Profile(pcgpath):
             result = self.M.list_topics(0, Nwords=Nwords)
 
         self.assertIsInstance(result, dict)
@@ -138,11 +115,8 @@ class TestMALLETModelManager(unittest.TestCase):
         Nwords = 10
         self.M._load_model()
 
-        if profile:
-            pcgpath = cg_path + 'model.manager.DTMModelManager.print_topics.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                result = self.M.print_topics(0, Nwords=Nwords)
-        else:
+        pcgpath = cg_path + 'model.manager.DTMModelManager.print_topics.png'
+        with Profile(pcgpath):
             result = self.M.print_topics(0, Nwords=Nwords)
 
         self.assertIsInstance(result, str)
@@ -152,8 +126,9 @@ class TestMALLETModelManager(unittest.TestCase):
         """
         .prep() should result in four sizeable temporary corpus files.
         """
-        with PyCallGraph(output=GraphvizOutput(
-                output_file=cg_path + 'model.manager.DTMModelManager.prep.png')):
+        
+        pcgpath = cg_path + 'model.manager.DTMModelManager.prep.png'
+        with Profile(pcgpath):
             self.M.prep()
             
         self.assertIn('tethne-meta.dat', os.listdir(temppath))
@@ -175,13 +150,8 @@ class TestMALLETModelManager(unittest.TestCase):
         """
         self.M.prep()
         
-        if profile:
-            pcgpath = cg_path + 'model.manager.DTMModelManager.build.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.M.build(   Z=5, lda_seq_min_iter=2,
-                                     lda_seq_max_iter=4,
-                                     lda_max_em_iter=4  )
-        else:
+        pcgpath = cg_path + 'model.manager.DTMModelManager.build.png'
+        with Profile(pcgpath):
             self.M.build(   Z=5, lda_seq_min_iter=2,
                                  lda_seq_max_iter=4,
                                  lda_max_em_iter=4  )
@@ -191,11 +161,8 @@ class TestMALLETModelManager(unittest.TestCase):
         :func:`._load_model` should execute successfully after :func:`.init`\.
         """
 
-        if profile:
-            pcgpath = cg_path + 'model.manager.DTMModelManager._load_model.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                self.M._load_model()
-        else:
+        pcgpath = cg_path + 'model.manager.DTMModelManager._load_model.png'
+        with Profile(pcgpath):
             self.M._load_model()
         
         self.assertEqual(self.M.model.e_theta.shape, (5, 176))
