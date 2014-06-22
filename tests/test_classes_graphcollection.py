@@ -29,7 +29,10 @@ class TestGraphCollection(unittest.TestCase):
         """
         :func:`.build` should generate graphs for each slice in `D`
         """
-        self.G.build(D, 'date', 'authors', 'coauthors')
+        
+        pcgpath = cg_path + 'classes.GraphCollection.build'
+        with Profile(pcgpath):
+            self.G.build(D, 'date', 'authors', 'coauthors')
 
         self.assertEqual(len(self.G.graphs), len(D.get_slices('date')))
         self.assertEqual(self.G.graphs.keys(), D.get_slices('date').keys())
@@ -40,11 +43,9 @@ class TestGraphCollection(unittest.TestCase):
         """
         should return a list of integers
         """
-        if profile:
-            pcgpath = cg_path + 'classes.GraphCollection.nodes.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                nodes = self.G.nodes()
-        else:
+        
+        pcgpath = cg_path + 'classes.GraphCollection.nodes.png'
+        with Profile(pcgpath):
             nodes = self.G.nodes()
 
         self.assertIsInstance(nodes, list)
@@ -54,11 +55,9 @@ class TestGraphCollection(unittest.TestCase):
         """
         should return a list of (int,int) tuples.
         """
-        if profile:
-            pcgpath = cg_path + 'classes.GraphCollection.edges.png'
-            with PyCallGraph(output=GraphvizOutput(output_file=pcgpath)):
-                edges = self.G.edges()
-        else:
+        
+        pcgpath = cg_path + 'classes.GraphCollection.edges.png'
+        with Profile(pcgpath):
             edges = self.G.edges()
 
         self.assertIsInstance(edges, list)
@@ -81,8 +80,10 @@ class TestGraphCollection(unittest.TestCase):
 
         xvalues = range(0, 10)
         yvalues = range(0, 10)
-
-        fig = self.G._plot((xvalues, yvalues), 'test')
+        
+        pcgpath = cg_path + 'classes.GraphCollection._plot.png'
+        with Profile(pcgpath):
+            fig = self.G._plot((xvalues, yvalues), 'test')
 
         self.assertIsInstance(fig, matplotlib.figure.Figure)
 
@@ -91,7 +92,9 @@ class TestGraphCollection(unittest.TestCase):
         :func:`.node_distribution` should return a tuple of ([keys],[values]).
         """
 
-        data = self.G.node_distribution()
+        pcgpath = cg_path + 'classes.GraphCollection.node_distribution.png'
+        with Profile(pcgpath):
+            data = self.G.node_distribution()
 
         self.assertIsInstance(data, tuple)
         self.assertIsInstance(data[0], list)
@@ -104,7 +107,9 @@ class TestGraphCollection(unittest.TestCase):
         :class:`matplotlib.figure.Figure`
         """
 
-        fig = self.G.plot_node_distribution()
+        pcgpath = cg_path + 'classes.GraphCollection.plot_node_distribution.png'
+        with Profile(pcgpath):
+            fig = self.G.plot_node_distribution()
 
         self.assertIsInstance(fig, matplotlib.figure.Figure)
 
@@ -113,7 +118,9 @@ class TestGraphCollection(unittest.TestCase):
         :func:`.edge_distribution` should return a tuple of ([keys],[values]).
         """
 
-        data = self.G.edge_distribution()
+        pcgpath = cg_path + 'classes.GraphCollection.edge_distribution.png'
+        with Profile(pcgpath):
+            data = self.G.edge_distribution()
 
         self.assertIsInstance(data, tuple)
         self.assertIsInstance(data[0], list)
@@ -126,7 +133,9 @@ class TestGraphCollection(unittest.TestCase):
         :class:`matplotlib.figure.Figure`
         """
 
-        fig = self.G.plot_edge_distribution()
+        pcgpath = cg_path + 'classes.GraphCollection.plot_edge_distribution.png'
+        with Profile(pcgpath):
+            fig = self.G.plot_edge_distribution()
 
         self.assertIsInstance(fig, matplotlib.figure.Figure)
 
@@ -135,9 +144,11 @@ class TestGraphCollection(unittest.TestCase):
         :func:`.attr_distribution` should return a tuple of ([keys],[values]).
         """
 
+        pcgpath = cg_path + 'classes.GraphCollection.attr_distribution.png'
         with warnings.catch_warnings(record=False) as w:
             warnings.simplefilter('ignore') # Some slices have no values.
-            data = self.G.attr_distribution()
+            with Profile(pcgpath):
+                data = self.G.attr_distribution()
 
         self.assertIsInstance(data, tuple)
         self.assertIsInstance(data[0], list)
@@ -150,9 +161,11 @@ class TestGraphCollection(unittest.TestCase):
         :class:`matplotlib.figure.Figure`
         """
 
+        pcgpath = cg_path + 'classes.GraphCollection.plot_attr_distribution.png'
         with warnings.catch_warnings(record=False) as w:
             warnings.simplefilter('ignore') # Some slices have no values.
-            fig = self.G.plot_attr_distribution()
+            with Profile(pcgpath):
+                fig = self.G.plot_attr_distribution()
 
         self.assertIsInstance(fig, matplotlib.figure.Figure)
 
