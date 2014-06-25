@@ -61,7 +61,6 @@ class TestTAPModelManager(unittest.TestCase):
     def test_build_and_graph_collection(self):
         """
         :func:`.build` should generate a set of :class:`.TAPModel` instances.
-        :func:`.graph_collection` should generate a :class:`.GraphCollection`\.
         """
 
         pcgpath = cg_path + 'model.manager.TAPModelManager.build.png'
@@ -70,12 +69,23 @@ class TestTAPModelManager(unittest.TestCase):
 
         self.assertIsInstance(self.M.SM.values()[0], TAPModel)
         self.assertIsInstance(self.M.SM.values()[0].MU[0], DiGraph)
+
+    def test_build(self):
+        """
+        :func:`.graph_collection` should generate a :class:`.GraphCollection`\.
+        """
         
+        with open(picklepath + '/TAPModelManager.pickle', 'r') as f:
+            self.M = pickle.load(f)
+
         pcgpath = cg_path + 'model.manager.TAPModelManager.graph_collection.png'
         with Profile(pcgpath):
             GC = self.M.graph_collection(0)
 
+        testnodes = GC.graphs.values()[0].nodes(data=True)
+        
         self.assertIsInstance(GC, GraphCollection)
+        self.assertIsInstance(testnodes[0][1]['label'], str)
 
 if __name__ == '__main__':
     unittest.main()
