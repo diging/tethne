@@ -165,29 +165,4 @@ def to_dtm_input(target, D, feature='unigrams', fields=['date','atitle']):
             vocabFile.write('{0}\n'.format(word))
 
     return None
-
-if __name__ == '__main__':
-    import sys
-    sys.path.append("/Users/erickpeirson/Dropbox/DigitalHPS/Scripts/tethne")
-
-    datapath = "/Users/erickpeirson/Genecology Project Archive/JStor DfR Datasets/2013.5.3.cHrmED8A/"
-    datapath2 = "/Users/erickpeirson/Genecology Project Archive/JStor DfR Datasets/2013.5.3.k2HUvXh9/"
-    datapath3 = "/Users/erickpeirson/Genecology Project Archive/JStor DfR Datasets/2013.5.3.W8mEeULy/"
-
-    import tethne.readers as rd
-    from tethne.data import DataCollection
-    papers = rd.dfr.read(datapath) + rd.dfr.read(datapath2) + rd.dfr.read(datapath3)
-
-    D = DataCollection(papers, 'doi')
-    D.slice('date', 'time_period', window_size=8)
-    
-    ngrams = rd.dfr.ngrams(datapath, 'uni', apply_stoplist=True)
-    print len(ngrams)
-    ngrams.update(rd.dfr.ngrams(datapath2, 'uni', apply_stoplist=True))
-    print len(ngrams)
-    ngrams.update(rd.dfr.ngrams(datapath3, 'uni', apply_stoplist=True))
-    print len(ngrams)
-    t_ngrams, vocab, counts = rd.dfr.tokenize(ngrams)
-    
-    to_dtm_input("/Users/erickpeirson/Desktop/dtm_test", D, t_ngrams, vocab)
     
