@@ -24,7 +24,7 @@ class DTMModel(BaseModel):
         self.metadata = metadata
         self.vocabulary = vocabulary
 
-        self.lookup = { v:k for k,v in metadata.iteritems() }
+        self.lookup = { v['id']:k for k,v in metadata.iteritems() }
     
         logging.debug('DTMModel.__init__(): loaded model with' + \
                       ' {0} topics, {1} documents,'.format(self.Z, self.M) + \
@@ -63,45 +63,118 @@ class DTMModel(BaseModel):
             A list of ( item, weight ) tuples.
         """
 
-        description = [ (self.metadata[i], self.e_theta[k,i]) 
+        description = [ (self.metadata[i]['id'], self.e_theta[k,i]) 
                             for i in xrange(self.e_theta[k,:].size)
                             if self.e_theta[k,i] >= threshold ]
-        return description    
-        
-    def topics_in_doc(self, d, topZ=None):
+        return description
+    
+    def list_topic(self, k, t, Nwords=10):
         """
-        Deprecated; use :func:`BaseModel.item`\.
+        Yields the top ``Nwords`` for topic ``k``.
+        
+        Parameters
+        ----------
+        k : int
+            A topic index.
+        t : int
+            A time index.
+        Nwords : int
+            Number of words to return.
+        
+        Returns
+        -------
+        as_list : list
+            List of words in topic.
+        """
+        words = self.dimension(k, t=t, top=Nwords)
+        as_list = [ self.vocabulary[w] for w,p in words ]
+
+        return as_list
+    
+    def list_topic_diachronic(self, k, Nwords=10):
+        as_dict = { t:self.list_topic(k, t, Nwords)
+                        for t in xrange(self.T) }
+        return as_dict
+        
+    def print_topic_diachronic(self, k, Nwords=10):
+        as_dict = self.list_topic_diachronic(k, Nwords)
+        s = []
+        for key, value in as_dict.iteritems():
+            s.append('{0}: {1}'.format(key, ', '.join(value)))
+        as_string = '\n'.join(s)
+        
+        return as_string
+    
+    def print_topic(self, k, t, Nwords=10):
+        """
+        Yields the top ``Nwords`` for topic ``k``.
+        
+        Parameters
+        ----------
+        k : int
+            A topic index.
+        t : int
+            A time index.
+        Nwords : int
+            Number of words to return.
+        
+        Returns
+        -------
+        as_string : str
+            Joined list of words in topic.
         """
 
-        if topZ is None:
-            topZ = 5
+        as_string = ', '.join(self.list_topic(k, t=t, Nwords=Nwords))
+    
+        return as_string
+    
+    def list_topics(self, t, Nwords=10):
+        """
+        Yields the top ``Nwords`` for each topic.
+        
+        Parameters
+        ----------
+        t : int
+            A time index.
+        Nwords : int
+            Number of words to return for each topic.
+        
+        Returns
+        -------
+        as_dict : dict
+            Keys are topic indices, values are list of words.
+        """
+        
+        as_dict = {}
+        for k in xrange(self.Z):
+            as_dict[k] = self.list_topic(k, t, Nwords)
+    
+        return as_dict
+    
+    def print_topics(self, t, Nwords=10):
+        """
+        Yields the top ``Nwords`` for each topic.
+        
+        Parameters
+        ----------
+        t : int
+            A time index.
+        Nwords : int
+            Number of words to return for each topic.
+        
+        Returns
+        -------
+        as_string : str
+            Newline-delimited lists of words for each topic.
+        """
             
-        if type(topZ) is int:   # Return a set number of topics.
-            top_indices = self.e_theta[:, d].argsort()[-topZ:][::1]
-        elif type(topZ) is float:   # Return topics above a threshold.
-            top_indices = [ z for z in np.argsort(self.e_theta[:, d])
-                                if self.e_theta[z, d] > topZ ]
-
-        top_values = [ self.e_theta[z, d] for z in top_indices ]
+        as_dict = self.list_topics(t, Nwords)
+        s = []
+        for key, value in as_dict.iteritems():
+            s.append('{0}: {1}'.format(key, ', '.join(value)))
+        as_string = '\n'.join(s)
         
-        topics = zip(top_indices, top_values)
-        
-        return topics
-
-    def words_in_topic(self, z, t, topW=5):
-        """
-        Deprecated; use :func:`BaseModel.dimension`\.
-        """    
-        if type(topW) is int:
-            words = self.topics[z, :, t].argsort()[-topW:][::-1]
-
-        return [ ( w, self.topics[z, w, t]) for w in words ]
-
-    def print_topic(self, z, t):
-        words = [ self.vocabulary[w] for w,p
-                    in self.words_in_topic(z,t,topW=topw) ]
-        print ', '.join(words)
-        return words
+        return as_string
 
 
 class GerrishLoader(object):
@@ -111,11 +184,10 @@ class GerrishLoader(object):
     http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz
     """
 
-    def __init__(self, target, metadata_path, vocabulary_path, metadata_key='doi',):
+    def __init__(self, target, metadata_path, vocabulary_path):
         self.target = target
         self.metadata_path = metadata_path
         self.vocabulary_path = vocabulary_path
-        self.metadata_key = metadata_key
     
         self.handler = { 'prob': self._handle_prob,
                          'info': self._handle_info,
@@ -147,10 +219,10 @@ class GerrishLoader(object):
             if fs[0] == 'topic':
                 z_s = fs[1]
                 z = int(z_s)
-
                 self.handler[fs[-2]](fname, z)
-
-        self.topics = np.array( [ self.tdict[z] for z in sorted(self.tdict.keys()) ])
+        
+        tkeys = sorted(self.tdict.keys())
+        self.topics = np.array( [ self.tdict[z] for z in tkeys ])
     
         self.model = DTMModel(self.e_theta, self.topics, self.metadata, self.vocabulary)
 
@@ -221,10 +293,14 @@ class GerrishLoader(object):
 
         with open(self.metadata_path, "rU") as f:
             reader = csv.reader(f, delimiter='\t')
-            lines = [ l for l in reader ][1:]
+            
+            all_lines = [ l for l in reader ]
+            keys = all_lines[0]
+            lines = all_lines[1:]
+            
             i = 0
             for l in lines:
-                self.metadata[i] = l[0]
+                self.metadata[i] = { keys[i]:l[i] for i in xrange(0, len(l)) }
                 i += 1
 
         return self.metadata

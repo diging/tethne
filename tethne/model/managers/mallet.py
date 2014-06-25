@@ -23,23 +23,22 @@ class MALLETModelManager(ModelManager):
     Model Manager for LDA topic modeling with MALLET.
     """
     
-    def __init__(self, datacollection,
-                       feature='unigrams', outpath='/tmp/',
-                       temppath=None, mallet_path='./model/bin/mallet-2.0.7'):
+    def __init__(self, D, feature='unigrams', outpath='/tmp/', temppath=None,
+                          mallet_path='./model/bin/mallet-2.0.7'):
         """
         
         Parameters
         ----------
-        datacollection : :class:`.DataCollection`
+        D : :class:`.DataCollection`
         feature : str
-            Key from datacollection.features containing wordcounts (or whatever
+            Key from D.features containing wordcounts (or whatever
             you want to model with).
         mallet_path : str
             Path to MALLET install directory (contains bin/mallet).
         """
         super(MALLETModelManager, self).__init__(outpath, temppath)
         
-        self.datacollection = datacollection
+        self.D = D
         self.mallet_path = mallet_path
         self.feature = feature
         
@@ -51,7 +50,7 @@ class MALLETModelManager(ModelManager):
         self.wt = '{0}/wt.dat'.format(self.temp)
         self.om = '{0}/model.mallet'.format(self.outpath)
     
-        self.vocabulary = self.datacollection.features[self.feature]['index']
+        self.vocabulary = self.D.features[self.feature]['index']
 
     def prep(self, meta=['date', 'atitle', 'jtitle']):
         """
@@ -74,14 +73,14 @@ class MALLETModelManager(ModelManager):
         
         # Metadata to export with corpus.
         metadata = ( meta, { p: { k:paper[k] for k in meta }
-                       for p,paper in self.datacollection.papers.iteritems() } )
+                       for p,paper in self.D.papers.iteritems() } )
         
         # Export the corpus.
         to_documents(
             self.temp+'/tethne',            # Temporary files.
-            self.datacollection.features[self.feature]['features'],
+            self.D.features[self.feature]['features'],
             metadata=metadata,
-            vocab=self.datacollection.features[self.feature]['index'] )
+            vocab=self.D.features[self.feature]['index'] )
         
         self._export_corpus()
     
@@ -160,92 +159,6 @@ class MALLETModelManager(ModelManager):
         self.model = from_mallet(   self.dt, 
                                     self.wt, 
                                     self.meta_path  )
-    
-    def list_topic(self, k, Nwords=10):
-        """
-        Yields the top ``Nwords`` for topic ``k``.
-        
-        Parameters
-        ----------
-        k : int
-            A topic index.
-        Nwords : int
-            Number of words to return.
-        
-        Returns
-        -------
-        as_list : list
-            List of words in topic.
-        """
-        words = self.model.dimension(k, top=Nwords)
-        as_list = [ self.vocabulary[w] for w,p in words ]
-
-        return as_list
-    
-    def print_topic(self, k, Nwords=10):
-        """
-        Yields the top ``Nwords`` for topic ``k``.
-        
-        Parameters
-        ----------
-        k : int
-            A topic index.
-        Nwords : int
-            Number of words to return.
-        
-        Returns
-        -------
-        as_string : str
-            Joined list of words in topic.
-        """
-
-        as_string = ', '.join(self.list_topic(k, Nwords))
-    
-        return as_string
-    
-    def list_topics(self, Nwords=10):
-        """
-        Yields the top ``Nwords`` for each topic.
-        
-        Parameters
-        ----------
-        Nwords : int
-            Number of words to return for each topic.
-        
-        Returns
-        -------
-        as_dict : dict
-            Keys are topic indices, values are list of words.
-        """
-        
-        as_dict = {}
-        for k in xrange(self.model.Z):
-            as_dict[k] = self.list_topic(k, Nwords)
-    
-        return as_dict
-    
-    def print_topics(self, Nwords=10):
-        """
-        Yields the top ``Nwords`` for each topic.
-        
-        Parameters
-        ----------
-        Nwords : int
-            Number of words to return for each topic.
-        
-        Returns
-        -------
-        as_string : str
-            Newline-delimited lists of words for each topic.
-        """
-            
-        as_dict = self.list_topics(Nwords)
-        s = []
-        for key, value in as_dict.iteritems():
-            s.append('{0}: {1}'.format(key, ', '.join(value)))
-        as_string = '\n'.join(s)
-        
-        return as_string
 
     def topic_over_time(self, k, threshold=0.05, mode='documents', 
                                  normed=True, plot=False, 
@@ -284,10 +197,12 @@ class MALLETModelManager(ModelManager):
             raise ValueError('No such topic in this model.')
         
         items = self.model.dimension_items(k, threshold)
-        slices = self.datacollection.get_slices('date')
+        slices = self.D.get_slices('date')
         keys = sorted(slices.keys())
 
         R = []
+
+        topic_label = self.model.print_topic(k)
 
         if mode == 'documents': # Documents that contain k.
             for t in keys:
@@ -328,6 +243,7 @@ class MALLETModelManager(ModelManager):
             plt.plot(np.array(keys), np.array(R))
             plt.xlabel('Time Slice')
             plt.ylabel(ylabel)      # Set based on mode.
+            plt.title(topic_label)
             plt.savefig('{0}/topic_{1}_over_time.png'.format(self.outpath, k))        
         
         return np.array(keys), np.array(R)
