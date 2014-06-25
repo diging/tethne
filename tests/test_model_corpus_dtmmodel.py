@@ -15,95 +15,105 @@ class TestPrint(unittest.TestCase):
                                              self.meta_path,
                                              self.vocab_path )
 
-    def test_list_topic(self):
-        """
-        :func:`.list_topic` should yield a list with ``Nwords`` words.
-        """
+#    def test_list_topic(self):
+#        """
+#        :func:`.list_topic` should yield a list with ``Nwords`` words.
+#        """
+#
+#        Nwords = 10
+#
+#        pcgpath = cg_path + 'model.corpus.DTMModel.list_topic.png'
+#        with Profile(pcgpath):
+#            result = self.model.list_topic(0, 0, Nwords=Nwords)
+#
+#        self.assertIsInstance(result, list)
+#        self.assertIsInstance(result[0], str)
+#        self.assertEqual(len(result), Nwords)
 
-        Nwords = 10
+    def test_plot_topic_evolution(self):
+        Nwords = 5
+        K, R = self.model.topic_evolution(2, Nwords=Nwords)
 
-        pcgpath = cg_path + 'model.corpus.DTMModel.list_topic.png'
-        with Profile(pcgpath):
-            result = self.model.list_topic(0, 0, Nwords=Nwords)
+        self.assertIsInstance(K, list)
+        self.assertIsInstance(R, dict)
+        self.assertIsInstance(R.keys()[0], str) #   Word
+        self.assertIsInstance(R.values()[0], list)  # p over time.
+        self.assertEqual(len(K), len(R.values()[0]))
 
-        self.assertIsInstance(result, list)
-        self.assertIsInstance(result[0], str)
-        self.assertEqual(len(result), Nwords)
-
-    def test_list_topic_diachronic(self):
-        """
-        :func:`.list_topic_diachronic` should yield a dict with ``T`` entries,
-        each with a list of ``Nwords`` words.
-        """
-
-        Nwords = 10
-
-        pcgpath = cg_path + 'model.corpus.DTMModel.list_topic_diachronic.png'
-        with Profile(pcgpath):
-            result = self.model.list_topic_diachronic(0, Nwords=Nwords)
-
-        self.assertIsInstance(result, dict)
-        self.assertEqual(len(result), self.model.T)
-        self.assertIsInstance(result.keys()[0], int)
-        self.assertIsInstance(result[0], list)
-        self.assertEqual(len(result[0]), Nwords)
-
-    def test_print_topic_diachronic(self):
-        """
-        :func:`.print_topic` should yield a string with ``Nwords`` words.
-        """
-    
-        Nwords = 10
-
-        pcgpath = cg_path + 'model.corpus.DTMModel.print_topic.png'
-        with Profile(pcgpath):
-            result = self.model.print_topic_diachronic(0, Nwords=Nwords)
-        
-        self.assertIsInstance(result, str)
-        self.assertEqual(len(result.split('\n')), self.model.T)
-
-    def test_print_topic(self):
-        """
-        :func:`.print_topic` should yield a string with ``Nwords`` words.
-        """
-    
-        Nwords = 10
-
-        pcgpath = cg_path + 'model.corpus.DTMModel.print_topic.png'
-        with Profile(pcgpath):
-            result = self.model.print_topic(0, 0, Nwords=Nwords)
-        
-        self.assertIsInstance(result, str)
-        self.assertEqual(len(result.split(', ')), Nwords)
-
-    def test_list_topics(self):
-        """
-        :func:`.list_topics` should yield a dict { k : [ w ], }.
-        """
-
-        Nwords = 10
-
-        pcgpath = cg_path + 'model.corpus.DTMModel.list_topics.png'
-        with Profile(pcgpath):
-            result = self.model.list_topics(0, Nwords=Nwords)
-
-        self.assertIsInstance(result, dict)
-        self.assertIsInstance(result.keys()[0], int)
-        self.assertIsInstance(result.values()[0], list)
-        self.assertIsInstance(result.values()[0][0], str)
-        self.assertEqual(len(result), self.model.Z)
-
-    def test_print_topics(self):
-        Nwords = 10
-
-        pcgpath = cg_path + 'model.corpus.DTMModel.print_topics.png'
-        with Profile(pcgpath):
-            result = self.model.print_topics(0, Nwords=Nwords)
-
-        self.assertIsInstance(result, str)
-        self.assertEqual(len(result.split('\n')), self.model.Z)
-
-
+#    def test_list_topic_diachronic(self):
+#        """
+#        :func:`.list_topic_diachronic` should yield a dict with ``T`` entries,
+#        each with a list of ``Nwords`` words.
+#        """
+#
+#        Nwords = 10
+#
+#        pcgpath = cg_path + 'model.corpus.DTMModel.list_topic_diachronic.png'
+#        with Profile(pcgpath):
+#            result = self.model.list_topic_diachronic(0, Nwords=Nwords)
+#
+#        self.assertIsInstance(result, dict)
+#        self.assertEqual(len(result), self.model.T)
+#        self.assertIsInstance(result.keys()[0], int)
+#        self.assertIsInstance(result[0], list)
+#        self.assertEqual(len(result[0]), Nwords)
+#
+#    def test_print_topic_diachronic(self):
+#        """
+#        :func:`.print_topic` should yield a string with ``Nwords`` words.
+#        """
+#    
+#        Nwords = 10
+#
+#        pcgpath = cg_path + 'model.corpus.DTMModel.print_topic.png'
+#        with Profile(pcgpath):
+#            result = self.model.print_topic_diachronic(0, Nwords=Nwords)
+#        
+#        self.assertIsInstance(result, str)
+#        self.assertEqual(len(result.split('\n')), self.model.T)
+#
+#    def test_print_topic(self):
+#        """
+#        :func:`.print_topic` should yield a string with ``Nwords`` words.
+#        """
+#    
+#        Nwords = 10
+#
+#        pcgpath = cg_path + 'model.corpus.DTMModel.print_topic.png'
+#        with Profile(pcgpath):
+#            result = self.model.print_topic(0, 0, Nwords=Nwords)
+#        
+#        self.assertIsInstance(result, str)
+#        self.assertEqual(len(result.split(', ')), Nwords)
+#
+#    def test_list_topics(self):
+#        """
+#        :func:`.list_topics` should yield a dict { k : [ w ], }.
+#        """
+#
+#        Nwords = 10
+#
+#        pcgpath = cg_path + 'model.corpus.DTMModel.list_topics.png'
+#        with Profile(pcgpath):
+#            result = self.model.list_topics(0, Nwords=Nwords)
+#
+#        self.assertIsInstance(result, dict)
+#        self.assertIsInstance(result.keys()[0], int)
+#        self.assertIsInstance(result.values()[0], list)
+#        self.assertIsInstance(result.values()[0][0], str)
+#        self.assertEqual(len(result), self.model.Z)
+#
+#    def test_print_topics(self):
+#        Nwords = 10
+#
+#        pcgpath = cg_path + 'model.corpus.DTMModel.print_topics.png'
+#        with Profile(pcgpath):
+#            result = self.model.print_topics(0, Nwords=Nwords)
+#
+#        self.assertIsInstance(result, str)
+#        self.assertEqual(len(result.split('\n')), self.model.Z)
+#
+#
 #class TestLoad(unittest.TestCase):
 #    def setUp(self):
 #        self.meta_path = '{0}/dtm/tethne-meta.dat'.format(datapath)

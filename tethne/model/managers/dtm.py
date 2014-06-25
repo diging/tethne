@@ -126,6 +126,28 @@ class DTMModelManager(ModelManager):
         self.vocabulary = self.model.vocabulary
         return self.model
 
+    def plot_topic_evolution(self, k, Nwords=5, plot=False,
+                                      figargs={'figsize':(10,10)} ):
+        
+        t_keys, t_series = self.model.topic_evolution(k, Nwords)
+        
+        slices = self.D.get_slices('date')
+        keys = sorted(slices.keys())
+        
+        if plot:
+            import matplotlib.pyplot as plt
+            fig = plt.figure(**figargs)
+            ax = fig.add_axes([0.1, 0.1, 0.6, 0.75])
+            for word, series in t_series.iteritems():
+                plt.plot(keys, series, label=word)
+            plt.xlabel('Time Slice')
+            plt.ylabel('Probability of word in topic')
+            plt.title('Evolution of topic {0}'.format(k))
+            plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+            plt.xlim(keys[0], keys[-1])
+            plt.savefig('{0}/topic_{1}_evolution.png'.format(self.outpath, k))
+    
+        return keys, t_series
 
     def topic_over_time(self, k, threshold=0.05, mode='documents', 
                                  normed=True, plot=False, 
