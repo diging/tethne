@@ -12,14 +12,30 @@ logger.setLevel('ERROR')
 
 class DTMModel(BaseModel):
 
-    def __init__(self, e_theta, topics, metadata, vocabulary):
+    def __init__(self, e_theta, phi, metadata, vocabulary):
+        """
+        Initialize the :class:`.DTMModel`\.
+        
+        Parameters
+        ----------
+        e_theta : matrix-like
+            Distribution of topics (Z) in documents (M). Shape: (Z, M).
+        phi : matrix-like
+            Topic (Z) distribution over words (W), over time (T). Shape: 
+            (Z, W, T)
+        metadata : dict
+            Maps matrix indices onto document datadata.
+        vocabulary : dict
+            Maps W indices onto words.
+        """
+        
         self.e_theta = e_theta
         self.Z = e_theta.shape[0]   # Number of topics.
         self.M = e_theta.shape[1]   # Number of documents.
         
-        self.topics = topics
-        self.W = topics.shape[1]    # Number of words.
-        self.T = topics.shape[2]    # Number of time periods.
+        self.phi = phi
+        self.W = phi.shape[1]    # Number of words.
+        self.T = phi.shape[2]    # Number of time periods.
 
         self.metadata = metadata
         self.vocabulary = vocabulary
@@ -43,8 +59,8 @@ class DTMModel(BaseModel):
         Yields probability distribution over terms.
         """
 
-        return [ (w, self.topics[k, w, t]) 
-                    for w in xrange(self.topics[k, :, t].size) ]
+        return [ (w, self.phi[k, w, t]) 
+                    for w in xrange(self.phi[k, :, t].size) ]
         
     def _dimension_items(self, k, threshold, **kwargs):
         """
@@ -63,10 +79,37 @@ class DTMModel(BaseModel):
             A list of ( item, weight ) tuples.
         """
 
-        description = [ (self.metadata[i]['id'], self.e_theta[k,i]) 
+        description = [ (self.metadata[i]['id'], self.e_theta[k,i])
                             for i in xrange(self.e_theta[k,:].size)
                             if self.e_theta[k,i] >= threshold ]
         return description
+    
+    def topic_evolution(self, k, Nwords=5):
+        """
+        Generate a plot that shows p(w|z) over time for the top `Nwords` terms.
+        """
+    
+        t_keys = range(self.T)
+        t_values = {}
+        for t in t_keys:
+            dim = self.dimension(k, t=t, top=Nwords)
+            for w,p in dim:
+                if w not in t_values:
+                    t_values[w] = {}
+                t_values[w][t] = p
+
+        t_series = {}
+        for w, values in t_values.iteritems():
+            word = self.vocabulary[w]
+            series = []
+            for t in t_keys:
+                if t in values:
+                    series.append(values[t])
+                else:   # No value for that time-period.
+                    series.append(0.)
+            t_series[word] = series
+            
+        return t_keys, t_series
     
     def list_topic(self, k, t, Nwords=10):
         """
@@ -222,9 +265,9 @@ class GerrishLoader(object):
                 self.handler[fs[-2]](fname, z)
         
         tkeys = sorted(self.tdict.keys())
-        self.topics = np.array( [ self.tdict[z] for z in tkeys ])
+        self.phi = np.array( [ self.tdict[z] for z in tkeys ])
     
-        self.model = DTMModel(self.e_theta, self.topics, self.metadata, self.vocabulary)
+        self.model = DTMModel(self.e_theta, self.phi, self.metadata, self.vocabulary)
 
         return self.model
 

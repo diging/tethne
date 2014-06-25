@@ -69,54 +69,68 @@ class TestMALLETModelManager(unittest.TestCase):
 #        
 #        self.assertEqual(self.M.model.e_theta.shape, (5, 176))
 
-    def test_topic_time(self):
-        """
-        Each mode should generate two numpy.ndarrays of equal non-zero length.
-        """
-        k = 1
-        
+    def test_plot_topic_evolution(self):
+        k = 3
         self.M._load_model()
-        
-        pcgpath = cg_path+'model.manager.DTMModelManager.topic_over_time.png'
+        Nwords = 5
+    
+        pcgpath = cg_path+'model.manager.DTMModelManager.plot_topic_evolution.png'
         with Profile(pcgpath):
-            K,R = self.M.topic_over_time(k, mode='documents', normed=True)
+            K,R = self.M.plot_topic_evolution(k, Nwords, plot=True)
 
-        self.assertIsInstance(K, numpy.ndarray)
-        self.assertIsInstance(R, numpy.ndarray)
-        self.assertGreater(len(K), 0)
-        self.assertGreater(len(R), 0)                
-        self.assertEqual(len(R), len(K))
-        self.assertGreater(sum(R), 0)
-
-        K,R = self.M.topic_over_time(k, mode='documents', normed=False)
-        self.assertIsInstance(K, numpy.ndarray)
-        self.assertIsInstance(R, numpy.ndarray)  
-        self.assertGreater(len(K), 0)
-        self.assertGreater(len(R), 0)                
-        self.assertEqual(len(R), len(K))
-        self.assertGreater(sum(R), 0)
-        
-        K,R = self.M.topic_over_time(k, mode='proportions', normed=True)
-        self.assertIsInstance(K, numpy.ndarray)
-        self.assertIsInstance(R, numpy.ndarray)
-        self.assertGreater(len(K), 0)
-        self.assertGreater(len(R), 0)                
-        self.assertEqual(len(R), len(K))
-        self.assertGreater(sum(R), 0)
-                
-        K,R = self.M.topic_over_time(k, mode='proportions', normed=False)                        
-        self.assertIsInstance(K, numpy.ndarray)
-        self.assertIsInstance(R, numpy.ndarray)
-        self.assertGreater(len(K), 0)
-        self.assertGreater(len(R), 0)                
-        self.assertEqual(len(R), len(K))
-        self.assertGreater(sum(R), 0)
-        
-        K,R = self.M.topic_over_time(k, mode='documents', plot=True)
-        self.assertIn('topic_{0}_over_time.png'.format(k), os.listdir(outpath))
-        size = os.path.getsize(outpath+'/topic_{0}_over_time.png'.format(k))
+        self.assertIn('topic_{0}_evolution.png'.format(k), os.listdir(outpath))
+        size = os.path.getsize(outpath+'/topic_{0}_evolution.png'.format(k))
         self.assertGreater(size, 0)
-        self.assertGreater(sum(R), 0)
+        self.assertGreater(sum(R.values()[0]), 0)
+
+#    def test_topic_time(self):
+#        """
+#        Each mode should generate two numpy.ndarrays of equal non-zero length.
+#        """
+#        k = 1
+#        
+#        self.M._load_model()
+#        
+#        pcgpath = cg_path+'model.manager.DTMModelManager.topic_over_time.png'
+#        with Profile(pcgpath):
+#            K,R = self.M.topic_over_time(k, mode='documents', normed=True)
+#
+#        self.assertIsInstance(K, numpy.ndarray)
+#        self.assertIsInstance(R, numpy.ndarray)
+#        self.assertGreater(len(K), 0)
+#        self.assertGreater(len(R), 0)                
+#        self.assertEqual(len(R), len(K))
+#        self.assertGreater(sum(R), 0)
+#
+#        K,R = self.M.topic_over_time(k, mode='documents', normed=False)
+#        self.assertIsInstance(K, numpy.ndarray)
+#        self.assertIsInstance(R, numpy.ndarray)  
+#        self.assertGreater(len(K), 0)
+#        self.assertGreater(len(R), 0)                
+#        self.assertEqual(len(R), len(K))
+#        self.assertGreater(sum(R), 0)
+#        
+#        K,R = self.M.topic_over_time(k, mode='proportions', normed=True)
+#        self.assertIsInstance(K, numpy.ndarray)
+#        self.assertIsInstance(R, numpy.ndarray)
+#        self.assertGreater(len(K), 0)
+#        self.assertGreater(len(R), 0)                
+#        self.assertEqual(len(R), len(K))
+#        self.assertGreater(sum(R), 0)
+#                
+#        K,R = self.M.topic_over_time(k, mode='proportions', normed=False)                        
+#        self.assertIsInstance(K, numpy.ndarray)
+#        self.assertIsInstance(R, numpy.ndarray)
+#        self.assertGreater(len(K), 0)
+#        self.assertGreater(len(R), 0)                
+#        self.assertEqual(len(R), len(K))
+#        self.assertGreater(sum(R), 0)
+#        
+#        K,R = self.M.topic_over_time(k, mode='documents', plot=True)
+#        self.assertIn('topic_{0}_over_time.png'.format(k), os.listdir(outpath))
+#        size = os.path.getsize(outpath+'/topic_{0}_over_time.png'.format(k))
+#        self.assertGreater(size, 0)
+#        self.assertGreater(sum(R), 0)
 
 
 if __name__ == '__main__':

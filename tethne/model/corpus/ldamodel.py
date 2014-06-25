@@ -24,7 +24,9 @@ class LDAModel(BaseModel):
         phi : matrix-like
             Distribution over words (cols) for topics (rows). Rows sum to 1.
         metadata : dict
-            Maps matrix indices for documents onto a :class:`.Paper` key.
+            Maps matrix indices onto document datadata.
+        vocabulary : dict
+            Maps W indices onto words.            
         """
         
         self.theta = theta
