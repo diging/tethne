@@ -24,148 +24,99 @@ class TestMALLETModelManager(unittest.TestCase):
                                         temppath=temppath,
                                         dtm_path=dtm_path)
 
-    def test_list_topic(self):
-        """
-        :func:`.list_topic` should yield a list with ``Nwords`` words.
-        """
+#    def test_prep(self):
+#        """
+#        .prep() should result in four sizeable temporary corpus files.
+#        """
+#        
+#        pcgpath = cg_path + 'model.manager.DTMModelManager.prep.png'
+#        with Profile(pcgpath):
+#            self.M.prep()
+#            
+#        self.assertIn('tethne-meta.dat', os.listdir(temppath))
+#        self.assertGreater(os.path.getsize(temppath+'/tethne-meta.dat'),15000)
+#        
+#        self.assertIn('tethne-mult.dat', os.listdir(temppath))
+#        self.assertGreater(os.path.getsize(temppath+'/tethne-mult.dat'),1400000)
+#                
+#        self.assertIn('tethne-seq.dat', os.listdir(temppath))        
+#        self.assertGreater(os.path.getsize(temppath+'/tethne-seq.dat'),10)
+#
+#        self.assertIn('tethne-vocab.dat', os.listdir(temppath))        
+#        self.assertGreater(os.path.getsize(temppath+'/tethne-vocab.dat'),400000)
+#    
+#    def test_build(self):
+#        """
+#        .build() should result in new sizeable files in both the temp and out
+#        directories.
+#        """
+#        self.M.prep()
+#        
+#        pcgpath = cg_path + 'model.manager.DTMModelManager.build.png'
+#        with Profile(pcgpath):
+#            self.M.build(   Z=5, lda_seq_min_iter=2,
+#                                 lda_seq_max_iter=4,
+#                                 lda_max_em_iter=4  )
+#
+#    def test_load(self):
+#        """
+#        :func:`._load_model` should execute successfully after :func:`.init`\.
+#        """
+#
+#        pcgpath = cg_path + 'model.manager.DTMModelManager._load_model.png'
+#        with Profile(pcgpath):
+#            self.M._load_model()
+#        
+#        self.assertEqual(self.M.model.e_theta.shape, (5, 176))
 
-        Nwords = 10
+    def test_topic_time(self):
+        """
+        Each mode should generate two numpy.ndarrays of equal non-zero length.
+        """
+        k = 1
         
         self.M._load_model()
-
-        pcgpath = cg_path + 'model.manager.DTMModelManager.list_topic.png'
-        with Profile(pcgpath):
-            result = self.M.list_topic(0, 0, Nwords=Nwords)
-
-        self.assertIsInstance(result, list)
-        self.assertIsInstance(result[0], str)
-        self.assertEqual(len(result), Nwords)
-
-    def test_list_topic_diachronic(self):
-        """
-        :func:`.list_topic_diachronic` should yield a dict with ``T`` entries,
-        each with a list of ``Nwords`` words.
-        """
-
-        Nwords = 10
         
-        self.M._load_model()
-
-        pcgpath = cg_path + 'model.manager.DTMModelManager.list_topic_diachronic.png'
+        pcgpath = cg_path+'model.manager.DTMModelManager.topic_over_time.png'
         with Profile(pcgpath):
-            result = self.M.list_topic_diachronic(0, Nwords=Nwords)
+            K,R = self.M.topic_over_time(k, mode='documents', normed=True)
 
-        self.assertIsInstance(result, dict)
-        self.assertEqual(len(result), self.M.model.T)
-        self.assertIsInstance(result.keys()[0], int)
-        self.assertIsInstance(result[0], list)
-        self.assertEqual(len(result[0]), Nwords)
+        self.assertIsInstance(K, numpy.ndarray)
+        self.assertIsInstance(R, numpy.ndarray)
+        self.assertGreater(len(K), 0)
+        self.assertGreater(len(R), 0)                
+        self.assertEqual(len(R), len(K))
+        self.assertGreater(sum(R), 0)
 
-    def test_print_topic_diachronic(self):
-        """
-        :func:`.print_topic` should yield a string with ``Nwords`` words.
-        """
-    
-        Nwords = 10
+        K,R = self.M.topic_over_time(k, mode='documents', normed=False)
+        self.assertIsInstance(K, numpy.ndarray)
+        self.assertIsInstance(R, numpy.ndarray)  
+        self.assertGreater(len(K), 0)
+        self.assertGreater(len(R), 0)                
+        self.assertEqual(len(R), len(K))
+        self.assertGreater(sum(R), 0)
         
-        self.M._load_model()
-
-        pcgpath = cg_path + 'model.manager.DTMModelManager.print_topic.png'
-        with Profile(pcgpath):
-            result = self.M.print_topic_diachronic(0, Nwords=Nwords)
-        
-        self.assertIsInstance(result, str)
-        self.assertEqual(len(result.split('\n')), self.M.model.T)
-
-    def test_print_topic(self):
-        """
-        :func:`.print_topic` should yield a string with ``Nwords`` words.
-        """
-    
-        Nwords = 10
-        
-        self.M._load_model()
-
-        pcgpath = cg_path + 'model.manager.DTMModelManager.print_topic.png'
-        with Profile(pcgpath):
-            result = self.M.print_topic(0, 0, Nwords=Nwords)
-        
-        self.assertIsInstance(result, str)
-        self.assertEqual(len(result.split(', ')), Nwords)
-
-    def test_list_topics(self):
-        """
-        :func:`.list_topics` should yield a dict { k : [ w ], }.
-        """
-
-        Nwords = 10
-        self.M._load_model()
-
-        pcgpath = cg_path + 'model.manager.DTMModelManager.list_topics.png'
-        with Profile(pcgpath):
-            result = self.M.list_topics(0, Nwords=Nwords)
-
-        self.assertIsInstance(result, dict)
-        self.assertIsInstance(result.keys()[0], int)
-        self.assertIsInstance(result.values()[0], list)
-        self.assertIsInstance(result.values()[0][0], str)
-        self.assertEqual(len(result), self.M.model.Z)
-
-    def test_print_topics(self):
-        Nwords = 10
-        self.M._load_model()
-
-        pcgpath = cg_path + 'model.manager.DTMModelManager.print_topics.png'
-        with Profile(pcgpath):
-            result = self.M.print_topics(0, Nwords=Nwords)
-
-        self.assertIsInstance(result, str)
-        self.assertEqual(len(result.split('\n')), self.M.model.Z)
-
-    def test_prep(self):
-        """
-        .prep() should result in four sizeable temporary corpus files.
-        """
-        
-        pcgpath = cg_path + 'model.manager.DTMModelManager.prep.png'
-        with Profile(pcgpath):
-            self.M.prep()
-            
-        self.assertIn('tethne-meta.dat', os.listdir(temppath))
-        self.assertGreater(os.path.getsize(temppath+'/tethne-meta.dat'),15000)
-        
-        self.assertIn('tethne-mult.dat', os.listdir(temppath))
-        self.assertGreater(os.path.getsize(temppath+'/tethne-mult.dat'),1400000)
+        K,R = self.M.topic_over_time(k, mode='proportions', normed=True)
+        self.assertIsInstance(K, numpy.ndarray)
+        self.assertIsInstance(R, numpy.ndarray)
+        self.assertGreater(len(K), 0)
+        self.assertGreater(len(R), 0)                
+        self.assertEqual(len(R), len(K))
+        self.assertGreater(sum(R), 0)
                 
-        self.assertIn('tethne-seq.dat', os.listdir(temppath))        
-        self.assertGreater(os.path.getsize(temppath+'/tethne-seq.dat'),10)
-
-        self.assertIn('tethne-vocab.dat', os.listdir(temppath))        
-        self.assertGreater(os.path.getsize(temppath+'/tethne-vocab.dat'),400000)
-    
-    def test_build(self):
-        """
-        .build() should result in new sizeable files in both the temp and out
-        directories.
-        """
-        self.M.prep()
+        K,R = self.M.topic_over_time(k, mode='proportions', normed=False)                        
+        self.assertIsInstance(K, numpy.ndarray)
+        self.assertIsInstance(R, numpy.ndarray)
+        self.assertGreater(len(K), 0)
+        self.assertGreater(len(R), 0)                
+        self.assertEqual(len(R), len(K))
+        self.assertGreater(sum(R), 0)
         
-        pcgpath = cg_path + 'model.manager.DTMModelManager.build.png'
-        with Profile(pcgpath):
-            self.M.build(   Z=5, lda_seq_min_iter=2,
-                                 lda_seq_max_iter=4,
-                                 lda_max_em_iter=4  )
-
-    def test_load(self):
-        """
-        :func:`._load_model` should execute successfully after :func:`.init`\.
-        """
-
-        pcgpath = cg_path + 'model.manager.DTMModelManager._load_model.png'
-        with Profile(pcgpath):
-            self.M._load_model()
-        
-        self.assertEqual(self.M.model.e_theta.shape, (5, 176))
+        K,R = self.M.topic_over_time(k, mode='documents', plot=True)
+        self.assertIn('topic_{0}_over_time.png'.format(k), os.listdir(outpath))
+        size = os.path.getsize(outpath+'/topic_{0}_over_time.png'.format(k))
+        self.assertGreater(size, 0)
+        self.assertGreater(sum(R), 0)
 
 
 if __name__ == '__main__':

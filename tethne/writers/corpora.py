@@ -35,7 +35,7 @@ def to_documents(target, ngrams, metadata=None, vocab=None):
     if metadata is not None:
         metakeys, metadict = metadata
         metaFile = open(metapath, 'wb')
-        metaFile.write('# {0}\n'.format('\t'.join(metakeys)))
+        metaFile.write('{0}\n'.format('\t'.join(['id'] + metakeys)))
     
     # MALLET expects strings; if `vocab` is provided, assumes that ngrams
     #   in `ngrams` are keys into `vocab`.
@@ -46,17 +46,18 @@ def to_documents(target, ngrams, metadata=None, vocab=None):
         def word(s):
             return vocab[s] # unidecode(unicode(vocab[s]))
     
-    d = 0   # Document index in _docs.txt file.
     try:
         for p,grams in ngrams.iteritems():
-            docFile.write(' '.join([ word(gram) for gram,freq in grams 
-                                                for i in xrange(freq) ]) + '\n')
-
-            meta = [ str(d), str(p) ]
+            # Write documents.
+            m = [ p, 'en' ] # Add doc name and language before data.
+            dat = [ word(gram) for gram,freq in grams for i in xrange(freq) ]
+            docFile.write(' '.join( m + dat) + '\n')
+            
+            # Write metadata.
+            meta = [ str(p) ]
             if metadata is not None:
                 meta += [ str(metadict[p][f]) for f in metakeys ]
                 metaFile.write('\t'.join(meta) + '\n')
-            d += 1
 
     except AttributeError:  # .iteritems() raises an AttributeError if ngrams
                             #  is not dict-like.
@@ -120,23 +121,28 @@ def to_dtm_input(target, D, feature='unigrams', fields=['date','atitle']):
     #           the same order as the docs in the mult file.
     #
     with open(target + '-meta.dat', 'wb') as metaFile:
+        metaFile.write('\t'.join(['id'] + fields ) + '\n')
+    
         with open(target + '-mult.dat', 'wb') as multFile:
             for year in D.axes['date'].keys():
                 papers = D.axes['date'][year]
                 
                 seq[year] = []
-                for doi in papers:  # D must be indexed by doi.
+                for id in papers:
                     try:
-                        grams = features[doi]
-                        seq[year].append(doi)
+                        grams = features[id]
+                        seq[year].append(id)
                         wordcount = len(grams)  # Number of unique words.
-                        multFile.write(' '.join([ str(wordcount) ] + \
-                                                [ '{0}:{1}'.format(g,c)
-                                                    for g,c in grams ] + \
-                                                ['\n']))
-                        meta = [ str(doi) ]
+                        
+                        # Write data.
+                        mdat = [ '{0}:{1}'.format(g,c) for g,c in grams ]
+                        mdat_string = ' '.join([ str(wordcount) ] + mdat) + '\n'
+                        multFile.write(mdat_string)
+                        
+                        # Write metadata.
+                        meta = [ str(id) ]
                         if papers:
-                            p = D.papers[doi]
+                            p = D.papers[id]
                             meta += [ str(p[f]) for f in fields ]
                         metaFile.write('\t'.join(meta) + '\n')
                         

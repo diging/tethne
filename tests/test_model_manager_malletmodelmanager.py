@@ -65,64 +65,6 @@ class TestMALLETModelManager(unittest.TestCase):
         self.assertIn('model.mallet', os.listdir(outpath))
         self.assertGreater(os.path.getsize(outpath+'/model.mallet'), 9000000)
 
-    def test_list_topic(self):
-        """
-        :func:`.list_topic` should yield a list with ``Nwords`` words.
-        """
-        Nwords = 10
-        self.M._load_model()
-        
-        pcgpath = cg_path + 'model.manager.MALLETModelManager.list_topic.png'
-        with Profile(pcgpath):
-            result = self.M.list_topic(0, Nwords=Nwords)
-
-        self.assertIsInstance(result, list)
-        self.assertIsInstance(result[0], str)
-        self.assertEqual(len(result), Nwords)
-
-    def test_print_topic(self):
-        """
-        :func:`.print_topic` should yield a string with ``Nwords`` words.
-        """
-        Nwords = 10
-        self.M._load_model()
-        
-        pcgpath = cg_path + 'model.manager.MALLETModelManager.print_topic.png'
-        with Profile(pcgpath):
-            result = self.M.print_topic(0, Nwords=Nwords)
-        
-        self.assertIsInstance(result, str)
-        self.assertEqual(len(result.split(', ')), Nwords)
-
-    def test_list_topics(self):
-        """
-        :func:`.list_topics` should yield a dict { k : [ w ], }.
-        """
-
-        Nwords = 10
-        self.M._load_model()
-
-        pcgpath = cg_path + 'model.manager.MALLETModelManager.list_topics.png'
-        with Profile(pcgpath):
-            result = self.M.list_topics(Nwords=Nwords)
-
-        self.assertIsInstance(result, dict)
-        self.assertIsInstance(result.keys()[0], int)
-        self.assertIsInstance(result.values()[0], list)
-        self.assertIsInstance(result.values()[0][0], str)
-        self.assertEqual(len(result), self.M.model.Z)
-
-    def test_print_topics(self):
-        Nwords = 10
-        self.M._load_model()
-
-        pcgpath = cg_path + 'model.manager.MALLETModelManager.print_topics.png'
-        with Profile(pcgpath):
-            result = self.M.print_topics(Nwords=Nwords)
-
-        self.assertIsInstance(result, str)
-        self.assertEqual(len(result.split('\n')), self.M.model.Z)
-
     def test_topic_time(self):
         """
         Each mode should generate two numpy.ndarrays of equal non-zero length.
@@ -141,32 +83,37 @@ class TestMALLETModelManager(unittest.TestCase):
         self.assertGreater(len(K), 0)
         self.assertGreater(len(R), 0)                
         self.assertEqual(len(R), len(K))
+        self.assertGreater(sum(R), 0)
 
         K,R = self.M.topic_over_time(k, mode='documents', normed=False)
         self.assertIsInstance(K, numpy.ndarray)
         self.assertIsInstance(R, numpy.ndarray)  
         self.assertGreater(len(K), 0)
         self.assertGreater(len(R), 0)                
-        self.assertEqual(len(R), len(K))                            
+        self.assertEqual(len(R), len(K))
+        self.assertGreater(sum(R), 0)
         
         K,R = self.M.topic_over_time(k, mode='proportions', normed=True)
         self.assertIsInstance(K, numpy.ndarray)
         self.assertIsInstance(R, numpy.ndarray)
         self.assertGreater(len(K), 0)
         self.assertGreater(len(R), 0)                
-        self.assertEqual(len(R), len(K))                
+        self.assertEqual(len(R), len(K))
+        self.assertGreater(sum(R), 0)
                 
         K,R = self.M.topic_over_time(k, mode='proportions', normed=False)                        
         self.assertIsInstance(K, numpy.ndarray)
         self.assertIsInstance(R, numpy.ndarray)
         self.assertGreater(len(K), 0)
         self.assertGreater(len(R), 0)                
-        self.assertEqual(len(R), len(K))    
+        self.assertEqual(len(R), len(K))
+        self.assertGreater(sum(R), 0)
         
         K,R = self.M.topic_over_time(k, mode='documents', plot=True)
         self.assertIn('topic_{0}_over_time.png'.format(k), os.listdir(outpath))
         size = os.path.getsize(outpath+'/topic_{0}_over_time.png'.format(k))
         self.assertGreater(size, 0)
+        self.assertGreater(sum(R), 0)
 
     def test_load(self):
         """

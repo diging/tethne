@@ -47,114 +47,6 @@ class DTMModelManager(ModelManager):
         self.vocab_path = '{0}/tethne-vocab.dat'.format(self.temp)        
         self.meta_path = '{0}/tethne-meta.dat'.format(self.temp)
     
-    def list_topic(self, k, t, Nwords=10):
-        """
-        Yields the top ``Nwords`` for topic ``k``.
-        
-        Parameters
-        ----------
-        k : int
-            A topic index.
-        t : int
-            A time index.
-        Nwords : int
-            Number of words to return.
-        
-        Returns
-        -------
-        as_list : list
-            List of words in topic.
-        """
-        words = self.model.dimension(k, t=t, top=Nwords)
-        as_list = [ self.vocabulary[w] for w,p in words ]
-
-        return as_list
-    
-    def list_topic_diachronic(self, k, Nwords=10):
-        as_dict = { t:self.list_topic(k, t, Nwords)
-                        for t in xrange(self.model.T) }
-        return as_dict
-    
-    def print_topic(self, k, t, Nwords=10):
-        """
-        Yields the top ``Nwords`` for topic ``k``.
-        
-        Parameters
-        ----------
-        k : int
-            A topic index.
-        t : int
-            A time index.
-        Nwords : int
-            Number of words to return.
-        
-        Returns
-        -------
-        as_string : str
-            Joined list of words in topic.
-        """
-
-        as_string = ', '.join(self.list_topic(k, t=t, Nwords=Nwords))
-    
-        return as_string
-    
-    def print_topic_diachronic(self, k, Nwords=10):
-        as_dict = self.list_topic_diachronic(k, Nwords)
-        s = []
-        for key, value in as_dict.iteritems():
-            s.append('{0}: {1}'.format(key, ', '.join(value)))
-        as_string = '\n'.join(s)
-        
-        return as_string
-    
-    def list_topics(self, t, Nwords=10):
-        """
-        Yields the top ``Nwords`` for each topic.
-        
-        Parameters
-        ----------
-        t : int
-            A time index.
-        Nwords : int
-            Number of words to return for each topic.
-        
-        Returns
-        -------
-        as_dict : dict
-            Keys are topic indices, values are list of words.
-        """
-        
-        as_dict = {}
-        for k in xrange(self.model.Z):
-            as_dict[k] = self.list_topic(k, t, Nwords)
-    
-        return as_dict
-    
-    def print_topics(self, t, Nwords=10):
-        """
-        Yields the top ``Nwords`` for each topic.
-        
-        Parameters
-        ----------
-        t : int
-            A time index.
-        Nwords : int
-            Number of words to return for each topic.
-        
-        Returns
-        -------
-        as_string : str
-            Newline-delimited lists of words for each topic.
-        """
-            
-        as_dict = self.list_topics(t, Nwords)
-        s = []
-        for key, value in as_dict.iteritems():
-            s.append('{0}: {1}'.format(key, ', '.join(value)))
-        as_string = '\n'.join(s)
-        
-        return as_string
-    
     def _generate_corpus(self, meta):
         from tethne.writers.corpora import to_dtm_input    
         
@@ -224,8 +116,7 @@ class DTMModelManager(ModelManager):
 
             except IndexError:
                 pass
-            
-            
+    
         self.num_iters += lda_max_em_iter   # TODO: does this make sense?
             
     def _load_model(self):
@@ -234,3 +125,92 @@ class DTMModelManager(ModelManager):
         self.model = from_gerrish(self.outname, self.meta_path, self.vocab_path)
         self.vocabulary = self.model.vocabulary
         return self.model
+
+
+    def topic_over_time(self, k, threshold=0.05, mode='documents', 
+                                 normed=True, plot=False, 
+                                 figargs={'figsize':(10,10)} ):
+        """
+        Representation of topic ``k`` over 'date' slice axis.
+        
+        Parameters
+        ----------
+        k : int
+            Topic index.
+        threshold : float
+            Minimum representation of ``k`` in a document.
+        mode : str
+            'documents' counts the number documents that contain ``k``;
+            'proportions' sums the representation of ``k`` in each document
+            that contains it.
+        normed : bool
+            (default: True) Normalizes values by the number of documents in each
+            slice.
+        plot : bool
+            (default: False) If True, generates a MatPlotLib figure and saves
+            it to the :class:`MALLETModelManager` outpath.
+        figargs : dict
+            kwargs dict for :func:`matplotlib.pyplot.figure`\.
+            
+        Returns
+        -------
+        keys : array
+            Keys into 'date' slice axis.
+        R : array
+            Representation of topic ``k`` over time.
+        """
+        
+        if k >= self.model.Z:
+            raise ValueError('No such topic in this model.')
+        
+        items = self.model.dimension_items(k, threshold)
+        slices = self.D.get_slices('date')
+        keys = sorted(slices.keys())
+
+        R = []
+
+        topic_label = self.model.print_topic(k,0)
+
+        if mode == 'documents': # Documents that contain k.
+            for t in keys:
+                docs = slices[t]
+                Ndocs = float(len(docs))
+                Ncontains = 0.
+                for i,w in items:
+                    if i in docs:
+                        Ncontains += 1.
+                if normed:  # As a percentage of docs in each slice.
+                    ylabel = 'Percentage of documents containing topic.'
+                    if Ndocs > 0.:
+                        R.append( Ncontains/Ndocs )
+                    else:
+                        R.append( 0. )
+                else:       # Raw count.
+                    ylabel = 'Number of documents containing topic.'                
+                    R.append( Ncontains )
+
+        elif mode == 'proportions': # Representation of topic k.
+            for t in keys:
+                docs = slices[t]
+                Ndocs = float(len(docs))
+                if normed:      # Normalized by number of docs in each slice.
+                    ylabel = 'Normed representation of topic in documents.'                
+                    if Ndocs > 0.:
+                        R.append( sum([ w for i,w in items if i in docs ])
+                                                                        /Ndocs )
+                    else:
+                        R.append( 0. )
+                else:
+                    ylabel = 'Sum of topic representation in documents.'                
+                    R.append( sum([ w for i,w in items if i in docs ]) )
+        
+        if plot:    # Generates a simple lineplot and saves it in the outpath.
+            import matplotlib.pyplot as plt
+            fig = plt.figure(**figargs)
+            plt.plot(np.array(keys), np.array(R))
+            plt.xlabel('Time Slice')
+            plt.ylabel(ylabel)      # Set based on mode.
+            plt.title(topic_label)
+            plt.savefig('{0}/topic_{1}_over_time.png'.format(self.outpath, k))        
+        
+        return np.array(keys), np.array(R)
