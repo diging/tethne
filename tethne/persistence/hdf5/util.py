@@ -5,7 +5,6 @@ logger.setLevel('ERROR')
 
 import numpy
 import tables
-from ..classes import Paper, DataCollection
 import tempfile
 import uuid
 import cPickle as pickle
@@ -29,172 +28,130 @@ pytype = {  tables.atom.BoolAtom: bool,
             tables.atom.Time64Atom: float,
             numpy.int32: int }
 
-class HDF5DataCollection(DataCollection):
+def get_h5file(typename, datapath=None):
     """
-    Provides HDF5 persistence for :class:`.DataCollection`\.
-    
-    The :class:`.HDF5DataCollection` uses a variety of tables and arrays to
-    store data. The structure of a typical HDF5 repository for an instance
-    of this class is:
-    
-    # TODO: update this.
-    
-    * ``/``
-    
-      * ``arrays``/
-      
-        * ``authors``: VLArray, :class:`.vlarray_dict`
-        * ``authors_index``: table, see :class:`.vlarray_dict`
-        * ``papers_citing``: VLArray, :class:`.vlarray_dict`
-        * ``papers_citing_index``: table, see :class:`.vlarray_dict`
-      
-      * ``citations``/
-      
-        * ``papers_table``: table, :class:`.papers_table`
-      
-      * ``features``/
-      
-        * ``[ feature type ]``/
-
-          * ``index``: table, :class:`.Index` -- int(f_i) : str(f)
-          * ``features``: table, :class:`.StrIndex` -- str(p) : [ ( f_i, c) ]
-          * ``counts``: table, :class:`.IntIndex` --  int(f_i) : int(C)
-          * ``documentCounts``: table, :class:`.IntIndex` -- int(f_i) : int(C)
-    
-    Since some data types (e.g. list, tuple) are not supported in PyTables/HDF5,
-    we make use of cPickle serialization. For example, sparse feature vectors
-    (lists of tuples) are pickled for storage in a StringCol.
+    Load or create an HDF5 data file.
     """
-        
 
-    def __init__(self, papers, features=None, index_by='wosid',
-                       index_citation_by='ayjid', exclude=set([]),
-                       filt=None, datapath=None, index=True):
+    # Where to save the HDF5 data file?
+    if datapath is None:
+        datapath = tempfile.mkdtemp()
+        logger.debug('Generated datapath {0}.'.format(datapath))
+
+    # Load or create HDF5 repository.
+    if datapath.split('.')[-1] == 'h5':
+        path = datapath
+        title = ''
+    else:   # New h5 file.
+        this_uuid = uuid.uuid4()    # Unique identifier for this H5File
+        logger.debug('H5File has UUID {0}.'.format(this_uuid))
+        path = '{0}/{1}-{2}.h5'.format(datapath, typename, this_uuid)
+        title = '{0}-{1}'.format(typename, uuid)
+
+    # mode = 'a' will create a new file if no file exists.
+    h5file = tables.openFile(path, mode = 'a', title=title)
+
+    return h5file, path, uuid
+
+def get_or_create_group(h5file, name):
+    if '/' + name not in h5file:
+        group = h5file.createGroup('/', name)
+    else:
+        group = h5file.getNode('/' + name)
+    return group
+
+def get_or_create_table(h5file, group, name, model):
+    if name not in group:
+        table = h5file.createTable(group, name, model)
+    else:
+        table = h5file.getNode(group, name)
+    return table
+
+def get_or_create_array(h5file, group, name, values):
+    if name not in group:
+        array = h5file.create_array(group, name, values)
+    else:
+        array = h5file.getNode(group, name)
+    return array
+
+class FieldIndex(tables.IsDescription):
+    """
+    For storing metadata about fields.
+    """
+    name = tables.StringCol(100)    # name of a field.
+    type = tables.StringCol(100)    # should correspond to a Python dtype.
+
+class HDF5Metadata(dict):
+    def __init__(self, h5file, metadata=None):
+        self.h5file = h5file
+        self.name = 'metadata'
+        self.group = get_or_create_group(self.h5file, self.name)
+        self.fields = get_or_create_table(self.h5file, self.group, 'fields', FieldIndex)
+        self.field_values = {}
+
+        # Get the names and types of metadata fields.
+        fieldkeys = {}
+        mvalues = { 'index': [] }
+        for name, value in metadata.values()[0].iteritems():
+            this_type = str(type(value))
+            fieldkeys[name] = this_type
+            mvalues[name] = []
+        
+        # Holds paper identifiers.
+        indices = sorted(metadata.keys())   # Ensure consistent order.
+
+        # Generate metadata vectors.
+        for i in indices:
+            for name,value in metadata[i].iteritems():
+                mvalues[name].append(value)
+
+        # Generate a fields table.
+        for name,this_type in fieldkeys.iteritems():
+            query = 'name == b"{0}"'.format(name)
+            matches = [ row for row in self.fields.where(query)]
+            if len(matches) == 0:
+                fieldentry = self.fields.row
+                fieldentry['name'] = name
+                fieldentry['type'] = this_type
+                fieldentry.append()
+        self.fields.flush()
+
+        # Get or create arrays that hold metadata vectors.
+        for name in fieldkeys.keys():
+            self.field_values[name] = get_or_create_array(self.h5file, self.group, name, mvalues[name])
+
+    def __setitem__(self, key, value):
+        raise AttributeError('Values can only be set on __init__')
+
+    def __getitem__(self, key):
         """
-        
-        Parameters
-        ----------
-        papers : list
-            A list of :class:`.Paper`
-        features : dict
-            Contains dictionary `{ type: { i: [ (f, w) ] } }` where `i` is an 
-            index for papers (see kwarg `index_by`), `f` is a feature (e.g. an 
-            N-gram), and `w` is a weight on that feature (e.g. a count).
-        index_by : str
-            A key in :class:`.Paper` for indexing. If `features` is provided, 
-            then this must by the field from which indices `i` are drawn. For 
-            example, if a dictionary in `features` describes DfR wordcounts for
-            the :class:`.Paper`\s in `data`, and is indexed by DOI, then 
-            `index_by` should be 'doi'.
-        index_citations_by : str
-            Just as ``index_by``, except for citations.
-        exclude : set
-            (optional) Features to ignore, e.g. stopwords.
-        datapath : str
-            (optional) Target path for HDF5 repository. If not provided, will
-            generate a temporary directory in ``/tmp`` (or equivalent). The full
-            path to the HDF5 repo can be found in the ``path`` attribute after
-            initialization.
-        index : bool
-            (default: True) If True, runs :func:`.index`\.
-        """
-        
-        logger.debug('Initialize HDF5DataCollection with {0} papers'
-                                                           .format(len(papers)))
-
-        # Where to save the HDF5 data file?
-        if datapath is None:
-            self.datapath = tempfile.mkdtemp()
-            logger.debug('Generated datapath {0}.'.format(self.datapath))
-        else:
-            self.datapath = datapath
-        
-        # Load or create HDF5 repository.
-        if self.datapath.split('.')[-1] == 'h5':
-            self.path = self.datapath
-            title = ''
-        else:   # New h5 file.
-            self.uuid = uuid.uuid4()    # Unique identifier for this DataCollection.
-            logger.debug('Datapath has UUID {0}.'.format(self.uuid))
-            self.path = '{0}/DataCollection-{1}.h5'.format( self.datapath,
-                                                            self.uuid   )
-            title = 'DataCollection-{0}'.format(self.uuid)
-
-        # mode = 'a' will create a new file if no file exists.
-        self.h5file = tables.openFile(self.path, mode = 'a', title=title)
-                                   
-        # Load or create arrays group.
-        if '/arrays' not in self.h5file:
-            self.group = self.h5file.createGroup("/", 'arrays')
-        else:
-            self.group = self.h5file.getNode('/arrays')
-        
-        logger.debug('Initialize features...')
-        self.features = HDF5Features(self.h5file)
-        logger.debug('Initialize authors...')
-        self.authors = vlarray_dict(self.h5file, self.group, 
-                                    'authors', tables.StringAtom(100))
-
-        # { str(f) : feature }
-        logger.debug('Initialize citations...')
-        self.citations = papers_table(self.h5file, index_citation_by,
-                                                   'citations')
-
-        logger.debug('Initialize papers...')
-        self.papers = papers_table(self.h5file, index_by, 'papers', 
-                                        citations=self.citations,
-                                        index_citation_by=index_citation_by)
-
-        # { str(f) : [ str(p) ] }
-        logger.debug('Initialize papers_citing...')        
-        self.papers_citing = vlarray_dict(self.h5file, self.group,
-                                        'papers_citing', tables.StringAtom(100))
-        
-        self.axes = HDF5Axes(self.h5file)
-        self.index_by = index_by    # Field in Paper, e.g. 'wosid', 'doi'.
-        self.index_citation_by = index_citation_by        
-        
-        if index:
-            logger.debug('Index DataCollection...')
-            self.index(papers, features, index_by, index_citation_by,
-                                                   exclude, filt)
-    
-        logger.debug('HDF5DataCollection initialized, flushing to force save.')
-        self.h5file.flush()
-        
-    def abstract_to_features(self, remove_stopwords=True):
-        """
-        See :func:`.DataCollection.abstract_to_features`\.
-        
-        Parameters
-        ----------
-        remove_stopwords : bool
-            (default: True) If True, passes tokenizer the NLTK stoplist.        
+        For each field in `self.fields` table, retrieve the value for `key`
+        from the corresponding metadata vector.
         """
 
-        super(HDF5DataCollection, self).abstract_to_features(remove_stopwords)
-        self.h5file.flush()
-        
-    def filter_features(self, fold, fnew, filt):
-        """
-        See :func:`.DataCollection.filter_features`\.
-        
-        Parameters
-        ----------
-        fold : str
-            Key into ``features`` for existing featureset.
-        fnew : str
-            Key into ``features`` for resulting featuresset.
-        filt : method
-            Filter function to apply to the featureset. Should take a feature
-            dict as its sole parameter.
-        """    
+        i = int(key)
+        fielddata = { row['name']:row['type'] for row in self.fields }
+        meta = {}
+        for name, type in fielddata.iteritems():
+            meta[name] = self._get_meta_entry(name, i, type)
 
-        self.h5file.flush()                
-        super(HDF5DataCollection, self).filter_features(fold, fnew, filt)
-        self.h5file.flush()        
-        
-        
+        return meta
+
+    def _get_meta_entry(self, name, index, this_type):
+        """
+        Retrieve value for `index` from the metadata vector `name`, and 
+        cast as `type` before returning.
+        """
+        value = self.field_values[name][index]
+        if this_type == str(type('')): return str(value)
+        if this_type == str(type(1)): return int(value)
+        if this_type == str(type(1.1)): return float(value)
+        if this_type == str(type(u'')): return unicode(value)
+        return value
+
+    def __len__(self):
+        return len(self.field_values.values()[0])
+
 ################################################################################
 ####                    Helper classes and methods.                         ####
 ################################################################################
@@ -381,7 +338,6 @@ class HDF5FeatureSet(dict):
                 dict.__setitem__(self, key, HDF5ArrayDict(self.h5file, self.group, key, []))
             return dict.__getitem__(self, key)
 
-
 class HDF5ArrayDict(dict):
     def __init__(self, h5file, group, name, values):
         self.h5file = h5file
@@ -420,7 +376,6 @@ class HDF5ArrayDict(dict):
         
 
 class HDF5FeatureValues(dict):
-
     def __init__(self, h5file, group):
         self.h5file = h5file
         
@@ -622,6 +577,7 @@ class vlarray_dict(dict):
     """
     Provides dict-like access to an HDF5 VLArray.
     """
+
     def __init__(self, h5file, group, name, atom):
         self.h5file = h5file
         self.group = group
@@ -649,7 +605,6 @@ class vlarray_dict(dict):
             self.vlarray = self.h5file.getNode(self.group, self.name)
             self.index.cols.mindex.createIndex()
 
-        
     def __setitem__(self, key, value):
         if key not in self:
             i = len(self.vlarray)
@@ -682,4 +637,4 @@ class vlarray_dict(dict):
         return len(self.vlarray)
 
     def iteritems(self):
-        return { x['mindex']:self[x['mindex']] for x in self.keys() }
+        return { x['mindex']:self[x['mindex']] for x in self.keys() }        
