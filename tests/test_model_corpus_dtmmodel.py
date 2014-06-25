@@ -15,24 +15,31 @@ class TestPrint(unittest.TestCase):
                                              self.meta_path,
                                              self.vocab_path )
 
-#    def test_list_topic(self):
-#        """
-#        :func:`.list_topic` should yield a list with ``Nwords`` words.
-#        """
-#
-#        Nwords = 10
-#
-#        pcgpath = cg_path + 'model.corpus.DTMModel.list_topic.png'
-#        with Profile(pcgpath):
-#            result = self.model.list_topic(0, 0, Nwords=Nwords)
-#
-#        self.assertIsInstance(result, list)
-#        self.assertIsInstance(result[0], str)
-#        self.assertEqual(len(result), Nwords)
+    def test_list_topic(self):
+        """
+        :func:`.list_topic` should yield a list with ``Nwords`` words.
+        """
 
-    def test_plot_topic_evolution(self):
+        Nwords = 10
+
+        pcgpath = cg_path + 'model.corpus.DTMModel.list_topic.png'
+        with Profile(pcgpath):
+            result = self.model.list_topic(0, 0, Nwords=Nwords)
+
+        self.assertIsInstance(result, list)
+        self.assertIsInstance(result[0], str)
+        self.assertEqual(len(result), Nwords)
+
+    def test_topic_evolution(self):
+        """
+        :func:`.topic_evolution` should return time index keys, and a 
+        dictionary containing words and p(w|z) series.
+        """
+
         Nwords = 5
-        K, R = self.model.topic_evolution(2, Nwords=Nwords)
+        pcgpath = cg_path + 'model.corpus.DTMModel.topic_evolution.png'
+        with Profile(pcgpath):
+            K, R = self.model.topic_evolution(2, Nwords=Nwords)
 
         self.assertIsInstance(K, list)
         self.assertIsInstance(R, dict)
