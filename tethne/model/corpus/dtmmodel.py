@@ -87,6 +87,13 @@ class DTMModel(BaseModel):
     def topic_evolution(self, k, Nwords=5):
         """
         Generate a plot that shows p(w|z) over time for the top `Nwords` terms.
+        
+        Parameters
+        ----------
+        k : int
+            A topic index.
+        Nwords : int
+            Number of words to return.
         """
     
         t_keys = range(self.T)
