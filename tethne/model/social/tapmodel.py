@@ -44,8 +44,10 @@ class TAPModel(BaseModel):
         self.T = self.theta.values()[0].shape[0]
         self.N_d = len(self.theta)
 
-        self.yold = { i:{k:0 for k in xrange(self.T) } for i in sorted(self.G.nodes()) }
-        self.yold_values = { i:{k:0. for k in xrange(self.T) } for i in sorted(self.G.nodes()) }
+        self.yold = { i:{k:0 for k in xrange(self.T) }
+                        for i in sorted(self.G.nodes()) }
+        self.yold_values = { i:{k:0. for k in xrange(self.T) }
+                                for i in sorted(self.G.nodes()) }
 
         logger.debug('Loaded distributions over {0} topics for {1} nodes.'
                                                       .format(self.T, self.N_d))
@@ -104,9 +106,7 @@ class TAPModel(BaseModel):
             sumout = np.zeros((self.T))
         
             for t, attr in self.G[i].iteritems():
-                #this = self._node_index(self.G, t)
                 this = t
-                #this = int(t) - 1
                 for k in xrange(self.T):
                     w = float(attr['weight'])     
                     sumout[k] = sumout[k] + w * self.theta[this][k]
@@ -114,7 +114,6 @@ class TAPModel(BaseModel):
             for t, attr in self.G[i].iteritems():
                 for k in xrange(self.T):
                     w = float(attr['weight'])
-#                    this = self._node_index(self.G, i)
                     this = i
                     sumin[k] = sumin[k] + w * self.theta[this][k]
                 
@@ -125,9 +124,8 @@ class TAPModel(BaseModel):
             for t,attr in self.G[i].iteritems():
                 for k in xrange(self.T):
                     w = float(attr['weight'])
-#                    this = self._node_index(self.G, i)
                     this = i
-                    self.g[i][j,k] = w*self.theta[this][k] / (sumin[k]+sumout[k])
+                    self.g[i][j,k] = w*self.theta[this][k]/(sumin[k]+sumout[k])
                 j+=1
             
     def _calculate_b(self):

@@ -6,6 +6,7 @@ import subprocess
 import numpy as np
 
 from networkx import Graph
+import networkx as nx
 
 import logging
 logging.basicConfig()
@@ -129,17 +130,20 @@ class TAPModelManager(SocialModelManager):
                              'modeling slice {0}'.format(slice))
 
                 if s > 0 and sequential:
-                    alt_r, alt_a, alt_G = self.SM[last].r, self.SM[last].a, self.SM[last].G
+                    alt_r = self.SM[last].r
+                    alt_a = self.SM[last].a
+                    alt_G = self.SM[last].G
 
                 papers = self.D.get_slice(axis, slice, include_papers=True)
-                include = {n[1]['label']:n[0] for n in self.G[slice].nodes(data=True) }
+                include = { n[1]['label']:n[0]
+                            for n in self.G[slice].nodes(data=True) }
 
                 if len(include) < 1:    # Skip slices with no coauthorship.
                     logger.debug('TAPModelManager._run_model(): ' + \
                                  'skipping slice {0}.'.format(slice))
                     continue
 
-                theta = self.author_theta(papers, authors=include) #self.M[slice])
+                theta = self.author_theta(papers, authors=include)
                 model = TAPModel(self.G[slice], theta)
                 
                 if s > 0 and sequential:
@@ -173,6 +177,13 @@ class TAPModelManager(SocialModelManager):
         C = GraphCollection()
         for slice in self.SM.keys():
             C[slice] = self.SM[slice].graph(k)
+            
+            # Get node labels from original GraphCollection.
+            labels = nx.get_node_attributes(self.G[slice], 'label')
+            labels_ = { n:l for n,l in labels.iteritems()
+                        if n in C[slice].nodes() }
+            
+            nx.set_node_attributes(C[slice], 'label', labels_)
     
         return C
                     
