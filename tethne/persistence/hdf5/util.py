@@ -53,11 +53,17 @@ def get_h5file(typename, datapath=None):
 
     return h5file, path, uuid
 
-def get_or_create_group(h5file, name):
-    if '/' + name not in h5file:
-        group = h5file.createGroup('/', name)
+def get_or_create_group(h5file, name, where=None):
+    if where is None:
+        if '/' + name not in h5file:
+            group = h5file.createGroup('/', name)
+        else:
+            group = h5file.getNode('/' + name)
     else:
-        group = h5file.getNode('/' + name)
+        if name not in where:
+            group = h5file.createGroup(where, name)
+        else:
+            group = h5file.getNode(where, name)
     return group
 
 def get_or_create_table(h5file, group, name, model):
