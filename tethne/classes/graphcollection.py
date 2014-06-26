@@ -1,5 +1,3 @@
-# TODO: distribution, plot_distribution, etc
-
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -24,7 +22,6 @@ class GraphCollection(object):
 
     def __init__(self):
         self.graphs = {}
-        self.metadata = {}
         self.edge_list = []
         
         self.node_index = {}
@@ -32,11 +29,9 @@ class GraphCollection(object):
 
         return
 
-    def __setitem__(self, index, graph, metadata=None):
+    def __setitem__(self, index, graph):
         """
         Add a :class:`.Graph` to the :class:`.GraphCollection`
-
-        Metadata can be anything, but is probably most profitably a dictionary.
 
         Parameters
         ----------
@@ -51,9 +46,6 @@ class GraphCollection(object):
         """
 
         self._index_graph(index, graph)
-
-        # TODO: do we need this?
-        self.metadata[index] = metadata
         
     def _index_graph(self, index, graph):
         """
