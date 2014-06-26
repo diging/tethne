@@ -1,3 +1,9 @@
+"""
+Helper classes and methods for :mod:`tethne.persistence.hdf5`\.
+
+TODO: move away from index table pattern, toward index array pattern.
+"""
+
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -10,6 +16,8 @@ import uuid
 import cPickle as pickle
 import urllib
 from unidecode import unidecode
+
+from ...classes import Paper
 
 pytype = {  tables.atom.BoolAtom: bool,
             tables.atom.UInt8Atom: int,
@@ -559,7 +567,7 @@ class papers_table(dict):
                     in self.table.where('mindex == b"{0}"'.format(key)) ][0]
     
     def __len__(self):
-        return len(self.table)
+        return len([ r for r in self.table])
     
     def __contains__(self, key):
         size = len([ self._to_paper(x) for x
@@ -584,12 +592,13 @@ class vlarray_dict(dict):
     Provides dict-like access to an HDF5 VLArray.
     """
 
-    def __init__(self, h5file, group, name, atom):
+    def __init__(self, h5file, group, name, atom, keyatom):
         self.h5file = h5file
         self.group = group
         self.name = name
         self.atom = atom
-        
+        self.keyatom = keyatom
+
         try:
             self.pytype = pytype[type(atom)]
         except KeyError:
@@ -600,6 +609,7 @@ class vlarray_dict(dict):
         # Load or create index.
         if indexname not in self.group:
             self.index = self.h5file.createTable(self.group, indexname, Index)
+            self.index.cols.mindex.createIndex()
         else:
             self.index = self.h5file.getNode(self.group, indexname)
         
@@ -607,26 +617,39 @@ class vlarray_dict(dict):
         if self.name not in self.group:
             self.vlarray = self.h5file.createVLArray(self.group, self.name,
                                                                  self.atom)
+            # Pad with dummy data.
+            if self.atom.shape == ():
+                self.vlarray.append([self.atom.dflt])
+            else:
+                size = numpy.zeros(shape=self.atom.shape).size
+                padding = numpy.array([ self.atom.dflt for d in xrange(size)]).reshape(self.atom.shape)
+                self.vlarray.append(padding)
         else:
             self.vlarray = self.h5file.getNode(self.group, self.name)
-            self.index.cols.mindex.createIndex()
+            self.atom = self.vlarray.atom
+
+        # If create, pads with dummy index at 0.
+        if 'I' not in self.group:
+            self.I = self.h5file.createEArray(self.group, 'I', keyatom, (0,))
+            if keyatom.dflt == 0: dflt = -1
+            if keyatom.dflt == 0.0: dflt = -1.
+            else: dflt = keyatom.dflt
+            self.I.append([dflt])
+        else:
+            self.I = self.h5file.getNode(self.group, 'I')
+            self.keyatom = self.I.atom
 
     def __setitem__(self, key, value):
         if key not in self:
-            i = len(self.vlarray)
-            ind = self.index.row
-            ind['i'] = i
-            ind['mindex'] = key
-            ind.append()
-        
-        self.vlarray.append(value)
+            self.I.append([key])
+            self.vlarray.append([ v for v in  value ])
 
     def __getitem__(self, key):
-        rset = [ x['i'] for x
-                    in self.index.where('(mindex == b"{0}")'.format(key)) ]
-
-        i = int(rset[0])
-        return [ self.pytype(v) for v in self.vlarray[i] ]
+        i = list(self.I.read()).index(key)
+        data = self.vlarray.read()
+        if self.atom.shape != ():
+            return [[ self.pytype(v) for v in d ] for d in data[i]]
+        return [ self.pytype(v) for v in data[i] ]
 
     def __contains__(self,key):
         size = len([ self._to_paper(x) for x
@@ -640,7 +663,7 @@ class vlarray_dict(dict):
         return [ x['mindex'] for x in self.index ]  
     
     def __len__(self):
-        return len(self.vlarray)
+        return len(self.vlarray) -1  # Compensate for padding.
 
     def iteritems(self):
         return { x['mindex']:self[x['mindex']] for x in self.keys() }        
