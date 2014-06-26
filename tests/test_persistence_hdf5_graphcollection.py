@@ -23,21 +23,6 @@ class TestGraphCollection(unittest.TestCase):
             self.G_[k] = coauthors(v)
 
         self.G = HDF5GraphCollection(self.G_)
-        
-    def test_build(self):
-        """
-        :func:`.build` should generate graphs for each slice in `D`
-        """
-        
-        pcgpath = cg_path + 'classes.GraphCollection.build'
-        with Profile(pcgpath):
-            self.G.build(D, 'date', 'authors', 'coauthors')
-
-        self.assertEqual(len(self.G.graphs), len(D.get_slices('date')))
-        self.assertEqual(   set(self.G.graphs.keys()),
-                            set(D.get_slices('date').keys())    )
-        self.assertEqual(len(self.G.nodes()), 63)
-        self.assertEqual(len(self.G.edges()), 44)
 
     def test_nodes(self):
         """

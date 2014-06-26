@@ -27,7 +27,7 @@ class HDF5GraphCollection(GraphCollection):
     
         logger.debug('HDF5GraphCollection: initialize.')
 
-        self.h5file, self.path, self.uuid = get_h5file('DTMModel', datapath)
+        self.h5file, self.path, self.uuid = get_h5file('GraphCollection', datapath)
         logger.debug('HDF5GraphCollection: got h5file at path {0}'
                                                              .format(self.path))
         
