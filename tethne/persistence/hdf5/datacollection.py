@@ -118,7 +118,8 @@ class HDF5DataCollection(DataCollection):
         self.features = HDF5Features(self.h5file)
         logger.debug('Initialize authors...')
         self.authors = vlarray_dict(self.h5file, self.group, 
-                                    'authors', tables.StringAtom(100))
+                                    'authors', tables.StringAtom(100),
+                                               tables.StringAtom(100))
 
         # { str(f) : feature }
         logger.debug('Initialize citations...')
@@ -133,7 +134,9 @@ class HDF5DataCollection(DataCollection):
         # { str(f) : [ str(p) ] }
         logger.debug('Initialize papers_citing...')        
         self.papers_citing = vlarray_dict(self.h5file, self.group,
-                                        'papers_citing', tables.StringAtom(100))
+                                        'papers_citing',
+                                        tables.StringAtom(100),
+                                        tables.StringAtom(100))
         
         self.axes = HDF5Axes(self.h5file)
         self.index_by = index_by    # Field in Paper, e.g. 'wosid', 'doi'.
