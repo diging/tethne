@@ -51,9 +51,19 @@ class HDF5GraphCollection(GraphCollection):
         self.edge_list = [] # Not stored.
     
         self.graphs = {}
-        for key, graph in G.graphs.iteritems():
-            name = 'graph_' + str(key)
-            self.graphs[key] = HDF5Graph(self.h5file, self.group, name, graph)
+        gchildren = self.group._v_children.keys()
+        if len(gchildren) > 0:
+            for child in gchildren:
+                key = child[6:] # Cut off 'graph_' at start.
+                try:    # Keys may be ints, but we can't store them that way.
+                    key = int(key)
+                except:
+                    pass
+                self.graphs[key] = HDF5Graph(self.h5file, self.group, child, None)
+        else:
+            for key, graph in G.graphs.iteritems():
+                name = 'graph_' + str(key)
+                self.graphs[key] = HDF5Graph(self.h5file, self.group, name, graph)
 
     def __getitem__(self, key):
         name = 'graph_' + str(key)
@@ -77,8 +87,16 @@ class HDF5Graph(Graph):
         else:
             self.h5file = h5file
         self.group = get_or_create_group(h5file, name, where=pgroup)
-        self.edge = HDF5EdgeAttributes(h5file, self.group, graph.edge)
-        self.node = HDF5NodeAttributes(h5file, self.group, graph.node)
+        
+        if graph is None:
+            edge_values = None
+            node_values = None
+        else:
+            edge_values = graph.edge
+            node_values = graph.node
+
+        self.edge = HDF5EdgeAttributes(h5file, self.group, edge_values)
+        self.node = HDF5NodeAttributes(h5file, self.group, node_values)
         self.adj = self.edge
 
     def edges(self, data=False):
@@ -101,8 +119,8 @@ class HDF5EdgeAttributes(object):
         V = []
         self.field_values = {}
 
-        fieldchildren = self.fieldgroup._v_children.keys()
-        if len(fieldchildren) > 0:
+        if 'neighbors' in self.group._v_children.keys():  # Data already exists?
+            fieldchildren = self.fieldgroup._v_children.keys()
             for child in fieldchildren:
                 carray = get_or_create_array(self.h5file, self.fieldgroup,
                                                           child, None)
@@ -151,7 +169,7 @@ class HDF5EdgeAttributes(object):
                         if this_type == str(type(1)): mvalues[name].append(0)
                         if this_type == str(type(1.1)): mvalues[name].append(0.0)
                         if this_type == str(type(u'')): mvalues[name].append(u'')
-                        if this_Type == str(type([])): mvalues[name].append(pickle.dumps([]))
+                        if this_type == str(type([])): mvalues[name].append(pickle.dumps([]))
                         
             # Get or create arrays that hold attribute vectors.
             for name in fieldkeys.keys():
@@ -294,13 +312,13 @@ class HDF5NodeAttributes(object):
                                                                     FieldIndex)
         self.field_values = {}
 
-        fieldchildren = self.fieldgroup._v_children.keys()
-        if len(fieldchildren) > 0:
+        if 'I' in self.group._v_children.keys():    # Data already exists?
+            fieldchildren = self.fieldgroup._v_children.keys()
             for child in fieldchildren:
                 carray = get_or_create_array(self.h5file, self.fieldgroup,
                                                           child, None)
                 self.field_values[child] = carray
-
+            self.I = get_or_create_array(h5file, self.group, 'I', [])
         else:   # No data in this group.
             # Get the names and types of attribute fields.
             fieldkeys = {}

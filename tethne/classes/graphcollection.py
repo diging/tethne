@@ -7,6 +7,8 @@ import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
 
+import warnings
+
 import tethne.networks as nt
 
 class GraphCollection(object):
@@ -289,7 +291,15 @@ class GraphCollection(object):
         values = []
         for k in keys:
             A = nx.__dict__['get_{0}_attributes'.format(etype)](self[k], attr).values()
-            values.append(stat(A))
+            
+            # Ignore warnings; will handle NaNs below.
+            with warnings.catch_warnings():
+                warnings.simplefilter('ignore')
+                v = stat(A)
+
+            if np.isnan(v):
+                v = 0.
+            values.append(v)
 
         return keys, values
         
