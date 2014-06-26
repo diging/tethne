@@ -158,7 +158,8 @@ class HDF5EdgeAttributes(object):
                 if fieldkeys[name] == str(type([])):
                     mvalues[name] = [ pickle.dumps(v) for v in mvalues[name] ]
                 self.field_values[name] = get_or_create_array(self.h5file,
-                                                              self.group, name,
+                                                              self.fieldgroup,
+                                                              name,
                                                               mvalues[name])
 
             if len([ r for r in self.fields ]) == 0:   # New Graph.
@@ -288,55 +289,63 @@ class HDF5NodeAttributes(object):
     def __init__(self, h5file, pgroup, attributes=None):
         self.h5file = h5file
         self.group = get_or_create_group(h5file, 'nodes', where=pgroup)
-
+        self.fieldgroup = get_or_create_group(h5file, 'fieldgroup', where=self.group)
         self.fields = get_or_create_table(self.h5file, self.group, 'fields',
                                                                     FieldIndex)
         self.field_values = {}
 
-        # Get the names and types of attribute fields.
-        fieldkeys = {}
-        mvalues = { 'index': [] }
-        for node, attribs in attributes.iteritems():
-            for name, value in attribs.iteritems():
-                if name not in mvalues:
-                    this_type = str(type(value))
-                    fieldkeys[name] = this_type
-                    mvalues[name] = []
+        fieldchildren = self.fieldgroup._v_children.keys()
+        if len(fieldchildren) > 0:
+            for child in fieldchildren:
+                carray = get_or_create_array(self.h5file, self.fieldgroup,
+                                                          child, None)
+                self.field_values[child] = carray
 
-        # Holds node identifiers.
-        indices = sorted(attributes.keys())   # Ensure consistent order.
-        self.I = get_or_create_array(h5file, self.group, 'I', indices)
+        else:   # No data in this group.
+            # Get the names and types of attribute fields.
+            fieldkeys = {}
+            mvalues = { 'index': [] }
+            for node, attribs in attributes.iteritems():
+                for name, value in attribs.iteritems():
+                    if name not in mvalues:
+                        this_type = str(type(value))
+                        fieldkeys[name] = this_type
+                        mvalues[name] = []
 
-        # Generate attribute vectors.
-        for i in indices:
+            # Holds node identifiers.
+            indices = sorted(attributes.keys())   # Ensure consistent order.
+            self.I = get_or_create_array(h5file, self.group, 'I', indices)
+
+            # Generate attribute vectors.
+            for i in indices:
+                for name,this_type in fieldkeys.iteritems():
+                    if name in attributes[i]:
+                        mvalues[name].append(attributes[i][name])
+                    else:
+                        if this_type == str(type('')): mvalues[name].append('')
+                        if this_type == str(type(1)): mvalues[name].append(0)
+                        if this_type == str(type(1.1)): mvalues[name].append(0.0)
+                        if this_type == str(type(u'')): mvalues[name].append(u'')
+                        if this_type == str(type([])): mvalues[name].append(pickle.dumps([]))
+
+            # Generate a fields table.
             for name,this_type in fieldkeys.iteritems():
-                if name in attributes[i]:
-                    mvalues[name].append(attributes[i][name])
-                else:
-                    if this_type == str(type('')): mvalues[name].append('')
-                    if this_type == str(type(1)): mvalues[name].append(0)
-                    if this_type == str(type(1.1)): mvalues[name].append(0.0)
-                    if this_type == str(type(u'')): mvalues[name].append(u'')
-                    if this_type == str(type([])): mvalues[name].append(pickle.dumps([]))
+                query = 'name == b"{0}"'.format(name)
+                matches = [ row for row in self.fields.where(query)]
+                if len(matches) == 0:
+                    fieldentry = self.fields.row
+                    fieldentry['name'] = name
+                    fieldentry['type'] = this_type
+                    fieldentry.append()
+            self.fields.flush()
 
-        # Generate a fields table.
-        for name,this_type in fieldkeys.iteritems():
-            query = 'name == b"{0}"'.format(name)
-            matches = [ row for row in self.fields.where(query)]
-            if len(matches) == 0:
-                fieldentry = self.fields.row
-                fieldentry['name'] = name
-                fieldentry['type'] = this_type
-                fieldentry.append()
-        self.fields.flush()
-
-        # Get or create arrays that hold metadata vectors.
-        for name in fieldkeys.keys():
-            if fieldkeys[name] == str(type([])):
-                mvalues[name] = [ pickle.dumps(v) for v in mvalues[name] ]
-            self.field_values[name] = get_or_create_array(self.h5file,
-                                                          self.group, name,
-                                                          mvalues[name])
+            # Get or create arrays that hold metadata vectors.
+            for name in fieldkeys.keys():
+                if fieldkeys[name] == str(type([])):
+                    mvalues[name] = [ pickle.dumps(v) for v in mvalues[name] ]
+                self.field_values[name] = get_or_create_array(self.h5file,
+                                                              self.fieldgroup, name,
+                                                              mvalues[name])
 
     def __iter__(self):
         return iter(self.get_nodes())
