@@ -221,6 +221,73 @@ def from_dir(path):
 
     return papers
 
+def ngrams_from_dir(path, N='uni', ignore_hash=True, mode='heavy'):
+    """
+    
+    Parameters
+    ----------
+    path : string
+        Path to directory containing DfR dataset directories.
+    N : string
+        'uni', 'bi', 'tri', or 'quad'
+    ignore_hash : bool
+        If True, will exclude all N-grams that contain the hash '#' character.
+    mode : str
+        If 'heavy' (default), loads all data into memory and returns a dict. If
+        'light', returns a (somewhat) reusable :class:`.GramGenerator`\. See
+        :class:`.GramGenerator` for usage.
+        
+    Returns
+    -------
+    ngrams : dict
+        Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
+    """
+
+    grams = {}
+    try:
+        files = os.listdir(path)
+    except IOError:
+        raise IOError('Invalid path.')
+
+    for f in files:
+        if not f.startswith('.') and os.path.isdir(path + '/' + f):
+            try:
+                fpath = path + '/' + f
+                grams.update(ngrams(fpath, N, ignore_hash, mode))
+            except (IOError, UnboundLocalError, OSError):
+                pass
+
+    return grams
+                                
+def corpus_from_dir(path, features=None, exclude=None, **kwargs):
+    """
+
+    Parameters
+    ----------
+    path : string
+        Path to directory containing DfR dataset directories.
+    features : list
+        List of feature-grams (e.g. 'uni', 'bi', 'tri') to load from dataset.
+    exclude : list
+        Stoplist for feature-grams.
+    **kwargs
+        Use this to pass kwargs to :func:`.ngrams`.
+    
+    Returns
+    -------
+    :class:`.Corpus`
+    """
+
+    papers = from_dir(path)
+    grams = {}
+    if features is not None:
+        for feat in features:
+            grams[feat] = ngrams_from_dir(path, **kwargs)
+
+    return Corpus(papers, features=grams, index_by='doi', exclude=exclude)
+
+
+
 def ngrams(datapath, N='bi', ignore_hash=True, mode='heavy'):
     """
     Yields N-grams from a JSTOR DfR dataset.

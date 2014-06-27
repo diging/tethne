@@ -2,9 +2,32 @@ from settings import *
 
 import unittest
 
-from tethne.readers.dfr import read, ngrams, GramGenerator, _handle_authors
+from tethne.readers import dfr
 from tethne.writers import corpora
-from tethne import Paper
+from tethne import Paper, Corpus
+
+class TestFromDir(unittest.TestCase):
+    def setUp(self):
+        self.dfrdatapath = '{0}/dfr'.format(datapath)
+
+    def test_ngrams_from_dir(self):
+        self.unigrams = dfr.ngrams_from_dir(datapath, N='uni')
+
+        self.assertEqual(len(self.unigrams), 241)
+        self.assertIsInstance(self.unigrams, dict)
+        self.assertIsInstance(self.unigrams.values()[0], list)
+        self.assertIsInstance(self.unigrams.values()[0][0], tuple)
+
+    def test_corpus_from_dir(self):
+        C = dfr.corpus_from_dir(datapath)
+
+        self.assertIsInstance(C, Corpus)
+        self.assertEqual(len(C.papers), 241)
+
+    def test_corpus_from_dir_ngrams(self):
+        C = dfr.corpus_from_dir(datapath, features=('uni',))
+        self.assertEqual(len(C.papers), 241)
+        self.assertEqual(len(C.features['uni']['features']), 241)
 
 class TestNGrams(unittest.TestCase):
     def setUp(self):
@@ -17,7 +40,7 @@ class TestNGrams(unittest.TestCase):
 
         pcgpath = cg_path + 'readers.dfr.ngrams[heavy].png'
         with Profile(pcgpath):
-            self.unigrams = ngrams(self.dfrdatapath, N='uni')
+            self.unigrams = dfr.ngrams(self.dfrdatapath, N='uni')
 
         self.assertEqual(len(self.unigrams), 241)
         self.assertIsInstance(self.unigrams, dict)
@@ -31,10 +54,10 @@ class TestNGrams(unittest.TestCase):
         
         pcgpath = cg_path + 'readers.dfr.ngrams[light].png'
         with Profile(pcgpath):
-            self.unigrams = ngrams(self.dfrdatapath, N='uni', mode='light')
+            self.unigrams = dfr.ngrams(self.dfrdatapath, N='uni', mode='light')
 
         self.assertEqual(len(self.unigrams), 241)
-        self.assertIsInstance(self.unigrams, GramGenerator)
+        self.assertIsInstance(self.unigrams, dfr.GramGenerator)
         self.assertIsInstance(self.unigrams.values()[0], list)
         self.assertIsInstance(self.unigrams.values()[0][0], tuple)   
 
@@ -43,7 +66,7 @@ class TestNGrams(unittest.TestCase):
         Result of :func:`.ngrams` should be ready to write as a corpus.
         """
 
-        self.unigrams = ngrams(self.dfrdatapath, N='uni')            
+        self.unigrams = dfr.ngrams(self.dfrdatapath, N='uni')
         ret = corpora.to_documents('/tmp/', self.unigrams)
         self.assertIsInstance(ret, tuple)
        
@@ -53,9 +76,10 @@ class TestNGrams(unittest.TestCase):
         a corpus.
         """
 
-        self.unigrams = ngrams(self.dfrdatapath, N='uni', mode='light')
+        self.unigrams = dfr.ngrams(self.dfrdatapath, N='uni', mode='light')
         ret = corpora.to_documents('/tmp/', self.unigrams)
         self.assertIsInstance(ret, tuple)
+
          
 class TestGramGenerator(unittest.TestCase):
     def setUp(self):
@@ -68,7 +92,7 @@ class TestGramGenerator(unittest.TestCase):
         
         pcgpath = cg_path + 'readers.dfr.GramGenerator.__init__.png'
         with Profile(pcgpath):
-            g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
+            g = dfr.GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
         
         self.assertEqual(len(g), 241)
         
@@ -77,7 +101,7 @@ class TestGramGenerator(unittest.TestCase):
         Should yield something when iterated upon.
         """
         
-        g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
+        g = dfr.GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
 
         for i in g:
             self.assertNotEqual(i, None)
@@ -88,8 +112,8 @@ class TestGramGenerator(unittest.TestCase):
         :class:`.GramGenerator` that returns tuples.
         """
         
-        g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
-        self.assertIsInstance(g.items(), GramGenerator)
+        g = dfr.GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
+        self.assertIsInstance(g.items(), dfr.GramGenerator)
         self.assertIsInstance(g.items()[0], tuple)
         
     def test_iteritems(self):
@@ -98,8 +122,8 @@ class TestGramGenerator(unittest.TestCase):
         :class:`.GramGenerator` that returns tuples.
         """
         
-        g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
-        self.assertIsInstance(g.iteritems(), GramGenerator)
+        g = dfr.GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
+        self.assertIsInstance(g.iteritems(), dfr.GramGenerator)
         self.assertIsInstance(g.items()[0], tuple)                
 
     def test_values(self):
@@ -108,8 +132,8 @@ class TestGramGenerator(unittest.TestCase):
         :class:`.GramGenerator` that returns lists of tuples.
         """
         
-        g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
-        self.assertIsInstance(g.values(), GramGenerator)    
+        g = dfr.GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
+        self.assertIsInstance(g.values(), dfr.GramGenerator)
         self.assertIsInstance(g.values()[0], list)                
         self.assertIsInstance(g.values()[0][0], tuple)  
         
@@ -119,8 +143,8 @@ class TestGramGenerator(unittest.TestCase):
         :class:`.GramGenerator` that returns strings.
         """
         
-        g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
-        self.assertIsInstance(g.keys(), GramGenerator)    
+        g = dfr.GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
+        self.assertIsInstance(g.keys(), dfr.GramGenerator)
         self.assertIsInstance(g.keys()[0], str)                
     
     def test_getitem(self):
@@ -128,7 +152,7 @@ class TestGramGenerator(unittest.TestCase):
         :func:`GramGenerator.__getitem__` should return a key,value tuple.
         """
         
-        g = GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
+        g = dfr.GramGenerator(self.dfrdatapath+'/wordcounts', 'wordcount')
         self.assertIsInstance(g[0], tuple)
         self.assertIsInstance(g[0][0], str)     # Key.
         self.assertIsInstance(g[0][1], list)    # Value.
@@ -140,7 +164,7 @@ class TestRead(unittest.TestCase):
 
         pcgpath = cg_path + 'readers.dfr.read.png'
         with Profile(pcgpath):
-            self.papers = read(self.dfrdatapath)
+            self.papers = dfr.read(self.dfrdatapath)
 
     def test_number(self):
         """
@@ -178,7 +202,7 @@ class TestRead(unittest.TestCase):
         """
 
         with self.assertRaises(ValueError):
-            _handle_authors(1234)
+            dfr._handle_authors(1234)
 
     def test_handle_pubdate(self):
         """
