@@ -2,7 +2,7 @@
 Methods for network analysis.
 """
 
-from tethne.data import DataCollection, GraphCollection
+from tethne.data import Corpus, GraphCollection
 from tethne.builders import authorCollectionBuilder
 import tethne.analyze as az
 
@@ -31,7 +31,7 @@ def closeness_introgression(papers, node, window_size, normalize = False):
 
     """
 
-    D = DataCollection(papers)
+    D = Corpus(papers)
     D.slice('date', 'time_window', window_size=window_size)
     builder = authorCollectionBuilder(D)
     C = builder.build('date', 'coauthors')

@@ -31,10 +31,10 @@ def to_dxgmml(C, path): # [#61510094]
        >>> import tethne.readers as rd
        >>> papers = rd.wos.read(datapath)
 
-       >>> # Build a DataCollection, and slice it temporally using a
+       >>> # Build a Corpus, and slice it temporally using a
        >>> #  4-year sliding time-window.
-       >>> from tethne.data import DataCollection, GraphCollection
-       >>> D = DataCollection(papers)
+       >>> from tethne.data import Corpus, GraphCollection
+       >>> D = Corpus(papers)
        >>> D.slice('date', 'time_window', window_size=4)
 
        >>> # Generate a GraphCollection of co-citation graphs.

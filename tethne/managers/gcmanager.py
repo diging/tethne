@@ -13,7 +13,7 @@ class GraphCollectionManager(CollectionManager):
         
         Parameters
         ----------
-        D : :class:`.DataCollection`
+        D : :class:`.Corpus`
         """
         super(GraphCollectionManager, self).__init__(**kwargs)
 
@@ -38,7 +38,7 @@ class GenericGraphCollectionManager(GraphCollectionManager):
     
     def build(self):
         """
-        Generates a graph for each slice of a :class:`.DataCollection`.
+        Generates a graph for each slice of a :class:`.Corpus`.
         """
         
         self.C = GraphCollection()

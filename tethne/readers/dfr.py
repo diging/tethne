@@ -11,13 +11,12 @@ Methods for parsing JSTOR Data-for-Research datasets.
 import sys
 sys.path.append('/Users/erickpeirson/Dropbox/DigitalHPS/Scripts/tethne')
 
-
-from tethne.classes.paper import Paper
+from ..classes import Paper, Corpus
 
 import os
 import xml.etree.ElementTree as ET
 import re
-from tethne.utilities import dict_from_node, strip_non_ascii
+from ..utilities import dict_from_node, strip_non_ascii
 from nltk.corpus import stopwords
 import uuid
 from collections import Counter
@@ -131,7 +130,6 @@ class GramGenerator(object):
             return grams
 
         return doi, grams   # Default behavior.
-
 
 def read(datapath):
     """

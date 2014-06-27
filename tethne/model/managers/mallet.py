@@ -29,7 +29,7 @@ class MALLETModelManager(ModelManager):
         
         Parameters
         ----------
-        D : :class:`.DataCollection`
+        D : :class:`.Corpus`
         feature : str
             Key from D.features containing wordcounts (or whatever
             you want to model with).

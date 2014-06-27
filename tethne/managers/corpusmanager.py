@@ -1,10 +1,10 @@
 from collectionmanager import CollectionManager
 
-from ..classes import DataCollection
+from ..classes import Corpus
 
-class DataCollectionManager(CollectionManager):
+class CorpusManager(CollectionManager):
     """
-    Base class for DataCollection managers.
+    Base class for Corpus managers.
     """
 
     def __init__(self, datapath, **kwargs):
@@ -15,13 +15,13 @@ class DataCollectionManager(CollectionManager):
         datapath : str
             Path to data.
         """
-        super(DataCollectionManager, self).__init__(**kwargs)
+        super(CorpusManager, self).__init__(**kwargs)
 
         self.datapath = datapath
         
-class SampleDFRManager(DataCollectionManager):
+class SampleDFRManager(CorpusManager):
     """
-    Sample :class:`.DataCollectionManager` for JSTOR Data-for-Research datasets.
+    Sample :class:`.CorpusManager` for JSTOR Data-for-Research datasets.
     """
     
     slice_axis='date'
@@ -41,7 +41,7 @@ class SampleDFRManager(DataCollectionManager):
     def build(self):
         from nltk.corpus import stopwords
         exclude = set(stopwords.words())
-        self.D = DataCollection(self.papers, self.features, index_by='doi',
+        self.D = Corpus(self.papers, self.features, index_by='doi',
                                                            exclude=exclude)
         self.D.slice(self.slice_axis, method=self.slice_method,
                      window_size=self.window_size, step_size=self.step_size)
