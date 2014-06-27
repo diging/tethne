@@ -106,9 +106,9 @@ if __name__ == "__main__":
                            
     sliceGroup.add_option("-M", "--slice-method", dest="slice_method",
                default="time_period",
-               help="Method used to slice DataCollection. Available methods:" +\
+               help="Method used to slice Corpus. Available methods:" +\
                     " time_window, time_period. For details, see"             +\
-                    " ./doc/api/tethne.html#tethne.data.DataCollection.slice."+\
+                    " ./doc/api/tethne.html#tethne.data.Corpus.slice."+\
                     " Default is time_period.")
                     
     sliceGroup.add_option("--slice-window-size", dest="window_size", default=1,
@@ -159,7 +159,7 @@ if __name__ == "__main__":
 
     graphGroup.add_option("--merged",
                           action="store_true", dest="merged", default=False,
-                          help="Ignore DataCollection slicing, and build" +\
+                          help="Ignore Corpus slicing, and build" +\
                                " a single graph from all Papers.")
                              
     graphGroup.add_option("--threshold", dest="threshold",
@@ -224,7 +224,7 @@ if __name__ == "__main__":
     import tethne.networks as nt
     import tethne.analyze as az
     import tethne.writers as wr
-    from tethne.data import DataCollection, GraphCollection
+    from tethne.data import Corpus, GraphCollection
     from tethne.builders import authorCollectionBuilder, paperCollectionBuilder
     
     if options.dataset_id is None:
@@ -276,18 +276,18 @@ if __name__ == "__main__":
         sys.stdout.write("Read {0} papers in {1} seconds. Accession: {2}.\n"
                                                                .format(N, t, a))
 
-        sys.stdout.write("Generating a new DataCollection...")
+        sys.stdout.write("Generating a new Corpus...")
         if options.dataformat == 'WOS':
             index_by = 'wosid'
         elif options.dataformat == 'DFR':
             index_by = 'doi'
-        D = DataCollection(papers, index_by=index_by)
+        D = Corpus(papers, index_by=index_by)
         sys.stdout.write("done.\n")
 
-        # Save DataCollection for next workflow step.
+        # Save Corpus for next workflow step.
         savepath = options.temp_dir + "/" + \
-                   options.dataset_id + "_DataCollection.pickle"
-        sys.stdout.write("Saving DataCollection to {0}...".format(savepath))
+                   options.dataset_id + "_Corpus.pickle"
+        sys.stdout.write("Saving Corpus to {0}...".format(savepath))
         pickle.dump(D, open(savepath, 'wb'))
         sys.stdout.write("done.\n")
         
@@ -304,19 +304,19 @@ if __name__ == "__main__":
         if options.slice_axis is None:
             sys.exit('Must specifify a slice axis with --slice-axis.')
         
-        # Load DataCollection.
+        # Load Corpus.
         loadpath = options.temp_dir + "/" + \
-                   options.dataset_id + "_DataCollection.pickle"
-        sys.stdout.write("Loading DataCollection from {0}...".format(loadpath))
+                   options.dataset_id + "_Corpus.pickle"
+        sys.stdout.write("Loading Corpus from {0}...".format(loadpath))
         sys.stdout.flush()
                 
         D = pickle.load(open(loadpath, 'rb'))
         sys.stdout.write("done.\n")
         
-        # Slice DataCollection
+        # Slice Corpus
         axes = options.slice_axis.split(',')
         for a in axes:
-            sys.stdout.write("Slicing DataCollection by {0}...".format(a))
+            sys.stdout.write("Slicing Corpus by {0}...".format(a))
             sys.stdout.flush()
             
             if a == 'date':
@@ -363,10 +363,10 @@ if __name__ == "__main__":
                         writer.writerow([A_indices[i], dist[i]])
             sys.stdout.write("done.\n")
         
-        # Save sliced DataCollection for next workflow step.
+        # Save sliced Corpus for next workflow step.
         savepath = options.temp_dir + "/" + \
-                   options.dataset_id + "_DataCollection_sliced.pickle"
-        sys.stdout.write("Saving sliced DataCollection to {0}..."
+                   options.dataset_id + "_Corpus_sliced.pickle"
+        sys.stdout.write("Saving sliced Corpus to {0}..."
                                                               .format(savepath))
         sys.stdout.flush()                                                              
         pickle.dump(D, open(savepath, 'wb'))
@@ -391,14 +391,14 @@ if __name__ == "__main__":
         
         if options.merged:
             loadpath = options.temp_dir + "/" + \
-                       options.dataset_id + "_DataCollection.pickle"
+                       options.dataset_id + "_Corpus.pickle"
             qualifier = "without"
         else:
             loadpath = options.temp_dir + "/" + \
-                       options.dataset_id + "_DataCollection_sliced.pickle"
+                       options.dataset_id + "_Corpus_sliced.pickle"
             qualifier = "with"
             
-        sys.stdout.write("Loading DataCollection {0} slices from {1}..."
+        sys.stdout.write("Loading Corpus {0} slices from {1}..."
                                                    .format(qualifier, loadpath))
         sys.stdout.flush()                                                    
         
@@ -408,7 +408,7 @@ if __name__ == "__main__":
         if not options.merged:
             # Uses the first axis only!
             a = D.get_axes()[0]
-            sys.stdout.write("Using first slice in DataCollection: {0}.\n"
+            sys.stdout.write("Using first slice in Corpus: {0}.\n"
                                                                      .format(a))
                                                                  
         # Build kwargs.
@@ -435,7 +435,7 @@ if __name__ == "__main__":
 
         start_time = time.time()        
         
-        if not options.merged:  # Generate GraphCollection from DataCollection.
+        if not options.merged:  # Generate GraphCollection from Corpus.
             if options.node_type == 'paper':
                 builder = paperCollectionBuilder(D)
                 
@@ -445,7 +445,7 @@ if __name__ == "__main__":
             C = builder.build(a, options.graph_type, **kwargs)
 
         else:   # Generate a single Graph from all of the papers in 
-                #  DataCollection, D.
+                #  Corpus, D.
             method = nt.__dict__[options.node_type+'s'] \
                        .__dict__[options.graph_type]
             

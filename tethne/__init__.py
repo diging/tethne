@@ -7,10 +7,11 @@ using networkx.
 .. autosummary::
 
    tethne.analyze
-   tethne.builders
-   tethne.data
-   tethne.matrices
+   tethne.classes
+   tethne.managers
+   tethne.model
    tethne.networks
+   tethne.persistence
    tethne.readers
    tethne.services
    tethne.utilities
@@ -18,6 +19,12 @@ using networkx.
    
 """
 
+from analyze import *
 from classes import *
-from model import *
 from managers import *
+from model import *
+from networks import *
+from persistence import *
+from readers import *
+from services import *
+from writers import *

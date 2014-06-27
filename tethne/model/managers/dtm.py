@@ -28,7 +28,7 @@ class DTMModelManager(ModelManager):
         
         Parameters
         ----------
-        D : :class:`.DataCollection`
+        D : :class:`.Corpus`
         outpath : str
             Path to output directory.
         dtm_path : str

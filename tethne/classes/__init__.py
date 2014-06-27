@@ -4,7 +4,7 @@ Classes for handling bibliographic data.
 .. autosummary::
 
    Paper
-   DataCollection
+   Corpus
    GraphCollection
    LDAModel
    
@@ -18,8 +18,8 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel('DEBUG')
 
-from paper import *
-from datacollection import *
-from graphcollection import *
+from paper import Paper
+from corpus import Corpus
+from graphcollection import GraphCollection
 
-from ..persistence import HDF5Paper, HDF5DataCollection
+from ..persistence import HDF5Paper, HDF5Corpus, HDF5GraphCollection

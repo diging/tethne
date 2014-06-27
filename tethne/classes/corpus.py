@@ -16,13 +16,13 @@ from unidecode import unidecode
 
 from ..utilities import strip_punctuation
 
-class DataCollection(object):
+class Corpus(object):
     """
-    A :class:`.DataCollection` organizes :class:`.Paper`\s for analysis.
+    A :class:`.Corpus` organizes :class:`.Paper`\s for analysis.
     
-    The :class:`.DataCollection` is initialized with some data, which is indexed
-    by a key in :class:`.Paper` (default is wosid). The :class:`.DataCollection`
-    can then be sliced ( :func:`DataCollection.slice` ) by other keys in
+    The :class:`.Corpus` is initialized with some data, which is indexed
+    by a key in :class:`.Paper` (default is wosid). The :class:`.Corpus`
+    can then be sliced ( :func:`Corpus.slice` ) by other keys in
     :class:`.Paper` .
     
     **Usage**
@@ -32,12 +32,12 @@ class DataCollection(object):
        >>> import tethne.readers as rd
        >>> data = rd.wos.read("/Path/to/wos/data.txt")
        >>> data += rd.wos.read("/Path/to/wos/data2.txt")    # Two accessions.
-       >>> from tethne.data import DataCollection
-       >>> D = DataCollection(data) # Indexed by wosid, by default.
+       >>> from tethne.data import Corpus
+       >>> D = Corpus(data) # Indexed by wosid, by default.
        >>> D.slice('date', 'time_window', window_size=4)
        >>> D.slice('accession')
        >>> D
-       <tethne.data.DataCollection at 0x10af0ef50>
+       <tethne.data.Corpus at 0x10af0ef50>
        
     """
     
@@ -72,7 +72,7 @@ class DataCollection(object):
             
         Returns
         -------
-        :class:`.DataCollection`
+        :class:`.Corpus`
         """                                              
         
         self.papers = {}             # { p : paper }, where p is index_by
@@ -227,7 +227,9 @@ class DataCollection(object):
         
         if filt is None:
             filt = lambda s: True
-        
+
+        if exclude is None:
+            exclude = set([])
         if type(exclude) is not set:
             exclude = set(exclude)
         
@@ -337,7 +339,7 @@ class DataCollection(object):
         """
         Generates a set of unigram features from the abstracts of Papers.
         
-        Automatically tokenizes and updates the :class:`.DataCollection`\.
+        Automatically tokenizes and updates the :class:`.Corpus`\.
         
         Parameters
         ----------
@@ -365,7 +367,7 @@ class DataCollection(object):
         """
         Slices data by key, using method (if applicable).
 
-        Methods available for slicing a :class:`.DataCollection`\:
+        Methods available for slicing a :class:`.Corpus`\:
 
         ===========    =============================    =======    =============
         Method         Description                      Key        kwargs
@@ -473,7 +475,7 @@ class DataCollection(object):
         slices : dict
             Keys are start date of time slice, values are :class:`.Paper`
             indices (controlled by index_by argument in 
-            :func:`.DataCollection.__init__` )
+            :func:`.Corpus.__init__` )
         
         Notes
         -----
@@ -515,7 +517,7 @@ class DataCollection(object):
         
     def indices(self):
         """
-        Yields a list of indices of all papers in this :class:`.DataCollection`
+        Yields a list of indices of all papers in this :class:`.Corpus`
         
         Returns
         -------
@@ -528,7 +530,7 @@ class DataCollection(object):
     def all_papers(self):
         """
         Yield the complete set of :class:`.Paper` instances in this
-        :class:`.DataCollection` .
+        :class:`.Corpus` .
         
         Returns
         -------
@@ -546,7 +548,7 @@ class DataCollection(object):
         ----------
         key : str
             Key from :class:`.Paper` that has previously been used to slice data
-            in this :class:`.DataCollection` .
+            in this :class:`.Corpus` .
         include_papers : bool
             If True, retrives :class:`.Paper` objects, rather than just indices.
         
@@ -559,13 +561,13 @@ class DataCollection(object):
 
         Raises
         ------
-        RuntimeError : DataCollection has not been sliced.
+        RuntimeError : Corpus has not been sliced.
         KeyError : Data has not been sliced by [key] 
                     
         """
 
         if len(self.axes) == 0:
-            raise(RuntimeError("DataCollection has not been sliced."))        
+            raise(RuntimeError("Corpus has not been sliced."))        
         if key not in self.axes.keys():
             raise(KeyError("Data has not been sliced by " + str(key)))
         
@@ -584,7 +586,7 @@ class DataCollection(object):
         ----------
         key : str
             Key from :class:`.Paper` that has previously been used to slice data
-            in this :class:`.DataCollection` .
+            in this :class:`.Corpus` .
         index : str or int
             Slice index for key (e.g. 1999 for 'date').
         include_papers : bool
@@ -593,19 +595,19 @@ class DataCollection(object):
         Returns
         -------
         slice : list
-            List of paper indices in this :class:`.DataCollection` , or (if
+            List of paper indices in this :class:`.Corpus` , or (if
             `include_papers` is `True`) a list of :class:`.Paper` instances.
 
         Raises
         ------
-        RuntimeError : DataCollection has not been sliced.
+        RuntimeError : Corpus has not been sliced.
         KeyError : Data has not been sliced by [key] 
         KeyError : [index] not a valid index for [key]
         
         """
 
         if len(self.axes) == 0:
-            raise(RuntimeError("DataCollection has not been sliced."))        
+            raise(RuntimeError("Corpus has not been sliced."))        
         if key not in self.axes.keys():
             raise(KeyError("Data has not been sliced by " + str(key)))
         if index not in self.axes[key].keys():
@@ -637,12 +639,12 @@ class DataCollection(object):
         
         Raises
         ------
-        RuntimeError : DataCollection has not been sliced.
+        RuntimeError : Corpus has not been sliced.
 
         """
 
         if len(self.axes) == 0:
-            raise(RuntimeError("DataCollection has not been sliced."))
+            raise(RuntimeError("Corpus has not been sliced."))
         
         slices = []
         for k,i in key_indices:
@@ -673,14 +675,14 @@ class DataCollection(object):
     
     def get_axes(self):
         """
-        Returns a list of all slice axes for this :class:`.DataCollection` .
+        Returns a list of all slice axes for this :class:`.Corpus` .
         """
         
         return self.axes.keys()
     
     def N_axes(self):
         """
-        Returns the number of slice axes for this :class:`.DataCollection` .
+        Returns the number of slice axes for this :class:`.Corpus` .
         """
         
         return len(self.axes.keys())
@@ -698,16 +700,16 @@ class DataCollection(object):
             
         Raises
         ------
-        RuntimeError : DataCollection has not been sliced.
-        KeyError: Invalid slice axes for this DataCollection.
+        RuntimeError : Corpus has not been sliced.
+        KeyError: Invalid slice axes for this Corpus.
         """
         logger.debug('generate distribution over slices')
         if len(self.axes) == 0:
-            logger.debug('datacollection has not been sliced')
-            raise(RuntimeError("DataCollection has not been sliced."))
+            logger.debug('Corpus has not been sliced')
+            raise(RuntimeError("Corpus has not been sliced."))
         if x_axis not in self.get_axes():
-            logger.debug('datacollection has no axis {0}'.format(x_axis))
-            raise(KeyError("X axis invalid for this DataCollection."))
+            logger.debug('Corpus has no axis {0}'.format(x_axis))
+            raise(KeyError("X axis invalid for this Corpus."))
 
         x_size = len(self.axes[x_axis])
         logger.debug('x axis size: {0}'.format(x_axis))
@@ -715,8 +717,8 @@ class DataCollection(object):
         if y_axis is not None:
             logger.debug('y axis: {0}'.format(y_axis))
             if y_axis not in self.get_axes():
-                logger.debug('datacollection has not axis {0}'.format(y_axis))
-                raise(KeyError("Y axis invalid for this DataCollection."))
+                logger.debug('Corpus has not axis {0}'.format(y_axis))
+                raise(KeyError("Y axis invalid for this Corpus."))
             y_size = len(self.axes[y_axis])
             logger.debug('y axis size: {0}'.format(y_axis))
         else:   # Only 1 slice axis.
@@ -795,27 +797,27 @@ class DataCollection(object):
 
     def to_hdf5(self, datapath=None):
         """
-        Transforms a :class:`.DataCollection` into a 
-        :class:`.HDF5DataCollection`\.
+        Transforms a :class:`.Corpus` into a 
+        :class:`.HDF5Corpus`\.
         
         Parameters
         ----------
         datapath : str
-            If provided, will create the new :class:`.HDF5DataCollection` at
+            If provided, will create the new :class:`.HDF5Corpus` at
             that location.
         
         Returns
         -------
-        HD : :class:`.HDF5DataCollection`
+        HD : :class:`.HDF5Corpus`
         """
 
         try:
-            from ..persistence.hdf5 import HDF5DataCollection
+            from ..persistence.hdf5 import HDF5Corpus
         except ImportError:
             raise RuntimeError('Must have pytables installed to use HDF5.')
 
         # Initialize, but don't index.
-        HD = HDF5DataCollection([], index_by=self.index_by,
+        HD = HDF5Corpus([], index_by=self.index_by,
                                     index_citation_by=self.index_citation_by,
                                     datapath=datapath,
                                     index=False)
@@ -825,7 +827,7 @@ class DataCollection(object):
 
     def from_hdf5(self, HD):
         try:
-            from ..persistence.hdf5 import HDF5DataCollection
+            from ..persistence.hdf5 import HDF5Corpus
         except ImportError:
             raise RuntimeError('Must have pytables installed to use HDF5.')
 
@@ -833,52 +835,52 @@ class DataCollection(object):
 
 def from_hdf5(HD_or_path):
     """
-    Transforms a :class:`.HDF5DataCollection` into a :class:`.DataCollection`\.
+    Transforms a :class:`.HDF5Corpus` into a :class:`.Corpus`\.
     
     If `HD_or_path` is a string, will attempt to load the 
-    :class:`.HDF5DataCollection` from that path.
+    :class:`.HDF5Corpus` from that path.
     
     Parameters
     ----------
-    HD_or_path : str or :class:`.HDF5DataCollection`
-        If str, must be a path to a :class:`.HDF5DataCollection` HDF5 repo.
+    HD_or_path : str or :class:`.HDF5Corpus`
+        If str, must be a path to a :class:`.HDF5Corpus` HDF5 repo.
     
     Returns
     -------
-    D : :class:`.DataCollection`
+    D : :class:`.Corpus`
     """
 
     try:
-        from ..persistence.hdf5 import HDF5DataCollection
+        from ..persistence.hdf5 import HDF5Corpus
     except ImportError:
         raise RuntimeError('Must have pytables installed to use HDF5.')
 
     if HD_or_path is str:
-        hd = HDF5DataCollection([], index=False, datapath=HD_or_path)
-    elif type(HD_or_path) is HDF5DataCollection:
+        hd = HDF5Corpus([], index=False, datapath=HD_or_path)
+    elif type(HD_or_path) is HDF5Corpus:
         hd = HD_or_path
 
-    D = _migrate_values(hd, DataCollection([], index=False))
+    D = _migrate_values(hd, Corpus([], index=False))
     return D
 
 def _migrate_values(fromD, toD):
     """
-    Transfers properties from one :class:`.DataCollection` to another.
+    Transfers properties from one :class:`.Corpus` to another.
     
     `fromD` and `toD` can by anything that behaves like a 
-    :class:`.DataCollection`\, including a :class:`.HDF5DataCollection`\.
+    :class:`.Corpus`\, including a :class:`.HDF5Corpus`\.
     
     Parameters
     ----------
-    fromD : :class:`.DataCollection`
-        Source :class:`.DataCollection`
-    toD : :class:`.DataCollection`
-        Target :class:`.DataCollection`
+    fromD : :class:`.Corpus`
+        Source :class:`.Corpus`
+    toD : :class:`.Corpus`
+        Target :class:`.Corpus`
         
     Returns
     -------
-    toD : :class:`.DataCollection`
-        Updated target :class:`.DataCollection`
+    toD : :class:`.Corpus`
+        Updated target :class:`.Corpus`
     """
 
     # Transfer papers.

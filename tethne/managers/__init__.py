@@ -1,3 +1,3 @@
 from collectionmanager import *
-from dcmanager import *
+from corpusmanager import *
 from gcmanager import *

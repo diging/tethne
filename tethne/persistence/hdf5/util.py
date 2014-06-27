@@ -173,7 +173,7 @@ class HDF5Metadata(dict):
 class HDF5Paper(tables.IsDescription):
     """
     Provides persistence for :class:`.Paper` within a
-    :class:`.HDF5DataCollection`\.
+    :class:`.HDF5Corpus`\.
     """
     mindex = tables.StringCol(100)
     aulast = tables.StringCol(1000)
@@ -310,7 +310,7 @@ class HDF5Features(dict):
 class HDF5FeatureSet(dict):
     """
     Stores data about the distribution of a specific feature-set, e.g. unigrams,
-    across papers in the :class:`.DataCollection`\.
+    across papers in the :class:`.Corpus`\.
     """
 
     def __init__(self, h5file, fgroup, name):
@@ -474,7 +474,7 @@ class papers_table(dict):
         A :class:`tables.file.File` object.
     index_by : str
         Key in :class:`.Paper` used to index papers in this 
-        :class:`.DataCollection`\.
+        :class:`.Corpus`\.
     """
     def __init__(self, h5file, index_by, name, citations=None, 
                                                index_citation_by='ayjid'):

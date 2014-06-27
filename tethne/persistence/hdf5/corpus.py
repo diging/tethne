@@ -5,7 +5,7 @@ logger.setLevel('DEBUG')
 
 import numpy
 import tables
-from ...classes import Paper, DataCollection
+from ...classes import Paper, Corpus
 import tempfile
 import uuid
 import cPickle as pickle
@@ -14,11 +14,11 @@ from unidecode import unidecode
 
 from util import *
 
-class HDF5DataCollection(DataCollection):
+class HDF5Corpus(Corpus):
     """
-    Provides HDF5 persistence for :class:`.DataCollection`\.
+    Provides HDF5 persistence for :class:`.Corpus`\.
     
-    The :class:`.HDF5DataCollection` uses a variety of tables and arrays to
+    The :class:`.HDF5Corpus` uses a variety of tables and arrays to
     store data. The structure of a typical HDF5 repository for an instance
     of this class is:
     
@@ -84,7 +84,7 @@ class HDF5DataCollection(DataCollection):
             (default: True) If True, runs :func:`.index`\.
         """
         
-        logger.debug('Initialize HDF5DataCollection with {0} papers'
+        logger.debug('Initialize HDF5Corpus with {0} papers'
                                                            .format(len(papers)))
 
         # Where to save the HDF5 data file?
@@ -99,11 +99,11 @@ class HDF5DataCollection(DataCollection):
             self.path = self.datapath
             title = ''
         else:   # New h5 file.
-            self.uuid = uuid.uuid4()    # Unique identifier for this DataCollection.
+            self.uuid = uuid.uuid4()    # Unique identifier for this Corpus.
             logger.debug('Datapath has UUID {0}.'.format(self.uuid))
-            self.path = '{0}/DataCollection-{1}.h5'.format( self.datapath,
+            self.path = '{0}/Corpus-{1}.h5'.format( self.datapath,
                                                             self.uuid   )
-            title = 'DataCollection-{0}'.format(self.uuid)
+            title = 'Corpus-{0}'.format(self.uuid)
 
         # mode = 'a' will create a new file if no file exists.
         self.h5file = tables.openFile(self.path, mode = 'a', title=title)
@@ -143,16 +143,16 @@ class HDF5DataCollection(DataCollection):
         self.index_citation_by = index_citation_by        
         
         if index:
-            logger.debug('Index DataCollection...')
+            logger.debug('Index Corpus...')
             self.index(papers, features, index_by, index_citation_by,
                                                    exclude, filt)
     
-        logger.debug('HDF5DataCollection initialized, flushing to force save.')
+        logger.debug('HDF5Corpus initialized, flushing to force save.')
         self.h5file.flush()
         
     def abstract_to_features(self, remove_stopwords=True):
         """
-        See :func:`.DataCollection.abstract_to_features`\.
+        See :func:`.Corpus.abstract_to_features`\.
         
         Parameters
         ----------
@@ -160,12 +160,12 @@ class HDF5DataCollection(DataCollection):
             (default: True) If True, passes tokenizer the NLTK stoplist.        
         """
 
-        super(HDF5DataCollection, self).abstract_to_features(remove_stopwords)
+        super(HDF5Corpus, self).abstract_to_features(remove_stopwords)
         self.h5file.flush()
         
     def filter_features(self, fold, fnew, filt):
         """
-        See :func:`.DataCollection.filter_features`\.
+        See :func:`.Corpus.filter_features`\.
         
         Parameters
         ----------
@@ -179,5 +179,5 @@ class HDF5DataCollection(DataCollection):
         """    
 
         self.h5file.flush()                
-        super(HDF5DataCollection, self).filter_features(fold, fnew, filt)
+        super(HDF5Corpus, self).filter_features(fold, fnew, filt)
         self.h5file.flush()

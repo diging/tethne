@@ -27,7 +27,7 @@ class TAPModelManager(SocialModelManager):
         
         Parameters
         ----------
-        D : :class:`.DataCollection`
+        D : :class:`.Corpus`
         G : :class:`.GraphCollection`
         model : :class:`.LDAModel`
         """
@@ -52,7 +52,7 @@ class TAPModelManager(SocialModelManager):
         authors : dict
             Maps author names (LAST F) onto coauthor :class:`.Graph` indices.
         indexed_by : str
-            Key in :class:`.Paper` used to index :class:`.DataCollection`\.
+            Key in :class:`.Paper` used to index :class:`.Corpus`\.
             
         Returns
         -------
@@ -121,7 +121,7 @@ class TAPModelManager(SocialModelManager):
         else:
             # model for each slice.
             if axis not in self.D.get_axes():
-                raise RuntimeError('No such axis in DataCollection.')
+                raise RuntimeError('No such axis in Corpus.')
                 
             s = 0
             last = None

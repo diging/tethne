@@ -9,6 +9,3 @@ an entire :class:`.GraphCollection`\.
    graph
 
 """
-
-import tethne.analyze.collection
-import tethne.analyze.graph

@@ -15,11 +15,11 @@ Methods
 """
 
 import networkx as nx
-import tethne.utilities as util
+from .. import utilities as util
 import helpers
 import operator
 
-from ..classes import Paper
+from ..classes.paper import Paper
 
 def direct_citation(papers, node_id='ayjid', node_attribs=['date'], **kwargs):
     """
@@ -299,7 +299,7 @@ def cocitation(papers, threshold=1, node_id='ayjid', topn=None, verbose=False,\
     about the theory behind it
     `here <http://cluster.cis.drexel.edu/~cchen/citespace/>`_. Co-citation
     analysis is generally performed with a temporal component, so building a
-    :class:`.GraphCollection` from a :class`.DataCollection` sliced by ``date``
+    :class:`.GraphCollection` from a :class`.Corpus` sliced by ``date``
     is recommended.
 
     You can generate a co-citation network using the

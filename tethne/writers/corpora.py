@@ -79,11 +79,11 @@ def to_dtm_input(target, D, feature='unigrams', fields=['date','atitle']):
         Target path for documents; e.g. './mycorpus' will result in 
         './mycorpus-mult.dat', './mycorpus-seq.dat', 'mycorpus-vocab.dat', and
         './mycorpus-meta.dat'.    
-    D : :class:`.DataCollection`
+    D : :class:`.Corpus`
         Contains :class:`.Paper` objects generated from the same DfR dataset
         as t_ngrams, indexed by doi and sliced by date.
     feature : str
-        (default: 'unigrams') Features in :class:`.DataCollection` to use for
+        (default: 'unigrams') Features in :class:`.Corpus` to use for
         modeling.
     fields : list
         (optional) Fields in :class:`.Paper` to include in the metadata file.

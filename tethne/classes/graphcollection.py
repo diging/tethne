@@ -9,7 +9,8 @@ import matplotlib.pyplot as plt
 
 import warnings
 
-import tethne.networks as nt
+from .. import networks as nt
+
 
 class GraphCollection(object):
     """
@@ -90,11 +91,11 @@ class GraphCollection(object):
     
     def build(self, D, axis, node_type, graph_type, method_kwargs={}, **kwargs):
         """
-        Generates a graph for each slice of a :class:`.DataCollection`.
+        Generates a graph for each slice of a :class:`.Corpus`.
         
         Parameters
         ----------
-        D : :class:`.DataCollection`
+        D : :class:`.Corpus`
             Must already be sliced by `axis`.
         axis : str
             Name of slice axis to use in generating graphs.
