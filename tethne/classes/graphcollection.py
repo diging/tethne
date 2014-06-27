@@ -1,3 +1,8 @@
+"""
+A :class:`.GraphCollection` is a set of graphs generated from a 
+:class:`.Corpus` or model.
+"""
+
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -10,7 +15,6 @@ import matplotlib.pyplot as plt
 import warnings
 
 from .. import networks as nt
-
 
 class GraphCollection(object):
     """

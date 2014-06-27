@@ -1,22 +1,23 @@
 """
-Classes for handling bibliographic data.
+The :mod:`.classes` package provides the three most fundamental classes for
+working with bibliographic data in Tethne: the :class:`.Paper`\, the
+:class:`.Corpus`\, and the :class:`.GraphCollection`\.
+
+Classes for models can be found in :mod:`.model`\. Persistent classes (e.g. for 
+data archiving) can be found in :mod:`.persistence`\.
 
 .. autosummary::
 
-   Paper
-   Corpus
-   GraphCollection
-   LDAModel
+   paper
+   corpus
+   graphcollection
    
 """
-
-# TODO: redefine ModelCollections and Models
-# TODO: rename this module?
 
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
+logger.setLevel('ERROR')
 
 from paper import Paper
 from corpus import Corpus

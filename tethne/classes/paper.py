@@ -1,3 +1,7 @@
+"""
+The :class:`.Paper` represents a document in a :class:`.Corpus`\. 
+"""
+
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)

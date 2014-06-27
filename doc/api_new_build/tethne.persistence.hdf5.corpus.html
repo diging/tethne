@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>tethne.persistence.hdf5.corpus module &mdash; tethne 0.5.0-alpha documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
+    <link rel="stylesheet" href="_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.5.0-alpha',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
+    <link rel="top" title="tethne 0.5.0-alpha documentation" href="index.html" >
+    <link rel="up" title="tethne.persistence.hdf5 package" href="tethne.persistence.hdf5.html" >
+    <link rel="prev" title="tethne.persistence.hdf5 package" href="tethne.persistence.hdf5.html" > 
+  </head>
+  <body>
+
+<div class="container">
+  <div class="top-scipy-org-logo-header">
+    <a href="index.html">
+      <img style="border: 0; height: 60px;" alt="SciPy" src="_static/img/logo_long_devo.png"></a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
+	
+        <li class="active"><a href="index.html">tethne 0.5.0-alpha documentation</a></li>
+	
+          <li class="active"><a href="tethne.html" >tethne package</a></li>
+          <li class="active"><a href="tethne.persistence.html" >tethne.persistence package</a></li>
+          <li class="active"><a href="tethne.persistence.hdf5.html" accesskey="U">tethne.persistence.hdf5 package</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="tethne.persistence.hdf5.html" title="tethne.persistence.hdf5 package"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-tethne.persistence.hdf5.corpus">
+<span id="tethne-persistence-hdf5-corpus-module"></span><h1>tethne.persistence.hdf5.corpus module<a class="headerlink" href="#module-tethne.persistence.hdf5.corpus" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="tethne.persistence.hdf5.corpus.HDF5Corpus">
+<em class="property">class </em><tt class="descclassname">tethne.persistence.hdf5.corpus.</tt><tt class="descname">HDF5Corpus</tt><big>(</big><em>papers</em>, <em>features=None</em>, <em>index_by='wosid'</em>, <em>index_citation_by='ayjid'</em>, <em>exclude=set([])</em>, <em>filt=None</em>, <em>datapath=None</em>, <em>index=True</em><big>)</big><a class="reference internal" href="_modules/tethne/persistence/hdf5/corpus.html#HDF5Corpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.persistence.hdf5.corpus.HDF5Corpus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">tethne.classes.corpus.Corpus</span></tt></a></p>
+<p>Provides HDF5 persistence for <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</p>
+<p>The <a class="reference internal" href="#tethne.persistence.hdf5.corpus.HDF5Corpus" title="tethne.persistence.hdf5.corpus.HDF5Corpus"><tt class="xref py py-class docutils literal"><span class="pre">HDF5Corpus</span></tt></a> uses a variety of tables and arrays to
+store data. The structure of a typical HDF5 repository for an instance
+of this class is:</p>
+<p># TODO: update this.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">/</span></tt><ul>
+<li><tt class="docutils literal"><span class="pre">arrays</span></tt>/<ul>
+<li><tt class="docutils literal"><span class="pre">authors</span></tt>: VLArray, <a class="reference internal" href="tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.vlarray_dict" title="tethne.persistence.hdf5.util.vlarray_dict"><tt class="xref py py-class docutils literal"><span class="pre">vlarray_dict</span></tt></a></li>
+<li><tt class="docutils literal"><span class="pre">authors_index</span></tt>: table, see <a class="reference internal" href="tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.vlarray_dict" title="tethne.persistence.hdf5.util.vlarray_dict"><tt class="xref py py-class docutils literal"><span class="pre">vlarray_dict</span></tt></a></li>
+<li><tt class="docutils literal"><span class="pre">papers_citing</span></tt>: VLArray, <a class="reference internal" href="tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.vlarray_dict" title="tethne.persistence.hdf5.util.vlarray_dict"><tt class="xref py py-class docutils literal"><span class="pre">vlarray_dict</span></tt></a></li>
+<li><tt class="docutils literal"><span class="pre">papers_citing_index</span></tt>: table, see <a class="reference internal" href="tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.vlarray_dict" title="tethne.persistence.hdf5.util.vlarray_dict"><tt class="xref py py-class docutils literal"><span class="pre">vlarray_dict</span></tt></a></li>
+</ul>
+</li>
+<li><tt class="docutils literal"><span class="pre">citations</span></tt>/<ul>
+<li><tt class="docutils literal"><span class="pre">papers_table</span></tt>: table, <a class="reference internal" href="tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.papers_table" title="tethne.persistence.hdf5.util.papers_table"><tt class="xref py py-class docutils literal"><span class="pre">papers_table</span></tt></a></li>
+</ul>
+</li>
+<li><tt class="docutils literal"><span class="pre">features</span></tt>/<ul>
+<li><tt class="docutils literal"><span class="pre">[</span> <span class="pre">feature</span> <span class="pre">type</span> <span class="pre">]</span></tt>/<ul>
+<li><tt class="docutils literal"><span class="pre">index</span></tt>: table, <tt class="xref py py-class docutils literal"><span class="pre">Index</span></tt> &#8211; int(f_i) : str(f)</li>
+<li><tt class="docutils literal"><span class="pre">features</span></tt>: table, <tt class="xref py py-class docutils literal"><span class="pre">StrIndex</span></tt> &#8211; str(p) : [ ( f_i, c) ]</li>
+<li><tt class="docutils literal"><span class="pre">counts</span></tt>: table, <tt class="xref py py-class docutils literal"><span class="pre">IntIndex</span></tt> &#8211;  int(f_i) : int(C)</li>
+<li><tt class="docutils literal"><span class="pre">documentCounts</span></tt>: table, <tt class="xref py py-class docutils literal"><span class="pre">IntIndex</span></tt> &#8211; int(f_i) : int(C)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Since some data types (e.g. list, tuple) are not supported in PyTables/HDF5,
+we make use of cPickle serialization. For example, sparse feature vectors
+(lists of tuples) are pickled for storage in a StringCol.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">N_axes</span></tt>()</td>
+<td>Returns the number of slice axes for this <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> .</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.persistence.hdf5.corpus.HDF5Corpus.abstract_to_features" title="tethne.persistence.hdf5.corpus.HDF5Corpus.abstract_to_features"><tt class="xref py py-obj docutils literal"><span class="pre">abstract_to_features</span></tt></a>([remove_stopwords])</td>
+<td>See <tt class="xref py py-func docutils literal"><span class="pre">Corpus.abstract_to_features()</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">add_features</span></tt>(name,&nbsp;features[,&nbsp;exclude,&nbsp;filt])</td>
+<td>Add a new featureset to the <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">all_papers</span></tt>()</td>
+<td>Yield the complete set of <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances in this <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> .</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">distribution</span></tt>(x_axis[,&nbsp;y_axis])</td>
+<td>Get the distribution of <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s over one or two slice axes.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.persistence.hdf5.corpus.HDF5Corpus.filter_features" title="tethne.persistence.hdf5.corpus.HDF5Corpus.filter_features"><tt class="xref py py-obj docutils literal"><span class="pre">filter_features</span></tt></a>(fold,&nbsp;fnew,&nbsp;filt)</td>
+<td>See <tt class="xref py py-func docutils literal"><span class="pre">Corpus.filter_features()</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">from_hdf5</span></tt>(HD_or_path)</td>
+<td>Load or transform a <a class="reference internal" href="#tethne.persistence.hdf5.corpus.HDF5Corpus" title="tethne.persistence.hdf5.corpus.HDF5Corpus"><tt class="xref py py-class docutils literal"><span class="pre">HDF5Corpus</span></tt></a> into a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_axes</span></tt>()</td>
+<td>Returns a list of all slice axes for this <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> .</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_slice</span></tt>(key,&nbsp;index[,&nbsp;papers])</td>
+<td>Get a single slice.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_slices</span></tt>(key[,&nbsp;papers])</td>
+<td>Get all of the papers/indices in a particular slice.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">index</span></tt>(papers[,&nbsp;features,&nbsp;index_by,&nbsp;...])</td>
+<td>Indexes <cite>papers</cite>, <cite>features</cite>, and <cite>citations</cite> (if present).</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">indices</span></tt>()</td>
+<td>Yields a list of indices of all papers in this <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">plot_distribution</span></tt>([x_axis,&nbsp;y_axis,&nbsp;type,&nbsp;...])</td>
+<td>Plot distribution along slice axes, using MatPlotLib.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">slice</span></tt>(key[,&nbsp;method])</td>
+<td>Slices data by key, using method (if applicable).</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">to_hdf5</span></tt>([datapath])</td>
+<td>Transforms a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> into a <a class="reference internal" href="#tethne.persistence.hdf5.corpus.HDF5Corpus" title="tethne.persistence.hdf5.corpus.HDF5Corpus"><tt class="xref py py-class docutils literal"><span class="pre">HDF5Corpus</span></tt></a>.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="tethne.persistence.hdf5.corpus.HDF5Corpus.abstract_to_features">
+<tt class="descname">abstract_to_features</tt><big>(</big><em>remove_stopwords=True</em><big>)</big><a class="reference internal" href="_modules/tethne/persistence/hdf5/corpus.html#HDF5Corpus.abstract_to_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.persistence.hdf5.corpus.HDF5Corpus.abstract_to_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <tt class="xref py py-func docutils literal"><span class="pre">Corpus.abstract_to_features()</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>remove_stopwords</strong> : bool</p>
+<blockquote class="last">
+<div><p>(default: True) If True, passes tokenizer the NLTK stoplist.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.persistence.hdf5.corpus.HDF5Corpus.filter_features">
+<tt class="descname">filter_features</tt><big>(</big><em>fold</em>, <em>fnew</em>, <em>filt</em><big>)</big><a class="reference internal" href="_modules/tethne/persistence/hdf5/corpus.html#HDF5Corpus.filter_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.persistence.hdf5.corpus.HDF5Corpus.filter_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <tt class="xref py py-func docutils literal"><span class="pre">Corpus.filter_features()</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fold</strong> : str</p>
+<blockquote>
+<div><p>Key into <tt class="docutils literal"><span class="pre">features</span></tt> for existing featureset.</p>
+</div></blockquote>
+<p><strong>fnew</strong> : str</p>
+<blockquote>
+<div><p>Key into <tt class="docutils literal"><span class="pre">features</span></tt> for resulting featuresset.</p>
+</div></blockquote>
+<p><strong>filt</strong> : method</p>
+<blockquote class="last">
+<div><p>Filter function to apply to the featureset. Should take a feature
+dict as its sole parameter.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_round.png" alt="Logo">
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tethne.persistence.hdf5.html"
+                        title="previous chapter">tethne.persistence.hdf5 package</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="_sources/tethne.persistence.hdf5.corpus.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div class="this-page-menu">
+  <a href="/scipy/docs/scipy-docs/tethne.persistence.hdf5.corpus.rst">Edit page</a>
+</div>
+
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2013, ASU Digital Innovation Group.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

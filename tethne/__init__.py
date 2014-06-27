@@ -6,16 +6,16 @@ using networkx.
 
 .. autosummary::
 
-   tethne.analyze
-   tethne.classes
-   tethne.managers
-   tethne.model
-   tethne.networks
-   tethne.persistence
-   tethne.readers
-   tethne.services
-   tethne.utilities
-   tethne.writers
+   analyze
+   classes
+   managers
+   model
+   networks
+   persistence
+   readers
+   services
+   utilities
+   writers
    
 """
 

@@ -74,7 +74,8 @@ Methods
 
 from tethne.classes.paper import Paper
 import xml.etree.ElementTree as ET
-import tethne.utilities as util
+from .. import utilities as util
+from ..classes import Corpus
 import os
 import re
 import uuid
@@ -687,6 +688,31 @@ def from_dir(path):
                 pass                            #  contain WoS data.
     papers = convert(wos_list)
     return papers
+
+def read_corpus(path):
+    """
+    
+    """
+
+    papers = read(path)
+    return Corpus(papers, index_by='wosid')
+
+def corpus_from_dir(path):
+    """
+    
+    Parameters
+    ----------
+    path : string
+        Path to directory of field-tagged data files.
+
+    Returns
+    -------
+    papers : list
+        A list of :class:`.Paper` objects.
+    """
+
+    papers = from_dir(path)
+    return Corpus(papers, index_by='wosid')
 
 # [62809724]
 def _validate(wos_data):
