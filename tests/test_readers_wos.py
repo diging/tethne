@@ -5,8 +5,32 @@ from settings import *
 import unittest
 import tethne.readers as rd
 import tethne.utilities as util
+from tethne import Corpus
 import os
 from pprint import pprint
+
+
+class TestReadCorpus(unittest.TestCase):
+    def setUp(self):
+        self.path = datapath + '/wos.txt'
+
+    def test_read_corpus(self):
+        pcgpath = cg_path + 'readers.wos.read_corpus.png'
+        with Profile(pcgpath):
+            C = rd.wos.read_corpus(self.path)
+
+        self.assertIsInstance(C, Corpus)
+        self.assertEqual(len(C.papers), 10)
+        self.assertEqual(len(C.features['citations']['index']), 531)
+
+    def test_corpus_from_dir(self):
+        pcgpath = cg_path + 'readers.wos.corpus_from_dir.png'
+        with Profile(pcgpath):
+            C = rd.wos.corpus_from_dir(datapath)
+        
+        self.assertIsInstance(C, Corpus)
+        self.assertEqual(len(C.papers), 10)
+        self.assertEqual(len(C.features['citations']['index']), 531)
 
 class TestConvert(unittest.TestCase):
 

@@ -11,7 +11,9 @@ class TestFromDir(unittest.TestCase):
         self.dfrdatapath = '{0}/dfr'.format(datapath)
 
     def test_ngrams_from_dir(self):
-        self.unigrams = dfr.ngrams_from_dir(datapath, N='uni')
+        pcgpath = cg_path + 'readers.dfr.ngrams_from_dir.png'
+        with Profile(pcgpath):
+            self.unigrams = dfr.ngrams_from_dir(datapath, N='uni')
 
         self.assertEqual(len(self.unigrams), 241)
         self.assertIsInstance(self.unigrams, dict)
@@ -19,13 +21,27 @@ class TestFromDir(unittest.TestCase):
         self.assertIsInstance(self.unigrams.values()[0][0], tuple)
 
     def test_corpus_from_dir(self):
-        C = dfr.corpus_from_dir(datapath)
+        pcgpath = cg_path + 'readers.dfr.corpus_from_dir.png'
+        with Profile(pcgpath):
+            C = dfr.corpus_from_dir(datapath)
 
         self.assertIsInstance(C, Corpus)
         self.assertEqual(len(C.papers), 241)
 
     def test_corpus_from_dir_ngrams(self):
-        C = dfr.corpus_from_dir(datapath, features=('uni',))
+        pcgpath = cg_path + 'readers.dfr.corpus_from_dir[ngrams].png'
+        with Profile(pcgpath):
+            C = dfr.corpus_from_dir(datapath, features=('uni',))
+        
+        self.assertEqual(len(C.papers), 241)
+        self.assertEqual(len(C.features['uni']['features']), 241)
+
+    def test_read_corpus(self):
+        pcgpath = cg_path + 'readers.dfr.read_corpus.png'
+        with Profile(pcgpath):
+            C = dfr.read_corpus(self.dfrdatapath, features=('uni',))
+
+        self.assertIsInstance(C, Corpus)
         self.assertEqual(len(C.papers), 241)
         self.assertEqual(len(C.features['uni']['features']), 241)
 

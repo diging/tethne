@@ -173,6 +173,19 @@ def read(datapath):
 
     return papers
 
+def read_corpus(path, features=None, exclude=None, **kwargs):
+    """
+    
+    """
+
+    papers = read(path)
+    grams = {}
+    if features is not None:
+        for feat in features:
+            grams[feat] = ngrams(path, **kwargs)
+
+    return Corpus(papers, features=grams, index_by='doi', exclude=exclude)
+
 def from_dir(path):
     """
     Convenience function for generating a list of :class:`.Paper` from a
@@ -284,9 +297,7 @@ def corpus_from_dir(path, features=None, exclude=None, **kwargs):
 
     return Corpus(papers, features=grams, index_by='doi', exclude=exclude)
 
-
-
-def ngrams(datapath, N='bi', ignore_hash=True, mode='heavy'):
+def ngrams(datapath, N='uni', ignore_hash=True, mode='heavy'):
     """
     Yields N-grams from a JSTOR DfR dataset.
 
