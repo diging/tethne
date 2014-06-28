@@ -13,19 +13,96 @@ logger = logging.getLogger(__name__)
 logger.setLevel('ERROR')
 
 from ...classes import GraphCollection
-from ..social import TAPModel
+#from ..social import TAPModel
 from ..managers import ModelManager
 from ...writers.corpora import to_documents
-from ..corpus.ldamodel import from_mallet
+from ..corpus.ldamodel import from_mallet, LDAModel
 
 class MALLETModelManager(ModelManager):
     """
-    Model Manager for LDA topic modeling with MALLET.
+    Generates a :class:`.LDAModel` from a :class:`.Corpus` using
+    `MALLET <http://mallet.cs.umass.edu/>`_.
+    
+    Starting with some JSTOR DfR data (with wordcounts), a typical workflow
+    might look something like this:
+    
+    .. code-block:: python
+    
+       >>> from nltk.corpus import stopwords                 #  1. Get stoplist.
+       >>> stoplist = stopwords.words()
+       
+       >>> from tethne.readers import dfr                    #  2. Build Corpus.
+       >>> C = dfr.corpus_from_dir('/path/to/DfR/datasets', 'uni', stoplist)
+       
+       >>> def filt(s, C, DC):                           # 3. Filter wordcounts.
+       ...     if C > 3 and DC > 1 and len(s) > 3:
+       ...         return True
+       ...     return False
+       >>> C.filter_features('wordcounts', 'wc_filtered', filt)
+       
+       >>> from tethne.model import MALLETModelManager       #   4. Get Manager.
+       >>> outpath = '/path/to/my/working/directory'
+       >>> mallet = '/Applications/mallet-2.0.7'
+       >>> M = MALLETModelManager(C, 'wc_filtered', outpath, mallet_path=mallet)
+       
+       >>> M.prep()                                          #    5. Prep model.
+       
+       >>> model = M.build(Z=50, max_iter=300)               #   6. Build model.
+       >>> model                                             # (may take awhile)
+       <tethne.model.corpus.ldamodel.LDAModel at 0x10bfac710>
+
+    A plot showing the log-likelihood/topic over modeling iterations should be
+    generated in your `outpath`. For example:
+    
+    .. figure:: _static/images/ldamodel_LL.png
+       :width: 400
+       :align: center
+       
+    Behind the scenes, the :func:`.prep` procedure generates a plain-text corpus
+    file at `temppath`, along with a metadata file. MALLET's ``import-file``
+    procedure is then called, which translates the corpus into MALLET's internal
+    format (also stored at the `temppath`).
+    
+    The :func:`.build` procedure then invokes MALLET's ``train-topics``
+    procedure. This step may take a considerable amount of time, anywhere from 
+    a few minutes (small corpus, few topics) to a few hours (large corpus, many
+    topics).
+
+    For a :class:`.Corpus` with a few thousand :class:`.Paper`\s, 300 - 500 
+    iterations is often sufficient to achieve convergence for 20-100 topics.
+    
+    Once the :class:`.LDAModel` is built, you can access its methods directly.
+    See full method descriptions in :class:`.LDAModel`\.
+    
+    For more information about topic modeling with MALLET see 
+    `this tutorial <http://programminghistorian.org/lessons/topic-modeling-and-mallet>`_.
     """
     
     def __init__(self, D, feature='unigrams', outpath='/tmp/', temppath=None,
                           mallet_path='./model/bin/mallet-2.0.7'):
         """
+        Initialize the :class:`.MALLETModelManager` with a :class:`.Corpus`
+        and a featureset.
+        
+        The :class:`.Corpus` should already contain at least one featurset,
+        indicated by the `feature` parameter, such as wordcounts. You may
+        specify two working directories: `temppath` should be a working
+        directory that will contain intermediate files (e.g. documents, data
+        files, metadata), while `outpath` will contain the final model and any 
+        plots generated during the modeling process. If `temppath` is not
+        provided, generates and uses a system temporary directory.
+        
+        Tethne comes bundled with a recent version of MALLET. If you would
+        rather use your own install, you can do so by providing the 
+        `mallet_path` parameter. This should point to the directory containing
+        ``/bin/mallet``.
+        
+        .. code-block:: python
+        
+           >>> from tethne.model import MALLETModelManager
+           >>> outpath = '/path/to/my/working/directory'
+           >>> mallet = '/Applications/mallet-2.0.7'
+           >>> M = MALLETModelManager(C, 'wordcounts', outpath, mallet_path=mallet)
         
         Parameters
         ----------
@@ -51,20 +128,6 @@ class MALLETModelManager(ModelManager):
         self.om = '{0}/model.mallet'.format(self.outpath)
     
         self.vocabulary = self.D.features[self.feature]['index']
-
-    def prep(self, meta=['date', 'atitle', 'jtitle']):
-        """
-        Generates a corpus that can be used as input for modeling.
-
-        Parameters
-        ----------
-        meta : list
-            A list of keys onto :class:`.Paper` to include in the exported
-            metadata file. Default: ['date', 'jtitle']
-        """
-        
-        self._generate_corpus(meta)
-        self.prepped = True
 
     def _generate_corpus(self, meta):
         """
@@ -165,6 +228,20 @@ class MALLETModelManager(ModelManager):
                                  figargs={'figsize':(10,10)} ):
         """
         Representation of topic ``k`` over 'date' slice axis.
+        
+        The :class:`.Corpus` used to initialize the :class:`.LDAModelManager`
+        must have been already sliced by 'date'.
+        
+        .. code-block:: python
+        
+           >>> keys, repr = M.topic_over_time(1, plot=True)
+
+        ...should return ``keys`` (date) and ``repr`` (% documents) for topic 1,
+        and generate a plot like this one in your ``outpath``.
+        
+        .. figure:: _static/images/topic_1_over_time.png
+           :width: 400
+           :align: center
         
         Parameters
         ----------

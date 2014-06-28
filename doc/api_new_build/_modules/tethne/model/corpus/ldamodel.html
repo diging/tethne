@@ -78,6 +78,10 @@
           <div class="body" id="spc-section-body">
             
   <h1>Source code for tethne.model.corpus.ldamodel</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Classes and methods related to the :class:`.LDAModel`\.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">from</span> <span class="nn">..basemodel</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
@@ -86,27 +90,47 @@
 
 <div class="viewcode-block" id="LDAModel"><a class="viewcode-back" href="../../../../tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.LDAModel">[docs]</a><span class="k">class</span> <span class="nc">LDAModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Latent Dirichlet Allocation topic model.</span>
+<span class="sd">    Represents a Latent Dirichlet Allocation (LDA) topic model.</span>
 <span class="sd">    </span>
-<span class="sd">    Items are documents, dimensions are topics.</span>
+<span class="sd">    In the LDA model, topics (dimensions) are probability distributions over </span>
+<span class="sd">    words (features), and documents (items) are comprised of mixtures of topics.</span>
+<span class="sd">    For a complete description of the model, see </span>
+<span class="sd">    `Blei &amp; Jordan (2003) &lt;http://jmlr.org/papers/v3/blei03a.html&gt;`_.</span>
 <span class="sd">    </span>
-<span class="sd">    See: http://jmlr.org/papers/v3/blei03a.html</span>
+<span class="sd">    To generate a :class:`.LDAModel` from a :class:`.Corpus` using</span>
+<span class="sd">    `MALLET &lt;http://mallet.cs.umass.edu/&gt;`_, use the </span>
+<span class="sd">    :class:`.MALLETModelManager`\. Additional managers for :class:`.LDAModel`\s</span>
+<span class="sd">    will be added shortly.</span>
+<span class="sd">    </span>
+<span class="sd">    You can also initialize a :class:`.LDAModel` directly by providing the</span>
+<span class="sd">    following parameters:</span>
+<span class="sd">    </span>
+<span class="sd">    * ``theta``, describes the proportion of topics (cols) in each document </span>
+<span class="sd">      (rows).</span>
+<span class="sd">    * ``phi`` describes the topic (rows) distributions over words (cols).</span>
+<span class="sd">    * ``metadata`` should map matrix indices for documents onto :class:`.Paper`</span>
+<span class="sd">      IDs (or whatever you use to identify documents).</span>
+<span class="sd">    * ``vocabulary`` should map matrix indices for words onto word-strings.</span>
+<span class="sd">    ``metadata`` and ``vocabulary`` mappings.</span>
+<span class="sd">    </span>
+<span class="sd">    Finally, you can use :func:`.from_mallet` to generate a :class:`.LDAModel`</span>
+<span class="sd">    from MALLET output.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    theta : matrix-like</span>
+<span class="sd">        Distribution of topics (cols) in documents (rows). Rows sum to 1.</span>
+<span class="sd">    phi : matrix-like</span>
+<span class="sd">        Distribution over words (cols) for topics (rows). Rows sum to 1.</span>
+<span class="sd">    metadata : dict</span>
+<span class="sd">        Maps matrix indices onto document datadata.</span>
+<span class="sd">    vocabulary : dict</span>
+<span class="sd">        Maps W indices onto words.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">vocabulary</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the :class:`.LDAModel`\.</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        theta : matrix-like</span>
-<span class="sd">            Distribution of topics (cols) in documents (rows). Rows sum to 1.</span>
-<span class="sd">        phi : matrix-like</span>
-<span class="sd">            Distribution over words (cols) for topics (rows). Rows sum to 1.</span>
-<span class="sd">        metadata : dict</span>
-<span class="sd">            Maps matrix indices onto document datadata.</span>
-<span class="sd">        vocabulary : dict</span>
-<span class="sd">            Maps W indices onto words.            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span>
@@ -176,7 +200,12 @@
     
 <div class="viewcode-block" id="LDAModel.list_topic"><a class="viewcode-back" href="../../../../tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.LDAModel.list_topic">[docs]</a>    <span class="k">def</span> <span class="nf">list_topic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">Nwords</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Yields the top ``Nwords`` for topic ``k``.</span>
+<span class="sd">        Yields a list of the top ``Nwords`` for topic ``k``.</span>
+<span class="sd">        </span>
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">        </span>
+<span class="sd">           &gt;&gt;&gt; model.list_topic(1, Nwords=5)</span>
+<span class="sd">           [ &#39;opposed&#39;, &#39;terminates&#39;, &#39;trichinosis&#39;, &#39;cistus&#39;, &#39;acaule&#39; ]</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -197,7 +226,12 @@
     </div>
 <div class="viewcode-block" id="LDAModel.print_topic"><a class="viewcode-back" href="../../../../tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.LDAModel.print_topic">[docs]</a>    <span class="k">def</span> <span class="nf">print_topic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">Nwords</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Yields the top ``Nwords`` for topic ``k``.</span>
+<span class="sd">        Yields the top ``Nwords`` for topic ``k`` as a string.</span>
+<span class="sd">        </span>
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">        </span>
+<span class="sd">           &gt;&gt;&gt; model.list_topic(1, Nwords=5)</span>
+<span class="sd">           &#39;opposed, terminates, trichinosis, cistus, acaule&#39;</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -218,7 +252,7 @@
     </div>
 <div class="viewcode-block" id="LDAModel.list_topics"><a class="viewcode-back" href="../../../../tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.LDAModel.list_topics">[docs]</a>    <span class="k">def</span> <span class="nf">list_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nwords</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Yields the top ``Nwords`` for each topic.</span>
+<span class="sd">        Yields lists of the top ``Nwords`` for each topic.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -239,7 +273,7 @@
     </div>
 <div class="viewcode-block" id="LDAModel.print_topics"><a class="viewcode-back" href="../../../../tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.LDAModel.print_topics">[docs]</a>    <span class="k">def</span> <span class="nf">print_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Nwords</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Yields the top ``Nwords`` for each topic.</span>
+<span class="sd">        Yields the top ``Nwords`` for each topic, as a string.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -262,19 +296,28 @@
 </div></div>
 <div class="viewcode-block" id="from_mallet"><a class="viewcode-back" href="../../../../tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.from_mallet">[docs]</a><span class="k">def</span> <span class="nf">from_mallet</span><span class="p">(</span><span class="n">top_doc</span><span class="p">,</span> <span class="n">word_top</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Parse results from LDA modeling with MALLET.</span>
+<span class="sd">    Generate a :class:`.LDAModel` from MALLET output.</span>
 
-<span class="sd">    MALLET&#39;s LDA topic modeling algorithm produces a collection of output files.</span>
-<span class="sd">    :func:`.read` takes the topic-document and (sparse) word-topic matrices, as</span>
-<span class="sd">    tab-separated value files, along with a metadata file that maps</span>
-<span class="sd">    each MALLET document id to a :class:`.Paper`\, using the `metadata_key`.</span>
+<span class="sd">    MALLET&#39;s LDA topic modeling algorithm produces multiple output files. See</span>
+<span class="sd">    the `MALLET documentation &lt;http://mallet.cs.umass.edu/topics.php&gt;`_ for</span>
+<span class="sd">    details. When invoking MALLET&#39;s ``train-topics`` procedure, you should</span>
+<span class="sd">    have provided the ``--output-doc-topics`` and ``--word-topic-counts-file``</span>
+<span class="sd">    parameters; the ``top_doc`` and ``word_top`` parameters should be paths</span>
+<span class="sd">    to those two files.</span>
+<span class="sd">    </span>
+<span class="sd">    You should also provide the path ``metadata`` to a tab-separated file </span>
+<span class="sd">    containing metadata about the documents used to build the model. The first</span>
+<span class="sd">    column should be the ID used in the original corpus files. For example::</span>
+<span class="sd">    </span>
+<span class="sd">       10.2307/1709733 1962	BOTANICAL CLASSIFICATION	SCIENCE</span>
+<span class="sd">       10.2307/20000814	1974	THE USE OF DIFFERENTIAL SYSTEMATICS IN GEOGRAPHIC RESEARCH	AREA</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    top_doc : string</span>
-<span class="sd">        Path to topic-document datafile generated with --output-doc-topics.</span>
+<span class="sd">        Path to topic-document datafile generated with ``--output-doc-topics``.</span>
 <span class="sd">    word_top : string</span>
-<span class="sd">        Path to word-topic datafile generated with --word-topic-counts-file.</span>
+<span class="sd">        Path to word-topic datafile generated with ``--word-topic-counts-file``.</span>
 <span class="sd">    metadata : string</span>
 <span class="sd">        Path to tab-separated metadata file with :class:`.Paper` keys.</span>
 
@@ -290,12 +333,34 @@
     <span class="k">return</span> <span class="n">model</span>
 </div>
 <div class="viewcode-block" id="MALLETLoader"><a class="viewcode-back" href="../../../../tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.MALLETLoader">[docs]</a><span class="k">class</span> <span class="nc">MALLETLoader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Used by :func:`.from_mallet` to load MALLET output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">top_doc</span><span class="p">,</span> <span class="n">word_top</span><span class="p">,</span> <span class="n">metapath</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        top_doc : string</span>
+<span class="sd">            Path to topic-document datafile generated with </span>
+<span class="sd">            ``--output-doc-topics``.</span>
+<span class="sd">        word_top : string</span>
+<span class="sd">            Path to word-topic datafile generated with </span>
+<span class="sd">            ``--word-topic-counts-file``.</span>
+<span class="sd">        metadata : string</span>
+<span class="sd">            Path to tab-separated metadata file with :class:`.Paper` keys.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">top_doc</span> <span class="o">=</span> <span class="n">top_doc</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">word_top</span> <span class="o">=</span> <span class="n">word_top</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metapath</span> <span class="o">=</span> <span class="n">metapath</span>
     
 <div class="viewcode-block" id="MALLETLoader.load"><a class="viewcode-back" href="../../../../tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.MALLETLoader.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load a :class:`.LDAModel` from MALLET output.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        self.model : :class:`.LDAModel`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_handle_top_doc</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_handle_metadata</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_handle_word_top</span><span class="p">()</span>

@@ -86,10 +86,57 @@
             
   <div class="section" id="module-tethne.model.corpus.dtmmodel">
 <span id="tethne-model-corpus-dtmmodel-module"></span><h1>tethne.model.corpus.dtmmodel module<a class="headerlink" href="#module-tethne.model.corpus.dtmmodel" title="Permalink to this headline">¶</a></h1>
+<p>Classes and methods related to the <a class="reference internal" href="#tethne.model.corpus.dtmmodel.DTMModel" title="tethne.model.corpus.dtmmodel.DTMModel"><tt class="xref py py-class docutils literal"><span class="pre">DTMModel</span></tt></a>.</p>
 <dl class="class">
 <dt id="tethne.model.corpus.dtmmodel.DTMModel">
 <em class="property">class </em><tt class="descclassname">tethne.model.corpus.dtmmodel.</tt><tt class="descname">DTMModel</tt><big>(</big><em>e_theta</em>, <em>phi</em>, <em>metadata</em>, <em>vocabulary</em><big>)</big><a class="reference internal" href="_modules/tethne/model/corpus/dtmmodel.html#DTMModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.dtmmodel.DTMModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="tethne.model.basemodel.html#tethne.model.basemodel.BaseModel" title="tethne.model.basemodel.BaseModel"><tt class="xref py py-class docutils literal"><span class="pre">tethne.model.basemodel.BaseModel</span></tt></a></p>
+<p>Represents a Dynamic Topic Model (DTM).</p>
+<p>The DTM is similar to the LDA model (see <a class="reference internal" href="tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a>) except that
+each topic is permitted to evolve over time (i.e. probabilities associated
+with terms in the topic can change). For a complete description of the model
+see <a class="reference external" href="http://www.cs.cmu.edu/~lafferty/pub/dtm.pdf">Blei &amp; Lafferty 2006</a>.</p>
+<p>To generate a <a class="reference internal" href="#tethne.model.corpus.dtmmodel.DTMModel" title="tethne.model.corpus.dtmmodel.DTMModel"><tt class="xref py py-class docutils literal"><span class="pre">DTMModel</span></tt></a> from a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> use the
+<a class="reference internal" href="tethne.model.managers.dtm.html#tethne.model.managers.dtm.DTMModelManager" title="tethne.model.managers.dtm.DTMModelManager"><tt class="xref py py-class docutils literal"><span class="pre">DTMModelManager</span></tt></a>, which relies on S. Gerrish&#8217;s <a class="reference external" href="http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz">C++ implementation
+of DTM</a>. Alternatively, you can build the
+model externally (e.g. using the Gerrish DTM implementation directly), and
+then load the results with <a class="reference internal" href="#tethne.model.corpus.dtmmodel.from_gerrish" title="tethne.model.corpus.dtmmodel.from_gerrish"><tt class="xref py py-func docutils literal"><span class="pre">from_gerrish()</span></tt></a>.</p>
+<p>If you are using a different implementation of DTM, you can initialize a
+<a class="reference internal" href="#tethne.model.corpus.dtmmodel.DTMModel" title="tethne.model.corpus.dtmmodel.DTMModel"><tt class="xref py py-class docutils literal"><span class="pre">DTMModel</span></tt></a> directly by providing parameters and metadata.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">e_theta</span></tt> should describe the distribution of topics (rows) in documents 
+(cols).</li>
+<li><tt class="docutils literal"><span class="pre">phi</span></tt> should describe the topic (dimension 0) distributions over words
+(dimension 1) over time (dimension 2).</li>
+<li><tt class="docutils literal"><span class="pre">metadata</span></tt> should map matrix indices for documents onto <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>
+IDs (or whatever you use to identify documents).</li>
+<li><tt class="docutils literal"><span class="pre">vocabulary</span></tt> should map matrix indices for words onto word-strings.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>e_theta</strong> : matrix-like</p>
+<blockquote>
+<div><p>Distribution of topics (Z) in documents (M). Shape: (Z, M).</p>
+</div></blockquote>
+<p><strong>phi</strong> : matrix-like</p>
+<blockquote>
+<div><p>Topic (Z) distribution over words (W), over time (T). Shape: 
+(Z, W, T)</p>
+</div></blockquote>
+<p><strong>metadata</strong> : dict</p>
+<blockquote>
+<div><p>Maps matrix indices onto document datadata.</p>
+</div></blockquote>
+<p><strong>vocabulary</strong> : dict</p>
+<blockquote class="last">
+<div><p>Maps W indices onto words.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -131,7 +178,7 @@
 <td>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for each topic.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.model.corpus.dtmmodel.DTMModel.topic_evolution" title="tethne.model.corpus.dtmmodel.DTMModel.topic_evolution"><tt class="xref py py-obj docutils literal"><span class="pre">topic_evolution</span></tt></a>(k[,&nbsp;Nwords])</td>
-<td>Generate a plot that shows p(w|z) over time for the top <cite>Nwords</cite> terms.</td>
+<td>Generate a plot that shows p(w|z) over time for the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> terms.</td>
 </tr>
 </tbody>
 </table>
@@ -268,7 +315,8 @@
 <dl class="method">
 <dt id="tethne.model.corpus.dtmmodel.DTMModel.topic_evolution">
 <tt class="descname">topic_evolution</tt><big>(</big><em>k</em>, <em>Nwords=5</em><big>)</big><a class="reference internal" href="_modules/tethne/model/corpus/dtmmodel.html#DTMModel.topic_evolution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.dtmmodel.DTMModel.topic_evolution" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a plot that shows p(w|z) over time for the top <cite>Nwords</cite> terms.</p>
+<dd><p>Generate a plot that shows p(w|z) over time for the top <tt class="docutils literal"><span class="pre">Nwords</span></tt>
+terms.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -278,8 +326,18 @@
 <div><p>A topic index.</p>
 </div></blockquote>
 <p><strong>Nwords</strong> : int</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Number of words to return.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>keys</strong> : list</p>
+<blockquote>
+<div><p>Start-date of each time-period.</p>
+</div></blockquote>
+<p><strong>t_series</strong> : list</p>
+<blockquote class="last">
+<div><p>Array of p(w|t) for Nwords for each time-period.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -293,8 +351,30 @@
 <dt id="tethne.model.corpus.dtmmodel.GerrishLoader">
 <em class="property">class </em><tt class="descclassname">tethne.model.corpus.dtmmodel.</tt><tt class="descname">GerrishLoader</tt><big>(</big><em>target</em>, <em>metadata_path</em>, <em>vocabulary_path</em><big>)</big><a class="reference internal" href="_modules/tethne/model/corpus/dtmmodel.html#GerrishLoader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.dtmmodel.GerrishLoader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Helper class for parsing results from S. Gerrish&#8217;s C++ DTM implementation.</p>
-<p><a class="reference external" href="http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz">http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz</a></p>
+<p>Helper class for parsing results from <a class="reference external" href="http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz">S. Gerrish&#8217;s C++ implementation</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>target</strong> : str</p>
+<blockquote>
+<div><p>Path to <tt class="docutils literal"><span class="pre">lda-seq</span></tt> output directory.</p>
+</div></blockquote>
+<p><strong>metadata</strong> : str</p>
+<blockquote>
+<div><p>Path to metadata file.</p>
+</div></blockquote>
+<p><strong>vocabulary</strong> : str</p>
+<blockquote>
+<div><p>Path to vocabulary file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#tethne.model.corpus.dtmmodel.DTMModel" title="tethne.model.corpus.dtmmodel.DTMModel"><tt class="xref py py-class docutils literal"><span class="pre">DTMModel</span></tt></a></p>
+</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -317,8 +397,45 @@
 <dl class="function">
 <dt id="tethne.model.corpus.dtmmodel.from_gerrish">
 <tt class="descclassname">tethne.model.corpus.dtmmodel.</tt><tt class="descname">from_gerrish</tt><big>(</big><em>target</em>, <em>metadata</em>, <em>vocabulary</em>, <em>metadata_key='doi'</em><big>)</big><a class="reference internal" href="_modules/tethne/model/corpus/dtmmodel.html#from_gerrish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.dtmmodel.from_gerrish" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parse results from S. Gerrish&#8217;s C++ DTM implementation.</p>
-<p><a class="reference external" href="http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz">http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz</a></p>
+<dd><p>Generate a <a class="reference internal" href="#tethne.model.corpus.dtmmodel.DTMModel" title="tethne.model.corpus.dtmmodel.DTMModel"><tt class="xref py py-class docutils literal"><span class="pre">DTMModel</span></tt></a> from the output of <a class="reference external" href="http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz">S. Gerrish&#8217;s C++ DTM 
+implementation</a>.</p>
+<p>The Gerrish DTM implementation generates a large number of data files
+contained in a directory called <tt class="docutils literal"><span class="pre">lda-seq</span></tt>. The <tt class="docutils literal"><span class="pre">target</span></tt> parameter
+should be the path to that directory.</p>
+<p><tt class="docutils literal"><span class="pre">metadata</span></tt> should be the path to a tab-delimted metadata file. Those
+records should occur in the same order as in the corpus data files used
+to generate the model. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre>id       date    atitle
+10.2307/2437162  1945    SOME ECOTYPIC RELATIONS OF DESCHAMPSIA CAESPITOSA
+10.2307/4353229  1940    ENVIRONMENTAL INFLUENCE AND TRANSPLANT EXPERIMENTS
+10.2307/4353158  1937    SOME FUNDAMENTAL PROBLEMS OF TAXONOMY AND PHYLOGENETICS
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">vocabulary</span></tt> should be the path to a file containing the words used to
+generate the model, one per line.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>target</strong> : str</p>
+<blockquote>
+<div><p>Path to <tt class="docutils literal"><span class="pre">lda-seq</span></tt> output directory.</p>
+</div></blockquote>
+<p><strong>metadata</strong> : str</p>
+<blockquote>
+<div><p>Path to metadata file.</p>
+</div></blockquote>
+<p><strong>vocabulary</strong> : str</p>
+<blockquote>
+<div><p>Path to vocabulary file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#tethne.model.corpus.dtmmodel.DTMModel" title="tethne.model.corpus.dtmmodel.DTMModel"><tt class="xref py py-class docutils literal"><span class="pre">DTMModel</span></tt></a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

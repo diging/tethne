@@ -78,6 +78,10 @@
           <div class="body" id="spc-section-body">
             
   <h1>Source code for tethne.model.corpus.dtmmodel</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Classes and methods related to the :class:`.DTMModel`\.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">from</span> <span class="nn">..basemodel</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -91,22 +95,48 @@
 <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s">&#39;ERROR&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DTMModel"><a class="viewcode-back" href="../../../../tethne.model.corpus.dtmmodel.html#tethne.model.corpus.dtmmodel.DTMModel">[docs]</a><span class="k">class</span> <span class="nc">DTMModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents a Dynamic Topic Model (DTM).</span>
+<span class="sd">    </span>
+<span class="sd">    The DTM is similar to the LDA model (see :class:`.LDAModel`) except that</span>
+<span class="sd">    each topic is permitted to evolve over time (i.e. probabilities associated</span>
+<span class="sd">    with terms in the topic can change). For a complete description of the model</span>
+<span class="sd">    see `Blei &amp; Lafferty 2006 &lt;http://www.cs.cmu.edu/~lafferty/pub/dtm.pdf&gt;`_.</span>
+<span class="sd">    </span>
+<span class="sd">    To generate a :class:`.DTMModel` from a :class:`.Corpus` use the</span>
+<span class="sd">    :class:`.DTMModelManager`\, which relies on S. Gerrish&#39;s `C++ implementation</span>
+<span class="sd">    of DTM &lt;http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz&gt;`_. Alternatively, you can build the</span>
+<span class="sd">    model externally (e.g. using the Gerrish DTM implementation directly), and</span>
+<span class="sd">    then load the results with :func:`.from_gerrish`\.</span>
+<span class="sd">    </span>
+<span class="sd">    If you are using a different implementation of DTM, you can initialize a</span>
+<span class="sd">    :class:`.DTMModel` directly by providing parameters and metadata.</span>
+<span class="sd">    </span>
+<span class="sd">    * ``e_theta`` should describe the distribution of topics (rows) in documents </span>
+<span class="sd">      (cols).</span>
+<span class="sd">    * ``phi`` should describe the topic (dimension 0) distributions over words</span>
+<span class="sd">      (dimension 1) over time (dimension 2).</span>
+<span class="sd">    * ``metadata`` should map matrix indices for documents onto :class:`.Paper`</span>
+<span class="sd">      IDs (or whatever you use to identify documents).</span>
+<span class="sd">    * ``vocabulary`` should map matrix indices for words onto word-strings.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    e_theta : matrix-like</span>
+<span class="sd">        Distribution of topics (Z) in documents (M). Shape: (Z, M).</span>
+<span class="sd">    phi : matrix-like</span>
+<span class="sd">        Topic (Z) distribution over words (W), over time (T). Shape: </span>
+<span class="sd">        (Z, W, T)</span>
+<span class="sd">    metadata : dict</span>
+<span class="sd">        Maps matrix indices onto document datadata.</span>
+<span class="sd">    vocabulary : dict</span>
+<span class="sd">        Maps W indices onto words.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e_theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">vocabulary</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the :class:`.DTMModel`\.</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        e_theta : matrix-like</span>
-<span class="sd">            Distribution of topics (Z) in documents (M). Shape: (Z, M).</span>
-<span class="sd">        phi : matrix-like</span>
-<span class="sd">            Topic (Z) distribution over words (W), over time (T). Shape: </span>
-<span class="sd">            (Z, W, T)</span>
-<span class="sd">        metadata : dict</span>
-<span class="sd">            Maps matrix indices onto document datadata.</span>
-<span class="sd">        vocabulary : dict</span>
-<span class="sd">            Maps W indices onto words.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">e_theta</span> <span class="o">=</span> <span class="n">e_theta</span>
@@ -166,7 +196,8 @@
     
 <div class="viewcode-block" id="DTMModel.topic_evolution"><a class="viewcode-back" href="../../../../tethne.model.corpus.dtmmodel.html#tethne.model.corpus.dtmmodel.DTMModel.topic_evolution">[docs]</a>    <span class="k">def</span> <span class="nf">topic_evolution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">Nwords</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Generate a plot that shows p(w|z) over time for the top `Nwords` terms.</span>
+<span class="sd">        Generate a plot that shows p(w|z) over time for the top ``Nwords``</span>
+<span class="sd">        terms.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -174,6 +205,13 @@
 <span class="sd">            A topic index.</span>
 <span class="sd">        Nwords : int</span>
 <span class="sd">            Number of words to return.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        keys : list</span>
+<span class="sd">            Start-date of each time-period.</span>
+<span class="sd">        t_series : list</span>
+<span class="sd">            Array of p(w|t) for Nwords for each time-period.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
     
         <span class="n">t_keys</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
@@ -305,13 +343,65 @@
         <span class="n">as_string</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="n">as_string</span>
-
 </div></div>
+<div class="viewcode-block" id="from_gerrish"><a class="viewcode-back" href="../../../../tethne.model.corpus.dtmmodel.html#tethne.model.corpus.dtmmodel.from_gerrish">[docs]</a><span class="k">def</span> <span class="nf">from_gerrish</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">vocabulary</span><span class="p">,</span> <span class="n">metadata_key</span><span class="o">=</span><span class="s">&#39;doi&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a :class:`.DTMModel` from the output of `S. Gerrish&#39;s C++ DTM </span>
+<span class="sd">    implementation &lt;http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz&gt;`_.</span>
+<span class="sd">    </span>
+<span class="sd">    The Gerrish DTM implementation generates a large number of data files</span>
+<span class="sd">    contained in a directory called ``lda-seq``. The ``target`` parameter</span>
+<span class="sd">    should be the path to that directory.</span>
+<span class="sd">    </span>
+<span class="sd">    ``metadata`` should be the path to a tab-delimted metadata file. Those</span>
+<span class="sd">    records should occur in the same order as in the corpus data files used</span>
+<span class="sd">    to generate the model. For example::</span>
+<span class="sd">    </span>
+<span class="sd">       id	date	atitle</span>
+<span class="sd">       10.2307/2437162	1945	SOME ECOTYPIC RELATIONS OF DESCHAMPSIA CAESPITOSA</span>
+<span class="sd">       10.2307/4353229	1940	ENVIRONMENTAL INFLUENCE AND TRANSPLANT EXPERIMENTS</span>
+<span class="sd">       10.2307/4353158	1937	SOME FUNDAMENTAL PROBLEMS OF TAXONOMY AND PHYLOGENETICS</span>
+<span class="sd">       </span>
+<span class="sd">    ``vocabulary`` should be the path to a file containing the words used to</span>
+<span class="sd">    generate the model, one per line.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    target : str</span>
+<span class="sd">        Path to ``lda-seq`` output directory.</span>
+<span class="sd">    metadata : str</span>
+<span class="sd">        Path to metadata file.</span>
+<span class="sd">    vocabulary : str</span>
+<span class="sd">        Path to vocabulary file.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`.DTMModel`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">e_log_prob</span> <span class="o">=</span> <span class="s">&#39;topic-{0}-var-e-log-prob.dat&#39;</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="s">&#39;topic-{0}-info.dat&#39;</span>
+    <span class="n">obs</span> <span class="o">=</span> <span class="s">&#39;topic-{0}-obs.dat&#39;</span>
+
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">GerrishLoader</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">vocabulary</span><span class="p">)</span><span class="c">#, metadata, vocabulary)</span>
+    <span class="k">return</span> <span class="n">reader</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+</div>
 <div class="viewcode-block" id="GerrishLoader"><a class="viewcode-back" href="../../../../tethne.model.corpus.dtmmodel.html#tethne.model.corpus.dtmmodel.GerrishLoader">[docs]</a><span class="k">class</span> <span class="nc">GerrishLoader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Helper class for parsing results from S. Gerrish&#39;s C++ DTM implementation.</span>
-<span class="sd">    </span>
-<span class="sd">    http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz</span>
+<span class="sd">    Helper class for parsing results from `S. Gerrish&#39;s C++ implementation &lt;http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz&gt;`_ </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    target : str</span>
+<span class="sd">        Path to ``lda-seq`` output directory.</span>
+<span class="sd">    metadata : str</span>
+<span class="sd">        Path to metadata file.</span>
+<span class="sd">    vocabulary : str</span>
+<span class="sd">        Path to vocabulary file.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`.DTMModel`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">metadata_path</span><span class="p">,</span> <span class="n">vocabulary_path</span><span class="p">):</span>
@@ -454,21 +544,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">vocabulary</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
                 <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vocabulary</span>
-</div>
-<div class="viewcode-block" id="from_gerrish"><a class="viewcode-back" href="../../../../tethne.model.corpus.dtmmodel.html#tethne.model.corpus.dtmmodel.from_gerrish">[docs]</a><span class="k">def</span> <span class="nf">from_gerrish</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">vocabulary</span><span class="p">,</span> <span class="n">metadata_key</span><span class="o">=</span><span class="s">&#39;doi&#39;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Parse results from S. Gerrish&#39;s C++ DTM implementation.</span>
-<span class="sd">    </span>
-<span class="sd">    http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">e_log_prob</span> <span class="o">=</span> <span class="s">&#39;topic-{0}-var-e-log-prob.dat&#39;</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="s">&#39;topic-{0}-info.dat&#39;</span>
-    <span class="n">obs</span> <span class="o">=</span> <span class="s">&#39;topic-{0}-obs.dat&#39;</span>
-
-    <span class="n">reader</span> <span class="o">=</span> <span class="n">GerrishLoader</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">vocabulary</span><span class="p">)</span><span class="c">#, metadata, vocabulary)</span>
-    <span class="k">return</span> <span class="n">reader</span><span class="o">.</span><span class="n">load</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vocabulary</span></div>
 </pre></div>
 
           </div>

@@ -94,19 +94,96 @@
 <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s">&#39;ERROR&#39;</span><span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">...classes</span> <span class="kn">import</span> <span class="n">GraphCollection</span>
-<span class="kn">from</span> <span class="nn">..social</span> <span class="kn">import</span> <span class="n">TAPModel</span>
+<span class="c">#from ..social import TAPModel</span>
 <span class="kn">from</span> <span class="nn">..managers</span> <span class="kn">import</span> <span class="n">ModelManager</span>
 <span class="kn">from</span> <span class="nn">...writers.corpora</span> <span class="kn">import</span> <span class="n">to_documents</span>
-<span class="kn">from</span> <span class="nn">..corpus.ldamodel</span> <span class="kn">import</span> <span class="n">from_mallet</span>
+<span class="kn">from</span> <span class="nn">..corpus.ldamodel</span> <span class="kn">import</span> <span class="n">from_mallet</span><span class="p">,</span> <span class="n">LDAModel</span>
 
 <div class="viewcode-block" id="MALLETModelManager"><a class="viewcode-back" href="../../../../tethne.model.managers.mallet.html#tethne.model.managers.mallet.MALLETModelManager">[docs]</a><span class="k">class</span> <span class="nc">MALLETModelManager</span><span class="p">(</span><span class="n">ModelManager</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Model Manager for LDA topic modeling with MALLET.</span>
+<span class="sd">    Generates a :class:`.LDAModel` from a :class:`.Corpus` using</span>
+<span class="sd">    `MALLET &lt;http://mallet.cs.umass.edu/&gt;`_.</span>
+<span class="sd">    </span>
+<span class="sd">    Starting with some JSTOR DfR data (with wordcounts), a typical workflow</span>
+<span class="sd">    might look something like this:</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">    </span>
+<span class="sd">       &gt;&gt;&gt; from nltk.corpus import stopwords                 #  1. Get stoplist.</span>
+<span class="sd">       &gt;&gt;&gt; stoplist = stopwords.words()</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; from tethne.readers import dfr                    #  2. Build Corpus.</span>
+<span class="sd">       &gt;&gt;&gt; C = dfr.corpus_from_dir(&#39;/path/to/DfR/datasets&#39;, &#39;uni&#39;, stoplist)</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; def filt(s, C, DC):                           # 3. Filter wordcounts.</span>
+<span class="sd">       ...     if C &gt; 3 and DC &gt; 1 and len(s) &gt; 3:</span>
+<span class="sd">       ...         return True</span>
+<span class="sd">       ...     return False</span>
+<span class="sd">       &gt;&gt;&gt; C.filter_features(&#39;wordcounts&#39;, &#39;wc_filtered&#39;, filt)</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; from tethne.model import MALLETModelManager       #   4. Get Manager.</span>
+<span class="sd">       &gt;&gt;&gt; outpath = &#39;/path/to/my/working/directory&#39;</span>
+<span class="sd">       &gt;&gt;&gt; mallet = &#39;/Applications/mallet-2.0.7&#39;</span>
+<span class="sd">       &gt;&gt;&gt; M = MALLETModelManager(C, &#39;wc_filtered&#39;, outpath, mallet_path=mallet)</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; M.prep()                                          #    5. Prep model.</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; model = M.build(Z=50, max_iter=300)               #   6. Build model.</span>
+<span class="sd">       &gt;&gt;&gt; model                                             # (may take awhile)</span>
+<span class="sd">       &lt;tethne.model.corpus.ldamodel.LDAModel at 0x10bfac710&gt;</span>
+
+<span class="sd">    A plot showing the log-likelihood/topic over modeling iterations should be</span>
+<span class="sd">    generated in your `outpath`. For example:</span>
+<span class="sd">    </span>
+<span class="sd">    .. figure:: _static/images/ldamodel_LL.png</span>
+<span class="sd">       :width: 400</span>
+<span class="sd">       :align: center</span>
+<span class="sd">       </span>
+<span class="sd">    Behind the scenes, the :func:`.prep` procedure generates a plain-text corpus</span>
+<span class="sd">    file at `temppath`, along with a metadata file. MALLET&#39;s ``import-file``</span>
+<span class="sd">    procedure is then called, which translates the corpus into MALLET&#39;s internal</span>
+<span class="sd">    format (also stored at the `temppath`).</span>
+<span class="sd">    </span>
+<span class="sd">    The :func:`.build` procedure then invokes MALLET&#39;s ``train-topics``</span>
+<span class="sd">    procedure. This step may take a considerable amount of time, anywhere from </span>
+<span class="sd">    a few minutes (small corpus, few topics) to a few hours (large corpus, many</span>
+<span class="sd">    topics).</span>
+
+<span class="sd">    For a :class:`.Corpus` with a few thousand :class:`.Paper`\s, 300 - 500 </span>
+<span class="sd">    iterations is often sufficient to achieve convergence for 20-100 topics.</span>
+<span class="sd">    </span>
+<span class="sd">    Once the :class:`.LDAModel` is built, you can access its methods directly.</span>
+<span class="sd">    See full method descriptions in :class:`.LDAModel`\.</span>
+<span class="sd">    </span>
+<span class="sd">    For more information about topic modeling with MALLET see </span>
+<span class="sd">    `this tutorial &lt;http://programminghistorian.org/lessons/topic-modeling-and-mallet&gt;`_.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">feature</span><span class="o">=</span><span class="s">&#39;unigrams&#39;</span><span class="p">,</span> <span class="n">outpath</span><span class="o">=</span><span class="s">&#39;/tmp/&#39;</span><span class="p">,</span> <span class="n">temppath</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                           <span class="n">mallet_path</span><span class="o">=</span><span class="s">&#39;./model/bin/mallet-2.0.7&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the :class:`.MALLETModelManager` with a :class:`.Corpus`</span>
+<span class="sd">        and a featureset.</span>
+<span class="sd">        </span>
+<span class="sd">        The :class:`.Corpus` should already contain at least one featurset,</span>
+<span class="sd">        indicated by the `feature` parameter, such as wordcounts. You may</span>
+<span class="sd">        specify two working directories: `temppath` should be a working</span>
+<span class="sd">        directory that will contain intermediate files (e.g. documents, data</span>
+<span class="sd">        files, metadata), while `outpath` will contain the final model and any </span>
+<span class="sd">        plots generated during the modeling process. If `temppath` is not</span>
+<span class="sd">        provided, generates and uses a system temporary directory.</span>
+<span class="sd">        </span>
+<span class="sd">        Tethne comes bundled with a recent version of MALLET. If you would</span>
+<span class="sd">        rather use your own install, you can do so by providing the </span>
+<span class="sd">        `mallet_path` parameter. This should point to the directory containing</span>
+<span class="sd">        ``/bin/mallet``.</span>
+<span class="sd">        </span>
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">        </span>
+<span class="sd">           &gt;&gt;&gt; from tethne.model import MALLETModelManager</span>
+<span class="sd">           &gt;&gt;&gt; outpath = &#39;/path/to/my/working/directory&#39;</span>
+<span class="sd">           &gt;&gt;&gt; mallet = &#39;/Applications/mallet-2.0.7&#39;</span>
+<span class="sd">           &gt;&gt;&gt; M = MALLETModelManager(C, &#39;wordcounts&#39;, outpath, mallet_path=mallet)</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -133,20 +210,6 @@
     
         <span class="bp">self</span><span class="o">.</span><span class="n">vocabulary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="MALLETModelManager.prep"><a class="viewcode-back" href="../../../../tethne.model.managers.mallet.html#tethne.model.managers.mallet.MALLETModelManager.prep">[docs]</a>    <span class="k">def</span> <span class="nf">prep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;atitle&#39;</span><span class="p">,</span> <span class="s">&#39;jtitle&#39;</span><span class="p">]):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Generates a corpus that can be used as input for modeling.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        meta : list</span>
-<span class="sd">            A list of keys onto :class:`.Paper` to include in the exported</span>
-<span class="sd">            metadata file. Default: [&#39;date&#39;, &#39;jtitle&#39;]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">_generate_corpus</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">prepped</span> <span class="o">=</span> <span class="bp">True</span>
-</div>
     <span class="k">def</span> <span class="nf">_generate_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes a corpus to disk amenable to MALLET topic modeling.</span>
@@ -246,6 +309,20 @@
                                  <span class="n">figargs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;figsize&#39;</span><span class="p">:(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)}</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Representation of topic ``k`` over &#39;date&#39; slice axis.</span>
+<span class="sd">        </span>
+<span class="sd">        The :class:`.Corpus` used to initialize the :class:`.LDAModelManager`</span>
+<span class="sd">        must have been already sliced by &#39;date&#39;.</span>
+<span class="sd">        </span>
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">        </span>
+<span class="sd">           &gt;&gt;&gt; keys, repr = M.topic_over_time(1, plot=True)</span>
+
+<span class="sd">        ...should return ``keys`` (date) and ``repr`` (% documents) for topic 1,</span>
+<span class="sd">        and generate a plot like this one in your ``outpath``.</span>
+<span class="sd">        </span>
+<span class="sd">        .. figure:: _static/images/topic_1_over_time.png</span>
+<span class="sd">           :width: 400</span>
+<span class="sd">           :align: center</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>

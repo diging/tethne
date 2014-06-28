@@ -13,6 +13,7 @@ import unittest
 import networkx as nx
 
 
+
 class TestDirectCitationGraph(unittest.TestCase):
     """
     Test the citations, internal_citations networks (assuming the reader

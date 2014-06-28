@@ -1,3 +1,18 @@
+"""
+This module provides manager classes for generating, visualizing, and
+analyzing :mod:`.model`\s.
+
+The following managers are presently available:
+
+.. autosummary::
+
+   dtm.DTMModelManager
+   mallet.MALLETModelManager
+   tap.TAPModelManager
+
+More managers will be added regularly.
+"""
+
 import os
 import re
 import shutil
@@ -61,7 +76,13 @@ class ModelManager(object):
     
     def prep(self, meta=['date', 'atitle', 'jtitle']):
         """
-        Generates a corpus that can be used as input for a modeling algorithm.
+        Generates a corpus that can be used as input for modeling.
+
+        Parameters
+        ----------
+        meta : list
+            A list of keys onto :class:`.Paper` to include in the exported
+            metadata file. Default: ['date', 'jtitle']
         """
         
         self._generate_corpus(meta)
@@ -69,7 +90,16 @@ class ModelManager(object):
 
     def build(self, Z=20, max_iter=1000, prep=False, **kwargs):
         """
+        Start the modeling build procedure. 
         
+        Parameters
+        ----------
+        Z : int
+            Number of topics.
+        max_iter : int
+            Maximum number of modeling iterations.
+        prep : bool
+            (default: False) Perform :func:`.prep` before modeling.
         """
         
         if not self.prepped:

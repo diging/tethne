@@ -103,6 +103,27 @@
 </div>
 <div class="section" id="module-tethne.model.managers">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tethne.model.managers" title="Permalink to this headline">¶</a></h2>
+<p>This module provides manager classes for generating, visualizing, and
+analyzing <a class="reference internal" href="tethne.model.html#module-tethne.model" title="tethne.model"><tt class="xref py py-mod docutils literal"><span class="pre">model</span></tt></a>s.</p>
+<p>The following managers are presently available:</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="tethne.model.managers.dtm.html#tethne.model.managers.dtm.DTMModelManager" title="tethne.model.managers.dtm.DTMModelManager"><tt class="xref py py-obj docutils literal"><span class="pre">dtm.DTMModelManager</span></tt></a>(D[,&nbsp;feature,&nbsp;outpath,&nbsp;...])</td>
+<td>Generates a <a class="reference internal" href="tethne.model.corpus.dtmmodel.html#tethne.model.corpus.dtmmodel.DTMModel" title="tethne.model.corpus.dtmmodel.DTMModel"><tt class="xref py py-class docutils literal"><span class="pre">DTMModel</span></tt></a> from a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> using  <a class="reference external" href="http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz">Gerrish&#8217;s C++ implementation</a>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="tethne.model.managers.mallet.html#tethne.model.managers.mallet.MALLETModelManager" title="tethne.model.managers.mallet.MALLETModelManager"><tt class="xref py py-obj docutils literal"><span class="pre">mallet.MALLETModelManager</span></tt></a>(D[,&nbsp;feature,&nbsp;...])</td>
+<td>Generate a <a class="reference internal" href="tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a> from a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> using  <a class="reference external" href="http://mallet.cs.umass.edu/">MALLET</a>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="tethne.model.managers.tap.html#tethne.model.managers.tap.TAPModelManager" title="tethne.model.managers.tap.TAPModelManager"><tt class="xref py py-obj docutils literal"><span class="pre">tap.TAPModelManager</span></tt></a>(D,&nbsp;G,&nbsp;model,&nbsp;**kwargs)</td>
+<td>For managing the <a class="reference internal" href="tethne.model.social.tapmodel.html#tethne.model.social.tapmodel.TAPModel" title="tethne.model.social.tapmodel.TAPModel"><tt class="xref py py-class docutils literal"><span class="pre">TAPModel</span></tt></a> .</td>
+</tr>
+</tbody>
+</table>
+<p>More managers will be added regularly.</p>
 <dl class="class">
 <dt id="tethne.model.managers.ModelManager">
 <em class="property">class </em><tt class="descclassname">tethne.model.managers.</tt><tt class="descname">ModelManager</tt><big>(</big><em>outpath=None</em>, <em>temppath=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/model/managers.html#ModelManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.managers.ModelManager" title="Permalink to this definition">¶</a></dt>
@@ -116,20 +137,41 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#tethne.model.managers.ModelManager.build" title="tethne.model.managers.ModelManager.build"><tt class="xref py py-obj docutils literal"><span class="pre">build</span></tt></a>([Z,&nbsp;max_iter,&nbsp;prep])</td>
-<td></td>
+<td>Start the modeling build procedure.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.model.managers.ModelManager.plot_ll" title="tethne.model.managers.ModelManager.plot_ll"><tt class="xref py py-obj docutils literal"><span class="pre">plot_ll</span></tt></a>()</td>
 <td>Plots LL/topic over iterations.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#tethne.model.managers.ModelManager.prep" title="tethne.model.managers.ModelManager.prep"><tt class="xref py py-obj docutils literal"><span class="pre">prep</span></tt></a>([meta])</td>
-<td>Generates a corpus that can be used as input for a modeling algorithm.</td>
+<td>Generates a corpus that can be used as input for modeling.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="tethne.model.managers.ModelManager.build">
 <tt class="descname">build</tt><big>(</big><em>Z=20</em>, <em>max_iter=1000</em>, <em>prep=False</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/model/managers.html#ModelManager.build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.managers.ModelManager.build" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Start the modeling build procedure.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Z</strong> : int</p>
+<blockquote>
+<div><p>Number of topics.</p>
+</div></blockquote>
+<p><strong>max_iter</strong> : int</p>
+<blockquote>
+<div><p>Maximum number of modeling iterations.</p>
+</div></blockquote>
+<p><strong>prep</strong> : bool</p>
+<blockquote class="last">
+<div><p>(default: False) Perform <tt class="xref py py-func docutils literal"><span class="pre">prep()</span></tt> before modeling.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="tethne.model.managers.ModelManager.plot_ll">
@@ -140,7 +182,20 @@
 <dl class="method">
 <dt id="tethne.model.managers.ModelManager.prep">
 <tt class="descname">prep</tt><big>(</big><em>meta=['date', 'atitle', 'jtitle']</em><big>)</big><a class="reference internal" href="_modules/tethne/model/managers.html#ModelManager.prep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.managers.ModelManager.prep" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a corpus that can be used as input for a modeling algorithm.</p>
+<dd><p>Generates a corpus that can be used as input for modeling.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>meta</strong> : list</p>
+<blockquote class="last">
+<div><p>A list of keys onto <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> to include in the exported
+metadata file. Default: [&#8216;date&#8217;, &#8216;jtitle&#8217;]</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>

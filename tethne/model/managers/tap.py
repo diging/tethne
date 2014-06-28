@@ -22,7 +22,7 @@ class TAPModelManager(SocialModelManager):
     For managing the :class:`.TAPModel` .
     """
     
-    def __init__(self, D, G, model, **kwargs):
+    def __init__(self, D=None, G=None, model=None, **kwargs):
         """
         
         Parameters
