@@ -1,3 +1,7 @@
+"""
+Classes and methods related to the :class:`.TAPModel`\.
+"""
+
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -10,17 +14,58 @@ from ..basemodel import BaseModel
 from tethne.utilities import swap
 
 class TAPModel(BaseModel):
+    """
+    Represents a Topical Affinity Propogation (TAP) social model.
+    
+    The TAP model assumes that authors can be influenced by other authors with
+    whom they are acquainted to adopt particular features (eg topics) in their
+    writing. The TAP model takes a weighted social graph, and the probabilities
+    that each author will generate a document containing particular topics. For
+    a complete description of the model, see 
+    `Tang et al. 2009 <https://wiki.engr.illinois.edu/download/attachments/186384416/KDD09_Social_Influence_Analysis.pdf?version=1&modificationDate=1255578264000>`_,
+    or the `presentation <http://videolectures.net/kdd09_tang_sia/>`_ on which
+    the paper was based.
+    
+    There are two ways to generate a :class:`.TAPModel`\:
+    
+    To generate a :class:`.TAPModel` from a single :func:`.coauthors` graph and
+    a :mod:`.corpus` model, instantiate and build a :class:`.TAPModel` directly:
+    
+    .. code-block:: python
+       
+       >>> from tethne.networks import authors
+       >>> g = authors.coauthors(C.all_papers())    # C is a Corpus.
+       
+       >>> from tethne.model import managers, TAPModel
+       >>> atheta = managers.TAPModelManager().author_theta(C.all_papers())
+       
+       >>> T = TAPModel(g, atheta)
+       >>> T.build()
+    
+    To generate a :class:`.TAPModel` from a :class:`.Corpus` that takes time
+    into account, use a :class:`.TAPModelManager`\:
+    
+    .. code-block:: python
+    
+       >>> C.slice('date', 'time_period', window_size=5)
+       
+       >>> from tethne import GraphCollection
+       >>> G = GraphCollection().build(C, 'date', 'authors', 'coauthors')
+       >>> G.graphs
+       
+       >>> from tethne.model import MALLETModelManager
+       >>> M = MALLETModelManager(C, 'wc_filtered', outpath, mallet_path=mallet)
+       model = M.build(Z=50, max_iter=300)  
+    
+    Parameters
+    ----------
+    G : :class:`.nx.Graph()`
+        Should have 'weight' attribute in [0.,1.].
+    theta : dict
+        Distribution over topics for authors. Should have N keys, with values
+        shaped T; N == len(G.nodes()) and T is the number of topics.
+    """
     def __init__(self, G, theta, damper=0.5):
-        """
-        
-        Parameters
-        ----------
-        G : :class:`.nx.Graph()`
-            Should have 'weight' attribute in [0.,1.].
-        theta : dict
-            Should have N keys, with values shaped T; N == len(G.nodes()) and T
-            is the number of topics.
-        """
         
         assert len(theta) == len(G.nodes())
         

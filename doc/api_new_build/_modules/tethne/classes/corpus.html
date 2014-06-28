@@ -80,46 +80,6 @@
   <h1>Source code for tethne.classes.corpus</h1><div class="highlight"><pre>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">A :class:`.Corpus` organizes :class:`.Paper`\s for analysis.</span>
-
-<span class="sd">You can create a :class:`.Corpus` by passing its constructor a list of</span>
-<span class="sd">:class:`.Paper` instances, and (optionally) some features over those papers,</span>
-<span class="sd">e.g. wordcounts. Once you have created a :class:`.Corpus` you can use it</span>
-<span class="sd">to generate a :class:`.GraphCollection`\, or generate corpus or social</span>
-<span class="sd">models (see :mod:`.model`\).</span>
-
-<span class="sd">To create a :class:`.Corpus` from a JSTOR DfR dataset containing wordcounts,</span>
-<span class="sd">you might do:</span>
-
-<span class="sd">.. code-block:: python</span>
-
-<span class="sd">   &gt;&gt;&gt; from tethne.readers import dfr</span>
-<span class="sd">   &gt;&gt;&gt; papers = dfr.read(&#39;/path/to/dataset&#39;)</span>
-<span class="sd">   &gt;&gt;&gt; wordcounts = dfr.ngrams(&#39;/path/to/dataset&#39;, N=&#39;uni&#39;)</span>
-<span class="sd">   </span>
-<span class="sd">   &gt;&gt;&gt; from tethne import Corpus</span>
-<span class="sd">   &gt;&gt;&gt; C = Corpus(papers, features={&#39;wordcounts&#39;:wordcounts}, index_by=&#39;doi&#39;)</span>
-<span class="sd">   &gt;&gt;&gt; C</span>
-<span class="sd">   &lt;tethne.classes.corpus.Corpus object at 0x107975ad0&gt;</span>
-
-<span class="sd">:mod:`.readers.dfr` and :mod:`.readers.wos` provide some convenience </span>
-<span class="sd">functions for generating a :class:`.Corpus` directly from a dataset. For </span>
-<span class="sd">example:</span>
-
-<span class="sd">.. code-block:: python</span>
-
-<span class="sd">   &gt;&gt;&gt; from tethne.readers import dfr</span>
-<span class="sd">   &gt;&gt;&gt; C = dfr.read_corpus(&#39;/path/to/dataset&#39;, features=(&#39;uni&#39;,))</span>
-<span class="sd">   &gt;&gt;&gt; C</span>
-<span class="sd">   &lt;tethne.classes.corpus.Corpus object at 0x107975ad0&gt;</span>
-
-<span class="sd">You can organize your :class:`.Corpus` using the :meth:`.slice` method, and</span>
-<span class="sd">generate some descriptive statistics with :meth:`.distribution` and</span>
-<span class="sd">:meth:`.plot_distribution`\.</span>
-
-<span class="sd">To save/load your :class:`.Corpus` (e.g. for archiving your data), you can</span>
-<span class="sd">convert it to or from a :class:`.HDF5Corpus` using :meth:`.to_hdf5` and</span>
-<span class="sd">:func:`.from_hdf5`\.</span>
-<span class="sd">   </span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -142,6 +102,48 @@
 <span class="kn">from</span> <span class="nn">..utilities</span> <span class="kn">import</span> <span class="n">strip_punctuation</span>
 
 <div class="viewcode-block" id="Corpus"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus">[docs]</a><span class="k">class</span> <span class="nc">Corpus</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A :class:`.Corpus` organizes :class:`.Paper`\s for analysis.</span>
+
+<span class="sd">    You can create a :class:`.Corpus` by passing its constructor a list of</span>
+<span class="sd">    :class:`.Paper` instances, and (optionally) some features over those papers,</span>
+<span class="sd">    e.g. wordcounts. Once you have created a :class:`.Corpus` you can use it</span>
+<span class="sd">    to generate a :class:`.GraphCollection`\, or generate corpus or social</span>
+<span class="sd">    models (see :mod:`.model`\).</span>
+
+<span class="sd">    To create a :class:`.Corpus` from a JSTOR DfR dataset containing wordcounts,</span>
+<span class="sd">    you might do:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; from tethne.readers import dfr</span>
+<span class="sd">       &gt;&gt;&gt; papers = dfr.read(&#39;/path/to/dataset&#39;)</span>
+<span class="sd">       &gt;&gt;&gt; wordcounts = dfr.ngrams(&#39;/path/to/dataset&#39;, N=&#39;uni&#39;)</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; from tethne import Corpus</span>
+<span class="sd">       &gt;&gt;&gt; C = Corpus(papers, features={&#39;wordcounts&#39;:wordcounts}, index_by=&#39;doi&#39;)</span>
+<span class="sd">       &gt;&gt;&gt; C</span>
+<span class="sd">       &lt;tethne.classes.corpus.Corpus object at 0x107975ad0&gt;</span>
+
+<span class="sd">    :mod:`.readers.dfr` and :mod:`.readers.wos` provide some convenience </span>
+<span class="sd">    functions for generating a :class:`.Corpus` directly from a dataset. For </span>
+<span class="sd">    example:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; from tethne.readers import dfr</span>
+<span class="sd">       &gt;&gt;&gt; C = dfr.read_corpus(&#39;/path/to/dataset&#39;, features=(&#39;uni&#39;,))</span>
+<span class="sd">       &gt;&gt;&gt; C</span>
+<span class="sd">       &lt;tethne.classes.corpus.Corpus object at 0x107975ad0&gt;</span>
+
+<span class="sd">    You can organize your :class:`.Corpus` using the :meth:`.slice` method, and</span>
+<span class="sd">    generate some descriptive statistics with :meth:`.distribution` and</span>
+<span class="sd">    :meth:`.plot_distribution`\.</span>
+
+<span class="sd">    To save/load your :class:`.Corpus` (e.g. for archiving your data), you can</span>
+<span class="sd">    convert it to or from a :class:`.HDF5Corpus` using :meth:`.to_hdf5` and</span>
+<span class="sd">    :func:`.from_hdf5`\.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">papers</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span>
                        <span class="n">index_citation_by</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="nb">set</span><span class="p">([]),</span>

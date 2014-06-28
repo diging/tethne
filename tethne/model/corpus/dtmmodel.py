@@ -1,3 +1,7 @@
+"""
+Classes and methods related to the :class:`.DTMModel`\.
+"""
+
 from ..basemodel import BaseModel
 import numpy as np
 import os
@@ -11,22 +15,48 @@ logger = logging.getLogger(__name__)
 logger.setLevel('ERROR')
 
 class DTMModel(BaseModel):
+    """
+    Represents a Dynamic Topic Model (DTM).
+    
+    The DTM is similar to the LDA model (see :class:`.LDAModel`) except that
+    each topic is permitted to evolve over time (i.e. probabilities associated
+    with terms in the topic can change). For a complete description of the model
+    see `Blei & Lafferty 2006 <http://www.cs.cmu.edu/~lafferty/pub/dtm.pdf>`_.
+    
+    To generate a :class:`.DTMModel` from a :class:`.Corpus` use the
+    :class:`.DTMModelManager`\, which relies on S. Gerrish's `C++ implementation
+    of DTM <http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz>`_. Alternatively, you can build the
+    model externally (e.g. using the Gerrish DTM implementation directly), and
+    then load the results with :func:`.from_gerrish`\.
+    
+    If you are using a different implementation of DTM, you can initialize a
+    :class:`.DTMModel` directly by providing parameters and metadata.
+    
+    * ``e_theta`` should describe the distribution of topics (rows) in documents 
+      (cols).
+    * ``phi`` should describe the topic (dimension 0) distributions over words
+      (dimension 1) over time (dimension 2).
+    * ``metadata`` should map matrix indices for documents onto :class:`.Paper`
+      IDs (or whatever you use to identify documents).
+    * ``vocabulary`` should map matrix indices for words onto word-strings.
+    
+    
+    Parameters
+    ----------
+    e_theta : matrix-like
+        Distribution of topics (Z) in documents (M). Shape: (Z, M).
+    phi : matrix-like
+        Topic (Z) distribution over words (W), over time (T). Shape: 
+        (Z, W, T)
+    metadata : dict
+        Maps matrix indices onto document datadata.
+    vocabulary : dict
+        Maps W indices onto words.
+    """
 
     def __init__(self, e_theta, phi, metadata, vocabulary):
         """
         Initialize the :class:`.DTMModel`\.
-        
-        Parameters
-        ----------
-        e_theta : matrix-like
-            Distribution of topics (Z) in documents (M). Shape: (Z, M).
-        phi : matrix-like
-            Topic (Z) distribution over words (W), over time (T). Shape: 
-            (Z, W, T)
-        metadata : dict
-            Maps matrix indices onto document datadata.
-        vocabulary : dict
-            Maps W indices onto words.
         """
         
         self.e_theta = e_theta
@@ -86,7 +116,8 @@ class DTMModel(BaseModel):
     
     def topic_evolution(self, k, Nwords=5):
         """
-        Generate a plot that shows p(w|z) over time for the top `Nwords` terms.
+        Generate a plot that shows p(w|z) over time for the top ``Nwords``
+        terms.
         
         Parameters
         ----------
@@ -94,6 +125,13 @@ class DTMModel(BaseModel):
             A topic index.
         Nwords : int
             Number of words to return.
+            
+        Returns
+        -------
+        keys : list
+            Start-date of each time-period.
+        t_series : list
+            Array of p(w|t) for Nwords for each time-period.
         """
     
         t_keys = range(self.T)
@@ -226,12 +264,64 @@ class DTMModel(BaseModel):
         
         return as_string
 
+def from_gerrish(target, metadata, vocabulary, metadata_key='doi'):
+    """
+    Generate a :class:`.DTMModel` from the output of `S. Gerrish's C++ DTM 
+    implementation <http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz>`_.
+    
+    The Gerrish DTM implementation generates a large number of data files
+    contained in a directory called ``lda-seq``. The ``target`` parameter
+    should be the path to that directory.
+    
+    ``metadata`` should be the path to a tab-delimted metadata file. Those
+    records should occur in the same order as in the corpus data files used
+    to generate the model. For example::
+    
+       id	date	atitle
+       10.2307/2437162	1945	SOME ECOTYPIC RELATIONS OF DESCHAMPSIA CAESPITOSA
+       10.2307/4353229	1940	ENVIRONMENTAL INFLUENCE AND TRANSPLANT EXPERIMENTS
+       10.2307/4353158	1937	SOME FUNDAMENTAL PROBLEMS OF TAXONOMY AND PHYLOGENETICS
+       
+    ``vocabulary`` should be the path to a file containing the words used to
+    generate the model, one per line.
+    
+    Parameters
+    ----------
+    target : str
+        Path to ``lda-seq`` output directory.
+    metadata : str
+        Path to metadata file.
+    vocabulary : str
+        Path to vocabulary file.
+        
+    Returns
+    -------
+    :class:`.DTMModel`
+    """
+
+    e_log_prob = 'topic-{0}-var-e-log-prob.dat'
+    info = 'topic-{0}-info.dat'
+    obs = 'topic-{0}-obs.dat'
+
+    reader = GerrishLoader(target, metadata, vocabulary)#, metadata, vocabulary)
+    return reader.load()
 
 class GerrishLoader(object):
     """
-    Helper class for parsing results from S. Gerrish's C++ DTM implementation.
-    
-    http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz
+    Helper class for parsing results from `S. Gerrish's C++ implementation <http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz>`_ 
+
+    Parameters
+    ----------
+    target : str
+        Path to ``lda-seq`` output directory.
+    metadata : str
+        Path to metadata file.
+    vocabulary : str
+        Path to vocabulary file.
+        
+    Returns
+    -------
+    :class:`.DTMModel`
     """
 
     def __init__(self, target, metadata_path, vocabulary_path):
@@ -375,17 +465,3 @@ class GerrishLoader(object):
                 i += 1
 
         return self.vocabulary
-
-def from_gerrish(target, metadata, vocabulary, metadata_key='doi'):
-    """
-    Parse results from S. Gerrish's C++ DTM implementation.
-    
-    http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz
-    """
-
-    e_log_prob = 'topic-{0}-var-e-log-prob.dat'
-    info = 'topic-{0}-info.dat'
-    obs = 'topic-{0}-obs.dat'
-
-    reader = GerrishLoader(target, metadata, vocabulary)#, metadata, vocabulary)
-    return reader.load()

@@ -100,20 +100,116 @@
 
 <div class="viewcode-block" id="DTMModelManager"><a class="viewcode-back" href="../../../../tethne.model.managers.dtm.html#tethne.model.managers.dtm.DTMModelManager">[docs]</a><span class="k">class</span> <span class="nc">DTMModelManager</span><span class="p">(</span><span class="n">ModelManager</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Model Manager for DTM.</span>
+<span class="sd">    Generates a :class:`.DTMModel` from a :class:`.Corpus` using </span>
+<span class="sd">    `Gerrish&#39;s C++ implementation &lt;http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz&gt;`_.</span>
+
+<span class="sd">    You should be sure to slice your :class:`.Corpus` by &#39;date&#39; using the </span>
+<span class="sd">    &#39;time_period&#39; method (for details, see :func:`.Corpus.slice`\).</span>
+<span class="sd">    </span>
+<span class="sd">    Starting with some JSTOR DfR data (with wordcounts), a typical workflow</span>
+<span class="sd">    might look something like this:</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">    </span>
+<span class="sd">       &gt;&gt;&gt; from nltk.corpus import stopwords                 #  1. Get stoplist.</span>
+<span class="sd">       &gt;&gt;&gt; stoplist = stopwords.words()</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; from tethne.readers import dfr                    #  2. Build Corpus.</span>
+<span class="sd">       &gt;&gt;&gt; C = dfr.corpus_from_dir(&#39;/path/to/DfR/datasets&#39;, &#39;uni&#39;, stoplist)</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; def filt(s, C, DC):                           # 3. Filter wordcounts.</span>
+<span class="sd">       ...     if C &gt; 3 and DC &gt; 1 and len(s) &gt; 3:</span>
+<span class="sd">       ...         return True</span>
+<span class="sd">       ...     return False</span>
+<span class="sd">       &gt;&gt;&gt; C.filter_features(&#39;wordcounts&#39;, &#39;wc_filtered&#39;, filt)</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; C.slice(&#39;date&#39;, &#39;time_period&#39;, window_size=5)     #  4. Slice Corpus.</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; from tethne.model import DTMModelManager          #   5. Get Manager.</span>
+<span class="sd">       &gt;&gt;&gt; outpath = &#39;/path/to/my/working/directory&#39;</span>
+<span class="sd">       &gt;&gt;&gt; dtm = &#39;/path/to/dtm/bin/main&#39;</span>
+<span class="sd">       &gt;&gt;&gt; M = DTMModelManager(C, &#39;wc_filtered&#39;, outpath, dtm_path=dtm)</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; M.prep()                                          #    6. Prep model.</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; model = M.build(Z=50)                             #   7. Build model.</span>
+<span class="sd">       &gt;&gt;&gt; model                                             # (may take awhile)</span>
+<span class="sd">       &lt;tethne.model.corpus.dtmmodel.DTMModel at 0x10bfac710&gt;</span>
+<span class="sd">       </span>
+<span class="sd">    A plot showing the log-likelihood/topic over modeling iterations should be</span>
+<span class="sd">    generated in your `outpath`. For example:</span>
+<span class="sd">    </span>
+<span class="sd">    .. figure:: _static/images/dtmmodel_LL.png</span>
+<span class="sd">       :width: 400</span>
+<span class="sd">       :align: center</span>
+<span class="sd">    </span>
+<span class="sd">    Behind the scenes, the :func:`.prep` procedure generates data files at</span>
+<span class="sd">    ``temppath`` describing your :class:`.Corpus`\:</span>
+<span class="sd">    </span>
+<span class="sd">    * ``tethne-vocab.dat`` contains all of the words in the corpus, one per</span>
+<span class="sd">      line.</span>
+<span class="sd">    * ``tethne-mult.dat`` contains wordcounts for each document; words are</span>
+<span class="sd">      represented by integer indices corresponding to line numbers in </span>
+<span class="sd">      ``tethne-vocab.dat``. Documents are ordered by publication date (earliest</span>
+<span class="sd">      to latest).</span>
+<span class="sd">    * ``tethne-seq.dat`` describes how documents are to be apportioned among</span>
+<span class="sd">      time-periods. The first line is the number of time periods, and the </span>
+<span class="sd">      subsequent lines specify the number of documents in each successive</span>
+<span class="sd">      time-period.</span>
+<span class="sd">    * ``tethne-meta.dat`` is a tab-delimted metadata file. Those records occur </span>
+<span class="sd">      in the same order as in the documents in ``tethne-mult.dat``. For</span>
+<span class="sd">      example::</span>
+<span class="sd">      </span>
+<span class="sd">       id	date	atitle</span>
+<span class="sd">       10.2307/2437162	1945	SOME ECOTYPIC RELATIONS OF DESCHAMPSIA CAESPITOSA</span>
+<span class="sd">       10.2307/4353229	1940	ENVIRONMENTAL INFLUENCE AND TRANSPLANT EXPERIMENTS</span>
+<span class="sd">       10.2307/4353158	1937	SOME FUNDAMENTAL PROBLEMS OF TAXONOMY AND PHYLOGENETICS</span>
+
+<span class="sd">    The :func:`.build` procedure then starts the DTM modeling algorithm. This </span>
+<span class="sd">    step may take a considerable amount of time, anywhere from a few minutes </span>
+<span class="sd">    (small corpus, few topics) to a few hours (large corpus, many topics).</span>
+<span class="sd">    **Warning:** this implementation of DTM is known to run into memory issues</span>
+<span class="sd">    with large vocabularies. If a memory-leak does occur, try using a more</span>
+<span class="sd">    restrictive filter to the featureset, using </span>
+<span class="sd">    :func:`.Corpus.filter_features`\.</span>
+<span class="sd">    </span>
+<span class="sd">    Once the :class:`.DTMModel` is built, you can access its methods directly.</span>
+<span class="sd">    See full method descriptions in :class:`.DTMModel`\. Of special interest </span>
+<span class="sd">    are:</span>
+<span class="sd">    </span>
+<span class="sd">    .. autosummary::</span>
+<span class="sd">       :nosignature:</span>
+<span class="sd">    </span>
+<span class="sd">       DTMModel.list_topic_diachronic</span>
+<span class="sd">       DTMModel.print_topic_diachronic</span>
+<span class="sd">       DTMModel.topic_evolution</span>
+<span class="sd">    </span>
+<span class="sd">    To plot the evolution of a topic over time, use </span>
+<span class="sd">    :func:`.plot_topic_evolution`\. </span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">    </span>
+<span class="sd">       &gt;&gt;&gt; M.plot_topic_evolution(2, plot=True)</span>
+<span class="sd">       </span>
+<span class="sd">    ...should generate a plot at ``outpath`` called ``topic_2_evolution.png``:</span>
+
+<span class="sd">    .. figure:: _static/images/topic_2_evolution.png</span>
+<span class="sd">       :width: 400</span>
+<span class="sd">       :align: center</span>
+
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    D : :class:`.Corpus`</span>
+<span class="sd">    outpath : str</span>
+<span class="sd">        Path to output directory.</span>
+<span class="sd">    dtm_path : str</span>
+<span class="sd">        Path to MALLET install directory (contains bin/mallet).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">feature</span><span class="o">=</span><span class="s">&#39;unigrams&#39;</span><span class="p">,</span> <span class="n">outpath</span><span class="o">=</span><span class="s">&#39;/tmp&#39;</span><span class="p">,</span>
                           <span class="n">temppath</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dtm_path</span><span class="o">=</span><span class="s">&#39;./bin/main&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        D : :class:`.Corpus`</span>
-<span class="sd">        outpath : str</span>
-<span class="sd">            Path to output directory.</span>
-<span class="sd">        dtm_path : str</span>
-<span class="sd">            Path to MALLET install directory (contains bin/mallet).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DTMModelManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">outpath</span><span class="p">,</span> <span class="n">temppath</span><span class="p">)</span>
         
@@ -209,6 +305,41 @@
 
 <div class="viewcode-block" id="DTMModelManager.plot_topic_evolution"><a class="viewcode-back" href="../../../../tethne.model.managers.dtm.html#tethne.model.managers.dtm.DTMModelManager.plot_topic_evolution">[docs]</a>    <span class="k">def</span> <span class="nf">plot_topic_evolution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">Nwords</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
                                       <span class="n">figargs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;figsize&#39;</span><span class="p">:(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)}</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot the probability of the top ``Nwords`` words in topic ``k`` over</span>
+<span class="sd">        time.</span>
+<span class="sd">        </span>
+<span class="sd">        If ``plot`` is True, generates a plot image at ``outpath``.</span>
+<span class="sd">        </span>
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">        </span>
+<span class="sd">           &gt;&gt;&gt; M.plot_topic_evolution(2, plot=True)</span>
+<span class="sd">           </span>
+<span class="sd">        ...should generate a plot at ``outpath`` called </span>
+<span class="sd">        ``topic_2_evolution.png``:</span>
+
+<span class="sd">        .. figure:: _static/images/topic_2_evolution.png</span>
+<span class="sd">           :width: 400</span>
+<span class="sd">           :align: center</span>
+<span class="sd">           </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        k : int</span>
+<span class="sd">            Topic index.</span>
+<span class="sd">        Nwords : int</span>
+<span class="sd">            Number of words to include in plot.</span>
+<span class="sd">        plot : bool</span>
+<span class="sd">            (default: False) If True, generates a plot image at ``outpath``.</span>
+<span class="sd">        figargs : dict</span>
+<span class="sd">            Keyword arguments to pass to :func:`matplotlib.pyplot.plot`\.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        keys : list</span>
+<span class="sd">            Start-date of each time-period.</span>
+<span class="sd">        t_series : list</span>
+<span class="sd">            Array of p(w|t) for Nwords for each time-period.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="n">t_keys</span><span class="p">,</span> <span class="n">t_series</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">topic_evolution</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">Nwords</span><span class="p">)</span>
         
@@ -235,6 +366,20 @@
                                  <span class="n">figargs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;figsize&#39;</span><span class="p">:(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)}</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Representation of topic ``k`` over &#39;date&#39; slice axis.</span>
+<span class="sd">        </span>
+<span class="sd">        The :class:`.Corpus` used to initialize the :class:`.DTMModelManager`</span>
+<span class="sd">        must have been already sliced by &#39;date&#39;.</span>
+<span class="sd">        </span>
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">        </span>
+<span class="sd">           &gt;&gt;&gt; keys, repr = M.topic_over_time(1, plot=True)</span>
+
+<span class="sd">        ...should return ``keys`` (date) and ``repr`` (% documents) for topic 1,</span>
+<span class="sd">        and generate a plot like this one in your ``outpath``.</span>
+<span class="sd">        </span>
+<span class="sd">        .. figure:: _static/images/topic_1_over_time.png</span>
+<span class="sd">           :width: 400</span>
+<span class="sd">           :align: center</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>

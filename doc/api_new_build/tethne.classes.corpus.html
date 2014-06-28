@@ -86,6 +86,11 @@
   <div class="section" id="module-tethne.classes.corpus">
 <span id="tethne-classes-corpus-module"></span><h1>tethne.classes.corpus module<a class="headerlink" href="#module-tethne.classes.corpus" title="Permalink to this headline">¶</a></h1>
 <p>A <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> organizes <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s for analysis.</p>
+<dl class="class">
+<dt id="tethne.classes.corpus.Corpus">
+<em class="property">class </em><tt class="descclassname">tethne.classes.corpus.</tt><tt class="descname">Corpus</tt><big>(</big><em>papers</em>, <em>features=None</em>, <em>index_by='ayjid'</em>, <em>index_citation_by='ayjid'</em>, <em>exclude=set([])</em>, <em>filt=None</em>, <em>index=True</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/corpus.html#Corpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.corpus.Corpus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>A <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> organizes <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s for analysis.</p>
 <p>You can create a <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> by passing its constructor a list of
 <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances, and (optionally) some features over those papers,
 e.g. wordcounts. Once you have created a <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> you can use it
@@ -118,10 +123,6 @@ generate some descriptive statistics with <a class="reference internal" href="#t
 <p>To save/load your <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> (e.g. for archiving your data), you can
 convert it to or from a <a class="reference internal" href="tethne.persistence.hdf5.corpus.html#tethne.persistence.hdf5.corpus.HDF5Corpus" title="tethne.persistence.hdf5.corpus.HDF5Corpus"><tt class="xref py py-class docutils literal"><span class="pre">HDF5Corpus</span></tt></a> using <a class="reference internal" href="#tethne.classes.corpus.Corpus.to_hdf5" title="tethne.classes.corpus.Corpus.to_hdf5"><tt class="xref py py-meth docutils literal"><span class="pre">to_hdf5()</span></tt></a> and
 <a class="reference internal" href="#tethne.classes.corpus.from_hdf5" title="tethne.classes.corpus.from_hdf5"><tt class="xref py py-func docutils literal"><span class="pre">from_hdf5()</span></tt></a>.</p>
-<dl class="class">
-<dt id="tethne.classes.corpus.Corpus">
-<em class="property">class </em><tt class="descclassname">tethne.classes.corpus.</tt><tt class="descname">Corpus</tt><big>(</big><em>papers</em>, <em>features=None</em>, <em>index_by='ayjid'</em>, <em>index_citation_by='ayjid'</em>, <em>exclude=set([])</em>, <em>filt=None</em>, <em>index=True</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/corpus.html#Corpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.corpus.Corpus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>

@@ -81,13 +81,57 @@
             
   <div class="section" id="module-tethne.model.corpus.ldamodel">
 <span id="tethne-model-corpus-ldamodel-module"></span><h1>tethne.model.corpus.ldamodel module<a class="headerlink" href="#module-tethne.model.corpus.ldamodel" title="Permalink to this headline">¶</a></h1>
+<p>Classes and methods related to the <a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a>.</p>
 <dl class="class">
 <dt id="tethne.model.corpus.ldamodel.LDAModel">
 <em class="property">class </em><tt class="descclassname">tethne.model.corpus.ldamodel.</tt><tt class="descname">LDAModel</tt><big>(</big><em>theta</em>, <em>phi</em>, <em>metadata</em>, <em>vocabulary</em><big>)</big><a class="reference internal" href="_modules/tethne/model/corpus/ldamodel.html#LDAModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.ldamodel.LDAModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="tethne.model.basemodel.html#tethne.model.basemodel.BaseModel" title="tethne.model.basemodel.BaseModel"><tt class="xref py py-class docutils literal"><span class="pre">tethne.model.basemodel.BaseModel</span></tt></a></p>
-<p>Latent Dirichlet Allocation topic model.</p>
-<p>Items are documents, dimensions are topics.</p>
-<p>See: <a class="reference external" href="http://jmlr.org/papers/v3/blei03a.html">http://jmlr.org/papers/v3/blei03a.html</a></p>
+<p>Represents a Latent Dirichlet Allocation (LDA) topic model.</p>
+<p>In the LDA model, topics (dimensions) are probability distributions over 
+words (features), and documents (items) are comprised of mixtures of topics.
+For a complete description of the model, see 
+<a class="reference external" href="http://jmlr.org/papers/v3/blei03a.html">Blei &amp; Jordan (2003)</a>.</p>
+<p>To generate a <a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a> from a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> using
+<a class="reference external" href="http://mallet.cs.umass.edu/">MALLET</a>, use the 
+<a class="reference internal" href="tethne.model.managers.mallet.html#tethne.model.managers.mallet.MALLETModelManager" title="tethne.model.managers.mallet.MALLETModelManager"><tt class="xref py py-class docutils literal"><span class="pre">MALLETModelManager</span></tt></a>. Additional managers for <a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a>s
+will be added shortly.</p>
+<p>You can also initialize a <a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a> directly by providing the
+following parameters:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">theta</span></tt>, describes the proportion of topics (cols) in each document 
+(rows).</li>
+<li><tt class="docutils literal"><span class="pre">phi</span></tt> describes the topic (rows) distributions over words (cols).</li>
+<li><tt class="docutils literal"><span class="pre">metadata</span></tt> should map matrix indices for documents onto <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>
+IDs (or whatever you use to identify documents).</li>
+<li><tt class="docutils literal"><span class="pre">vocabulary</span></tt> should map matrix indices for words onto word-strings.</li>
+</ul>
+<p><tt class="docutils literal"><span class="pre">metadata</span></tt> and <tt class="docutils literal"><span class="pre">vocabulary</span></tt> mappings.</p>
+<p>Finally, you can use <a class="reference internal" href="#tethne.model.corpus.ldamodel.from_mallet" title="tethne.model.corpus.ldamodel.from_mallet"><tt class="xref py py-func docutils literal"><span class="pre">from_mallet()</span></tt></a> to generate a <a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a>
+from MALLET output.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>theta</strong> : matrix-like</p>
+<blockquote>
+<div><p>Distribution of topics (cols) in documents (rows). Rows sum to 1.</p>
+</div></blockquote>
+<p><strong>phi</strong> : matrix-like</p>
+<blockquote>
+<div><p>Distribution over words (cols) for topics (rows). Rows sum to 1.</p>
+</div></blockquote>
+<p><strong>metadata</strong> : dict</p>
+<blockquote>
+<div><p>Maps matrix indices onto document datadata.</p>
+</div></blockquote>
+<p><strong>vocabulary</strong> : dict</p>
+<blockquote class="last">
+<div><p>Maps W indices onto words.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -111,23 +155,27 @@
 <td>Describes the relationship between two items.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel.list_topic" title="tethne.model.corpus.ldamodel.LDAModel.list_topic"><tt class="xref py py-obj docutils literal"><span class="pre">list_topic</span></tt></a>(k[,&nbsp;Nwords])</td>
-<td>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for topic <tt class="docutils literal"><span class="pre">k</span></tt>.</td>
+<td>Yields a list of the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for topic <tt class="docutils literal"><span class="pre">k</span></tt>.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel.list_topics" title="tethne.model.corpus.ldamodel.LDAModel.list_topics"><tt class="xref py py-obj docutils literal"><span class="pre">list_topics</span></tt></a>([Nwords])</td>
-<td>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for each topic.</td>
+<td>Yields lists of the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for each topic.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel.print_topic" title="tethne.model.corpus.ldamodel.LDAModel.print_topic"><tt class="xref py py-obj docutils literal"><span class="pre">print_topic</span></tt></a>(k[,&nbsp;Nwords])</td>
-<td>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for topic <tt class="docutils literal"><span class="pre">k</span></tt>.</td>
+<td>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for topic <tt class="docutils literal"><span class="pre">k</span></tt> as a string.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel.print_topics" title="tethne.model.corpus.ldamodel.LDAModel.print_topics"><tt class="xref py py-obj docutils literal"><span class="pre">print_topics</span></tt></a>([Nwords])</td>
-<td>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for each topic.</td>
+<td>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for each topic, as a string.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="tethne.model.corpus.ldamodel.LDAModel.list_topic">
 <tt class="descname">list_topic</tt><big>(</big><em>k</em>, <em>Nwords=10</em><big>)</big><a class="reference internal" href="_modules/tethne/model/corpus/ldamodel.html#LDAModel.list_topic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.ldamodel.LDAModel.list_topic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for topic <tt class="docutils literal"><span class="pre">k</span></tt>.</p>
+<dd><p>Yields a list of the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for topic <tt class="docutils literal"><span class="pre">k</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">list_topic</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nwords</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">[ &#39;opposed&#39;, &#39;terminates&#39;, &#39;trichinosis&#39;, &#39;cistus&#39;, &#39;acaule&#39; ]</span>
+</pre></div>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -155,7 +203,7 @@
 <dl class="method">
 <dt id="tethne.model.corpus.ldamodel.LDAModel.list_topics">
 <tt class="descname">list_topics</tt><big>(</big><em>Nwords=10</em><big>)</big><a class="reference internal" href="_modules/tethne/model/corpus/ldamodel.html#LDAModel.list_topics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.ldamodel.LDAModel.list_topics" title="Permalink to this definition">¶</a></dt>
-<dd><p>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for each topic.</p>
+<dd><p>Yields lists of the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for each topic.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -179,7 +227,11 @@
 <dl class="method">
 <dt id="tethne.model.corpus.ldamodel.LDAModel.print_topic">
 <tt class="descname">print_topic</tt><big>(</big><em>k</em>, <em>Nwords=10</em><big>)</big><a class="reference internal" href="_modules/tethne/model/corpus/ldamodel.html#LDAModel.print_topic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.ldamodel.LDAModel.print_topic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for topic <tt class="docutils literal"><span class="pre">k</span></tt>.</p>
+<dd><p>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for topic <tt class="docutils literal"><span class="pre">k</span></tt> as a string.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">list_topic</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nwords</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">&#39;opposed, terminates, trichinosis, cistus, acaule&#39;</span>
+</pre></div>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -207,7 +259,7 @@
 <dl class="method">
 <dt id="tethne.model.corpus.ldamodel.LDAModel.print_topics">
 <tt class="descname">print_topics</tt><big>(</big><em>Nwords=10</em><big>)</big><a class="reference internal" href="_modules/tethne/model/corpus/ldamodel.html#LDAModel.print_topics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.ldamodel.LDAModel.print_topics" title="Permalink to this definition">¶</a></dt>
-<dd><p>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for each topic.</p>
+<dd><p>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for each topic, as a string.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -234,6 +286,7 @@
 <dt id="tethne.model.corpus.ldamodel.MALLETLoader">
 <em class="property">class </em><tt class="descclassname">tethne.model.corpus.ldamodel.</tt><tt class="descname">MALLETLoader</tt><big>(</big><em>top_doc</em>, <em>word_top</em>, <em>metapath</em><big>)</big><a class="reference internal" href="_modules/tethne/model/corpus/ldamodel.html#MALLETLoader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.ldamodel.MALLETLoader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Used by <a class="reference internal" href="#tethne.model.corpus.ldamodel.from_mallet" title="tethne.model.corpus.ldamodel.from_mallet"><tt class="xref py py-func docutils literal"><span class="pre">from_mallet()</span></tt></a> to load MALLET output.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -242,36 +295,54 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#tethne.model.corpus.ldamodel.MALLETLoader.load" title="tethne.model.corpus.ldamodel.MALLETLoader.load"><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt></a>()</td>
-<td></td>
+<td>Load a <a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a> from MALLET output.</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="tethne.model.corpus.ldamodel.MALLETLoader.load">
 <tt class="descname">load</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/model/corpus/ldamodel.html#MALLETLoader.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.ldamodel.MALLETLoader.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Load a <a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a> from MALLET output.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>self.model</strong> : <a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="function">
 <dt id="tethne.model.corpus.ldamodel.from_mallet">
 <tt class="descclassname">tethne.model.corpus.ldamodel.</tt><tt class="descname">from_mallet</tt><big>(</big><em>top_doc</em>, <em>word_top</em>, <em>metadata</em><big>)</big><a class="reference internal" href="_modules/tethne/model/corpus/ldamodel.html#from_mallet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.ldamodel.from_mallet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parse results from LDA modeling with MALLET.</p>
-<p>MALLET&#8217;s LDA topic modeling algorithm produces a collection of output files.
-<a class="reference internal" href="tethne.readers.dfr.html#tethne.readers.dfr.read" title="tethne.readers.dfr.read"><tt class="xref py py-func docutils literal"><span class="pre">read()</span></tt></a> takes the topic-document and (sparse) word-topic matrices, as
-tab-separated value files, along with a metadata file that maps
-each MALLET document id to a <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>, using the <cite>metadata_key</cite>.</p>
+<dd><p>Generate a <a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a> from MALLET output.</p>
+<p>MALLET&#8217;s LDA topic modeling algorithm produces multiple output files. See
+the <a class="reference external" href="http://mallet.cs.umass.edu/topics.php">MALLET documentation</a> for
+details. When invoking MALLET&#8217;s <tt class="docutils literal"><span class="pre">train-topics</span></tt> procedure, you should
+have provided the <tt class="docutils literal"><span class="pre">--output-doc-topics</span></tt> and <tt class="docutils literal"><span class="pre">--word-topic-counts-file</span></tt>
+parameters; the <tt class="docutils literal"><span class="pre">top_doc</span></tt> and <tt class="docutils literal"><span class="pre">word_top</span></tt> parameters should be paths
+to those two files.</p>
+<p>You should also provide the path <tt class="docutils literal"><span class="pre">metadata</span></tt> to a tab-separated file 
+containing metadata about the documents used to build the model. The first
+column should be the ID used in the original corpus files. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre>10.2307/1709733 1962     BOTANICAL CLASSIFICATION        SCIENCE
+10.2307/20000814 1974    THE USE OF DIFFERENTIAL SYSTEMATICS IN GEOGRAPHIC RESEARCH      AREA
+</pre></div>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>top_doc</strong> : string</p>
 <blockquote>
-<div><p>Path to topic-document datafile generated with &#8211;output-doc-topics.</p>
+<div><p>Path to topic-document datafile generated with <tt class="docutils literal"><span class="pre">--output-doc-topics</span></tt>.</p>
 </div></blockquote>
 <p><strong>word_top</strong> : string</p>
 <blockquote>
-<div><p>Path to word-topic datafile generated with &#8211;word-topic-counts-file.</p>
+<div><p>Path to word-topic datafile generated with <tt class="docutils literal"><span class="pre">--word-topic-counts-file</span></tt>.</p>
 </div></blockquote>
 <p><strong>metadata</strong> : string</p>
 <blockquote>

@@ -8,7 +8,7 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel('ERROR')
 
-import networkx as nx
+import networkx
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -18,13 +18,40 @@ from .. import networks as nt
 
 class GraphCollection(object):
     """
-    Collection of NetworkX :class:`nx.classes.graph.Graph` objects, 
-    organized by some index (e.g. time). 
+    A :class:`.GraphCollection` is an indexed set of :class:`networkx.Graph`
+    objects generated from a :class:`.Corpus` or model.
+
+    A :class:`.GraphCollection` can be instantiated without any data.
     
-    A :class:`.GraphCollection` can be generated using classes in the
-    :mod:`tethne.builders` module. See 
-    :ref:`generate-graphcollection` for details.
+    .. code-block:: python
     
+       >>> from tethne import GraphCollection
+       >>> G = GraphCollection()
+    
+    When you add a :class:`networkx.Graph` to the :class:`.GraphCollection`\, 
+    all of the nodes are indexed and the graph is recast using integer IDs. 
+    This means that node IDs are consistent among all of the graphs in the 
+    collection.
+    
+    .. code-block:: python
+    
+       >>> import networkx
+       >>> g = networkx.Graph()
+       >>> g.add_edge('Bob', 'Joe')
+       >>> g.add_edge('Bob', 'Jane')
+
+       >>> from tethne import GraphCollection
+       >>> G = GraphCollection()
+       >>> G[1950] = g
+       
+       >>> print G[1950].nodes(data=True)
+       [(0, {'label': 'Jane'}), (1, {'label': 'Bob'}), (2, {'label': 'Joe'})]
+       
+    Note that the original node names have been retained in the `label`
+    attribute.
+    
+    You can also generate a :class:`.GraphCollection` directly from a 
+    :class:`.Corpus` using the :func:`GraphCollection.build` method.
     """
 
     def __init__(self):
@@ -44,7 +71,7 @@ class GraphCollection(object):
         ----------
         index
             This can be anything used to refer to the graph.
-        graph : :class:`.nx.classes.graph.Graph`
+        graph : :class:`.networkx.classes.graph.Graph`
 
         Raises
         ------
@@ -59,7 +86,7 @@ class GraphCollection(object):
         Effectively labels nodes with integer indices used across all graphs.
         """
 
-        graph_ = nx.Graph()
+        graph_ = networkx.Graph()
         
         # Index nodes, and add to new graph.
         for node in graph.nodes(data=True):
@@ -95,8 +122,35 @@ class GraphCollection(object):
     
     def build(self, D, axis, node_type, graph_type, method_kwargs={}, **kwargs):
         """
-        Generates a graph for each slice of a :class:`.Corpus`.
+        Generates a graphs directly from data in a :class:`.Corpus`.
         
+        The :mod:`.networks` module contains graph-building methods for
+        :mod:`.authors`, :mod:`.papers`, :mod:`.features`, and :mod:`.topics`\.
+        Choose a method from one of these modules by specifying the module name
+        in `node_type` and the method name in `graph_type`. That method will
+        be applied to each slice in the :class:`.Corpus`\, `C`, along the 
+        specified `axis`.
+        
+        To build a coauthorship network from a :class:`.Corpus`
+        (already sliced by 'date'):
+        
+        .. code-block:: python
+        
+           >>> G = GraphCollection().build(C, 'date', 'authors', 'coauthors')
+           >>> G.graphs
+           {1921: <networkx.classes.graph.Graph at 0x10b2692d0>,
+            1926: <networkx.classes.graph.Graph at 0x10b269c50>,
+            1931: <networkx.classes.graph.Graph at 0x10b269c10>,
+            1936: <networkx.classes.graph.Graph at 0x10b2695d0>,
+            1941: <networkx.classes.graph.Graph at 0x10b269dd0>,
+            1946: <networkx.classes.graph.Graph at 0x10a88bb90>,
+            1951: <networkx.classes.graph.Graph at 0x10a88b0d0>,
+            1956: <networkx.classes.graph.Graph at 0x10b269a50>,
+            1961: <networkx.classes.graph.Graph at 0x10b269b50>,
+            1966: <networkx.classes.graph.Graph at 0x10b269790>,
+            1971: <networkx.classes.graph.Graph at 0x10b269d50>,
+            1976: <networkx.classes.graph.Graph at 0x10a88bed0>}
+
         Parameters
         ----------
         D : :class:`.Corpus`
@@ -104,9 +158,9 @@ class GraphCollection(object):
         axis : str
             Name of slice axis to use in generating graphs.
         node_type : str
-            'authors', 'papers', or 'institutions'
+            Name of a graph-building module in :mod:`.networks`\.
         graph_type : str
-            __name__ of a method in :mod:`tethne.networks`
+            Name of a method in the module indicated by `node_type`.
         method_kwargs : dict
             Kwargs to pass to `graph_type` method.
         
@@ -125,7 +179,19 @@ class GraphCollection(object):
 
     def nodes(self):
         """
-        Return complete set of nodes for this :class:`.GraphCollection` .
+        Get the complete set of nodes for this :class:`.GraphCollection`\.
+        
+        .. code-block:: python
+        
+           >>> G.nodes()
+           [0,
+            1,
+            2,
+            3,
+            4,
+            .
+            .
+            233]
 
         Returns
         -------
@@ -138,12 +204,20 @@ class GraphCollection(object):
 
     def edges(self, overwrite=False):   # [#61512528]
         """
-        Return complete set of edges for this :class:`.GraphCollection` . 
+        Get the complete set of edges for this :class:`.GraphCollection` .
 
-        If this method has been called previously for this
-        :class:`.GraphCollection` then will not recompute unless overwrite =
-        True.
-
+        .. code-block:: python
+        
+           >>> G.edges()
+           [(131, 143),
+            (183, 222),
+            (54, 55),
+            (64, 51),
+            (54, 58),
+            .
+            .
+            (53, 56)]
+            
         Parameters
         ----------
         overwrite : bool
@@ -187,7 +261,7 @@ class GraphCollection(object):
         xvalues, yvalues = data
 
         if fig is None:
-            fig = plt.figure()
+            fig = plt.figure(figsize=(10,5))
 
         plt.__dict__[type](xvalues, yvalues, **plotargs)
         plt.xlim(np.min(xvalues), np.max(xvalues))
@@ -195,8 +269,17 @@ class GraphCollection(object):
         
     def node_distribution(self):
         """
-        Returns keys and graph sizes (nodes), sorted by key.
+        Get the number of nodes for each :class:`networkx.Graph` in the
+        :class:`.GraphCollection`\.
         
+        .. code-block:: python
+        
+           >>> keys, nodes = G.node_distribution()
+           >>> print keys
+           [1921, 1926, 1931, 1936, 1941, 1946, 1951, 1956, 1961, 1966, 1971, 1976]
+           >>> print nodes
+           [0, 2, 16, 8, 2, 5, 14, 16, 33, 60, 44, 52]
+
         Returns
         -------
         keys : list
@@ -213,7 +296,17 @@ class GraphCollection(object):
     def plot_node_distribution(self, type='bar', fig=None, plotargs={},
                                                               **kwargs):
         """
-        Plot :func:`.node_distribution` using MatPlotLib.
+        Plot :func:`GraphCollection.node_distribution` using MatPlotLib.
+        
+        .. code-block:: python
+        
+           >>> fig = G.plot_node_distribution()
+           
+        ...should generate a plot that looks like:
+        
+        .. figure:: _static/images/graph_plot_distribution.png
+           :width: 400
+           :align: center
         
         Parameters
         ----------
@@ -234,7 +327,16 @@ class GraphCollection(object):
     
     def edge_distribution(self):
         """
-        Returns keys and graph sizes (edges), sorted by key.
+        Get the number of edges in each :class:`networkx.Graph` in the
+        :class:`.GraphCollection`\.
+        
+        .. code-block:: python
+   
+           >>> keys, edges = G.edge_distribution()
+           >>> print keys
+           [1921, 1926, 1931, 1936, 1941, 1946, 1951, 1956, 1961, 1966, 1971, 1976]
+           >>> print edges
+           [0, 1, 108, 7, 1, 4, 16, 17, 29, 42, 112, 45]
         
         Returns
         -------
@@ -252,7 +354,17 @@ class GraphCollection(object):
     def plot_edge_distribution(self, type='bar', fig=None, plotargs={},
                                                               **kwargs):
         """
-        Plot :func:`.edge_distribution` using MatPlotLib.
+        Plot :func:`GraphCollection.edge_distribution` using MatPlotLib.
+        
+        .. code-block:: python
+        
+           >>> fig = G.plot_edge_distribution()
+           
+        ...should generate a plot that looks like:
+        
+        .. figure:: _static/images/graph_plot_edge_distribution.png
+           :width: 400
+           :align: center
         
         Parameters
         ----------
@@ -273,8 +385,20 @@ class GraphCollection(object):
     
     def attr_distribution(self, attr='weight', etype='edge', stat=np.mean):
         """
-        Generate summary statistics for a node or edge attribute.
+        Generate summary statistics for a node or edge attribute across all
+        of the :class:`networkx.Graph`\s in the :class:`.GraphCollection`\.
         
+        For example, to get the mean edge weight for each graph:
+        
+        .. code-block:: python
+        
+           >>> import numpy
+           >>> keys, means = G.attr_distribution('weight', 'edge', numpy.mean)
+           >>> print keys
+           [1921, 1926, 1931, 1936, 1941, 1946, 1951, 1956, 1961, 1966, 1971, 1976]
+           >>> print means
+           [0.0, 1.0, 1.1388888888888888, 1.1428571428571428, 4.0, 1.25, 1.0, 1.0, 1.0344827586206897, 1.2142857142857142, 1.0089285714285714, 1.2]
+
         Parameters
         ----------
         attr : str
@@ -295,7 +419,7 @@ class GraphCollection(object):
         keys = sorted(self.graphs.keys())
         values = []
         for k in keys:
-            A = nx.__dict__['get_{0}_attributes'.format(etype)](self[k], attr).values()
+            A = networkx.__dict__['get_{0}_attributes'.format(etype)](self[k], attr).values()
             
             # Ignore warnings; will handle NaNs below.
             with warnings.catch_warnings():
@@ -311,7 +435,18 @@ class GraphCollection(object):
     def plot_attr_distribution(self, attr='weight', etype='edge', stat=np.mean,
                                 type='bar', fig=None, plotargs={}, **kwargs):
         """
-        Plot :func:`.attr_distribution` using MatPlotLib.
+        Plot :func:`GraphCollection.attr_distribution` using MatPlotLib.
+        
+        .. code-block:: python
+
+           >>> import numpy
+           >>> G.plot_attr_distribution('weight', 'edge', numpy.mean, fig=fig)
+           
+        ...should generate a plot that looks something like:
+        
+        .. figure:: _static/images/graph_plot_attr_distribution.png
+           :width: 400
+           :align: center
         
         Parameters
         ----------
@@ -337,9 +472,13 @@ class GraphCollection(object):
 
         return fig
     
-    def save(self,filepath):   #[61512528]
+    def save(self, filepath):   #[61512528]
         """
-        Pickles (serializes) the :class:`.GraphCollection` .
+        Pickles (serializes) the :class:`.GraphCollection`\.
+        
+        .. code-block:: python
+        
+           >>> G.save('/path/to/archive.pickle')
         
         Parameters
         ----------
@@ -368,6 +507,10 @@ class GraphCollection(object):
     def load(self, filepath):    #[61512528]
         """
         Loads a pickled (serialized) :class:`.GraphCollection` from filepath.
+        
+        .. code-block:: python
+        
+           >>> G = GraphCollection().load('/path/to/archive.pickle')
 
         Parameters
         ----------
@@ -402,7 +545,13 @@ class GraphCollection(object):
     def compose(self):
         """
         Returns the simple union of all :class:`.Graph` in the 
-        :class:`.GraphCollection` .
+        :class:`.GraphCollection`\.
+        
+        .. code-block:: python
+        
+           >>> g = G.compose()
+           >>> g
+           <networkx.classes.graph.Graph at 0x10bfac710>
         
         Returns
         -------
@@ -417,8 +566,8 @@ class GraphCollection(object):
         
         """
         
-        composed = nx.Graph()
+        composed = networkx.Graph()
         for k, G in self.graphs.iteritems():
-            composed = nx.compose(composed, G)
+            composed = networkx.compose(composed, G)
         
         return composed

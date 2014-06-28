@@ -285,28 +285,28 @@ manipulation.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">attr_distribution</span></tt>([attr,&nbsp;etype,&nbsp;stat])</td>
-<td>Generate summary statistics for a node or edge attribute.</td>
+<td>Generate summary statistics for a node or edge attribute across all of the <tt class="xref py py-class docutils literal"><span class="pre">networkx.Graph</span></tt>s in the <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">build</span></tt>(D,&nbsp;axis,&nbsp;node_type,&nbsp;graph_type[,&nbsp;...])</td>
-<td>Generates a graph for each slice of a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</td>
+<td>Generates a graphs directly from data in a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">compose</span></tt>()</td>
-<td>Returns the simple union of all <tt class="xref py py-class docutils literal"><span class="pre">Graph</span></tt> in the  <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</td>
+<td>Returns the simple union of all <tt class="xref py py-class docutils literal"><span class="pre">Graph</span></tt> in the  <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">edge_distribution</span></tt>()</td>
-<td>Returns keys and graph sizes (edges), sorted by key.</td>
+<td>Get the number of edges in each <tt class="xref py py-class docutils literal"><span class="pre">networkx.Graph</span></tt> in the <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">edges</span></tt>([overwrite])</td>
-<td>Return complete set of edges for this <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</td>
+<td>Get the complete set of edges for this <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt>(filepath)</td>
 <td>Loads a pickled (serialized) <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> from filepath.</td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">node_distribution</span></tt>()</td>
-<td>Returns keys and graph sizes (nodes), sorted by key.</td>
+<td>Get the number of nodes for each <tt class="xref py py-class docutils literal"><span class="pre">networkx.Graph</span></tt> in the <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">nodes</span></tt>()</td>
-<td>Return complete set of nodes for this <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</td>
+<td>Get the complete set of nodes for this <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">plot_attr_distribution</span></tt>([attr,&nbsp;etype,&nbsp;stat,&nbsp;...])</td>
 <td>Plot <tt class="xref py py-func docutils literal"><span class="pre">attr_distribution()</span></tt> using MatPlotLib.</td>
@@ -318,7 +318,7 @@ manipulation.</p>
 <td>Plot <tt class="xref py py-func docutils literal"><span class="pre">node_distribution()</span></tt> using MatPlotLib.</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt>(filepath)</td>
-<td>Pickles (serializes) the <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</td>
+<td>Pickles (serializes) the <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</td>
 </tr>
 </tbody>
 </table>

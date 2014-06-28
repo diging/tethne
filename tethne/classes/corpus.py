@@ -1,45 +1,5 @@
 """
 A :class:`.Corpus` organizes :class:`.Paper`\s for analysis.
-
-You can create a :class:`.Corpus` by passing its constructor a list of
-:class:`.Paper` instances, and (optionally) some features over those papers,
-e.g. wordcounts. Once you have created a :class:`.Corpus` you can use it
-to generate a :class:`.GraphCollection`\, or generate corpus or social
-models (see :mod:`.model`\).
-
-To create a :class:`.Corpus` from a JSTOR DfR dataset containing wordcounts,
-you might do:
-
-.. code-block:: python
-
-   >>> from tethne.readers import dfr
-   >>> papers = dfr.read('/path/to/dataset')
-   >>> wordcounts = dfr.ngrams('/path/to/dataset', N='uni')
-   
-   >>> from tethne import Corpus
-   >>> C = Corpus(papers, features={'wordcounts':wordcounts}, index_by='doi')
-   >>> C
-   <tethne.classes.corpus.Corpus object at 0x107975ad0>
-
-:mod:`.readers.dfr` and :mod:`.readers.wos` provide some convenience 
-functions for generating a :class:`.Corpus` directly from a dataset. For 
-example:
-
-.. code-block:: python
-
-   >>> from tethne.readers import dfr
-   >>> C = dfr.read_corpus('/path/to/dataset', features=('uni',))
-   >>> C
-   <tethne.classes.corpus.Corpus object at 0x107975ad0>
-
-You can organize your :class:`.Corpus` using the :meth:`.slice` method, and
-generate some descriptive statistics with :meth:`.distribution` and
-:meth:`.plot_distribution`\.
-
-To save/load your :class:`.Corpus` (e.g. for archiving your data), you can
-convert it to or from a :class:`.HDF5Corpus` using :meth:`.to_hdf5` and
-:func:`.from_hdf5`\.
-   
 """
 
 import logging
@@ -62,6 +22,48 @@ from unidecode import unidecode
 from ..utilities import strip_punctuation
 
 class Corpus(object):
+    """
+    A :class:`.Corpus` organizes :class:`.Paper`\s for analysis.
+
+    You can create a :class:`.Corpus` by passing its constructor a list of
+    :class:`.Paper` instances, and (optionally) some features over those papers,
+    e.g. wordcounts. Once you have created a :class:`.Corpus` you can use it
+    to generate a :class:`.GraphCollection`\, or generate corpus or social
+    models (see :mod:`.model`\).
+
+    To create a :class:`.Corpus` from a JSTOR DfR dataset containing wordcounts,
+    you might do:
+
+    .. code-block:: python
+
+       >>> from tethne.readers import dfr
+       >>> papers = dfr.read('/path/to/dataset')
+       >>> wordcounts = dfr.ngrams('/path/to/dataset', N='uni')
+       
+       >>> from tethne import Corpus
+       >>> C = Corpus(papers, features={'wordcounts':wordcounts}, index_by='doi')
+       >>> C
+       <tethne.classes.corpus.Corpus object at 0x107975ad0>
+
+    :mod:`.readers.dfr` and :mod:`.readers.wos` provide some convenience 
+    functions for generating a :class:`.Corpus` directly from a dataset. For 
+    example:
+
+    .. code-block:: python
+
+       >>> from tethne.readers import dfr
+       >>> C = dfr.read_corpus('/path/to/dataset', features=('uni',))
+       >>> C
+       <tethne.classes.corpus.Corpus object at 0x107975ad0>
+
+    You can organize your :class:`.Corpus` using the :meth:`.slice` method, and
+    generate some descriptive statistics with :meth:`.distribution` and
+    :meth:`.plot_distribution`\.
+
+    To save/load your :class:`.Corpus` (e.g. for archiving your data), you can
+    convert it to or from a :class:`.HDF5Corpus` using :meth:`.to_hdf5` and
+    :func:`.from_hdf5`\.
+    """
     
     def __init__(self, papers, features=None, index_by='ayjid',
                        index_citation_by='ayjid', exclude=set([]),

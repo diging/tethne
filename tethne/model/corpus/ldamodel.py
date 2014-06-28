@@ -1,3 +1,7 @@
+"""
+Classes and methods related to the :class:`.LDAModel`\.
+"""
+
 from ..basemodel import BaseModel
 import numpy as np
 
@@ -6,27 +10,47 @@ from scipy.sparse import coo_matrix
 
 class LDAModel(BaseModel):
     """
-    Latent Dirichlet Allocation topic model.
+    Represents a Latent Dirichlet Allocation (LDA) topic model.
     
-    Items are documents, dimensions are topics.
+    In the LDA model, topics (dimensions) are probability distributions over 
+    words (features), and documents (items) are comprised of mixtures of topics.
+    For a complete description of the model, see 
+    `Blei & Jordan (2003) <http://jmlr.org/papers/v3/blei03a.html>`_.
     
-    See: http://jmlr.org/papers/v3/blei03a.html
+    To generate a :class:`.LDAModel` from a :class:`.Corpus` using
+    `MALLET <http://mallet.cs.umass.edu/>`_, use the 
+    :class:`.MALLETModelManager`\. Additional managers for :class:`.LDAModel`\s
+    will be added shortly.
+    
+    You can also initialize a :class:`.LDAModel` directly by providing the
+    following parameters:
+    
+    * ``theta``, describes the proportion of topics (cols) in each document 
+      (rows).
+    * ``phi`` describes the topic (rows) distributions over words (cols).
+    * ``metadata`` should map matrix indices for documents onto :class:`.Paper`
+      IDs (or whatever you use to identify documents).
+    * ``vocabulary`` should map matrix indices for words onto word-strings.
+    ``metadata`` and ``vocabulary`` mappings.
+    
+    Finally, you can use :func:`.from_mallet` to generate a :class:`.LDAModel`
+    from MALLET output.
+    
+    Parameters
+    ----------
+    theta : matrix-like
+        Distribution of topics (cols) in documents (rows). Rows sum to 1.
+    phi : matrix-like
+        Distribution over words (cols) for topics (rows). Rows sum to 1.
+    metadata : dict
+        Maps matrix indices onto document datadata.
+    vocabulary : dict
+        Maps W indices onto words.
     """
 
     def __init__(self, theta, phi, metadata, vocabulary):
         """
         Initialize the :class:`.LDAModel`\.
-        
-        Parameters
-        ----------
-        theta : matrix-like
-            Distribution of topics (cols) in documents (rows). Rows sum to 1.
-        phi : matrix-like
-            Distribution over words (cols) for topics (rows). Rows sum to 1.
-        metadata : dict
-            Maps matrix indices onto document datadata.
-        vocabulary : dict
-            Maps W indices onto words.            
         """
         
         self.theta = theta
@@ -96,7 +120,12 @@ class LDAModel(BaseModel):
     
     def list_topic(self, k, Nwords=10):
         """
-        Yields the top ``Nwords`` for topic ``k``.
+        Yields a list of the top ``Nwords`` for topic ``k``.
+        
+        .. code-block:: python
+        
+           >>> model.list_topic(1, Nwords=5)
+           [ 'opposed', 'terminates', 'trichinosis', 'cistus', 'acaule' ]
         
         Parameters
         ----------
@@ -117,7 +146,12 @@ class LDAModel(BaseModel):
     
     def print_topic(self, k, Nwords=10):
         """
-        Yields the top ``Nwords`` for topic ``k``.
+        Yields the top ``Nwords`` for topic ``k`` as a string.
+        
+        .. code-block:: python
+        
+           >>> model.list_topic(1, Nwords=5)
+           'opposed, terminates, trichinosis, cistus, acaule'
         
         Parameters
         ----------
@@ -138,7 +172,7 @@ class LDAModel(BaseModel):
     
     def list_topics(self, Nwords=10):
         """
-        Yields the top ``Nwords`` for each topic.
+        Yields lists of the top ``Nwords`` for each topic.
         
         Parameters
         ----------
@@ -159,7 +193,7 @@ class LDAModel(BaseModel):
     
     def print_topics(self, Nwords=10):
         """
-        Yields the top ``Nwords`` for each topic.
+        Yields the top ``Nwords`` for each topic, as a string.
         
         Parameters
         ----------
@@ -182,19 +216,28 @@ class LDAModel(BaseModel):
 
 def from_mallet(top_doc, word_top, metadata):
     """
-    Parse results from LDA modeling with MALLET.
+    Generate a :class:`.LDAModel` from MALLET output.
 
-    MALLET's LDA topic modeling algorithm produces a collection of output files.
-    :func:`.read` takes the topic-document and (sparse) word-topic matrices, as
-    tab-separated value files, along with a metadata file that maps
-    each MALLET document id to a :class:`.Paper`\, using the `metadata_key`.
+    MALLET's LDA topic modeling algorithm produces multiple output files. See
+    the `MALLET documentation <http://mallet.cs.umass.edu/topics.php>`_ for
+    details. When invoking MALLET's ``train-topics`` procedure, you should
+    have provided the ``--output-doc-topics`` and ``--word-topic-counts-file``
+    parameters; the ``top_doc`` and ``word_top`` parameters should be paths
+    to those two files.
+    
+    You should also provide the path ``metadata`` to a tab-separated file 
+    containing metadata about the documents used to build the model. The first
+    column should be the ID used in the original corpus files. For example::
+    
+       10.2307/1709733 1962	BOTANICAL CLASSIFICATION	SCIENCE
+       10.2307/20000814	1974	THE USE OF DIFFERENTIAL SYSTEMATICS IN GEOGRAPHIC RESEARCH	AREA
 
     Parameters
     ----------
     top_doc : string
-        Path to topic-document datafile generated with --output-doc-topics.
+        Path to topic-document datafile generated with ``--output-doc-topics``.
     word_top : string
-        Path to word-topic datafile generated with --word-topic-counts-file.
+        Path to word-topic datafile generated with ``--word-topic-counts-file``.
     metadata : string
         Path to tab-separated metadata file with :class:`.Paper` keys.
 
@@ -210,12 +253,34 @@ def from_mallet(top_doc, word_top, metadata):
     return model
 
 class MALLETLoader(object):
+    """
+    Used by :func:`.from_mallet` to load MALLET output.
+    """
     def __init__(self, top_doc, word_top, metapath):
+        """
+        Parameters
+        ----------
+        top_doc : string
+            Path to topic-document datafile generated with 
+            ``--output-doc-topics``.
+        word_top : string
+            Path to word-topic datafile generated with 
+            ``--word-topic-counts-file``.
+        metadata : string
+            Path to tab-separated metadata file with :class:`.Paper` keys.
+        """
         self.top_doc = top_doc
         self.word_top = word_top
         self.metapath = metapath
     
     def load(self):
+        """
+        Load a :class:`.LDAModel` from MALLET output.
+        
+        Returns
+        -------
+        self.model : :class:`.LDAModel`
+        """
         self._handle_top_doc()
         self._handle_metadata()
         self._handle_word_top()

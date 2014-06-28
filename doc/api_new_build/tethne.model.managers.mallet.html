@@ -85,7 +85,53 @@
 <dt id="tethne.model.managers.mallet.MALLETModelManager">
 <em class="property">class </em><tt class="descclassname">tethne.model.managers.mallet.</tt><tt class="descname">MALLETModelManager</tt><big>(</big><em>D</em>, <em>feature='unigrams'</em>, <em>outpath='/tmp/'</em>, <em>temppath=None</em>, <em>mallet_path='./model/bin/mallet-2.0.7'</em><big>)</big><a class="reference internal" href="_modules/tethne/model/managers/mallet.html#MALLETModelManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.managers.mallet.MALLETModelManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="tethne.model.managers.html#tethne.model.managers.ModelManager" title="tethne.model.managers.ModelManager"><tt class="xref py py-class docutils literal"><span class="pre">tethne.model.managers.ModelManager</span></tt></a></p>
-<p>Model Manager for LDA topic modeling with MALLET.</p>
+<p>Generates a <a class="reference internal" href="tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a> from a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> using
+<a class="reference external" href="http://mallet.cs.umass.edu/">MALLET</a>.</p>
+<p>Starting with some JSTOR DfR data (with wordcounts), a typical workflow
+might look something like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>                 <span class="c">#  1. Get stoplist.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stoplist</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">dfr</span>                    <span class="c">#  2. Build Corpus.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">corpus_from_dir</span><span class="p">(</span><span class="s">&#39;/path/to/DfR/datasets&#39;</span><span class="p">,</span> <span class="s">&#39;uni&#39;</span><span class="p">,</span> <span class="n">stoplist</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">filt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">DC</span><span class="p">):</span>                           <span class="c"># 3. Filter wordcounts.</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">C</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">DC</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="bp">True</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="bp">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">filter_features</span><span class="p">(</span><span class="s">&#39;wordcounts&#39;</span><span class="p">,</span> <span class="s">&#39;wc_filtered&#39;</span><span class="p">,</span> <span class="n">filt</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.model</span> <span class="kn">import</span> <span class="n">MALLETModelManager</span>       <span class="c">#   4. Get Manager.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outpath</span> <span class="o">=</span> <span class="s">&#39;/path/to/my/working/directory&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mallet</span> <span class="o">=</span> <span class="s">&#39;/Applications/mallet-2.0.7&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">MALLETModelManager</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="s">&#39;wc_filtered&#39;</span><span class="p">,</span> <span class="n">outpath</span><span class="p">,</span> <span class="n">mallet_path</span><span class="o">=</span><span class="n">mallet</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">prep</span><span class="p">()</span>                                          <span class="c">#    5. Prep model.</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">Z</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>               <span class="c">#   6. Build model.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span>                                             <span class="c"># (may take awhile)</span>
+<span class="go">&lt;tethne.model.corpus.ldamodel.LDAModel at 0x10bfac710&gt;</span>
+</pre></div>
+</div>
+<p>A plot showing the log-likelihood/topic over modeling iterations should be
+generated in your <cite>outpath</cite>. For example:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/ldamodel_LL.png"><img alt="_images/ldamodel_LL.png" src="_images/ldamodel_LL.png" style="width: 400px;" /></a>
+</div>
+<p>Behind the scenes, the <tt class="xref py py-func docutils literal"><span class="pre">prep()</span></tt> procedure generates a plain-text corpus
+file at <cite>temppath</cite>, along with a metadata file. MALLET&#8217;s <tt class="docutils literal"><span class="pre">import-file</span></tt>
+procedure is then called, which translates the corpus into MALLET&#8217;s internal
+format (also stored at the <cite>temppath</cite>).</p>
+<p>The <tt class="xref py py-func docutils literal"><span class="pre">build()</span></tt> procedure then invokes MALLET&#8217;s <tt class="docutils literal"><span class="pre">train-topics</span></tt>
+procedure. This step may take a considerable amount of time, anywhere from 
+a few minutes (small corpus, few topics) to a few hours (large corpus, many
+topics).</p>
+<p>For a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> with a few thousand <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s, 300 - 500 
+iterations is often sufficient to achieve convergence for 20-100 topics.</p>
+<p>Once the <a class="reference internal" href="tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a> is built, you can access its methods directly.
+See full method descriptions in <a class="reference internal" href="tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a>.</p>
+<p>For more information about topic modeling with MALLET see 
+<a class="reference external" href="http://programminghistorian.org/lessons/topic-modeling-and-mallet">this tutorial</a>.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -94,12 +140,12 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">build</span></tt>([Z,&nbsp;max_iter,&nbsp;prep])</td>
-<td></td>
+<td>Start the modeling build procedure.</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">plot_ll</span></tt>()</td>
 <td>Plots LL/topic over iterations.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.model.managers.mallet.MALLETModelManager.prep" title="tethne.model.managers.mallet.MALLETModelManager.prep"><tt class="xref py py-obj docutils literal"><span class="pre">prep</span></tt></a>([meta])</td>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">prep</span></tt>([meta])</td>
 <td>Generates a corpus that can be used as input for modeling.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.model.managers.mallet.MALLETModelManager.topic_over_time" title="tethne.model.managers.mallet.MALLETModelManager.topic_over_time"><tt class="xref py py-obj docutils literal"><span class="pre">topic_over_time</span></tt></a>(k[,&nbsp;threshold,&nbsp;mode,&nbsp;...])</td>
@@ -108,28 +154,19 @@
 </tbody>
 </table>
 <dl class="method">
-<dt id="tethne.model.managers.mallet.MALLETModelManager.prep">
-<tt class="descname">prep</tt><big>(</big><em>meta=['date', 'atitle', 'jtitle']</em><big>)</big><a class="reference internal" href="_modules/tethne/model/managers/mallet.html#MALLETModelManager.prep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.managers.mallet.MALLETModelManager.prep" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a corpus that can be used as input for modeling.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>meta</strong> : list</p>
-<blockquote class="last">
-<div><p>A list of keys onto <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> to include in the exported
-metadata file. Default: [&#8216;date&#8217;, &#8216;jtitle&#8217;]</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="tethne.model.managers.mallet.MALLETModelManager.topic_over_time">
 <tt class="descname">topic_over_time</tt><big>(</big><em>k</em>, <em>threshold=0.05</em>, <em>mode='documents'</em>, <em>normed=True</em>, <em>plot=False</em>, <em>figargs={'figsize': (10</em>, <em>10)}</em><big>)</big><a class="reference internal" href="_modules/tethne/model/managers/mallet.html#MALLETModelManager.topic_over_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.managers.mallet.MALLETModelManager.topic_over_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Representation of topic <tt class="docutils literal"><span class="pre">k</span></tt> over &#8216;date&#8217; slice axis.</p>
+<p>The <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> used to initialize the <tt class="xref py py-class docutils literal"><span class="pre">LDAModelManager</span></tt>
+must have been already sliced by &#8216;date&#8217;.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">keys</span><span class="p">,</span> <span class="nb">repr</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">topic_over_time</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>...should return <tt class="docutils literal"><span class="pre">keys</span></tt> (date) and <tt class="docutils literal"><span class="pre">repr</span></tt> (% documents) for topic 1,
+and generate a plot like this one in your <tt class="docutils literal"><span class="pre">outpath</span></tt>.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/topic_1_over_time.png"><img alt="_images/topic_1_over_time.png" src="_images/topic_1_over_time.png" style="width: 400px;" /></a>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

@@ -80,15 +80,15 @@
             
   <div class="section" id="module-tethne.classes.paper">
 <span id="tethne-classes-paper-module"></span><h1>tethne.classes.paper module<a class="headerlink" href="#module-tethne.classes.paper" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference internal" href="#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> represents a document in a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</p>
+<p>A <a class="reference internal" href="#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> represents a document in a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</p>
 <dl class="class">
 <dt id="tethne.classes.paper.Paper">
 <em class="property">class </em><tt class="descclassname">tethne.classes.paper.</tt><tt class="descname">Paper</tt><a class="reference internal" href="_modules/tethne/classes/paper.html#Paper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.paper.Paper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Base class for Papers.</p>
-<p>Behaves just like a dict, but enforces a limited vocabulary of keys, and 
-specific data types.</p>
-<p>The following fields (and corresponding data types) are allowed:</p>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt></p>
+<p>The <a class="reference internal" href="#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> represents a document in a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</p>
+<p><tt class="xref py py-func docutils literal"><span class="pre">__setitem__()</span></tt> enforces a limited vocabulary of keys and corresponding
+data types.</p>
+<p>The following fields (and corresponding data types) are permitted.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="16%" />
@@ -182,42 +182,69 @@ specific data types.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.paper.Paper.authors" title="tethne.classes.paper.Paper.authors"><tt class="xref py py-obj docutils literal"><span class="pre">authors</span></tt></a>()</td>
-<td>Returns a list of author names (FI LAST).</td>
+<td>Returns a list of author names (LAST F).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.paper.Paper.iteritems" title="tethne.classes.paper.Paper.iteritems"><tt class="xref py py-obj docutils literal"><span class="pre">iteritems</span></tt></a>()</td>
-<td>Returns an iterator for the <a class="reference internal" href="#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>&#8216;s metadata fields</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">clear</span></tt>(()&nbsp;-&gt;&nbsp;None.&nbsp;&nbsp;Remove&nbsp;all&nbsp;items&nbsp;from&nbsp;D.)</td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.paper.Paper.keys" title="tethne.classes.paper.Paper.keys"><tt class="xref py py-obj docutils literal"><span class="pre">keys</span></tt></a>()</td>
-<td>Returns the keys of the <a class="reference internal" href="#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>&#8216;s metadata fields.</td>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">copy</span></tt>(()&nbsp;-&gt;&nbsp;a&nbsp;shallow&nbsp;copy&nbsp;of&nbsp;D)</td>
+<td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.paper.Paper.values" title="tethne.classes.paper.Paper.values"><tt class="xref py py-obj docutils literal"><span class="pre">values</span></tt></a>()</td>
-<td>Returns the values of the <a class="reference internal" href="#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>&#8216;s metadata fields.</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">fromkeys</span></tt>(...)</td>
+<td>v defaults to None.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get</span></tt>((k[,d])&nbsp;-&gt;&nbsp;D[k]&nbsp;if&nbsp;k&nbsp;in&nbsp;D,&nbsp;...)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">has_key</span></tt>((k)&nbsp;-&gt;&nbsp;True&nbsp;if&nbsp;D&nbsp;has&nbsp;a&nbsp;key&nbsp;k,&nbsp;else&nbsp;False)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">items</span></tt>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D&#8217;s&nbsp;(key,&nbsp;value)&nbsp;pairs,&nbsp;...)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">iteritems</span></tt>(()&nbsp;-&gt;&nbsp;an&nbsp;iterator&nbsp;over&nbsp;the&nbsp;(key,&nbsp;...)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">iterkeys</span></tt>(()&nbsp;-&gt;&nbsp;an&nbsp;iterator&nbsp;over&nbsp;the&nbsp;keys&nbsp;of&nbsp;D)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">itervalues</span></tt>(...)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">keys</span></tt>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D&#8217;s&nbsp;keys)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">pop</span></tt>((k[,d])&nbsp;-&gt;&nbsp;v,&nbsp;...)</td>
+<td>If key is not found, d is returned if given, otherwise KeyError is raised</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">popitem</span></tt>(()&nbsp;-&gt;&nbsp;(k,&nbsp;v),&nbsp;...)</td>
+<td>2-tuple; but raise KeyError if D is empty.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">setdefault</span></tt>((k[,d])&nbsp;-&gt;&nbsp;D.get(k,d),&nbsp;...)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">update</span></tt>(([E,&nbsp;...)</td>
+<td>If E present and has a .keys() method, does:     for k in E: D[k] = E[k]</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">values</span></tt>(()&nbsp;-&gt;&nbsp;list&nbsp;of&nbsp;D&#8217;s&nbsp;values)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">viewitems</span></tt>(...)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">viewkeys</span></tt>(...)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">viewvalues</span></tt>(...)</td>
+<td></td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="tethne.classes.paper.Paper.authors">
 <tt class="descname">authors</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/classes/paper.html#Paper.authors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.paper.Paper.authors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a list of author names (FI LAST).</p>
+<dd><p>Returns a list of author names (LAST F).</p>
 <p>If there are no authors, returns an empty list.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="tethne.classes.paper.Paper.iteritems">
-<tt class="descname">iteritems</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/classes/paper.html#Paper.iteritems"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.paper.Paper.iteritems" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an iterator for the <a class="reference internal" href="#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>&#8216;s metadata fields</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="tethne.classes.paper.Paper.keys">
-<tt class="descname">keys</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/classes/paper.html#Paper.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.paper.Paper.keys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the keys of the <a class="reference internal" href="#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>&#8216;s metadata fields.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="tethne.classes.paper.Paper.values">
-<tt class="descname">values</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/classes/paper.html#Paper.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.paper.Paper.values" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the values of the <a class="reference internal" href="#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>&#8216;s metadata fields.</p>
 </dd></dl>
 
 </dd></dl>
