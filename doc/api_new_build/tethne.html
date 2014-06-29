@@ -25,9 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/js/copybutton.js"></script>
-    <link rel="top" title="tethne 0.5.0-alpha documentation" href="index.html" >
-    <link rel="next" title="tethne.analyze package" href="tethne.analyze.html" >
-    <link rel="prev" title="Welcome to tethne’s documentation!" href="index.html" > 
+    <link rel="top" title="tethne 0.5.0-alpha documentation" href="index.html" > 
   </head>
   <body>
 
@@ -63,14 +61,6 @@
       <li class="active">
         <a href="py-modindex.html" title="Python Module Index"
            >modules</a>
-      </li>
-      <li class="active">
-        <a href="tethne.analyze.html" title="tethne.analyze package"
-           accesskey="N">next</a>
-      </li>
-      <li class="active">
-        <a href="index.html" title="Welcome to tethne’s documentation!"
-           accesskey="P">previous</a>
       </li>
     </ul>
               
@@ -297,10 +287,14 @@
 </div>
 <div class="section" id="module-tethne">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tethne" title="Permalink to this headline">¶</a></h2>
-<p>Tethne is a package for analyzing citation data from the Web of Science.
-Modules within Tethne can generate a variety of networks, such as
-bibliographic coupling, citation, author-paper, and co-author networks,
-using networkx.</p>
+<p>Tethne is a Python package that draws together tools and techniques from 
+bibliometrics, computational linguistics, and social influence modeling into a
+single easy-to-use corpus analysis framework. Scholars can use Tethne to parse 
+and organize data from the ISI Web of Science and JSTOR Data-for-Research 
+databases, and generate time-variant citation-based network models, topic 
+models, and social influence models. Tethne also provides mechanisms for 
+visualizing those models using mainstream network visualization software (e.g. 
+Cyotoscape and Gephi) and the MatPlotLib Python library.</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -317,7 +311,7 @@ using networkx.</p>
 <td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="tethne.model.html#module-tethne.model" title="tethne.model"><tt class="xref py py-obj docutils literal"><span class="pre">model</span></tt></a></td>
-<td></td>
+<td>Provides classes for describing <a class="reference internal" href="tethne.model.corpus.html#module-tethne.model.corpus" title="tethne.model.corpus"><tt class="xref py py-mod docutils literal"><span class="pre">corpus</span></tt></a> or <a class="reference internal" href="tethne.model.social.html#module-tethne.model.social" title="tethne.model.social"><tt class="xref py py-mod docutils literal"><span class="pre">social</span></tt></a> models.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="tethne.networks.html#module-tethne.networks" title="tethne.networks"><tt class="xref py py-obj docutils literal"><span class="pre">networks</span></tt></a></td>
 <td>Methods for building networks from bibliographic data.</td>
@@ -331,10 +325,7 @@ using networkx.</p>
 <tr class="row-even"><td><a class="reference internal" href="tethne.services.html#module-tethne.services" title="tethne.services"><tt class="xref py py-obj docutils literal"><span class="pre">services</span></tt></a></td>
 <td>Modules for interacting with external web services.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="tethne.utilities.html#module-tethne.utilities" title="tethne.utilities"><tt class="xref py py-obj docutils literal"><span class="pre">utilities</span></tt></a></td>
-<td>Helper functions.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.writers.html#module-tethne.writers" title="tethne.writers"><tt class="xref py py-obj docutils literal"><span class="pre">writers</span></tt></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="tethne.writers.html#module-tethne.writers" title="tethne.writers"><tt class="xref py py-obj docutils literal"><span class="pre">writers</span></tt></a></td>
 <td>Export networks to structured and unstructured formats, for visualization.</td>
 </tr>
 </tbody>
@@ -361,12 +352,6 @@ using networkx.</p>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to tethne&#8217;s documentation!</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="tethne.analyze.html"
-                        title="next chapter">tethne.analyze package</a></p>
   <h3>This Page</h3>
   <div>
     <a href="_sources/tethne.txt"

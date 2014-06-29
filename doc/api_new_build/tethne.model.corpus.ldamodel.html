@@ -25,8 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/js/copybutton.js"></script>
-    <link rel="top" title="tethne 0.5.0-alpha documentation" href="index.html" >
-    <link rel="up" title="tethne.model.corpus package" href="tethne.model.corpus.html" > 
+    <link rel="top" title="tethne 0.5.0-alpha documentation" href="index.html" > 
   </head>
   <body>
 
@@ -50,10 +49,7 @@
         <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
 	
         <li class="active"><a href="index.html">tethne 0.5.0-alpha documentation</a></li>
-	
-          <li class="active"><a href="tethne.html" >tethne package</a></li>
-          <li class="active"><a href="tethne.model.html" >tethne.model package</a></li>
-          <li class="active"><a href="tethne.model.corpus.html" accesskey="U">tethne.model.corpus package</a></li> 
+	 
     </ul>
               
               
@@ -139,19 +135,19 @@ from MALLET output.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">dimension</span></tt>(d[,&nbsp;top])</td>
-<td>Describes a dimension (e.g.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel.dimension" title="tethne.model.corpus.ldamodel.LDAModel.dimension"><tt class="xref py py-obj docutils literal"><span class="pre">dimension</span></tt></a>(d[,&nbsp;top])</td>
+<td>Describes a dimension (eg a topic).</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">dimension_items</span></tt>(d,&nbsp;threshold,&nbsp;**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel.dimension_items" title="tethne.model.corpus.ldamodel.LDAModel.dimension_items"><tt class="xref py py-obj docutils literal"><span class="pre">dimension_items</span></tt></a>(d,&nbsp;threshold,&nbsp;**kwargs)</td>
 <td>Describes a dimension in terms of the items that contain it.</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">dimension_relationship</span></tt>(d,&nbsp;e,&nbsp;**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel.dimension_relationship" title="tethne.model.corpus.ldamodel.LDAModel.dimension_relationship"><tt class="xref py py-obj docutils literal"><span class="pre">dimension_relationship</span></tt></a>(d,&nbsp;e,&nbsp;**kwargs)</td>
 <td>Describes the relationship between two dimensions.</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">item</span></tt>(i[,&nbsp;top])</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel.item" title="tethne.model.corpus.ldamodel.LDAModel.item"><tt class="xref py py-obj docutils literal"><span class="pre">item</span></tt></a>(i[,&nbsp;top])</td>
 <td>Describes an item in terms of dimensions and weights.</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">item_relationship</span></tt>(i,&nbsp;j,&nbsp;**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel.item_relationship" title="tethne.model.corpus.ldamodel.LDAModel.item_relationship"><tt class="xref py py-obj docutils literal"><span class="pre">item_relationship</span></tt></a>(i,&nbsp;j,&nbsp;**kwargs)</td>
 <td>Describes the relationship between two items.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel.list_topic" title="tethne.model.corpus.ldamodel.LDAModel.list_topic"><tt class="xref py py-obj docutils literal"><span class="pre">list_topic</span></tt></a>(k[,&nbsp;Nwords])</td>
@@ -168,6 +164,147 @@ from MALLET output.</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="tethne.model.corpus.ldamodel.LDAModel.dimension">
+<tt class="descname">dimension</tt><big>(</big><em>d</em>, <em>top=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#tethne.model.corpus.ldamodel.LDAModel.dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes a dimension (eg a topic).</p>
+<p>Subclass must provide <tt class="docutils literal"><span class="pre">_dimension_description(d)</span></tt> method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>d</strong> : int</p>
+<blockquote>
+<div><p>Dimension index.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>description</strong> : list</p>
+<blockquote class="last">
+<div><p>A list of ( feature, weight ) tuples (e.g. word, prob ).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.model.corpus.ldamodel.LDAModel.dimension_items">
+<tt class="descname">dimension_items</tt><big>(</big><em>d</em>, <em>threshold</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#tethne.model.corpus.ldamodel.LDAModel.dimension_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes a dimension in terms of the items that contain it.</p>
+<p>Subclass must provide <tt class="docutils literal"><span class="pre">_dimension_items(d,</span> <span class="pre">threshold)</span></tt> method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>d</strong> : int</p>
+<blockquote>
+<div><p>Dimension index.</p>
+</div></blockquote>
+<p><strong>threshold</strong> : float</p>
+<blockquote>
+<div><p>Minimum representation of <tt class="docutils literal"><span class="pre">d</span></tt> in item.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>description</strong> : list</p>
+<blockquote class="last">
+<div><p>A list of ( item, weight ) tuples.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.model.corpus.ldamodel.LDAModel.dimension_relationship">
+<tt class="descname">dimension_relationship</tt><big>(</big><em>d</em>, <em>e</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#tethne.model.corpus.ldamodel.LDAModel.dimension_relationship" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes the relationship between two dimensions.</p>
+<p>Subclass must provide <tt class="docutils literal"><span class="pre">_dimension_relationship(d,</span> <span class="pre">e)</span></tt> method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>d</strong> : int</p>
+<blockquote>
+<div><p>Dimension index.</p>
+</div></blockquote>
+<p><strong>e</strong> : int</p>
+<blockquote>
+<div><p>Dimension index.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>relationship</strong> : list</p>
+<blockquote class="last">
+<div><p>A list of ( factor ,  weight ) tuples.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.model.corpus.ldamodel.LDAModel.item">
+<tt class="descname">item</tt><big>(</big><em>i</em>, <em>top=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#tethne.model.corpus.ldamodel.LDAModel.item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes an item in terms of dimensions and weights.</p>
+<p>Subclass must provide <tt class="docutils literal"><span class="pre">_item_description(i)</span></tt> method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>i</strong> : int</p>
+<blockquote>
+<div><p>Index for an item.</p>
+</div></blockquote>
+<p><strong>top</strong> : int</p>
+<blockquote>
+<div><p>(optional) Number of (highest-w) dimensions to return.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>description</strong> : list</p>
+<blockquote class="last">
+<div><p>A list of ( dimension , weight ) tuples.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.model.corpus.ldamodel.LDAModel.item_relationship">
+<tt class="descname">item_relationship</tt><big>(</big><em>i</em>, <em>j</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#tethne.model.corpus.ldamodel.LDAModel.item_relationship" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes the relationship between two items.</p>
+<p>Subclass must provide <tt class="docutils literal"><span class="pre">_item_relationship(i,</span> <span class="pre">j)</span></tt> method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>i</strong> : int</p>
+<blockquote>
+<div><p>Item index.</p>
+</div></blockquote>
+<p><strong>j</strong> : int</p>
+<blockquote>
+<div><p>Item index.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>relationship</strong> : list</p>
+<blockquote class="last">
+<div><p>A list of ( dimension ,  weight ) tuples.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="tethne.model.corpus.ldamodel.LDAModel.list_topic">
 <tt class="descname">list_topic</tt><big>(</big><em>k</em>, <em>Nwords=10</em><big>)</big><a class="reference internal" href="_modules/tethne/model/corpus/ldamodel.html#LDAModel.list_topic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.ldamodel.LDAModel.list_topic" title="Permalink to this definition">¶</a></dt>

@@ -1,3 +1,7 @@
+"""
+Classes and methods related to the :class:`.TAPModelManager`\.
+"""
+
 import os
 import re
 import shutil
@@ -19,7 +23,61 @@ from ..managers import SocialModelManager
 
 class TAPModelManager(SocialModelManager):
     """
-    For managing the :class:`.TAPModel` .
+    Generates a time-sensitive set of :class:`.TAPModel`\s from a 
+    :class:`.Corpus`\, a :mod:`.corpus` model, and a coauthorship 
+    :class:`.GraphCollection`\.
+    
+    The standard :class:`.TAPModel` is not sensitive to time, in that influence
+    among authors is estimated without regard to the sequence in which those
+    authors adopt features in their papers. The :class:`.TAPModelManager` 
+    generates :class:`.TAPModel`\s sequentially, using the posterior influence
+    values from one time-period as priors for the next time-period. The
+    :class:`.TAPModel` for the latest time-period, therefore, should reflect
+    both the structure of the network in that time-period as well as the
+    evolution of that network and the sequence in which authors adopt features
+    in their work.
+    
+    Starting with some JSTOR DfR data, a typical workflow might look something
+    like this:
+    
+    .. code-block:: python
+    
+       >>> from tethne.readers import dfr                  # 1. Create a Corpus.
+       >>> from nltk.corpus import stopwords
+       >>> C = dfr.read_corpus('/path/to/dataset/', 'uni', stopwords.word())
+       >>> C.slice('date', 'time_period', window_size=5)
+       
+       >>> from tethne import GraphCollection          # 2. Coauthorship graphs.
+       >>> G = GraphCollection().build(C, 'date', 'authors', 'coauthors')
+       >>> G.graphs
+       
+       >>> from tethne.model import MALLETModelManager        # 3. Corpus model.
+       >>> outpath = '/path/to/my/working/directory'
+       >>> mallet = '/Applications/mallet-2.0.7'
+       >>> M = MALLETModelManager(C, 'wc_filtered', outpath, mallet_path=mallet)
+       >>> model = M.build(Z=50, max_iter=300)
+       
+       >>> from tethne.model import TAPModelManager        # 4. Build TAPModels.
+       >>> T = TAPModelManager(C, G, model)
+       >>> T.build()
+
+    To visualize the :class:`.TAPModel`\s, use 
+    :func:`TAPModelManager.graph_collection` to generate a 
+    :class:`.GraphCollection` of influence graphs for a particular topic. For 
+    example:
+    
+    .. code-block:: python
+    
+       >>> IG = T.graph_collection(0)
+    
+    You can then use a method from :mod:`.writers` to export a network datafile
+    for visualization in `Cytoscape <http://www.cytoscape.org>`_ or
+    `Gephi <http://gephi.org>`_.
+    
+    .. figure:: _static/images/tap_topic0.png
+       :width: 600
+       :align: center
+       
     """
     
     def __init__(self, D=None, G=None, model=None, **kwargs):

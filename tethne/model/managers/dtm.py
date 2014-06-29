@@ -1,3 +1,7 @@
+"""
+Classes and methods related to the :class:`.DTMModelManager`\.
+"""
+
 import os
 import re
 import shutil

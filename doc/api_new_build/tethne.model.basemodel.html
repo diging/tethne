@@ -25,8 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/js/copybutton.js"></script>
-    <link rel="top" title="tethne 0.5.0-alpha documentation" href="index.html" >
-    <link rel="up" title="tethne.model package" href="tethne.model.html" > 
+    <link rel="top" title="tethne 0.5.0-alpha documentation" href="index.html" > 
   </head>
   <body>
 
@@ -50,9 +49,7 @@
         <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
 	
         <li class="active"><a href="index.html">tethne 0.5.0-alpha documentation</a></li>
-	
-          <li class="active"><a href="tethne.html" >tethne package</a></li>
-          <li class="active"><a href="tethne.model.html" accesskey="U">tethne.model package</a></li> 
+	 
     </ul>
               
               
@@ -94,7 +91,7 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#tethne.model.basemodel.BaseModel.dimension" title="tethne.model.basemodel.BaseModel.dimension"><tt class="xref py py-obj docutils literal"><span class="pre">dimension</span></tt></a>(d[,&nbsp;top])</td>
-<td>Describes a dimension (e.g.</td>
+<td>Describes a dimension (eg a topic).</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.model.basemodel.BaseModel.dimension_items" title="tethne.model.basemodel.BaseModel.dimension_items"><tt class="xref py py-obj docutils literal"><span class="pre">dimension_items</span></tt></a>(d,&nbsp;threshold,&nbsp;**kwargs)</td>
 <td>Describes a dimension in terms of the items that contain it.</td>
@@ -113,8 +110,8 @@
 <dl class="method">
 <dt id="tethne.model.basemodel.BaseModel.dimension">
 <tt class="descname">dimension</tt><big>(</big><em>d</em>, <em>top=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/model/basemodel.html#BaseModel.dimension"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.basemodel.BaseModel.dimension" title="Permalink to this definition">¶</a></dt>
-<dd><p>Describes a dimension (e.g. a topic).</p>
-<p>Subclass must provide _dimension_description(d) method.</p>
+<dd><p>Describes a dimension (eg a topic).</p>
+<p>Subclass must provide <tt class="docutils literal"><span class="pre">_dimension_description(d)</span></tt> method.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -139,6 +136,7 @@
 <dt id="tethne.model.basemodel.BaseModel.dimension_items">
 <tt class="descname">dimension_items</tt><big>(</big><em>d</em>, <em>threshold</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/model/basemodel.html#BaseModel.dimension_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.basemodel.BaseModel.dimension_items" title="Permalink to this definition">¶</a></dt>
 <dd><p>Describes a dimension in terms of the items that contain it.</p>
+<p>Subclass must provide <tt class="docutils literal"><span class="pre">_dimension_items(d,</span> <span class="pre">threshold)</span></tt> method.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -167,7 +165,7 @@
 <dt id="tethne.model.basemodel.BaseModel.dimension_relationship">
 <tt class="descname">dimension_relationship</tt><big>(</big><em>d</em>, <em>e</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/model/basemodel.html#BaseModel.dimension_relationship"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.basemodel.BaseModel.dimension_relationship" title="Permalink to this definition">¶</a></dt>
 <dd><p>Describes the relationship between two dimensions.</p>
-<p>Subclass must provide _dimension_relationship(d, e) method.</p>
+<p>Subclass must provide <tt class="docutils literal"><span class="pre">_dimension_relationship(d,</span> <span class="pre">e)</span></tt> method.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -196,7 +194,7 @@
 <dt id="tethne.model.basemodel.BaseModel.item">
 <tt class="descname">item</tt><big>(</big><em>i</em>, <em>top=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/model/basemodel.html#BaseModel.item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.basemodel.BaseModel.item" title="Permalink to this definition">¶</a></dt>
 <dd><p>Describes an item in terms of dimensions and weights.</p>
-<p>Subclass must provide _item_description(i) method.</p>
+<p>Subclass must provide <tt class="docutils literal"><span class="pre">_item_description(i)</span></tt> method.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -225,7 +223,7 @@
 <dt id="tethne.model.basemodel.BaseModel.item_relationship">
 <tt class="descname">item_relationship</tt><big>(</big><em>i</em>, <em>j</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/model/basemodel.html#BaseModel.item_relationship"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.basemodel.BaseModel.item_relationship" title="Permalink to this definition">¶</a></dt>
 <dd><p>Describes the relationship between two items.</p>
-<p>Subclass must provide _item_relationship(i, j) method.</p>
+<p>Subclass must provide <tt class="docutils literal"><span class="pre">_item_relationship(i,</span> <span class="pre">j)</span></tt> method.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

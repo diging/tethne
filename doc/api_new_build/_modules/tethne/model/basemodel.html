@@ -93,7 +93,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Describes an item in terms of dimensions and weights.</span>
 <span class="sd">        </span>
-<span class="sd">        Subclass must provide _item_description(i) method.</span>
+<span class="sd">        Subclass must provide ``_item_description(i)`` method.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -135,7 +135,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Describes the relationship between two items.</span>
 <span class="sd">        </span>
-<span class="sd">        Subclass must provide _item_relationship(i, j) method.</span>
+<span class="sd">        Subclass must provide ``_item_relationship(i, j)`` method.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -160,9 +160,9 @@
 </div>
 <div class="viewcode-block" id="BaseModel.dimension"><a class="viewcode-back" href="../../../tethne.model.basemodel.html#tethne.model.basemodel.BaseModel.dimension">[docs]</a>    <span class="k">def</span> <span class="nf">dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Describes a dimension (e.g. a topic).</span>
+<span class="sd">        Describes a dimension (eg a topic).</span>
 <span class="sd">        </span>
-<span class="sd">        Subclass must provide _dimension_description(d) method.</span>
+<span class="sd">        Subclass must provide ``_dimension_description(d)`` method.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -200,6 +200,8 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Describes a dimension in terms of the items that contain it.</span>
 <span class="sd">        </span>
+<span class="sd">        Subclass must provide ``_dimension_items(d, threshold)`` method.</span>
+<span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        d : int</span>
@@ -224,7 +226,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Describes the relationship between two dimensions.</span>
 <span class="sd">        </span>
-<span class="sd">        Subclass must provide _dimension_relationship(d, e) method.</span>
+<span class="sd">        Subclass must provide ``_dimension_relationship(d, e)`` method.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
