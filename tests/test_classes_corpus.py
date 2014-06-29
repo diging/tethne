@@ -7,6 +7,8 @@ from tethne.classes import Corpus
 from tethne.classes.corpus import from_hdf5
 from tethne.persistence import HDF5Corpus
 
+import numpy
+
 from nltk.corpus import stopwords
 
 class TestPaper(unittest.TestCase):
@@ -214,7 +216,57 @@ class TestCorpusTokenization(unittest.TestCase):
         self.dfrdatapath = '{0}/dfr'.format(datapath)
         self.papers = dfr.read(self.dfrdatapath)
         self.ngrams = dfr.ngrams(self.dfrdatapath, 'uni')
+
+    def test_feature_distribution(self):
+        filt = lambda s: len(s) > 3
+        D = Corpus(self.papers, features={'unigrams': self.ngrams},
+                                        index_by='doi',
+                                        exclude=set(stopwords.words()),
+                                        filt=filt)
+
+        D.slice('date', 'time_period', window_size=5)
+        D.slice('jtitle')
         
+        dateshape = len(D.axes['date'].keys())
+        jtitleshape = len(D.axes['jtitle'].keys())
+
+        values = D.feature_distribution('unigrams', 'four', 'date',
+                                        mode='counts', normed=True)
+        self.assertEqual(values.shape, (dateshape,1))
+        self.assertGreater(numpy.sum(values), 0)
+        
+        values = D.feature_distribution('unigrams', 'four', 'date',
+                                        mode='counts', normed=False)
+        self.assertEqual(values.shape, (dateshape,1))
+        self.assertGreater(numpy.sum(values), 0)
+        
+        values = D.feature_distribution('unigrams', 'four', 'date',
+                                        mode='documentCounts', normed=True)
+        self.assertEqual(values.shape, (dateshape,1))
+        self.assertGreater(numpy.sum(values), 0)
+        
+        values = D.feature_distribution('unigrams', 'four', 'date',
+                                        mode='documentCounts', normed=False)
+        self.assertEqual(values.shape, (dateshape,1))
+        self.assertGreater(numpy.sum(values), 0)
+        
+        values = D.feature_distribution('unigrams', 'four', 'date', 'jtitle',
+                                        mode='counts', normed=True)
+        self.assertEqual(values.shape, (dateshape,jtitleshape))
+        self.assertGreater(numpy.sum(values), 0)
+
+        fkwargs = {
+            'featureset': 'unigrams',
+            'feature': 'four',
+            'mode': 'counts',
+            'normed': True,
+            }
+
+        import matplotlib.pyplot as plt
+        fig = D.plot_distribution('date', 'jtitle', mode='features',
+                                    fkwargs=fkwargs, interpolation='none')
+
+
     def test_tokenize_filter(self):
         """
         Applying a filter should result in a smaller featureset.
