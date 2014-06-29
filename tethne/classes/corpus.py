@@ -959,18 +959,150 @@ class Corpus(object):
         dist = np.array(sc.sparse.coo_matrix((K, (I,J)), shape=shape).todense())
 
         return dist
+    
+    # TODO: Merge this with :func:`.distribution`
+    def feature_distribution(self, featureset, feature, x_axis, y_axis=None,
+                             mode='counts', normed=True):
+        """
+        Get the distribution of a ``feature`` over one or two slice axes.
+        
+        .. code-block:: python
+        
+           >>> C..feature_distribution('unigrams', 'four', 'date',
+                                        mode='counts', normed=True)
+           [[  7.10025561e-05]
+            [  1.81508792e-03]
+            [  3.87657001e-04]
+            [  7.68344218e-04]
+            [  9.81739643e-04]
+            [  1.02986612e-03]
+            [  5.04682875e-04]
+            [  6.60851176e-04]
+            [  1.02951270e-03]
+            [  9.94742078e-04]
+            [  1.04085711e-03]]
+
+        You can generate a figure for this distribution using
+        :meth:`.plot_distribution`\.
+
+        Parameters
+        ----------
+        featureset : str
+            Name of a set of features (eg 'unigrams')
+        feature : str
+            String representation of the feature.
+        x_axis : str
+            Name of a slice axis.
+        y_axis : str
+            (optional) Name of a slice axis.
+        mode : str
+            (default: True) 'counts' or 'documentCounts'
+        normed : bool
+            (default: True) If True, values are normalized for each slice.
+            
+        Returns
+        -------
+        dist : matrix
+        """
+        
+        if mode not in [ 'counts', 'documentCounts' ]:
+            raise RuntimeError('No such mode. Try "counts" or "documentCounts"')
+
+        if featureset not in self.features:
+            raise KeyError('No such featureset in this Corpus')
+
+        index = self.features[featureset]['index']
+        feature_lookup = { v:k for k,v in index.iteritems() }
+        try:
+            findex = feature_lookup[feature]
+        except KeyError:
+            raise KeyError('No such feature in featureset')
+        
+        if x_axis not in self.axes:
+            raise KeyError('No such slice axis in this Corpus; try .slice()')
+
+        logger.debug('generate distribution over slices')
+
+        x_size = len(self.axes[x_axis])
+        logger.debug('x axis size: {0}'.format(x_axis))
+
+        if y_axis is not None:
+            logger.debug('y axis: {0}'.format(y_axis))
+            if y_axis not in self.get_axes():
+                logger.debug('Corpus has not axis {0}'.format(y_axis))
+                raise(KeyError("Y axis invalid for this Corpus."))
+            y_size = len(self.axes[y_axis])
+            logger.debug('y axis size: {0}'.format(y_axis))
+        else:   # Only 1 slice axis.
+            logger.debug('only 1 slice axis')
+            y_size = 1
+            
+        shape = (x_size, y_size)
+        logger.debug('distribution shape: {0}'.format(shape))
+        
+        fvalues = self.features[featureset]['features']
+        
+        def _get_value(papers):
+            vtuples = [ fv for p in papers for fv in fvalues[p] ]
+            values = [ v for f,v in vtuples if f == findex ]
+            
+            if mode == 'counts':
+                val = sum(values)
+                if normed:
+                    Nwords = sum([ v for f,v in vtuples])
+                    try:
+                        val = float(val)/float(Nwords)
+                    except ZeroDivisionError:
+                        val = 0.
+            if mode == 'documentCounts':
+                val = len(values)
+                if normed:
+                    try:
+                        val = float(val)/float(len(papers))
+                    except ZeroDivisionError:
+                        val = 0.
+
+            return val
+        
+        I = []
+        J = []
+        K = []
+        for i in xrange(x_size):
+            if y_axis is None:
+                papers = self._get_by_i([(x_axis, i)])
+                k = _get_value(papers)
+                if k > 0:
+                    I.append(i)
+                    J.append(0)
+                    K.append(k)
+            else:
+                for j in xrange(y_size):
+                    papers = self._get_by_i([(x_axis, i),(y_axis, j)])
+                    k = _get_value(papers)
+                    if k > 0:
+                        I.append(i)
+                        J.append(j)
+                        K.append(k)
+
+        dist = np.array(sc.sparse.coo_matrix((K, (I,J)), shape=shape).todense())
+
+        return dist
+
 
     def plot_distribution(self, x_axis=None, y_axis=None, type='bar',
-                                aspect=0.3, step=2, fig=None, **kwargs):
+                                aspect=0.2, step=2, fig=None, mode='papers',
+                                fkwargs={}, **kwargs):
         """
-        Plot distribution along slice axes, using MatPlotLib.
+        Plot distribution of papers or features along slice axes, using 
+        MatPlotLib.
         
         You must first use :func:`.slice` to divide your data up along axes of
         interest. Then you can use :func:`.distribution` or 
         :func:`.plot_distribution` to generate descriptive statistics about your
         data.
         
-        For example:
+        The default behavior is to plot the distribution of paper across 
+        ``x_axis`` (and ``y_axis``):
         
         .. code-block:: python
 
@@ -995,6 +1127,26 @@ class Corpus(object):
         Which should generate a plot that looks something like:
         
         .. figure:: _static/images/corpus_plot_distribution_2d.png
+           :width: 600
+           :align: center
+           
+        If ``mode='features`` is set, this method will plot the distribution
+        of a feature across ``x_axis`` (and ``y_axis``). Set keyword arguments
+        for :func:`Corpus.feature_distribution` using ``fkwargs``.
+        
+        .. code-block:: python
+        
+           >>> fkwargs = {
+           ...     'featureset': 'unigrams',
+           ...     'feature': 'four',
+           ...     'mode': 'counts',
+           ...     'normed': True,
+           ...     }
+           >>> fig = D.plot_distribution('date', 'jtitle', mode='features',
+                                         fkwargs=fkwargs, interpolation='none')
+           >>> fig.savefig('/path/to/dist.png')
+           
+        .. figure:: _static/images/testdist.png
            :width: 600
            :align: center
            
@@ -1024,7 +1176,7 @@ class Corpus(object):
         fig : :class:`matplotlib.figure`
         
         """
-        
+
         if fig is None:
             fig = plt.figure(figsize=(20,10))
         
@@ -1032,24 +1184,39 @@ class Corpus(object):
             x_axis = self.get_axes()[0]
 
         xkeys = self._get_slice_keys(x_axis)
-        print xkeys
         
+        if mode == 'features':
+            featureset = fkwargs['featureset']
+            feature = fkwargs['feature']
+            fmode = fkwargs['mode']
+            fnormed = fkwargs['normed']
+
         if y_axis is None:
-            yvals = self.distribution(x_axis)
+            if mode == 'papers':
+                yvals = self.distribution(x_axis)
+            elif mode == 'features':
+                yvals = self.feature_distribution(featureset, feature, x_axis,
+                                                  mode=fmode, normed=fnormed)
             plt.__dict__[type](xkeys, yvals, **kwargs)
             plt.xlim(xkeys[0], xkeys[-1])   # Already sorted.
         else:
             ykeys = self._get_slice_keys(y_axis)    
             ax = fig.add_subplot(111)
-            ax.imshow(self.distribution(y_axis, x_axis), aspect=aspect, **kwargs)
+            if mode == 'papers':
+                values = self.distribution(y_axis, x_axis)
+            elif mode == 'features':
+                values = self.feature_distribution(featureset, feature, y_axis,
+                                                   x_axis, fmode, fnormed)
+            ax.imshow(values, aspect=aspect, **kwargs)
             plt.yticks(np.arange(len(ykeys)), ykeys)
 
             nxkeys = len(xkeys)
             tickstops = range(0, nxkeys, step)
-            print tickstops
+
             ax.set_xticks(tickstops)
             ax.set_xticklabels([ xkeys[i] for i in tickstops ])
             plt.xlim(0, nxkeys-1)   # Already sorted.
+            plt.subplots_adjust(left=0.5)
             
         return fig
 
