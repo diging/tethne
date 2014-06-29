@@ -5,3 +5,5 @@ tethne.model.corpus.dtmmodel module
     :members:
     :undoc-members:
     :show-inheritance:
+    :inherited-members:
+    

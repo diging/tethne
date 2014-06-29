@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Welcome to tethne’s documentation! &mdash; tethne 0.5.0-alpha documentation</title>
+    <title>Tethne: Corpus Analysis for Historians &mdash; tethne 0.5.0-alpha documentation</title>
     
     <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/js/copybutton.js"></script>
     <link rel="top" title="tethne 0.5.0-alpha documentation" href="#" >
-    <link rel="next" title="tethne package" href="tethne.html" > 
+    <link rel="next" title="Installation" href="installation.html" > 
   </head>
   <body>
 
@@ -62,7 +62,7 @@
            >modules</a>
       </li>
       <li class="active">
-        <a href="tethne.html" title="tethne package"
+        <a href="installation.html" title="Installation"
            accesskey="N">next</a>
       </li>
     </ul>
@@ -78,72 +78,34 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
             
-  <div class="section" id="welcome-to-tethne-s-documentation">
-<h1>Welcome to tethne&#8217;s documentation!<a class="headerlink" href="#welcome-to-tethne-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Contents:</p>
+  <div class="section" id="tethne-corpus-analysis-for-historians">
+<h1>Tethne: Corpus Analysis for Historians<a class="headerlink" href="#tethne-corpus-analysis-for-historians" title="Permalink to this headline">¶</a></h1>
+<p>Tethne is a Python package that draws together tools and techniques from bibliometrics,
+computational linguistics, and social influence modeling into a single easy-to-use corpus
+analysis framework. Scholars can use Tethne to parse and organize data from the ISI Web of
+Science and JSTOR Data-for-Research databases, and generate time-variant citation-based
+<a class="reference internal" href="tethne.networks.html#module-tethne.networks" title="tethne.networks"><tt class="xref py py-mod docutils literal"><span class="pre">networks</span></tt></a>, <a class="reference internal" href="tethne.model.corpus.html#module-tethne.model.corpus" title="tethne.model.corpus"><tt class="xref py py-mod docutils literal"><span class="pre">corpus</span></tt></a> models, and <a class="reference internal" href="tethne.model.social.html#module-tethne.model.social" title="tethne.model.social"><tt class="xref py py-mod docutils literal"><span class="pre">social</span></tt></a> influence models. Tethne also
+provides <a class="reference internal" href="tethne.writers.html#module-tethne.writers" title="tethne.writers"><tt class="xref py py-mod docutils literal"><span class="pre">writers</span></tt></a> that make it easy to visualize those models using mainstream
+network visualization software (eg <a class="reference external" href="http://cytoscape.org">Cyotoscape</a> and
+<a class="reference external" href="http://gephi.org">Gephi</a>) and the <a class="reference external" href="http://matplotlib.org/">MatPlotLib Python library</a>. Dataset <a class="reference internal" href="tethne.persistence.html#module-tethne.persistence" title="tethne.persistence"><tt class="xref py py-mod docutils literal"><span class="pre">persistence</span></tt></a> for archiving and sharing data is
+achieved using the <a class="reference external" href="http://www.hdfgroup.org/HDF5/">HDF5 file format</a>.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tethne.html">tethne package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tethne.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tethne.analyze.html">tethne.analyze package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tethne.analyze.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tethne.analyze.html#module-tethne.analyze">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#with-anaconda">With Anaconda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#without-anaconda">Without Anaconda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#tethne">Tethne</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#dependencies">Dependencies</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="tethne.classes.html">tethne.classes package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tethne.classes.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tethne.classes.html#module-tethne.classes">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#load-some-data">Load some data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#simple-networks-simply">Simple networks simply</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#visualize-your-networks">Visualize your networks</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="tethne.managers.html">tethne.managers package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tethne.managers.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tethne.managers.html#module-tethne.managers">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="tethne.model.html">tethne.model package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tethne.model.html#subpackages">Subpackages</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tethne.model.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tethne.model.html#module-tethne.model">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="tethne.networks.html">tethne.networks package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tethne.networks.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tethne.networks.html#module-tethne.networks">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="tethne.persistence.html">tethne.persistence package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tethne.persistence.html#subpackages">Subpackages</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tethne.persistence.html#module-tethne.persistence">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="tethne.readers.html">tethne.readers package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tethne.readers.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tethne.readers.html#module-tethne.readers">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="tethne.services.html">tethne.services package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tethne.services.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tethne.services.html#module-tethne.services">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="tethne.utilities.html">tethne.utilities package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tethne.utilities.html#module-tethne.utilities">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="tethne.writers.html">tethne.writers package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tethne.writers.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tethne.writers.html#module-tethne.writers">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.html#submodules">Submodules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tethne.workflow.html">tethne.workflow module</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.html#module-tethne">Module contents</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="support.html">Support &amp; Bug Reporting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 </ul>
 </div>
 </div>
@@ -167,13 +129,13 @@
             </a></p>
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Welcome to tethne&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#">Tethne: Corpus Analysis for Historians</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
   <h4>Next topic</h4>
-  <p class="topless"><a href="tethne.html"
-                        title="next chapter">tethne package</a></p>
+  <p class="topless"><a href="installation.html"
+                        title="next chapter">Installation</a></p>
   <h3>This Page</h3>
   <div>
     <a href="_sources/index.txt"

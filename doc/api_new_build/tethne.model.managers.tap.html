@@ -25,8 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/js/copybutton.js"></script>
-    <link rel="top" title="tethne 0.5.0-alpha documentation" href="index.html" >
-    <link rel="up" title="tethne.model.managers package" href="tethne.model.managers.html" > 
+    <link rel="top" title="tethne 0.5.0-alpha documentation" href="index.html" > 
   </head>
   <body>
 
@@ -50,10 +49,7 @@
         <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
 	
         <li class="active"><a href="index.html">tethne 0.5.0-alpha documentation</a></li>
-	
-          <li class="active"><a href="tethne.html" >tethne package</a></li>
-          <li class="active"><a href="tethne.model.html" >tethne.model package</a></li>
-          <li class="active"><a href="tethne.model.managers.html" accesskey="U">tethne.model.managers package</a></li> 
+	 
     </ul>
               
               
@@ -81,11 +77,58 @@
             
   <div class="section" id="module-tethne.model.managers.tap">
 <span id="tethne-model-managers-tap-module"></span><h1>tethne.model.managers.tap module<a class="headerlink" href="#module-tethne.model.managers.tap" title="Permalink to this headline">¶</a></h1>
+<p>Classes and methods related to the <a class="reference internal" href="#tethne.model.managers.tap.TAPModelManager" title="tethne.model.managers.tap.TAPModelManager"><tt class="xref py py-class docutils literal"><span class="pre">TAPModelManager</span></tt></a>.</p>
 <dl class="class">
 <dt id="tethne.model.managers.tap.TAPModelManager">
-<em class="property">class </em><tt class="descclassname">tethne.model.managers.tap.</tt><tt class="descname">TAPModelManager</tt><big>(</big><em>D</em>, <em>G</em>, <em>model</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/model/managers/tap.html#TAPModelManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.managers.tap.TAPModelManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">tethne.model.managers.tap.</tt><tt class="descname">TAPModelManager</tt><big>(</big><em>D=None</em>, <em>G=None</em>, <em>model=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/model/managers/tap.html#TAPModelManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.managers.tap.TAPModelManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="tethne.model.managers.html#tethne.model.managers.SocialModelManager" title="tethne.model.managers.SocialModelManager"><tt class="xref py py-class docutils literal"><span class="pre">tethne.model.managers.SocialModelManager</span></tt></a></p>
-<p>For managing the <a class="reference internal" href="tethne.model.social.tapmodel.html#tethne.model.social.tapmodel.TAPModel" title="tethne.model.social.tapmodel.TAPModel"><tt class="xref py py-class docutils literal"><span class="pre">TAPModel</span></tt></a> .</p>
+<p>Generates a time-sensitive set of <a class="reference internal" href="tethne.model.social.tapmodel.html#tethne.model.social.tapmodel.TAPModel" title="tethne.model.social.tapmodel.TAPModel"><tt class="xref py py-class docutils literal"><span class="pre">TAPModel</span></tt></a>s from a 
+<a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>, a <a class="reference internal" href="tethne.model.corpus.html#module-tethne.model.corpus" title="tethne.model.corpus"><tt class="xref py py-mod docutils literal"><span class="pre">corpus</span></tt></a> model, and a coauthorship 
+<a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</p>
+<p>The standard <a class="reference internal" href="tethne.model.social.tapmodel.html#tethne.model.social.tapmodel.TAPModel" title="tethne.model.social.tapmodel.TAPModel"><tt class="xref py py-class docutils literal"><span class="pre">TAPModel</span></tt></a> is not sensitive to time, in that influence
+among authors is estimated without regard to the sequence in which those
+authors adopt features in their papers. The <a class="reference internal" href="#tethne.model.managers.tap.TAPModelManager" title="tethne.model.managers.tap.TAPModelManager"><tt class="xref py py-class docutils literal"><span class="pre">TAPModelManager</span></tt></a> 
+generates <a class="reference internal" href="tethne.model.social.tapmodel.html#tethne.model.social.tapmodel.TAPModel" title="tethne.model.social.tapmodel.TAPModel"><tt class="xref py py-class docutils literal"><span class="pre">TAPModel</span></tt></a>s sequentially, using the posterior influence
+values from one time-period as priors for the next time-period. The
+<a class="reference internal" href="tethne.model.social.tapmodel.html#tethne.model.social.tapmodel.TAPModel" title="tethne.model.social.tapmodel.TAPModel"><tt class="xref py py-class docutils literal"><span class="pre">TAPModel</span></tt></a> for the latest time-period, therefore, should reflect
+both the structure of the network in that time-period as well as the
+evolution of that network and the sequence in which authors adopt features
+in their work.</p>
+<p>Starting with some JSTOR DfR data, a typical workflow might look something
+like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">dfr</span>                  <span class="c"># 1. Create a Corpus.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">read_corpus</span><span class="p">(</span><span class="s">&#39;/path/to/dataset/&#39;</span><span class="p">,</span> <span class="s">&#39;uni&#39;</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">word</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;time_period&#39;</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne</span> <span class="kn">import</span> <span class="n">GraphCollection</span>          <span class="c"># 2. Coauthorship graphs.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">GraphCollection</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;authors&#39;</span><span class="p">,</span> <span class="s">&#39;coauthors&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">graphs</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.model</span> <span class="kn">import</span> <span class="n">MALLETModelManager</span>        <span class="c"># 3. Corpus model.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outpath</span> <span class="o">=</span> <span class="s">&#39;/path/to/my/working/directory&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mallet</span> <span class="o">=</span> <span class="s">&#39;/Applications/mallet-2.0.7&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">MALLETModelManager</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="s">&#39;wc_filtered&#39;</span><span class="p">,</span> <span class="n">outpath</span><span class="p">,</span> <span class="n">mallet_path</span><span class="o">=</span><span class="n">mallet</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">Z</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.model</span> <span class="kn">import</span> <span class="n">TAPModelManager</span>        <span class="c"># 4. Build TAPModels.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span> <span class="o">=</span> <span class="n">TAPModelManager</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To visualize the <a class="reference internal" href="tethne.model.social.tapmodel.html#tethne.model.social.tapmodel.TAPModel" title="tethne.model.social.tapmodel.TAPModel"><tt class="xref py py-class docutils literal"><span class="pre">TAPModel</span></tt></a>s, use 
+<a class="reference internal" href="#tethne.model.managers.tap.TAPModelManager.graph_collection" title="tethne.model.managers.tap.TAPModelManager.graph_collection"><tt class="xref py py-func docutils literal"><span class="pre">TAPModelManager.graph_collection()</span></tt></a> to generate a 
+<a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> of influence graphs for a particular topic. For 
+example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">IG</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">graph_collection</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can then use a method from <a class="reference internal" href="tethne.writers.html#module-tethne.writers" title="tethne.writers"><tt class="xref py py-mod docutils literal"><span class="pre">writers</span></tt></a> to export a network datafile
+for visualization in <a class="reference external" href="http://www.cytoscape.org">Cytoscape</a> or
+<a class="reference external" href="http://gephi.org">Gephi</a>.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/tap_topic0.png"><img alt="_images/tap_topic0.png" src="_images/tap_topic0.png" style="width: 600px;" /></a>
+</div>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>

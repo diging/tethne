@@ -13,7 +13,7 @@ import networkx as nx
 from ..basemodel import BaseModel
 from tethne.utilities import swap
 
-class TAPModel(BaseModel):
+class TAPModel(object):
     """
     Represents a Topical Affinity Propogation (TAP) social model.
     
@@ -39,31 +39,25 @@ class TAPModel(BaseModel):
        >>> from tethne.model import managers, TAPModel
        >>> atheta = managers.TAPModelManager().author_theta(C.all_papers())
        
-       >>> T = TAPModel(g, atheta)
-       >>> T.build()
+       >>> model = TAPModel(g, atheta)
+       >>> model.build()
     
     To generate a :class:`.TAPModel` from a :class:`.Corpus` that takes time
-    into account, use a :class:`.TAPModelManager`\:
-    
-    .. code-block:: python
-    
-       >>> C.slice('date', 'time_period', window_size=5)
+    into account, use a :class:`.TAPModelManager`\.
        
-       >>> from tethne import GraphCollection
-       >>> G = GraphCollection().build(C, 'date', 'authors', 'coauthors')
-       >>> G.graphs
-       
-       >>> from tethne.model import MALLETModelManager
-       >>> M = MALLETModelManager(C, 'wc_filtered', outpath, mallet_path=mallet)
-       model = M.build(Z=50, max_iter=300)  
+    Use :func:`TAPModel.graph` to retrieve an influence graph for a particular
+    topic.
     
     Parameters
     ----------
     G : :class:`.nx.Graph()`
-        Should have 'weight' attribute in [0.,1.].
+        Should have ``weight`` attribute in the range [0.,1.] indicating the
+        strength of the relationship between authors (eg the number of
+        coauthored papers).
     theta : dict
-        Distribution over topics for authors. Should have N keys, with values
-        shaped T; N == len(G.nodes()) and T is the number of topics.
+        Distribution over topics for authors. Should have ``N`` keys, with 
+        values shaped ``T``; ``N == len(G.nodes())`` and ``T`` is the number of
+        topics.
     """
     def __init__(self, G, theta, damper=0.5):
         
@@ -385,7 +379,8 @@ class TAPModel(BaseModel):
     
     def prime(self, alt_r, alt_a, alt_G):
         """
-        Prime r and a with values from a previous model.
+        Assign posterior ``r`` and ``a`` values from a previous model as priors
+        for this model.
         
         Parameters
         ----------
@@ -414,12 +409,20 @@ class TAPModel(BaseModel):
 
                         for k in xrange(self.T):
                             self.r[i][j_,k] = alt_r[i][alt_j_,k]
-                            self.a[i][j_,k] = alt_a[i][alt_j_,k]                        
-
-    def graph(self, k):
-        return self.MU[k]
+                            self.a[i][j_,k] = alt_a[i][alt_j_,k]
 
     def build(self, max_iter=500):
+        """
+        Estimate the :class:`.TAPModel`\.
+        
+        This may take a considerable amount of time, depending on the size of
+        the social graph and the number of features/topics.
+        
+        Parameters
+        ----------
+        max_iter : int
+            (default: 500) Maximum number of iterations.
+        """
         logger.debug('start iterations')
         nc = 0
         self.iteration = 0.
@@ -438,3 +441,36 @@ class TAPModel(BaseModel):
                 cont = False
 
         self._calculate_mu()
+
+    def graph(self, k):
+        """
+        Retrieve an influence graph for a particular topic.
+        
+        .. code-block:: python
+        
+           >>> g = model.graph(0)   # model is a TAPModel.
+           >>> g
+           <networkx.classes.graph.Graph at 0x10b2692d0>
+        
+        You can then use a method from :mod:`.writers` to generate a network 
+        datafile for visualization in `Cytoscape <http://www.cytoscape.org>`_ or 
+        `Gephi <http://gephi.org>`_.
+        
+        .. figure:: _static/images/tap_topic0.png
+           :width: 600
+           :align: center
+           
+        Parameters
+        ----------
+        k : int
+            A topic index.
+        
+        Returns
+        -------
+        NetworkX DiGraph object
+            An influence graph. Edge direction and their ``weight`` indicate
+            influence strength. Node attribute ``theta`` is the probability
+            that an author will generate a paper that includes topic ``k``.
+        """
+    
+        return self.MU[k]

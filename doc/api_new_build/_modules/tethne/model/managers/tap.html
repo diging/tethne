@@ -79,6 +79,10 @@
           <div class="body" id="spc-section-body">
             
   <h1>Source code for tethne.model.managers.tap</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Classes and methods related to the :class:`.TAPModelManager`\.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
@@ -100,10 +104,64 @@
 
 <div class="viewcode-block" id="TAPModelManager"><a class="viewcode-back" href="../../../../tethne.model.managers.tap.html#tethne.model.managers.tap.TAPModelManager">[docs]</a><span class="k">class</span> <span class="nc">TAPModelManager</span><span class="p">(</span><span class="n">SocialModelManager</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    For managing the :class:`.TAPModel` .</span>
+<span class="sd">    Generates a time-sensitive set of :class:`.TAPModel`\s from a </span>
+<span class="sd">    :class:`.Corpus`\, a :mod:`.corpus` model, and a coauthorship </span>
+<span class="sd">    :class:`.GraphCollection`\.</span>
+<span class="sd">    </span>
+<span class="sd">    The standard :class:`.TAPModel` is not sensitive to time, in that influence</span>
+<span class="sd">    among authors is estimated without regard to the sequence in which those</span>
+<span class="sd">    authors adopt features in their papers. The :class:`.TAPModelManager` </span>
+<span class="sd">    generates :class:`.TAPModel`\s sequentially, using the posterior influence</span>
+<span class="sd">    values from one time-period as priors for the next time-period. The</span>
+<span class="sd">    :class:`.TAPModel` for the latest time-period, therefore, should reflect</span>
+<span class="sd">    both the structure of the network in that time-period as well as the</span>
+<span class="sd">    evolution of that network and the sequence in which authors adopt features</span>
+<span class="sd">    in their work.</span>
+<span class="sd">    </span>
+<span class="sd">    Starting with some JSTOR DfR data, a typical workflow might look something</span>
+<span class="sd">    like this:</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">    </span>
+<span class="sd">       &gt;&gt;&gt; from tethne.readers import dfr                  # 1. Create a Corpus.</span>
+<span class="sd">       &gt;&gt;&gt; from nltk.corpus import stopwords</span>
+<span class="sd">       &gt;&gt;&gt; C = dfr.read_corpus(&#39;/path/to/dataset/&#39;, &#39;uni&#39;, stopwords.word())</span>
+<span class="sd">       &gt;&gt;&gt; C.slice(&#39;date&#39;, &#39;time_period&#39;, window_size=5)</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; from tethne import GraphCollection          # 2. Coauthorship graphs.</span>
+<span class="sd">       &gt;&gt;&gt; G = GraphCollection().build(C, &#39;date&#39;, &#39;authors&#39;, &#39;coauthors&#39;)</span>
+<span class="sd">       &gt;&gt;&gt; G.graphs</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; from tethne.model import MALLETModelManager        # 3. Corpus model.</span>
+<span class="sd">       &gt;&gt;&gt; outpath = &#39;/path/to/my/working/directory&#39;</span>
+<span class="sd">       &gt;&gt;&gt; mallet = &#39;/Applications/mallet-2.0.7&#39;</span>
+<span class="sd">       &gt;&gt;&gt; M = MALLETModelManager(C, &#39;wc_filtered&#39;, outpath, mallet_path=mallet)</span>
+<span class="sd">       &gt;&gt;&gt; model = M.build(Z=50, max_iter=300)</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; from tethne.model import TAPModelManager        # 4. Build TAPModels.</span>
+<span class="sd">       &gt;&gt;&gt; T = TAPModelManager(C, G, model)</span>
+<span class="sd">       &gt;&gt;&gt; T.build()</span>
+
+<span class="sd">    To visualize the :class:`.TAPModel`\s, use </span>
+<span class="sd">    :func:`TAPModelManager.graph_collection` to generate a </span>
+<span class="sd">    :class:`.GraphCollection` of influence graphs for a particular topic. For </span>
+<span class="sd">    example:</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">    </span>
+<span class="sd">       &gt;&gt;&gt; IG = T.graph_collection(0)</span>
+<span class="sd">    </span>
+<span class="sd">    You can then use a method from :mod:`.writers` to export a network datafile</span>
+<span class="sd">    for visualization in `Cytoscape &lt;http://www.cytoscape.org&gt;`_ or</span>
+<span class="sd">    `Gephi &lt;http://gephi.org&gt;`_.</span>
+<span class="sd">    </span>
+<span class="sd">    .. figure:: _static/images/tap_topic0.png</span>
+<span class="sd">       :width: 600</span>
+<span class="sd">       :align: center</span>
+<span class="sd">       </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>

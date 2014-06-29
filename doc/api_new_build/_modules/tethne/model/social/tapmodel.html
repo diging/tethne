@@ -78,6 +78,10 @@
           <div class="body" id="spc-section-body">
             
   <h1>Source code for tethne.model.social.tapmodel</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Classes and methods related to the :class:`.TAPModel`\.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">()</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
@@ -89,18 +93,53 @@
 <span class="kn">from</span> <span class="nn">..basemodel</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 <span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">swap</span>
 
-<div class="viewcode-block" id="TAPModel"><a class="viewcode-back" href="../../../../tethne.model.social.tapmodel.html#tethne.model.social.tapmodel.TAPModel">[docs]</a><span class="k">class</span> <span class="nc">TAPModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<div class="viewcode-block" id="TAPModel"><a class="viewcode-back" href="../../../../tethne.model.social.tapmodel.html#tethne.model.social.tapmodel.TAPModel">[docs]</a><span class="k">class</span> <span class="nc">TAPModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents a Topical Affinity Propogation (TAP) social model.</span>
+<span class="sd">    </span>
+<span class="sd">    The TAP model assumes that authors can be influenced by other authors with</span>
+<span class="sd">    whom they are acquainted to adopt particular features (eg topics) in their</span>
+<span class="sd">    writing. The TAP model takes a weighted social graph, and the probabilities</span>
+<span class="sd">    that each author will generate a document containing particular topics. For</span>
+<span class="sd">    a complete description of the model, see </span>
+<span class="sd">    `Tang et al. 2009 &lt;https://wiki.engr.illinois.edu/download/attachments/186384416/KDD09_Social_Influence_Analysis.pdf?version=1&amp;modificationDate=1255578264000&gt;`_,</span>
+<span class="sd">    or the `presentation &lt;http://videolectures.net/kdd09_tang_sia/&gt;`_ on which</span>
+<span class="sd">    the paper was based.</span>
+<span class="sd">    </span>
+<span class="sd">    There are two ways to generate a :class:`.TAPModel`\:</span>
+<span class="sd">    </span>
+<span class="sd">    To generate a :class:`.TAPModel` from a single :func:`.coauthors` graph and</span>
+<span class="sd">    a :mod:`.corpus` model, instantiate and build a :class:`.TAPModel` directly:</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; from tethne.networks import authors</span>
+<span class="sd">       &gt;&gt;&gt; g = authors.coauthors(C.all_papers())    # C is a Corpus.</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; from tethne.model import managers, TAPModel</span>
+<span class="sd">       &gt;&gt;&gt; atheta = managers.TAPModelManager().author_theta(C.all_papers())</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; model = TAPModel(g, atheta)</span>
+<span class="sd">       &gt;&gt;&gt; model.build()</span>
+<span class="sd">    </span>
+<span class="sd">    To generate a :class:`.TAPModel` from a :class:`.Corpus` that takes time</span>
+<span class="sd">    into account, use a :class:`.TAPModelManager`\.</span>
+<span class="sd">       </span>
+<span class="sd">    Use :func:`TAPModel.graph` to retrieve an influence graph for a particular</span>
+<span class="sd">    topic.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    G : :class:`.nx.Graph()`</span>
+<span class="sd">        Should have ``weight`` attribute in the range [0.,1.] indicating the</span>
+<span class="sd">        strength of the relationship between authors (eg the number of</span>
+<span class="sd">        coauthored papers).</span>
+<span class="sd">    theta : dict</span>
+<span class="sd">        Distribution over topics for authors. Should have ``N`` keys, with </span>
+<span class="sd">        values shaped ``T``; ``N == len(G.nodes())`` and ``T`` is the number of</span>
+<span class="sd">        topics.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">damper</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        G : :class:`.nx.Graph()`</span>
-<span class="sd">            Should have &#39;weight&#39; attribute in [0.,1.].</span>
-<span class="sd">        theta : dict</span>
-<span class="sd">            Should have N keys, with values shaped T; N == len(G.nodes()) and T</span>
-<span class="sd">            is the number of topics.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
         
@@ -420,7 +459,8 @@
     
 <div class="viewcode-block" id="TAPModel.prime"><a class="viewcode-back" href="../../../../tethne.model.social.tapmodel.html#tethne.model.social.tapmodel.TAPModel.prime">[docs]</a>    <span class="k">def</span> <span class="nf">prime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alt_r</span><span class="p">,</span> <span class="n">alt_a</span><span class="p">,</span> <span class="n">alt_G</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Prime r and a with values from a previous model.</span>
+<span class="sd">        Assign posterior ``r`` and ``a`` values from a previous model as priors</span>
+<span class="sd">        for this model.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -449,12 +489,20 @@
 
                         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">):</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j_</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">alt_r</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">alt_j_</span><span class="p">,</span><span class="n">k</span><span class="p">]</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j_</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">alt_a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">alt_j_</span><span class="p">,</span><span class="n">k</span><span class="p">]</span>                        
-</div>
-<div class="viewcode-block" id="TAPModel.graph"><a class="viewcode-back" href="../../../../tethne.model.social.tapmodel.html#tethne.model.social.tapmodel.TAPModel.graph">[docs]</a>    <span class="k">def</span> <span class="nf">graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">MU</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j_</span><span class="p">,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">alt_a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">alt_j_</span><span class="p">,</span><span class="n">k</span><span class="p">]</span>
 </div>
 <div class="viewcode-block" id="TAPModel.build"><a class="viewcode-back" href="../../../../tethne.model.social.tapmodel.html#tethne.model.social.tapmodel.TAPModel.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Estimate the :class:`.TAPModel`\.</span>
+<span class="sd">        </span>
+<span class="sd">        This may take a considerable amount of time, depending on the size of</span>
+<span class="sd">        the social graph and the number of features/topics.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        max_iter : int</span>
+<span class="sd">            (default: 500) Maximum number of iterations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;start iterations&#39;</span><span class="p">)</span>
         <span class="n">nc</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">iteration</span> <span class="o">=</span> <span class="mf">0.</span>
@@ -472,7 +520,40 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iteration</span> <span class="o">&gt;=</span> <span class="n">max_iter</span><span class="p">:</span>
                 <span class="n">cont</span> <span class="o">=</span> <span class="bp">False</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_mu</span><span class="p">()</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_mu</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="TAPModel.graph"><a class="viewcode-back" href="../../../../tethne.model.social.tapmodel.html#tethne.model.social.tapmodel.TAPModel.graph">[docs]</a>    <span class="k">def</span> <span class="nf">graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve an influence graph for a particular topic.</span>
+<span class="sd">        </span>
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">        </span>
+<span class="sd">           &gt;&gt;&gt; g = model.graph(0)   # model is a TAPModel.</span>
+<span class="sd">           &gt;&gt;&gt; g</span>
+<span class="sd">           &lt;networkx.classes.graph.Graph at 0x10b2692d0&gt;</span>
+<span class="sd">        </span>
+<span class="sd">        You can then use a method from :mod:`.writers` to generate a network </span>
+<span class="sd">        datafile for visualization in `Cytoscape &lt;http://www.cytoscape.org&gt;`_ or </span>
+<span class="sd">        `Gephi &lt;http://gephi.org&gt;`_.</span>
+<span class="sd">        </span>
+<span class="sd">        .. figure:: _static/images/tap_topic0.png</span>
+<span class="sd">           :width: 600</span>
+<span class="sd">           :align: center</span>
+<span class="sd">           </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        k : int</span>
+<span class="sd">            A topic index.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        NetworkX DiGraph object</span>
+<span class="sd">            An influence graph. Edge direction and their ``weight`` indicate</span>
+<span class="sd">            influence strength. Node attribute ``theta`` is the probability</span>
+<span class="sd">            that an author will generate a paper that includes topic ``k``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">MU</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></div></div>
 </pre></div>
 
           </div>

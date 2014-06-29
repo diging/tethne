@@ -1039,18 +1039,110 @@
         <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">((</span><span class="n">K</span><span class="p">,</span> <span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">J</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span>
 
         <span class="k">return</span> <span class="n">dist</span>
+    
+    <span class="c"># TODO: Merge this with :func:`.distribution`</span></div>
+<div class="viewcode-block" id="Corpus.feature_distribution"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.feature_distribution">[docs]</a>    <span class="k">def</span> <span class="nf">feature_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">featureset</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">,</span> <span class="n">y_axis</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                             <span class="n">mode</span><span class="o">=</span><span class="s">&#39;counts&#39;</span><span class="p">,</span> <span class="n">normed</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span> <span class="s">&#39;counts&#39;</span><span class="p">,</span> <span class="s">&#39;documentCounts&#39;</span> <span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;No such mode. Try &quot;counts&quot; or &quot;documentCounts&quot;&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">featureset</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&#39;No such featureset in this Corpus&#39;</span><span class="p">)</span>
+
+        <span class="n">feature_lookup</span> <span class="o">=</span> <span class="p">{</span> <span class="n">v</span><span class="p">:</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="p">}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">findex</span> <span class="o">=</span> <span class="n">feature_lookup</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&#39;No such feature in featureset&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">x_axis</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&#39;No such slice axis in this Corpus; try .slice()&#39;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;generate distribution over slices&#39;</span><span class="p">)</span>
+
+        <span class="n">x_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">x_axis</span><span class="p">])</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;x axis size: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x_axis</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">y_axis</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;y axis: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y_axis</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">y_axis</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_axes</span><span class="p">():</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Corpus has not axis {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y_axis</span><span class="p">))</span>
+                <span class="k">raise</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">(</span><span class="s">&quot;Y axis invalid for this Corpus.&quot;</span><span class="p">))</span>
+            <span class="n">y_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">y_axis</span><span class="p">])</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;y axis size: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y_axis</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>   <span class="c"># Only 1 slice axis.</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;only 1 slice axis&#39;</span><span class="p">)</span>
+            <span class="n">y_size</span> <span class="o">=</span> <span class="mi">1</span>
+            
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_size</span><span class="p">,</span> <span class="n">y_size</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;distribution shape: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">shape</span><span class="p">))</span>
+        
+        <span class="n">fvalues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset</span><span class="p">][</span><span class="s">&#39;features&#39;</span><span class="p">]</span>
+        
+        <span class="k">def</span> <span class="nf">_get_value</span><span class="p">(</span><span class="n">papers</span><span class="p">):</span>
+            <span class="n">vtuples</span> <span class="o">=</span> <span class="p">[</span> <span class="n">fv</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">papers</span> <span class="k">for</span> <span class="n">fv</span> <span class="ow">in</span> <span class="n">fvalues</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="p">]</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span> <span class="n">v</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">vtuples</span> <span class="k">if</span> <span class="n">f</span> <span class="o">==</span> <span class="n">findex</span> <span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;counts&#39;</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">normed</span><span class="p">:</span>
+                    <span class="n">Nwords</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span> <span class="n">v</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">vtuples</span><span class="p">])</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">Nwords</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="mf">0.</span>
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;documentCounts&#39;</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">normed</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">papers</span><span class="p">))</span>
+                    <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="mf">0.</span>
+
+            <span class="k">return</span> <span class="n">val</span>
+        
+        <span class="n">I</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">x_size</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">y_axis</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">papers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_by_i</span><span class="p">([(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">i</span><span class="p">)])</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">_get_value</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">I</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                    <span class="n">J</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="n">K</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">y_size</span><span class="p">):</span>
+                    <span class="n">papers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_by_i</span><span class="p">([(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">i</span><span class="p">),(</span><span class="n">y_axis</span><span class="p">,</span> <span class="n">j</span><span class="p">)])</span>
+                    <span class="n">k</span> <span class="o">=</span> <span class="n">_get_value</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">I</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                        <span class="n">J</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                        <span class="n">K</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">((</span><span class="n">K</span><span class="p">,</span> <span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">J</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">dist</span>
+
 </div>
 <div class="viewcode-block" id="Corpus.plot_distribution"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.plot_distribution">[docs]</a>    <span class="k">def</span> <span class="nf">plot_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_axis</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">y_axis</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&#39;bar&#39;</span><span class="p">,</span>
-                                <span class="n">aspect</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                                <span class="n">aspect</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;papers&#39;</span><span class="p">,</span>
+                                <span class="n">fkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Plot distribution along slice axes, using MatPlotLib.</span>
+<span class="sd">        Plot distribution of papers or features along slice axes, using </span>
+<span class="sd">        MatPlotLib.</span>
 <span class="sd">        </span>
 <span class="sd">        You must first use :func:`.slice` to divide your data up along axes of</span>
 <span class="sd">        interest. Then you can use :func:`.distribution` or </span>
 <span class="sd">        :func:`.plot_distribution` to generate descriptive statistics about your</span>
 <span class="sd">        data.</span>
 <span class="sd">        </span>
-<span class="sd">        For example:</span>
+<span class="sd">        The default behavior is to plot the distribution of paper across </span>
+<span class="sd">        ``x_axis`` (and ``y_axis``):</span>
 <span class="sd">        </span>
 <span class="sd">        .. code-block:: python</span>
 
@@ -1075,6 +1167,26 @@
 <span class="sd">        Which should generate a plot that looks something like:</span>
 <span class="sd">        </span>
 <span class="sd">        .. figure:: _static/images/corpus_plot_distribution_2d.png</span>
+<span class="sd">           :width: 600</span>
+<span class="sd">           :align: center</span>
+<span class="sd">           </span>
+<span class="sd">        If ``mode=&#39;features`` is set, this method will plot the distribution</span>
+<span class="sd">        of a feature across ``x_axis`` (and ``y_axis``). Set keyword arguments</span>
+<span class="sd">        for :func:`Corpus.feature_distribution` using ``fkwargs``.</span>
+<span class="sd">        </span>
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">        </span>
+<span class="sd">           &gt;&gt;&gt; fkwargs = {</span>
+<span class="sd">           ...     &#39;featureset&#39;: &#39;unigrams&#39;,</span>
+<span class="sd">           ...     &#39;feature&#39;: &#39;four&#39;,</span>
+<span class="sd">           ...     &#39;mode&#39;: &#39;counts&#39;,</span>
+<span class="sd">           ...     &#39;normed&#39;: True,</span>
+<span class="sd">           ...     }</span>
+<span class="sd">           &gt;&gt;&gt; fig = D.plot_distribution(&#39;date&#39;, &#39;jtitle&#39;, mode=&#39;features&#39;,</span>
+<span class="sd">                                         fkwargs=fkwargs, interpolation=&#39;none&#39;)</span>
+<span class="sd">           &gt;&gt;&gt; fig.savefig(&#39;/path/to/dist.png&#39;)</span>
+<span class="sd">           </span>
+<span class="sd">        .. figure:: _static/images/testdist.png</span>
 <span class="sd">           :width: 600</span>
 <span class="sd">           :align: center</span>
 <span class="sd">           </span>
@@ -1104,7 +1216,7 @@
 <span class="sd">        fig : :class:`matplotlib.figure`</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        
+
         <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
         
@@ -1112,24 +1224,39 @@
             <span class="n">x_axis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">xkeys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_slice_keys</span><span class="p">(</span><span class="n">x_axis</span><span class="p">)</span>
-        <span class="k">print</span> <span class="n">xkeys</span>
         
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;features&#39;</span><span class="p">:</span>
+            <span class="n">featureset</span> <span class="o">=</span> <span class="n">fkwargs</span><span class="p">[</span><span class="s">&#39;featureset&#39;</span><span class="p">]</span>
+            <span class="n">feature</span> <span class="o">=</span> <span class="n">fkwargs</span><span class="p">[</span><span class="s">&#39;feature&#39;</span><span class="p">]</span>
+            <span class="n">fmode</span> <span class="o">=</span> <span class="n">fkwargs</span><span class="p">[</span><span class="s">&#39;mode&#39;</span><span class="p">]</span>
+            <span class="n">fnormed</span> <span class="o">=</span> <span class="n">fkwargs</span><span class="p">[</span><span class="s">&#39;normed&#39;</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="n">y_axis</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">yvals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="p">(</span><span class="n">x_axis</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;papers&#39;</span><span class="p">:</span>
+                <span class="n">yvals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="p">(</span><span class="n">x_axis</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;features&#39;</span><span class="p">:</span>
+                <span class="n">yvals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_distribution</span><span class="p">(</span><span class="n">featureset</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">,</span>
+                                                  <span class="n">mode</span><span class="o">=</span><span class="n">fmode</span><span class="p">,</span> <span class="n">normed</span><span class="o">=</span><span class="n">fnormed</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="nb">type</span><span class="p">](</span><span class="n">xkeys</span><span class="p">,</span> <span class="n">yvals</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">xkeys</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xkeys</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>   <span class="c"># Already sorted.</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ykeys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_slice_keys</span><span class="p">(</span><span class="n">y_axis</span><span class="p">)</span>    
             <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="p">(</span><span class="n">y_axis</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">),</span> <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;papers&#39;</span><span class="p">:</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="p">(</span><span class="n">y_axis</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;features&#39;</span><span class="p">:</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_distribution</span><span class="p">(</span><span class="n">featureset</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">y_axis</span><span class="p">,</span>
+                                                   <span class="n">x_axis</span><span class="p">,</span> <span class="n">fmode</span><span class="p">,</span> <span class="n">fnormed</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ykeys</span><span class="p">)),</span> <span class="n">ykeys</span><span class="p">)</span>
 
             <span class="n">nxkeys</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xkeys</span><span class="p">)</span>
             <span class="n">tickstops</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nxkeys</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
-            <span class="k">print</span> <span class="n">tickstops</span>
+
             <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">tickstops</span><span class="p">)</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span> <span class="n">xkeys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tickstops</span> <span class="p">])</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nxkeys</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>   <span class="c"># Already sorted.</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
             
         <span class="k">return</span> <span class="n">fig</span>
 </div>

@@ -13,7 +13,7 @@ class BaseModel(object):
         """
         Describes an item in terms of dimensions and weights.
         
-        Subclass must provide _item_description(i) method.
+        Subclass must provide ``_item_description(i)`` method.
         
         Parameters
         ----------
@@ -55,7 +55,7 @@ class BaseModel(object):
         """
         Describes the relationship between two items.
         
-        Subclass must provide _item_relationship(i, j) method.
+        Subclass must provide ``_item_relationship(i, j)`` method.
         
         Parameters
         ----------
@@ -80,9 +80,9 @@ class BaseModel(object):
 
     def dimension(self, d, top=None, **kwargs):
         """
-        Describes a dimension (e.g. a topic).
+        Describes a dimension (eg a topic).
         
-        Subclass must provide _dimension_description(d) method.
+        Subclass must provide ``_dimension_description(d)`` method.
         
         Parameters
         ----------
@@ -120,6 +120,8 @@ class BaseModel(object):
         """
         Describes a dimension in terms of the items that contain it.
         
+        Subclass must provide ``_dimension_items(d, threshold)`` method.
+        
         Parameters
         ----------
         d : int
@@ -144,7 +146,7 @@ class BaseModel(object):
         """
         Describes the relationship between two dimensions.
         
-        Subclass must provide _dimension_relationship(d, e) method.
+        Subclass must provide ``_dimension_relationship(d, e)`` method.
         
         Parameters
         ----------
