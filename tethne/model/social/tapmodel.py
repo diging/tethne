@@ -26,6 +26,20 @@ class TAPModel(object):
     or the `presentation <http://videolectures.net/kdd09_tang_sia/>`_ on which
     the paper was based.
     
+    Parameters
+    ----------
+    G : :class:`.nx.Graph()`
+        Should have ``weight`` attribute in the range [0.,1.] indicating the
+        strength of the relationship between authors (eg the number of
+        coauthored papers).
+    theta : dict
+        Distribution over topics for authors. Should have ``N`` keys, with 
+        values shaped ``T``; ``N == len(G.nodes())`` and ``T`` is the number of
+        topics.
+        
+    Examples
+    --------
+    
     There are two ways to generate a :class:`.TAPModel`\:
     
     To generate a :class:`.TAPModel` from a single :func:`.coauthors` graph and
@@ -48,16 +62,6 @@ class TAPModel(object):
     Use :func:`TAPModel.graph` to retrieve an influence graph for a particular
     topic.
     
-    Parameters
-    ----------
-    G : :class:`.nx.Graph()`
-        Should have ``weight`` attribute in the range [0.,1.] indicating the
-        strength of the relationship between authors (eg the number of
-        coauthored papers).
-    theta : dict
-        Distribution over topics for authors. Should have ``N`` keys, with 
-        values shaped ``T``; ``N == len(G.nodes())`` and ``T`` is the number of
-        topics.
     """
     def __init__(self, G, theta, damper=0.5):
         
@@ -445,6 +449,21 @@ class TAPModel(object):
     def graph(self, k):
         """
         Retrieve an influence graph for a particular topic.
+           
+        Parameters
+        ----------
+        k : int
+            A topic index.
+        
+        Returns
+        -------
+        NetworkX DiGraph object
+            An influence graph. Edge direction and their ``weight`` indicate
+            influence strength. Node attribute ``theta`` is the probability
+            that an author will generate a paper that includes topic ``k``.
+            
+        Examples
+        --------
         
         .. code-block:: python
         
@@ -459,18 +478,7 @@ class TAPModel(object):
         .. figure:: _static/images/tap_topic0.png
            :width: 600
            :align: center
-           
-        Parameters
-        ----------
-        k : int
-            A topic index.
         
-        Returns
-        -------
-        NetworkX DiGraph object
-            An influence graph. Edge direction and their ``weight`` indicate
-            influence strength. Node attribute ``theta`` is the probability
-            that an author will generate a paper that includes topic ``k``.
         """
     
         return self.MU[k]

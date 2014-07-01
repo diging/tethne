@@ -3,8 +3,12 @@ Methods for parsing JSTOR Data-for-Research datasets.
 
 .. autosummary::
 
-   ngrams
    read
+   ngrams
+   read_corpus
+   from_dir
+   ngrams_from_dir
+   corpus_from_dir
 
 """
 
@@ -153,8 +157,8 @@ def read(datapath):
 
     .. code-block:: python
 
-       >>> import tethne.readers as rd
-       >>> papers = rd.dfr.read("/Path/to/DfR")
+       >>> from tethne.readers import dfr
+       >>> papers = dfr.read("/Path/to/DfR")
     """
 
     with open(datapath + "/citations.XML", mode='r') as f:
@@ -175,7 +179,34 @@ def read(datapath):
 
 def read_corpus(path, features=None, exclude=None, **kwargs):
     """
+    Generate a :class:`.Corpus` from a single DfR dataset.
     
+    If ``features`` is provided (see below), will also load ngrams.
+    
+    Parameters
+    ----------
+    filepath : string
+        Filepath to unzipped JSTOR DfR folder containing a citations.XML file.
+    features : list
+        List of feature-grams (e.g. 'uni', 'bi', 'tri') to load from dataset.
+    exclude : list
+        Stoplist for feature-grams.
+    **kwargs
+        Use this to pass kwargs to :func:`.ngrams`.
+        
+    Returns
+    -------
+    :class:`.Corpus`
+    
+    Examples
+    --------
+
+    .. code-block:: python
+
+       >>> from nltk.corpus import stopwords    # Get a stoplist.
+       >>> stoplist = stopwords.words()
+       >>> from tethne.readers import dfr
+       >>> MyCorpus = dfr.read_corpus("/Path/to/DfR", ['uni'], stoplist)
     """
 
     papers = read(path)
@@ -211,8 +242,8 @@ def from_dir(path):
 
     .. code-block:: python
 
-       >>> import tethne.readers as rd
-       >>> papers = rd.dfr.from_dir("/Path/to/datadir")
+       >>> from tethne.readers import dfr
+       >>> papers = dfr.from_dir("/Path/to/datadir")
 
     """
 
@@ -234,6 +265,7 @@ def from_dir(path):
 
 def ngrams_from_dir(path, N='uni', ignore_hash=True, mode='heavy'):
     """
+    Load ngrams from a directory of JSTOR DfR datasets.
     
     Parameters
     ----------
@@ -252,6 +284,15 @@ def ngrams_from_dir(path, N='uni', ignore_hash=True, mode='heavy'):
     -------
     ngrams : dict
         Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
+        
+    Examples
+    --------
+    
+    .. code-block:: python
+    
+       >>> from tethne.readers import dfr
+       >>> ngrams = dfr.ngrams_from_dir("/Path/to/datadir", 'uni')
+       
     """
 
     grams = {}
@@ -272,6 +313,10 @@ def ngrams_from_dir(path, N='uni', ignore_hash=True, mode='heavy'):
                                 
 def corpus_from_dir(path, features=None, exclude=None, **kwargs):
     """
+    Generate a :class:`.Corpus` from a directory containing multiple DfR 
+    datasets.
+    
+    If ``features`` is provided (see below), will also load ngrams.
 
     Parameters
     ----------
@@ -287,6 +332,17 @@ def corpus_from_dir(path, features=None, exclude=None, **kwargs):
     Returns
     -------
     :class:`.Corpus`
+    
+    Examples
+    --------
+    
+    .. code-block:: python
+    
+       >>> from nltk.corpus import stopwords    # Get a stoplist.
+       >>> stoplist = stopwords.words()
+       >>> from tethne.readers import dfr
+       >>> C = dfr.corpus_from_dir('/path/to/DfR/datasets', 'uni', stoplist)
+
     """
 
     papers = from_dir(path)
@@ -324,8 +380,8 @@ def ngrams(datapath, N='uni', ignore_hash=True, mode='heavy'):
 
     .. code-block:: python
 
-       >>> import tethne.readers as rd
-       >>> trigrams = rd.dfr.ngrams("/Path/to/DfR", N='tri')
+       >>> from tethne.readers import dfr
+       >>> trigrams = dfr.ngrams("/Path/to/DfR", N='tri')
     """
 
     if  N =='uni':
