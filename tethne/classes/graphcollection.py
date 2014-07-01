@@ -169,7 +169,7 @@ class GraphCollection(object):
         self : :class:`.GraphCollection`
         """
         method = nt.__dict__[node_type].__dict__[graph_type]
-        for key, data in D.get_slices('date', include_papers=True).iteritems():
+        for key, data in D.get_slices('date', papers=True).iteritems():
             # Include sliced fields as node attributes.
             method_kwargs['node_attribs'] = D.get_axes()
             method_kwargs['node_id'] = D.index_by

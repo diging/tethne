@@ -1,8 +1,5 @@
 """
-Methods for analyzing :class:`.GraphCollection` objects.
-
-For the most part, these methods simply provide systematic access to algorithms
-in NetworkX.
+Methods for analyzing :class:`.GraphCollection`\s.
 """
 
 import networkx as nx
@@ -74,6 +71,46 @@ def algorithm(C, method, **kwargs):
                         results[elem] = { k: value }
                 nx.set_node_attributes(G, method, r)    # [#61510128]
     return results
+
+def delta(G, attribute):
+    """
+    Updates a :class:`.GraphCollection` with deltas of a node attribute.
+    
+    Parameters
+    ----------
+    G : :class:`.GraphCollection`
+    attribute : str
+        Name of a node attribute in ``G``.
+    """
+    import copy
+
+    keys = sorted(G.graphs.keys())
+    all_nodes =  G.nodes()
+    deltas = { k:{} for k in keys }
+    #n:{} for n in all_nodes }
+    last = { n:None for n in all_nodes }
+    
+    for k in keys:
+        graph = G[k]
+        asdict = { v[0]:v[1] for v in graph.nodes(data=True) }
+    
+        for n in all_nodes:
+            try:
+                curr = float(asdict[n][attribute])
+                if last[n] is not None and curr is not None:
+                    delta = float(curr) - float(last[n])
+                    last[n] = float(curr)
+                elif last[n] is None and curr is not None:
+                    delta = float(curr)
+                    last[n] = float(curr)
+                else:
+                    delta = 0.
+                deltas[k][n] = float(delta)
+            except KeyError:
+                pass
+        nx.set_node_attributes(G[k], attribute+'_delta', deltas[k])
+
+    return deltas
 
 def connected(C, method, **kwargs):
     """

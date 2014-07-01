@@ -27,6 +27,35 @@ class MALLETModelManager(ModelManager):
     Generates a :class:`.LDAModel` from a :class:`.Corpus` using
     `MALLET <http://mallet.cs.umass.edu/>`_.
     
+    The :class:`.Corpus` should already contain at least one featurset,
+    indicated by the `feature` parameter, such as wordcounts. You may
+    specify two working directories: `temppath` should be a working
+    directory that will contain intermediate files (e.g. documents, data
+    files, metadata), while `outpath` will contain the final model and any 
+    plots generated during the modeling process. If `temppath` is not
+    provided, generates and uses a system temporary directory.
+    
+    Tethne comes bundled with a recent version of MALLET. If you would
+    rather use your own install, you can do so by providing the 
+    `mallet_path` parameter. This should point to the directory containing
+    ``/bin/mallet``.
+    
+    Parameters
+    ----------
+    D : :class:`.Corpus`
+    feature : str
+        Key from D.features containing wordcounts (or whatever
+        you want to model with).
+    outpath : str
+        Path to output directory.
+    temppath : str
+        Path to temporary directory.
+    mallet_path : str
+        Path to MALLET install directory (contains bin/mallet).
+        
+    Examples
+    --------
+        
     Starting with some JSTOR DfR data (with wordcounts), a typical workflow
     might look something like this:
     
@@ -80,43 +109,11 @@ class MALLETModelManager(ModelManager):
     
     For more information about topic modeling with MALLET see 
     `this tutorial <http://programminghistorian.org/lessons/topic-modeling-and-mallet>`_.
+    
     """
     
     def __init__(self, D, feature='unigrams', outpath='/tmp/', temppath=None,
                           mallet_path='./model/bin/mallet-2.0.7'):
-        """
-        Initialize the :class:`.MALLETModelManager` with a :class:`.Corpus`
-        and a featureset.
-        
-        The :class:`.Corpus` should already contain at least one featurset,
-        indicated by the `feature` parameter, such as wordcounts. You may
-        specify two working directories: `temppath` should be a working
-        directory that will contain intermediate files (e.g. documents, data
-        files, metadata), while `outpath` will contain the final model and any 
-        plots generated during the modeling process. If `temppath` is not
-        provided, generates and uses a system temporary directory.
-        
-        Tethne comes bundled with a recent version of MALLET. If you would
-        rather use your own install, you can do so by providing the 
-        `mallet_path` parameter. This should point to the directory containing
-        ``/bin/mallet``.
-        
-        .. code-block:: python
-        
-           >>> from tethne.model import MALLETModelManager
-           >>> outpath = '/path/to/my/working/directory'
-           >>> mallet = '/Applications/mallet-2.0.7'
-           >>> M = MALLETModelManager(C, 'wordcounts', outpath, mallet_path=mallet)
-        
-        Parameters
-        ----------
-        D : :class:`.Corpus`
-        feature : str
-            Key from D.features containing wordcounts (or whatever
-            you want to model with).
-        mallet_path : str
-            Path to MALLET install directory (contains bin/mallet).
-        """
         super(MALLETModelManager, self).__init__(outpath, temppath)
         
         self.D = D
@@ -236,17 +233,6 @@ class MALLETModelManager(ModelManager):
         The :class:`.Corpus` used to initialize the :class:`.LDAModelManager`
         must have been already sliced by 'date'.
         
-        .. code-block:: python
-        
-           >>> keys, repr = M.topic_over_time(1, plot=True)
-
-        ...should return ``keys`` (date) and ``repr`` (% documents) for topic 1,
-        and generate a plot like this one in your ``outpath``.
-        
-        .. figure:: _static/images/topic_1_over_time.png
-           :width: 400
-           :align: center
-        
         Parameters
         ----------
         k : int
@@ -272,6 +258,21 @@ class MALLETModelManager(ModelManager):
             Keys into 'date' slice axis.
         R : array
             Representation of topic ``k`` over time.
+            
+        Examples
+        --------
+        
+        .. code-block:: python
+        
+           >>> keys, repr = M.topic_over_time(1, plot=True)
+
+        ...should return ``keys`` (date) and ``repr`` (% documents) for topic 1,
+        and generate a plot like this one in your ``outpath``.
+        
+        .. figure:: _static/images/topic_1_over_time.png
+           :width: 400
+           :align: center
+           
         """
         
         if k >= self.model.Z:

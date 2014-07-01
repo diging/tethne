@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>tethne.managers.gcmanager module &mdash; tethne 0.5.0-dev documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
+    <link rel="stylesheet" href="_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.5.0-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
+    <link rel="top" title="tethne 0.5.0-dev documentation" href="index.html" > 
+  </head>
+  <body>
+
+<div class="container">
+  <div class="top-scipy-org-logo-header">
+    <a href="index.html">
+      <img style="border: 0; height: 60px;" alt="SciPy" src="_static/img/logo_long_devo.png"></a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
+	
+        <li class="active"><a href="index.html">tethne 0.5.0-dev documentation</a></li>
+	 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-tethne.managers.gcmanager">
+<span id="tethne-managers-gcmanager-module"></span><h1>tethne.managers.gcmanager module<a class="headerlink" href="#module-tethne.managers.gcmanager" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="tethne.managers.gcmanager.GenericGraphCollectionManager">
+<em class="property">class </em><tt class="descclassname">tethne.managers.gcmanager.</tt><tt class="descname">GenericGraphCollectionManager</tt><big>(</big><em>sourcecollection</em>, <em>graph_axis</em>, <em>node_type</em>, <em>graph_type</em>, <em>method_kwargs={}</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/managers/gcmanager.html#GenericGraphCollectionManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.managers.gcmanager.GenericGraphCollectionManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tethne.managers.gcmanager.GraphCollectionManager" title="tethne.managers.gcmanager.GraphCollectionManager"><tt class="xref py py-class docutils literal"><span class="pre">tethne.managers.gcmanager.GraphCollectionManager</span></tt></a></p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.managers.gcmanager.GenericGraphCollectionManager.build" title="tethne.managers.gcmanager.GenericGraphCollectionManager.build"><tt class="xref py py-obj docutils literal"><span class="pre">build</span></tt></a>()</td>
+<td>Generates a graph for each slice of a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.managers.gcmanager.GenericGraphCollectionManager.prep" title="tethne.managers.gcmanager.GenericGraphCollectionManager.prep"><tt class="xref py py-obj docutils literal"><span class="pre">prep</span></tt></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">run</span></tt>(**kwargs)</td>
+<td>Execute CollectionManager workflow (prep, build, run).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.managers.gcmanager.GenericGraphCollectionManager.write" title="tethne.managers.gcmanager.GenericGraphCollectionManager.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a>()</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="tethne.managers.gcmanager.GenericGraphCollectionManager.build">
+<tt class="descname">build</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/managers/gcmanager.html#GenericGraphCollectionManager.build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.managers.gcmanager.GenericGraphCollectionManager.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a graph for each slice of a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.managers.gcmanager.GenericGraphCollectionManager.prep">
+<tt class="descname">prep</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/managers/gcmanager.html#GenericGraphCollectionManager.prep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.managers.gcmanager.GenericGraphCollectionManager.prep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="tethne.managers.gcmanager.GenericGraphCollectionManager.write">
+<tt class="descname">write</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/managers/gcmanager.html#GenericGraphCollectionManager.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.managers.gcmanager.GenericGraphCollectionManager.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="tethne.managers.gcmanager.GraphCollectionManager">
+<em class="property">class </em><tt class="descclassname">tethne.managers.gcmanager.</tt><tt class="descname">GraphCollectionManager</tt><big>(</big><em>sourcecollection</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/managers/gcmanager.html#GraphCollectionManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.managers.gcmanager.GraphCollectionManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="tethne.managers.collectionmanager.html#tethne.managers.collectionmanager.CollectionManager" title="tethne.managers.collectionmanager.CollectionManager"><tt class="xref py py-class docutils literal"><span class="pre">tethne.managers.collectionmanager.CollectionManager</span></tt></a></p>
+<p>Base class for GraphCollection managers.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">run</span></tt>(**kwargs)</td>
+<td>Execute CollectionManager workflow (prep, build, run).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_round.png" alt="Logo">
+            </a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="_sources/tethne.managers.gcmanager.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div class="this-page-menu">
+  <a href="/scipy/docs/scipy-docs/tethne.managers.gcmanager.rst">Edit page</a>
+</div>
+
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2013, ASU Digital Innovation Group.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

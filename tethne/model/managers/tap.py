@@ -37,6 +37,15 @@ class TAPModelManager(SocialModelManager):
     evolution of that network and the sequence in which authors adopt features
     in their work.
     
+    Parameters
+    ----------
+    D : :class:`.Corpus`
+    G : :class:`.GraphCollection`
+    model : :class:`.LDAModel`
+    
+    Examples
+    --------
+    
     Starting with some JSTOR DfR data, a typical workflow might look something
     like this:
     
@@ -82,12 +91,7 @@ class TAPModelManager(SocialModelManager):
     
     def __init__(self, D=None, G=None, model=None, **kwargs):
         """
-        
-        Parameters
-        ----------
-        D : :class:`.Corpus`
-        G : :class:`.GraphCollection`
-        model : :class:`.LDAModel`
+
         """
 
         super(TAPModelManager, self).__init__(**kwargs)

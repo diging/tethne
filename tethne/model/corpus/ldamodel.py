@@ -122,11 +122,6 @@ class LDAModel(BaseModel):
         """
         Yields a list of the top ``Nwords`` for topic ``k``.
         
-        .. code-block:: python
-        
-           >>> model.list_topic(1, Nwords=5)
-           [ 'opposed', 'terminates', 'trichinosis', 'cistus', 'acaule' ]
-        
         Parameters
         ----------
         k : int
@@ -138,6 +133,15 @@ class LDAModel(BaseModel):
         -------
         as_list : list
             List of words in topic.
+
+        Examples
+        --------
+        
+        .. code-block:: python
+        
+           >>> model.list_topic(1, Nwords=5)
+           [ 'opposed', 'terminates', 'trichinosis', 'cistus', 'acaule' ]
+           
         """
         words = self.dimension(k, top=Nwords)
         as_list = [ self.vocabulary[w] for w,p in words ]
@@ -147,11 +151,6 @@ class LDAModel(BaseModel):
     def print_topic(self, k, Nwords=10):
         """
         Yields the top ``Nwords`` for topic ``k`` as a string.
-        
-        .. code-block:: python
-        
-           >>> model.list_topic(1, Nwords=5)
-           'opposed, terminates, trichinosis, cistus, acaule'
         
         Parameters
         ----------
@@ -164,6 +163,14 @@ class LDAModel(BaseModel):
         -------
         as_string : str
             Joined list of words in topic.
+            
+        Examples
+        --------
+        
+        .. code-block:: python
+        
+           >>> model.print_topic(1, Nwords=5)
+           'opposed, terminates, trichinosis, cistus, acaule'
         """
 
         as_string = ', '.join(self.list_topic(k, Nwords))

@@ -29,6 +29,17 @@ class DTMModelManager(ModelManager):
     You should be sure to slice your :class:`.Corpus` by 'date' using the 
     'time_period' method (for details, see :func:`.Corpus.slice`\).
     
+    Parameters
+    ----------
+    D : :class:`.Corpus`
+    outpath : str
+        Path to output directory.
+    dtm_path : str
+        Path to MALLET install directory (contains bin/mallet).
+        
+    Examples
+    --------
+    
     Starting with some JSTOR DfR data (with wordcounts), a typical workflow
     might look something like this:
     
@@ -119,15 +130,6 @@ class DTMModelManager(ModelManager):
     .. figure:: _static/images/topic_2_evolution.png
        :width: 400
        :align: center
-
-    
-    Parameters
-    ----------
-    D : :class:`.Corpus`
-    outpath : str
-        Path to output directory.
-    dtm_path : str
-        Path to MALLET install directory (contains bin/mallet).
     """
     
     def __init__(self, D, feature='unigrams', outpath='/tmp',
@@ -233,17 +235,6 @@ class DTMModelManager(ModelManager):
         time.
         
         If ``plot`` is True, generates a plot image at ``outpath``.
-        
-        .. code-block:: python
-        
-           >>> M.plot_topic_evolution(2, plot=True)
-           
-        ...should generate a plot at ``outpath`` called 
-        ``topic_2_evolution.png``:
-
-        .. figure:: _static/images/topic_2_evolution.png
-           :width: 400
-           :align: center
            
         Parameters
         ----------
@@ -262,6 +253,20 @@ class DTMModelManager(ModelManager):
             Start-date of each time-period.
         t_series : list
             Array of p(w|t) for Nwords for each time-period.
+            
+        Examples
+        --------
+
+        .. code-block:: python
+        
+           >>> M.plot_topic_evolution(2, plot=True)
+           
+        ...should generate a plot at ``outpath`` called 
+        ``topic_2_evolution.png``:
+
+        .. figure:: _static/images/topic_2_evolution.png
+           :width: 400
+           :align: center
         """
         
         t_keys, t_series = self.model.topic_evolution(k, Nwords)
@@ -293,17 +298,6 @@ class DTMModelManager(ModelManager):
         The :class:`.Corpus` used to initialize the :class:`.DTMModelManager`
         must have been already sliced by 'date'.
         
-        .. code-block:: python
-        
-           >>> keys, repr = M.topic_over_time(1, plot=True)
-
-        ...should return ``keys`` (date) and ``repr`` (% documents) for topic 1,
-        and generate a plot like this one in your ``outpath``.
-        
-        .. figure:: _static/images/topic_1_over_time.png
-           :width: 400
-           :align: center
-        
         Parameters
         ----------
         k : int
@@ -329,6 +323,20 @@ class DTMModelManager(ModelManager):
             Keys into 'date' slice axis.
         R : array
             Representation of topic ``k`` over time.
+            
+        Examples
+        --------
+        
+        .. code-block:: python
+        
+           >>> keys, repr = M.topic_over_time(1, plot=True)
+
+        ...should return ``keys`` (date) and ``repr`` (% documents) for topic 1,
+        and generate a plot like this one in your ``outpath``.
+        
+        .. figure:: _static/images/topic_1_over_time.png
+           :width: 400
+           :align: center
         """
         
         if k >= self.model.Z:

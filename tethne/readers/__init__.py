@@ -4,8 +4,6 @@ Methods for parsing bibliographic datasets.
 .. autosummary::
 
    dfr
-   mallet
-   pubmed
    wos
 
 Each file reader provides methods to parse bibliographic data from a

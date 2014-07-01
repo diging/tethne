@@ -108,8 +108,8 @@ class TestCorpusDfR(unittest.TestCase):
         pcgpath = cg_path + 'classes.Corpus.__init__[dfr].png'
         with Profile(pcgpath):
             self.D = Corpus(papers, features={'unigrams': ngrams},
-                                            index_by='doi',
-                                            exclude=set(stopwords.words()))
+                                                index_by='doi',
+                                                exclude=set(stopwords.words()))
 
     def test_indexing(self):
         """
