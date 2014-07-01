@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>tethne.persistence.hdf5.util &mdash; tethne 0.5.0-dev documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.5.0-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/js/copybutton.js"></script>
+    <link rel="top" title="tethne 0.5.0-dev documentation" href="../../../../index.html" >
+    <link rel="up" title="Module code" href="../../../index.html" > 
+  </head>
+  <body>
+
+<div class="container">
+  <div class="top-scipy-org-logo-header">
+    <a href="../../../../index.html">
+      <img style="border: 0; height: 60px;" alt="SciPy" src="../../../../_static/img/logo_long_devo.png"></a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
+	
+        <li class="active"><a href="../../../../index.html">tethne 0.5.0-dev documentation</a></li>
+	
+          <li class="active"><a href="../../../index.html" accesskey="U">Module code</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <h1>Source code for tethne.persistence.hdf5.util</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Helper classes and methods for :mod:`tethne.persistence.hdf5`\.</span>
+
+<span class="sd">TODO: move away from index table pattern, toward index array pattern.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">()</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s">&#39;ERROR&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">tables</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">import</span> <span class="nn">cPickle</span> <span class="kn">as</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">urllib</span>
+<span class="kn">from</span> <span class="nn">unidecode</span> <span class="kn">import</span> <span class="n">unidecode</span>
+
+<span class="kn">from</span> <span class="nn">...classes</span> <span class="kn">import</span> <span class="n">Paper</span>
+
+<span class="n">pytype</span> <span class="o">=</span> <span class="p">{</span>  <span class="n">tables</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">BoolAtom</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+            <span class="n">tables</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">UInt8Atom</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">tables</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">Int16Atom</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">tables</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">UInt16Atom</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">tables</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">Int32Atom</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">tables</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">UInt32Atom</span><span class="p">:</span> <span class="nb">long</span><span class="p">,</span>
+            <span class="n">tables</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">Int64Atom</span><span class="p">:</span> <span class="nb">long</span><span class="p">,</span>
+            <span class="n">tables</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">UInt64Atom</span><span class="p">:</span> <span class="nb">long</span><span class="p">,</span>
+            <span class="n">tables</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">Float32Atom</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+            <span class="n">tables</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">Float64Atom</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+            <span class="n">tables</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">Complex64Atom</span><span class="p">:</span> <span class="nb">complex</span><span class="p">,</span>
+            <span class="n">tables</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">Complex128Atom</span><span class="p">:</span> <span class="nb">complex</span><span class="p">,</span>
+            <span class="n">tables</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">StringAtom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">tables</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">Time32Atom</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">tables</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">Time64Atom</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">int32</span><span class="p">:</span> <span class="nb">int</span> <span class="p">}</span>
+
+<div class="viewcode-block" id="get_h5file"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.get_h5file">[docs]</a><span class="k">def</span> <span class="nf">get_h5file</span><span class="p">(</span><span class="n">typename</span><span class="p">,</span> <span class="n">datapath</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load or create an HDF5 data file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Where to save the HDF5 data file?</span>
+    <span class="k">if</span> <span class="n">datapath</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">datapath</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Generated datapath {0}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datapath</span><span class="p">))</span>
+
+    <span class="c"># Load or create HDF5 repository.</span>
+    <span class="k">if</span> <span class="n">datapath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;h5&#39;</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">datapath</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="k">else</span><span class="p">:</span>   <span class="c"># New h5 file.</span>
+        <span class="n">this_uuid</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span>    <span class="c"># Unique identifier for this H5File</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;H5File has UUID {0}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">this_uuid</span><span class="p">))</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;{0}/{1}-{2}.h5&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">typename</span><span class="p">,</span> <span class="n">this_uuid</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;{0}-{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">typename</span><span class="p">,</span> <span class="n">uuid</span><span class="p">)</span>
+
+    <span class="c"># mode = &#39;a&#39; will create a new file if no file exists.</span>
+    <span class="n">h5file</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">openFile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">h5file</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">uuid</span>
+</div>
+<div class="viewcode-block" id="get_or_create_group"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.get_or_create_group">[docs]</a><span class="k">def</span> <span class="nf">get_or_create_group</span><span class="p">(</span><span class="n">h5file</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">where</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">h5file</span><span class="p">:</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">createGroup</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">where</span><span class="p">:</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">createGroup</span><span class="p">(</span><span class="n">where</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="n">where</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">group</span>
+</div>
+<div class="viewcode-block" id="get_or_create_table"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.get_or_create_table">[docs]</a><span class="k">def</span> <span class="nf">get_or_create_table</span><span class="p">(</span><span class="n">h5file</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">createTable</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">table</span>
+</div>
+<div class="viewcode-block" id="get_or_create_array"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.get_or_create_array">[docs]</a><span class="k">def</span> <span class="nf">get_or_create_array</span><span class="p">(</span><span class="n">h5file</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">create_array</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">array</span>
+</div>
+<span class="k">class</span> <span class="nc">FieldIndex</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">IsDescription</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For storing metadata about fields.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>    <span class="c"># name of a field.</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>    <span class="c"># should correspond to a Python dtype.</span>
+
+<div class="viewcode-block" id="HDF5Metadata"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.HDF5Metadata">[docs]</a><span class="k">class</span> <span class="nc">HDF5Metadata</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5file</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span> <span class="o">=</span> <span class="n">h5file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;metadata&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="n">get_or_create_group</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="n">get_or_create_table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="s">&#39;fields&#39;</span><span class="p">,</span> <span class="n">FieldIndex</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">field_values</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c"># Get the names and types of metadata fields.</span>
+        <span class="n">fieldkeys</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">mvalues</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;index&#39;</span><span class="p">:</span> <span class="p">[]</span> <span class="p">}</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">this_type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+            <span class="n">fieldkeys</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">this_type</span>
+            <span class="n">mvalues</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="c"># Holds paper identifiers.</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>   <span class="c"># Ensure consistent order.</span>
+
+        <span class="c"># Generate metadata vectors.</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span><span class="n">value</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                <span class="n">mvalues</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="c"># Generate a fields table.</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span><span class="n">this_type</span> <span class="ow">in</span> <span class="n">fieldkeys</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;name == b&quot;{0}&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">matches</span> <span class="o">=</span> <span class="p">[</span> <span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">query</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">fieldentry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">row</span>
+                <span class="n">fieldentry</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+                <span class="n">fieldentry</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">this_type</span>
+                <span class="n">fieldentry</span><span class="o">.</span><span class="n">append</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+        <span class="c"># Get or create arrays that hold metadata vectors.</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">fieldkeys</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">field_values</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_or_create_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">mvalues</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;Values can only be set on __init__&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For each field in `self.fields` table, retrieve the value for `key`</span>
+<span class="sd">        from the corresponding metadata vector.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="n">fielddata</span> <span class="o">=</span> <span class="p">{</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]:</span><span class="n">row</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="p">}</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="nb">type</span> <span class="ow">in</span> <span class="n">fielddata</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">meta</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_meta_entry</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">meta</span>
+
+    <span class="k">def</span> <span class="nf">_get_meta_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">this_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve value for `index` from the metadata vector `name`, and </span>
+<span class="sd">        cast as `type` before returning.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_values</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">this_type</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)):</span> <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">this_type</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="mi">1</span><span class="p">)):</span> <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">this_type</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="mf">1.1</span><span class="p">)):</span> <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">this_type</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="s">u&#39;&#39;</span><span class="p">)):</span> <span class="k">return</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field_values</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c">################################################################################</span>
+<span class="c">####                    Helper classes and methods.                         ####</span>
+<span class="c">################################################################################</span>
+</div>
+<span class="k">class</span> <span class="nc">HDF5Paper</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">IsDescription</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides persistence for :class:`.Paper` within a</span>
+<span class="sd">    :class:`.HDF5Corpus`\.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mindex</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">aulast</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">auinit</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">atitle</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+    <span class="n">jtitle</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+    <span class="n">volume</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+    <span class="n">issue</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+    <span class="n">spage</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+    <span class="n">epage</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+    <span class="n">ayjid</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">pmid</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">wosid</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">abstract</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
+    <span class="n">accession</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Int32Col</span><span class="p">()</span>
+    <span class="n">citations</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>  <span class="c"># List of citation keys.</span>
+    
+<span class="k">class</span> <span class="nc">Index</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">IsDescription</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For storing int : str pairs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Int32Col</span><span class="p">()</span>
+    <span class="n">mindex</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">IntIndex</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">IsDescription</span><span class="p">):</span>    
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For storing int : int pairs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Int32Col</span><span class="p">()</span>
+    <span class="n">mindex</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">Int32Col</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">StrIndex</span><span class="p">(</span><span class="n">tables</span><span class="o">.</span><span class="n">IsDescription</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For storing str : str pairs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">mindex</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">StringCol</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HDF5Axes"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.HDF5Axes">[docs]</a><span class="k">class</span> <span class="nc">HDF5Axes</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Organizes axes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5file</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Initialize HDF5Axes.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span> <span class="o">=</span> <span class="n">h5file</span>
+        
+        <span class="c"># Load or create axes group.</span>
+        <span class="k">if</span> <span class="s">&#39;/axes&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">createGroup</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">,</span> <span class="s">&#39;axes&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="s">&#39;/axes&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;HDF5Axes.__setitem__ for key {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+
+        <span class="nb">dict</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">HDF5Axis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="nb">dict</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">HDF5Axis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">_f_listNodes</span><span class="p">())</span>
+        
+</div>
+<div class="viewcode-block" id="HDF5Axis"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.HDF5Axis">[docs]</a><span class="k">class</span> <span class="nc">HDF5Axis</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Organizes a single axis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5file</span><span class="p">,</span> <span class="n">fgroup</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span> <span class="o">=</span> <span class="n">h5file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        
+        <span class="c"># Load or create group.</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fgroup</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">createGroup</span><span class="p">(</span><span class="n">fgroup</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="n">fgroup</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;{0}_{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="n">h5dict</span> <span class="o">=</span> <span class="n">HDF5ArrayDict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="nb">dict</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">h5dict</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">_f_listNodes</span><span class="p">())</span>
+
+</div>
+<div class="viewcode-block" id="HDF5Features"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.HDF5Features">[docs]</a><span class="k">class</span> <span class="nc">HDF5Features</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Organizes feature-sets, each as a :class:`.HDF5Feature`\.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5file</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Initialize HDF5Features.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span> <span class="o">=</span> <span class="n">h5file</span>
+        
+        <span class="c"># Load or create features group.</span>
+        <span class="k">if</span> <span class="s">&#39;/features&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">createGroup</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">,</span> <span class="s">&#39;features&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="s">&#39;/features&#39;</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;HDF5Features.___setitem__ for key {0}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+        
+        <span class="n">fset</span> <span class="o">=</span> <span class="n">HDF5FeatureSet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="nb">dict</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">fset</span><span class="p">)</span>
+        
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;assign values for key {0}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">fset</span> <span class="o">=</span> <span class="n">HDF5FeatureSet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+            <span class="nb">dict</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">fset</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+            </div>
+<div class="viewcode-block" id="HDF5FeatureSet"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.HDF5FeatureSet">[docs]</a><span class="k">class</span> <span class="nc">HDF5FeatureSet</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Stores data about the distribution of a specific feature-set, e.g. unigrams,</span>
+<span class="sd">    across papers in the :class:`.Corpus`\.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5file</span><span class="p">,</span> <span class="n">fgroup</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Initializing HDF5Feature with name {0}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span> <span class="o">=</span> <span class="n">h5file</span>
+        
+        <span class="c"># Load or create a group.</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fgroup</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">createGroup</span><span class="p">(</span><span class="n">fgroup</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="n">fgroup</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+        <span class="nb">dict</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;features&#39;</span><span class="p">,</span> <span class="n">HDF5FeatureValues</span><span class="p">(</span><span class="n">h5file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">))</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;...done.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;HDF5Feature ({0}): __setitem__ for key {1}, and value with length {2}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>    
+
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;features&#39;</span><span class="p">:</span>
+                <span class="nb">dict</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;features&#39;</span><span class="p">,</span> <span class="n">HDF5FeatureValues</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="n">value</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="p">])</span>
+                <span class="nb">dict</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">HDF5ArrayDict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;features&#39;</span><span class="p">:</span>
+                <span class="nb">dict</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;features&#39;</span><span class="p">,</span> <span class="n">HDF5FeatureValues</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="p">[]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">dict</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">HDF5ArrayDict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="p">[]))</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="HDF5ArrayDict"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.HDF5ArrayDict">[docs]</a><span class="k">class</span> <span class="nc">HDF5ArrayDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5file</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span> <span class="o">=</span> <span class="n">h5file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="n">group</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        
+        <span class="c"># Load or create a new array.</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">create_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        
+<div class="viewcode-block" id="HDF5ArrayDict.items"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.HDF5ArrayDict.items">[docs]</a>    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span> <span class="n">i</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">))</span> <span class="p">}</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    </div>
+<div class="viewcode-block" id="HDF5ArrayDict.iteritems"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.HDF5ArrayDict.iteritems">[docs]</a>    <span class="k">def</span> <span class="nf">iteritems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+    </div>
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">)</span>
+        
+<div class="viewcode-block" id="HDF5ArrayDict.values"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.HDF5ArrayDict.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">))</span> <span class="p">]</span>
+    </div>
+<div class="viewcode-block" id="HDF5ArrayDict.keys"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.HDF5ArrayDict.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">array</span><span class="p">))</span>
+        
+</div></div>
+<div class="viewcode-block" id="HDF5FeatureValues"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.HDF5FeatureValues">[docs]</a><span class="k">class</span> <span class="nc">HDF5FeatureValues</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5file</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span> <span class="o">=</span> <span class="n">h5file</span>
+        
+        <span class="c"># Load or create features group.</span>
+        <span class="k">if</span> <span class="s">&#39;features&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">createGroup</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="s">&#39;features&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="s">&#39;features&#39;</span><span class="p">)</span>
+
+        <span class="c"># Load or create documents table.</span>
+        <span class="k">if</span> <span class="s">&#39;documents&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">documents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="s">&#39;documents&#39;</span><span class="p">,</span>
+                                                                  <span class="n">Index</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">documents</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">create_index</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">documents</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">mindex</span><span class="o">.</span><span class="n">create_index</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">documents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="s">&#39;documents&#39;</span><span class="p">)</span>
+
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+        
+    <span class="k">def</span> <span class="nf">_get_or_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="c"># Index the document.</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">documents</span><span class="p">)</span>
+        <span class="n">doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">documents</span><span class="o">.</span><span class="n">row</span>
+        <span class="n">doc</span><span class="p">[</span><span class="s">&#39;i&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">doc</span><span class="p">[</span><span class="s">&#39;mindex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">documents</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+    
+        <span class="n">indices</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">iname</span> <span class="o">=</span> <span class="s">&#39;indices{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">kname</span> <span class="o">=</span> <span class="s">&#39;values{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="c"># Load or create I array.</span>
+        <span class="k">if</span> <span class="n">iname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">:</span>
+            <span class="n">I</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">create_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">iname</span><span class="p">,</span>
+                                         <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">indices</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">I</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">iname</span><span class="p">)</span>
+
+        <span class="c"># Load or create K array.</span>
+        <span class="k">if</span> <span class="n">kname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">:</span>
+            <span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">create_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">kname</span><span class="p">,</span>
+                                         <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">kname</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">I</span><span class="p">,</span><span class="n">K</span>
+    
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">I</span><span class="p">,</span><span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_or_create</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="nb">dict</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">K</span><span class="p">))</span>
+        
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">I</span><span class="p">,</span><span class="n">K</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">I</span><span class="p">,</span><span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_or_create</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">return</span> <span class="nb">zip</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">K</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">documents</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="HDF5FeatureValues.iteritems"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.HDF5FeatureValues.iteritems">[docs]</a>    <span class="k">def</span> <span class="nf">iteritems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">documents</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+</div></div>
+<div class="viewcode-block" id="papers_table"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.papers_table">[docs]</a><span class="k">class</span> <span class="nc">papers_table</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Mimics the `papers` dict in :class:`.Paper`\, providing HDF5 persistence.</span>
+
+<span class="sd">    Values should be set only once for a key.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    h5file : tables.file.File</span>
+<span class="sd">        A :class:`tables.file.File` object.</span>
+<span class="sd">    index_by : str</span>
+<span class="sd">        Key in :class:`.Paper` used to index papers in this </span>
+<span class="sd">        :class:`.Corpus`\.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5file</span><span class="p">,</span> <span class="n">index_by</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">citations</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> 
+                                               <span class="n">index_citation_by</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span> <span class="o">=</span> <span class="n">h5file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_by</span> <span class="o">=</span> <span class="n">index_by</span>
+        
+        <span class="c"># Load or create group.</span>
+        <span class="k">if</span> <span class="s">&#39;/{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">createGroup</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="s">&#39;/{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="c"># Load or create table.</span>
+        <span class="k">if</span> <span class="s">&#39;papers_table&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">createTable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="s">&#39;papers_table&#39;</span><span class="p">,</span>
+                                                             <span class="n">HDF5Paper</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">indexrows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">mindex</span><span class="o">.</span><span class="n">createIndex</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="s">&#39;papers_table&#39;</span><span class="p">)</span>
+        
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">citations</span> <span class="o">=</span> <span class="n">citations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_citation_by</span> <span class="o">=</span> <span class="n">index_citation_by</span>
+    
+    <span class="k">def</span> <span class="nf">_recast_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Recasts values from HDF5 table as Python types.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="n">to</span> <span class="ow">is</span> <span class="nb">list</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">:</span>  <span class="c"># avoid re-unpickling.</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">else</span><span class="p">:</span>   
+                <span class="n">v</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">to</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">v</span>
+    
+    
+    <span class="k">def</span> <span class="nf">_to_paper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hdf5paper</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Yields a :class:`.Paper` from an :class:`.HDF5Paper`\.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">paper</span> <span class="o">=</span> <span class="n">Paper</span><span class="p">()</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">description</span><span class="o">.</span><span class="n">_v_dtypes</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">kname</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kname</span> <span class="o">==</span> <span class="s">&#39;mindex&#39;</span><span class="p">:</span> <span class="k">continue</span>    <span class="c"># Not a valid field for Paper.</span>
+
+            <span class="k">if</span> <span class="n">kname</span> <span class="ow">in</span> <span class="n">paper</span><span class="o">.</span><span class="n">list_fields</span><span class="p">:</span> <span class="n">to</span> <span class="o">=</span> <span class="nb">list</span>
+            <span class="k">elif</span> <span class="n">kname</span> <span class="ow">in</span> <span class="n">paper</span><span class="o">.</span><span class="n">string_fields</span><span class="p">:</span> <span class="n">to</span> <span class="o">=</span> <span class="nb">str</span>
+            <span class="k">elif</span> <span class="n">kname</span> <span class="ow">in</span> <span class="n">paper</span><span class="o">.</span><span class="n">int_fields</span><span class="p">:</span> <span class="n">to</span> <span class="o">=</span> <span class="nb">int</span>
+            
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_recast_value</span><span class="p">(</span><span class="n">to</span><span class="p">,</span> <span class="n">hdf5paper</span><span class="p">[</span><span class="n">kname</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">kname</span> <span class="o">==</span> <span class="s">&#39;citations&#39;</span><span class="p">:</span>  <span class="c"># &#39;citations&#39; should contain Papers.</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">citations</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="k">continue</span>     <span class="c"># May not have any.</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_paper</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">citations</span><span class="p">[</span><span class="n">a</span><span class="p">])</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">v</span> <span class="p">]</span>
+                <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">paper</span><span class="p">[</span><span class="n">kname</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="n">paper</span>
+        
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">hpaper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">row</span>
+        <span class="n">hpaper</span><span class="p">[</span><span class="s">&#39;mindex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="c"># Lists will be pickled for storage.</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+                        <span class="c"># Citations will be stored as list of citation indices.                        </span>
+                        <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s">&#39;citations&#39;</span><span class="p">:</span>    
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">citations</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="k">continue</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">v</span> <span class="o">=</span> <span class="p">[</span> <span class="n">a</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index_citation_by</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">v</span> <span class="p">]</span>
+                            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                                <span class="n">v</span> <span class="o">=</span> <span class="p">[]</span>
+                        <span class="n">v</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                    <span class="n">hpaper</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="n">hpaper</span><span class="o">.</span><span class="n">append</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>  <span class="c"># We need table completely up-to-date for subsequent</span>
+                            <span class="c">#  operations.</span>
+    
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_paper</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span>
+                    <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s">&#39;mindex == b&quot;{0}&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">([</span> <span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">])</span>
+    
+    <span class="k">def</span> <span class="nf">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_paper</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span>
+                        <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s">&#39;mindex == b&quot;{0}&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="p">])</span>
+        <span class="k">return</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    
+<div class="viewcode-block" id="papers_table.iteritems"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.papers_table.iteritems">[docs]</a>    <span class="k">def</span> <span class="nf">iteritems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">yield</span> <span class="n">x</span><span class="p">[</span><span class="s">&#39;mindex&#39;</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_paper</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            </div>
+<div class="viewcode-block" id="papers_table.values"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.papers_table.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_paper</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="p">]</span>
+    </div>
+<div class="viewcode-block" id="papers_table.keys"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.papers_table.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span> <span class="n">x</span><span class="p">[</span><span class="s">&#39;mindex&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="p">]</span>
+</div></div>
+<div class="viewcode-block" id="vlarray_dict"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.vlarray_dict">[docs]</a><span class="k">class</span> <span class="nc">vlarray_dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides dict-like access to an HDF5 VLArray.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h5file</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">atom</span><span class="p">,</span> <span class="n">keyatom</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span> <span class="o">=</span> <span class="n">h5file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">group</span> <span class="o">=</span> <span class="n">group</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">atom</span> <span class="o">=</span> <span class="n">atom</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keyatom</span> <span class="o">=</span> <span class="n">keyatom</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pytype</span> <span class="o">=</span> <span class="n">pytype</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">atom</span><span class="p">)]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&#39;No equivalent Python type for atom.&#39;</span><span class="p">)</span>
+        
+        <span class="n">indexname</span> <span class="o">=</span> <span class="s">&#39;{0}_index&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c"># Load or create index.</span>
+        <span class="k">if</span> <span class="n">indexname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">createTable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">indexname</span><span class="p">,</span> <span class="n">Index</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">mindex</span><span class="o">.</span><span class="n">createIndex</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">indexname</span><span class="p">)</span>
+        
+        <span class="c"># Load or create vlarray.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vlarray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">createVLArray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                                                 <span class="bp">self</span><span class="o">.</span><span class="n">atom</span><span class="p">)</span>
+            <span class="c"># Pad with dummy data.</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vlarray</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">dflt</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">size</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">size</span>
+                <span class="n">padding</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="bp">self</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">dflt</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">size</span><span class="p">)])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vlarray</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">padding</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vlarray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">atom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vlarray</span><span class="o">.</span><span class="n">atom</span>
+
+        <span class="c"># If create, pads with dummy index at 0.</span>
+        <span class="k">if</span> <span class="s">&#39;I&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">I</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">createEArray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="s">&#39;I&#39;</span><span class="p">,</span> <span class="n">keyatom</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,))</span>
+            <span class="k">if</span> <span class="n">keyatom</span><span class="o">.</span><span class="n">dflt</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="n">dflt</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">if</span> <span class="n">keyatom</span><span class="o">.</span><span class="n">dflt</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span> <span class="n">dflt</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span>
+            <span class="k">else</span><span class="p">:</span> <span class="n">dflt</span> <span class="o">=</span> <span class="n">keyatom</span><span class="o">.</span><span class="n">dflt</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">dflt</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">I</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">h5file</span><span class="o">.</span><span class="n">getNode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="s">&#39;I&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">keyatom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="o">.</span><span class="n">atom</span>
+
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">key</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vlarray</span><span class="o">.</span><span class="n">append</span><span class="p">([</span> <span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span>  <span class="n">value</span> <span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vlarray</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">atom</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">():</span>
+            <span class="k">return</span> <span class="p">[[</span> <span class="bp">self</span><span class="o">.</span><span class="n">pytype</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span> <span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">pytype</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">):</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_paper</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span>
+                    <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s">&#39;mindex == b&quot;{0}&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="p">])</span>
+        <span class="k">return</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    
+<div class="viewcode-block" id="vlarray_dict.values"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.vlarray_dict.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">pytype</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">x</span> <span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vlarray</span> <span class="p">]</span>
+    </div>
+<div class="viewcode-block" id="vlarray_dict.keys"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.vlarray_dict.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span> <span class="n">x</span><span class="p">[</span><span class="s">&#39;mindex&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="p">]</span>  
+    </div>
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vlarray</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span>  <span class="c"># Compensate for padding.</span>
+
+<div class="viewcode-block" id="vlarray_dict.iteritems"><a class="viewcode-back" href="../../../../tethne.persistence.hdf5.util.html#tethne.persistence.hdf5.util.vlarray_dict.iteritems">[docs]</a>    <span class="k">def</span> <span class="nf">iteritems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span> <span class="n">x</span><span class="p">[</span><span class="s">&#39;mindex&#39;</span><span class="p">]:</span><span class="bp">self</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="s">&#39;mindex&#39;</span><span class="p">]]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="p">}</span>        </div></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/logo_round.png" alt="Logo">
+            </a></p>
+
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2013, ASU Digital Innovation Group.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
