@@ -7,7 +7,9 @@ Submodules
 .. toctree::
 
    tethne.analyze.collection
+   tethne.analyze.corpus
    tethne.analyze.graph
+   tethne.analyze.cocitation
 
 Module contents
 ---------------

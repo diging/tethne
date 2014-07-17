@@ -292,14 +292,20 @@ manipulation.</p>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">edge_distribution</span></tt>()</td>
 <td>Get the number of edges in each <tt class="xref py py-class docutils literal"><span class="pre">networkx.Graph</span></tt> in the <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">edges</span></tt>([overwrite])</td>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">edge_history</span></tt>(source,&nbsp;target,&nbsp;attribute[,&nbsp;...])</td>
+<td>Returns a dictionary of attribute vales for each Graph in C for a single edge.</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">edges</span></tt>([overwrite])</td>
 <td>Get the complete set of edges for this <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt>(filepath)</td>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt>(filepath)</td>
 <td>Loads a pickled (serialized) <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> from filepath.</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">node_distribution</span></tt>()</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">node_distribution</span></tt>()</td>
 <td>Get the number of nodes for each <tt class="xref py py-class docutils literal"><span class="pre">networkx.Graph</span></tt> in the <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">node_history</span></tt>(node,&nbsp;attribute[,&nbsp;verbose])</td>
+<td>Returns a dictionary of attribute values for each Graph in C for a single node.</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">nodes</span></tt>()</td>
 <td>Get the complete set of nodes for this <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</td>

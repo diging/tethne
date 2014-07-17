@@ -1194,7 +1194,47 @@
         <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">((</span><span class="n">K</span><span class="p">,</span> <span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">J</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span>
 
         <span class="k">return</span> <span class="n">dist</span>
+</div>
+<div class="viewcode-block" id="Corpus.feature_counts"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.feature_counts">[docs]</a>    <span class="k">def</span> <span class="nf">feature_counts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">featureset</span><span class="p">,</span> <span class="nb">slice</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s">&#39;date&#39;</span><span class="p">,</span>
+                                                <span class="n">documentCounts</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get feature counts for a particular ``slice`` in ``axis``.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        featureset : str</span>
+<span class="sd">            Name of a featureset in the corpus.</span>
+<span class="sd">        slice : int or str</span>
+<span class="sd">            Name of a slice along ``axis``.</span>
+<span class="sd">        axis : str</span>
+<span class="sd">            Name of slice axis containing ``slice``.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        counts : dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="n">featureset</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&#39;No such featureset in this Corpus&#39;</span><span class="p">)</span>
 
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
+        <span class="n">feature_lookup</span> <span class="o">=</span> <span class="p">{</span> <span class="n">v</span><span class="p">:</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">index</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="p">}</span>
+    
+        <span class="n">fvalues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset</span><span class="p">][</span><span class="s">&#39;features&#39;</span><span class="p">]</span>
+
+        <span class="n">papers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">papers</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">f</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">fvalues</span><span class="p">[</span><span class="n">p</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">documentCounts</span><span class="p">:</span>
+                        <span class="n">counts</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">counts</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">+=</span> <span class="n">v</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Corpus.plot_distribution"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.plot_distribution">[docs]</a>    <span class="k">def</span> <span class="nf">plot_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_axis</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">y_axis</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&#39;bar&#39;</span><span class="p">,</span>
                                 <span class="n">aspect</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;papers&#39;</span><span class="p">,</span>

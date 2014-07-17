@@ -98,6 +98,8 @@
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">utilities</span> <span class="k">as</span> <span class="n">util</span>
 <span class="kn">import</span> <span class="nn">helpers</span>
 <span class="kn">import</span> <span class="nn">operator</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
 
 <span class="kn">from</span> <span class="nn">..classes.paper</span> <span class="kn">import</span> <span class="n">Paper</span>
 
@@ -438,66 +440,65 @@
 
     <span class="n">cocitation_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;cocitation&#39;</span><span class="p">)</span>
 
-    <span class="c"># We&#39;ll use tuples as keys. Values are the number of times each pair</span>
-    <span class="c">#  of papers is co-cited.</span>
-    <span class="n">cocitations</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">citations_count</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;Generating a cocitation network with &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; nodes...&quot;</span>
+
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">citation_count</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">node_id</span><span class="p">)</span>
 
     <span class="c"># 61670334: networks.citations.cocitation should have a &quot;top cited&quot;</span>
     <span class="c">#  parameter.</span>
     <span class="k">if</span> <span class="n">topn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">parents</span><span class="p">,</span><span class="n">include</span><span class="p">,</span><span class="n">citations_count</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">top_parents</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="n">topn</span><span class="p">)</span>
-        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">include</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">citations_count</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">citation_count</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
-        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">citations_count</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">cvalues</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">topn</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="n">top_values</span> <span class="o">=</span> <span class="n">cvalues</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[</span><span class="o">-</span><span class="n">topn</span><span class="p">:][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">topn</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">float</span><span class="p">:</span>
+            <span class="n">topn_</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">topn</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">counts</span><span class="p">)))</span>
+            <span class="n">top_values</span> <span class="o">=</span> <span class="n">cvalues</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[</span><span class="o">-</span><span class="n">topn_</span><span class="p">:][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">top_cited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span> <span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">top_values</span> <span class="p">])</span>
 
-    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">&quot;Generating a cocitation network with &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; nodes...&quot;</span>
-
+    <span class="n">cocited</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">paper</span> <span class="ow">in</span> <span class="n">papers</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>  <span class="c"># Some papers don&#39;t have citations.</span>
-            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">])</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-                <span class="n">paper_i</span> <span class="o">=</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">these_citations</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span> <span class="p">[</span> <span class="n">c</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="p">]</span> <span class="p">)</span>
+            <span class="k">if</span> <span class="n">topn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">allowed</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">these_citations</span> <span class="o">&amp;</span> <span class="n">top_cited</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">allowed</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">these_citations</span><span class="p">)</span>
+            
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">allowed</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">i_id</span> <span class="o">=</span> <span class="n">allowed</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">topn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">i_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">top_cited</span><span class="p">:</span>
+                        <span class="k">continue</span>
 
-                <span class="k">if</span> <span class="n">topn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">paper_i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
-                    <span class="k">pass</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-                        <span class="n">paper_j</span> <span class="o">=</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+                    <span class="n">j_id</span> <span class="o">=</span> <span class="n">allowed</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">topn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">j_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">top_cited</span><span class="p">:</span>
+                            <span class="k">continue</span>
 
-                        <span class="k">if</span> <span class="n">topn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">paper_j</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">include</span><span class="p">:</span>
-                            <span class="k">pass</span>
-                        <span class="k">else</span><span class="p">:</span>
-
-                            <span class="n">pp</span> <span class="o">=</span> <span class="p">(</span> <span class="n">paper_i</span><span class="p">,</span> <span class="n">paper_j</span> <span class="p">)</span>
-                            <span class="n">pp_inv</span> <span class="o">=</span> <span class="p">(</span> <span class="n">paper_j</span><span class="p">,</span> <span class="n">paper_i</span> <span class="p">)</span>
-
-                            <span class="k">try</span><span class="p">:</span> <span class="c"># Have these papers been co-cited before?</span>
-                                <span class="n">cocitations</span><span class="p">[</span><span class="n">pp</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-                            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                                <span class="k">try</span><span class="p">:</span> <span class="c"># Maybe in opposite order?</span>
-                                    <span class="n">cocitations</span><span class="p">[</span><span class="n">pp_inv</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-                                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                                    <span class="c"># First time these papers are co-cited.</span>
-                                    <span class="n">cocitations</span><span class="p">[</span><span class="n">pp</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="n">pair</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">i_id</span><span class="p">,</span> <span class="n">j_id</span><span class="p">])</span>
+                    <span class="n">pair_key</span> <span class="o">=</span> <span class="s">&#39;|||&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pair</span><span class="p">)</span>
+                    <span class="n">cocited</span><span class="p">[</span><span class="n">pair_key</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>   <span class="c"># Raised when a paper has no citations.</span>
+            <span class="k">pass</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="k">print</span> <span class="s">&quot;Co-citation matrix generated, building Graph...&quot;</span>
 
-    <span class="k">for</span> <span class="n">key</span> <span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">cocitations</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">pairkey</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">cocited</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">val</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">:</span> <span class="c"># and key[0] in include and key[1] in include:</span>
-            <span class="n">cocitation_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">weight</span><span class="o">=</span><span class="n">val</span><span class="p">)</span>
+            <span class="n">pair</span> <span class="o">=</span> <span class="n">pairkey</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;|||&#39;</span><span class="p">)</span>
+            <span class="n">cocitation_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">weight</span><span class="o">=</span><span class="n">val</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="k">print</span> <span class="s">&quot;Done building co-citation graph, adding attributes...&quot;</span>
 
     <span class="c"># 62657522: Nodes in co-citation graph should have attribute containing</span>
     <span class="c">#  number of citations.</span>
-    <span class="n">n_cit</span> <span class="o">=</span> <span class="p">{</span> <span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">citations_count</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">cocitation_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="p">}</span>
-    <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span> <span class="n">cocitation_graph</span><span class="p">,</span> <span class="s">&#39;citations&#39;</span><span class="p">,</span> <span class="n">n_cit</span> <span class="p">)</span>
+    <span class="n">cts</span> <span class="o">=</span> <span class="p">{</span> <span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">cocitation_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="p">}</span>
+    <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span> <span class="n">cocitation_graph</span><span class="p">,</span> <span class="s">&#39;citations&#39;</span><span class="p">,</span> <span class="n">cts</span> <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">cocitation_graph</span>
 </div>

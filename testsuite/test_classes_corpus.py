@@ -33,7 +33,7 @@ class TestAddFeatures(unittest.TestCase):
                                               exclude=stopwords.words())
 
         self.assertEqual(len(self.D.features['wordcounts']['index']), 51639)
-
+#
 class TestCorpusWoS(unittest.TestCase):
     def setUp(self):
         """
@@ -46,7 +46,23 @@ class TestCorpusWoS(unittest.TestCase):
         pcgpath = cg_path + 'classes.Corpus.__init__[wos].png'
         with Profile(pcgpath):
             self.D = Corpus(papers, index_by='wosid')
-    
+
+    def test_feature_counts(self):
+        filt = lambda s: len(s) > 3
+        self.D.slice('date', method='time_period', window_size=1)
+        
+        # Counts
+        result = self.D.feature_counts('citations', 2012, 'date')
+        self.assertIsInstance(result, dict)
+        self.assertGreater(len(result), 0)
+
+        # Document Counts
+        result = self.D.feature_counts('citations', 2012, 'date',
+                                        documentCounts=True)
+        self.assertIsInstance(result, dict)
+        self.assertGreater(len(result), 0)
+
+
     def test_indexing(self):
         """
         index_papers: Should be N_p number of papers.
@@ -216,6 +232,7 @@ class TestCorpusTokenization(unittest.TestCase):
         self.dfrdatapath = '{0}/dfr'.format(datapath)
         self.papers = dfr.read(self.dfrdatapath)
         self.ngrams = dfr.ngrams(self.dfrdatapath, 'uni')
+
 
     def test_feature_distribution(self):
         filt = lambda s: len(s) > 3

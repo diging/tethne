@@ -267,6 +267,8 @@ class GraphCollection(object):
         plt.xlim(np.min(xvalues), np.max(xvalues))
         plt.ylabel(ylabel)
         
+        return fig
+        
     def node_distribution(self):
         """
         Get the number of nodes for each :class:`networkx.Graph` in the
@@ -571,3 +573,77 @@ class GraphCollection(object):
             composed = networkx.compose(composed, G)
         
         return composed
+
+    def node_history(self, node, attribute, verbose=False):
+        """
+        Returns a dictionary of attribute values for each Graph in C for a single
+        node.
+
+        Parameters
+        ----------
+        C : :class:`.GraphCollection`
+        node : str
+            The node of interest.
+        attribute : str
+            The attribute of interest; e.g. 'betweenness_centrality'
+        verbose : bool
+            If True, prints status and debug messages.
+
+        Returns
+        -------
+        history : dict
+            Keys are Graph keys in C; values are attribute values for node.
+        """
+
+        history = {}
+
+        keys = sorted(self.graphs.keys())
+        for k in keys:
+            G = self.graphs[k]
+            asdict = { v[0]:v[1] for v in G.nodes(data=True) }
+            try:
+                history[k] = asdict[node][attribute]
+            except KeyError:
+                if verbose: print "No such node or attribute in Graph " + str(k)
+
+        return history
+
+    def edge_history(self, source, target, attribute, verbose=False):
+        """
+        Returns a dictionary of attribute vales for each Graph in C for a single
+        edge.
+
+        Parameters
+        ----------
+        C : :class:`.GraphCollection`
+        source : str
+            Identifier for source node.
+        target : str
+            Identifier for target node.
+        attribute : str
+            The attribute of interest; e.g. 'betweenness_centrality'
+        verbose : bool
+            If True, prints status and debug messages.
+
+        Returns
+        -------
+        history : dict
+            Keys are Graph keys in C; values are attribute values for edge.
+        """
+
+        history = {}
+
+        keys = sorted(self.graphs.keys())
+        for k in keys:
+            G = self.graphs[k]
+            try:
+                attributes = G[source][target]
+                try:
+                    history[k] = attributes[attribute]
+                except KeyError:
+                    if verbose: print "No such attribute for edge in Graph " \
+                                        + str(k)
+            except KeyError:
+                if verbose: print "No such edge in Graph " + str(k)
+
+        return history

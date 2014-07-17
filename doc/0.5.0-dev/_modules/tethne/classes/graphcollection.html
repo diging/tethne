@@ -347,6 +347,8 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">xvalues</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">xvalues</span><span class="p">))</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
         
+        <span class="k">return</span> <span class="n">fig</span>
+        
 <div class="viewcode-block" id="GraphCollection.node_distribution"><a class="viewcode-back" href="../../../tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection.node_distribution">[docs]</a>    <span class="k">def</span> <span class="nf">node_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the number of nodes for each :class:`networkx.Graph` in the</span>
@@ -650,7 +652,81 @@
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">G</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graphs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
             <span class="n">composed</span> <span class="o">=</span> <span class="n">networkx</span><span class="o">.</span><span class="n">compose</span><span class="p">(</span><span class="n">composed</span><span class="p">,</span> <span class="n">G</span><span class="p">)</span>
         
-        <span class="k">return</span> <span class="n">composed</span></div></div>
+        <span class="k">return</span> <span class="n">composed</span>
+</div>
+<div class="viewcode-block" id="GraphCollection.node_history"><a class="viewcode-back" href="../../../tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection.node_history">[docs]</a>    <span class="k">def</span> <span class="nf">node_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a dictionary of attribute values for each Graph in C for a single</span>
+<span class="sd">        node.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        C : :class:`.GraphCollection`</span>
+<span class="sd">        node : str</span>
+<span class="sd">            The node of interest.</span>
+<span class="sd">        attribute : str</span>
+<span class="sd">            The attribute of interest; e.g. &#39;betweenness_centrality&#39;</span>
+<span class="sd">        verbose : bool</span>
+<span class="sd">            If True, prints status and debug messages.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        history : dict</span>
+<span class="sd">            Keys are Graph keys in C; values are attribute values for node.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">history</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graphs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">asdict</span> <span class="o">=</span> <span class="p">{</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">}</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">history</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">attribute</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="k">print</span> <span class="s">&quot;No such node or attribute in Graph &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">history</span>
+</div>
+<div class="viewcode-block" id="GraphCollection.edge_history"><a class="viewcode-back" href="../../../tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection.edge_history">[docs]</a>    <span class="k">def</span> <span class="nf">edge_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a dictionary of attribute vales for each Graph in C for a single</span>
+<span class="sd">        edge.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        C : :class:`.GraphCollection`</span>
+<span class="sd">        source : str</span>
+<span class="sd">            Identifier for source node.</span>
+<span class="sd">        target : str</span>
+<span class="sd">            Identifier for target node.</span>
+<span class="sd">        attribute : str</span>
+<span class="sd">            The attribute of interest; e.g. &#39;betweenness_centrality&#39;</span>
+<span class="sd">        verbose : bool</span>
+<span class="sd">            If True, prints status and debug messages.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        history : dict</span>
+<span class="sd">            Keys are Graph keys in C; values are attribute values for edge.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">history</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graphs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graphs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">attributes</span> <span class="o">=</span> <span class="n">G</span><span class="p">[</span><span class="n">source</span><span class="p">][</span><span class="n">target</span><span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">history</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="k">print</span> <span class="s">&quot;No such attribute for edge in Graph &quot;</span> \
+                                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="k">print</span> <span class="s">&quot;No such edge in Graph &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">history</span></div></div>
 </pre></div>
 
           </div>

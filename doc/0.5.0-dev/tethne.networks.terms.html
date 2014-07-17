@@ -88,81 +88,8 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
             
-  <div class="section" id="module-tethne.networks.terms">
-<span id="tethne-networks-terms-module"></span><h1>tethne.networks.terms module<a class="headerlink" href="#module-tethne.networks.terms" title="Permalink to this headline">¶</a></h1>
-<p>Methods for building networks from terms in bibliographic records. This
-includes keywords, abstract terms, etc.</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.terms.keyword_cooccurrence" title="tethne.networks.terms.keyword_cooccurrence"><tt class="xref py py-obj docutils literal"><span class="pre">keyword_cooccurrence</span></tt></a>(papers,&nbsp;threshold[,&nbsp;...])</td>
-<td>Generates a keyword cooccurrence network.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.networks.terms.topic_coupling" title="tethne.networks.terms.topic_coupling"><tt class="xref py py-obj docutils literal"><span class="pre">topic_coupling</span></tt></a>(model[,&nbsp;threshold])</td>
-<td>Creates a network of words connected by implication in a common topic(s).</td>
-</tr>
-</tbody>
-</table>
-<dl class="function">
-<dt id="tethne.networks.terms.keyword_cooccurrence">
-<tt class="descclassname">tethne.networks.terms.</tt><tt class="descname">keyword_cooccurrence</tt><big>(</big><em>papers</em>, <em>threshold</em>, <em>connected=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#tethne.networks.terms.keyword_cooccurrence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a keyword cooccurrence network.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
-<blockquote>
-<div><p>A list of <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects.</p>
-</div></blockquote>
-<p><strong>threshold</strong> : int</p>
-<blockquote>
-<div><p>Minimum number of occurrences for a keyword pair to appear in graph.</p>
-</div></blockquote>
-<p><strong>connected</strong> : bool</p>
-<blockquote>
-<div><p>If True, returns only the largest connected component.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>k_coccurrence</strong> :  networkx.Graph</p>
-<blockquote class="last">
-<div><p>A keyword coccurrence network.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="tethne.networks.terms.topic_coupling">
-<tt class="descclassname">tethne.networks.terms.</tt><tt class="descname">topic_coupling</tt><big>(</big><em>model</em>, <em>threshold=0.005</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#tethne.networks.terms.topic_coupling" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a network of words connected by implication in a common topic(s).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>model</strong> : <a class="reference internal" href="tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a></p>
-<p><strong>threshold</strong> : float</p>
-<blockquote>
-<div><p>Minimum P(W|T) for coupling.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>tc</strong> : networkx.Graph</p>
-<blockquote class="last">
-<div><p>A topic-coupling graph, where nodes are terms.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
+  <div class="section" id="tethne-networks-terms-module">
+<h1>tethne.networks.terms module<a class="headerlink" href="#tethne-networks-terms-module" title="Permalink to this headline">¶</a></h1>
 </div>
 
 

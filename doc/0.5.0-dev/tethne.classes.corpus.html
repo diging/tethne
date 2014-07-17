@@ -192,37 +192,40 @@ convert it to or from a <a class="reference internal" href="tethne.persistence.h
 <tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.distribution" title="tethne.classes.corpus.Corpus.distribution"><tt class="xref py py-obj docutils literal"><span class="pre">distribution</span></tt></a>(x_axis[,&nbsp;y_axis])</td>
 <td>Get the distribution of <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s over one or two slice axes.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.feature_distribution" title="tethne.classes.corpus.Corpus.feature_distribution"><tt class="xref py py-obj docutils literal"><span class="pre">feature_distribution</span></tt></a>(featureset,&nbsp;feature,&nbsp;x_axis)</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.feature_counts" title="tethne.classes.corpus.Corpus.feature_counts"><tt class="xref py py-obj docutils literal"><span class="pre">feature_counts</span></tt></a>(featureset,&nbsp;slice[,&nbsp;axis,&nbsp;...])</td>
+<td>Get feature counts for a particular <tt class="docutils literal"><span class="pre">slice</span></tt> in <tt class="docutils literal"><span class="pre">axis</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.feature_distribution" title="tethne.classes.corpus.Corpus.feature_distribution"><tt class="xref py py-obj docutils literal"><span class="pre">feature_distribution</span></tt></a>(featureset,&nbsp;feature,&nbsp;x_axis)</td>
 <td>Get the distribution of a <tt class="docutils literal"><span class="pre">feature</span></tt> over one or two slice axes.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.filter_features" title="tethne.classes.corpus.Corpus.filter_features"><tt class="xref py py-obj docutils literal"><span class="pre">filter_features</span></tt></a>(fold,&nbsp;fnew,&nbsp;filt)</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.filter_features" title="tethne.classes.corpus.Corpus.filter_features"><tt class="xref py py-obj docutils literal"><span class="pre">filter_features</span></tt></a>(fold,&nbsp;fnew,&nbsp;filt)</td>
 <td>Create a new featureset by applying a filter to an existing featureset.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.from_hdf5" title="tethne.classes.corpus.Corpus.from_hdf5"><tt class="xref py py-obj docutils literal"><span class="pre">from_hdf5</span></tt></a>(HD_or_path)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.from_hdf5" title="tethne.classes.corpus.Corpus.from_hdf5"><tt class="xref py py-obj docutils literal"><span class="pre">from_hdf5</span></tt></a>(HD_or_path)</td>
 <td>Load or transform a <a class="reference internal" href="tethne.persistence.hdf5.corpus.html#tethne.persistence.hdf5.corpus.HDF5Corpus" title="tethne.persistence.hdf5.corpus.HDF5Corpus"><tt class="xref py py-class docutils literal"><span class="pre">HDF5Corpus</span></tt></a> into a <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.get_axes" title="tethne.classes.corpus.Corpus.get_axes"><tt class="xref py py-obj docutils literal"><span class="pre">get_axes</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.get_axes" title="tethne.classes.corpus.Corpus.get_axes"><tt class="xref py py-obj docutils literal"><span class="pre">get_axes</span></tt></a>()</td>
 <td>Returns a list of all slice axes for this <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> .</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.get_slice" title="tethne.classes.corpus.Corpus.get_slice"><tt class="xref py py-obj docutils literal"><span class="pre">get_slice</span></tt></a>(key,&nbsp;index[,&nbsp;papers])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.get_slice" title="tethne.classes.corpus.Corpus.get_slice"><tt class="xref py py-obj docutils literal"><span class="pre">get_slice</span></tt></a>(key,&nbsp;index[,&nbsp;papers])</td>
 <td>Get a single slice.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.get_slices" title="tethne.classes.corpus.Corpus.get_slices"><tt class="xref py py-obj docutils literal"><span class="pre">get_slices</span></tt></a>(key[,&nbsp;papers])</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.get_slices" title="tethne.classes.corpus.Corpus.get_slices"><tt class="xref py py-obj docutils literal"><span class="pre">get_slices</span></tt></a>(key[,&nbsp;papers])</td>
 <td>Get all of the papers/indices in a particular slice.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.index" title="tethne.classes.corpus.Corpus.index"><tt class="xref py py-obj docutils literal"><span class="pre">index</span></tt></a>(papers[,&nbsp;features,&nbsp;index_by,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.index" title="tethne.classes.corpus.Corpus.index"><tt class="xref py py-obj docutils literal"><span class="pre">index</span></tt></a>(papers[,&nbsp;features,&nbsp;index_by,&nbsp;...])</td>
 <td>Indexes <cite>papers</cite>, <cite>features</cite>, and <cite>citations</cite> (if present).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.indices" title="tethne.classes.corpus.Corpus.indices"><tt class="xref py py-obj docutils literal"><span class="pre">indices</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.indices" title="tethne.classes.corpus.Corpus.indices"><tt class="xref py py-obj docutils literal"><span class="pre">indices</span></tt></a>()</td>
 <td>Yields a list of indices of all papers in this <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.plot_distribution" title="tethne.classes.corpus.Corpus.plot_distribution"><tt class="xref py py-obj docutils literal"><span class="pre">plot_distribution</span></tt></a>([x_axis,&nbsp;y_axis,&nbsp;type,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.plot_distribution" title="tethne.classes.corpus.Corpus.plot_distribution"><tt class="xref py py-obj docutils literal"><span class="pre">plot_distribution</span></tt></a>([x_axis,&nbsp;y_axis,&nbsp;type,&nbsp;...])</td>
 <td>Plot distribution of papers or features along slice axes, using  MatPlotLib.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.slice" title="tethne.classes.corpus.Corpus.slice"><tt class="xref py py-obj docutils literal"><span class="pre">slice</span></tt></a>(key[,&nbsp;method])</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.slice" title="tethne.classes.corpus.Corpus.slice"><tt class="xref py py-obj docutils literal"><span class="pre">slice</span></tt></a>(key[,&nbsp;method])</td>
 <td>Slices data by key, using method (if applicable).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.to_hdf5" title="tethne.classes.corpus.Corpus.to_hdf5"><tt class="xref py py-obj docutils literal"><span class="pre">to_hdf5</span></tt></a>([datapath])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.to_hdf5" title="tethne.classes.corpus.Corpus.to_hdf5"><tt class="xref py py-obj docutils literal"><span class="pre">to_hdf5</span></tt></a>([datapath])</td>
 <td>Transforms a <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> into a <a class="reference internal" href="tethne.persistence.hdf5.corpus.html#tethne.persistence.hdf5.corpus.HDF5Corpus" title="tethne.persistence.hdf5.corpus.HDF5Corpus"><tt class="xref py py-class docutils literal"><span class="pre">HDF5Corpus</span></tt></a>.</td>
 </tr>
 </tbody>
@@ -370,6 +373,35 @@ associated with each slice-coordinate.</p>
 </div>
 <p>You can generate a figure for this distribution using
 <a class="reference internal" href="#tethne.classes.corpus.Corpus.plot_distribution" title="tethne.classes.corpus.Corpus.plot_distribution"><tt class="xref py py-meth docutils literal"><span class="pre">plot_distribution()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.classes.corpus.Corpus.feature_counts">
+<tt class="descname">feature_counts</tt><big>(</big><em>featureset</em>, <em>slice</em>, <em>axis='date'</em>, <em>documentCounts=False</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/corpus.html#Corpus.feature_counts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.corpus.Corpus.feature_counts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get feature counts for a particular <tt class="docutils literal"><span class="pre">slice</span></tt> in <tt class="docutils literal"><span class="pre">axis</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>featureset</strong> : str</p>
+<blockquote>
+<div><p>Name of a featureset in the corpus.</p>
+</div></blockquote>
+<p><strong>slice</strong> : int or str</p>
+<blockquote>
+<div><p>Name of a slice along <tt class="docutils literal"><span class="pre">axis</span></tt>.</p>
+</div></blockquote>
+<p><strong>axis</strong> : str</p>
+<blockquote>
+<div><p>Name of slice axis containing <tt class="docutils literal"><span class="pre">slice</span></tt>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>counts</strong> : dict</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">

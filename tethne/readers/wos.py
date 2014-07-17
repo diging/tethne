@@ -74,7 +74,7 @@ Methods
 
 from tethne.classes.paper import Paper
 import xml.etree.ElementTree as ET
-from .. import utilities as util
+from ..utilities import *
 from ..classes import Corpus
 import os
 import re
@@ -246,7 +246,7 @@ def parse(filepath):
     # Note: first two lines of file are not related to any paper therein.
     last_field_tag = paper_start_key #initialize to something.
     for line in line_list[2:]:
-        line = util.strip_non_ascii(line)
+        line = strip_non_ascii(line)
         field_tag = line[:2]
         
         if field_tag == ' ':

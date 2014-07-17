@@ -155,7 +155,7 @@
 
 <span class="kn">from</span> <span class="nn">tethne.classes.paper</span> <span class="kn">import</span> <span class="n">Paper</span>
 <span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">as</span> <span class="nn">ET</span>
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">utilities</span> <span class="k">as</span> <span class="n">util</span>
+<span class="kn">from</span> <span class="nn">..utilities</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">..classes</span> <span class="kn">import</span> <span class="n">Corpus</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -327,7 +327,7 @@
     <span class="c"># Note: first two lines of file are not related to any paper therein.</span>
     <span class="n">last_field_tag</span> <span class="o">=</span> <span class="n">paper_start_key</span> <span class="c">#initialize to something.</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">line_list</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">strip_non_ascii</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">strip_non_ascii</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
         <span class="n">field_tag</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
         
         <span class="k">if</span> <span class="n">field_tag</span> <span class="o">==</span> <span class="s">&#39; &#39;</span><span class="p">:</span>

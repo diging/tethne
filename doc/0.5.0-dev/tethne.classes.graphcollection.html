@@ -133,14 +133,20 @@ attribute.</p>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection.edge_distribution" title="tethne.classes.graphcollection.GraphCollection.edge_distribution"><tt class="xref py py-obj docutils literal"><span class="pre">edge_distribution</span></tt></a>()</td>
 <td>Get the number of edges in each <tt class="xref py py-class docutils literal"><span class="pre">networkx.Graph</span></tt> in the <a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection.edges" title="tethne.classes.graphcollection.GraphCollection.edges"><tt class="xref py py-obj docutils literal"><span class="pre">edges</span></tt></a>([overwrite])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection.edge_history" title="tethne.classes.graphcollection.GraphCollection.edge_history"><tt class="xref py py-obj docutils literal"><span class="pre">edge_history</span></tt></a>(source,&nbsp;target,&nbsp;attribute[,&nbsp;...])</td>
+<td>Returns a dictionary of attribute vales for each Graph in C for a single edge.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection.edges" title="tethne.classes.graphcollection.GraphCollection.edges"><tt class="xref py py-obj docutils literal"><span class="pre">edges</span></tt></a>([overwrite])</td>
 <td>Get the complete set of edges for this <a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection.load" title="tethne.classes.graphcollection.GraphCollection.load"><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt></a>(filepath)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection.load" title="tethne.classes.graphcollection.GraphCollection.load"><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt></a>(filepath)</td>
 <td>Loads a pickled (serialized) <a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> from filepath.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection.node_distribution" title="tethne.classes.graphcollection.GraphCollection.node_distribution"><tt class="xref py py-obj docutils literal"><span class="pre">node_distribution</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection.node_distribution" title="tethne.classes.graphcollection.GraphCollection.node_distribution"><tt class="xref py py-obj docutils literal"><span class="pre">node_distribution</span></tt></a>()</td>
 <td>Get the number of nodes for each <tt class="xref py py-class docutils literal"><span class="pre">networkx.Graph</span></tt> in the <a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection.node_history" title="tethne.classes.graphcollection.GraphCollection.node_history"><tt class="xref py py-obj docutils literal"><span class="pre">node_history</span></tt></a>(node,&nbsp;attribute[,&nbsp;verbose])</td>
+<td>Returns a dictionary of attribute values for each Graph in C for a single node.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection.nodes" title="tethne.classes.graphcollection.GraphCollection.nodes"><tt class="xref py py-obj docutils literal"><span class="pre">nodes</span></tt></a>()</td>
 <td>Get the complete set of nodes for this <a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</td>
@@ -161,7 +167,7 @@ attribute.</p>
 </table>
 <dl class="method">
 <dt id="tethne.classes.graphcollection.GraphCollection.attr_distribution">
-<tt class="descname">attr_distribution</tt><big>(</big><em>attr='weight'</em>, <em>etype='edge'</em>, <em>stat=&lt;function mean at 0x105211de8&gt;</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/graphcollection.html#GraphCollection.attr_distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.graphcollection.GraphCollection.attr_distribution" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">attr_distribution</tt><big>(</big><em>attr='weight'</em>, <em>etype='edge'</em>, <em>stat=&lt;function mean at 0x103f1f500&gt;</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/graphcollection.html#GraphCollection.attr_distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.graphcollection.GraphCollection.attr_distribution" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate summary statistics for a node or edge attribute across all
 of the <tt class="xref py py-class docutils literal"><span class="pre">networkx.Graph</span></tt>s in the <a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</p>
 <p>For example, to get the mean edge weight for each graph:</p>
@@ -314,6 +320,44 @@ specified <cite>axis</cite>.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="tethne.classes.graphcollection.GraphCollection.edge_history">
+<tt class="descname">edge_history</tt><big>(</big><em>source</em>, <em>target</em>, <em>attribute</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/graphcollection.html#GraphCollection.edge_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.graphcollection.GraphCollection.edge_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary of attribute vales for each Graph in C for a single
+edge.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
+<p><strong>source</strong> : str</p>
+<blockquote>
+<div><p>Identifier for source node.</p>
+</div></blockquote>
+<p><strong>target</strong> : str</p>
+<blockquote>
+<div><p>Identifier for target node.</p>
+</div></blockquote>
+<p><strong>attribute</strong> : str</p>
+<blockquote>
+<div><p>The attribute of interest; e.g. &#8216;betweenness_centrality&#8217;</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool</p>
+<blockquote>
+<div><p>If True, prints status and debug messages.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>history</strong> : dict</p>
+<blockquote class="last">
+<div><p>Keys are Graph keys in C; values are attribute values for edge.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="tethne.classes.graphcollection.GraphCollection.edges">
 <tt class="descname">edges</tt><big>(</big><em>overwrite=False</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/graphcollection.html#GraphCollection.edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.graphcollection.GraphCollection.edges" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the complete set of edges for this <a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> .</p>
@@ -404,6 +448,40 @@ specified <cite>axis</cite>.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="tethne.classes.graphcollection.GraphCollection.node_history">
+<tt class="descname">node_history</tt><big>(</big><em>node</em>, <em>attribute</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/graphcollection.html#GraphCollection.node_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.graphcollection.GraphCollection.node_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary of attribute values for each Graph in C for a single
+node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
+<p><strong>node</strong> : str</p>
+<blockquote>
+<div><p>The node of interest.</p>
+</div></blockquote>
+<p><strong>attribute</strong> : str</p>
+<blockquote>
+<div><p>The attribute of interest; e.g. &#8216;betweenness_centrality&#8217;</p>
+</div></blockquote>
+<p><strong>verbose</strong> : bool</p>
+<blockquote>
+<div><p>If True, prints status and debug messages.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>history</strong> : dict</p>
+<blockquote class="last">
+<div><p>Keys are Graph keys in C; values are attribute values for node.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="tethne.classes.graphcollection.GraphCollection.nodes">
 <tt class="descname">nodes</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/tethne/classes/graphcollection.html#GraphCollection.nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.graphcollection.GraphCollection.nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the complete set of nodes for this <a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</p>
@@ -435,7 +513,7 @@ specified <cite>axis</cite>.</p>
 
 <dl class="method">
 <dt id="tethne.classes.graphcollection.GraphCollection.plot_attr_distribution">
-<tt class="descname">plot_attr_distribution</tt><big>(</big><em>attr='weight'</em>, <em>etype='edge'</em>, <em>stat=&lt;function mean at 0x105211de8&gt;</em>, <em>type='bar'</em>, <em>fig=None</em>, <em>plotargs={}</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/graphcollection.html#GraphCollection.plot_attr_distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.graphcollection.GraphCollection.plot_attr_distribution" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">plot_attr_distribution</tt><big>(</big><em>attr='weight'</em>, <em>etype='edge'</em>, <em>stat=&lt;function mean at 0x103f1f500&gt;</em>, <em>type='bar'</em>, <em>fig=None</em>, <em>plotargs={}</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/graphcollection.html#GraphCollection.plot_attr_distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.graphcollection.GraphCollection.plot_attr_distribution" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot <a class="reference internal" href="#tethne.classes.graphcollection.GraphCollection.attr_distribution" title="tethne.classes.graphcollection.GraphCollection.attr_distribution"><tt class="xref py py-func docutils literal"><span class="pre">GraphCollection.attr_distribution()</span></tt></a> using MatPlotLib.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">plot_attr_distribution</span><span class="p">(</span><span class="s">&#39;weight&#39;</span><span class="p">,</span> <span class="s">&#39;edge&#39;</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
