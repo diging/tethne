@@ -96,6 +96,8 @@
 <span class="c">#import tethne.utilities as util  # Pylint Warnings</span>
 <span class="c">#import tethne.data as ds</span>
 
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+
 <div class="viewcode-block" id="simplify_multigraph"><a class="viewcode-back" href="../../../tethne.networks.helpers.html#tethne.networks.helpers.simplify_multigraph">[docs]</a><span class="k">def</span> <span class="nf">simplify_multigraph</span><span class="p">(</span><span class="n">multigraph</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Simplifies a graph by condensing multiple edges between the same node pair</span>
@@ -173,14 +175,11 @@
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="k">print</span> <span class="s">&quot;Generating citation counts for &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">papers</span><span class="p">))</span><span class="o">+</span><span class="s">&quot; papers...&quot;</span>
 
-    <span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">papers</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">P</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">counts</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                    <span class="n">counts</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">counts</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="k">return</span> <span class="n">counts</span>
 </div>

@@ -51,7 +51,6 @@ Missing data here also results in the above keys being set to None.
 """
 
 import wos
-import pubmed
 import dfr
 
 from ..classes import Paper

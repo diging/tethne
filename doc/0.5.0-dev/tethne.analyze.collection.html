@@ -254,82 +254,10 @@ applied to each <tt class="xref py py-class docutils literal"><span class="pre">
 </dd></dl>
 
 <dl class="function">
-<dt id="tethne.analyze.collection.edge_history">
-<tt class="descclassname">tethne.analyze.collection.</tt><tt class="descname">edge_history</tt><big>(</big><em>C</em>, <em>source</em>, <em>target</em>, <em>attribute</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/collection.html#edge_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.collection.edge_history" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a dictionary of attribute vales for each Graph in C for a single
-edge.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
-<p><strong>source</strong> : str</p>
-<blockquote>
-<div><p>Identifier for source node.</p>
-</div></blockquote>
-<p><strong>target</strong> : str</p>
-<blockquote>
-<div><p>Identifier for target node.</p>
-</div></blockquote>
-<p><strong>attribute</strong> : str</p>
-<blockquote>
-<div><p>The attribute of interest; e.g. &#8216;betweenness_centrality&#8217;</p>
-</div></blockquote>
-<p><strong>verbose</strong> : bool</p>
-<blockquote>
-<div><p>If True, prints status and debug messages.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>history</strong> : dict</p>
-<blockquote class="last">
-<div><p>Keys are Graph keys in C; values are attribute values for edge.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="tethne.analyze.collection.node_global_closeness_centrality">
 <tt class="descclassname">tethne.analyze.collection.</tt><tt class="descname">node_global_closeness_centrality</tt><big>(</big><em>C</em>, <em>node</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/collection.html#node_global_closeness_centrality"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.collection.node_global_closeness_centrality" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates global closeness centrality for node in each graph in
 <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> C.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="tethne.analyze.collection.node_history">
-<tt class="descclassname">tethne.analyze.collection.</tt><tt class="descname">node_history</tt><big>(</big><em>C</em>, <em>node</em>, <em>attribute</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/collection.html#node_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.collection.node_history" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a dictionary of attribute values for each Graph in C for a single
-node.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>C</strong> : <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a></p>
-<p><strong>node</strong> : str</p>
-<blockquote>
-<div><p>The node of interest.</p>
-</div></blockquote>
-<p><strong>attribute</strong> : str</p>
-<blockquote>
-<div><p>The attribute of interest; e.g. &#8216;betweenness_centrality&#8217;</p>
-</div></blockquote>
-<p><strong>verbose</strong> : bool</p>
-<blockquote>
-<div><p>If True, prints status and debug messages.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>history</strong> : dict</p>
-<blockquote class="last">
-<div><p>Keys are Graph keys in C; values are attribute values for node.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 </div>

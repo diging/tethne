@@ -137,37 +137,40 @@ we make use of cPickle serialization. For example, sparse feature vectors
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">distribution</span></tt>(x_axis[,&nbsp;y_axis])</td>
 <td>Get the distribution of <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s over one or two slice axes.</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">feature_distribution</span></tt>(featureset,&nbsp;feature,&nbsp;x_axis)</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">feature_counts</span></tt>(featureset,&nbsp;slice[,&nbsp;axis,&nbsp;...])</td>
+<td>Get feature counts for a particular <tt class="docutils literal"><span class="pre">slice</span></tt> in <tt class="docutils literal"><span class="pre">axis</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">feature_distribution</span></tt>(featureset,&nbsp;feature,&nbsp;x_axis)</td>
 <td>Get the distribution of a <tt class="docutils literal"><span class="pre">feature</span></tt> over one or two slice axes.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.persistence.hdf5.corpus.HDF5Corpus.filter_features" title="tethne.persistence.hdf5.corpus.HDF5Corpus.filter_features"><tt class="xref py py-obj docutils literal"><span class="pre">filter_features</span></tt></a>(fold,&nbsp;fnew,&nbsp;filt)</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.persistence.hdf5.corpus.HDF5Corpus.filter_features" title="tethne.persistence.hdf5.corpus.HDF5Corpus.filter_features"><tt class="xref py py-obj docutils literal"><span class="pre">filter_features</span></tt></a>(fold,&nbsp;fnew,&nbsp;filt)</td>
 <td>See <tt class="xref py py-func docutils literal"><span class="pre">Corpus.filter_features()</span></tt>.</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">from_hdf5</span></tt>(HD_or_path)</td>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">from_hdf5</span></tt>(HD_or_path)</td>
 <td>Load or transform a <a class="reference internal" href="#tethne.persistence.hdf5.corpus.HDF5Corpus" title="tethne.persistence.hdf5.corpus.HDF5Corpus"><tt class="xref py py-class docutils literal"><span class="pre">HDF5Corpus</span></tt></a> into a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_axes</span></tt>()</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_axes</span></tt>()</td>
 <td>Returns a list of all slice axes for this <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> .</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_slice</span></tt>(key,&nbsp;index[,&nbsp;papers])</td>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_slice</span></tt>(key,&nbsp;index[,&nbsp;papers])</td>
 <td>Get a single slice.</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_slices</span></tt>(key[,&nbsp;papers])</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">get_slices</span></tt>(key[,&nbsp;papers])</td>
 <td>Get all of the papers/indices in a particular slice.</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">index</span></tt>(papers[,&nbsp;features,&nbsp;index_by,&nbsp;...])</td>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">index</span></tt>(papers[,&nbsp;features,&nbsp;index_by,&nbsp;...])</td>
 <td>Indexes <cite>papers</cite>, <cite>features</cite>, and <cite>citations</cite> (if present).</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">indices</span></tt>()</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">indices</span></tt>()</td>
 <td>Yields a list of indices of all papers in this <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">plot_distribution</span></tt>([x_axis,&nbsp;y_axis,&nbsp;type,&nbsp;...])</td>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">plot_distribution</span></tt>([x_axis,&nbsp;y_axis,&nbsp;type,&nbsp;...])</td>
 <td>Plot distribution of papers or features along slice axes, using  MatPlotLib.</td>
 </tr>
-<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">slice</span></tt>(key[,&nbsp;method])</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">slice</span></tt>(key[,&nbsp;method])</td>
 <td>Slices data by key, using method (if applicable).</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">to_hdf5</span></tt>([datapath])</td>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">to_hdf5</span></tt>([datapath])</td>
 <td>Transforms a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> into a <a class="reference internal" href="#tethne.persistence.hdf5.corpus.HDF5Corpus" title="tethne.persistence.hdf5.corpus.HDF5Corpus"><tt class="xref py py-class docutils literal"><span class="pre">HDF5Corpus</span></tt></a>.</td>
 </tr>
 </tbody>
