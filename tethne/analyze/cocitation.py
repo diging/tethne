@@ -34,6 +34,8 @@ def plot_sigma(G, corpus, topn=20, sort_by='max', perslice=False, flist=None,
     Returns
     -------
     fig : :class:`matplotlib.figure.Figure`
+    G : :class:`.GraphCollection`
+        A co-citation graph collection, updated with ``sigma`` node attributes.
     
     Examples
     --------
@@ -44,7 +46,7 @@ def plot_sigma(G, corpus, topn=20, sort_by='max', perslice=False, flist=None,
     .. code-block:: python
     
        >>> from tethne.analyze.cocitation import plot_sigma
-       >>> fig = plot_sigma(G, corpus, topn=5, perslice=True)
+       >>> fig,G = plot_sigma(G, corpus, topn=5, perslice=True)
        >>> fig.savefig('~/sigma_plot.png')
     
     In this figure, the top 5 most sigma-influential nodes in each slice are
@@ -164,7 +166,7 @@ def plot_sigma(G, corpus, topn=20, sort_by='max', perslice=False, flist=None,
 
     plt.subplots_adjust(left=0.5)
     fig.tight_layout(h_pad=0.25)
-    return fig
+    return fig, G
 
 def sigma(G, corpus, **kwargs):
     """
@@ -193,7 +195,7 @@ def sigma(G, corpus, **kwargs):
     Returns
     -------
     G : :class:`.GraphCollection`
-        A co-citation graph collection.
+        A co-citation graph collection, updated with ``sigma`` node attributes.
         
     Examples
     --------
