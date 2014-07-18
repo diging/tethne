@@ -1115,6 +1115,46 @@ class Corpus(object):
 
         return dist
 
+    def feature_counts(self, featureset, slice, axis='date',
+                                                documentCounts=False):
+        """
+        Get feature counts for a particular ``slice`` in ``axis``.
+        
+        Parameters
+        ----------
+        featureset : str
+            Name of a featureset in the corpus.
+        slice : int or str
+            Name of a slice along ``axis``.
+        axis : str
+            Name of slice axis containing ``slice``.
+        
+        Returns
+        -------
+        counts : dict
+        """
+        
+        if featureset not in self.features:
+            raise KeyError('No such featureset in this Corpus')
+
+        index = self.features[featureset]['index']
+        feature_lookup = { v:k for k,v in index.iteritems() }
+    
+        fvalues = self.features[featureset]['features']
+
+        papers = self.get_slice(axis, slice)
+        counts = Counter()
+        for p in papers:
+            try:
+                for f,v in fvalues[p]:
+                    if documentCounts:
+                        counts[f] += 1
+                    else:
+                        counts[f] += v
+            except KeyError:
+                pass
+
+        return dict(counts)
 
     def plot_distribution(self, x_axis=None, y_axis=None, type='bar',
                                 aspect=0.2, step=2, fig=None, mode='papers',

@@ -18,6 +18,8 @@ import networkx as nx
 from .. import utilities as util
 import helpers
 import operator
+import numpy
+from collections import Counter
 
 from ..classes.paper import Paper
 
@@ -358,66 +360,65 @@ def cocitation(papers, threshold=1, node_id='ayjid', topn=None, verbose=False,\
 
     cocitation_graph = nx.Graph(type='cocitation')
 
-    # We'll use tuples as keys. Values are the number of times each pair
-    #  of papers is co-cited.
-    cocitations = {}
-    citations_count = {}
+    if verbose:
+        print "Generating a cocitation network with " + str(N) + " nodes..."
+
+    counts = helpers.citation_count(papers, key=node_id)
 
     # 61670334: networks.citations.cocitation should have a "top cited"
     #  parameter.
     if topn is not None:
-        parents,include,citations_count = helpers.top_parents(papers, topn=topn)
-        N = len(include)
-    else:
-        citations_count = helpers.citation_count(papers)
-        N = len(citations_count.keys())
+        cvalues = numpy.array(counts.values())
+        if type(topn) is int:
+            top_values = cvalues.argsort()[-topn:][::-1]
+        if type(topn) is float:
+            topn_ = round(topn * float(len(counts)))
+            top_values = cvalues.argsort()[-topn_:][::-1]
+        top_cited = set([ counts.keys()[i] for i in top_values ])
 
-    if verbose:
-        print "Generating a cocitation network with " + str(N) + " nodes..."
-
+    cocited = Counter()
     for paper in papers:
-        if paper['citations'] is not None:  # Some papers don't have citations.
-            n = len(paper['citations'])
-            for i in xrange(0, n):
-                paper_i = paper['citations'][i]['ayjid']
+        try:
+            these_citations = set( [ c[node_id] for c in paper['citations'] ] )
+            if topn is not None:
+                allowed = list(these_citations & top_cited)
+            else:
+                allowed = list(these_citations)
+            
+            n = len(allowed)
+            for i in xrange(n):
+                i_id = allowed[i]
+                if topn is not None:
+                    if i_id not in top_cited:
+                        continue
 
-                if topn is not None and paper_i not in include:
-                    pass
-                else:
-                    for j in xrange(i+1, n):
-                        paper_j = paper['citations'][j]['ayjid']
+                for j in xrange(i+1,n):
+                    j_id = allowed[j]
+                    if topn is not None:
+                        if j_id not in top_cited:
+                            continue
 
-                        if topn is not None and paper_j not in include:
-                            pass
-                        else:
-
-                            pp = ( paper_i, paper_j )
-                            pp_inv = ( paper_j, paper_i )
-
-                            try: # Have these papers been co-cited before?
-                                cocitations[pp] += 1
-                            except KeyError:
-                                try: # Maybe in opposite order?
-                                    cocitations[pp_inv] += 1
-                                except KeyError:
-                                    # First time these papers are co-cited.
-                                    cocitations[pp] = 1
+                    pair = sorted([i_id, j_id])
+                    pair_key = '|||'.join(pair)
+                    cocited[pair_key] += 1
+        except TypeError:   # Raised when a paper has no citations.
+            pass
 
     if verbose:
         print "Co-citation matrix generated, building Graph..."
 
-    for key , val in cocitations.iteritems():
+    for pairkey, val in cocited.iteritems():
         if val >= threshold: # and key[0] in include and key[1] in include:
-            cocitation_graph.add_edge(key[0], key[1], weight=val)
+            pair = pairkey.split('|||')
+            cocitation_graph.add_edge(pair[0], pair[1], weight=val)
 
     if verbose:
         print "Done building co-citation graph, adding attributes..."
 
     # 62657522: Nodes in co-citation graph should have attribute containing
     #  number of citations.
-    n_cit = { k:v for k,v in citations_count.iteritems()
-                if k in cocitation_graph.nodes() }
-    nx.set_node_attributes( cocitation_graph, 'citations', n_cit )
+    cts = { k:v for k,v in counts.iteritems() if k in cocitation_graph.nodes() }
+    nx.set_node_attributes( cocitation_graph, 'citations', cts )
 
     return cocitation_graph
 
