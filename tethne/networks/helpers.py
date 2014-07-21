@@ -16,6 +16,8 @@ import numpy as np
 #import tethne.utilities as util  # Pylint Warnings
 #import tethne.data as ds
 
+from collections import Counter
+
 def simplify_multigraph(multigraph, time=False):
     """
     Simplifies a graph by condensing multiple edges between the same node pair
@@ -93,14 +95,11 @@ def citation_count(papers, key='ayjid', verbose=False):
     if verbose:
         print "Generating citation counts for "+str(len(papers))+" papers..."
 
-    counts = {}
+    counts = Counter()
     for P in papers:
         if P['citations'] is not None:
             for p in P['citations']:
-                try:
-                    counts[p[key]] += 1
-                except KeyError:
-                    counts[p[key]] = 1
+                counts[p[key]] += 1
 
     return counts
 

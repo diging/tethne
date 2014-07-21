@@ -1,8 +1,5 @@
 """
-Methods for analyzing :class:`.GraphCollection` objects.
-
-For the most part, these methods simply provide systematic access to algorithms
-in NetworkX.
+Methods for analyzing :class:`.GraphCollection`\s.
 """
 
 import networkx as nx
@@ -75,6 +72,46 @@ def algorithm(C, method, **kwargs):
                 nx.set_node_attributes(G, method, r)    # [#61510128]
     return results
 
+def delta(G, attribute):
+    """
+    Updates a :class:`.GraphCollection` with deltas of a node attribute.
+    
+    Parameters
+    ----------
+    G : :class:`.GraphCollection`
+    attribute : str
+        Name of a node attribute in ``G``.
+    """
+    import copy
+
+    keys = sorted(G.graphs.keys())
+    all_nodes =  G.nodes()
+    deltas = { k:{} for k in keys }
+    #n:{} for n in all_nodes }
+    last = { n:None for n in all_nodes }
+    
+    for k in keys:
+        graph = G[k]
+        asdict = { v[0]:v[1] for v in graph.nodes(data=True) }
+    
+        for n in all_nodes:
+            try:
+                curr = float(asdict[n][attribute])
+                if last[n] is not None and curr is not None:
+                    delta = float(curr) - float(last[n])
+                    last[n] = float(curr)
+                elif last[n] is None and curr is not None:
+                    delta = float(curr)
+                    last[n] = float(curr)
+                else:
+                    delta = 0.
+                deltas[k][n] = float(delta)
+            except KeyError:
+                pass
+        nx.set_node_attributes(G[k], attribute+'_delta', deltas[k])
+
+    return deltas
+
 def connected(C, method, **kwargs):
     """
     Performs analysis methods from networkx.connected on each graph in the
@@ -134,76 +171,6 @@ def connected(C, method, **kwargs):
             for k, G in C.graphs.iteritems():
                 results[k] = nx.connected.__dict__[method](G, **kwargs)
     return results
-
-def node_history(C, node, attribute, verbose=False):
-    """
-    Returns a dictionary of attribute values for each Graph in C for a single
-    node.
-
-    Parameters
-    ----------
-    C : :class:`.GraphCollection`
-    node : str
-        The node of interest.
-    attribute : str
-        The attribute of interest; e.g. 'betweenness_centrality'
-    verbose : bool
-        If True, prints status and debug messages.
-
-    Returns
-    -------
-    history : dict
-        Keys are Graph keys in C; values are attribute values for node.
-    """
-
-    history = {}
-
-    for k,G in C.graphs.iteritems():
-        asdict = { v[0]:v[1] for v in G.nodes(data=True) }
-        try:
-            history[k] = asdict[node][attribute]
-        except KeyError:
-            if verbose: print "No such node or attribute in Graph " + str(k)
-
-    return history
-
-def edge_history(C, source, target, attribute, verbose=False):
-    """
-    Returns a dictionary of attribute vales for each Graph in C for a single
-    edge.
-
-    Parameters
-    ----------
-    C : :class:`.GraphCollection`
-    source : str
-        Identifier for source node.
-    target : str
-        Identifier for target node.
-    attribute : str
-        The attribute of interest; e.g. 'betweenness_centrality'
-    verbose : bool
-        If True, prints status and debug messages.
-
-    Returns
-    -------
-    history : dict
-        Keys are Graph keys in C; values are attribute values for edge.
-    """
-
-    history = {}
-
-    for k,G in C.graphs.iteritems():
-        try:
-            attributes = G[source][target]
-            try:
-                history[k] = attributes[attribute]
-            except KeyError:
-                if verbose: print "No such attribute for edge in Graph " \
-                                    + str(k)
-        except KeyError:
-            if verbose: print "No such edge in Graph " + str(k)
-
-    return history
 
 def node_global_closeness_centrality(C, node):
     """

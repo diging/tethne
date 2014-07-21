@@ -10,6 +10,7 @@ Write :class:`.GraphCollection` to a structured data format.
 import networkx as nx
 import pickle as pk
 
+
 def to_dxgmml(C, path): # [#61510094]
     """
     Writes a :class:`.GraphCollection` to 
@@ -30,10 +31,10 @@ def to_dxgmml(C, path): # [#61510094]
        >>> import tethne.readers as rd
        >>> papers = rd.wos.read(datapath)
 
-       >>> # Build a DataCollection, and slice it temporally using a
+       >>> # Build a Corpus, and slice it temporally using a
        >>> #  4-year sliding time-window.
-       >>> from tethne.data import DataCollection, GraphCollection
-       >>> D = DataCollection(papers)
+       >>> from tethne.data import Corpus, GraphCollection
+       >>> D = Corpus(papers)
        >>> D.slice('date', 'time_window', window_size=4)
 
        >>> # Generate a GraphCollection of co-citation graphs.
@@ -51,12 +52,19 @@ def to_dxgmml(C, path): # [#61510094]
         The :class:`.GraphCollection` to be written to XGMML.
     path : str
         Path to file to be written. Will be created/overwritten.
+        
+    Raises
+    ------
+    AttributeError
+        C must be a tethne.classes.GraphCollection.
 
     Notes
     -----
     Period start and end dates in this method are inclusive, whereas XGMML end
     dates are exclusive. Hence +1 is added to all end dates when writing XGMML.
     """
+
+    # TODO: make sure C is a GraphCollection.
 
     nodes = {}
     for n in C.nodes():
@@ -108,53 +116,66 @@ def to_dxgmml(C, path): # [#61510094]
                 edges[e_key][k][attr] = value
 
     # Write graph to XGMML.
+    xst = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
+    
+    sg = '<graph>\n'
+    eg = '</graph>'
+    
     nst = '\t<node label="{0}" id="{0}" start="{1}" end="{2}">\n'
     ast = '\t\t<att name="{0}" type="{1}" value="{2}" start="{3}" end="{4}"/>\n'
+    enn = '\t</node>\n'
+    
+    est = '\t<edge source="{0}" target="{1}" start="{2}" end="{3}">\n'
+    eas = '\t\t<att name="{0}" type="{1}" value="{2}" start="{3}" end="{4}"/>\n'
+    ene = '\t</edge>\n'
     
     with open(path, "w") as f:
-        f.write('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n')
-        f.write('<graph>\n')
+        f.write(xst)    # xml element.
+        f.write(sg)     # Graph element.
         for n in nodes.keys():
             for period in nodes[n]['periods']:
                 label = str(n).replace("&", "&amp;").replace('"', '')
                 
+                # Node element.
                 f.write(nst.format(label, period['start'], period['end']+1))
 
                 for i in sorted(nodes[n].keys()):
                     if period['start'] <= i <= period['end']:
                         for attr, value in nodes[n][i].iteritems():
                             # Type names are slightly different in XGMML.
-                            if type(value) is str: dtype = 'string'
-                            if type(value) is int: dtype = 'integer'
-                            if type(value) is float: dtype = 'real'
+                            dtype = _safe_type(value)
                             attr = str(attr).replace("&", "&amp;")
+
+                            # Node attribute element.
                             f.write(ast.format(attr, dtype, value, i, i+1))
-                f.write('\t</node>\n')
+            
+                f.write(enn)    # End node element.
 
         for e in edges.keys():
             for period in edges[e]['periods']:
                 src = str(e[0]).replace("&", "&amp;").replace('"', '')
                 tgt = str(e[1]).replace("&", "&amp;").replace('"', '')
-                start = str(period['start'])
-                end = str(period['end']+1)
-                f.write('\t<edge source="' + src + '" target="' + tgt \
-                            + '" start="'+ start + '" end="' + end + '">\n')
+                start = period['start']
+                end = period['end'] + 1
+                
+                # Edge element.
+                f.write(est.format(src, tgt, start, end))
 
                 for i in sorted(edges[e].keys()):
                     if period['start'] <= i <= period['end']:
                         for attr, value in edges[e][i].iteritems():
                             # Type names are slightly different in XGMML.
-                            if type(value) is str: dtype = 'string'
-                            if type(value) is int: dtype = 'integer'
-                            if type(value) is float: dtype = 'real'
-                            f.write('\t\t<att name="'+str(attr)+'" type="'\
-                                    +dtype+'" value="'+str(value)+'" start="'\
-                                    +str(i)+'" end="'\
-                                    +str(i+1)+'" />\n'.replace("&", "&amp;"))
-                f.write('\t</edge>\n')
-        f.write('</graph>')
+                            dtype = _safe_type(value)
+                            
+                            # Edge attribute element.
+                            f.write(eas.format(attr, dtype, value, i, i+1)
+                                       .replace("&", "&amp;"))
+            
+                f.write(ene)    # End edge element.
+        f.write(eg) # End graph element.
         
 def _strip_list_attributes(G):
+    """Converts lists attributes to strings for all nodes and edges in G."""
     for n in G.nodes(data=True):
         for k,v in n[1].iteritems():
             if type(v) is list:
@@ -165,3 +186,13 @@ def _strip_list_attributes(G):
                 G.edge[e[0]][e[1]][k] = str(v)
 
     return G        
+
+def _safe_type(value):
+    """Converts Python type names to XGMML-safe type names."""
+
+    if type(value) is str: dtype = 'string'
+    if type(value) is unicode: dtype = 'string'
+    if type(value) is int: dtype = 'integer'
+    if type(value) is float: dtype = 'real'
+
+    return dtype

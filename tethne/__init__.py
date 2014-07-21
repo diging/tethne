@@ -1,19 +1,33 @@
 """
-Tethne is a package for analyzing citation data from the Web of Science.
-Modules within Tethne can generate a variety of networks, such as
-bibliographic coupling, citation, author-paper, and co-author networks,
-using networkx.
+Tethne is a Python package that draws together tools and techniques from 
+bibliometrics, computational linguistics, and social influence modeling into a
+single easy-to-use corpus analysis framework. Scholars can use Tethne to parse 
+and organize data from the ISI Web of Science and JSTOR Data-for-Research 
+databases, and generate time-variant citation-based network models, topic 
+models, and social influence models. Tethne also provides mechanisms for 
+visualizing those models using mainstream network visualization software (e.g. 
+Cyotoscape and Gephi) and the MatPlotLib Python library.
 
 .. autosummary::
 
-   tethne.analyze
-   tethne.builders
-   tethne.data
-   tethne.matrices
-   tethne.networks
-   tethne.readers
-   tethne.services
-   tethne.utilities
-   tethne.writers
+   analyze
+   classes
+   managers
+   model
+   networks
+   persistence
+   readers
+   services
+   writers
    
 """
+
+from analyze import *
+from classes import *
+from managers import *
+from model import *
+from networks import *
+from persistence import *
+from readers import *
+from services import *
+from writers import *

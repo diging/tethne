@@ -3,7 +3,7 @@ Methods for network analysis.
 """
 
 import networkx as nx
-import tethne.networks as nt
+from .. import networks as nt
 
 def node_global_closeness_centrality(g, node, normalize=True):
     """

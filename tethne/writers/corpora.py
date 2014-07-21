@@ -3,7 +3,7 @@
 
 from collections import Counter
 
-def to_documents(target, ngrams, papers=None, vocab=None, fields=['date','atitle']):
+def to_documents(target, ngrams, metadata=None, vocab=None):
     """
     
     Parameters
@@ -12,64 +12,65 @@ def to_documents(target, ngrams, papers=None, vocab=None, fields=['date','atitle
         Target path for documents; e.g. './mycorpus' will result in 
         './mycorpus_docs.txt' and './mycorpus_meta.csv'.
     ngrams : dict
-        Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
-    papers : list
-        Optional. List of :class:`.Paper` objects. Should have DOIs that 
-        correspond to keys in `ngrams`.
-    fields : list
-        Optional. If `papers` is provided, a list of fields in :class:`.Paper`
-        to include in the metadata file.
+        Keys are paper identifiers, values are lists of (ngram, frequency)
+        tuples. If `vocab` is provided, assumes that `ngram` is an index into
+        `vocab`.
+    metadata : tuple
+        (`keys`, dict): `keys` is a list of metadata keys, and dict contains
+        metadata values dict for each paper. ( [ str ], { str(p) : dict } ) 
     
     Raises
     ------
     IOError
     """
-    
-    # Index papers by DOI, for easy retrieval later.
-    if papers is not None:
-        papers_by_doi = { p['doi']:p for p in papers }
-    
+
+    docpath = target + '_docs.txt'
+    metapath = target + '_meta.csv'
+
     try:
-        docFile = open(target + '_docs.txt', 'wb')
-        metaFile = open(target + '_meta.csv', 'wb')
+        docFile = open(docpath, 'wb')
     except IOError:
         raise IOError('Invalid target. Could not open files for writing.')
     
-
-    metaFile.write('# {0}\n'.format('\t'.join(['doc','doi'] + fields)))
+    if metadata is not None:
+        metakeys, metadict = metadata
+        metaFile = open(metapath, 'wb')
+        metaFile.write('{0}\n'.format('\t'.join(['id'] + metakeys)))
     
-    if type(ngrams) is tuple:
-        ngrams, vocab, counts = ngrams
-    
+    # MALLET expects strings; if `vocab` is provided, assumes that ngrams
+    #   in `ngrams` are keys into `vocab`.
     if vocab is None:
         def word(s):
-            return str(s)
+            return s    # unidecode(unicode(s))
     else:
         def word(s):
-            return str(vocab[s])
+            return vocab[s] # unidecode(unicode(vocab[s]))
     
-    d = 0   # Document index in _docs.txt file.
     try:
-        for key,values in ngrams.iteritems():
-            docFile.write(' '.join([ word(gram) for gram,freq in values 
-                                                for i in xrange(freq) ]) + '\n')
+        for p,grams in ngrams.iteritems():
+            # Write documents.
+            m = [ p, 'en' ] # Add doc name and language before data.
+            dat = [ word(gram) for gram,freq in grams for i in xrange(freq) ]
+            docFile.write(' '.join( m + dat) + '\n')
+            
+            # Write metadata.
+            meta = [ str(p) ]
+            if metadata is not None:
+                meta += [ str(metadict[p][f]) for f in metakeys ]
+                metaFile.write('\t'.join(meta) + '\n')
 
-            meta = [ str(d), str(key) ]
-            if papers:
-                p = papers_by_doi[key]
-                meta += [ str(p[f]) for f in fields ]
-            metaFile.write('\t'.join(meta) + '\n')  #'{0}\t{1}\n'.format(d, key))
-            d += 1
     except AttributeError:  # .iteritems() raises an AttributeError if ngrams
                             #  is not dict-like.
-        raise ValueError('Parameter \'ngrams\' must be dictionary-like.')
+        raise ValueError('Parameter \'ngrams\' must be a dict.')
     
     docFile.close()
-    metaFile.close()
     
-    return True
+    if metadata is not None:
+        metaFile.close()
+    
+    return docpath, metapath
 
-def to_dtm_input(target, D, t_ngrams, vocab, fields=['date','atitle']):
+def to_dtm_input(target, D, feature='unigrams', fields=['date','atitle']):
     """
     
     Parameters
@@ -78,16 +79,14 @@ def to_dtm_input(target, D, t_ngrams, vocab, fields=['date','atitle']):
         Target path for documents; e.g. './mycorpus' will result in 
         './mycorpus-mult.dat', './mycorpus-seq.dat', 'mycorpus-vocab.dat', and
         './mycorpus-meta.dat'.    
-    D : :class:`.DataCollection`
+    D : :class:`.Corpus`
         Contains :class:`.Paper` objects generated from the same DfR dataset
         as t_ngrams, indexed by doi and sliced by date.
-    t_ngrams : dict
-        Keys are paper DOIs, values are lists of (index, frequency) tuples.
-    vocab : dict
-        Vocabulary as i:term.
+    feature : str
+        (default: 'unigrams') Features in :class:`.Corpus` to use for
+        modeling.
     fields : list
-        Optional. A list of fields in :class:`.Paper` to include in the metadata
-        file.
+        (optional) Fields in :class:`.Paper` to include in the metadata file.
         
     Returns
     -------
@@ -102,6 +101,9 @@ def to_dtm_input(target, D, t_ngrams, vocab, fields=['date','atitle']):
         metaFile = open(target + '-meta.dat', 'wb')
     except IOError:
         raise IOError('Invalid target. Could not open files for writing.')
+
+    vocab = D.features[feature]['index']
+    features = D.features[feature]['features']
 
     seq = {}
     # Generate -mult.dat file (wordcounts for each document).
@@ -119,23 +121,28 @@ def to_dtm_input(target, D, t_ngrams, vocab, fields=['date','atitle']):
     #           the same order as the docs in the mult file.
     #
     with open(target + '-meta.dat', 'wb') as metaFile:
+        metaFile.write('\t'.join(['id'] + fields ) + '\n')
+    
         with open(target + '-mult.dat', 'wb') as multFile:
             for year in D.axes['date'].keys():
                 papers = D.axes['date'][year]
                 
                 seq[year] = []
-                for doi in papers:  # D must be indexed by doi.
+                for id in papers:
                     try:
-                        grams = t_ngrams[doi]
-                        seq[year].append(doi)
+                        grams = features[id]
+                        seq[year].append(id)
                         wordcount = len(grams)  # Number of unique words.
-                        multFile.write(' '.join([ str(wordcount) ] + \
-                                                [ '{0}:{1}'.format(g,c)
-                                                    for g,c in grams ] + \
-                                                ['\n']))
-                        meta = [ str(doi) ]
+                        
+                        # Write data.
+                        mdat = [ '{0}:{1}'.format(g,c) for g,c in grams ]
+                        mdat_string = ' '.join([ str(wordcount) ] + mdat) + '\n'
+                        multFile.write(mdat_string)
+                        
+                        # Write metadata.
+                        meta = [ str(id) ]
                         if papers:
-                            p = D.data[doi]
+                            p = D.papers[id]
                             meta += [ str(p[f]) for f in fields ]
                         metaFile.write('\t'.join(meta) + '\n')
                         
@@ -164,29 +171,4 @@ def to_dtm_input(target, D, t_ngrams, vocab, fields=['date','atitle']):
             vocabFile.write('{0}\n'.format(word))
 
     return None
-
-if __name__ == '__main__':
-    import sys
-    sys.path.append("/Users/erickpeirson/Dropbox/DigitalHPS/Scripts/tethne")
-
-    datapath = "/Users/erickpeirson/Genecology Project Archive/JStor DfR Datasets/2013.5.3.cHrmED8A/"
-    datapath2 = "/Users/erickpeirson/Genecology Project Archive/JStor DfR Datasets/2013.5.3.k2HUvXh9/"
-    datapath3 = "/Users/erickpeirson/Genecology Project Archive/JStor DfR Datasets/2013.5.3.W8mEeULy/"
-
-    import tethne.readers as rd
-    from tethne.data import DataCollection
-    papers = rd.dfr.read(datapath) + rd.dfr.read(datapath2) + rd.dfr.read(datapath3)
-
-    D = DataCollection(papers, 'doi')
-    D.slice('date', 'time_period', window_size=8)
-    
-    ngrams = rd.dfr.ngrams(datapath, 'uni', apply_stoplist=True)
-    print len(ngrams)
-    ngrams.update(rd.dfr.ngrams(datapath2, 'uni', apply_stoplist=True))
-    print len(ngrams)
-    ngrams.update(rd.dfr.ngrams(datapath3, 'uni', apply_stoplist=True))
-    print len(ngrams)
-    t_ngrams, vocab, counts = rd.dfr.tokenize(ngrams)
-    
-    to_dtm_input("/Users/erickpeirson/Desktop/dtm_test", D, t_ngrams, vocab)
     
