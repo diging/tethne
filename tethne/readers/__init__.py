@@ -5,6 +5,7 @@ Methods for parsing bibliographic datasets.
 
    dfr
    wos
+   scopus
 
 Each file reader provides methods to parse bibliographic data from a
 scholarly database (e.g. Web of Science or PubMed), resulting in a
