@@ -1,22 +1,34 @@
 from distutils.core import setup
 
-DISTNAME = 'tethne'
+DISTNAME = 'Tethne'
+AUTHOR = 'E. Peirson, Digital Innovation Group @ ASU'
 MAINTAINER = 'Erick Peirson'
 MAINTAINER_EMAIL = 'erick [dot] peirson [at] asu [dot] edu'
-DESCRIPTION = ('Python library for analyzing bibliographic data')
+DESCRIPTION = ('Bibliographic network and corpus analysis for historians')
 LICENSE = 'GNU GPL 3' 
-URL = 'https://github.com/erickpeirson/tethne' 
-VERSION = '0.4.2-alpha'
-PACKAGES = [ 'tethne','tethne.analyze','tethne.networks','tethne.readers', \
-             'tethne.utilities', 'tethne.writers', 'tethne.matrices', \
-             'tethne.services', 'testsuite' ]
+URL = 'https://github.com/diging/tethne'
+VERSION = '0.5.1-dev'
+PACKAGES = [ 'tethne','tethne.analyze','tethne.networks','tethne.readers',
+             'tethne.utilities', 'tethne.writers', 'tethne.model',
+             'tethne.services', 'tethne.classes' ]
 
-setup(name=DISTNAME,
-      maintainer=MAINTAINER,
-      maintainer_email=MAINTAINER_EMAIL,
-      description=DESCRIPTION,
-      license=LICENSE,
-      url=URL,
-      version=VERSION,
-      packages = PACKAGES,
-      )
+setup(
+    name=DISTNAME,
+    author=AUTHOR,
+    maintainer=MAINTAINER,
+    maintainer_email=MAINTAINER_EMAIL,
+    description=DESCRIPTION,
+    license=LICENSE,
+    url=URL,
+    version=VERSION,
+    packages = PACKAGES,
+    long_description=open('README.md').read(),
+    install_requires=[
+        "networkx >= 1.8.1",
+        "matplotlib >= 1.3.1",
+        "tables >= 3.1.1",
+        "Unidecode >= 0.04.16",
+        "geopy >= 0.99",
+        "nltk",
+    ],
+)

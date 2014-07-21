@@ -40,10 +40,8 @@ nosetests.xml
 graveyard
 graveyard/*
 
-data
-data/*
-
 *.xcodeproj
+*.pickle
 
 play.py
 

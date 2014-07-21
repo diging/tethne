@@ -72,9 +72,9 @@ Methods
 
 """
 
-import tethne.data as ds
 import xml.etree.ElementTree as ET
-import tethne.utilities as util
+from ..utilities import *
+from ..classes import Corpus, Paper
 import os
 import re
 import uuid
@@ -245,7 +245,7 @@ def parse(filepath):
     # Note: first two lines of file are not related to any paper therein.
     last_field_tag = paper_start_key #initialize to something.
     for line in line_list[2:]:
-        line = util.strip_non_ascii(line)
+        line = strip_non_ascii(line)
         field_tag = line[:2]
         
         if field_tag == ' ':
@@ -367,7 +367,7 @@ def _parse_cr(ref):
     DOI numbers in a list of form [doi1, doi2, ...], address this?
 
     """
-    paper = ds.Paper()
+    paper = Paper()
     #tokens of form: aulast auinit, date, jtitle, volume, spage, doi
     tokens = ref.split(',')
     try:
@@ -477,7 +477,7 @@ def convert(wos_data):
     
     # Perform the key convertions
     for wos_dict in wos_data:
-        paper = ds.Paper()
+        paper = Paper()
 
         #direct translations
         for key in translator.iterkeys():
@@ -687,6 +687,31 @@ def from_dir(path):
                 pass                            #  contain WoS data.
     papers = convert(wos_list)
     return papers
+
+def read_corpus(path):
+    """
+    
+    """
+
+    papers = read(path)
+    return Corpus(papers, index_by='wosid')
+
+def corpus_from_dir(path):
+    """
+    
+    Parameters
+    ----------
+    path : string
+        Path to directory of field-tagged data files.
+
+    Returns
+    -------
+    papers : list
+        A list of :class:`.Paper` objects.
+    """
+
+    papers = from_dir(path)
+    return Corpus(papers, index_by='wosid')
 
 # [62809724]
 def _validate(wos_data):
