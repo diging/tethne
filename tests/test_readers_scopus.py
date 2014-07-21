@@ -42,6 +42,10 @@ class TestScopusReader(unittest.TestCase):
         self.assertEqual(len(papers[0]['citations']), 54)
         self.assertGreater(len(papers[0]['accession']), 0)
         self.assertIsInstance(papers[0], Paper)
+    
+        for p in papers:
+            self.assertGreater(len(p['eid']), 0)
+            self.assertGreater(p['date'], 0)
 
     def test_from_dir(self):
         papers = scopus.from_dir(self.scopus_data_dir)
