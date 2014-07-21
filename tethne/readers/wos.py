@@ -72,10 +72,9 @@ Methods
 
 """
 
-from tethne.classes.paper import Paper
 import xml.etree.ElementTree as ET
 from ..utilities import *
-from ..classes import Corpus
+from ..classes import Corpus, Paper
 import os
 import re
 import uuid

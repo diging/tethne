@@ -63,8 +63,9 @@ class Paper(dict):
             'country':None,
             'ayjid':None,
             'doi':None,
-            'pmid':None,
-            'wosid':None,
+            'pmid':None,    # PubMed
+            'wosid':None,   # ISI Web of Science
+            'eid':None,     # Scopus
             'abstract':None,
             'accession':None,
             'topics':None    }
@@ -84,6 +85,7 @@ class Paper(dict):
                                'epage',
                                'ayjid',
                                'doi',
+                               'eid',
                                'pmid',
                                'wosid',
                                'abstract',
