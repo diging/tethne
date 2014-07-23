@@ -5,12 +5,12 @@ import unittest
 import warnings
 
 from tethne.readers import wos, dfr
-from tethne.classes import DataCollection, GraphCollection
+from tethne.classes import Corpus, GraphCollection
 from tethne.networks.authors import coauthors
 
 import cPickle as pickle
-with open('{0}/dfr_DataCollection.pickle'.format(picklepath), 'r') as f:
-    D = pickle.load(f)
+D = wos.read_corpus(datapath+'/wos.txt')
+D.slice('date', 'time_period', window_size=1)
 
 import matplotlib
 
@@ -18,7 +18,7 @@ class TestGraphCollection(unittest.TestCase):
     def setUp(self):
         self.G = GraphCollection()
 
-        for k,v in D.get_slices('date', include_papers=True).iteritems():
+        for k,v in D.get_slices('date', papers=True).iteritems():
             self.G[k] = coauthors(v)
 
     def test_build(self):
@@ -32,8 +32,8 @@ class TestGraphCollection(unittest.TestCase):
 
         self.assertEqual(len(self.G.graphs), len(D.get_slices('date')))
         self.assertEqual(self.G.graphs.keys(), D.get_slices('date').keys())
-        self.assertEqual(len(self.G.nodes()), 63)
-        self.assertEqual(len(self.G.edges()), 44)
+        self.assertEqual(len(self.G.nodes()), 51)
+        self.assertEqual(len(self.G.edges()), 113)
 
     def test_nodes(self):
         """

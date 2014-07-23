@@ -2,26 +2,26 @@ from settings import *
 
 import unittest
 
-from tethne.persistence import HDF5DataCollection, HDF5Paper
+from tethne.persistence import HDF5Corpus, HDF5Paper
+from tethne import Corpus, Paper
 
 from nltk.corpus import stopwords
 from tethne.readers import wos, dfr
 import os
 
-import cPickle as pickle
-with open('{0}/dfr_DataCollection.pickle'.format(picklepath), 'r') as f:
-    D = pickle.load(f)
+D = dfr.read_corpus(datapath + '/dfr', features=('uni',))
+D.slice('date', 'time_period', window_size=1)
 
-class TestSaveLoadDataCollection(unittest.TestCase):
+class TestSaveLoadCorpus(unittest.TestCase):
     def setUp(self):
         pass
 
     def test_reload(self):
         HD = D.to_hdf5(datapath=temppath)
         hdpath = HD.path
-        self.delpath = hdpath
+        delpath = hdpath
 
-        HD_ = HDF5DataCollection([], index=False, datapath=hdpath)
+        HD_ = HDF5Corpus([], index=False, datapath=hdpath)
 
         # Papers should be the same.
         self.assertEqual(   len(HD_.papers), len(D.papers)  )
@@ -46,14 +46,12 @@ class TestSaveLoadDataCollection(unittest.TestCase):
         # Axes should be the same.
         self.assertEqual(   len(HD_.axes), len(D.axes)  )
         self.assertEqual(   len(HD_.axes['date']), len(D.axes['date'])  )
+        os.remove(delpath)
 
-    def tearDown(self):
-        os.remove(self.delpath)
-
-class TestDataCollectionDfRHDF5(unittest.TestCase):
+class TestCorpusDfRHDF5(unittest.TestCase):
     def setUp(self):
         """
-        Generate a DataCollection from some DfR data with unigrams.
+        Generate a :class:`.Corpus` from some DfR data with unigrams.
         """
         
         dfrdatapath = '{0}/dfr'.format(datapath)
@@ -61,9 +59,9 @@ class TestDataCollectionDfRHDF5(unittest.TestCase):
         papers = dfr.read(dfrdatapath)
         ngrams = dfr.ngrams(dfrdatapath, 'uni')
 
-        pcgpath = cg_path + 'persistence.hdf5.HDF5DataCollection.__init__[dfr].png'
+        pcgpath = cg_path + 'persistence.hdf5.HDF5Corpus.__init__[dfr].png'
         with Profile(pcgpath):
-            self.D = HDF5DataCollection(papers, features={'unigrams': ngrams},
+            self.D = HDF5Corpus(papers, features={'unigrams': ngrams},
                                                 index_by='doi',
                                                 exclude=set(stopwords.words()))
 
@@ -102,19 +100,19 @@ class TestDataCollectionDfRHDF5(unittest.TestCase):
         self.assertEqual(len(self.D.features['unigrams']['counts']), 51639)
         self.assertEqual(len(self.D.features['unigrams']['documentCounts']), 51639)
 
-class TestDataCollectionWoSHDF5(unittest.TestCase):
+class TestCorpusWoSHDF5(unittest.TestCase):
     def setUp(self):
         """
-        Genereate a DataCollection from some WoS data.
+        Genereate a :class:`.Corpus` from some WoS data.
         """
     
         wosdatapath = '{0}/wos.txt'.format(datapath)
 
         papers = wos.read(wosdatapath)
         
-        pcgpath = cg_path + 'persistence.hdf5.HDF5DataCollection.__init__[wos].png'
+        pcgpath = cg_path + 'persistence.hdf5.HDF5Corpus.__init__[wos].png'
         with Profile(pcgpath):
-            self.D = HDF5DataCollection(papers, index_by='wosid')
+            self.D = HDF5Corpus(papers, index_by='wosid')
 
     def test_indexing(self):
         """
@@ -140,7 +138,7 @@ class TestDataCollectionWoSHDF5(unittest.TestCase):
         Should generate features from available abstracts.
         """
 
-        pcgpath = cg_path + 'persistence.hdf5.HDF5DataCollection.abstract_to_features[wos].png'
+        pcgpath = cg_path + 'persistence.hdf5.HDF5Corpus.abstract_to_features[wos].png'
         with Profile(pcgpath):
             self.D.abstract_to_features()
 
@@ -155,7 +153,7 @@ class TestDataCollectionWoSHDF5(unittest.TestCase):
         """
         """
 
-        pcgpath = cg_path + 'persistence.hdf5.HDF5DataCollection.slice[wos].png'
+        pcgpath = cg_path + 'persistence.hdf5.HDF5Corpus.slice[wos].png'
         with Profile(pcgpath):
             self.D.slice('date')
 
@@ -164,7 +162,7 @@ class TestDataCollectionWoSHDF5(unittest.TestCase):
         self.assertIn(2013, self.D.axes['date'])
         self.assertEqual(len(self.D.axes['date'][2012]), 5)
         
-class TestDataCollectionTokenization(unittest.TestCase):
+class TestCorpusTokenization(unittest.TestCase):
     def setUp(self):
 
         self.dfrdatapath = '{0}/dfr'.format(datapath)
@@ -177,9 +175,9 @@ class TestDataCollectionTokenization(unittest.TestCase):
         """
         filt = lambda s: len(s) > 3 # Must have at least four characters.
 
-        pcgpath = cg_path + 'persistence.hdf5.HDF5DataCollection.__init__[dfr_filter].png'
+        pcgpath = cg_path + 'persistence.hdf5.HDF5Corpus.__init__[dfr_filter].png'
         with Profile(pcgpath):
-            D = HDF5DataCollection(self.papers,
+            D = HDF5Corpus(self.papers,
                                         features={'unigrams': self.ngrams},
                                         index_by='doi',
                                         exclude=set(stopwords.words()),
@@ -190,7 +188,7 @@ class TestDataCollectionTokenization(unittest.TestCase):
                 
     def test_filter_features(self):
         """
-        :func:`DataCollection.filterfeatures` should generate a new, more
+        :func:`Corpus.filterfeatures` should generate a new, more
         limited featureset.
         """
         
@@ -204,11 +202,11 @@ class TestDataCollectionTokenization(unittest.TestCase):
                 return True
             return False
         
-        D = HDF5DataCollection(self.papers, features={'unigrams': self.ngrams},
+        D = HDF5Corpus(self.papers, features={'unigrams': self.ngrams},
                                             index_by='doi',
                                             exclude=set(stopwords.words()))
         
-        pcgpath = cg_path + 'persistence.hdf5.HDF5DataCollection.filter_features[dfr].png'
+        pcgpath = cg_path + 'persistence.hdf5.HDF5Corpus.filter_features[dfr].png'
         with Profile(pcgpath):
             D.filter_features('unigrams', 'unigrams_lim', filt)
         

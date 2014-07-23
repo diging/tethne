@@ -6,18 +6,26 @@ from nltk.corpus import stopwords
 import numpy
 import os
 
-from tethne import DataCollection, HDF5DataCollection
+from tethne import Corpus, HDF5Corpus
 from tethne.readers import dfr
 from tethne.model.managers import MALLETModelManager
 
 import cPickle as pickle
-picklepath = '{0}/pickles'.format(datapath)
-with open('{0}/dfr_DataCollection.pickle'.format(picklepath), 'r') as f:
-    D = pickle.load(f)
+
+dfrdatapath = '{0}/dfr'.format(datapath)
+D = dfr.read_corpus(dfrdatapath, ['uni'])
+
+def filt(s, C, DC):
+    if C > 3 and DC > 1 and len(s) > 2:
+        return True
+    return False
+
+D.filter_features('uni', 'unigrams', filt)
+D.slice('date', 'time_period', window_size=1)
 
 class TestMALLETModelManager(unittest.TestCase):
     def setUp(self):
-        dfrdatapath = '{0}/dfr'.format(datapath)
+    
 
         pcgpath = cg_path + 'model.manager.MALLETModelManager.__init__.png'
         with Profile(pcgpath):
@@ -36,7 +44,7 @@ class TestMALLETModelManager(unittest.TestCase):
             self.M.prep()
 
         self.assertIn('input.mallet', os.listdir(temppath))
-        self.assertGreater(os.path.getsize(temppath+'/input.mallet'), 2500000)
+        self.assertGreater(os.path.getsize(temppath+'/input.mallet'), 2500)
         
         self.assertIn('tethne_docs.txt', os.listdir(temppath))
         self.assertGreater(os.path.getsize(temppath+'/tethne_docs.txt'), 5000000)
@@ -60,7 +68,7 @@ class TestMALLETModelManager(unittest.TestCase):
         self.assertGreater(os.path.getsize(temppath+'/dt.dat'), 100000)
         
         self.assertIn('wt.dat', os.listdir(temppath))
-        self.assertGreater(os.path.getsize(temppath+'/wt.dat'), 900000)
+        self.assertGreater(os.path.getsize(temppath+'/wt.dat'), 9000)
         
         self.assertIn('model.mallet', os.listdir(outpath))
         self.assertGreater(os.path.getsize(outpath+'/model.mallet'), 9000000)

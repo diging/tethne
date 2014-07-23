@@ -213,7 +213,7 @@ def read_corpus(path, features=None, exclude=None, **kwargs):
     grams = {}
     if features is not None:
         for feat in features:
-            grams[feat] = ngrams(path, **kwargs)
+            grams[feat+'grams'] = ngrams(path, feat, **kwargs)
 
     return Corpus(papers, features=grams, index_by='doi', exclude=exclude)
 
@@ -349,7 +349,7 @@ def corpus_from_dir(path, features=None, exclude=None, **kwargs):
     grams = {}
     if features is not None:
         for feat in features:
-            grams[feat] = ngrams_from_dir(path, **kwargs)
+            grams[feat+'grams'] = ngrams_from_dir(path, **kwargs)
 
     return Corpus(papers, features=grams, index_by='doi', exclude=exclude)
 

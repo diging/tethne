@@ -43,3 +43,4 @@ import tethne.networks.papers
 import tethne.networks.authors
 import tethne.networks.helpers
 import tethne.networks.topics
+import features

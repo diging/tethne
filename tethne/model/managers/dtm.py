@@ -235,6 +235,8 @@ class DTMModelManager(ModelManager):
         time.
         
         If ``plot`` is True, generates a plot image at ``outpath``.
+        
+        TODO: should return a Figure object.
            
         Parameters
         ----------

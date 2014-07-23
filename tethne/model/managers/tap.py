@@ -150,9 +150,22 @@ class TAPModelManager(SocialModelManager):
                         a_topics[a] = [ dist ]
 
             except KeyError:    # May not be corpus model repr for all papers.
+                # In that case, just give 0. values for those authors.
                 logger.debug('TAPModelManager.author_theta(): KeyError on {0}'
-                                                        .format(p[_indexed_by]))
-                pass
+                                                        .format(p[indexed_by]))
+
+                dist = np.zeros(( self.topicmodel.Z ))
+                # Give 0 values for authors.
+                for author in p.authors():
+                    if authors is not None:
+                        if author not in authors:
+                            continue
+                
+                    a = authors[author]
+                    if a in a_topics:
+                        a_topics[a].append(dist)
+                    else:
+                        a_topics[a] = [ dist ]
 
         shape = ( len(a_topics), self.topicmodel.Z )
         logger.debug('TAPModelManager.author_theta(): initialize with shape {0}'
@@ -196,7 +209,7 @@ class TAPModelManager(SocialModelManager):
                     alt_a = self.SM[last].a
                     alt_G = self.SM[last].G
 
-                papers = self.D.get_slice(axis, slice, include_papers=True)
+                papers = self.D.get_slice(axis, slice, papers=True)
                 include = { n[1]['label']:n[0]
                             for n in self.G[slice].nodes(data=True) }
 

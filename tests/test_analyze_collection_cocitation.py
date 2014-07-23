@@ -4,7 +4,7 @@ import unittest
 
 from tethne.readers import wos, dfr
 from tethne.classes import Corpus, GraphCollection
-from tethne.analyze import cocitation
+from tethne.analyze.corpus import plot_sigma, sigma
 import networkx
 import numpy
 
@@ -24,7 +24,7 @@ class TestCocitationAnalysis(unittest.TestCase):
         self.corpus = corpus
 
     def test_sigma(self):
-        G_ = cocitation.sigma(self.G, self.corpus)
+        G_ = sigma(self.G, self.corpus, 'citations')
         self.assertIsInstance(G_, GraphCollection)
         
         node = G.graphs.values()[-1].nodes(data=True)[0]
@@ -32,8 +32,8 @@ class TestCocitationAnalysis(unittest.TestCase):
 
     def test_plot_sigma(self):
         import matplotlib
-        fig, G_ = cocitation.plot_sigma( self.G, self.corpus,
-                                        topn=2, perslice=True   )
+        fig, G_ = plot_sigma( self.G, self.corpus, 'citations',
+                                         topn=2, perslice=True   )
         self.assertIsInstance(fig, matplotlib.figure.Figure)
         self.assertIsInstance(G_, GraphCollection)
         
