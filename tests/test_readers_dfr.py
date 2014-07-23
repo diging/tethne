@@ -34,7 +34,7 @@ class TestFromDir(unittest.TestCase):
             C = dfr.corpus_from_dir(datapath, features=('uni',))
         
         self.assertEqual(len(C.papers), 241)
-        self.assertEqual(len(C.features['uni']['features']), 241)
+        self.assertEqual(len(C.features['unigrams']['features']), 241)
 
     def test_read_corpus(self):
         pcgpath = cg_path + 'readers.dfr.read_corpus.png'
@@ -43,7 +43,7 @@ class TestFromDir(unittest.TestCase):
 
         self.assertIsInstance(C, Corpus)
         self.assertEqual(len(C.papers), 241)
-        self.assertEqual(len(C.features['uni']['features']), 241)
+        self.assertEqual(len(C.features['unigrams']['features']), 241)
 
 class TestNGrams(unittest.TestCase):
     def setUp(self):

@@ -360,7 +360,7 @@ class MALLETLoader(object):
         T = []
         C = []
         
-        with open(path, "rb") as f:
+        with open(path, "r") as f:
             reader = csv.reader(f, delimiter=' ')
             for line in reader:
                 w = int(line[0])
@@ -372,9 +372,9 @@ class MALLETLoader(object):
                     T.append(int(k))
                     C.append(float(c))
 
-        K = len(set(T))
+        K = max(T) + 1
         V = len(set(W))
-                    
+        
         phi = coo_matrix((C, (T,W)), shape=(K,V)).todense()
 
         # Normalize

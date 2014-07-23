@@ -10,6 +10,73 @@ includes keywords, abstract terms, etc.
 
 import numpy as np
 import networkx as nx
+from scipy.sparse import coo_matrix
+
+def cooccurrence_matrix(papers, featureset, indexed_by='doi', flist=None,
+                            dense=False, **kwargs):
+    """
+    Generate a sparse cooccurrence matrix for features in ``featureset``.
+    
+    Diagonal is occurence frequency.
+    """
+
+    I = []
+    J = []
+    K = []
+
+    features = featureset['features']
+    index = featureset['index']
+    for paper in papers:
+        p = paper[indexed_by]
+        try:
+            fvect = features[p]
+        except KeyError:    # Not all papers have features.
+            continue
+
+        Nfeat = len(fvect)
+        for i in xrange(Nfeat):
+            i_feat = fvect[i][0]
+            if flist is not None and index[i_feat] not in flist:
+                continue
+            
+            for j in xrange(i, Nfeat):
+                j_feat = fvect[j][0]
+                
+                if flist is not None and index[j_feat] not in flist:
+                    continue
+
+                I.append(i_feat)
+                J.append(j_feat)
+                K.append(1./len(papers))
+
+    matrix = coo_matrix((K, (I,J))).tocsc()
+    if dense:
+        return matrix.todense()
+    return matrix
+
+def nPMI(cooccurrence, i, j):
+    p_i = cooccurrence[i, i]
+    p_j = cooccurrence[j, j]
+    p_ij = cooccurrence[i, j] + cooccurrence[j, i]
+
+    return ( np.log( p_ij/(p_i*p_j) ) ) / ( -1* np.log(p_ij) )
+
+def pointwise_mutual_information(papers, featureset, indexed_by='doi', flist=None, threshold=0.9, **kwargs):
+    graph = nx.Graph()
+    cooccurrence = cooccurrence_matrix(papers, featureset, indexed_by, flist)
+    index = featureset['index']
+    Nfeat = len(index)
+    
+    for i in xrange(Nfeat):
+        j_slice = cooccurrence[i, :].nonzero()
+        j_slice_ = cooccurrence[:, i].nonzero()
+        print j_slice
+#        for j in xrange(i+1, Nfeat):
+#            pmi = nPMI(cooccurrence, i, j)
+#            if pmi > threshold:
+#                graph.add_edge(i,j,weight=pmi)
+
+    return graph
 
 def keyword_cooccurrence(papers, threshold, connected=False, **kwargs):
     """

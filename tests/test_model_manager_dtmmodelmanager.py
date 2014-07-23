@@ -6,13 +6,13 @@ from nltk.corpus import stopwords
 import numpy
 import os
 
-from tethne import DataCollection, HDF5DataCollection
+from tethne import Corpus, HDF5Corpus
 from tethne.readers import dfr
 from tethne.model.managers import DTMModelManager
 
 import cPickle as pickle
-with open('{0}/dfr_DataCollection.pickle'.format(picklepath), 'r') as f:
-    D = pickle.load(f)
+D = dfr.read_corpus(datapath+'/dfr', features=('uni',))
+D.slice('date', 'time_period', window_size=1)
 
 class TestMALLETModelManager(unittest.TestCase):
     def setUp(self):

@@ -4,12 +4,96 @@ import unittest
 import numpy as np
 import networkx as nx
 import random
+import csv
 
 from tethne.model.social.tapmodel import TAPModel
+from tethne.readers import wos, dfr
+from tethne import GraphCollection
+from tethne.networks.authors import coauthors
+from tethne.model.managers import MALLETModelManager, TAPModelManager
 
 N = 10  # nodes
 E = 20  # edges
 Z = 5   # topics
+
+class TestTAPModelTestData(unittest.TestCase):
+    def test_build(self):
+        edgepath = '/Users/erickpeirson/Downloads/Topic-Affinity-Propagation/edge.txt'
+        distpath = '/Users/erickpeirson/Downloads/Topic-Affinity-Propagation/distribution.txt'
+
+        graph = nx.Graph()
+
+        # Load edge data into Graph.
+        with open(edgepath, 'r') as f:
+            reader = csv.reader(f, delimiter=' ')
+            for line in reader:
+                try:
+                    graph.add_edge(int(line[1]), int(line[2]), weight=float(line[3]))
+                except:
+                    pass
+        authors = { n:n for n in graph.nodes() }
+
+        # Load dist data into atheta.
+        atheta = {}
+        with open(distpath, 'r') as f:
+            reader = csv.reader(f, delimiter=' ')
+            i = 0
+            for line in reader:
+                data = line[1:-1]
+                if len(data) > 0:
+                    if i in graph.nodes():
+                        atheta[i] = np.array([ float(d) for d in data ])
+                    i += 1
+
+
+        # Estimate params.
+        tapmodel = TAPModel(graph, atheta)
+        tapmodel.build()
+
+class TestTAPModelRealData(unittest.TestCase):
+    def test_build(self):
+        corpus = dfr.read_corpus(datapath + '/dfr', features=['uni'])
+        def filt(s, C, DC):
+            if C > 3 and DC > 1 and len(s) > 3:
+                return True
+            return False
+        corpus.filter_features('unigrams', 'unigramsF', filt)
+        corpus.slice('date', 'time_period', window_size=3)
+
+        G = GraphCollection().build(corpus, 'date', 'authors', 'coauthors')
+        graph = G.graphs[1965]
+
+        manager = MALLETModelManager(corpus, 'unigramsF', mallet_path=mallet_path)
+        manager.prep()
+        model = manager.build(Z=20, max_iter=100)
+
+        tmanager = TAPModelManager(corpus, model=model)
+        authors = { n[1]['label']:n[0] for n in graph.nodes(data=True) }
+        atheta = tmanager.author_theta(corpus.all_papers(), authors, indexed_by='doi')
+        atheta[17][0] = 0.999
+        atheta[14][0] = 0.555
+
+        tapmodel = TAPModel(graph, atheta)
+
+        before = np.sum(tapmodel.r[11])
+        tapmodel._update_r()
+        after = np.sum(tapmodel.r[11])
+        self.assertNotEqual(before, after)
+
+        before = np.sum(tapmodel.a[11])
+        tapmodel._update_a()
+        after = np.sum(tapmodel.a[11])
+        self.assertNotEqual(before, after)
+
+        tapmodel.iteration = 100
+
+        tapmodel.build()
+
+        mu = tapmodel._calculate_mu()
+        sampleweight = tapmodel.MU[0].edges(data=True)[0][2]['weight']
+        sampletheta = tapmodel.MU[0].nodes(data=True)[0][1]['theta']
+        self.assertEqual(type(sampleweight), float)
+        self.assertEqual(type(sampletheta), float)
 
 class TestTAPModel(unittest.TestCase):
     def setUp(self):

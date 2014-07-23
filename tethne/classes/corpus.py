@@ -124,7 +124,7 @@ class Corpus(object):
                         exclude=exclude, filt=filt  )
         
     def index(self, papers, features=None, index_by='ayjid',
-                    index_citation_by='ayjid', exclude=set([]), filt=None):
+                    index_citation_by='ayjid', exclude=set([]), filt=None, stem=False):
         """
         Indexes `papers`, `features`, and `citations` (if present).
         This should be called automatically from :func:`.__init__`, unless
@@ -153,10 +153,6 @@ class Corpus(object):
             Takes a lambda function that returns True if a feature should be 
             included.
         """
-
-        # Check if data is a list of Papers.
-        if type(papers) is not list or type(papers[0]) is not Paper:
-            raise(ValueError("papers must be a list of Paper objects."))
         
         # Check if index_by is a valid key.
         self.datakeys = papers[0].keys()
@@ -177,7 +173,16 @@ class Corpus(object):
         # Tokenize and index features.
         if features is not None:
             for ftype, fdict in features.iteritems():   # e.g. unigrams, bigrams
-                tokd = self._tokenize_features(ftype, fdict, exclude, filt)
+
+                # Stem only for unigrams, when requested.
+                if stem and ftype == 'unigrams':    # Use stemming?
+                    from nltk.stem.porter import PorterStemmer
+                    stemmer = PorterStemmer()
+                    transformer = stemmer.stem
+                else:
+                    transformer = None
+                
+                tokd = self._tokenize_features(ftype, fdict, exclude, filt, transformer=transformer)
                 ft, fi, fs, c, dC = tokd
                 self._define_features(ft, fi, fs, c, dC)
         else:
@@ -305,7 +310,7 @@ class Corpus(object):
         self.N_c = len(self.citations)
         logger.debug('indexed {0} citations'.format(self.N_c))
 
-    def _tokenize_features(self, ftype, fdict, exclude=set([]), filt=None):
+    def _tokenize_features(self, ftype, fdict, exclude=set([]), filt=None, transformer=None):
         """
         
         Parameters
@@ -353,6 +358,11 @@ class Corpus(object):
                 return True
             return False
         
+        def _transform(string):
+            if transformer is None:
+                return string
+            return transformer(string)
+        
         logger.debug('tokenizing features of type {0}'.format(ftype))
 
         features = {}
@@ -363,7 +373,7 @@ class Corpus(object):
         # List of unique tokens.
         ftokenset = set([ unidecode(unicode(f)) for k,fval in fdict.items()
                                                 for f,v in fval])
-        ftokens = [ s for s in list(ftokenset - exclude) if filt(s) ]    # e.g. stopwords.
+        ftokens = list(set([ _transform(s) for s in list(ftokenset - exclude) if filt(s) ]))
         logger.debug('found {0} unique tokens'.format(len(ftokens)))
 
         # Create forward and reverse indices.
@@ -465,7 +475,7 @@ class Corpus(object):
 
         logger.debug('done indexing features')                
         
-    def abstract_to_features(self, remove_stopwords=True):
+    def abstract_to_features(self, remove_stopwords=True, stem=True):
         """
         Generates a set of unigram features from the abstracts of Papers.
         
@@ -475,6 +485,8 @@ class Corpus(object):
         ----------
         remove_stopwords : bool
             (default: True) If True, passes tokenizer the NLTK stoplist.
+        stem : bool
+            (default: True) If True, passes tokenizer the NLTK Porter stemmer.
             
         Examples
         --------
@@ -496,9 +508,19 @@ class Corpus(object):
                 unigrams[p] = term_counts.items()
             
         logger.debug('abstract_to_features: generated features.')
-        stoplist = set(stopwords.words())
+        if remove_stopwords:    # Use stoplist?
+            stoplist = set(stopwords.words())
+        else:
+            stoplist = set([])
+        
+        if stem:    # Use stemming?
+            from nltk.stem.porter import PorterStemmer
+            stemmer = PorterStemmer()
+            transformer = stemmer.stem
+        else:
+            transformer = None
                 
-        tokd = self._tokenize_features('abstractTerms', unigrams, stoplist)
+        tokd = self._tokenize_features('abstractTerms', unigrams, exclude=stoplist, transformer=transformer)
         ft, fi, fs, c, dC = tokd
         self._define_features(ft, fi, fs, c, dC)
 
@@ -1416,21 +1438,27 @@ def _migrate_values(fromD, toD):
     """
 
     # Transfer papers.
-    toD.papers = { k:v for k,v in fromD.papers.iteritems() }
+    for k,v in fromD.papers.iteritems():
+        toD.papers[k] = v
 
     # Transfer citations.
-    toD.citations = { k:v for k,v in fromD.citations.iteritems() }
-    toD.papers_citing = {k:v for k,v in fromD.papers_citing.iteritems() }
+    for k,v in fromD.citations.iteritems():
+        toD.citations[k] = v
+
+    for k,v in fromD.papers_citing.iteritems():
+        toD.papers_citing[k] = v
 
     # Transfer authors.
-    toD.authors = {k:v for k,v in fromD.authors.iteritems() }
+    for k,v in fromD.authors.iteritems():
+        toD.authors[k] = v
 
     # Transfer features.
     for k, v in fromD.features.iteritems():
         toD._define_features(k, v['index'], v['features'], v['counts'], v['documentCounts'])
         
     # Transfer axes.
-    toD.axes = { k:v for k,v in fromD.axes.iteritems() }
+    for k,v in fromD.axes.iteritems():
+        toD.axes[k] = v
 
     toD.N_a = len(fromD.authors)
     toD.N_c = len(fromD.citations)
