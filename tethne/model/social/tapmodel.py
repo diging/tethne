@@ -5,7 +5,7 @@ Classes and methods related to the :class:`.TAPModel`\.
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel('ERROR')
+logger.setLevel('DEBUG')
 
 import numpy as np
 import networkx as nx
@@ -202,9 +202,9 @@ class TAPModel(object):
                     fmx[k] = float(self.b[i][0,k] + self.a[i][0,k])
                     smx[k] = float(self.b[i][1,k] + self.a[i][1,k])
                     maxk[k] = 0
-                    # Setting a minimum difference >> 1e-8 to avoid weird
+                    # Setting a minimum difference >> 1e-5 to avoid weird
                     #  precision issues.
-                    if smx[k] - fmx[k] > float(1e-8):
+                    if smx[k] - fmx[k] > float(1e-5):
                         inter = float(fmx[k])
                         inter_ = float(smx[k])
                         fmx[k] = float(inter_)
@@ -215,14 +215,14 @@ class TAPModel(object):
                     for k in xrange(self.T):
                         temp = float(self.a[i][j,k] + self.b[i][j,k])
                         # (see above) precision issues.
-                        if temp - smx[k] > float(1e-8):
+                        if temp - smx[k] > float(1e-5):
                             inter = float(temp)
                             inter_ = float(smx[k])
                             temp = float(inter_)
                             smx[k] = float(inter)
                     
                         # (see above) precision issues.
-                        if smx[k] - fmx[k] > float(1e-8):
+                        if smx[k] - fmx[k] > float(1e-5):
 
                             inter = float(fmx[k])
                             inter_ = float(smx[k])
@@ -271,7 +271,7 @@ class TAPModel(object):
                     for k in xrange(self.T):
                         smx[j][k] = min( self.r[neighbour][pos, k], 0. )
                         # (see above) precision issues.
-                        if smx[j][k] - fmx[j][k] > float(1e-8):
+                        if smx[j][k] - fmx[j][k] > float(1e-5):
                             inter = float(fmx[j][k])
                             inter_ = float(smx[j][k])
                             fmx[j][k] = float(inter_)
@@ -286,14 +286,14 @@ class TAPModel(object):
                         for k in xrange(self.T):
                             temp = min ( self.r[neighbour][pos,k] , 0. )
                             # (see above) precision issues.
-                            if temp - smx[j][k] > float(1e-8):
+                            if temp - smx[j][k] > float(1e-5):
                                 inter = float(temp)
                                 inter_ = float(smx[j][k])
                                 temp = float(inter_)
                                 smx[j][k] = float(inter)
                             
                             # (see above) precision issues.
-                            if smx[j][k] - fmx[j][k] > float(1e-8):
+                            if smx[j][k] - fmx[j][k] > float(1e-5):
                                 inter = float(fmx[j][k])
                                 inter_ = float(smx[j][k])
                                 fmx[j][k] = float(inter_)
@@ -343,7 +343,7 @@ class TAPModel(object):
                         last = float(f)
     
                 if self.iteration > 20:
-                    if self.yold[i][k] != j_max and (j_max_value - self.yold_values[i][k]) > float(1e-8):
+                    if self.yold[i][k] != j_max and (j_max_value - self.yold_values[i][k]) > float(1e-5):
                         dc += 1
                         self.yold[i][k] = int(j_max)
                         self.yold_values[i][k] = float(j_max_value)

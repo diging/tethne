@@ -1,0 +1,67 @@
+many bugfixes, esp to TAPModel
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch python
+# Your branch is up-to-date with 'origin/python'.
+#
+# Changes to be committed:
+#	modified:   tests/sandbox/out/ll.png
+#	modified:   tests/sandbox/out/model.mallet
+#	modified:   tests/sandbox/out/model_run/em_log.dat
+#	modified:   tests/sandbox/out/model_run/initial-lda-ss.dat
+#	modified:   tests/sandbox/out/model_run/initial-lda.beta
+#	modified:   tests/sandbox/out/model_run/lda-seq/gam.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/info.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/lhoods.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/topic-000-info.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/topic-000-var-e-log-prob.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/topic-000-var-obs.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/topic-001-info.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/topic-001-var-e-log-prob.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/topic-001-var-obs.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/topic-002-info.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/topic-002-var-e-log-prob.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/topic-002-var-obs.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/topic-003-info.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/topic-003-var-e-log-prob.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/topic-003-var-obs.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/topic-004-info.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/topic-004-var-e-log-prob.dat
+#	modified:   tests/sandbox/out/model_run/lda-seq/topic-004-var-obs.dat
+#	modified:   tests/sandbox/out/topic_0_over_time.png
+#	modified:   tests/sandbox/out/topic_1_over_time.png
+#	new file:   tests/sandbox/temp/Corpus-179917ef-cc82-4313-beee-e7eacd61c58d.h5
+#	new file:   tests/sandbox/temp/Corpus-250c27b7-0034-4114-b810-65f6ac74a322.h5
+#	new file:   tests/sandbox/temp/Corpus-3c6b2104-1fd9-4eec-abda-9ec5b7125eb6.h5
+#	new file:   tests/sandbox/temp/Corpus-56b8530f-6923-4be0-9228-0796780d0445.h5
+#	new file:   tests/sandbox/temp/Corpus-73d1a728-b335-460b-b20c-1af335913966.h5
+#	new file:   tests/sandbox/temp/Corpus-fa88b9e9-03d1-404b-aa4c-24db9cda26fd.h5
+#	modified:   tests/sandbox/temp/dt.dat
+#	modified:   tests/sandbox/temp/input.mallet
+#	modified:   tests/sandbox/temp/tethne-meta.dat
+#	modified:   tests/sandbox/temp/tethne-mult.dat
+#	modified:   tests/sandbox/temp/tethne-seq.dat
+#	modified:   tests/sandbox/temp/tethne-vocab.dat
+#	modified:   tests/sandbox/temp/tethne_docs.txt
+#	modified:   tests/sandbox/temp/wt.dat
+#	modified:   tests/settings.py
+#	renamed:    tests/test_analyze_cocitation.py -> tests/test_analyze_collection_cocitation.py
+#	modified:   tests/test_classes_graphcollection.py
+#	modified:   tests/test_model_manager_dtmmodelmanager.py
+#	modified:   tests/test_model_manager_malletmodelmanager.py
+#	modified:   tests/test_model_manager_tapmodelmanager.py
+#	modified:   tests/test_model_social_tapmodel.py
+#	renamed:    tests/test_persistence_hdf5_datacollection.py -> tests/test_persistence_hdf5_corpus.py
+#	modified:   tests/test_readers_dfr.py
+#	deleted:    tethne/analyze/cocitation.py
+#	modified:   tethne/analyze/corpus.py
+#	modified:   tethne/classes/corpus.py
+#	modified:   tethne/model/corpus/ldamodel.py
+#	modified:   tethne/model/managers/dtm.py
+#	modified:   tethne/model/managers/tap.py
+#	modified:   tethne/model/social/tapmodel.py
+#	modified:   tethne/networks/__init__.py
+#	modified:   tethne/networks/features.py
+#	modified:   tethne/readers/dfr.py
+#

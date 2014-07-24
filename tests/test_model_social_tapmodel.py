@@ -70,8 +70,6 @@ class TestTAPModelRealData(unittest.TestCase):
         tmanager = TAPModelManager(corpus, model=model)
         authors = { n[1]['label']:n[0] for n in graph.nodes(data=True) }
         atheta = tmanager.author_theta(corpus.all_papers(), authors, indexed_by='doi')
-        atheta[17][0] = 0.999
-        atheta[14][0] = 0.555
 
         tapmodel = TAPModel(graph, atheta)
 

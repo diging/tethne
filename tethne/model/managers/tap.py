@@ -15,7 +15,7 @@ import networkx as nx
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel('ERROR')
+logger.setLevel('DEBUG')
 
 from ...classes import GraphCollection
 from ..social import TAPModel
@@ -150,11 +150,11 @@ class TAPModelManager(SocialModelManager):
                         a_topics[a] = [ dist ]
 
             except KeyError:    # May not be corpus model repr for all papers.
-                # In that case, just give 0. values for those authors.
+                # In that case, just give zero values for those authors.
                 logger.debug('TAPModelManager.author_theta(): KeyError on {0}'
                                                         .format(p[indexed_by]))
 
-                dist = np.zeros(( self.topicmodel.Z ))
+                dist = np.array(np.zeros(self.topicmodel.Z))
                 # Give 0 values for authors.
                 for author in p.authors():
                     if authors is not None:
@@ -176,8 +176,11 @@ class TAPModelManager(SocialModelManager):
             a_dist = np.zeros(( self.topicmodel.Z ))
             for dist in dists:
                 a_dist += dist
-            a_dist = a_dist/np.linalg.norm(a_dist)
-            a_theta[a] = a_dist/np.sum(a_dist)   # Should sum to <= 1.0.
+            if np.sum(a_dist) != 0.0:
+                a_dist = a_dist/np.linalg.norm(a_dist)
+                a_theta[a] = a_dist/np.sum(a_dist)   # Should sum to <= 1.0.
+            else:
+                a_theta[a] = np.array([1e-6]*self.topicmodel.Z)
 
         return a_theta
     
