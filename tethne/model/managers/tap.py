@@ -177,8 +177,7 @@ class TAPModelManager(SocialModelManager):
             for dist in dists:
                 a_dist += dist
             if np.sum(a_dist) != 0.0:
-                a_dist = a_dist/np.linalg.norm(a_dist)
-                a_theta[a] = a_dist/np.sum(a_dist)   # Should sum to <= 1.0.
+                a_theta[a] = a_dist/len(dists)
             else:
                 a_theta[a] = np.array([1e-6]*self.topicmodel.Z)
 
