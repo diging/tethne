@@ -178,7 +178,7 @@ class TAPModel(object):
             self.a[i] = np.zeros((len(n)+1, self.T))
     
 
-            for z in xrange(self.T):
+            for z in xrange(self.T):    # TODO: simplify this.
                 sum_ = np.sum(self.g[i][:,z])
                 for j in xrange(len(n)+1):
                     self.b[i][j,z] = np.log(self.g[i][j,z]/sum_)
@@ -354,10 +354,10 @@ class TAPModel(object):
             nc = 0
     
         cont = True
-        if nc == 50:
+        if nc == 5:
             cont = False
         
-        return nc, cont
+        return nc, cont, dc
 
     def _calculate_mu(self):
         self.MU = {}
@@ -379,10 +379,6 @@ class TAPModel(object):
                 
                         j_i = eq_9(i, j_, k)
                         i_j = eq_9(j, i_, k)
-#                        j_i = 1./ (1. + \
-#                              np.exp(-1. * (self.r[i][j_,k] + self.a[i][j_,k])))
-#                        i_j = 1./ (1. + \
-#                              np.exp(-1. * (self.r[j][i_,k] + self.a[j][i_,k])))
 
                         if j_i > i_j:   # Add only strongest edge.
                             subg.add_edge(j, i, weight=float(j_i))
@@ -433,7 +429,7 @@ class TAPModel(object):
                             self.r[i][j_,k] = alt_r[i][alt_j_,k]
                             self.a[i][j_,k] = alt_a[i][alt_j_,k]
 
-    def build(self, max_iter=500):
+    def build(self, max_iter=1000):
         """
         Estimate the :class:`.TAPModel`\.
         
@@ -447,17 +443,20 @@ class TAPModel(object):
         """
         logger.debug('start iterations')
         nc = 0
-        self.iteration = 0.
+        self.iteration = 0
         cont = True
 
         while cont:
             self.iteration += 1
-            if self.iteration % 10 == 0:
-                logger.debug('iteration {0}, nc={1}'.format(self.iteration, nc))
+            
+            # Check for convergence every 10 iterations.
+            if self.iteration % 10 == 0:            
+                nc,cont, dc = self._check_convergence(nc)            
+                logger.debug('iteration {0}, nc={1}, dc={2}'
+                                                .format(self.iteration, nc, dc))
 
             self._update_r()
             self._update_a()
-            nc,cont = self._check_convergence(nc)
             
             if self.iteration >= max_iter:
                 cont = False
