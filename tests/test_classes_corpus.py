@@ -176,9 +176,14 @@ class TestCorpusDfR(unittest.TestCase):
         # Citations should be the same.
         self.assertEqual(   len(HD.citations), len(self.D.citations)    )
         self.assertEqual(   len(HD.papers_citing), len(self.D.papers_citing)   )
+        self.assertEqual(   set(HD.papers_citing.keys()),
+                            set(self.D.papers_citing.keys())    )
         
         # Authors should be the same.
         self.assertEqual(   len(HD.authors), len(self.D.authors)    )
+        self.assertEqual(set(HD.authors.keys()), set(self.D.authors.keys()))
+        for k in self.D.authors.keys():
+            self.assertTrue(k in HD.authors)
 
         # Features should be the same.
         self.assertEqual(   len(HD.features['unigrams']['index']),
@@ -189,6 +194,8 @@ class TestCorpusDfR(unittest.TestCase):
                             len(self.D.features['unigrams']['counts'])   )
         self.assertEqual(   len(HD.features['unigrams']['documentCounts']),
                             len(self.D.features['unigrams']['documentCounts']) )
+        self.assertEqual(   len(HD.features['unigrams']['papers']),
+                            len(self.D.features['unigrams']['papers']) )
 
         # Axes should be the same.
         self.assertEqual(   len(HD.axes), len(self.D.axes)  )
@@ -208,9 +215,14 @@ class TestCorpusDfR(unittest.TestCase):
         # Citations should be the same.
         self.assertEqual(   len(HD.citations), len(D_.citations)    )
         self.assertEqual(   len(HD.papers_citing), len(D_.papers_citing)   )
+        self.assertEqual(   set(HD.papers_citing.keys()),
+                            set(D_.papers_citing.keys())    )
         
         # Authors should be the same.
         self.assertEqual(   len(HD.authors), len(D_.authors)    )
+        self.assertEqual(set(HD.authors.keys()), set(D_.authors.keys()))
+        for k in D_.authors.keys():
+            self.assertTrue(k in HD.authors)
 
         # Features should be the same.
         self.assertEqual(   len(HD.features['unigrams']['index']),

@@ -3,9 +3,9 @@ A :class:`.Corpus` organizes :class:`.Paper`\s for analysis.
 """
 
 import logging
-logging.basicConfig()
+logging.basicConfig(filename=None, format='%(asctime)-6s: %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(lineno)d - %(message)s')
 logger = logging.getLogger(__name__)
-logger.setLevel('ERROR')
+logger.setLevel('INFO')
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -182,9 +182,10 @@ class Corpus(object):
                 else:
                     transformer = None
                 
-                tokd = self._tokenize_features(ftype, fdict, exclude, filt, transformer=transformer)
-                ft, fi, fs, c, dC = tokd
-                self._define_features(ft, fi, fs, c, dC)
+                tokd = self._tokenize_features( ftype, fdict, exclude, filt,
+                                                transformer=transformer )
+                ft, fi, fs, c, dC, fp = tokd
+                self._define_features(ft, fi, fs, c, dC, fp)
         else:
             logger.debug('features is None, skipping tokenization.')
             pass
@@ -218,10 +219,10 @@ class Corpus(object):
         """
     
         tokd = self._tokenize_features(name, features, exclude, filt)
-        ft, fi, fs, c, dC = tokd
-        self._define_features(ft, fi, fs, c, dC)
+        ft, fi, fs, c, dC, fp = tokd
+        self._define_features(ft, fi, fs, c, dC, fp)
 
-    def _define_features(self, name, index, features, counts, documentCounts):
+    def _define_features(self, name, index, features, counts, documentCounts, fpapers):
         """
         Update :prop:`.features` with a tokenized featureset.
         """
@@ -230,7 +231,8 @@ class Corpus(object):
             'index': index,         # { int(f_i) : str(f) }
             'features': features,   # { str(p) : [ ( f_i, c) ] }
             'counts': counts,       # { int(f_i) : int(C) }
-            'documentCounts': documentCounts    # { int(f_i) : int(C) }
+            'documentCounts': documentCounts,   # { int(f_i) : int(C) }
+            'papers': fpapers       # { int(f_i) : [ (str(p), c ] }
             }
 
     def _index_papers_by_author(self):
@@ -269,6 +271,8 @@ class Corpus(object):
         
         citations = {}
         
+        fpapers = {}
+        
         papers_citing = {}
         
         for paper in papers:
@@ -292,8 +296,10 @@ class Corpus(object):
                         citations[c] = citation
                     
                     if c not in papers_citing:
+                        fpapers[c_i] = [ (p, 1) ]
                         papers_citing[c] = [ p ]
                     else:
+                        fpapers[c_i].append( (p, 1) )
                         papers_citing[c].append(p)
     
         # Separating this part allows for more flexibility in what sits behind
@@ -305,12 +311,13 @@ class Corpus(object):
             self.citations[k] = v
     
         self._define_features('citations', citation_index, cited,
-                                citation_counts, citation_counts)
+                                citation_counts, citation_counts, fpapers)
 
         self.N_c = len(self.citations)
         logger.debug('indexed {0} citations'.format(self.N_c))
 
-    def _tokenize_features(self, ftype, fdict, exclude=set([]), filt=None, transformer=None):
+    def _tokenize_features( self, ftype, fdict, exclude=set([]),
+                            filt=None, transformer=None ):
         """
         
         Parameters
@@ -318,7 +325,6 @@ class Corpus(object):
         ftype : str
             Name of featureset.
         fdict : dict
-        features : dict
             Contains dictionary `{ i: [ (f, w) ] }` where `i` is an
             index for papers (see kwarg `index_by`), `f` is a feature (e.g. an
             N-gram), and `w` is a weight on that feature (e.g. a count).
@@ -380,21 +386,30 @@ class Corpus(object):
         findex = { i:ftokens[i] for i in xrange(len(ftokens)) }
         findex_ = { v:k for k,v in findex.iteritems() }     # lookup.
         logger.debug('created forward and reverse indices.')
-        
+
+        # Holds a list of (document, count) tuples for each feature.
+        fpapers = {}
+
         # Tokenize.
         for key, fval in fdict.iteritems(): # fval is a list of tuples.
             if type(fval) is not list or type(fval[0]) is not tuple:
                 raise ValueError('Malformed features data.')
 
-            tokenized = [ (findex_[f],w)    # unidecode(unicode(f))
-                            for f,w in fval 
-                            if _handle(f,w) ]   # unidecode(unicode(f))
+            tokenized = []
+            for f,w in fval:
+                if _handle(f,w):
+                    tokenized.append( ( findex_[f], w ) )
+                    try:
+                        fpapers[findex_[f]].append( ( key, w ) )
+                    except KeyError:
+                        fpapers[findex_[f]] = [ ( key, w ) ]
+
             features[key] = tokenized
             for t,w in tokenized:
                 documentCounts[t] += 1
             
         logger.debug('done tokenizing features')
-        return ftype, findex, features, counts, documentCounts
+        return ftype, findex, features, counts, documentCounts, fpapers
     
     def filter_features(self, fold, fnew, filt):
         """
@@ -457,21 +472,31 @@ class Corpus(object):
         findex = { i:ftokens[i] for i in xrange(Ntokens) }
         findex_ = { v:k for k,v in findex.iteritems() }
 
+        fpapers = { i:[] for i in findex.keys() }
+
         logger.debug('created forward and reverse indices.')
 
         feats = fdict['features']
         
+        
         for key, fval in feats.iteritems():
             if type(fval) is not list or type(fval[0]) is not tuple:
-                raise ValueError('Malformed features data.')       
-                     
-            tokenized = [ (findex_[fdict['index'][f]],w)
-                          for f,w in fval if _handle(fdict['index'][f],w) ]
+                raise ValueError('Malformed features data.')
+            
+            tokenized = []
+            
+            for f,w in fval:
+                if _handle(fdict['index'][f],w):
+                    f_ = findex_[fdict['index'][f]]
+                    tokenized.append( (f_,w) )
+                    fpapers[f_].append( ( key, w ))
+#            tokenized = [ (findex_[fdict['index'][f]],w)
+#                          for f,w in fval if _handle(fdict['index'][f],w) ]
             features[key] = tokenized
             for f,w in tokenized:
                 documentCounts[f] += 1
                 
-        self._define_features(fnew, findex, features, counts, documentCounts)                
+        self._define_features(fnew, findex, features, counts, documentCounts, fpapers)
 
         logger.debug('done indexing features')                
         
@@ -520,9 +545,11 @@ class Corpus(object):
         else:
             transformer = None
                 
-        tokd = self._tokenize_features('abstractTerms', unigrams, exclude=stoplist, transformer=transformer)
-        ft, fi, fs, c, dC = tokd
-        self._define_features(ft, fi, fs, c, dC)
+        tokd = self._tokenize_features( 'abstractTerms', unigrams,
+                                        exclude=stoplist,
+                                        transformer=transformer )
+        ft, fi, fs, c, dC, fp = tokd
+        self._define_features(ft, fi, fs, c, dC, fp)
 
         return unigrams
     
@@ -1436,29 +1463,42 @@ def _migrate_values(fromD, toD):
     toD : :class:`.Corpus`
         Updated target :class:`.Corpus`
     """
+    
+    logger.debug('migrate values')
 
     # Transfer papers.
     for k,v in fromD.papers.iteritems():
         toD.papers[k] = v
+    logger.debug('papers: {0}->{1}'.format(len(fromD.papers), len(toD.papers)))
 
     # Transfer citations.
     for k,v in fromD.citations.iteritems():
         toD.citations[k] = v
+    logger.debug('citations: {0}->{1}'
+                              .format(len(fromD.citations), len(toD.citations)))
 
     for k,v in fromD.papers_citing.iteritems():
         toD.papers_citing[k] = v
+    logger.debug('papers_citing: {0}->{1}'
+                      .format(len(fromD.papers_citing), len(toD.papers_citing)))
 
     # Transfer authors.
     for k,v in fromD.authors.iteritems():
         toD.authors[k] = v
+    logger.debug('authors: {0}->{1}'
+                                  .format(len(fromD.authors), len(toD.authors)))
 
     # Transfer features.
     for k, v in fromD.features.iteritems():
-        toD._define_features(k, v['index'], v['features'], v['counts'], v['documentCounts'])
-        
+        toD._define_features(   k, v['index'], v['features'], v['counts'],
+                                   v['documentCounts'], v['papers']    )
+    logger.debug('features: {0}->{1}'
+                                .format(len(fromD.features), len(toD.features)))
+
     # Transfer axes.
     for k,v in fromD.axes.iteritems():
         toD.axes[k] = v
+    logger.debug('axes: {0}->{1}'.format(len(fromD.axes), len(toD.axes)))
 
     toD.N_a = len(fromD.authors)
     toD.N_c = len(fromD.citations)

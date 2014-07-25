@@ -5,18 +5,21 @@ import unittest
 import warnings
 
 from tethne.readers import wos, dfr
-from tethne.classes import DataCollection, GraphCollection
+from tethne.classes import Corpus, GraphCollection
 from tethne.networks.authors import coauthors
 from tethne.persistence.hdf5.graphcollection import HDF5Graph, HDF5GraphCollection
 from tethne.persistence.hdf5.util import get_h5file, get_or_create_group
 
-import cPickle as pickle
-with open('{0}/dfr_DataCollection.pickle'.format(picklepath), 'r') as f:
-    D = pickle.load(f)
-
 import os
 
 import networkx as nx
+
+dfrdatapath = '{0}/dfr'.format(datapath)
+ngrams = dfr.ngrams(dfrdatapath, 'uni')
+papers = dfr.read(dfrdatapath)
+
+D = Corpus(papers, index_by='doi')
+D.slice('date', method='time_period', window_size=1)
 
 class TestHDF5Graph(unittest.TestCase):
     def setUp(self):
@@ -85,7 +88,7 @@ class TestGraphCollection(unittest.TestCase):
     
         self.G_ = GraphCollection()
 
-        for k,v in D.get_slices('date', include_papers=True).iteritems():
+        for k,v in D.get_slices('date', papers=True).iteritems():
             self.G_[k] = coauthors(v)
 
         self.G = HDF5GraphCollection(self.G_, datapath=self.h5path)
