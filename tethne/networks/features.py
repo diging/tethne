@@ -8,12 +8,17 @@ includes keywords, abstract terms, etc.
    topic_coupling
 """
 
+import logging
+logging.basicConfig(filename=None, format='%(asctime)-6s: %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(lineno)d - %(message)s')
+logger = logging.getLogger(__name__)
+logger.setLevel('INFO')
+
 import numpy as np
 import networkx as nx
 from scipy.sparse import coo_matrix
 
 def cooccurrence_matrix(papers, featureset, indexed_by='doi', flist=None,
-                            dense=False, **kwargs):
+                        min_count=5, min_docs=5, dense=False, **kwargs):
     """
     Generate a sparse cooccurrence matrix for features in ``featureset``.
     
@@ -23,6 +28,9 @@ def cooccurrence_matrix(papers, featureset, indexed_by='doi', flist=None,
     I = []
     J = []
     K = []
+
+    logger.debug('{0} papers, {1} features, indexed by {2}'
+                    .format(len(papers), len(featureset['index']), indexed_by))
 
     features = featureset['features']
     index = featureset['index']
@@ -62,14 +70,17 @@ def nPMI(cooccurrence, i, j):
     return ( np.log( p_ij/(p_i*p_j) ) ) / ( -1* np.log(p_ij) )
 
 def pointwise_mutual_information(papers, featureset, indexed_by='doi', flist=None, threshold=0.9, **kwargs):
+    logger.debug('{0} papers, {1} features, indexed by {2}'
+                    .format(len(papers), len(featureset['index']), indexed_by))
+
     graph = nx.Graph()
     cooccurrence = cooccurrence_matrix(papers, featureset, indexed_by, flist)
     index = featureset['index']
     Nfeat = len(index)
-    
     for i in xrange(Nfeat):
         j_slice = cooccurrence[i, :].nonzero()
         j_slice_ = cooccurrence[:, i].nonzero()
+
         print j_slice
 #        for j in xrange(i+1, Nfeat):
 #            pmi = nPMI(cooccurrence, i, j)

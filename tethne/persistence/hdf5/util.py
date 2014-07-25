@@ -5,9 +5,9 @@ TODO: move away from index table pattern, toward index array pattern.
 """
 
 import logging
-logging.basicConfig()
+logging.basicConfig(filename=None, format='%(asctime)-6s: %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(lineno)d - %(message)s')
 logger = logging.getLogger(__name__)
-logger.setLevel('ERROR')
+logger.setLevel('INFO')
 
 import numpy
 import tables
@@ -283,11 +283,8 @@ class HDF5Features(dict):
         self.h5file = h5file
         
         # Load or create features group.
-        if '/features' not in self.h5file:
-            self.group = self.h5file.createGroup('/', 'features')
-        else:
-            self.group = self.h5file.getNode('/features')
-        
+        self.group = get_or_create_group(self.h5file, 'features')
+
     def __setitem__(self, key, value):
         logger.debug('HDF5Features.___setitem__ for key {0}.'.format(key))
         
@@ -318,10 +315,8 @@ class HDF5FeatureSet(dict):
         self.h5file = h5file
         
         # Load or create a group.
-        if name not in fgroup:
-            self.group = self.h5file.createGroup(fgroup, name)
-        else:
-            self.group = self.h5file.getNode(fgroup, name)
+        self.group = get_or_create_group(self.h5file, name, fgroup)
+
         self.name = name
 
         dict.__setitem__(self, 'features', HDF5FeatureValues(h5file, self.group))
@@ -329,16 +324,32 @@ class HDF5FeatureSet(dict):
         logger.debug('...done.')
 
     def __setitem__(self, key, value):
-        logger.debug('HDF5Feature ({0}): __setitem__ for key {1}, and value with length {2}.'.format(self.name, key, len(value)))    
+        logger.debug('HDF5Feature ({0}): __setitem__ for key {1}, length {2}.'
+                                            .format(self.name, key, len(value)))
 
         if key not in self:
+            logger.debug('{0} does not exist, creating...'.format(key))
             if key == 'features':
-                dict.__setitem__(self, 'features', HDF5FeatureValues(self.h5file, self.group, value))
+                dict.__setitem__(self, key,
+                    HDF5SparseValues(   self.h5file, self.group, key,
+                                        tables.atom.Int32Atom(),
+                                        tables.atom.Float64Atom(),
+                                        tables.atom.StringAtom(100) )    )
+#                    HDF5FeatureValues( self.h5file, self.group )    )
+            elif key == 'papers':
+                dict.__setitem__(self, key,
+                    HDF5SparseValues(   self.h5file, self.group, key,
+                                        tables.atom.StringAtom(100),
+                                        tables.atom.Float64Atom(),
+                                        tables.atom.Int32Atom() )    )
+                for k,v in value.iteritems():
+                    self[key][k] = v
             else:
                 values = numpy.array([ value[k] for k in sorted(value.keys()) ])
-                dict.__setitem__(self, key, HDF5ArrayDict(self.h5file, self.group, key, values))
-
+                dict.__setitem__(self, key,
+                    HDF5ArrayDict( self.h5file, self.group, key, values ) )
         else:
+            logger.debug('setting values for {0}...'.format(key))
             for k,v in value.iteritems():
                 self[key][k] = v
         
@@ -347,9 +358,22 @@ class HDF5FeatureSet(dict):
             return dict.__getitem__(self, key)
         except KeyError:
             if key == 'features':
-                dict.__setitem__(self, 'features', HDF5FeatureValues(self.h5file, self.group, []))
+                dict.__setitem__(self, key,
+                    HDF5SparseValues(   self.h5file, self.group, key,
+                                        tables.atom.Int32Atom(),
+                                        tables.atom.Float64Atom(),
+                                        tables.atom.StringAtom(100) )    )
+#                    HDF5FeatureValues( self.h5file, self.group )  )
+            elif key == 'papers':
+                dict.__setitem__(self, key,
+                    HDF5SparseValues(   self.h5file, self.group, key,
+                                        tables.atom.StringAtom(100),
+                                        tables.atom.Float64Atom(),
+                                        tables.atom.Int32Atom() )    )
             else:
-                dict.__setitem__(self, key, HDF5ArrayDict(self.h5file, self.group, key, []))
+                dict.__setitem__(self, key,
+                    HDF5ArrayDict( self.h5file, self.group, key, [] )   )
+
             return dict.__getitem__(self, key)
 
 class HDF5ArrayDict(dict):
@@ -358,12 +382,9 @@ class HDF5ArrayDict(dict):
         self.group = group
         self.name = name
         
-        # Load or create a new array.
-        if name not in self.group:
-            self.array = self.h5file.create_array(self.group, self.name, values)
-        else:
-            self.array = self.h5file.getNode(self.group, name)
-        
+        # Load or create a new array. def get_or_create_array(h5file, group, name, values):
+        self.array = get_or_create_array(self.h5file, self.group, name, values)
+
     def __setitem__(self, key, value):
         self.array[key] = value
     
@@ -388,16 +409,70 @@ class HDF5ArrayDict(dict):
     def keys(self):
         return range(len(self.array))
         
+class HDF5SparseValues(dict):
+    """
+    
+    Parameters
+    ----------
+    h5file
+    group
+    name
+    iatom
+    katom
+    indexatom
+    """
+    def __init__(self, h5file, group, name, iatom, katom, indexatom):
+        logger.debug('initialize HDF5SparseValues for {0}'.format(name))
+        self.h5file = h5file
+        self.group = get_or_create_group(self.h5file, name, group)
+    
+        # For sparse arrays like index:[ (i1,k1), (i2,k2) ... (iN,kN) ], self.I
+        #  holds a vlarray index:[ i1,i2,...iN ], and self.K holds a vlarray
+        #  index:[ k1,k2,...kN ].
+        self.I = vlarray_dict(  h5file, self.group,
+                                '{0}_I'.format(name),
+                                iatom, indexatom    )
+        self.K = vlarray_dict(  h5file, self.group,
+                                '{0}_K'.format(name),
+                                katom, indexatom    )
+
+    def __setitem__(self, key, value):
+        # Split sparse vector [ (i1,k1), (i2,k2) ... (iN,kN) ] into constituents
+        # [ i1,i2,...iN ] and [ k1,k2,...kN ].
+        try:
+            I_values, K_values = zip(*value)
+        except:     # OK to store empty vectors.
+            I_values = []
+            K_values = []
+        
+        # Store the constituent vectors separately.
+        self.I[key] = I_values
+        self.K[key] = K_values
+
+    def __getitem__(self, key):
+        # Load constituent vectors [ i1,i2,...iN ] and [ k1,k2,...kN ], and
+        #  reconstruct sparse vector [ (i1,k1), (i2,k2) ... (iN,kN) ]
+        I_values = self.I[key]
+        K_values = self.K[key]
+
+        return zip(I_values, K_values)
+
+    def __len__(self):
+        return len(self.I)
+    
+    def iteritems(self):
+        i = 0
+        keys = self.I.keys()
+        while i < len(self.I):
+            yield keys[i], self.__getitem__(keys[i])
+            i += 1
 
 class HDF5FeatureValues(dict):
     def __init__(self, h5file, group):
         self.h5file = h5file
         
         # Load or create features group.
-        if 'features' not in group:
-            self.group = self.h5file.createGroup(group, 'features')
-        else:
-            self.group = self.h5file.getNode(group, 'features')
+        self.group = get_or_create_group(self.h5file, 'features', group)
 
         # Load or create documents table.
         if 'documents' not in self.group:
@@ -407,8 +482,6 @@ class HDF5FeatureValues(dict):
             self.documents.cols.mindex.create_index()
         else:
             self.documents = self.h5file.getNode(self.group, 'documents')
-
-        
         self.d = {}
         
     def _get_or_create(self, key, value):
@@ -593,6 +666,8 @@ class vlarray_dict(dict):
     """
 
     def __init__(self, h5file, group, name, atom, keyatom):
+        logger.debug('initialize vlarray_dict with name {0}'.format(name))
+        
         self.h5file = h5file
         self.group = group
         self.name = name
@@ -608,35 +683,52 @@ class vlarray_dict(dict):
 
         # Load or create index.
         if indexname not in self.group:
+            logger.debug('no node for {0} in {1}, creating...'
+                                                 .format(indexname, self.group))
+
             self.index = self.h5file.createTable(self.group, indexname, Index)
             self.index.cols.mindex.createIndex()
         else:
+            logger.debug('found node for {0} in {1}, loading...'
+                                                 .format(indexname, self.group))
+
             self.index = self.h5file.getNode(self.group, indexname)
         
         # Load or create vlarray.
         if self.name not in self.group:
-            self.vlarray = self.h5file.createVLArray(self.group, self.name,
-                                                                 self.atom)
+            logger.debug('no node for VLArray {0} in group {1}, creating...'
+                                                .format(self.name, self.group))
+
+            self.vlarray = self.h5file.createVLArray(   self.group,
+                                                        self.name,
+                                                        self.atom   )
             # Pad with dummy data.
             if self.atom.shape == ():
                 self.vlarray.append([self.atom.dflt])
             else:
                 size = numpy.zeros(shape=self.atom.shape).size
-                padding = numpy.array([ self.atom.dflt for d in xrange(size)]).reshape(self.atom.shape)
+                padding = numpy.array([ self.atom.dflt for d in xrange(size)]) \
+                                                       .reshape(self.atom.shape)
                 self.vlarray.append(padding)
         else:
+            logger.debug('found node for VLArray {0} in group {1}, loading...'
+                                                 .format(self.name, self.group))
             self.vlarray = self.h5file.getNode(self.group, self.name)
             self.atom = self.vlarray.atom
 
+        indexname = 'indices_{0}'.format(self.name)
+        
         # If create, pads with dummy index at 0.
-        if 'I' not in self.group:
-            self.I = self.h5file.createEArray(self.group, 'I', keyatom, (0,))
+        if indexname not in self.group:
+            self.I = self.h5file.createEArray(  self.group,
+                                                indexname,
+                                                keyatom, (0,)   )
             if keyatom.dflt == 0: dflt = -1
             if keyatom.dflt == 0.0: dflt = -1.
             else: dflt = keyatom.dflt
             self.I.append([dflt])
         else:
-            self.I = self.h5file.getNode(self.group, 'I')
+            self.I = self.h5file.getNode(self.group, indexname)
             self.keyatom = self.I.atom
 
     def __setitem__(self, key, value):
@@ -647,23 +739,24 @@ class vlarray_dict(dict):
     def __getitem__(self, key):
         i = list(self.I.read()).index(key)
         data = self.vlarray.read()
+
         if self.atom.shape != ():
             return [[ self.pytype(v) for v in d ] for d in data[i]]
         return [ self.pytype(v) for v in data[i] ]
 
     def __contains__(self,key):
-        size = len([ self._to_paper(x) for x
-                    in self.index.where('mindex == b"{0}"'.format(key)) ])
-        return size > 0
+        return key in self.I.read()
     
     def values(self):
         return [ [ self.pytype(v) for v in x ] for x in self.vlarray ]
     
     def keys(self):
-        return [ x['mindex'] for x in self.index ]  
+        return self.I.read()[1:]
     
     def __len__(self):
         return len(self.vlarray) -1  # Compensate for padding.
 
     def iteritems(self):
-        return { x['mindex']:self[x['mindex']] for x in self.keys() }        
+        indices = self.I.read()
+        values = self.values()
+        return [(indices[i],values[i]) for i in xrange(1, len(self.vlarray))]
