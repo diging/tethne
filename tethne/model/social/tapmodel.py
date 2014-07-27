@@ -102,6 +102,9 @@ class TAPModel(object):
         #   1.2 Eq8, calculate bz,ij
         self._calculate_b()
         logger.debug('Calculated b')
+        
+        
+        self.dc_trace = []
     
     # Obligatory methods.
     def _item_description(self, i, **kwargs):
@@ -342,7 +345,7 @@ class TAPModel(object):
                         j_max_value = float(f)
                         last = float(f)
     
-                if self.iteration > 20:
+                if self.iteration > 50:
                     if self.yold[i][k] != j_max and (j_max_value - self.yold_values[i][k]) > float(1e-5):
                         dc += 1
                         self.yold[i][k] = int(j_max)
@@ -352,9 +355,14 @@ class TAPModel(object):
             nc += 1
         else:
             nc = 0
-    
+        
+        self.dc_trace.append(dc)
         cont = True
-        if nc == 5:
+        
+        pct_change = np.mean(self.dc_trace[-4:])/self.M
+        var_change = np.var(self.dc_trace[-4:])/self.M
+
+        if pct_change < 0.01 and var_change < 0.01:
             cont = False
         
         return nc, cont, dc
