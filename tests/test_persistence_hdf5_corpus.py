@@ -132,7 +132,7 @@ class TestCorpusWoSHDF5(unittest.TestCase):
         # citations
         self.assertEqual(self.D.N_c, 531)
         self.assertEqual(len(self.D.citations), self.D.N_c)
-    
+
     def test_abstract_to_features(self):
         """
         Should generate features from available abstracts.
