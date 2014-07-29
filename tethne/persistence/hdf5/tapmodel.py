@@ -12,14 +12,19 @@ class HDF5TAPModel(TAPModel):
     Provides HDF5 persistence for :class:`.TAPModel`\.
     """
 
-    def __init__(self, T, datapath=None):
+    def __init__(self, T=None, datapath=None):
         logger.debug('HDF5TAPModel: initialize.')
 
         self.h5file, self.path, self.uuid = get_h5file('TAPModel', datapath)
         logger.debug('HDF5TAPModel: got h5file at path {0}'.format(self.path))
         
+        if T is not None:
+            graph = T.G
+        else:
+            graph = None
+        
         self.group = get_or_create_group(self.h5file, 'graph')
-        self.G = HDF5Graph(self.h5file, self.group, 'graph', T.G)
+        self.G = HDF5Graph(self.h5file, self.group, 'graph', graph)
         self.N = len(self.G.nodes())
         self.M = len(self.G.edges())
         logger.debug('HDF5TAPModel: HDF5Graph with {0} nodes'.format(self.N) + \
@@ -43,8 +48,8 @@ class HDF5TAPModel(TAPModel):
         # Not stored.
         self.yold = { i:{k:0 for k in xrange(self.T) }
                         for i in sorted(self.G.nodes()) }
-        self.yold_values = { i:{k:0. for k in xrange(self.T) }
-                                for i in sorted(self.G.nodes()) }
+        self.yold_values = { i: { k:0. for k in xrange(self.T) }
+                                  for i in sorted(self.G.nodes()) }
 
         logger.debug('HDF5TAPModel: initialized parameters.')
 
@@ -65,3 +70,57 @@ class HDF5TAPModel(TAPModel):
             for k,v in getattr(T, param).iteritems():
                 getattr(self, param)[k] = v
 
+def to_hdf5(model, datapath=None):
+    """
+    Generate a :class:`.HDF5TAPModel` from the current instance.
+    
+    Parameters
+    ----------
+    model : :class:`.TAPModel`
+    datapath : str
+        (optional) Path to an HDF5 repository. If not provided, generates
+        a temporary path, which can be accessed as the ``.path`` attribute.
+    
+    Returns
+    -------
+    hdf5_model : :class:`.HDF5TAPModel`
+    """
+
+    hdf5_model = HDF5TAPModel(model, datapath = datapath)
+
+    return hdf5_model
+
+def from_hdf5(HD_or_path):
+    """
+    Load a :class:`.LDAModel` from a :class:`.HDF5LDAModel`\.
+    
+    Parameters
+    ----------
+    HD_or_path : str or :class:`.HDF5LDAModel`
+        If str, must be a path to a :class:`.HDF5LDAModel` HDF5 repo.
+        
+    Returns
+    -------
+    model : :class:`.LDAModel`
+    
+    Examples
+    --------
+
+    From a path:
+    
+    .. code-block:: python
+    
+       >>> model = from_hdf5('/path/to/my/HDF5LDAModel.h5')
+       
+    """
+
+    if type(HD_or_path) is str:
+        hmodel = HDF5TAPModel(datapath=HD_or_path)
+    elif type(HD_or_path) is HDF5TAPModel:
+        hmodel = HD_or_path
+    else:
+        raise AttributeError('Must provide datapath or HDF5LDAModel object.')
+
+    model = TAPModel()
+
+    return model
