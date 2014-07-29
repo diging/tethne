@@ -102,37 +102,48 @@ class HDF5Metadata(dict):
         self.group = get_or_create_group(self.h5file, self.name)
         self.fields = get_or_create_table(self.h5file, self.group, 'fields', FieldIndex)
         self.field_values = {}
-
-        # Get the names and types of metadata fields.
-        fieldkeys = {}
-        mvalues = { 'index': [] }
-        for name, value in metadata.values()[0].iteritems():
-            this_type = str(type(value))
-            fieldkeys[name] = this_type
-            mvalues[name] = []
         
-        # Holds paper identifiers.
-        indices = sorted(metadata.keys())   # Ensure consistent order.
+        if len(self.fields) == 0:
+            # Get the names and types of metadata fields.
+            fieldkeys = {}
+            mvalues = { 'index': [] }
+            for name, value in metadata.values()[0].iteritems():
+                this_type = str(type(value))
+                fieldkeys[name] = this_type
+                mvalues[name] = []
+            
+            # Holds paper identifiers.
+            indices = sorted(metadata.keys())   # Ensure consistent order.
 
-        # Generate metadata vectors.
-        for i in indices:
-            for name,value in metadata[i].iteritems():
-                mvalues[name].append(value)
+            # Generate metadata vectors.
+            for i in indices:
+                for name,value in metadata[i].iteritems():
+                    mvalues[name].append(value)
 
-        # Generate a fields table.
-        for name,this_type in fieldkeys.iteritems():
-            query = 'name == b"{0}"'.format(name)
-            matches = [ row for row in self.fields.where(query)]
-            if len(matches) == 0:
-                fieldentry = self.fields.row
-                fieldentry['name'] = name
-                fieldentry['type'] = this_type
-                fieldentry.append()
-        self.fields.flush()
+            # Generate a fields table.
+            for name,this_type in fieldkeys.iteritems():
+                query = 'name == b"{0}"'.format(name)
+                matches = [ row for row in self.fields.where(query)]
+                if len(matches) == 0:
+                    fieldentry = self.fields.row
+                    fieldentry['name'] = name
+                    fieldentry['type'] = this_type
+                    fieldentry.append()
+            self.fields.flush()
+
+        else:
+            fieldkeys = { row[0]:None for row in self.fields.read() }
+            mvalues = { k:[] for k in fieldkeys.keys() }
 
         # Get or create arrays that hold metadata vectors.
         for name in fieldkeys.keys():
-            self.field_values[name] = get_or_create_array(self.h5file, self.group, name, mvalues[name])
+            self.field_values[name] = get_or_create_array(  self.h5file,
+                                                            self.group,
+                                                            name, mvalues[name])
+
+        # Prime values.
+        for i in xrange(self.field_values.values()[0].shape[0]):
+            self.__getitem__(i)
 
     def __setitem__(self, key, value):
         raise AttributeError('Values can only be set on __init__')
@@ -143,12 +154,16 @@ class HDF5Metadata(dict):
         from the corresponding metadata vector.
         """
 
-        i = int(key)
-        fielddata = { row['name']:row['type'] for row in self.fields }
-        meta = {}
-        for name, type in fielddata.iteritems():
-            meta[name] = self._get_meta_entry(name, i, type)
-
+        try:
+            return dict.__getitem__(self, key)
+        except:
+            i = int(key)
+            fielddata = { row['name']:row['type'] for row in self.fields }
+            meta = {}
+            for name, type in fielddata.iteritems():
+                meta[name] = self._get_meta_entry(name, i, type)
+            dict.__setitem__(self, key, meta)
+            
         return meta
 
     def _get_meta_entry(self, name, index, this_type):
@@ -382,14 +397,24 @@ class HDF5ArrayDict(dict):
         self.group = group
         self.name = name
         
-        # Load or create a new array. def get_or_create_array(h5file, group, name, values):
+        # Load or create a new array.
         self.array = get_or_create_array(self.h5file, self.group, name, values)
+    
+        # Prime values.
+        for i in xrange(len(self.array)):
+            self.__getitem__(i)
 
     def __setitem__(self, key, value):
         self.array[key] = value
+        dict.__setitem__(self, key, value)
     
     def __getitem__(self, key):
-        return self.array[key]
+        try:
+            return dict.__getitem__(self, key)
+        except KeyError:
+            value = self.array[key]
+            dict.__setitem__(self, key, value)
+        return value
         
     def items(self):
         return { i:self.array[i] for i in xrange(len(self.array)) }.items()
@@ -735,14 +760,21 @@ class vlarray_dict(dict):
         if key not in self:
             self.I.append([key])
             self.vlarray.append([ v for v in  value ])
+            dict.__setitem__(self, key, value)
 
     def __getitem__(self, key):
         i = list(self.I.read()).index(key)
         data = self.vlarray.read()
 
-        if self.atom.shape != ():
-            return [[ self.pytype(v) for v in d ] for d in data[i]]
-        return [ self.pytype(v) for v in data[i] ]
+        try:
+            return dict.__getitem__(self, key)
+        except KeyError:
+            if self.atom.shape != ():
+                value = [[ self.pytype(v) for v in d ] for d in data[i]]
+            else:
+                value = [ self.pytype(v) for v in data[i] ]
+            dict.__setitem__(self, key, value)
+            return value
 
     def __contains__(self,key):
         return key in self.I.read()

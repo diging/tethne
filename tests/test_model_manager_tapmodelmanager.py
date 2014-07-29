@@ -17,7 +17,7 @@ import cPickle as pickle
 picklepath = '{0}/pickles'.format(datapath)
 
 dfrdatapath = '{0}/dfr'.format(datapath)
-corpus = dfr.read_corpus(dfrdatapath, ['unigrams'])
+corpus = dfr.read_corpus(dfrdatapath, ['uni'])
 print corpus.features.keys()
 corpus.slice('date', 'time_period', window_size=1)
 G = GraphCollection().build(corpus, 'date', 'authors', 'coauthors')
@@ -74,6 +74,9 @@ class TestTAPModelManager(unittest.TestCase):
         
         self.assertIsInstance(GC, GraphCollection)
         self.assertIsInstance(testnodes[0][1]['label'], str)
+#
+#        with open(picklepath + '/test_TAPModel.pickle', 'w') as f:
+#            pickle.dump(self.M.SM.values()[-1], f)
 
 if __name__ == '__main__':
     unittest.main()

@@ -2,14 +2,14 @@ from settings import *
 
 import unittest
 
-from tethne.persistence import HDF5LDAModel
+from tethne.persistence.hdf5.ldamodel import HDF5LDAModel, from_hdf5, to_hdf5
 from tethne.model.corpus import ldamodel
 
 import os
 
 class TestHDF5LDAModelInit(unittest.TestCase):
 
-    def test_init(self):
+    def setUp(self):
         self.dt_path = '{0}/mallet/dt.dat'.format(datapath)
         self.wt_path = '{0}/mallet/wt.dat'.format(datapath)
         self.meta_path = '{0}/mallet/tethne_meta.csv'.format(datapath)
@@ -27,6 +27,34 @@ class TestHDF5LDAModelInit(unittest.TestCase):
                                       datapath=self.h5path)
                 
         self.assertIn(self.h5name, os.listdir(temppath))
+
+    def test_from_hdf5_object(self):
+        tmodel = from_hdf5(self.model)
+    
+        self.assertIsInstance(tmodel, ldamodel.LDAModel)
+        self.assertEqual(tmodel.theta, self.model.theta)
+        self.assertEqual(tmodel.phi, self.model.phi)
+        self.assertEqual(tmodel.metadata, self.model.metadata)
+        self.assertEqual(tmodel.vocabulary, self.model.vocabulary)
+
+    def test_from_hdf5_datapath(self):
+        tmodel = from_hdf5(self.model.path)
+        self.assertIsInstance(tmodel, ldamodel.LDAModel)
+        self.assertEqual(tmodel.theta.shape, self.model.theta.shape)
+        self.assertEqual(tmodel.theta[0].all(), self.model.theta[0].all())
+        self.assertEqual(tmodel.phi.shape, self.model.phi.shape)
+        self.assertEqual(tmodel.phi[0].all(), self.model.phi[0].all())
+        self.assertEqual(tmodel.metadata, self.model.metadata)
+        self.assertEqual(tmodel.vocabulary, self.model.vocabulary)
+
+    def test_to_hdf5(self):
+        hmodel = to_hdf5(self.lmodel)
+
+        self.assertIsInstance(hmodel, HDF5LDAModel)
+        self.assertEqual(self.lmodel.theta[0].all(), hmodel.theta[0].all())
+        self.assertEqual(self.lmodel.phi[0].all(), hmodel.phi[0].all())
+        self.assertEqual(self.lmodel.metadata, hmodel.metadata)
+        self.assertEqual(self.lmodel.vocabulary, hmodel.vocabulary)
 
     def tearDown(self):
         os.remove(self.h5path)
@@ -146,10 +174,5 @@ class TestHDF5LDAModel(unittest.TestCase):
     def tearDown(self):
         os.remove(self.h5path)
 
-
-
 if __name__ == '__main__':
     unittest.main()
-
-
-

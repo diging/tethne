@@ -95,15 +95,6 @@ class TAPModel(object):
         logger.debug('Loaded distributions over {0} topics for {1} nodes.'
                                                       .format(self.T, self.N_d))
         
-        #	1.1 calculate g(vi,yi,z)
-        self._calculate_g()
-        logger.debug('Calculated g')
-
-        #   1.2 Eq8, calculate bz,ij
-        self._calculate_b()
-        logger.debug('Calculated b')
-        
-        
         self.dc_trace = []
     
     # Obligatory methods.
@@ -449,6 +440,15 @@ class TAPModel(object):
         max_iter : int
             (default: 500) Maximum number of iterations.
         """
+
+        #	1.1 calculate g(vi,yi,z)
+        self._calculate_g()
+        logger.debug('Calculated g')
+
+        #   1.2 Eq8, calculate bz,ij
+        self._calculate_b()
+        logger.debug('Calculated b')        
+        
         logger.debug('start iterations')
         nc = 0
         self.iteration = 0

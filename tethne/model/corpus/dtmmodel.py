@@ -12,7 +12,7 @@ import csv
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel('ERROR')
+logger.setLevel('DEBUG')
 
 class DTMModel(BaseModel):
     """
