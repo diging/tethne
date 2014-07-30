@@ -428,6 +428,16 @@ class TAPModel(object):
                             self.r[i][j_,k] = alt_r[i][alt_j_,k]
                             self.a[i][j_,k] = alt_a[i][alt_j_,k]
 
+    def prep(self):
+        #	1.1 calculate g(vi,yi,z)
+        self._calculate_g()
+        logger.debug('Calculated g')
+
+        #   1.2 Eq8, calculate bz,ij
+        self._calculate_b()
+        logger.debug('Calculated b')
+
+
     def build(self, max_iter=1000):
         """
         Estimate the :class:`.TAPModel`\.
@@ -440,14 +450,7 @@ class TAPModel(object):
         max_iter : int
             (default: 500) Maximum number of iterations.
         """
-
-        #	1.1 calculate g(vi,yi,z)
-        self._calculate_g()
-        logger.debug('Calculated g')
-
-        #   1.2 Eq8, calculate bz,ij
-        self._calculate_b()
-        logger.debug('Calculated b')        
+        self.prep()
         
         logger.debug('start iterations')
         nc = 0

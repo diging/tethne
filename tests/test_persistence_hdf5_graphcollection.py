@@ -7,12 +7,13 @@ import warnings
 from tethne.readers import wos, dfr
 from tethne.classes import Corpus, GraphCollection
 from tethne.networks.authors import coauthors
-from tethne.persistence.hdf5.graphcollection import HDF5Graph, HDF5GraphCollection
+from tethne.persistence.hdf5.graphcollection import *
 from tethne.persistence.hdf5.util import get_h5file, get_or_create_group
 
 import os
 
 import networkx as nx
+from scipy.sparse import coo_matrix
 
 dfrdatapath = '{0}/dfr'.format(datapath)
 ngrams = dfr.ngrams(dfrdatapath, 'uni')
@@ -20,6 +21,87 @@ papers = dfr.read(dfrdatapath)
 
 D = Corpus(papers, index_by='doi')
 D.slice('date', method='time_period', window_size=1)
+
+class TestSparseArray(unittest.TestCase):
+    def setUp(self):
+        self.I = [0,0,1,2,2,3,4,5,5]
+        self.J = [1,2,5,3,4,1,8,4,3]
+        self.K = [1,1,1,1,2,3,2,1,1]
+
+        self.h5name = 'HDF5Graph_test.h5'
+        self.h5path = temppath + '/' + self.h5name
+        self.h5file,a,b = get_h5file('HDF5Graph', self.h5path)
+        self.group = get_or_create_group(self.h5file, 'testgroup')
+        self.sparse = SparseArray(  self.h5file, self.group, 'sparse',
+                                  self.I, self.J, self.K  )
+
+    def test_len(self):
+        self.assertEqual(len(self.sparse), len(self.I))
+    
+    def test_shape(self):
+        A = coo_matrix(self.K, (self.I, self.J)).tocsr()
+        
+        self.assertEqual(A.shape, self.sparse.shape)
+        
+    def test_num_edges(self):
+        self.assertEqual(self.sparse.num_edges(), 9)
+
+    def test_getitem(self):
+        self.assertEqual(self.sparse[3,1], 3)
+
+    def test_get_neighbors(self):
+        self.assertEqual(set(self.sparse.get_neighbors(1)), set([0,3,5]) )
+
+    def test_get_edges(self):
+        self.assertEqual(   self.sparse.get_edges(data=True),
+                            zip(self.I, self.J, self.K) )
+    
+    def test_nodes(self):
+        expected = [0,1,2,3,4,5,8]
+        self.assertEqual(set(self.sparse.nodes()), set(expected))
+        self.assertEqual(len(self.sparse.nodes()), len(expected))
+
+    def tearDown(self):
+        os.remove(self.h5path)
+
+class TestHDF5NodeAttributes(unittest.TestCase):
+    def setUp(self):
+        self.h5name = 'HDF5Graph_test.h5'
+        self.h5path = temppath + '/' + self.h5name
+        self.h5file,a,b = get_h5file('HDF5Graph', self.h5path)
+        self.group = get_or_create_group(self.h5file, 'testgroup')
+    
+        self.attribs = {
+            0: {
+                'size': 5,
+                'name': 'bob',
+            },
+            1: {
+                'size': 10,
+                'name': 'alice',
+            },
+        }
+        
+        self.node = HDF5NodeAttributes(self.h5file, self.group, self.attribs)
+        self.graph = Graph()
+        for node, attribs in self.attribs.iteritems():
+            self.graph.add_node(node, attribs)
+                
+    def test_getitem(self):
+        self.assertEqual(self.graph.node[0], self.node[0])
+    
+    def test_get_nodes(self):
+        self.assertEqual(   self.graph.nodes(data=True),
+                            self.node.get_nodes(data=True)  )
+    
+    def test_items(self):
+        self.assertEqual(self.graph.node.items(), self.node.items())
+
+    def test_str(self):
+        self.assertEqual(str(self.node), str(self.graph.node))
+
+    def tearDown(self):
+        os.remove(self.h5path)
 
 class TestHDF5Graph(unittest.TestCase):
     def setUp(self):
@@ -36,7 +118,7 @@ class TestHDF5Graph(unittest.TestCase):
         self.g = g
     
         self.hg = HDF5Graph(self.h5file, self.group, 'testGraph', g)
-    
+
     def test_edges(self):
         self.assertEqual(self.hg.edges(), self.g.edges())
     
@@ -76,9 +158,37 @@ class TestHDF5Graph(unittest.TestCase):
         g_bc = nx.edge_betweenness(self.g)
         self.assertEqual(hg_bc, g_bc)
 
+    def test_to_graph(self):
+        g = self.hg.to_graph()
+
+        self.assertEqual(g.node.items(), self.hg.node.items())
+        self.assertEqual(g.node.items(), self.g.node.items())
+
+        self.assertEqual(g.edge.items(), self.hg.edge.items())
+        self.assertEqual(g.edge.items(), self.g.edge.items())
+
+        self.assertEqual(g.nodes(data=True), self.hg.nodes(data=True))
+        self.assertEqual(g.nodes(data=True), self.g.nodes(data=True))
+        self.assertEqual(g.edges(data=True), self.hg.edges(data=True))
+        self.assertEqual(g.edges(data=True), self.g.edges(data=True))
+
+    def test_add_node(self):
+        self.assertRaises(NotImplementedError, self.hg.add_node, 20)
+
+    def test_add_edge(self):
+        self.assertRaises(NotImplementedError, self.hg.add_edge, 20, 21)
+
+    def test_get_edges(self):
+        self.assertEqual(self.g.edges(), self.hg.edge.get_edges())
+        self.assertEqual(   self.g.edges(data=True),
+                            self.hg.edge.get_edges(data=True)   )
+#
+    def test_edge(self):
+        self.assertEqual(str(self.g.edge), str(self.hg.edge))
+        self.assertEqual(self.g.edge.items(), self.hg.edge.items())
+
     def tearDown(self):
         os.remove(self.h5path)
-
 
 class TestGraphCollection(unittest.TestCase):
     def setUp(self):

@@ -763,24 +763,25 @@ class vlarray_dict(dict):
             dict.__setitem__(self, key, value)
 
     def __getitem__(self, key):
-        i = list(self.I.read()).index(key)
-        data = self.vlarray.read()
+        i = list(self.I.read())[1:].index(key)
+        data = self.vlarray.read()[1:]
 
         try:
             return dict.__getitem__(self, key)
         except KeyError:
             if self.atom.shape != ():
-                value = [[ self.pytype(v) for v in d ] for d in data[i]]
+                value = numpy.array([[ self.pytype(v) for v in d ] for d in data[i]])
             else:
-                value = [ self.pytype(v) for v in data[i] ]
+                value = numpy.array([ self.pytype(v) for v in data[i] ])
             dict.__setitem__(self, key, value)
             return value
 
     def __contains__(self,key):
-        return key in self.I.read()
+        return key in self.keys()
     
     def values(self):
-        return [ [ self.pytype(v) for v in x ] for x in self.vlarray ]
+        values = [ self[i] for i in self.I.read()[1:] ]
+        return values
     
     def keys(self):
         return self.I.read()[1:]
@@ -788,7 +789,11 @@ class vlarray_dict(dict):
     def __len__(self):
         return len(self.vlarray) -1  # Compensate for padding.
 
+    def __str__(self):
+        return str(self.items())
+
+    def items(self):
+        return zip(self.keys(), self.values())
+
     def iteritems(self):
-        indices = self.I.read()
-        values = self.values()
-        return [(indices[i],values[i]) for i in xrange(1, len(self.vlarray))]
+        return iter(zip(self.keys(), self.values()))

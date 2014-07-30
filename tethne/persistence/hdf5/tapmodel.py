@@ -7,6 +7,8 @@ from util import *
 from ...model import TAPModel
 from .graphcollection import HDF5Graph
 
+import numpy
+
 class HDF5TAPModel(TAPModel):
     """
     Provides HDF5 persistence for :class:`.TAPModel`\.
@@ -58,17 +60,17 @@ class HDF5TAPModel(TAPModel):
             setattr(self, param, vlarray_dict(self.h5file, self.pgroup, param,
                                        tables.Float32Atom(),tables.Int32Atom()))
             if param == 'theta':
-                self.T = self.theta.atom.shape[0]
+                self.T = self.theta[0].shape[0]
         else:
             if param == 'theta':
-                self.T = T.T
+                self.T = int(T.T)
                 atom = tables.Float32Atom()
             else:
                 atom = tables.Float32Atom(shape=(self.T,))
             setattr(self, param, vlarray_dict(self.h5file, self.pgroup, param,
                                                       atom, tables.Int32Atom()))
             for k,v in getattr(T, param).iteritems():
-                getattr(self, param)[k] = v
+                getattr(self, param)[k] = numpy.array(v)
 
 def to_hdf5(model, datapath=None):
     """
@@ -86,7 +88,7 @@ def to_hdf5(model, datapath=None):
     hdf5_model : :class:`.HDF5TAPModel`
     """
 
-    hdf5_model = HDF5TAPModel(model, datapath = datapath)
+    hdf5_model = HDF5TAPModel(model, datapath=datapath)
 
     return hdf5_model
 
@@ -121,6 +123,20 @@ def from_hdf5(HD_or_path):
     else:
         raise AttributeError('Must provide datapath or HDF5LDAModel object.')
 
-    model = TAPModel()
+    G = hmodel.G.to_graph()
+    theta = { k:numpy.array(v) for k,v in hmodel.theta.iteritems() }
+    model = TAPModel(G, theta)#, damper=hmodel.damper)
+
+    model.a = { k:numpy.array(v) for k,v in hmodel.a.iteritems() }
+    model.r = { k:numpy.array(v) for k,v in hmodel.r.iteritems() }
+    model.b = { k:numpy.array(v) for k,v in hmodel.b.iteritems() }
+    model.g = { k:numpy.array(v) for k,v in hmodel.g.iteritems() }
+
+    model.N = hmodel.N
+    model.M = hmodel.M
+    model.T = hmodel.T
+
+    model.yold = hmodel.yold
+    model.yold_values = hmodel.yold_values
 
     return model
