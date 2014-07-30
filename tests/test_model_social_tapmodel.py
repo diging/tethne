@@ -5,6 +5,7 @@ import numpy as np
 import networkx as nx
 import random
 import csv
+import cPickle as pickle
 
 from tethne.model.social.tapmodel import TAPModel
 from tethne.readers import wos, dfr
@@ -248,6 +249,9 @@ class TestTAPModel(unittest.TestCase):
         pcgpath = cg_path + 'model.social.tapmodel.TAPModel.build.png'
         with Profile(pcgpath):
             self.T.build()
+
+#        with open(picklepath + '/test_TAPModel.pickle', 'w') as f:
+#            pickle.dump(self.T, f)
 
 if __name__ == '__main__':
     unittest.main()

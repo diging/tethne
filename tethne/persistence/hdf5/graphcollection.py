@@ -106,6 +106,40 @@ class HDF5Graph(Graph):
     def nodes(self, data=False):
         return self.node.get_nodes(data=data)
 
+    def __str__(self):
+        return 'tethne.persistence.hdf5.graphcollection.HDF5Graph object'
+
+    def to_graph(self):
+        """
+        Convert :class:`.HDF5Graph` to a :class:`.networkx.Graph`\.
+        
+        Returns
+        -------
+        graph : :class:`.networkx.Graph`
+        """
+        graph = Graph()
+
+        # Transfer nodes.
+        for node in self.node.items():
+            i = node[0]
+            attrs = node[1]
+            graph.add_node(i, attrs)
+
+        # Transfer edges.
+        for edge in self.edge.items():
+            i = edge[0]
+            for j, attrs in edge[1].iteritems():
+                graph.add_edge(i,j,attrs)
+
+        return graph
+
+    def add_node(self, *args, **kwargs):
+        raise NotImplementedError('HDF5Graph does not support item assignment.')
+
+    def add_edge(self, *args, **kwargs):
+        raise NotImplementedError('HDF5Graph does not support item assignment.')
+
+
 class HDF5EdgeAttributes(object):
     def __init__(self, h5file, pgroup, edges):
         self.h5file = h5file
@@ -204,7 +238,6 @@ class HDF5EdgeAttributes(object):
 
         return attributes
     
-
     def _get_attributes(self, k):
         attr_types = { row['name']:row['type'] for row in self.fields }
         attr_names = attr_types.keys()
@@ -231,8 +264,11 @@ class HDF5EdgeAttributes(object):
             attr[name] = value
         return attr
 
+    def __str__(self):
+        return str({ i:self[i] for i in self.neighbors.nodes() })
+
     def items(self):
-        return { i:self[i] for i in xrange(len(self.neighbors)) }
+        return [ (i,self[i]) for i in self.neighbors.nodes() ]
 
     def __len__(self):
         return self.neighbors.num_edges()
@@ -264,6 +300,9 @@ class SparseArray(object):
     
         self.h5file.flush()
     
+        A = coo_matrix(self.K.read(), (self.I.read(), self.J.read())).tocsr()
+        self.shape = A.shape
+    
     def __getitem__(self, indices):
         I = numpy.array(self.I.read())
         J = numpy.array(self.J.read())
@@ -288,8 +327,19 @@ class SparseArray(object):
         return neighbors
 
     def __len__(self):
-        A = coo_matrix(self.K.read(), (self.I.read(), self.J.read())).tocsr()
-        return(A.shape[0])
+        return self.shape[1]
+    
+    def nodes(self):
+        """
+        Return a list of nodes for which there are edge data.
+        
+        Returns
+        -------
+        nodes : list
+        """
+    
+        nodes = list(set(list(self.I.read()) + list(self.J.read())))
+        return nodes
         
     def num_edges(self):
         A = coo_matrix(self.K.read(), (self.I.read(), self.J.read()))
@@ -379,6 +429,12 @@ class HDF5NodeAttributes(object):
             return nodelist
         return nodes
     
+    def items(self):
+        return self.get_nodes(data=True)
+    
+    def __str__(self):
+        return str({ n:a for n,a in self.get_nodes(data=True) })
+    
     def __len__(self):
         return len(self.I.read())
     
@@ -438,4 +494,5 @@ class HDF5NodeAttributes(object):
         if this_type == str(type(u'')): return unicode(value)
         if this_type == str(type([])): return pickle.loads(value)
         return value
+
 
