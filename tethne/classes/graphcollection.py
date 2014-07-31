@@ -83,7 +83,7 @@ class GraphCollection(object):
         
     def _index_graph(self, index, graph):
         """
-        Effectively labels nodes with integer indices used across all graphs.
+        Labels nodes with integer indices used across all graphs.
         """
 
         graph_ = networkx.Graph()
@@ -106,6 +106,7 @@ class GraphCollection(object):
         for edge in graph.edges(data=True):
             n_i = self.node_lookup[edge[0]] # Already indexed all nodes.
             n_j = self.node_lookup[edge[1]]
+            self.edge_list.append((n_i, n_j))
         
             graph_.add_edge(n_i, n_j, edge[2])  # Include edge attributes.
 

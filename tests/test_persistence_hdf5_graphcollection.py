@@ -182,7 +182,7 @@ class TestHDF5Graph(unittest.TestCase):
         self.assertEqual(self.g.edges(), self.hg.edge.get_edges())
         self.assertEqual(   self.g.edges(data=True),
                             self.hg.edge.get_edges(data=True)   )
-#
+
     def test_edge(self):
         self.assertEqual(str(self.g.edge), str(self.hg.edge))
         self.assertEqual(self.g.edge.items(), self.hg.edge.items())
@@ -203,6 +203,15 @@ class TestGraphCollection(unittest.TestCase):
 
         self.G = HDF5GraphCollection(self.G_, datapath=self.h5path)
 
+    def test_to_hdf5(self):
+        HG = HDF5GraphCollection(datapath=self.h5path)
+        self.assertEqual(HG.graphs.keys(), self.G_.graphs.keys())
+        for key, graph in HG.graphs.iteritems():
+            self.assertEqual(   set(graph.nodes()),
+                                set(self.G_[key].nodes())   )
+            self.assertEqual(   set(graph.edges()),
+                                set(self.G_[key].edges())   )
+
     def test_open(self):
         dpath = self.G.path
 
@@ -218,6 +227,18 @@ class TestGraphCollection(unittest.TestCase):
         self.assertEqual(   G2.attr_distribution()[1],
                             self.G.attr_distribution()[1]  )
 
+
+    def test_from_hdf5(self):
+        HG = from_hdf5(self.G)
+        self.assertEqual(set(HG.nodes()), set(self.G.nodes()))
+        self.assertEqual(set(HG.edges()), set(self.G.edges()))
+        self.assertEqual(len(HG.node_index), len(self.G.node_index))
+        self.assertEqual(HG.node_distribution(), self.G.node_distribution())
+        self.assertEqual(HG.edge_distribution(), self.G.edge_distribution())
+        self.assertEqual(   HG.attr_distribution()[0],
+                            self.G.attr_distribution()[0]  )
+        self.assertEqual(   HG.attr_distribution()[1],
+                            self.G.attr_distribution()[1]  )
 
     def test_nodes(self):
         """
@@ -245,7 +266,9 @@ class TestGraphCollection(unittest.TestCase):
         self.assertIsInstance(edges[0], tuple)
         self.assertIsInstance(edges[0][0], int)
         self.assertIsInstance(edges[0][1], int)
-        self.assertEqual(set(self.G.edges()), set(self.G_.edges()))
+        for e in self.G.edges():
+            self.assertTrue(
+                e in self.G_.edges() or (e[1],e[0]) in self.G_.edges()  )
 
     def test_index_graph(self):
         """
@@ -267,8 +290,6 @@ class TestGraphCollection(unittest.TestCase):
         pcgpath = cg_path + 'persistence.hdf5.HDF5GraphCollection._plot.png'
         with Profile(pcgpath):
             fig = self.G._plot((xvalues, yvalues), 'test')
-
-#        self.assertIsInstance(fig, matplotlib.figure.Figure)
 
     def test_node_distribution(self):
         """
@@ -356,8 +377,6 @@ class TestGraphCollection(unittest.TestCase):
 
     def tearDown(self):
         os.remove(self.h5path)
-
-
 
 if __name__ == '__main__':
     unittest.main()

@@ -31,3 +31,5 @@ from persistence import *
 from readers import *
 from services import *
 from writers import *
+
+from persistence import hdf5

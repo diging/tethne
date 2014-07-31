@@ -17,6 +17,8 @@ import cPickle as pickle
 import urllib
 from unidecode import unidecode
 
+import os
+
 from ...classes import Paper
 
 pytype = {  tables.atom.BoolAtom: bool,
@@ -46,18 +48,21 @@ def get_h5file(typename, datapath=None):
         datapath = tempfile.mkdtemp()
         logger.debug('Generated datapath {0}.'.format(datapath))
 
+    this_uuid = uuid.uuid4()    # Unique identifier for this H5File
+
     # Load or create HDF5 repository.
-    if datapath.split('.')[-1] == 'h5':
+    if datapath.split('.')[-1] == 'h5': # Path to file specified.
         path = datapath
-        title = ''
-    else:   # New h5 file.
-        this_uuid = uuid.uuid4()    # Unique identifier for this H5File
+    else:   # Generate a new path.
         logger.debug('H5File has UUID {0}.'.format(this_uuid))
         path = '{0}/{1}-{2}.h5'.format(datapath, typename, this_uuid)
-        title = '{0}-{1}'.format(typename, uuid)
 
     # mode = 'a' will create a new file if no file exists.
-    h5file = tables.openFile(path, mode = 'a', title=title)
+    if os.path.exists(path):
+        h5file = tables.openFile(path, mode='a')
+    else:
+        title = '{0}-{1}'.format(typename, this_uuid)
+        h5file = tables.openFile(path, mode='a', title=title)
 
     return h5file, path, uuid
 
@@ -762,14 +767,18 @@ class vlarray_dict(dict):
             dict.__setitem__(self, key, value)
 
     def __getitem__(self, key):
-        i = list(self.I.read())[1:].index(key)
-        data = self.vlarray.read()[1:]
+        try:
+            i = list(self.I.read())[1:].index(key)
+            data = self.vlarray.read()[1:]
+        except ValueError:
+            raise KeyError()
 
         try:
             return dict.__getitem__(self, key)
         except KeyError:
             if self.atom.shape != ():
-                value = numpy.array([[ self.pytype(v) for v in d ] for d in data[i]])
+                value = numpy.array([   [ self.pytype(v) for v in d ]
+                                            for d in data[i]    ])
             else:
                 value = numpy.array([ self.pytype(v) for v in data[i] ])
             dict.__setitem__(self, key, value)
