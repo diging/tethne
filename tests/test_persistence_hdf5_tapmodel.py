@@ -19,7 +19,7 @@ class TestH5F5TAPModel(unittest.TestCase):
         self.h5name = 'test_HDF5TAPModel.h5'
         self.h5path = temppath+'/'+self.h5name
         self.T = HDF5TAPModel(T_, self.h5path)
-    
+
     def test_test(self):
         for i in T_.theta.keys():
             self.assertGreater(1e-07, abs(self.T.theta[i][0]-T_.theta[i][0]))
@@ -37,16 +37,16 @@ class TestH5F5TAPModel(unittest.TestCase):
 
         self.assertIsInstance(tmodel, tapmodel.TAPModel)
 
-        for i in xrange(len(tmodel.a)):
+        for i in tmodel.a.keys():
             self.assertEqual(tmodel.a[i].all(), self.T.a[i].all())
-        for i in xrange(len(tmodel.r)):
+        for i in tmodel.r.keys():
             self.assertEqual(tmodel.r[i].all(), self.T.r[i].all())
-        for i in xrange(len(tmodel.g)):
+        for i in tmodel.g.keys():
             self.assertEqual(tmodel.g[i].all(), self.T.g[i].all())
-        for i in xrange(len(tmodel.b)):
+        for i in tmodel.b.keys():
             self.assertEqual(tmodel.b[i].all(), self.T.b[i].all())
 
-        for i in xrange(len(tmodel.theta)):
+        for i in tmodel.theta.keys():
             self.assertEqual(tmodel.theta[i].all(), self.T.theta[i].all())
 
         self.assertEqual(tmodel.N_d, self.T.N_d)
@@ -59,16 +59,15 @@ class TestH5F5TAPModel(unittest.TestCase):
 
         self.assertIsInstance(tmodel, tapmodel.TAPModel)
 
-        for i in xrange(len(tmodel.a)):
+        for i in tmodel.a.keys():
             self.assertEqual(tmodel.a[i].all(), self.T.a[i].all())
-        for i in xrange(len(tmodel.r)):
+        for i in tmodel.r.keys():
             self.assertEqual(tmodel.r[i].all(), self.T.r[i].all())
-        for i in xrange(len(tmodel.g)):
+        for i in tmodel.g.keys():
             self.assertEqual(tmodel.g[i].all(), self.T.g[i].all())
-        for i in xrange(len(tmodel.b)):
+        for i in tmodel.b.keys():
             self.assertEqual(tmodel.b[i].all(), self.T.b[i].all())
-
-        for i in xrange(len(tmodel.theta)):
+        for i in tmodel.theta.keys():
             self.assertEqual(tmodel.theta[i].all(), self.T.theta[i].all())
 
         self.assertEqual(tmodel.N_d, self.T.N_d)
@@ -80,15 +79,15 @@ class TestH5F5TAPModel(unittest.TestCase):
         hmodel = to_hdf5(T_)
 
         self.assertIsInstance(hmodel, HDF5TAPModel)
-        for i in xrange(len(hmodel.a)):
+        for i in hmodel.a.keys():
             self.assertEqual(hmodel.a[i].all(), T_.a[i].all())
-        for i in xrange(len(hmodel.r)):
+        for i in hmodel.r.keys():
             self.assertEqual(hmodel.r[i].all(), T_.r[i].all())
-        for i in xrange(len(hmodel.g)):
+        for i in hmodel.g.keys():
             self.assertEqual(hmodel.g[i].all(), T_.g[i].all())
-        for i in xrange(len(hmodel.b)):
+        for i in hmodel.b.keys():
             self.assertEqual(hmodel.b[i].all(), T_.b[i].all())
-        for i in xrange(len(hmodel.theta)):
+        for i in hmodel.theta.keys():
             self.assertEqual(hmodel.theta[i].all(), T_.theta[i].all())
         self.assertEqual(hmodel.N_d, T_.N_d)
         self.assertIsInstance(hmodel.G, HDF5Graph)
@@ -99,15 +98,15 @@ class TestH5F5TAPModel(unittest.TestCase):
         tmodel = from_hdf5(self.T)
         hmodel = to_hdf5(tmodel)
 
-        for i in xrange(len(hmodel.a)):
+        for i in hmodel.a.keys():
             self.assertEqual(hmodel.a[i].all(), tmodel.a[i].all())
-        for i in xrange(len(hmodel.r)):
+        for i in hmodel.r.keys():
             self.assertEqual(hmodel.r[i].all(), tmodel.r[i].all())
-        for i in xrange(len(hmodel.g)):
+        for i in hmodel.g.keys():
             self.assertEqual(hmodel.g[i].all(), tmodel.g[i].all())
-        for i in xrange(len(hmodel.b)):
+        for i in hmodel.b.keys():
             self.assertEqual(hmodel.b[i].all(), tmodel.b[i].all())
-        for i in xrange(len(hmodel.theta)):
+        for i in hmodel.theta.keys():
             self.assertEqual(hmodel.theta[i].all(), tmodel.theta[i].all())
         self.assertEqual(hmodel.N_d, tmodel.N_d)
         self.assertIsInstance(hmodel.G, HDF5Graph)

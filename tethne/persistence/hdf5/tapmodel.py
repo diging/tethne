@@ -59,7 +59,7 @@ class HDF5TAPModel(TAPModel):
             setattr(self, param, vlarray_dict(self.h5file, self.pgroup, param,
                                        tables.Float32Atom(),tables.Int32Atom()))
             if param == 'theta':
-                self.T = self.theta[0].shape[0]
+                self.T = self.theta.values()[0].shape[0]
         else:
             if param == 'theta':
                 self.T = int(T.T)

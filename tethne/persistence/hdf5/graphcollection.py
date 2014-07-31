@@ -19,7 +19,7 @@ class HDF5GraphCollection(GraphCollection):
     storing existing :class:`.GraphCollection`\, and NOT for direct 
     manipulation.
     """
-    def __init__(self, G, datapath=None):
+    def __init__(self, G=None, datapath=None):
         """
         Initialize a :class:`.HDF5GraphCollection` with a 
         :class:`.GraphCollection`\.
@@ -38,15 +38,19 @@ class HDF5GraphCollection(GraphCollection):
         self.group = get_or_create_group(self.h5file, 'graphs')
         
         # Forward and reverse indices for nodes.
-        index_values = [ G.node_index[k] for k in sorted(G.node_index.keys()) ]
-        self.node_index = HDF5ArrayDict(self.h5file, self.agroup,
-                                        'node_index', index_values)
+        if G is not None:
+            index_values = [ G.node_index[k] for k
+                                in sorted(G.node_index.keys()) ]
+        else:
+            index_values = []
+        self.node_index = HDF5ArrayDict(    self.h5file, self.agroup,
+                                            'node_index', index_values  )
                                         
         # Not stored.
         self.node_lookup = { v:k for k,v in self.node_index.iteritems() }
         
-        logger.debug('HDF5GraphCollection: initialized node index and lookup' +\
-                     ' for {0} nodes'.format(len(self.node_index)))
+        logger.debug('initialized node index and lookup for {0} nodes'
+                                                  .format(len(self.node_index)))
     
         self.edge_list = [] # Not stored.
     
@@ -59,11 +63,17 @@ class HDF5GraphCollection(GraphCollection):
                     key = int(key)
                 except:
                     pass
-                self.graphs[key] = HDF5Graph(self.h5file, self.group, child, None)
+                self.graphs[key] = HDF5Graph(
+                                        self.h5file, self.group, child, None)
+        elif G is None:
+            pass
         else:
             for key, graph in G.graphs.iteritems():
                 name = 'graph_' + str(key)
-                self.graphs[key] = HDF5Graph(self.h5file, self.group, name, graph)
+                self.graphs[key] = HDF5Graph(
+                                        self.h5file, self.group, name, graph)
+
+        self.h5file.flush()
 
     def __getitem__(self, key):
         name = 'graph_' + str(key)
@@ -71,7 +81,8 @@ class HDF5GraphCollection(GraphCollection):
             return self.graphs[key]
         except KeyError:
             if name in self.group:
-                self.graphs[key] = HDF5Graph(self.h5file, self.group, name, None)
+                self.graphs[key] = HDF5Graph(
+                                        self.h5file, self.group, name, None)
             else:
                 raise KeyError()
 
@@ -139,13 +150,14 @@ class HDF5Graph(Graph):
     def add_edge(self, *args, **kwargs):
         raise NotImplementedError('HDF5Graph does not support item assignment.')
 
-
 class HDF5EdgeAttributes(object):
     def __init__(self, h5file, pgroup, edges):
         self.h5file = h5file
         self.group = get_or_create_group(h5file, 'edges', where=pgroup)
-        self.fieldgroup = get_or_create_group(h5file, 'fieldgroup', where=self.group)
-        self.fields = get_or_create_table(h5file, self.group, 'fields', FieldIndex)
+        self.fieldgroup = get_or_create_group(
+                                h5file, 'fieldgroup', where=self.group)
+        self.fields = get_or_create_table(
+                                h5file, self.group, 'fields', FieldIndex)
         
         I = []
         J = []
@@ -156,8 +168,8 @@ class HDF5EdgeAttributes(object):
         if 'neighbors' in self.group._v_children.keys():  # Data already exists?
             fieldchildren = self.fieldgroup._v_children.keys()
             for child in fieldchildren:
-                carray = get_or_create_array(self.h5file, self.fieldgroup,
-                                                          child, None)
+                carray = get_or_create_array(
+                                self.h5file, self.fieldgroup, child, None)
                 self.field_values[child] = carray
 
         else:   # No data in this group.
@@ -186,12 +198,9 @@ class HDF5EdgeAttributes(object):
                             fieldkeys[name] = this_type
 
                             mvalues[name] = []
+                            
                             # Pad 0th entry will null values.
-                            if this_type == str(type('')): mvalues[name].append('')
-                            if this_type == str(type(1)): mvalues[name].append(0)
-                            if this_type == str(type(1.1)): mvalues[name].append(0.0)
-                            if this_type == str(type(u'')): mvalues[name].append(u'')
-                            if this_type == str(type([])): mvalues[name].append(pickle.dumps([]))
+                            mvalues[name].append(mtypes[this_type])
 
             # Generate attribute vectors.
             for v in V:
@@ -199,12 +208,8 @@ class HDF5EdgeAttributes(object):
                     if name in v:
                         mvalues[name].append(v[name])
                     else:
-                        if this_type == str(type('')): mvalues[name].append('')
-                        if this_type == str(type(1)): mvalues[name].append(0)
-                        if this_type == str(type(1.1)): mvalues[name].append(0.0)
-                        if this_type == str(type(u'')): mvalues[name].append(u'')
-                        if this_type == str(type([])): mvalues[name].append(pickle.dumps([]))
-                        
+                        mvalues[name].append(mtypes[this_type])
+                
             # Get or create arrays that hold attribute vectors.
             for name in fieldkeys.keys():
                 if fieldkeys[name] == str(type([])):
@@ -357,16 +362,17 @@ class HDF5NodeAttributes(object):
     def __init__(self, h5file, pgroup, attributes=None):
         self.h5file = h5file
         self.group = get_or_create_group(h5file, 'nodes', where=pgroup)
-        self.fieldgroup = get_or_create_group(h5file, 'fieldgroup', where=self.group)
-        self.fields = get_or_create_table(self.h5file, self.group, 'fields',
-                                                                    FieldIndex)
+        self.fieldgroup = get_or_create_group(
+                                h5file, 'fieldgroup', where=self.group)
+        self.fields = get_or_create_table(
+                                self.h5file, self.group, 'fields', FieldIndex)
         self.field_values = {}
 
         if 'I' in self.group._v_children.keys():    # Data already exists?
             fieldchildren = self.fieldgroup._v_children.keys()
             for child in fieldchildren:
-                carray = get_or_create_array(self.h5file, self.fieldgroup,
-                                                          child, None)
+                carray = get_or_create_array(
+                                self.h5file, self.fieldgroup, child, None)
                 self.field_values[child] = carray
             self.I = get_or_create_array(h5file, self.group, 'I', [])
         else:   # No data in this group.
@@ -390,11 +396,7 @@ class HDF5NodeAttributes(object):
                     if name in attributes[i]:
                         mvalues[name].append(attributes[i][name])
                     else:
-                        if this_type == str(type('')): mvalues[name].append('')
-                        if this_type == str(type(1)): mvalues[name].append(0)
-                        if this_type == str(type(1.1)): mvalues[name].append(0.0)
-                        if this_type == str(type(u'')): mvalues[name].append(u'')
-                        if this_type == str(type([])): mvalues[name].append(pickle.dumps([]))
+                        mvalues[name].append(mtypes[this_type])
 
             # Generate a fields table.
             for name,this_type in fieldkeys.iteritems():
@@ -411,9 +413,8 @@ class HDF5NodeAttributes(object):
             for name in fieldkeys.keys():
                 if fieldkeys[name] == str(type([])):
                     mvalues[name] = [ pickle.dumps(v) for v in mvalues[name] ]
-                self.field_values[name] = get_or_create_array(self.h5file,
-                                                              self.fieldgroup, name,
-                                                              mvalues[name])
+                self.field_values[name] = get_or_create_array(
+                            self.h5file, self.fieldgroup, name, mvalues[name])
 
     def __iter__(self):
         return iter(self.get_nodes())
@@ -495,4 +496,53 @@ class HDF5NodeAttributes(object):
         if this_type == str(type([])): return pickle.loads(value)
         return value
 
+mtypes = {
+    str(type('')): '',
+    str(type(1)): 0,
+    str(type(1.1)): 0.0,
+    str(type(u'')): u'',
+    str(type([])): pickle.dumps([]) }
 
+def to_hdf5(G, datapath=None):
+    return HDF5GraphCollection(G, datapath=datapath)
+
+def from_hdf5(HD_or_path):
+    """
+    Load a :class:`.GraphCollection` from a :class:`.HDF5GraphCollection`\.
+    
+    Parameters
+    ----------
+    HD_or_path : str or :class:`.GraphCollection`
+        If str, must be a path to a :class:`.GraphCollection` HDF5 repo.
+        
+    Returns
+    -------
+    G : :class:`.GraphCollection`
+    
+    Examples
+    --------
+
+    From a path:
+    
+    .. code-block:: python
+    
+       >>> model = from_hdf5('/path/to/my/HDF5LDAModel.h5')
+       
+    """
+
+    if type(HD_or_path) is str:
+        hmodel = HDF5GraphCollection(datapath=HD_or_path)
+    elif type(HD_or_path) is HDF5GraphCollection:
+        hmodel = HD_or_path
+    else:
+        raise AttributeError('Must provide datapath or HDF5LDAModel object.')
+
+    G = GraphCollection()
+    for key, graph in hmodel.graphs.iteritems():
+        G.graphs[key] = graph.to_graph()
+
+    G.node_index = { k:v for k,v in hmodel.node_index.iteritems() }
+    G.edge_list = [ e for e in hmodel.edge_list ]
+    G.node_lookup = { k:v for k,v in hmodel.node_lookup.iteritems() }
+    
+    return G
