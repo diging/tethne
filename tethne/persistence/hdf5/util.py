@@ -378,7 +378,6 @@ class HDF5FeatureSet(dict):
                                         tables.atom.Int32Atom(),
                                         tables.atom.Float64Atom(),
                                         tables.atom.StringAtom(100) )    )
-#                    HDF5FeatureValues( self.h5file, self.group )  )
             elif key == 'papers':
                 dict.__setitem__(self, key,
                     HDF5SparseValues(   self.h5file, self.group, key,

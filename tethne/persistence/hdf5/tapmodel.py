@@ -32,7 +32,6 @@ class HDF5TAPModel(TAPModel):
         logger.debug('HDF5TAPModel: HDF5Graph with {0} nodes'.format(self.N) + \
                      ' and {0} edges'.format(self.M))
         
-        
         # Load or create arrays group.
         self.agroup = get_or_create_group(self.h5file, 'arrays')
         logger.debug('HDF5TAPModel: initialized array group.')
