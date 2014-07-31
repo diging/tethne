@@ -1,26 +1,17 @@
-![alt text](https://raw.github.com/diging/tethne/python/doc/logo.jpeg "Tethneus, an orb weaving spider.")
+![alt text](https://raw.github.com/diging/tethne/python/doc/logo_round.png "Tethneus, an orb weaving spider.")
 
 Tethne
 ======
-Tethne is a Python package that draws together tools and techniques from bibliometrics, 
-computational linguistics, and social influence modeling into a single easy-to-use corpus
-analysis framework. Scholars can use Tethne to parse and organize data from the ISI Web of
-Science and JSTOR Data-for-Research databases, and generate time-variant citation-based
-network models, topic models, and social influence models. Tethne also provides mechanisms
-for visualizing those models using mainstream network visualization software (e.g. 
-Cyotoscape and Gephi) and the MatPlotLib Python library.
-
-![alt text](https://raw.githubusercontent.com/diging/tethne/python/doc/highlevel.png "Highlevel architecture for Tethne.")
-![alt text](https://raw.githubusercontent.com/diging/tethne/python/doc/legend.png "Legend.")
+Tethne is a Python package for integrated bibliographic and corpus analysis developed by the Digital Innovation Group at Arizona State University. Tethne provides simple tools for generating networks from bibliographic datasets, and provides a framework for weaving together techniques from scientometrics, computational linguistics, topic modeling, and social influence modeling. Rather than reinvent or re- implement existing algorithms, Tethne is designed to interface with existing software packages, and to provide mechanisms for drawing the results and functionalities of those packages together.
 
 Key features
 ------------
 * Flexible core model for text and citation-data.
 * Provides core analytic features of popular citation-analysis software (e.g. Citespace).
-* Integrates popular topic modeling software (e.g. MALLET, Gensim).
+* Integrates popular topic modeling software (e.g. MALLET).
 * Export network models to mainstream formats (e.g. for visualization in Cytoscape).
 * Leverages powerful computational and network-analysis libraries in Python. 
-* HDF5 data management ensures efficient memory usage, persistence, and interoperability.
+* HDF5 data management for persistence and interoperability.
 
 Documentation
 -------------
