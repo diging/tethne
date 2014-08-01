@@ -181,3 +181,137 @@ class HDF5Corpus(Corpus):
         self.h5file.flush()                
         super(HDF5Corpus, self).filter_features(fold, fnew, filt)
         self.h5file.flush()
+
+def to_hdf5(obj, datapath=None):
+    """
+    Transforms a :class:`.Corpus` into a :class:`.HDF5Corpus`\.
+    
+    Use this method to store your :class:`.Corpus`\, e.g. to archive data
+    associated with your study or project.
+    
+    Parameters
+    ----------
+    datapath : str
+        If provided, will create the new :class:`.HDF5Corpus` at
+        that location.
+    
+    Returns
+    -------
+    HD : :class:`.HDF5Corpus`
+    
+    Examples
+    --------
+    
+    .. code-block:: python
+    
+       >>> HC = C.to_hdf5(datapath='/path/to/my/archive')
+       
+    """
+
+    # Initialize, but don't index.
+    HD = HDF5Corpus([], index_by=obj.index_by,
+                        index_citation_by=obj.index_citation_by,
+                        datapath=datapath,
+                        index=False )
+
+    HD = _migrate_values(obj, HD)
+    return HD
+
+def from_hdf5(HD_or_path):
+    """
+    Load or transform a :class:`.HDF5Corpus` into a :class:`.Corpus`\.
+    
+    If `HD_or_path` is a string, will attempt to load the 
+    :class:`.HDF5Corpus` from that path.
+    
+    Parameters
+    ----------
+    HD_or_path : str or :class:`.HDF5Corpus`
+        If str, must be a path to a :class:`.HDF5Corpus` HDF5 repo.
+    
+    Returns
+    -------
+    D : :class:`.Corpus`
+    
+    Examples
+    --------
+
+    .. code-block:: python
+    
+       >>> C = from_hdf5('/path/to/my/archive/MyH5Corpus.h5')
+    """
+
+    if HD_or_path is str:
+        hd = HDF5Corpus([], index=False, datapath=HD_or_path)
+    elif type(HD_or_path) is HDF5Corpus:
+        hd = HD_or_path
+
+    D = _migrate_values(hd, Corpus([], index=False))
+    return D
+
+def _migrate_values(fromD, toD):
+    """
+    Transfers properties from one :class:`.Corpus` to another.
+    
+    `fromD` and `toD` can by anything that behaves like a 
+    :class:`.Corpus`\, including a :class:`.HDF5Corpus`\.
+    
+    Parameters
+    ----------
+    fromD : :class:`.Corpus`
+        Source :class:`.Corpus`
+    toD : :class:`.Corpus`
+        Target :class:`.Corpus`
+        
+    Returns
+    -------
+    toD : :class:`.Corpus`
+        Updated target :class:`.Corpus`
+    """
+    
+    logger.debug('migrate values')
+
+    # Transfer papers.
+    for k,v in fromD.papers.iteritems():
+        toD.papers[k] = v
+    logger.debug('papers: {0}->{1}'.format(len(fromD.papers), len(toD.papers)))
+
+    # Transfer citations.
+    for k,v in fromD.citations.iteritems():
+        toD.citations[k] = v
+    logger.debug('citations: {0}->{1}'
+                              .format(len(fromD.citations), len(toD.citations)))
+
+    for k,v in fromD.papers_citing.iteritems():
+        toD.papers_citing[k] = v
+    logger.debug('papers_citing: {0}->{1}'
+                      .format(len(fromD.papers_citing), len(toD.papers_citing)))
+
+    # Transfer authors.
+    for k,v in fromD.authors.iteritems():
+        toD.authors[k] = v
+    logger.debug('authors: {0}->{1}'
+                                  .format(len(fromD.authors), len(toD.authors)))
+
+    # Transfer features.
+    for k, v in fromD.features.iteritems():
+        toD._define_features(   k, v['index'], v['features'], v['counts'],
+                                   v['documentCounts'], v['papers']    )
+    logger.debug('features: {0}->{1}'
+                                .format(len(fromD.features), len(toD.features)))
+
+    # Transfer axes.
+    for k,v in fromD.axes.iteritems():
+        toD.axes[k] = v
+    logger.debug('axes: {0}->{1}'.format(len(fromD.axes), len(toD.axes)))
+
+    toD.N_a = len(fromD.authors)
+    toD.N_c = len(fromD.citations)
+    toD.N_p = len(fromD.papers)
+    
+    toD.index_by = fromD.index_by
+    toD.index_citation_by = fromD.index_citation_by
+
+    return toD
+
+

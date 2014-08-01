@@ -710,19 +710,19 @@ class vlarray_dict(dict):
         
         indexname = '{0}_index'.format(self.name)
 
-        # Load or create index.
-        if indexname not in self.group:
-            logger.debug('no node for {0} in {1}, creating...'
-                                                 .format(indexname, self.group))
+#        # Load or create index.
+#        if indexname not in self.group:
+#            logger.debug('no node for {0} in {1}, creating...'
+#                                                 .format(indexname, self.group))
+#
+#            self.index = self.h5file.createTable(self.group, indexname, Index)
+#            self.index.cols.mindex.createIndex()
+#        else:
+#            logger.debug('found node for {0} in {1}, loading...'
+#                                                 .format(indexname, self.group))
+#
+#            self.index = self.h5file.getNode(self.group, indexname)
 
-            self.index = self.h5file.createTable(self.group, indexname, Index)
-            self.index.cols.mindex.createIndex()
-        else:
-            logger.debug('found node for {0} in {1}, loading...'
-                                                 .format(indexname, self.group))
-
-            self.index = self.h5file.getNode(self.group, indexname)
-        
         # Load or create vlarray.
         if self.name not in self.group:
             logger.debug('no node for VLArray {0} in group {1}, creating...'
