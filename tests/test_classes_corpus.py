@@ -161,8 +161,6 @@ class TestCorpusDfR(unittest.TestCase):
         self.assertEqual(len(self.D.features['unigrams']['counts']), 51639)
         self.assertEqual(len(self.D.features['unigrams']['documentCounts']), 51639)
 
-
-
 class TestCorpusTokenization(unittest.TestCase):
 
     def setUp(self):

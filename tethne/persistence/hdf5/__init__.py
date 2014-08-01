@@ -1,6 +1,6 @@
-import graphcollection, ldamodel, tapmodel, dtmmodel
+import graphcollection, ldamodel, tapmodel, dtmmodel, corpus
 from util import get_h5file
-from ...classes import GraphCollection
+from ...classes import GraphCollection, Corpus
 from ...model import LDAModel, TAPModel, DTMModel
 
 htypes = {
@@ -20,6 +20,8 @@ def to_hdf5(obj, datapath=None):
         return tapmodel.to_hdf5(obj, datapath=datapath)
     elif type(obj) is DTMModel:
         return dtmmodel.to_hdf5(obj, datapath=datapath)
+    elif type(obj) is Corpus:
+        return corpus.to_hdf5(obj, datapath=datapath)
 
 def from_hdf5(HD_or_path):
     if type(HD_or_path) is str:     # Determine object type from File.title.
@@ -40,3 +42,6 @@ def from_hdf5(HD_or_path):
 
     elif type(HD_or_path) is dtmmodel.HDF5DTMModel:
         return dtmmodel.from_hdf5(HD_or_path)
+
+    elif type(HD_or_path) is corpus.HDF5Corpus:
+        return coprus.from_hdf5(HD_or_path)

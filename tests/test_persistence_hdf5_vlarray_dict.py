@@ -47,7 +47,7 @@ class TestStore(unittest.TestCase):
         self.assertEqual(vd_.shape[0], len(keys) + 1)     # 0-padded
 
         # Index is the right shape
-        vd_index = h5file.getNode(group, 'indices_test')
+        vd_index = h5file.getNode(group, 'test_keys')
         self.assertEqual(vd_index.shape[0], len(keys) + 1)
         self.assertEqual(vd_index[i+1], keys[i])
 
@@ -84,7 +84,7 @@ class TestStore(unittest.TestCase):
         self.assertEqual(vd_.shape[0], len(keys) + 1)     # 0-padded
 
         # Index is the right shape
-        vd_index = h5file.getNode(group, 'indices_test')
+        vd_index = h5file.getNode(group, 'test_keys')
         self.assertEqual(vd_index.shape[0], len(keys) + 1)
 
         # Same values and keys
@@ -124,7 +124,7 @@ class TestStore(unittest.TestCase):
         self.assertEqual(vd_.shape[0], len(keys) + 1)     # 0-padded
 
         # Index is the right shape
-        vd_index = h5file.getNode(group, 'indices_test')
+        vd_index = h5file.getNode(group, 'test_keys')
         self.assertEqual(vd_index.shape[0], len(keys) + 1)
 
         # Same values and keys
@@ -166,7 +166,7 @@ class TestStore(unittest.TestCase):
         self.assertEqual(vd_.shape[0], len(keys) + 1)     # 0-padded
 
         # Index is the right shape
-        vd_index = h5file.getNode(group, 'indices_test')
+        vd_index = h5file.getNode(group, 'test_keys')
         self.assertEqual(vd_index.shape[0], len(keys) + 1)
 
         # Same values and keys
@@ -203,7 +203,7 @@ class TestStore(unittest.TestCase):
         self.assertEqual(vd_.shape[0], len(keys) + 1)     # 0-padded
 
         # Index is the right shape
-        vd_index = h5file.getNode(group, 'indices_test')
+        vd_index = h5file.getNode(group, 'test_keys')
         self.assertEqual(vd_index.shape[0], len(keys) + 1)
         self.assertEqual(vd_index[i+1], keys[i])
 
