@@ -276,45 +276,45 @@ class TestCorpusDfR(unittest.TestCase):
 
         print HD.authors
 
-#    def test_from_hdf5(self):
-#        self.D.slice('date', method='time_period', window_size=5)
-#        HD = to_hdf5(self.D, datapath=self.h5path)
-#
-#        D_ = from_hdf5(HD)
-#
-#        self.assertIsInstance(D_, Corpus)
-#
-#        # Papers should be the same.
-#        self.assertEqual(   len(HD.papers), len(D_.papers)  )
-#        
-#        # Citations should be the same.
-#        self.assertEqual(   len(HD.citations), len(D_.citations)    )
-#        self.assertEqual(   len(HD.papers_citing), len(D_.papers_citing)   )
-#        self.assertEqual(   set(HD.papers_citing.keys()),
-#                            set(D_.papers_citing.keys())    )
-#        
-#        # Authors should be the same.
-#        self.assertEqual(   len(HD.authors), len(D_.authors)    )
-#        self.assertEqual(set(HD.authors.keys()), set(D_.authors.keys()))
-#        for k in D_.authors.keys():
-#            self.assertTrue(k in HD.authors)
-#
-#        # Features should be the same.
-#        self.assertEqual(   len(HD.features['unigrams']['index']),
-#                            len(D_.features['unigrams']['index'])   )
-#        self.assertEqual(   len(HD.features['unigrams']['features']),
-#                            len(D_.features['unigrams']['features'])   )
-#        self.assertEqual(   len(HD.features['unigrams']['counts']),
-#                            len(D_.features['unigrams']['counts'])   )
-#        self.assertEqual(   len(HD.features['unigrams']['documentCounts']),
-#                            len(D_.features['unigrams']['documentCounts']) )
-#
-#        # Axes should be the same.
-#        self.assertEqual(   len(HD.axes), len(D_.axes)  )
-#        self.assertEqual(   len(HD.axes['date']), len(D_.axes['date'])  )
-#
-#    def tearDown(self):
-#        os.remove(self.h5path)
+    def test_from_hdf5(self):
+        self.D.slice('date', method='time_period', window_size=5)
+        HD = to_hdf5(self.D, datapath=self.h5path)
+
+        D_ = from_hdf5(HD)
+
+        self.assertIsInstance(D_, Corpus)
+
+        # Papers should be the same.
+        self.assertEqual(   len(HD.papers), len(D_.papers)  )
+        
+        # Citations should be the same.
+        self.assertEqual(   len(HD.citations), len(D_.citations)    )
+        self.assertEqual(   len(HD.papers_citing), len(D_.papers_citing)   )
+        self.assertEqual(   set(HD.papers_citing.keys()),
+                            set(D_.papers_citing.keys())    )
+        
+        # Authors should be the same.
+        self.assertEqual(   len(HD.authors), len(D_.authors)    )
+        self.assertEqual(set(HD.authors.keys()), set(D_.authors.keys()))
+        for k in D_.authors.keys():
+            self.assertTrue(k in HD.authors)
+
+        # Features should be the same.
+        self.assertEqual(   len(HD.features['unigrams']['index']),
+                            len(D_.features['unigrams']['index'])   )
+        self.assertEqual(   len(HD.features['unigrams']['features']),
+                            len(D_.features['unigrams']['features'])   )
+        self.assertEqual(   len(HD.features['unigrams']['counts']),
+                            len(D_.features['unigrams']['counts'])   )
+        self.assertEqual(   len(HD.features['unigrams']['documentCounts']),
+                            len(D_.features['unigrams']['documentCounts']) )
+
+        # Axes should be the same.
+        self.assertEqual(   len(HD.axes), len(D_.axes)  )
+        self.assertEqual(   len(HD.axes['date']), len(D_.axes['date'])  )
+
+    def tearDown(self):
+        os.remove(self.h5path)
 
 if __name__ == '__main__':
     unittest.main()

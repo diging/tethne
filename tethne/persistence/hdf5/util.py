@@ -339,7 +339,7 @@ class HDF5FeatureSet(dict):
 
         self.name = name
 
-        dict.__setitem__(self, 'features', HDF5FeatureValues(h5file, self.group))
+        dict.__setitem__(self, 'features', HDF5FeatureValues(h5file, self.group, 'features'))
 
         logger.debug('...done.')
 
@@ -351,17 +351,13 @@ class HDF5FeatureSet(dict):
             logger.debug('{0} does not exist, creating...'.format(key))
             if key == 'features':
                 dict.__setitem__(self, key,
-                    HDF5SparseValues(   self.h5file, self.group, key,
-                                        tables.atom.Int32Atom(),
-                                        tables.atom.Float64Atom(),
-                                        tables.atom.StringAtom(100) )    )
-#                    HDF5FeatureValues( self.h5file, self.group )    )
+                    HDF5FeatureValues( self.h5file, self.group, key )    )
+
             elif key == 'papers':
                 dict.__setitem__(self, key,
-                    HDF5SparseValues(   self.h5file, self.group, key,
-                                        tables.atom.StringAtom(100),
-                                        tables.atom.Float64Atom(),
-                                        tables.atom.Int32Atom() )    )
+                    HDF5FeatureValues( self.h5file, self.group, key, keyatom=tables.Int32Atom(),
+                                                                indexatom=tables.StringAtom(200)) )
+
                 for k,v in value.iteritems():
                     self[key][k] = v
             else:
@@ -379,16 +375,13 @@ class HDF5FeatureSet(dict):
         except KeyError:
             if key == 'features':
                 dict.__setitem__(self, key,
-                    HDF5SparseValues(   self.h5file, self.group, key,
-                                        tables.atom.Int32Atom(),
-                                        tables.atom.Float64Atom(),
-                                        tables.atom.StringAtom(100) )    )
+                    HDF5FeatureValues( self.h5file, self.group, key )    )
+
             elif key == 'papers':
                 dict.__setitem__(self, key,
-                    HDF5SparseValues(   self.h5file, self.group, key,
-                                        tables.atom.StringAtom(100),
-                                        tables.atom.Float64Atom(),
-                                        tables.atom.Int32Atom() )    )
+                    HDF5FeatureValues( self.h5file, self.group, key, keyatom=tables.Int32Atom(),
+                                                                indexatom=tables.StringAtom(200)) )
+
             else:
                 dict.__setitem__(self, key,
                     HDF5ArrayDict( self.h5file, self.group, key, [] )   )
@@ -496,72 +489,40 @@ class HDF5SparseValues(dict):
             yield keys[i], self.__getitem__(keys[i])
             i += 1
 
+
 class HDF5FeatureValues(dict):
-    def __init__(self, h5file, group):
+    def __init__(self, h5file, group, name, keyatom=tables.StringAtom(200),
+                                            indexatom=tables.Int32Atom(),
+                                            valueatom=tables.Float64Atom()):
         self.h5file = h5file
-        
-        # Load or create features group.
-        self.group = get_or_create_group(self.h5file, 'features', group)
+        self.group = get_or_create_group(self.h5file, name, group)
 
-        # Load or create documents table.
-        if 'documents' not in self.group:
-            self.documents = self.h5file.create_table(self.group, 'documents',
-                                                                  Index)
-            self.documents.cols.i.create_index()
-            self.documents.cols.mindex.create_index()
-        else:
-            self.documents = self.h5file.getNode(self.group, 'documents')
-        self.d = {}
-        
-    def _get_or_create(self, key, value):
-        # Index the document.
-        i = len(self.documents)
-        doc = self.documents.row
-        doc['i'] = i
-        doc['mindex'] = key
-        doc.append()
-        self.d[i] = key
-        self.documents.flush()
-    
-        indices, values = zip(*value)
-        iname = 'indices{0}'.format(i)
-        kname = 'values{0}'.format(i)
+        self.indices = vlarray_dict(    self.h5file, self.group,
+                                        'indices', indexatom, keyatom   )
+        self.values  = vlarray_dict(    self.h5file, self.group,
+                                        'values', valueatom, keyatom    )
 
-        # Load or create I array.
-        if iname not in self.group:
-            I = self.h5file.create_array(self.group, iname,
-                                         numpy.array(indices))
-        else:
-            I = self.h5file.getNode(self.group, iname)
-
-        # Load or create K array.
-        if kname not in self.group:
-            K = self.h5file.create_array(self.group, kname,
-                                         numpy.array(values))
-        else:
-            K = self.h5file.getNode(self.group, kname)
-
-        return I,K
-    
     def __setitem__(self, key, value):
-        if key not in self:
-            I,K = self._get_or_create(key, value)
-            dict.__setitem__(self, key, (I,K))
-        
+        i,v = zip(*value)
+        self.indices[key] = list(i)
+        self.values[key] = list(v)
+
+
     def __getitem__(self, key):
-        try:
-            I,K = dict.__getitem__(self, key)
-        except KeyError:
-            I,K = self._get_or_create(key, [])
-        return zip(I,K)
+        i = self.indices[key]
+        v = self.values[key]
+        value = zip(i,v)
+        return value
 
     def __len__(self):
-        return len(self.documents)
-    
+        return len(self.indices)
+
     def iteritems(self):
+        N = self.__len__()
+        keys = self.indices.keys()
         i = 0
-        while i < len(self.documents):
-            yield self.d[i], self.__getitem__(self.d[i])
+        while i < N:
+            yield keys[i], self.__getitem__(keys[i])
             i += 1
 
 class papers_table(dict):
@@ -707,21 +668,6 @@ class vlarray_dict(dict):
             self.pytype = pytype[type(atom)]
         except KeyError:
             raise NotImplementedError('No equivalent Python type for atom.')
-        
-        indexname = '{0}_index'.format(self.name)
-
-#        # Load or create index.
-#        if indexname not in self.group:
-#            logger.debug('no node for {0} in {1}, creating...'
-#                                                 .format(indexname, self.group))
-#
-#            self.index = self.h5file.createTable(self.group, indexname, Index)
-#            self.index.cols.mindex.createIndex()
-#        else:
-#            logger.debug('found node for {0} in {1}, loading...'
-#                                                 .format(indexname, self.group))
-#
-#            self.index = self.h5file.getNode(self.group, indexname)
 
         # Load or create vlarray.
         if self.name not in self.group:
@@ -745,7 +691,7 @@ class vlarray_dict(dict):
             self.vlarray = self.h5file.getNode(self.group, self.name)
             self.atom = self.vlarray.atom
 
-        indexname = 'indices_{0}'.format(self.name)
+        indexname = '{0}_keys'.format(self.name)
         
         # If create, pads with dummy index at 0.
         if indexname not in self.group:
