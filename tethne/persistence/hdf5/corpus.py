@@ -22,29 +22,78 @@ class HDF5Corpus(Corpus):
     store data. The structure of a typical HDF5 repository for an instance
     of this class is:
     
-    # TODO: update this.
-    
     * ``/``
-    
-      * ``arrays``/
+
+      * ``arrays/``
       
-        * ``authors``: VLArray, :class:`.vlarray_dict`
-        * ``authors_index``: table, see :class:`.vlarray_dict`
-        * ``papers_citing``: VLArray, :class:`.vlarray_dict`
-        * ``papers_citing_index``: table, see :class:`.vlarray_dict`
+        * ``authors``: VLArray (String), :class:`.vlarray_dict`
+                Maps author indices in ``authors_index`` onto the IDs of papers that they
+                authored. Padded with an empty 0th entry.
+        * ``authors_index``: EArray (String), see :class:`.vlarray_dict`
+                Maps author indices used in ``authors`` to string representations of 
+                author names (LAST F). Padded with an empty 0th entry.
+        * ``papers_citing``: VLArray (String), :class:`.vlarray_dict`
+                Each row corresponds to a paper, and contains a set of IDs for the papers
+                that cite that paper. Row indices correspond to the entries in
+                ``papers_citing_index``. Padded with an empty 0th entry.
+        * ``papers_citing_index``: EArray (String), see :class:`.vlarray_dict`
+                Maps paper indices used in ``papers_citing`` to string paper IDs.
+                Padded with an empty 0th entry.
+
+      * ``axes/``
+            Each slice axis is represented by a VLArray (``[slice axis]``) and an EArray
+            (``[slice_axis]_keys``).
+
+        * ``[slice axis]`` (e.g. ``date``): VLArray (String)
+                Each row is a slice, containing a variable-length array of paper IDs.
+        * ``[slice axis]_keys`` (e.g. ``date_keys``): EArray (Int32 or String)
+                Maps row indices in ``[slice axis]`` onto slice names/keys.
       
       * ``citations``/
       
-        * ``papers_table``: table, :class:`.papers_table`
+        * ``papers_table``: Table, see :class:`.papers_table`
+                Contains metadata about cited references. These are usually not the same
+                papers as those described in ``papers/``.
       
       * ``features``/
-      
-        * ``[ feature type ]``/
+                This group contains data for featuresets. Each featureset has its own
+                subgroup, as described below.
+        * ``[featureset name]/``     
+        
+          * ``counts``: Array
+                Overall frequency for features across the whole Corpus.
+          * ``documentCounts``: Array
+                Number of papers in which each feature occurs.
+          * ``index``: Array
+                Maps indices in ``counts`` and ``documentCounts`` onto string
+                representations of each feature.
+          * ``features/``
+                Contains sparse frequency vectors over features for documents. Each row
+                in the arrays belows corresponds to a single document. The values of
+                ``indices`` are feature indices for each document, and the values of 
+                ``values`` are the frequencies themselves. ``indices_keys`` and
+                ``values_keys`` should be identical, and map the rows in ``indices`` and
+                ``values`` onto paper IDs.
 
-          * ``index``: table, :class:`.Index` -- int(f_i) : str(f)
-          * ``features``: table, :class:`.StrIndex` -- str(p) : [ ( f_i, c) ]
-          * ``counts``: table, :class:`.IntIndex` --  int(f_i) : int(C)
-          * ``documentCounts``: table, :class:`.IntIndex` -- int(f_i) : int(C)
+                Thus a sparse frequency vector over features for a document can be
+                reconstructed as ``freq[d,:] = [ (I[d,0],V[d,0]) ... (I[d,N],V[d,N])]``,
+                where ``I`` is the variable-length array ``indices`` and ``V`` is the 
+                variable-length array ``values``, and ``N`` is the length of the slice
+                ``I[d,:]``.
+                
+            * ``indices``: VLArray
+            * ``indices_keys``: EArray
+            * ``values``: VLArray
+            * ``values_keys``: Earray
+          * ``papers/``
+                Contains sparse frequency vectors over documents for features. Same
+                structure as in ``features/``, above, except that rows correspond to
+                features and ``indices`` contain variable-length arrays of paper IDs.
+
+      
+      * ``papers/``
+        * ``papers_table``: Table, see :class:`.papers_table`
+                Contains metadata about the papers in this Corpus.
     
     Since some data types (e.g. list, tuple) are not supported in PyTables/HDF5,
     we make use of cPickle serialization. For example, sparse feature vectors

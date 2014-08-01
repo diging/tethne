@@ -251,9 +251,19 @@ class HDF5Axes(dict):
             self.group = self.h5file.getNode('/axes')
 
     def __setitem__(self, key, value):
-        logger.debug('HDF5Axes.__setitem__ for key {0}'.format(key))
+        logger.debug('key {0}'.format(key))
+        if type(value.values()[0][0]) is str:
+            keyatom = tables.StringAtom(200)
+        elif type(value.values()[0][0]) is int:
+            keyatom = tables.Int32Atom()
 
-        dict.__setitem__(self, key, HDF5Axis(self.h5file, self.group, key))
+        logger.debug('keyatom: {0}'.format(keyatom))
+        valuesatom = tables.StringAtom(200)
+
+        dict.__setitem__(self, key,
+            vlarray_dict(self.h5file, self.group, key, valuesatom, keyatom) )
+
+#        dict.__setitem__(self, key, HDF5Axis(self.h5file, self.group, key))
         for k,v in value.iteritems():
             self[key][k] = v
 
@@ -261,11 +271,20 @@ class HDF5Axes(dict):
         try:
             return dict.__getitem__(self, key)
         except KeyError:
-            dict.__setitem__(self, key, HDF5Axis(self.h5file, self.group, key))
+#            if type(value.values()[0][0]) is str:
+#                keyatom = tables.StringAtom(200)
+#            elif type(value.values()[0][0]) is int:
+#                keyatom = tables.Int32Atom()
+#
+#            valuesatom = tables.StringAtom(200)
+
+            dict.__setitem__(self, key,
+                vlarray_dict(self.h5file, self.group, key))#, valuesatom, keyatom))
+#            dict.__setitem__(self, key, HDF5Axis(self.h5file, self.group, key))
             return dict.__getitem__(self, key)
 
     def __len__(self):
-        return len(self.group._f_listNodes())
+        return len(self.group._f_listNodes())/2
         
 
 class HDF5Axis(dict):
