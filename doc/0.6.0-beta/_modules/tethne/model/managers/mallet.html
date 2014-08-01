@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>tethne.model.managers.mallet &mdash; tethne 0.6.0-beta documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.6.0-beta',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../../_static/js/copybutton.js"></script>
+    <link rel="top" title="tethne 0.6.0-beta documentation" href="../../../../index.html" >
+    <link rel="up" title="tethne.model.managers" href="../managers.html" > 
+  </head>
+  <body>
+
+<div class="container">
+  <div class="top-scipy-org-logo-header">
+    <a href="../../../../index.html">
+      <img style="border: 0; height: 60px;" alt="SciPy" src="../../../../_static/img/logo_long_devo.png"></a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
+	
+        <li class="active"><a href="../../../../index.html">tethne 0.6.0-beta documentation</a></li>
+	
+          <li class="active"><a href="../../../index.html" >Module code</a></li>
+          <li class="active"><a href="../managers.html" accesskey="U">tethne.model.managers</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <h1>Source code for tethne.model.managers.mallet</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Classes and methods related to the :class:`.MALLETModelManager`\.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">networkx</span> <span class="kn">import</span> <span class="n">Graph</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">()</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s">&#39;ERROR&#39;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">...classes</span> <span class="kn">import</span> <span class="n">GraphCollection</span>
+<span class="c">#from ..social import TAPModel</span>
+<span class="kn">from</span> <span class="nn">..managers</span> <span class="kn">import</span> <span class="n">ModelManager</span>
+<span class="kn">from</span> <span class="nn">...writers.corpora</span> <span class="kn">import</span> <span class="n">to_documents</span>
+<span class="kn">from</span> <span class="nn">..corpus.ldamodel</span> <span class="kn">import</span> <span class="n">from_mallet</span><span class="p">,</span> <span class="n">LDAModel</span>
+
+<div class="viewcode-block" id="MALLETModelManager"><a class="viewcode-back" href="../../../../tethne.model.managers.mallet.html#tethne.model.managers.mallet.MALLETModelManager">[docs]</a><span class="k">class</span> <span class="nc">MALLETModelManager</span><span class="p">(</span><span class="n">ModelManager</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a :class:`.LDAModel` from a :class:`.Corpus` using</span>
+<span class="sd">    `MALLET &lt;http://mallet.cs.umass.edu/&gt;`_.</span>
+<span class="sd">    </span>
+<span class="sd">    The :class:`.Corpus` should already contain at least one featurset,</span>
+<span class="sd">    indicated by the `feature` parameter, such as wordcounts. You may</span>
+<span class="sd">    specify two working directories: `temppath` should be a working</span>
+<span class="sd">    directory that will contain intermediate files (e.g. documents, data</span>
+<span class="sd">    files, metadata), while `outpath` will contain the final model and any </span>
+<span class="sd">    plots generated during the modeling process. If `temppath` is not</span>
+<span class="sd">    provided, generates and uses a system temporary directory.</span>
+<span class="sd">    </span>
+<span class="sd">    Tethne comes bundled with a recent version of MALLET. If you would</span>
+<span class="sd">    rather use your own install, you can do so by providing the </span>
+<span class="sd">    `mallet_path` parameter. This should point to the directory containing</span>
+<span class="sd">    ``/bin/mallet``.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    D : :class:`.Corpus`</span>
+<span class="sd">    feature : str</span>
+<span class="sd">        Key from D.features containing wordcounts (or whatever</span>
+<span class="sd">        you want to model with).</span>
+<span class="sd">    outpath : str</span>
+<span class="sd">        Path to output directory.</span>
+<span class="sd">    temppath : str</span>
+<span class="sd">        Path to temporary directory.</span>
+<span class="sd">    mallet_path : str</span>
+<span class="sd">        Path to MALLET install directory (contains bin/mallet).</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">        </span>
+<span class="sd">    Starting with some JSTOR DfR data (with wordcounts), a typical workflow</span>
+<span class="sd">    might look something like this:</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">    </span>
+<span class="sd">       &gt;&gt;&gt; from nltk.corpus import stopwords                 #  1. Get stoplist.</span>
+<span class="sd">       &gt;&gt;&gt; stoplist = stopwords.words()</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; from tethne.readers import dfr                    #  2. Build Corpus.</span>
+<span class="sd">       &gt;&gt;&gt; C = dfr.corpus_from_dir(&#39;/path/to/DfR/datasets&#39;, &#39;uni&#39;, stoplist)</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; def filt(s, C, DC):                           # 3. Filter wordcounts.</span>
+<span class="sd">       ...     if C &gt; 3 and DC &gt; 1 and len(s) &gt; 3:</span>
+<span class="sd">       ...         return True</span>
+<span class="sd">       ...     return False</span>
+<span class="sd">       &gt;&gt;&gt; C.filter_features(&#39;wordcounts&#39;, &#39;wc_filtered&#39;, filt)</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; from tethne.model import MALLETModelManager       #   4. Get Manager.</span>
+<span class="sd">       &gt;&gt;&gt; outpath = &#39;/path/to/my/working/directory&#39;</span>
+<span class="sd">       &gt;&gt;&gt; mallet = &#39;/Applications/mallet-2.0.7&#39;</span>
+<span class="sd">       &gt;&gt;&gt; M = MALLETModelManager(C, &#39;wc_filtered&#39;, outpath, mallet_path=mallet)</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; M.prep()                                          #    5. Prep model.</span>
+<span class="sd">       </span>
+<span class="sd">       &gt;&gt;&gt; model = M.build(Z=50, max_iter=300)               #   6. Build model.</span>
+<span class="sd">       &gt;&gt;&gt; model                                             # (may take awhile)</span>
+<span class="sd">       &lt;tethne.model.corpus.ldamodel.LDAModel at 0x10bfac710&gt;</span>
+
+<span class="sd">    A plot showing the log-likelihood/topic over modeling iterations should be</span>
+<span class="sd">    generated in your `outpath`. For example:</span>
+<span class="sd">    </span>
+<span class="sd">    .. figure:: _static/images/ldamodel_LL.png</span>
+<span class="sd">       :width: 400</span>
+<span class="sd">       :align: center</span>
+<span class="sd">       </span>
+<span class="sd">    Behind the scenes, the :func:`.prep` procedure generates a plain-text corpus</span>
+<span class="sd">    file at `temppath`, along with a metadata file. MALLET&#39;s ``import-file``</span>
+<span class="sd">    procedure is then called, which translates the corpus into MALLET&#39;s internal</span>
+<span class="sd">    format (also stored at the `temppath`).</span>
+<span class="sd">    </span>
+<span class="sd">    The :func:`.build` procedure then invokes MALLET&#39;s ``train-topics``</span>
+<span class="sd">    procedure. This step may take a considerable amount of time, anywhere from </span>
+<span class="sd">    a few minutes (small corpus, few topics) to a few hours (large corpus, many</span>
+<span class="sd">    topics).</span>
+
+<span class="sd">    For a :class:`.Corpus` with a few thousand :class:`.Paper`\s, 300 - 500 </span>
+<span class="sd">    iterations is often sufficient to achieve convergence for 20-100 topics.</span>
+<span class="sd">    </span>
+<span class="sd">    Once the :class:`.LDAModel` is built, you can access its methods directly.</span>
+<span class="sd">    See full method descriptions in :class:`.LDAModel`\.</span>
+<span class="sd">    </span>
+<span class="sd">    For more information about topic modeling with MALLET see </span>
+<span class="sd">    `this tutorial &lt;http://programminghistorian.org/lessons/topic-modeling-and-mallet&gt;`_.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">feature</span><span class="o">=</span><span class="s">&#39;unigrams&#39;</span><span class="p">,</span> <span class="n">outpath</span><span class="o">=</span><span class="s">&#39;/tmp/&#39;</span><span class="p">,</span> <span class="n">temppath</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                          <span class="n">mallet_path</span><span class="o">=</span><span class="s">&#39;./model/bin/mallet-2.0.7&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MALLETModelManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">outpath</span><span class="p">,</span> <span class="n">temppath</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="n">D</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mallet_path</span> <span class="o">=</span> <span class="n">mallet_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature</span> <span class="o">=</span> <span class="n">feature</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_path</span> <span class="o">=</span> <span class="s">&#39;{0}/input.mallet&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">+</span><span class="s">&#39;/tethne_docs.txt&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meta_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">+</span><span class="s">&#39;/tethne_meta.csv&#39;</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="s">&#39;{0}/dt.dat&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wt</span> <span class="o">=</span> <span class="s">&#39;{0}/wt.dat&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">om</span> <span class="o">=</span> <span class="s">&#39;{0}/model.mallet&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outpath</span><span class="p">)</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">vocabulary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_generate_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Writes a corpus to disk amenable to MALLET topic modeling.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c"># Metadata to export with corpus.</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="p">(</span> <span class="n">meta</span><span class="p">,</span> <span class="p">{</span> <span class="n">p</span><span class="p">:</span> <span class="p">{</span> <span class="n">k</span><span class="p">:</span><span class="n">paper</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">meta</span> <span class="p">}</span>
+                       <span class="k">for</span> <span class="n">p</span><span class="p">,</span><span class="n">paper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="p">}</span> <span class="p">)</span>
+        
+        <span class="c"># Export the corpus.</span>
+        <span class="n">to_documents</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="o">+</span><span class="s">&#39;/tethne&#39;</span><span class="p">,</span>            <span class="c"># Temporary files.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="p">][</span><span class="s">&#39;features&#39;</span><span class="p">],</span>
+            <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+            <span class="n">vocab</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">feature</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">]</span> <span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_export_corpus</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">_export_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calls MALLET&#39;s `import-file` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># bin/mallet import-file --input /Users/erickpeirson/mycorpus_docs.txt</span>
+        <span class="c">#     --output mytopic-input.mallet --keep-sequence --remove-stopwords</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">mallet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mallet_path</span> <span class="o">+</span> <span class="s">&quot;/bin/mallet&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">exit</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">mallet</span><span class="p">,</span> 
+                    <span class="s">&#39;import-file&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;--input {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus_path</span><span class="p">),</span>
+                    <span class="s">&#39;--output {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_path</span><span class="p">),</span>
+                    <span class="s">&#39;--keep-sequence&#39;</span><span class="p">,</span>          <span class="c"># Required (oddly) for LDA.</span>
+                    <span class="s">&#39;--remove-stopwords&#39;</span> <span class="p">])</span>     <span class="c"># Probably redundant.</span>
+
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>     <span class="c"># Raised if mallet_path is bad.</span>
+            <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s">&quot;MALLET path invalid or non-existent.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">exit</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;MALLET import-file failed: {0}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">exit</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_run_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calls MALLET&#39;s `train-topic` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">#$ bin/mallet train-topics --input mytopic-input.mallet --num-topics 100 </span>
+        <span class="c">#&gt; --output-doc-topics /Users/erickpeirson/doc_top </span>
+        <span class="c">#&gt; --word-topic-counts-file /Users/erickpeirson/word_top </span>
+        <span class="c">#&gt; --output-topic-keys /Users/erickpeirson/topic_keys</span>
+        
+        <span class="n">prog</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&#39;\&lt;([^\)]+)\&gt;&#39;</span><span class="p">)</span>
+        <span class="n">ll_prog</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;(\d+)&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">mallet</span><span class="p">,</span>
+                        <span class="s">&#39;train-topics&#39;</span><span class="p">,</span>
+                        <span class="s">&#39;--input {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_path</span><span class="p">),</span>
+                        <span class="s">&#39;--num-topics {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">),</span>
+                        <span class="s">&#39;--num-iterations {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">max_iter</span><span class="p">),</span>
+                        <span class="s">&#39;--output-doc-topics {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">),</span>
+                        <span class="s">&#39;--word-topic-counts-file {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wt</span><span class="p">),</span>
+                        <span class="s">&#39;--output-model {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">om</span><span class="p">)</span> <span class="p">],</span>
+                    <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+                    <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+        
+            <span class="c"># Handle output of MALLET in real time.</span>
+            <span class="k">while</span> <span class="n">p</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">l</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                
+                <span class="c"># Keep track of LL/topic.</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">this_ll</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">&#39;([-+]\d+\.\d+)&#39;</span><span class="p">,</span> <span class="n">l</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ll</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">this_ll</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>  <span class="c"># Not every line will match.</span>
+                    <span class="k">pass</span>
+                
+                <span class="c"># Keep track of modeling progress.</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">this_iter</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">prog</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ll_iters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">this_iter</span><span class="p">)</span>
+                    <span class="n">progress</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">this_iter</span><span class="o">/</span><span class="n">max_iter</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Modeling progress: {0}%.</span><span class="se">\r</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span> <span class="n">progress</span> <span class="p">),)</span>
+                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>  <span class="c"># Not every line will match.</span>
+                    <span class="k">pass</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Modeling complete.&#39;</span><span class="p">)</span>
+            
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>     <span class="c"># Raised if mallet_path is bad.</span>
+            <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s">&quot;MALLET path invalid or non-existent.&quot;</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_iters</span> <span class="o">+=</span> <span class="n">max_iter</span>
+            
+    <span class="k">def</span> <span class="nf">_load_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">from_mallet</span><span class="p">(</span>   <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span> 
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">wt</span><span class="p">,</span> 
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">meta_path</span>  <span class="p">)</span>
+
+<div class="viewcode-block" id="MALLETModelManager.topic_over_time"><a class="viewcode-back" href="../../../../tethne.model.managers.mallet.html#tethne.model.managers.mallet.MALLETModelManager.topic_over_time">[docs]</a>    <span class="k">def</span> <span class="nf">topic_over_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;documents&#39;</span><span class="p">,</span> 
+                                 <span class="n">normed</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> 
+                                 <span class="n">figargs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;figsize&#39;</span><span class="p">:(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)}</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Representation of topic ``k`` over &#39;date&#39; slice axis.</span>
+<span class="sd">        </span>
+<span class="sd">        The :class:`.Corpus` used to initialize the :class:`.LDAModelManager`</span>
+<span class="sd">        must have been already sliced by &#39;date&#39;.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        k : int</span>
+<span class="sd">            Topic index.</span>
+<span class="sd">        threshold : float</span>
+<span class="sd">            Minimum representation of ``k`` in a document.</span>
+<span class="sd">        mode : str</span>
+<span class="sd">            &#39;documents&#39; counts the number documents that contain ``k``;</span>
+<span class="sd">            &#39;proportions&#39; sums the representation of ``k`` in each document</span>
+<span class="sd">            that contains it.</span>
+<span class="sd">        normed : bool</span>
+<span class="sd">            (default: True) Normalizes values by the number of documents in each</span>
+<span class="sd">            slice.</span>
+<span class="sd">        plot : bool</span>
+<span class="sd">            (default: False) If True, generates a MatPlotLib figure and saves</span>
+<span class="sd">            it to the :class:`MALLETModelManager` outpath.</span>
+<span class="sd">        figargs : dict</span>
+<span class="sd">            kwargs dict for :func:`matplotlib.pyplot.figure`\.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        keys : array</span>
+<span class="sd">            Keys into &#39;date&#39; slice axis.</span>
+<span class="sd">        R : array</span>
+<span class="sd">            Representation of topic ``k`` over time.</span>
+<span class="sd">            </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">        </span>
+<span class="sd">           &gt;&gt;&gt; keys, repr = M.topic_over_time(1, plot=True)</span>
+
+<span class="sd">        ...should return ``keys`` (date) and ``repr`` (% documents) for topic 1,</span>
+<span class="sd">        and generate a plot like this one in your ``outpath``.</span>
+<span class="sd">        </span>
+<span class="sd">        .. figure:: _static/images/topic_1_over_time.png</span>
+<span class="sd">           :width: 400</span>
+<span class="sd">           :align: center</span>
+<span class="sd">           </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">Z</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;No such topic in this model.&#39;</span><span class="p">)</span>
+        
+        <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">dimension_items</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">threshold</span><span class="p">)</span>
+        <span class="n">slices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">get_slices</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">)</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">slices</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="n">R</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">topic_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">print_topic</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;documents&#39;</span><span class="p">:</span> <span class="c"># Documents that contain k.</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="n">docs</span> <span class="o">=</span> <span class="n">slices</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+                <span class="n">Ndocs</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">docs</span><span class="p">))</span>
+                <span class="n">Ncontains</span> <span class="o">=</span> <span class="mf">0.</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">w</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">docs</span><span class="p">:</span>
+                        <span class="n">Ncontains</span> <span class="o">+=</span> <span class="mf">1.</span>
+                <span class="k">if</span> <span class="n">normed</span><span class="p">:</span>  <span class="c"># As a percentage of docs in each slice.</span>
+                    <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;Percentage of documents containing topic.&#39;</span>
+                    <span class="k">if</span> <span class="n">Ndocs</span> <span class="o">&gt;</span> <span class="mf">0.</span><span class="p">:</span>
+                        <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">Ncontains</span><span class="o">/</span><span class="n">Ndocs</span> <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="mf">0.</span> <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>       <span class="c"># Raw count.</span>
+                    <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;Number of documents containing topic.&#39;</span>                
+                    <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">Ncontains</span> <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;proportions&#39;</span><span class="p">:</span> <span class="c"># Representation of topic k.</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="n">docs</span> <span class="o">=</span> <span class="n">slices</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+                <span class="n">Ndocs</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">docs</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">normed</span><span class="p">:</span>      <span class="c"># Normalized by number of docs in each slice.</span>
+                    <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;Normed representation of topic in documents.&#39;</span>                
+                    <span class="k">if</span> <span class="n">Ndocs</span> <span class="o">&gt;</span> <span class="mf">0.</span><span class="p">:</span>
+                        <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="nb">sum</span><span class="p">([</span> <span class="n">w</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">w</span> <span class="ow">in</span> <span class="n">items</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">docs</span> <span class="p">])</span>
+                                                                        <span class="o">/</span><span class="n">Ndocs</span> <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="mf">0.</span> <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ylabel</span> <span class="o">=</span> <span class="s">&#39;Sum of topic representation in documents.&#39;</span>                
+                    <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="nb">sum</span><span class="p">([</span> <span class="n">w</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">w</span> <span class="ow">in</span> <span class="n">items</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">docs</span> <span class="p">])</span> <span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>    <span class="c"># Generates a simple lineplot and saves it in the outpath.</span>
+            <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="o">**</span><span class="n">figargs</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">keys</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R</span><span class="p">))</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Time Slice&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>      <span class="c"># Set based on mode.</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">topic_label</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;{0}/topic_{1}_over_time.png&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outpath</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>        
+        
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">keys</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">R</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/logo_round.png" alt="Logo">
+            </a></p>
+
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2013, ASU Digital Innovation Group.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

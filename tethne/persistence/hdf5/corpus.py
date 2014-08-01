@@ -29,44 +29,54 @@ class HDF5Corpus(Corpus):
         * ``authors``: VLArray (String), :class:`.vlarray_dict`
                 Maps author indices in ``authors_index`` onto the IDs of papers that they
                 authored. Padded with an empty 0th entry.
+
         * ``authors_index``: EArray (String), see :class:`.vlarray_dict`
                 Maps author indices used in ``authors`` to string representations of 
                 author names (LAST F). Padded with an empty 0th entry.
+
         * ``papers_citing``: VLArray (String), :class:`.vlarray_dict`
                 Each row corresponds to a paper, and contains a set of IDs for the papers
                 that cite that paper. Row indices correspond to the entries in
                 ``papers_citing_index``. Padded with an empty 0th entry.
+
         * ``papers_citing_index``: EArray (String), see :class:`.vlarray_dict`
                 Maps paper indices used in ``papers_citing`` to string paper IDs.
                 Padded with an empty 0th entry.
 
       * ``axes/``
+
             Each slice axis is represented by a VLArray (``[slice axis]``) and an EArray
             (``[slice_axis]_keys``).
 
         * ``[slice axis]`` (e.g. ``date``): VLArray (String)
                 Each row is a slice, containing a variable-length array of paper IDs.
+
         * ``[slice axis]_keys`` (e.g. ``date_keys``): EArray (Int32 or String)
                 Maps row indices in ``[slice axis]`` onto slice names/keys.
       
       * ``citations``/
       
         * ``papers_table``: Table, see :class:`.papers_table`
+
                 Contains metadata about cited references. These are usually not the same
                 papers as those described in ``papers/``.
       
       * ``features``/
                 This group contains data for featuresets. Each featureset has its own
                 subgroup, as described below.
+
         * ``[featureset name]/``     
         
           * ``counts``: Array
                 Overall frequency for features across the whole Corpus.
+
           * ``documentCounts``: Array
                 Number of papers in which each feature occurs.
+
           * ``index``: Array
                 Maps indices in ``counts`` and ``documentCounts`` onto string
                 representations of each feature.
+
           * ``features/``
                 Contains sparse frequency vectors over features for documents. Each row
                 in the arrays belows corresponds to a single document. The values of
@@ -85,6 +95,7 @@ class HDF5Corpus(Corpus):
             * ``indices_keys``: EArray
             * ``values``: VLArray
             * ``values_keys``: Earray
+
           * ``papers/``
                 Contains sparse frequency vectors over documents for features. Same
                 structure as in ``features/``, above, except that rows correspond to
@@ -92,6 +103,7 @@ class HDF5Corpus(Corpus):
 
       
       * ``papers/``
+
         * ``papers_table``: Table, see :class:`.papers_table`
                 Contains metadata about the papers in this Corpus.
     

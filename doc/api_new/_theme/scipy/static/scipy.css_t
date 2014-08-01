@@ -149,8 +149,8 @@ div.spc-rightsidebar h4 {
 
 div.top-scipy-org-logo-header {
     text-align: left;
-    background-color: rgb(140, 170, 230);
-    border-bottom: 8px solid rgb(0, 51, 153);
+    background-color: rgb(226, 158, 94); /* rgb(140, 170, 230); */
+    border-bottom: 8px solid rgb(104, 60, 12); /* rgb(0, 51, 153); */
     margin-top: 10px;
     padding: 5px;
     box-shadow: 0px 0px 3px rgb(136, 136, 136);

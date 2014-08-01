@@ -18,7 +18,7 @@ from .. import networks as nt
 
 class GraphCollection(object):
     """
-    A :class:`.GraphCollection` is an indexed set of :class:`networkx.Graph`
+    A :class:`.GraphCollection` is an indexed set of ``networkx.Graph``
     objects generated from a :class:`.Corpus` or model.
 
     A :class:`.GraphCollection` can be instantiated without any data.
@@ -121,23 +121,25 @@ class GraphCollection(object):
     def __len__(self):
         return len(self.graphs)
     
-    def build(self, D, axis, node_type, graph_type, method_kwargs={}, **kwargs):
+    def build(self, corpus, axis, node_type, graph_type, method_kwargs={},
+                                                                      **kwargs):
         """
         Generates a graphs directly from data in a :class:`.Corpus`.
         
         The :mod:`.networks` module contains graph-building methods for
         :mod:`.authors`, :mod:`.papers`, :mod:`.features`, and :mod:`.topics`\.
         Choose a method from one of these modules by specifying the module name
-        in `node_type` and the method name in `graph_type`. That method will
-        be applied to each slice in the :class:`.Corpus`\, `C`, along the 
-        specified `axis`.
+        in ``node_type`` and the method name in ``graph_type``. That method will
+        be applied to each slice in the :class:`.Corpus`\, ``MyCorpus``, along 
+        the specified ``axis``.
         
         To build a coauthorship network from a :class:`.Corpus`
         (already sliced by 'date'):
         
         .. code-block:: python
         
-           >>> G = GraphCollection().build(C, 'date', 'authors', 'coauthors')
+           >>> from tethne import GraphCollection
+           >>> G = GraphCollection().build(MyCorpus, 'date', 'authors', 'coauthors')
            >>> G.graphs
            {1921: <networkx.classes.graph.Graph at 0x10b2692d0>,
             1926: <networkx.classes.graph.Graph at 0x10b269c50>,
@@ -155,25 +157,26 @@ class GraphCollection(object):
         Parameters
         ----------
         D : :class:`.Corpus`
-            Must already be sliced by `axis`.
+            Must already be sliced by ``axis``.
         axis : str
             Name of slice axis to use in generating graphs.
         node_type : str
             Name of a graph-building module in :mod:`.networks`\.
         graph_type : str
-            Name of a method in the module indicated by `node_type`.
+            Name of a method in the module indicated by ``node_type``.
         method_kwargs : dict
-            Kwargs to pass to `graph_type` method.
+            Kwargs to pass to ``graph_type`` method.
         
         Returns
         -------
         self : :class:`.GraphCollection`
+
         """
         method = nt.__dict__[node_type].__dict__[graph_type]
-        for key, data in D.get_slices('date', papers=True).iteritems():
+        for key, data in corpus.get_slices('date', papers=True).iteritems():
             # Include sliced fields as node attributes.
-            method_kwargs['node_attribs'] = D.get_axes()
-            method_kwargs['node_id'] = D.index_by
+            method_kwargs['node_attribs'] = corpus.get_axes()
+            method_kwargs['node_id'] = corpus.index_by
             self[key] = method(data, **method_kwargs)
 
         return self
@@ -181,7 +184,16 @@ class GraphCollection(object):
     def nodes(self):
         """
         Get the complete set of nodes for this :class:`.GraphCollection`\.
-        
+
+        Returns
+        -------
+        nodes : list
+            Complete list of unique node indices for this
+            :class:`.GraphCollection`\.
+
+        Examples
+        --------
+
         .. code-block:: python
         
            >>> G.nodes()
@@ -194,11 +206,6 @@ class GraphCollection(object):
             .
             233]
 
-        Returns
-        -------
-        nodes : list
-            Complete list of unique node indices for this
-            :class:`.GraphCollection` .
         """
         
         return self.node_index.keys()
@@ -206,6 +213,19 @@ class GraphCollection(object):
     def edges(self, overwrite=False):   # [#61512528]
         """
         Get the complete set of edges for this :class:`.GraphCollection` .
+
+        Parameters
+        ----------
+        overwrite : bool
+            If True, will generate new node list, even if one already exists.
+
+        Returns
+        -------
+        edges : list
+            List (complete set) of edges for this :class:`.GraphCollection` .
+            
+        Examples
+        --------
 
         .. code-block:: python
         
@@ -218,16 +238,7 @@ class GraphCollection(object):
             .
             .
             (53, 56)]
-            
-        Parameters
-        ----------
-        overwrite : bool
-            If True, will generate new node list, even if one already exists.
 
-        Returns
-        -------
-        edges : list
-            List (complete set) of edges for this :class:`.GraphCollection` .
         """
         
         # TODO: is there a way to simplify this?
@@ -274,14 +285,6 @@ class GraphCollection(object):
         """
         Get the number of nodes for each :class:`networkx.Graph` in the
         :class:`.GraphCollection`\.
-        
-        .. code-block:: python
-        
-           >>> keys, nodes = G.node_distribution()
-           >>> print keys
-           [1921, 1926, 1931, 1936, 1941, 1946, 1951, 1956, 1961, 1966, 1971, 1976]
-           >>> print nodes
-           [0, 2, 16, 8, 2, 5, 14, 16, 33, 60, 44, 52]
 
         Returns
         -------
@@ -289,6 +292,18 @@ class GraphCollection(object):
             Graph indices.
         values  : list
             Number of nodes in each graph.
+            
+        Examples
+        --------
+
+        .. code-block:: python
+        
+           >>> keys, nodes = G.node_distribution()
+           >>> print keys
+           [1921, 1926, 1931, 1936, 1941, 1946, 1951, 1956, 1961, 1966, 1971]
+           >>> print nodes
+           [0, 2, 16, 8, 2, 5, 14, 16, 33, 60, 44]
+
         """
 
         keys = sorted(self.graphs.keys())
@@ -299,18 +314,9 @@ class GraphCollection(object):
     def plot_node_distribution(self, type='bar', fig=None, plotargs={},
                                                               **kwargs):
         """
-        Plot :func:`GraphCollection.node_distribution` using MatPlotLib.
-        
-        .. code-block:: python
-        
-           >>> fig = G.plot_node_distribution()
-           
-        ...should generate a plot that looks like:
-        
-        .. figure:: _static/images/graph_plot_distribution.png
-           :width: 400
-           :align: center
-        
+        Plot the values of :func:`.node_distribution` using `MatPlotLib
+        <http://matplotlib.org>`_.
+
         Parameters
         ----------
         type : str
@@ -321,6 +327,20 @@ class GraphCollection(object):
         Returns
         -------
         fig : :class:`matplotlib.figure.figure`
+
+        Examples
+        --------
+
+        .. code-block:: python
+        
+           >>> fig = G.plot_node_distribution()
+           
+        ...should generate a plot that looks like:
+        
+        .. figure:: _static/images/graph_plot_distribution.png
+           :width: 400
+           :align: center
+
         """
         
         data = self.node_distribution()
@@ -333,20 +353,24 @@ class GraphCollection(object):
         Get the number of edges in each :class:`networkx.Graph` in the
         :class:`.GraphCollection`\.
         
-        .. code-block:: python
-   
-           >>> keys, edges = G.edge_distribution()
-           >>> print keys
-           [1921, 1926, 1931, 1936, 1941, 1946, 1951, 1956, 1961, 1966, 1971, 1976]
-           >>> print edges
-           [0, 1, 108, 7, 1, 4, 16, 17, 29, 42, 112, 45]
-        
         Returns
         -------
         keys : list
             Graph indices.
         values  : list
             Number of nodes in each :class:`.Graph`
+            
+        Examples
+        --------
+
+        .. code-block:: python
+   
+           >>> keys, edges = G.edge_distribution()
+           >>> print keys
+           [1921, 1926, 1931, 1936, 1941, 1946, 1951, 1956, 1961, 1966, 1971]
+           >>> print edges
+           [0, 1, 108, 7, 1, 4, 16, 17, 29, 42, 112]
+
         """
 
         keys = sorted(self.graphs.keys())
@@ -357,18 +381,9 @@ class GraphCollection(object):
     def plot_edge_distribution(self, type='bar', fig=None, plotargs={},
                                                               **kwargs):
         """
-        Plot :func:`GraphCollection.edge_distribution` using MatPlotLib.
-        
-        .. code-block:: python
-        
-           >>> fig = G.plot_edge_distribution()
-           
-        ...should generate a plot that looks like:
-        
-        .. figure:: _static/images/graph_plot_edge_distribution.png
-           :width: 400
-           :align: center
-        
+        Plot :func:`GraphCollection.edge_distribution` using `MatPlotLib
+        <http://matplotlib.org>`_.
+
         Parameters
         ----------
         type : str
@@ -379,6 +394,20 @@ class GraphCollection(object):
         Returns
         -------
         fig : :class:`matplotlib.figure.figure`
+
+        Examples
+        --------
+
+        .. code-block:: python
+        
+           >>> fig = G.plot_edge_distribution()
+           
+        ...should generate a plot that looks like:
+        
+        .. figure:: _static/images/graph_plot_edge_distribution.png
+           :width: 400
+           :align: center
+
         """
 
         data = self.edge_distribution()
@@ -390,17 +419,6 @@ class GraphCollection(object):
         """
         Generate summary statistics for a node or edge attribute across all
         of the :class:`networkx.Graph`\s in the :class:`.GraphCollection`\.
-        
-        For example, to get the mean edge weight for each graph:
-        
-        .. code-block:: python
-        
-           >>> import numpy
-           >>> keys, means = G.attr_distribution('weight', 'edge', numpy.mean)
-           >>> print keys
-           [1921, 1926, 1931, 1936, 1941, 1946, 1951, 1956, 1961, 1966, 1971, 1976]
-           >>> print means
-           [0.0, 1.0, 1.1388888888888888, 1.1428571428571428, 4.0, 1.25, 1.0, 1.0, 1.0344827586206897, 1.2142857142857142, 1.0089285714285714, 1.2]
 
         Parameters
         ----------
@@ -417,6 +435,21 @@ class GraphCollection(object):
             Graph indices.
         values  : list
             Statistic values for each :class:`.Graph`
+
+        Examples
+        --------
+
+        To get the mean edge weight for each graph...
+        
+        .. code-block:: python
+        
+           >>> import numpy
+           >>> keys, means = G.attr_distribution('weight', 'edge', numpy.mean)
+           >>> print keys
+           [1921, 1926, 1931, 1936, 1941, 1946, 1951, 1956, 1961, 1966, 1971, 1976]
+           >>> print means
+           [0.0, 1.0, 1.1388888888888888, 1.1428571428571428, 4.0, 1.25, 1.0, 1.0, 1.0344827586206897, 1.2142857142857142, 1.0089285714285714, 1.2]
+
         """
     
         keys = sorted(self.graphs.keys())
@@ -440,17 +473,6 @@ class GraphCollection(object):
         """
         Plot :func:`GraphCollection.attr_distribution` using MatPlotLib.
         
-        .. code-block:: python
-
-           >>> import numpy
-           >>> G.plot_attr_distribution('weight', 'edge', numpy.mean, fig=fig)
-           
-        ...should generate a plot that looks something like:
-        
-        .. figure:: _static/images/graph_plot_attr_distribution.png
-           :width: 400
-           :align: center
-        
         Parameters
         ----------
         attr : str
@@ -467,6 +489,21 @@ class GraphCollection(object):
         Returns
         -------
         fig : :class:`matplotlib.figure.figure`
+        
+        Examples
+        --------
+
+        .. code-block:: python
+
+           >>> import numpy
+           >>> G.plot_attr_distribution('weight', 'edge', numpy.mean, fig=fig)
+           
+        ...should generate a plot that looks something like:
+        
+        .. figure:: _static/images/graph_plot_attr_distribution.png
+           :width: 400
+           :align: center
+
         """
                                 
         data = self.attr_distribution(attr, etype, stat)
@@ -474,94 +511,99 @@ class GraphCollection(object):
         fig = self._plot(data, ylabel, type, fig, plotargs, **kwargs)
 
         return fig
-    
-    def save(self, filepath):   #[61512528]
-        """
-        Pickles (serializes) the :class:`.GraphCollection`\.
-        
-        .. code-block:: python
-        
-           >>> G.save('/path/to/archive.pickle')
-        
-        Parameters
-        ----------
-        filepath :
-            Full path of output file.
 
-        Raises
-        -------
-        PicklingError : Raised when unpicklable objects are Pickled.
-        IOError : File does not exist, or cannot be opened.
-        """
+### TODO: This should probably go away. ###
 
+#    def save(self, filepath):   #[61512528]
+#        """
+#        Pickles (serializes) the :class:`.GraphCollection`\.
+#        
+#        .. code-block:: python
+#        
+#           >>> G.save('/path/to/archive.pickle')
+#        
+#        Parameters
+#        ----------
+#        filepath :
+#            Full path of output file.
+#
+#        Raises
+#        -------
+#        PicklingError : Raised when unpicklable objects are Pickled.
+#        IOError : File does not exist, or cannot be opened.
+#        """
+#
+#
+#        # Try block if the filename is present or not.
+#        try:
+#            with open(filepath,'wb') as output:
+#                try:
+#                    pk.dump(self, output)
+#                except PicklingError:     # Handle the Prickling error.
+#                    raise PicklingError \
+#                            ("Pickling error: The object cannot be pickled")
+#        except IOError: # File does not exist, or couldn't be read.
+#            raise IOError("File does not exist, or cannot be opened.")
+#
+#
+#    def load(self, filepath):    #[61512528]
+#        """
+#        Loads a pickled (serialized) :class:`.GraphCollection` from filepath.
+#        
+#        .. code-block:: python
+#        
+#           >>> G = GraphCollection().load('/path/to/archive.pickle')
+#
+#        Parameters
+#        ----------
+#        filepath : string
+#            Full path to pickled :class:`.GraphCollection` .
+#
+#        Raises
+#        -------
+#        UnpicklingError : Raised when there is some issue in unpickling.
+#        IOError : File does not exist, or cannot be read.
+#        """
+#
+#         # Handle NameError File not found.
+#        try:
+#            with open(filepath,'rb') as input: #reading in binary mode
+#                try:
+#                     obj_read = pk.load(input)
+#                except UnpicklingError:  # Handle unprickling error.
+#                    raise UnpicklingError \
+#                        ("UnPickling error: The object cannot be found")
+#
+#
+#        except IOError: # File does not exist, or couldn't be read.
+#            raise IOError("File does not exist, or cannot be read.")
+#        
+#        # Preserving the object with unpickled data
+#        if(obj_read):
+#            self.__dict__ = obj_read.__dict__
+#
+#        return obj_read
 
-        # Try block if the filename is present or not.
-        try:
-            with open(filepath,'wb') as output:
-                try:
-                    pk.dump(self, output)
-                except PicklingError:     # Handle the Prickling error.
-                    raise PicklingError \
-                            ("Pickling error: The object cannot be pickled")
-        except IOError: # File does not exist, or couldn't be read.
-            raise IOError("File does not exist, or cannot be opened.")
-
-
-    def load(self, filepath):    #[61512528]
-        """
-        Loads a pickled (serialized) :class:`.GraphCollection` from filepath.
-        
-        .. code-block:: python
-        
-           >>> G = GraphCollection().load('/path/to/archive.pickle')
-
-        Parameters
-        ----------
-        filepath : string
-            Full path to pickled :class:`.GraphCollection` .
-
-        Raises
-        -------
-        UnpicklingError : Raised when there is some issue in unpickling.
-        IOError : File does not exist, or cannot be read.
-        """
-
-         # Handle NameError File not found.
-        try:
-            with open(filepath,'rb') as input: #reading in binary mode
-                try:
-                     obj_read = pk.load(input)
-                except UnpicklingError:  # Handle unprickling error.
-                    raise UnpicklingError \
-                        ("UnPickling error: The object cannot be found")
-
-
-        except IOError: # File does not exist, or couldn't be read.
-            raise IOError("File does not exist, or cannot be read.")
-        
-        # Preserving the object with unpickled data
-        if(obj_read):
-            self.__dict__ = obj_read.__dict__
-
-        return obj_read
-        
     def compose(self):
         """
-        Returns the simple union of all :class:`.Graph` in the 
+        Returns the simple union of all the ``networkx.Graph``s in the
         :class:`.GraphCollection`\.
-        
+
+        Returns
+        -------
+        composed : :class:`.Graph`
+            Simple union of all ``networkx.Graph``s in the
+            :class:`.GraphCollection`\.
+
+        Examples
+        --------
+
         .. code-block:: python
         
            >>> g = G.compose()
            >>> g
            <networkx.classes.graph.Graph at 0x10bfac710>
-        
-        Returns
-        -------
-        composed : :class:`.Graph`
-            Simple union of all :class:`.Graph` in the 
-            :class:`.GraphCollection` .
-            
+
         Notes
         -----
         
@@ -575,25 +617,21 @@ class GraphCollection(object):
         
         return composed
 
-    def node_history(self, node, attribute, verbose=False):
+    def node_history(self, node, attribute):
         """
-        Returns a dictionary of attribute values for each Graph in C for a single
-        node.
+        Returns a dictionary of attribute values for each ``networkx.Graph`` in 
+        the :class:`.GraphCollection` for a single node.
 
         Parameters
         ----------
-        C : :class:`.GraphCollection`
         node : str
             The node of interest.
         attribute : str
             The attribute of interest; e.g. 'betweenness_centrality'
-        verbose : bool
-            If True, prints status and debug messages.
 
         Returns
         -------
         history : dict
-            Keys are Graph keys in C; values are attribute values for node.
         """
 
         history = {}
@@ -605,31 +643,27 @@ class GraphCollection(object):
             try:
                 history[k] = asdict[node][attribute]
             except KeyError:
-                if verbose: print "No such node or attribute in Graph " + str(k)
+                pass    # No such node attribute in graph.
 
         return history
 
-    def edge_history(self, source, target, attribute, verbose=False):
+    def edge_history(self, source, target, attribute):
         """
-        Returns a dictionary of attribute vales for each Graph in C for a single
-        edge.
+        Returns a dictionary of attribute vales for each Graph in the
+        :class:`.GraphCollection` for a single edge.
 
         Parameters
         ----------
-        C : :class:`.GraphCollection`
         source : str
             Identifier for source node.
         target : str
             Identifier for target node.
         attribute : str
             The attribute of interest; e.g. 'betweenness_centrality'
-        verbose : bool
-            If True, prints status and debug messages.
 
         Returns
         -------
         history : dict
-            Keys are Graph keys in C; values are attribute values for edge.
         """
 
         history = {}
@@ -642,9 +676,9 @@ class GraphCollection(object):
                 try:
                     history[k] = attributes[attribute]
                 except KeyError:
-                    if verbose: print "No such attribute for edge in Graph " \
-                                        + str(k)
+                    pass    # No such attribute for edge in Graph.
+
             except KeyError:
-                if verbose: print "No such edge in Graph " + str(k)
+                pass    # No such edge in graph.
 
         return history

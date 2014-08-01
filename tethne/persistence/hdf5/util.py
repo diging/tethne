@@ -263,7 +263,6 @@ class HDF5Axes(dict):
         dict.__setitem__(self, key,
             vlarray_dict(self.h5file, self.group, key, valuesatom, keyatom) )
 
-#        dict.__setitem__(self, key, HDF5Axis(self.h5file, self.group, key))
         for k,v in value.iteritems():
             self[key][k] = v
 
@@ -271,16 +270,8 @@ class HDF5Axes(dict):
         try:
             return dict.__getitem__(self, key)
         except KeyError:
-#            if type(value.values()[0][0]) is str:
-#                keyatom = tables.StringAtom(200)
-#            elif type(value.values()[0][0]) is int:
-#                keyatom = tables.Int32Atom()
-#
-#            valuesatom = tables.StringAtom(200)
-
             dict.__setitem__(self, key,
-                vlarray_dict(self.h5file, self.group, key))#, valuesatom, keyatom))
-#            dict.__setitem__(self, key, HDF5Axis(self.h5file, self.group, key))
+                vlarray_dict(self.h5file, self.group, key))
             return dict.__getitem__(self, key)
 
     def __len__(self):
