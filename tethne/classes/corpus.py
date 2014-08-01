@@ -13,7 +13,7 @@ import matplotlib
 from paper import Paper
 from collections import Counter
 from nltk.corpus import stopwords
-import scipy as sc
+import scipy
 
 import copy
 
@@ -25,43 +25,51 @@ class Corpus(object):
     """
     A :class:`.Corpus` organizes :class:`.Paper`\s for analysis.
 
-    You can create a :class:`.Corpus` by passing its constructor a list of
+    You can instantiate a :class:`.Corpus` directly by providing a list of
     :class:`.Paper` instances, and (optionally) some features over those papers,
     e.g. wordcounts. Once you have created a :class:`.Corpus` you can use it
     to generate a :class:`.GraphCollection`\, or generate corpus or social
-    models (see :mod:`.model`\).
-    
+    models (see the :mod:`.model` module).
+
+    You can create new :class:`.Corpus` objects from bibliographic datasets
+    using the methods in :mod:`.readers`\. For more information about what you
+    can do with a :class:`.Corpus`\, see :ref:`working-with-corpora`\.
+
     Parameters
     ----------
     papers : list
         A list of :class:`.Paper` instances.
     features : dict
-        Contains dictionary `{ type: { i: [ (f, w) ] } }` where `i` is an 
-        index for papers (see kwarg `index_by`), `f` is a feature (e.g. an 
+        Contains dictionary `{ type: { i: [ (f, w) ] } }` where `i` is an
+        index for papers (see kwarg `index_by`), `f` is a feature (e.g. an
         N-gram), and `w` is a weight on that feature (e.g. a count).
     index_by : str
-        A key in :class:`.Paper` for indexing. If `features` is provided, 
-        then this must by the field from which indices `i` are drawn. For 
+        A key in :class:`.Paper` for indexing. If `features` is provided,
+        then this must by the field from which indices `i` are drawn. For
         example, if a dictionary in `features` describes DfR wordcounts for
-        the :class:`.Paper`\s in `data`, and is indexed by DOI, then 
+        the :class:`.Paper`\s in `data`, and is indexed by DOI, then
         `index_by` should be 'doi'.
     index_citation_by : str
         Just as ``index_by``, except for citations.
     exclude : set
         (optional) Features to ignore, e.g. stopwords.
     filt : function
-        Takes a lambda function that returns True if a feature should be 
-        included.            
+        Takes a lambda function that returns True if a feature should be
+        included.
     index : bool
         (default: True) Set to False to supress indexing.
-        
+
     Returns
     -------
     :class:`.Corpus`
 
     Examples
     --------
-    
+
+    These examples deal with instantiating a :class:`.Corpus` using its
+    constructor. To read about loading a :class:`.Corpus` directly from data,
+    see :ref:`working-with-corpora`\.
+
     To create a :class:`.Corpus` from a JSTOR DfR dataset containing wordcounts,
     you might do:
 
@@ -70,21 +78,21 @@ class Corpus(object):
        >>> from tethne.readers import dfr
        >>> papers = dfr.read('/path/to/dataset')
        >>> wordcounts = dfr.ngrams('/path/to/dataset', N='uni')
-       
+
        >>> from tethne import Corpus
-       >>> C = Corpus(papers, features={'wordcounts':wordcounts}, index_by='doi')
-       >>> C
+       >>> MyCorpus = Corpus(papers, features={'wc':wordcounts}, index_by='doi')
+       >>> MyCorpus
        <tethne.classes.corpus.Corpus object at 0x107975ad0>
 
-    :mod:`.readers.dfr` and :mod:`.readers.wos` provide some convenience 
-    functions for generating a :class:`.Corpus` directly from a dataset. For 
+    :mod:`.readers.dfr` and :mod:`.readers.wos` provide some convenience
+    functions for generating a :class:`.Corpus` directly from a dataset. For
     example:
 
     .. code-block:: python
 
        >>> from tethne.readers import dfr
-       >>> C = dfr.read_corpus('/path/to/dataset', features=('uni',))
-       >>> C
+       >>> MyCorpus = dfr.read_corpus('/path/to/dataset', features=('uni',))
+       >>> MyCorpus
        <tethne.classes.corpus.Corpus object at 0x107975ad0>
 
     You can organize your :class:`.Corpus` using the :meth:`.slice` method, and
@@ -92,84 +100,77 @@ class Corpus(object):
     :meth:`.plot_distribution`\.
 
     To save/load your :class:`.Corpus` (e.g. for archiving your data), you can
-    convert it to or from a :class:`.HDF5Corpus` using :meth:`.to_hdf5` and
-    :func:`.from_hdf5`\.
-    
+    convert it to or from a :class:`.HDF5Corpus` using :func:`.hdf5.to_hdf5` and
+    :func:`.hdf5.from_hdf5`\.
+
     """
-    
+
     def __init__(self, papers, features=None, index_by='ayjid',
                        index_citation_by='ayjid', exclude=set([]),
                        filt=None, index=True):
 
-        """
-        Constructor for a :class:`.Corpus` object.
-        
-        
-
-        """                                              
-        
         self.papers = {}             # { p : paper }, where p is index_by
         self.features = {}
         self.authors = {}
         self.citations = {}          # { c : citation }
         self.papers_citing = {}      # { c : [ p ] }
-        
+
         self.axes = {}
         self.index_by = index_by    # Field in Paper, e.g. 'wosid', 'doi'.
         self.index_citation_by = index_citation_by
-    
+
         if index:
             self.index( papers, features, index_by=index_by,
                         index_citation_by=index_citation_by,
                         exclude=exclude, filt=filt  )
-        
+
     def index(self, papers, features=None, index_by='ayjid',
                     index_citation_by='ayjid', exclude=set([]), filt=None, stem=False):
         """
         Indexes `papers`, `features`, and `citations` (if present).
         This should be called automatically from :func:`.__init__`, unless
         explicitly supressed.
-        
+
         Parameters
         ----------
         papers : list
             A list of :class:`.Paper` instances.
         features : dict
-            Contains dictionary `{ type: { i: [ (f, w) ] } }` where `i` is an 
-            index for papers (see kwarg `index_by`), `f` is a feature (e.g. an 
+            Contains dictionary `{ type: { i: [ (f, w) ] } }` where `i` is an
+            index for papers (see kwarg `index_by`), `f` is a feature (e.g. an
             N-gram), and `w` is a weight on that feature (e.g. a count).
         index_by : str
             (default: 'ayjid')
-            A key in :class:`.Paper` for indexing. If `features` is provided, 
-            then this must by the field from which indices `i` are drawn. For 
+            A key in :class:`.Paper` for indexing. If `features` is provided,
+            then this must by the field from which indices `i` are drawn. For
             example, if a dictionary in `features` describes DfR wordcounts for
-            the :class:`.Paper`\s in `data`, and is indexed by DOI, then 
+            the :class:`.Paper`\s in `data`, and is indexed by DOI, then
             `index_by` should be 'doi'.
         index_citation_by : str
             (default: 'ayjid') Similar to ``index_by``, but for citations.
         exclude : set
             (optional) Features to ignore, e.g. stopwords.
         filt : function
-            Takes a lambda function that returns True if a feature should be 
+            Takes a lambda function that returns True if a feature should be
             included.
         """
-        
+
         # Check if index_by is a valid key.
         self.datakeys = papers[0].keys()
         if index_by not in self.datakeys:
             raise(KeyError(str(index_by) + " not a valid key in data."))
-    
+
         # Tokenize and index citations (both directions).
         self._index_citations(papers)
-    
+
         # Index the Papers in data.
         for paper in papers:
             self.papers[paper[index_by]] = paper
-        self.N_p = len(self.papers)  
-      
+        self.N_p = len(self.papers)
+
         # Index the Papers by author.
         self._index_papers_by_author()
-        
+
         # Tokenize and index features.
         if features is not None:
             for ftype, fdict in features.iteritems():   # e.g. unigrams, bigrams
@@ -181,7 +182,7 @@ class Corpus(object):
                     transformer = stemmer.stem
                 else:
                     transformer = None
-                
+
                 tokd = self._tokenize_features( ftype, fdict, exclude, filt,
                                                 transformer=transformer )
                 ft, fi, fs, c, dC, fp = tokd
@@ -193,36 +194,42 @@ class Corpus(object):
     def add_features(self, name, features, exclude=[], filt=None):
         """
         Add a new featureset to the :class:`.Corpus`\.
-        
+
         Parameters
         ----------
         name : str
         features : dict
-            Keys should be :class:`.Paper` identifiers 
+            Keys should be :class:`.Paper` identifiers
             (:prop:`.Corpus.index_by`), and values should be distributions
             over features in sparse-tuple formats.
         exclude : set
             (optional) Features to ignore, e.g. stopwords.
         filt : function
-            Takes a lambda function that returns True if a feature should be 
+            Takes a lambda function that returns True if a feature should be
             included.
-            
+
+        Returns
+        -------
+        None
+
         Examples
         --------
-        
+
         .. code-block:: python
-        
+
            >>> from tethne.readers import dfr
            >>> bigrams = dfr.ngrams('/path/to/dataset', N='bi')
-           >>> C.add_features('bigrams', bigrams)
+           >>> MyCorpus.add_features('bigrams', bigrams)
 
         """
-    
+
         tokd = self._tokenize_features(name, features, exclude, filt)
         ft, fi, fs, c, dC, fp = tokd
         self._define_features(ft, fi, fs, c, dC, fp)
+        return
 
-    def _define_features(self, name, index, features, counts, documentCounts, fpapers):
+    def _define_features(   self, name, index, features,
+                            counts, documentCounts, fpapers ):
         """
         Update :prop:`.features` with a tokenized featureset.
         """
@@ -240,41 +247,41 @@ class Corpus(object):
         Generates dict `{ author : [ p ] }` where `p` is an index of a
         :class:`.Paper` .
         """
-        
+
         logger.debug('indexing authors in {0} papers'.format(self.N_p))
-        
+
         author_dict = {}
-        
+
         for k,p in self.papers.iteritems():
             for author in p.authors():
                 if author in author_dict:
                     author_dict[author].append(k)
                 else:
                     author_dict[author] = [k]
-    
+
         self.N_a = len(author_dict)
         for k,v in author_dict.iteritems():
             self.authors[k] = v
         logger.debug('indexed {0} authors'.format(self.N_a))
-    
+
     def _index_citations(self, papers):
         """
         Generates dict `{ c : citation }` and `{ c : [ p ] }`.
         """
-        
+
         logger.debug('indexing citations in {0} papers'.format(len(papers)))
-        
+
         cited = {}  # { p : [ (c,1) ] }
         citation_counts = Counter()
         citation_index = {}
         citation_index_ = {}
-        
+
         citations = {}
-        
+
         fpapers = {}
-        
+
         papers_citing = {}
-        
+
         for paper in papers:
             p = paper[self.index_by]
             if paper['citations'] is not None:
@@ -294,14 +301,14 @@ class Corpus(object):
 
                     if c not in citations:
                         citations[c] = citation
-                    
+
                     if c not in papers_citing:
                         fpapers[c_i] = [ (p, 1) ]
                         papers_citing[c] = [ p ]
                     else:
                         fpapers[c_i].append( (p, 1) )
                         papers_citing[c].append(p)
-    
+
         # Separating this part allows for more flexibility in what sits behind
         #  self.papers_citing (e.g. HDF5 VArray).
         for k,v in papers_citing.iteritems():
@@ -309,7 +316,7 @@ class Corpus(object):
 
         for k,v in citations.iteritems():
             self.citations[k] = v
-    
+
         self._define_features('citations', citation_index, cited,
                                 citation_counts, citation_counts, fpapers)
 
@@ -319,7 +326,7 @@ class Corpus(object):
     def _tokenize_features( self, ftype, fdict, exclude=set([]),
                             filt=None, transformer=None ):
         """
-        
+
         Parameters
         ----------
         ftype : str
@@ -331,9 +338,9 @@ class Corpus(object):
         exclude : set
             (optional) Features to ignore, e.g. stopwords.
         filt : function
-            Takes a lambda function that returns True if a feature should be 
+            Takes a lambda function that returns True if a feature should be
             included.
-            
+
         Returns
         -------
         ftype : str
@@ -349,7 +356,7 @@ class Corpus(object):
         documentCounts : dict
             Number of documents containing each feature in the :class:`.Corpus`
         """
-        
+
         if filt is None:
             filt = lambda s: True
 
@@ -357,25 +364,25 @@ class Corpus(object):
             exclude = set([])
         if type(exclude) is not set:
             exclude = set(exclude)
-        
+
         def _handle(tok,w):
             if tok in findex_:
                 counts[findex_[tok]] += w
                 return True
             return False
-        
+
         def _transform(string):
             if transformer is None:
                 return string
             return transformer(string)
-        
+
         logger.debug('tokenizing features of type {0}'.format(ftype))
 
         features = {}
         index = {}
         counts = Counter()
         documentCounts = Counter()
-        
+
         # List of unique tokens.
         ftokenset = set([ unidecode(unicode(f)) for k,fval in fdict.items()
                                                 for f,v in fval])
@@ -407,14 +414,14 @@ class Corpus(object):
             features[key] = tokenized
             for t,w in tokenized:
                 documentCounts[t] += 1
-            
+
         logger.debug('done tokenizing features')
         return ftype, findex, features, counts, documentCounts, fpapers
-    
+
     def filter_features(self, fold, fnew, filt):
         """
         Create a new featureset by applying a filter to an existing featureset.
-        
+
         Parameters
         ----------
         fold : str
@@ -422,42 +429,52 @@ class Corpus(object):
         fnew : str
             Key into ``features`` for resulting featuresset.
         filt : method
-            Filter function to apply to the featureset. Should take a feature
-            dict as its sole parameter.
-            
+            Filter function to apply to the featureset. It should accept three
+            arguments (see example below)...
+
+            * ``s``, the string representation of the feature,
+            * ``C``, the overall frequency of the feature in the
+              :class:`.Corpus`, and
+            * ``DC``, the number of :class:`.Paper`\s in which the feature
+              occurs.
+
+        Returns
+        -------
+        None
+
         Examples
         --------
-        
+
         .. code-block:: python
-        
+
            >>> def filt(s, C, DC):
            ...     if C > 3 and DC > 1 and len(s) > 3:
            ...         return True
            ...     return False
-           >>> C.filter_features('wordcounts', 'wordcounts_filtered', filt)
-           
-        Assuming that the :class:`.Corpus` `C` already has a
-        feature called `wordcounts`, this would generate a new feature called 
-        `wordcounts_filtered` containing only those features that:
-        
-           1. Occur more than three times overall in the :class:`.Corpus`\,
-           2. Occur in more than one document,
-           3. Are at least four characters in length.
-            
+           >>> MyCorpus.filter_features('wc', 'wc_filtered', filt)
+
+        Assuming that the :class:`.Corpus` ``MyCorpus`` already has a
+        feature called ``wc``, this would generate a new feature called
+        ``wc_filtered`` containing only those features that...
+
+        1. Occur more than three times overall in the :class:`.Corpus`\,
+        2. Occur in more than one document, and
+        3. Are at least four characters in length.
+
         """
-        
+
         def _handle(tok,w): # Counts tokens, and excludes unwanted tokens.
             if tok in findex_:
                 counts[findex_[tok]] += w
                 return True
-            return False        
-        
+            return False
+
         logger.debug('Generating a new featureset {0} from {1}.'
                                                 .format(fnew, fold))
         # index, features, counts, documentCounts
 
         fdict = self.features[fold]
-        
+
         features = {}
         index = {}
         counts = Counter()
@@ -468,7 +485,7 @@ class Corpus(object):
         Ntokens = len(ftokens)
 
         logger.debug('found {0} unique tokens'.format(Ntokens))
-        
+
         findex = { i:ftokens[i] for i in xrange(Ntokens) }
         findex_ = { v:k for k,v in findex.iteritems() }
 
@@ -477,49 +494,59 @@ class Corpus(object):
         logger.debug('created forward and reverse indices.')
 
         feats = fdict['features']
-        
-        
+
+
         for key, fval in feats.iteritems():
             if type(fval) is not list or type(fval[0]) is not tuple:
                 raise ValueError('Malformed features data.')
-            
+
             tokenized = []
-            
+
             for f,w in fval:
                 if _handle(fdict['index'][f],w):
                     f_ = findex_[fdict['index'][f]]
                     tokenized.append( (f_,w) )
                     fpapers[f_].append( ( key, w ))
-#            tokenized = [ (findex_[fdict['index'][f]],w)
-#                          for f,w in fval if _handle(fdict['index'][f],w) ]
+
             features[key] = tokenized
             for f,w in tokenized:
                 documentCounts[f] += 1
-                
+
         self._define_features(fnew, findex, features, counts, documentCounts, fpapers)
 
-        logger.debug('done indexing features')                
-        
+        logger.debug('done indexing features')
+        return
+
     def abstract_to_features(self, remove_stopwords=True, stem=True):
         """
-        Generates a set of unigram features from the abstracts of Papers.
-        
-        Automatically tokenizes and updates the :class:`.Corpus`\.
-        
+        Generates a unigram (wordcount) featureset from the abstracts of all
+        :class:`.Paper`\s in the :class:`.Corpus` (if available).
+
+        Words are automatically tokenized, and stopwords are removed be default
+        (see parameters).
+
         Parameters
         ----------
         remove_stopwords : bool
             (default: True) If True, passes tokenizer the NLTK stoplist.
         stem : bool
             (default: True) If True, passes tokenizer the NLTK Porter stemmer.
-            
+
         Examples
         --------
         .. code-block:: python
-        
-           >>> C.abstract_to_features()
-           >>> 'abstractTerms' in C.features
+
+           >>> MyCorpus.abstract_to_features()
+           >>> 'abstractTerms' in MyCorpus.features
            True
+
+        Notes
+        -----
+
+        **TODO:**
+
+            * Should be able to pass one's own stemmer and stoplist, if desired.
+              [`Issue #23 <https://github.com/diging/tethne/issues/23>`_]
 
         """
         logger.debug('abstract_to_features: start.')
@@ -531,20 +558,20 @@ class Corpus(object):
                 terms = strip_punctuation(paper['abstract'].lower()).split()
                 for term in terms: term_counts[term] += 1
                 unigrams[p] = term_counts.items()
-            
+
         logger.debug('abstract_to_features: generated features.')
         if remove_stopwords:    # Use stoplist?
             stoplist = set(stopwords.words())
         else:
             stoplist = set([])
-        
+
         if stem:    # Use stemming?
             from nltk.stem.porter import PorterStemmer
             stemmer = PorterStemmer()
             transformer = stemmer.stem
         else:
             transformer = None
-                
+
         tokd = self._tokenize_features( 'abstractTerms', unigrams,
                                         exclude=stoplist,
                                         transformer=transformer )
@@ -552,13 +579,13 @@ class Corpus(object):
         self._define_features(ft, fi, fs, c, dC, fp)
 
         return unigrams
-    
+
     def slice(self, key, method=None, **kwargs):
         """
         Slices data by key, using method (if applicable).
-        
+
         In order to perform comparative analyses among your data, you must
-        define the "axes" that you wish to compare by "slicing" your 
+        define the "axes" that you wish to compare by "slicing" your
         :class:`.Corpus`\. You can slice by (theoretically) any field in your
         :class:`.Paper`\s, but most of the time you'll be slicing by the `date`.
 
@@ -570,7 +597,7 @@ class Corpus(object):
         ===========    =============================    =======    =============
         time_window    Slices data using a sliding      date       window_size
                        time-window. Dataslices are                 step_size
-                       indexed by the start of the 
+                       indexed by the start of the
                        time-window.
         time_period    Slices data into time periods    date       window_size
                        of equal length. Dataslices
@@ -578,24 +605,23 @@ class Corpus(object):
                        the time period.
         ===========    =============================    =======    =============
 
-
-        The main difference between the sliding time-window (``time_window``) 
+        The main difference between the sliding time-window (``time_window``)
         and the time-period (``time_period``) slicing methods are whether the
         resulting periods can overlap. Whereas time-period slicing divides data
-        into subsets by sequential non-overlapping time periods, subsets 
+        into subsets by sequential non-overlapping time periods, subsets
         generated by time-window slicing can overlap.
 
         .. figure:: _static/images/bibliocoupling/timeline.timeslice.png
            :width: 400
            :align: center
-           
+
            **Time-period** slicing, with a window-size of 4 years.
-           
+
         .. figure:: _static/images/bibliocoupling/timeline.timewindow.png
            :width: 400
            :align: center
-           
-           **Time-window** slicing, with a window-size of 4 years and a 
+
+           **Time-window** slicing, with a window-size of 4 years and a
            step-size of 1 year.
 
         Avilable kwargs:
@@ -607,18 +633,18 @@ class Corpus(object):
                                 (default = 1).
         step_size      int      Amount to advance time-window or period in each
                                 step (ignored for time_period).
-        cumulative     bool     If True, the data from each successive slice 
+        cumulative     bool     If True, the data from each successive slice
                                 includes the data from all preceding slices.
                                 Only applies if key is 'date' (default = False).
-        ===========    ======   ================================================ 
-        
+        ===========    ======   ================================================
+
         If you slice your :class:`.Corpus` by a field other than `date`, you do
         not need to specifiy a `method` or any other keyword arguments.
-        
+
         Once you have sliced your :class:`.Corpus`\, you can use
         :func:`.distribution` or :func:`.plot_distribution` to generate
         descriptive statistics about your data.
-        
+
         Parameters
         ----------
         key : str
@@ -629,22 +655,23 @@ class Corpus(object):
             step_size of 1.
         kwargs : kwargs
             See methods table, above.
-            
+
         Examples
         --------
-        
+
         .. code-block:: python
 
-           >>> C.slice('date', method='time_period', window_size=5)        
-           >>> C.plot_distribution('date')
-           
+           >>> MyCorpus.slice('date', method='time_period', window_size=5)
+           >>> MyCorpus.plot_distribution('date')
+
         Should generate a plot that looks something like this:
-        
+
         .. figure:: _static/images/corpus_plot_distribution.png
            :width: 400
            :align: center
 
         """
+
         if key == 'date':
             if method == 'time_window':
                 kw = {  'window_size': kwargs.get('window_size', 1),
@@ -659,7 +686,7 @@ class Corpus(object):
                 self.axes[key] = self._time_slice(**kw)
             else:
                 raise(ValueError(str(method) + " not a valid slicing method."))
-            
+
         # TODO: consider removing this, and just focusing on time.
         elif key == 'author':   # Already indexed.
             self.axes[key] = self.authors     # { a : [ p ] }
@@ -674,29 +701,29 @@ class Corpus(object):
                     self.axes[key][paper[key]] = [p]
         else:
             raise(KeyError(str(key) + " not a valid key in data."))
-        
+
     def _time_slice(self, **kwargs):
         """
         Slices data by date.
 
         If step_size = 1, this is a sliding time-window. If step_size =
         window_size, this is a time period slice.
-        
+
         Parameters
         ----------
         kwargs : kwargs
             See table, below.
-            
+
         Returns
         -------
         slices : dict
             Keys are start date of time slice, values are :class:`.Paper`
-            indices (controlled by index_by argument in 
+            indices (controlled by index_by argument in
             :func:`.Corpus.__init__` )
-        
+
         Notes
         -----
-        
+
         Avilable kwargs:
 
         ===========    ======   ================================================
@@ -706,11 +733,11 @@ class Corpus(object):
                                 (default = 1).
         step_size      int      Amount to advance time-window or period in each
                                 step (ignored for time_period).
-        cumulative     bool     If True, the data from each successive slice 
+        cumulative     bool     If True, the data from each successive slice
                                 includes the data from all preceding slices.
-                                Only applies if key is 'date' (default = False).                                
-        ===========    ======   ================================================           
-        
+                                Only applies if key is 'date' (default = False).
+        ===========    ======   ================================================
+
         """
 
         # Get parameters from kwargs.
@@ -731,85 +758,87 @@ class Corpus(object):
                 slices[s] += last
             last = slices[s]
         return slices
-        
+
     def indices(self):
         """
-        Yields a list of indices of all papers in this :class:`.Corpus`\.
-        
+        Yields a list of indices of all :class:`.Paper`\s in this
+        :class:`.Corpus`\.
+
         Returns
         -------
         keys : list
             List of indices.
-            
+
         Examples
         --------
-        
+
         .. code-block:: python
-        
-           >>> indices = C.indices()
+
+           >>> indices = MyCorpus.indices()
            >>> indices[0]
            '10.2307/20037014'
-           
+
         """
         keys = self.papers.keys()
         return keys
-    
+
     def all_papers(self):
         """
         Yield the complete set of :class:`.Paper` instances in this
         :class:`.Corpus` .
-        
+
         Returns
         -------
         papers : list
             A list of :class:`.Paper` instances.
-            
+
         Examples
         --------
-        
+
         .. code-block:: python
-        
-           >>> papers = C.all_papers()
+
+           >>> papers = MyCorpus.all_papers()
            >>> papers[0]
            <tethne.classes.paper.Paper at 0x10970e4d0>
-           
         """
-        
+
         return self.papers.values()
-    
+
     def get_slices(self, key, papers=False):
         """
-        Get all of the papers/indices in a particular slice.
-        
+        Get all of the :class:`.Paper`\s (or just their IDs) in a particular
+        slice.
+
         Parameters
         ----------
         key : str
             Key from :class:`.Paper` that has previously been used to slice data
             in this :class:`.Corpus` .
         papers : bool
-            If True, retrives :class:`.Paper` objects, rather than just indices.
-        
+            (default: False) If True, returns :class:`.Paper` objects rather
+            than just their IDs.
+
         Returns
         -------
         slices : dict
-            Keys are slice indices. If `papers` is `True`, values are 
-            lists of :class:`.Paper` instances; otherwise returns paper indices 
+            Keys are slice indices. If `papers` is `True`, values are
+            lists of :class:`.Paper` instances; otherwise returns paper IDs
             (e.g. 'wosid' or 'doi').
 
         Raises
         ------
         RuntimeError : Corpus has not been sliced.
-        KeyError : Data has not been sliced by [key] 
-        
+        KeyError : Data has not been sliced by [key]
+
         Examples
         --------
-        
+
         .. code-block:: python
-        
-           >>> slices = C.get_slices('date')
+
+           >>> slices = MyCorpus.get_slices('date')
            >>> slices.keys()
            [1921, 1926, 1931, 1936, 1941, 1946, 1951, 1956, 1961, 1966, 1971]
-           
+
            >>> slices[1926]
            ['10.2307/2470705',
             '10.2307/2480027',
@@ -818,14 +847,14 @@ class Corpus(object):
             '10.2307/1654383',
             '10.2307/2256048',
             '10.2307/41421952']
-    
+
         """
 
         if len(self.axes) == 0:
-            raise(RuntimeError("Corpus has not been sliced."))        
+            raise(RuntimeError("Corpus has not been sliced."))
         if key not in self.axes.keys():
             raise(KeyError("Data has not been sliced by " + str(key)))
-        
+
         slices = { k:self.axes[key][k] for k in sorted(self.axes[key].keys()) }
 
         if papers:  # Retrieve Papers.
@@ -835,7 +864,7 @@ class Corpus(object):
 
     def get_slice(self, key, index, papers=False):
         """
-        Get a single slice.
+        Get the :class:`.Paper\`s (or just their IDs) from a single slice.
 
         Parameters
         ----------
@@ -845,8 +874,9 @@ class Corpus(object):
         index : str or int
             Slice index for key (e.g. 1999 for 'date').
         papers : bool
-            If True, retrives :class:`.Paper` objects, rather than just indices.
-        
+            (default: False) If True, returns :class:`.Paper` objects rather
+            than just their IDs.
+
         Returns
         -------
         slice : list
@@ -856,15 +886,15 @@ class Corpus(object):
         Raises
         ------
         RuntimeError : Corpus has not been sliced.
-        KeyError : Data has not been sliced by [key] 
+        KeyError : Data has not been sliced by [key]
         KeyError : [index] not a valid index for [key]
-        
+
         Examples
         --------
-        
+
         .. code-block:: python
-        
-           >>> D.get_slice('date', 1926)
+
+           >>> MyCorpus.get_slice('date', 1926)
            ['10.2307/2470705',
             '10.2307/2480027',
             '10.2307/2255991',
@@ -872,8 +902,8 @@ class Corpus(object):
             '10.2307/1654383',
             '10.2307/2256048',
             '10.2307/41421952']
-            
-           >>> D.get_slice('date', 1926, papers=True)
+
+           >>> MyCorpus.get_slice('date', 1926, papers=True)
            [<tethne.classes.paper.Paper at 0x109942110>,
             <tethne.classes.paper.Paper at 0x109922b50>,
             <tethne.classes.paper.Paper at 0x109934190>,
@@ -881,69 +911,81 @@ class Corpus(object):
             <tethne.classes.paper.Paper at 0x10971f350>,
             <tethne.classes.paper.Paper at 0x10975f810>,
             <tethne.classes.paper.Paper at 0x10975fed0>]
+
         """
 
         if len(self.axes) == 0:
-            raise(RuntimeError("Corpus has not been sliced."))        
+            raise(RuntimeError("Corpus has not been sliced."))
         if key not in self.axes.keys():
             raise(KeyError("Data has not been sliced by " + str(key)))
         if index not in self.axes[key].keys():
             raise(KeyError(str(index) + " not a valid index for " + str(key)))
-        
+
         slice = self.axes[key][index]
-        
+
         if papers:
             return [ self.papers[p] for p in slice ]
         return slice
-    
+
     def _get_slice_i(self, key, i):
         k = sorted(self.axes[key].keys())[i]
         return self.axes[key][k]
-        
+
     def _get_by_i(self, key_indices):
         slices = []
         for k, i in key_indices:
             slice = set(self._get_slice_i(k, i))
             slices.append(slice)
-        
+
         return list( set.intersection(*slices) )
-    
+
     def _get_slice_keys(self, slice):
         if slice in self.get_axes():
             return sorted(self.axes[slice].keys())
-    
+
     def get_axes(self):
         """
         Returns a list of all slice axes for this :class:`.Corpus` .
 
+        Returns
+        -------
+        axes : list
+
         Examples
         --------
-        
+
         .. code-block:: python
-        
-           >>> C.get_axes()
+
+           >>> MyCorpus.get_axes()
            ['date', 'jtitle']
 
         """
-        
-        return self.axes.keys()
-    
+
+        axes = self.axes.keys()
+        return axes
+
     def N_axes(self):
         """
-        Returns the number of slice axes for this :class:`.Corpus` .
-        
+        Returns the number of slice axes for this :class:`.Corpus`\.
+
+        Returns
+        -------
+        N : int
+            Number of slice axes.
+
         Examples
         --------
-        
+
         .. code-block:: python
-        
-           >>> D.N_axes()
+
+           >>> MyCorpus.N_axes()
            2
 
         """
-        
-        return len(self.axes.keys())
-            
+
+        N = len(self.axes.keys())
+        return N
+
     def distribution(self, x_axis, y_axis=None):
         """
         Get the distribution of :class:`.Paper`\s over one or two slice axes.
@@ -957,18 +999,18 @@ class Corpus(object):
             Name of a slice axis.
         y_axis : str
             (optional) Name of a slice axis.
-            
+
         Returns
         -------
         dist : Numpy array
             Values are the number of :class:`.Paper` at that slice-coordinate.
-            
+
         Examples
         --------
-        
+
         .. code-block:: python
-        
-           >>> C.distribution('date')
+
+           >>> MyCorpus.distribution('date')
            array([[  1],
                   [  7],
                   [  8],
@@ -981,9 +1023,9 @@ class Corpus(object):
                   [107],
                   [ 76],
                   [106]])
-                  
+
         You can generate a figure for this distribution using
-        :meth:`.plot_distribution`\.
+        :func:`.plot_distribution`\.
 
         """
         logger.debug('generate distribution over slices')
@@ -1027,19 +1069,19 @@ class Corpus(object):
                         J.append(j)
                         K.append(k)
 
-        # TODO: Move away from SciPy, to facilitate PyPy compatibility.
-        dist = np.array(sc.sparse.coo_matrix((K, (I,J)), shape=shape).todense())
+        # TODO: Move away from SciPy, to facilitate PyPy compatibility?
+        dist = np.array(scipy.sparse.coo_matrix((K, (I,J)), shape=shape).todense())
 
         return dist
-    
+
     # TODO: Merge this with :func:`.distribution`
     def feature_distribution(self, featureset, feature, x_axis, y_axis=None,
-                             mode='counts', normed=True):
+                                   mode='counts', normed=True   ):
         """
         Get the distribution of a ``feature`` over one or two slice axes.
 
         You can generate a figure for this distribution using
-        :meth:`.plot_distribution`\.
+        :func:`.plot_distribution`\.
 
         Parameters
         ----------
@@ -1055,17 +1097,17 @@ class Corpus(object):
             (default: True) 'counts' or 'documentCounts'
         normed : bool
             (default: True) If True, values are normalized for each slice.
-            
+
         Returns
         -------
         dist : matrix
-        
+
         Examples
         --------
-        
+
         .. code-block:: python
-        
-           >>> C..feature_distribution('unigrams', 'four', 'date',
+
+           >>> MyCorpus.feature_distribution('unigrams', 'four', 'date',
                                         mode='counts', normed=True)
            [[  7.10025561e-05]
             [  1.81508792e-03]
@@ -1078,9 +1120,15 @@ class Corpus(object):
             [  1.02951270e-03]
             [  9.94742078e-04]
             [  1.04085711e-03]]
-            
+
+        Notes
+        -----
+
+        In the future, it may make sense to merge this into
+        :func:`.distribution`\.
+
         """
-        
+
         if mode not in [ 'counts', 'documentCounts' ]:
             raise RuntimeError('No such mode. Try "counts" or "documentCounts"')
 
@@ -1093,7 +1141,7 @@ class Corpus(object):
             findex = feature_lookup[feature]
         except KeyError:
             raise KeyError('No such feature in featureset')
-        
+
         if x_axis not in self.axes:
             raise KeyError('No such slice axis in this Corpus; try .slice()')
 
@@ -1112,16 +1160,16 @@ class Corpus(object):
         else:   # Only 1 slice axis.
             logger.debug('only 1 slice axis')
             y_size = 1
-            
+
         shape = (x_size, y_size)
         logger.debug('distribution shape: {0}'.format(shape))
-        
+
         fvalues = self.features[featureset]['features']
-        
+
         def _get_value(papers):
             vtuples = [ fv for p in papers for fv in fvalues[p] ]
             values = [ v for f,v in vtuples if f == findex ]
-            
+
             if mode == 'counts':
                 val = sum(values)
                 if normed:
@@ -1139,7 +1187,7 @@ class Corpus(object):
                         val = 0.
 
             return val
-        
+
         I = []
         J = []
         K = []
@@ -1160,15 +1208,15 @@ class Corpus(object):
                         J.append(j)
                         K.append(k)
 
-        dist = np.array(sc.sparse.coo_matrix((K, (I,J)), shape=shape).todense())
+        dist = np.array(scipy.sparse.coo_matrix((K, (I,J)), shape=shape).todense())
 
         return dist
 
     def feature_counts(self, featureset, slice, axis='date',
                                                 documentCounts=False):
         """
-        Get feature counts for a particular ``slice`` in ``axis``.
-        
+        Get the frequency of a feature in a particular ``slice`` of ``axis``.
+
         Parameters
         ----------
         featureset : str
@@ -1176,19 +1224,23 @@ class Corpus(object):
         slice : int or str
             Name of a slice along ``axis``.
         axis : str
-            Name of slice axis containing ``slice``.
-        
+            (default: 'date') Name of slice axis containing ``slice``.
+        documentCounts : bool
+            (default: False) If True, returns document counts (i.e. the number
+            of documents in which a feature occurs) rather than the frequency
+            (total number of instances) of that feature.
+
         Returns
         -------
         counts : dict
         """
-        
+
         if featureset not in self.features:
             raise KeyError('No such featureset in this Corpus')
 
         index = self.features[featureset]['index']
         feature_lookup = { v:k for k,v in index.iteritems() }
-    
+
         fvalues = self.features[featureset]['features']
 
         papers = self.get_slice(axis, slice)
@@ -1209,14 +1261,14 @@ class Corpus(object):
                                 aspect=0.2, step=2, fig=None, mode='papers',
                                 fkwargs={}, **kwargs):
         """
-        Plot distribution of papers or features along slice axes, using 
-        MatPlotLib.
-        
+        Plot distribution of papers or features along slice axes, using
+        `MatPlotLib <http://matplotlib.org/>`_.
+
         You must first use :func:`.slice` to divide your data up along axes of
-        interest. Then you can use :func:`.distribution` or 
+        interest. Then you can use :func:`.distribution` or
         :func:`.plot_distribution` to generate descriptive statistics about your
         data.
-           
+
         Parameters
         ----------
         x_axis : str
@@ -1235,75 +1287,78 @@ class Corpus(object):
         fig : :class:`matplotlib.figure`
             (optional) If not provided, will generate a new instance of
             :class:`matplotlib.figure`\.
-        **kwargs
+        mode : str
+            (default: 'papers') Specify whether to plot the distribution of
+            'papers' or 'features'. See examples, below.
+        fkwargs : dict
             Keyword arguments passed to PyPlot method.
-            
+
         Returns
         -------
         fig : :class:`matplotlib.figure`
-        
+
         Examples
         --------
-        
-        The default behavior is to plot the distribution of paper across 
+
+        The default behavior is to plot the distribution of paper across
         ``x_axis`` (and ``y_axis``):
-        
+
         .. code-block:: python
 
-           >>> C.slice('date', method='time_period', window_size=5)        
-           >>> C.plot_distribution('date')
-           
+           >>> MyCorpus.slice('date', method='time_period', window_size=5)
+           >>> MyCorpus.plot_distribution('date')
+
         Should generate a plot that looks something like this:
-        
+
         .. figure:: _static/images/corpus_plot_distribution.png
            :width: 400
            :align: center
-           
+
         To generate a 2-dimensional plot using `date` and `jtitle`, you could do
         something like:
-        
+
         .. code-block:: python
-        
-           >>> C.slice('date', method='time_period', window_size=5)        
-           >>> C.slice('jtitle')
-           >>> C.plot_distribution('date', 'jtitle')
-        
+
+           >>> MyCorpus.slice('date', method='time_period', window_size=5)
+           >>> MyCorpus.slice('jtitle')
+           >>> MyCorpus.plot_distribution('date', 'jtitle')
+
         Which should generate a plot that looks something like:
-        
+
         .. figure:: _static/images/corpus_plot_distribution_2d.png
            :width: 600
            :align: center
-           
+
         If ``mode='features`` is set, this method will plot the distribution
         of a feature across ``x_axis`` (and ``y_axis``). Set keyword arguments
         for :func:`Corpus.feature_distribution` using ``fkwargs``.
-        
+
         .. code-block:: python
-        
+
            >>> fkwargs = {
            ...     'featureset': 'unigrams',
            ...     'feature': 'four',
            ...     'mode': 'counts',
            ...     'normed': True,
            ...     }
-           >>> fig = C.plot_distribution('date', 'jtitle', mode='features',
+           >>> fig = MyCorpus.plot_distribution('date', 'jtitle', mode='features',
                                          fkwargs=fkwargs, interpolation='none')
            >>> fig.savefig('/path/to/dist.png')
-           
+
         .. figure:: _static/images/testdist.png
            :width: 600
            :align: center
-        
+
         """
 
         if fig is None:
             fig = plt.figure(figsize=(20,10))
-        
+
         if x_axis is None:
             x_axis = self.get_axes()[0]
 
         xkeys = self._get_slice_keys(x_axis)
-        
+
         if mode == 'features':
             featureset = fkwargs['featureset']
             feature = fkwargs['feature']
@@ -1319,7 +1374,7 @@ class Corpus(object):
             plt.__dict__[type](xkeys, yvals, **kwargs)
             plt.xlim(xkeys[0], xkeys[-1])   # Already sorted.
         else:
-            ykeys = self._get_slice_keys(y_axis)    
+            ykeys = self._get_slice_keys(y_axis)
             ax = fig.add_subplot(111)
             if mode == 'papers':
                 values = self.distribution(y_axis, x_axis)
@@ -1336,6 +1391,6 @@ class Corpus(object):
             ax.set_xticklabels([ xkeys[i] for i in tickstops ])
             plt.xlim(0, nxkeys-1)   # Already sorted.
             plt.subplots_adjust(left=0.5)
-            
+
         return fig
 

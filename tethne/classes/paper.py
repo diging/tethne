@@ -1,18 +1,20 @@
 """
-A :class:`.Paper` represents a document in a :class:`.Corpus`\. 
+A :class:`.Paper` represents a document in a :class:`.Corpus`\. :class:`.Paper`
+objects behave a lot like conventional Python dictionaries, except that they are
+picky about the kind of data that you throw into them.
+
+Most operations in Tethne don't require you to interact with :class:`.Paper`\s
+directly.
 """
 
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel('ERROR')
+logger.setLevel('INFO')
 
 class Paper(dict):
     """
-    The :class:`.Paper` represents a document in a :class:`.Corpus`\.
-
-    :func:`.__setitem__` enforces a limited vocabulary of keys and corresponding
-    data types.
+    Tethne's representation of a bibliographic record.
 
     The following fields (and corresponding data types) are permitted.
     
@@ -39,15 +41,10 @@ class Paper(dict):
     ===========     =====   ====================================================
 
     None values are also allowed for all fields.
-    
-    TODO: should subclass :class:`.dict`\.
     """
 
     def __init__(self):
-        """
-        Defines keys, and acceptable data types for values.
-        """
-        
+        # Default values.
         fields = {
             'aulast':None,
             'auinit':None,
@@ -73,10 +70,12 @@ class Paper(dict):
         for k,v in fields.iteritems():
             dict.__setitem__(self, k, v)
 
+        # Fields that require list values.
         self.list_fields = [ 'aulast',
                              'auinit',
                              'citations' ]
 
+        # Fields that require string values.
         self.string_fields = [ 'atitle',
                                'jtitle',
                                'volume',
@@ -91,8 +90,10 @@ class Paper(dict):
                                'abstract',
                                'accession' ]
 
+        # Fields that require int values.
         self.int_fields = [ 'date' ]
 
+        # Fields that require dict values.
         self.dict_fields = [ 'institutions' ]
 
     def __setitem__(self, key, value):
@@ -120,9 +121,13 @@ class Paper(dict):
 
     def authors(self):
         """
-        Returns a list of author names (LAST F).
+        Get the authors of the current :class:`.Paper` instance.
         
-        If there are no authors, returns an empty list.
+        Returns
+        -------
+        authors : list
+            Author names are in the format ``LAST F``. If there are no authors,
+            returns an empty list.
         """
         
         auths = []

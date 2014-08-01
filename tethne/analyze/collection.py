@@ -2,23 +2,22 @@
 Methods for analyzing :class:`.GraphCollection`\s.
 """
 
-import networkx as nx
+import networkx
 import types
 import graph
 
-def algorithm(C, method, **kwargs):
+def algorithm(G, method, **kwargs):
     """
-    Apply NetworkX method to each ``Graph`` in :class:`.GraphCollection`\.
+    Apply a ``method`` from NetworkX to all ``networkx.Graph`` objects in the
+    :class:`.GraphCollection` ``G``.
 
-    Passes kwargs to specified NetworkX method for each Graph, and returns
-    a dictionary of results indexed by element (node or edge) and graph index
-    (e.g. ``date``).
+
 
     Parameters
     ----------
-    C : :class:`.GraphCollection`
+    G : :class:`.GraphCollection`
         The :class:`.GraphCollection` to analyze. The specified method will be
-        applied to each :class:`.Graph` in **C**.
+        applied to each graph in ``G``.
     method : string
         Name of a method in NetworkX to execute on graph collection.
     **kwargs
@@ -28,23 +27,22 @@ def algorithm(C, method, **kwargs):
     Returns
     -------
     results : dict
-        A nested dictionary of results: results/elem(node or edge)/graph
-        index.
+        Indexed by element (node or edge) and graph index (e.g. ``date``).
 
     Raises
     ------
     ValueError
-        If name is not in networkx, or if no such method exists.
+        If no such method exists.
 
     Examples
     --------
 
-    *Betweenness centrality:*
+    *Betweenness centrality:* (``G`` is a :class:`.GraphCollection`\)
 
     .. code-block:: python
 
-       >>> import tethne.analyze as az
-       >>> BC = az.collection.algorithm(C, 'betweenness_centrality')
+       >>> from tethne.analyze import collection
+       >>> BC = collection.algorithm(G, 'betweenness_centrality')
        >>> print BC[0]
        {1999: 0.010101651117889644,
        2000: 0.0008689093723107329,
@@ -56,20 +54,20 @@ def algorithm(C, method, **kwargs):
 
     results = {}
 
-    if not method in nx.__dict__:
+    if not method in networkx.__dict__:
         raise(ValueError("No such name in networkx."))
     else:
-        if type(nx.__dict__[method]) is not types.FunctionType:
+        if type(networkx.__dict__[method]) is not types.FunctionType:
             raise(ValueError("No such method in networkx."))
         else:
-            for k, G in C.graphs.iteritems():
-                r = nx.__dict__[method](G, **kwargs)
+            for k, g in G.graphs.iteritems():
+                r = networkx.__dict__[method](g, **kwargs)
                 for elem, value in r.iteritems():
                     try:
                         results[elem][k] = value
                     except KeyError:
                         results[elem] = { k: value }
-                nx.set_node_attributes(G, method, r)    # [#61510128]
+                networkx.set_node_attributes(g, method, r)    # [#61510128]
     return results
 
 def delta(G, attribute):
@@ -81,6 +79,11 @@ def delta(G, attribute):
     G : :class:`.GraphCollection`
     attribute : str
         Name of a node attribute in ``G``.
+        
+    Returns
+    -------
+    deltas : dict
+
     """
     import copy
 
@@ -108,20 +111,20 @@ def delta(G, attribute):
                 deltas[k][n] = float(delta)
             except KeyError:
                 pass
-        nx.set_node_attributes(G[k], attribute+'_delta', deltas[k])
+        networkx.set_node_attributes(G[k], attribute+'_delta', deltas[k])
 
     return deltas
 
-def connected(C, method, **kwargs):
+def connected(G, method, **kwargs):
     """
     Performs analysis methods from networkx.connected on each graph in the
     collection.
 
     Parameters
     ----------
-    C : :class:`.GraphCollection`
+    G : :class:`.GraphCollection`
         The :class:`.GraphCollection` to analyze. The specified method will be
-        applied to each :class:`.Graph` in **C**.
+        applied to each graph in ``G``.
     method : string
         Name of method in networkx.connected.
     **kwargs : kwargs
@@ -129,7 +132,7 @@ def connected(C, method, **kwargs):
 
     Returns
     -------
-    results : dictionary
+    results : dict
         Keys are graph indices, values are output of method for that graph.
 
     Raises
@@ -137,55 +140,34 @@ def connected(C, method, **kwargs):
     ValueError
         If name is not in networkx.connected, or if no such method exists.
 
-    Examples
-    --------
-
-    .. code-block:: python
-
-        >>> import tethne.data as ds
-        >>> import tethne.analyze as az
-        >>> import networkx as nx
-        >>> C = ds.GraphCollection()
-        >>> # Generate some random graphs
-        >>> for graph_index in xrange(1999, 2004):
-        >>>     g = nx.random_regular_graph(4, 100)
-        >>>     C[graph_index] = g
-        >>> results = az.collection.connected(C, 'connected', k=None)
-        >>> print results
-        {1999: False,
-        2000: False,
-        2001: False,
-        2002: False,
-        2003: False }
-
     """
 
     results = {}
 
-    if not method in nx.connected.__dict__:
+    if not method in networkx.connected.__dict__:
         raise(ValueError("No such name in networkx.connected."))
     else:
-        if type(nx.connected.__dict__[method]) is not types.FunctionType:
+        if type(networkx.connected.__dict__[method]) is not types.FunctionType:
             raise(ValueError("No such method in networkx.connected."))
         else:
-            for k, G in C.graphs.iteritems():
-                results[k] = nx.connected.__dict__[method](G, **kwargs)
+            for k, g in G.graphs.iteritems():
+                results[k] = networkx.connected.__dict__[method](g, **kwargs)
     return results
 
-def node_global_closeness_centrality(C, node):
+def node_global_closeness_centrality(G, node):
     """
     Calculates global closeness centrality for node in each graph in
-    :class:`.GraphCollection` C.
+    :class:`.GraphCollection` G.
 
     """
 
     results = {}
-    for key, g in C.graphs.iteritems():
+    for key, g in G.graphs.iteritems():
         results[key] = graph.node_global_closeness_centrality(g, node)
 
     return results
     
-def attachment_probability(C):
+def attachment_probability(G):
     """
     Calculates the observed attachment probability for each node at each
     time-step.
@@ -198,26 +180,26 @@ def attachment_probability(C):
 
     Parameters
     ----------
-    C : :class:`.GraphCollection`
+    G : :class:`.GraphCollection`
         Must be sliced by 'date'. See :func:`.GraphCollection.slice`\.
     
     Returns
     -------
     probs : dict
-        Keyed by index in C.graphs, and then by node.
+        Keyed by index in G.graphs, and then by node.
     """
     
     probs = {}
     G_ = None
     k_ = None
-    for k,G in C.graphs.iteritems():
+    for k,g in G.graphs.iteritems():
         new_edges = {}
         if G_ is not None: 
-            for n in G.nodes():
+            for n in g.nodes():
                 try:
                     old_neighbors = set(G_[n].keys())
                     if len(old_neighbors) > 0:
-                        new_neighbors = set(G[n].keys()) - old_neighbors
+                        new_neighbors = set(g[n].keys()) - old_neighbors
                         new_edges[n] = float(len(new_neighbors))
                     else:
                         new_edges[n] = 0.
@@ -227,21 +209,21 @@ def attachment_probability(C):
             N = sum( new_edges.values() )
             probs[k_] = { n:0. for n in G_.nodes() }
             if N > 0.:
-                for n in C.nodes():
+                for n in G.nodes():
                     try:
                         probs[k_][n] = new_edges[n]/N
                     except KeyError:
                         pass
 
             if probs[k_] is not None:
-                nx.set_node_attributes(C.graphs[k_], 'attachment_probability', probs[k_])
+                networkx.set_node_attributes(G.graphs[k_], 'attachment_probability', probs[k_])
     
         G_ = G
         k_ = k
 
     # Handle last graph (no values).
-    key = C.graphs.keys()[-1]
-    zprobs = { n:0. for n in C.graphs[key].nodes() }
-    nx.set_node_attributes(C.graphs[key], 'attachment_probability', zprobs)
+    key = G.graphs.keys()[-1]
+    zprobs = { n:0. for n in G.graphs[key].nodes() }
+    networkx.set_node_attributes(G.graphs[key], 'attachment_probability', zprobs)
 
     return probs
