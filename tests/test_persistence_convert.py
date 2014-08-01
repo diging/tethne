@@ -386,7 +386,7 @@ class TestCorpusToFromHDF5(unittest.TestCase):
 #        # Axes should be the same.
 #        self.assertEqual(   len(HD.axes), len(D_.axes)  )
 #        self.assertEqual(   len(HD.axes['date']), len(D_.axes['date'])  )
-
+#
 #    def tearDown(self):
 #        os.remove(self.h5path)
 
