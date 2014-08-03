@@ -29,9 +29,6 @@ heavier the edge, the more strongly those words are associated with that topic. 
 is represented by a different color. The size of each word indicates the structural
 importance (betweenness centrality) of that word in the semantic network.
 
-*As of v0.4, corpus-oriented methods have not yet been implemented in the Tethne 
-command-line interface or GUI.*
-
 This tutorial assumes that you already have a basic familiarity with `Cytoscape
 <http://www.cytoscape.org>`_. 
 
@@ -45,143 +42,231 @@ so that you'll have some data for modeling.
 Be sure that you have the latest release of Tethne. See :ref:`installation`\.
 
 You should also download and install `MALLET <http://mallet.cs.umass.edu/download.php>`_.
-It's also not a bad idea to check out `this tutorial 
-<http://programminghistorian.org/lessons/topic-modeling-and-mallet>`_ for topic modeling
-with MALLET.
 
 Loading JSTOR DfR
 -----------------
 
-:mod:`tethne.readers.dfr` provides two mechanisms for loadings data from JSTOR DfR:
-
-    1. :func:`.dfr.read` loads bibliographic records from the ``citations.XML`` file
-       accompanying the dataset. This isn't particularly necessary for the purpose of this 
-       exercise, but is worth knowing about.
-    2. :func:`.dfr.ngrams` loads N-grams (including unigrams/wordcounts) from the dataset.
-       We'll use these as the raw data for topic modeling.
+Use the :mod:`.readers.dfr` module to load data from JSTOR DfR. Since we're working
+with a single DfR dataset that contains wordcounts, we'll use the
+:func:`.readers.dfr.read_corpus` method.
 
 Assuming that you unzipped your JSTOR DfR dataset to 
-``/Users/erickpeirson/JStor DfR Datasets/2013.5.3.cHrmED8A``, you can use something like
-the following to load wordcounts from your dataset:
+``/Users/me/JStor DfR Datasets/2013.5.3.cHrmED8A``, you can use something like
+the following to generate a :class:`.Corpus` from your dataset:
 
 .. code-block:: python
 
-   >>> import tethne.readers as rd
-   >>> datapath = '/Users/erickpeirson/JStor DfR Datasets/2013.5.3.cHrmED8A'
-   >>> wordcounts = rd.dfr.ngrams(datapath, N='uni')
-
-``wordcounts`` should now contain a dictionary mapping each paper (by DOI) to a list of
-(word, frequency) tuples. For example:
-
-.. code-block:: python
-
-   >>> wordcounts.keys()[0:3]
-   ['10.2307/1293500', '10.2307/1936479', '10.2307/2433815']
-   >>> wordcounts['10.2307/1293500'][0:6]
-   [('the', 49), ('of', 49), ('in', 33), ('and', 29), ('a', 21), ('to', 21)]
-
-Generating Documents
---------------------
-
-One of the most straight-forward ways to load documents into MALLET for topic modeling is
-to pass it a plain-text file containing the full text of each document on its own line. 
-Since JSTOR DfR data consist only of term frequencies for each document, we'll need to
-reconstruct each document. Since word order doesn't matter in LDA topic modeling, we can
-write a document by simply repeating each term by its corresponding frequency. For
-example, these term frequencies...
-
-.. code-block:: python
-
-   [('microbiology', 7), ('with', 7), ('are', 7), ('have', 7), ('be', 7), 
-    ('is', 6), ('issue', 6), ('training', 6), ('g', 6), ('bioscience', 6)]
-
-...would result in the document...
-
-.. code-block:: python
-
-   'microbiology microbiology microbiology microbiology microbiology 
-   microbiology microbiology with with with with with with with are are
-   are are are are are have have have have have have have be be be be be
-   be be is is is is is is issue issue issue issue issue issue training
-   training training training training training g g g g g g bioscience 
-   bioscience bioscience bioscience bioscience bioscience'
+   >>> from tethne.readers import dfr
+   >>> datapath = '/Users/me/JStor DfR Datasets/2013.5.3.cHrmED8A'
+   >>> MyCorpus = dfr.read_corpus(datapath, features=['uni'])
    
-We can use :func:`tethne.writers.corpora.to_documents` to generate such a corpus.
+The parameter ``features=['uni']`` tells the reader to look for unigrams in your dataset,
+and load them up as a featureset. Depending on the size of your dataset, this might take
+a few moments. The reader will attempt to discard junk data (e.g. unigrams with hashes
+``###`` in them), and index all of the :class:`.Paper`\s and features in the dataset.
+
+Using a Stoplist
+````````````````
+
+You may want to pare down our dataset further still, by applying a list of `stop
+words <http://en.wikipedia.org/wiki/Stop_words>`_. There are a few ways to do this in 
+Tethne. One way is to use to the :func:`.Corpus.apply_stoplist` method.
+
+First, load the `NLTK <http://www.nltk.org/>`_ stoplist (or use your own):
 
 .. code-block:: python
 
-   >>> import tethne.writers as wr
-   >>> wr.corpora.to_documents('./mycorpus', wordcounts)
+   >>> from nltk.corpus import stopwords
+   >>> stoplist = stopwords.words()
 
-This generates a text file called ``mycorpus_docs.txt`` containing all of our documents,
-and a file called ``mycorpus_meta.csv`` that maps each row in the corpus to a DOI.
+Then call :func:`.Corpus.apply_stoplist`\:
+
+.. code-block:: python
+
+   >>> MyCorpus.apply_stoplist('unigrams', 'unigrams_stop', stoplist)
+
+Checking your Data
+``````````````````
+
+If everything goes well, you should have a :class:`.Corpus` with some :class:`.Paper`\s in
+it...
+
+.. code-block:: python
+
+   >>> MyCorpus
+   <tethne.classes.corpus.Corpus object at 0x108403310>
+   
+   >>> len(MyCorpus.papers)
+   241
+   
+...as well as a featureset called ``unigrams_stop``:
+
+.. code-block:: python
+
+   >>> MyCorpus.features.keys()
+   ['unigrams', 'unigrams_stop', 'citations']   
+   
+   >>> len(MyCorpus.features['unigrams_stop']['index'])	# Unique features (words).
+   51639
+   
+Some of your papers may not have wordcounts associated with them. You can check how many
+papers have wordcount data:
+
+.. code-block:: python
+
+   >>> len(MyCorpus.features['unigrams_stop']['features'])
+   193
+
+Filtering Wordcount Data
+------------------------
+
+In the previous section, you loaded some DfR data with wordcounts (unigrams). That 
+resulted in a :class:`.Corpus` with a featurset called ``unigrams_stop``, containing
+51,639 unique words. That's a lot of words. Using a large vocabular increases the
+computational cost of building and visualizing your model. There may also be quite a few 
+"junk" words left in your vocabulary. To pare down your vocabulary, use the 
+:func:`.Corpus.filter_features` method.
+
+First, you'll need to define a filter. A filter is a Python method that will be applied
+to each feature (word) in the featureset. It should accept three parameters:
+
+====	=====================================================
+s		Representation of the feature (e.g. a string).
+C		The overall frequency of the feature in the Corpus.
+DC		The number of documents in which the feature occurs.
+====	=====================================================
+
+If your method returns True, then the word will be retained. If it returns False, the word
+will be filtered out.
+
+The filter method below will remove any words that are shorter than four characters in
+length, occur less than four times overall, and are found in less than two documents.
+
+.. code-block:: python
+
+   >>> def filt(s, C, DC):
+   ...     if C > 3 and DC > 1 and len(s) > 3:
+   ...         return True
+   ...     return False
+   
+Once your filter method is defined, call :func:`.Corpus.filter_features`\. The first 
+parameter should be the name of the featureset to which the filter will be applied, e.g.
+``unigrams_stop``. The second parameter should be the name of the new featureset, which 
+will be created from the features retained from the old featuret. The third parameter 
+should be your filter method. 
+
+.. code-block:: python
+   
+   >>> MyCorpus.filter_features('unigrams_stop', 'unigrams_filtered', filt)
+   
+Your new featureset, ``unigrams_filtered``, should be much smaller than the old 
+featureset.
+
+.. code-block:: python
+
+   >>> len(MyCorpus.features['unigrams_filtered']['index'])
+   12675
+   
+In this example, only 12,675 unique words were retained. This is far more computationally
+tractable.
 
 Topic Modeling in MALLET
 ------------------------
+
+Tethne provides a ModelManager called :class:`.MALLETModelManager` to perform topic
+modeling in MALLET. 
 
 For details about LDA modeling in MALLET, consult the `MALLET website 
 <http://mallet.cs.umass.edu/topics.php>`_ as well as `this tutorial 
 <http://programminghistorian.org/lessons/topic-modeling-and-mallet>`_. 
 
-First, tell MALLET to load the corpus that Tethne generated for you. Following the example
-on the MALLET website, use something like:
+Using a ModelManager
+````````````````````
 
-.. code-block:: bash
+First, you'll need to import and instantiate the :class:`.MALLETModelManager`\. To do 
+that, you'll need to know the path to your installation of MALLET. In the example below,
+MALLET is installed in '/Applications/mallet-2.0.7'. Tethne will look in that directory
+for a subdirectory, ``bin``, that contains the executable called ``mallet``. If you run
+into trouble at this step, double-check that the path that you provided does indeed
+contain that subdirectory and executable file.
 
-   $ bin/mallet import-file --input /Users/erickpeirson/mycorpus_docs.txt \
-   > --output mytopic-input.mallet --keep-sequence --remove-stopwords
+You'll also need to specify an output path. In the example below, output will be written
+to your Desktop.
 
-When you train your model, you'll want to specify a few output options so that Tethne will
-have something to work with later: ``--output-doc-topics``, ``--word-topic-counts-file``,
-and ``--output-topic-keys``:
+.. code-block:: python
 
-.. code-block:: bash
+   >>> from tethne.model.managers import MALLETModelManager
+   >>> malletpath = '/Applications/mallet-2.0.7'
+   >>> outpath = '/Users/me/Desktop'	# Be sure to change this.
+   >>> feature = 'unigrams_filtered'
+   >>> MyManager = MALLETModelManager(MyCorpus, feature, outpath, mallet_path=malletpath)
 
-   $ bin/mallet train-topics --input mytopic-input.mallet --num-topics 100 \
-   > --output-doc-topics /Users/erickpeirson/doc_top \
-   > --word-topic-counts-file /Users/erickpeirson/word_top \
-   > --output-topic-keys /Users/erickpeirson/topic_keys
+Running the Model
+`````````````````
 
-Modeling should commence, and run for a few minutes (or longer, depending on the size
-of your corpus and the number of iterations). Note that we chose 100 topics in the
-example above.
+The :class:`.MALLETModelManager` will handle all of the dirty-work of building a corpus
+file that MALLET can read, loading that corpus into MALLET, running the model, and reading
+MALLET's output. You can trigger all of this using the :func:`.MALLETModelManager.build`
+method.
 
-.. code-block:: bash
+.. code-block:: python
 
-   <1000> LL/token: -8.62952
-
-   Total time: 1 minutes 12 seconds
-   $
+   >>> MyLDAModel = MyManager.build(Z=50, max_iter=300, prep=True)
    
-Parsing MALLET Output
----------------------
+``Z=50`` tells the ModelManager to estimate parameters for 50 topics. ``max_iter=300``
+tells MALLET to stop after 300 iterations. This value is a bit low for large corpora, but
+is sufficient for the small example corpus used here.
 
-Tethne can read MALLET output using the methods in :mod:`tethne.readers.mallet`\:
+Depending on the size of your corpus, the size of your vocabulary, and the number of
+topics, this may take some time to complete (minutes to hours).
 
-    1. :func:`.mallet.load` parses MALLET output, and generates a :class:`.LDAModel`
-       object that can be used for subsequent analysis and visualization.
-    2. :func:`.mallet.read` behaves like the ``read`` method in any other 
-       :mod:`tethne.readers` sub-module, and generates a list of :class:`.Paper` objects
-       with vectors from the :class:`.LDAModel` attached.
+When modeling is complete, you should see a new file called ``ll.png`` in your outpath.
 
-We'll start by passing :func:`.mallet.load` paths to the MALLET output files from the
-previous step:
+.. figure:: _static/images/ldamodel_LL.png
+   :width: 400
+   :align: center
+   
+This figure shows the log-likelihood of your data given the LDA model over each iteration.
+If your model is getting "better" at describing your data, then this should increase
+over time. Eventually this value will level off, as subsequent iterations make negligible
+improvements to the model. If you don't see that kind of asymptotical leveling, then you
+may need to increase the number of iterations (set ``max_iterations`` higher).
+
+Inspecting the Model
+--------------------
+
+The :func:`.MALLETModelManager.build` method returns a :class:`.LDAModel` object. You can 
+inspect the model using the :func:`.LDAModel.print_topics` method, which prints the most
+likely words from each topic. You can control the number of words returned for each topic
+using the ``Nwords`` parameter.
 
 .. code-block:: python
 
-   >>> import tethne.readers as rd
-   >>> td = '/Users/erickpeirson/doc_top'
-   >>> tw = '/Users/erickpeirson/word_top'
-   >>> tk = '/Users/erickpeirson/topic_keys'
-   >>> m = '/Users/erickpeirson/mycorpus_meta.csv'
-   >>> Z = 100  # Number of topics
-   >>> model = rd.mallet.load(td, tw, tk, Z, m)
-
-We can also load up corresponding :class:`.Paper` objects using the same arguments:
+   >>> print MyLDAModel.print_topics(Nwords=5)
+   0: populations, genetic, variation, gene, variability
+   1: journal, article, illustrations, papers, form
+   2: leaf, water, size, leaves, temperature
+   3: found, great, form, number, forms
+   4: range, types, plant, type, ecological
+   5: research, university, volume, department, applications
+   6: populations, grass, soil, plots, plant
+   7: populations, population, conditions, environmental, high
+   8: seed, seeds, plants, germination, seedlings
+   9: spruce, white, british, growth, elevation
+   10: forms, harrison, zealand, work, hybrid
+   11: forest, plant, tropical, vegetation, ecology
+   12: subsp, tetraploid, rotundifolia, diploid, chromosome   
+   .
+   .
+   .
+   49: taxonomy, plant, taxonomic, evolution, systematics
+   
+To print the top ``Nwords`` for a particular topic, use :func:`.LDAModel.print_topic`\.
 
 .. code-block:: python
 
-   >>> papers = rd.mallet.read(td, tw, tk, Z, m)
+   >>> MyLDAModel.print_topic(33, Nwords=7)
+   'selection, gene, isolation, disruptive, flow, populations, mating'
 
 Semantic Network
 ----------------
@@ -193,13 +278,13 @@ Tethne, we call this a *topic-coupling* network.
 Build the Network
 `````````````````
 
-We can generate the topic-coupling network using 
-:func:`tethne.networks.terms.topic_coupling`\:
+We can generate the topic-coupling network the :func:`.topic_coupling` method
+from the :func:`.networks.features` module.
 
 .. code-block:: python
 
-   >>> import tethne.networks as nt
-   >>> g = nt.terms.topic_coupling(model, threshold=0.015)
+   >>> from tethne.networks import features
+   >>> MyGrap = features.topic_coupling(MyLDAModel, threshold=0.015)
 
 The ``threshold`` argument tells Tethne the minimum P(W|T) to consider a topic (T) to 
 contain a given word (W). In this example, the threshold was chosen *post-hoc* by 
@@ -210,7 +295,7 @@ We can then write this graph to a GraphML file for visualization:
 .. code-block:: python
 
    >>> import tethne.writers as wr
-   >>> wr.graph.to_graphml(g, './mymodel_tc.graphml')
+   >>> wr.graph.to_graphml(MyGraph, './mymodel_tc.graphml')
 
 Visualization
 `````````````
