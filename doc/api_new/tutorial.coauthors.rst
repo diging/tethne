@@ -1,15 +1,16 @@
 .. _coauthorship:
 
-.. warning:: This tutorial has been revised for v0.5.0-alpha, but has not been thoroughly
-             reviewed for accuracy.
-
 Coauthorship Networks
 =====================
 
-*This tutorial was developed for the course* `Introduction to Digital & Computational 
-Methods in the Humanities (HPS) <http://devo-evo.lab.asu.edu/methods>`_, *created and 
-taught by* `Julia Damerow <http://devo-evo.lab.asu.edu/?q=damerow>`_ *and* `Erick Peirson
-<http://gradinfo.cbs.asu.edu/?page_id=49>`_.
+.. contents::
+   :local:
+   :depth: 2
+
+.. note:: This tutorial was developed for the course `Introduction to Digital &
+   Computational Methods in the Humanities (HPS) <http://devo-evo.lab.asu.edu/methods>`_,
+   created and taught by `Julia Damerow <http://devo-evo.lab.asu.edu/?q=damerow>`_ and   
+   `Erick Peirson <http://gradinfo.cbs.asu.edu/?page_id=49>`_.
 
 Coauthorship networks are among the most popular models for studying the structure of 
 research communities, due in no small part to the ease with which coauthorship networks

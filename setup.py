@@ -7,7 +7,7 @@ MAINTAINER_EMAIL = 'erick [dot] peirson [at] asu [dot] edu'
 DESCRIPTION = ('Bibliographic network and corpus analysis for historians')
 LICENSE = 'GNU GPL 3' 
 URL = 'https://github.com/diging/tethne'
-VERSION = '0.5.1-dev'
+VERSION = '0.6.0-beta'
 PACKAGES = [ 'tethne','tethne.analyze','tethne.networks','tethne.readers',
              'tethne.utilities', 'tethne.writers', 'tethne.model',
              'tethne.services', 'tethne.classes' ]
@@ -30,5 +30,7 @@ setup(
         "Unidecode >= 0.04.16",
         "geopy >= 0.99",
         "nltk",
+        "scipy==0.14.0",
+        "numpy==1.8.1",
     ],
 )

@@ -1,6 +1,15 @@
 Co-citation Analysis
 ====================
 
+.. contents::
+   :local:
+   :depth: 2
+
+.. note:: This tutorial was developed for the course `Introduction to Digital &
+   Computational Methods in the Humanities (HPS) <http://devo-evo.lab.asu.edu/methods>`_,
+   created and taught by `Julia Damerow <http://devo-evo.lab.asu.edu/?q=damerow>`_ and   
+   `Erick Peirson <http://gradinfo.cbs.asu.edu/?page_id=49>`_.
+
 Co-citation analysis gained popularity in the 1970s as a technique for "mapping"
 scientific literatures, and for finding latent semantic relationships among technical
 publications.

@@ -1,14 +1,6 @@
 tethne.readers package
 ======================
 
-Submodules
-----------
-
-.. toctree::
-
-   tethne.readers.dfr
-   tethne.readers.wos
-
 Module contents
 ---------------
 
@@ -16,3 +8,12 @@ Module contents
     :members:
     :undoc-members:
     :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   tethne.readers.dfr
+   tethne.readers.scopus
+   tethne.readers.wos

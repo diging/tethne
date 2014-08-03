@@ -88,6 +88,30 @@
             
   <div class="section" id="co-citation-analysis">
 <h1>Co-citation Analysis<a class="headerlink" href="#co-citation-analysis" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#getting-started" id="id4">Getting Started</a></li>
+<li><a class="reference internal" href="#reading-wos-data" id="id5">Reading WoS Data</a></li>
+<li><a class="reference internal" href="#building-a-co-citation-graphcollection" id="id6">Building a Co-citation GraphCollection</a><ul>
+<li><a class="reference internal" href="#slicing-a-corpus" id="id7">Slicing a Corpus</a></li>
+<li><a class="reference internal" href="#time-variant-co-citation-graph" id="id8">Time-variant co-citation graph</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#analyzing-the-graphcollection" id="id9">Analyzing the GraphCollection</a><ul>
+<li><a class="reference internal" href="#id1" id="id10">Betweenness centrality</a></li>
+<li><a class="reference internal" href="#burstness" id="id11">Burstness</a></li>
+<li><a class="reference internal" href="#sigma" id="id12">Sigma</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This tutorial was developed for the course <a class="reference external" href="http://devo-evo.lab.asu.edu/methods">Introduction to Digital &amp;
+Computational Methods in the Humanities (HPS)</a>,
+created and taught by <a class="reference external" href="http://devo-evo.lab.asu.edu/?q=damerow">Julia Damerow</a> and
+<a class="reference external" href="http://gradinfo.cbs.asu.edu/?page_id=49">Erick Peirson</a>.</p>
+</div>
 <p>Co-citation analysis gained popularity in the 1970s as a technique for &#8220;mapping&#8221;
 scientific literatures, and for finding latent semantic relationships among technical
 publications.</p>
@@ -124,7 +148,7 @@ metric for potentially transformative cited references:</p>
 <p>First, we&#8217;ll build a time-variant co-citation network. We&#8217;ll then use Chen&#8217;s sigma
 (<img class="math" src="_images/math/fc5ccf0e85f2df730b9ebb7900adc9f4b55aa49e.png" alt="\Sigma" style="vertical-align: 0px"/>) metric to identify potential turning-points in our corpus.</p>
 <div class="section" id="getting-started">
-<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id4">Getting Started</a><a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
 <p>Before you begin, be sure to install the latest version of Tethne. Consult the
 <em class="xref std std-ref">installation</em> guide for details.</p>
 <p><strong>If you run into problems</strong>, don&#8217;t panic. Tethne is under active development, and there
@@ -139,7 +163,7 @@ the same directory.</p>
 </div>
 </div>
 <div class="section" id="reading-wos-data">
-<h2>Reading WoS Data<a class="headerlink" href="#reading-wos-data" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id5">Reading WoS Data</a><a class="headerlink" href="#reading-wos-data" title="Permalink to this headline">¶</a></h2>
 <p>You can parse WoS data from one or multiple field-tagged data files, using the methods
 in the <a class="reference internal" href="tethne.readers.html#module-tethne.readers" title="tethne.readers"><tt class="xref py py-mod docutils literal"><span class="pre">readers</span></tt></a> module. Since we&#8217;re working with multiple data files, we&#8217;ll
 use the <tt class="xref py py-mod docutils literal"><span class="pre">readers.wos.corpus_from_dir</span></tt> method to parse the WoS data and create
@@ -161,9 +185,9 @@ and make sure that you downloaded full records with citations from the WoS datab
 <a class="reference internal" href="tutorial.getting_data.html#gettingdata"><em>Getting Bibliographic Data</em></a>.</p>
 </div>
 <div class="section" id="building-a-co-citation-graphcollection">
-<h2>Building a Co-citation GraphCollection<a class="headerlink" href="#building-a-co-citation-graphcollection" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id6">Building a Co-citation GraphCollection</a><a class="headerlink" href="#building-a-co-citation-graphcollection" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="slicing-a-corpus">
-<h3>Slicing a Corpus<a class="headerlink" href="#slicing-a-corpus" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id7">Slicing a Corpus</a><a class="headerlink" href="#slicing-a-corpus" title="Permalink to this headline">¶</a></h3>
 <p>Think of slicing as indexing: we will divide the <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s in our <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>
 into bins by publication date, so that later on we can retrieve sets of papers
 corresponding to particular time-periods. You can slice your data using the
@@ -186,7 +210,7 @@ corresponding to particular time-periods. You can slice your data using the
 </div>
 </div>
 <div class="section" id="time-variant-co-citation-graph">
-<h3>Time-variant co-citation graph<a class="headerlink" href="#time-variant-co-citation-graph" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id8">Time-variant co-citation graph</a><a class="headerlink" href="#time-variant-co-citation-graph" title="Permalink to this headline">¶</a></h3>
 <p>We will use the <tt class="xref py py-func docutils literal"><span class="pre">GraphCollection.build()</span></tt> method to generate a cocitation
 <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</p>
 <p>The <tt class="docutils literal"><span class="pre">methods_kw</span></tt> parameter lets us set keyword arguments for the
@@ -201,14 +225,14 @@ of top-cited nodes to include in each time-slice.</p>
 </div>
 </div>
 <div class="section" id="analyzing-the-graphcollection">
-<h2>Analyzing the GraphCollection<a class="headerlink" href="#analyzing-the-graphcollection" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id9">Analyzing the GraphCollection</a><a class="headerlink" href="#analyzing-the-graphcollection" title="Permalink to this headline">¶</a></h2>
 <p>According to the equation for sigma (<img class="math" src="_images/math/fc5ccf0e85f2df730b9ebb7900adc9f4b55aa49e.png" alt="\Sigma" style="vertical-align: 0px"/>) given above, we need to calculate
 the betweenness centrality and the burstness of each node over time. The
 <tt class="xref py py-func docutils literal"><span class="pre">analyze.cocitation.sigma()</span></tt> method will do both of these things for us, as
 described further down in this tutorial. For the sake of illustration, however, we&#8217;ll walk
 through the intermediate steps.</p>
 <div class="section" id="id1">
-<h3>Betweenness centrality<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id10">Betweenness centrality</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>Betweenness centrality <img class="math" src="_images/math/34cfb73ee8e865342173d00ab630cdf5b5e61d13.png" alt="g(v)" style="vertical-align: -4px"/> is a measure of the structural importance of a node in
 a graph. Formally, betweenness centrality is a measure of the number of shortest paths
 that pass through a particular node. A node with high betweenness centrality tends to
@@ -230,7 +254,7 @@ disconnected.</p>
 values.</p>
 </div>
 <div class="section" id="burstness">
-<h3>Burstness<a class="headerlink" href="#burstness" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id11">Burstness</a><a class="headerlink" href="#burstness" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="http://www.cs.cornell.edu/home/kleinber/bhs.pdf">Kleingberg&#8217;s (2002)</a> burstness model
 is a popular approach for detecting &#8220;busts&#8221; of interest or activity in streams of data
 (e.g. identifying trending terms in Twitter feeds). Chen (2009) suggests that we apply
@@ -273,7 +297,7 @@ of which indicates burstness intensity.</p>
 </div>
 </div>
 <div class="section" id="sigma">
-<h3>Sigma<a class="headerlink" href="#sigma" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id12">Sigma</a><a class="headerlink" href="#sigma" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="http://arxiv.org/pdf/0904.1439.pdf">Chen (2009)</a> proposed sigma (<img class="math" src="_images/math/fc5ccf0e85f2df730b9ebb7900adc9f4b55aa49e.png" alt="\Sigma" style="vertical-align: 0px"/>) as a
 metric for potentially transformative cited references:</p>
 <div class="math">
