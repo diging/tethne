@@ -4,8 +4,6 @@ import unittest
 
 from tethne.readers import wos, dfr
 from tethne.classes import Corpus
-from tethne.classes.corpus import from_hdf5
-from tethne.persistence import HDF5Corpus
 
 import numpy
 
@@ -267,6 +265,26 @@ class TestCorpusTokenization(unittest.TestCase):
 
         self.assertEqual(len(D.features['unigrams_lim']['index']), 14709)
         self.assertEqual(len(set(after) - set(before)), 0)
+
+    def test_transform_tfidf(self):
+        """
+        :func:`Corpus.transform`\'s default behavior is a tf*idf transformation
+        """
+        D = Corpus( self.papers,
+                    features={'unigrams': self.ngrams},
+                    index_by='doi',
+                    exclude=set(stopwords.words())  )
+
+        key = D.features['unigrams']['features'].keys()[0]
+        before = D.features['unigrams']['features'][key][0]
+        D.transform('unigrams', 'unigrams_tfidf')
+        after = D.features['unigrams_tfidf']['features'][key][0]
+
+        DC = D.features['unigrams']['documentCounts'][before[0]]
+        tf = float(before[1])
+        idf = numpy.log(float(len(D.papers))/float(DC))
+    
+        self.assertEqual(after[1], tf*idf)
 
 if __name__ == '__main__':
     unittest.main()
