@@ -5,7 +5,7 @@ A :class:`.Corpus` organizes :class:`.Paper`\s for analysis.
 import logging
 logging.basicConfig(filename=None, format='%(asctime)-6s: %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(lineno)d - %(message)s')
 logger = logging.getLogger(__name__)
-logger.setLevel('INFO')
+logger.setLevel('DEBUG')
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -20,6 +20,16 @@ import copy
 from unidecode import unidecode
 
 from ..utilities import strip_punctuation
+
+def _tfidf(f, c, C, DC, N):
+    tf = float(c)
+    idf = np.log(float(N)/float(DC))
+    return tf*idf
+
+def _filter(s, C, DC):
+    if C > 3 and DC > 1 and len(s) > 3:
+        return True
+    return False
 
 class Corpus(object):
     """
@@ -124,8 +134,9 @@ class Corpus(object):
                         index_citation_by=index_citation_by,
                         exclude=exclude, filt=filt  )
 
-    def index(self, papers, features=None, index_by='ayjid',
-                    index_citation_by='ayjid', exclude=set([]), filt=None, stem=False):
+    def index(  self,   papers, features=None, index_by='ayjid',
+                        index_citation_by='ayjid', exclude=set([]),
+                        filt=None, stem=False   ):
         """
         Indexes `papers`, `features`, and `citations` (if present).
         This should be called automatically from :func:`.__init__`, unless
@@ -418,7 +429,34 @@ class Corpus(object):
         logger.debug('done tokenizing features')
         return ftype, findex, features, counts, documentCounts, fpapers
 
-    def filter_features(self, fold, fnew, filt):
+    def transform(self, fold, fnew, transformer=_tfidf):
+        logger.debug('start transformation: "{0}" -> "{1}"'.format(fold, fnew))
+        logger.debug('with transformer: {0}'.format(transformer.__name__))
+        
+        fdict = self.features[fold]
+
+        features = {}
+        index = fdict['index']
+        counts = fdict['counts']
+        documentCounts = fdict['documentCounts']    # Re-use this.
+        fpapers = {}
+        
+        for d, fvect in fdict['features'].iteritems():
+            fvect_ = []
+            for f,v in fvect:
+                v_ = transformer(
+                    index[f], v, counts[f], documentCounts[f], len(self.papers))
+                fvect_.append(  (f, v_) )
+                try:
+                    fpapers[f].append(  (d, v_) )
+                except KeyError:
+                    fpapers[f] = [ (d, v_), ]
+            
+            features[d] = fvect_
+
+        self._define_features(fnew, index, features, counts, documentCounts, fpapers)
+
+    def filter_features(self, fold, fnew, filt=_filter):
         """
         Create a new featureset by applying a filter to an existing featureset.
 
