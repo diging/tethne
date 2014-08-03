@@ -23,7 +23,6 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/js/copybutton.js"></script>
     <link rel="top" title="tethne 0.6.0-beta documentation" href="index.html" >
     <link rel="up" title="Tutorials" href="tutorials.html" >
@@ -112,18 +111,18 @@ knowledge-base of a scientific field. If a new paper emerges that is highly co-c
 two otherwise-distinct clusters of concepts, then that might mean that the field is
 adopting new concepts and propositions in a way that is structurally radical for their
 conceptual framework.</p>
-<p><a class="reference external" href="http://arxiv.org/pdf/0904.1439.pdf">Chen (2009)</a> introduces sigma (<span class="math">\(\Sigma\)</span>) as a
+<p><a class="reference external" href="http://arxiv.org/pdf/0904.1439.pdf">Chen (2009)</a> introduces sigma (<img class="math" src="_images/math/fc5ccf0e85f2df730b9ebb7900adc9f4b55aa49e.png" alt="\Sigma" style="vertical-align: 0px"/>) as a
 metric for potentially transformative cited references:</p>
 <div class="math">
-\[\Sigma(v) = (g(v) + 1)^{burstness(v)}\]</div>
-<p>...where the <a class="reference external" href="http://en.wikipedia.org/wiki/Betweenness_centrality">betweenness centrality</a> of each node <span class="math">\(v\)</span> is:</p>
+<p><img src="_images/math/998365376e77533032190d1ae4a9aa537ea592aa.png" alt="\Sigma(v) = (g(v) + 1)^{burstness(v)}"/></p>
+</div><p>...where the <a class="reference external" href="http://en.wikipedia.org/wiki/Betweenness_centrality">betweenness centrality</a> of each node <img class="math" src="_images/math/5a6fa433f1ec3b094c387fc349e1fd8a1f65c957.png" alt="v" style="vertical-align: 0px"/> is:</p>
 <div class="math">
-\[g(v) = \sum\limits_{i\neq j\neq v} \frac{\sigma_{ij} (v)}{\sigma_{ij}}\]</div>
-<p>...where <span class="math">\(\sigma_{ij}\)</span> is the number of shortest paths from node <em>i</em> to node
-<em>j</em> and <span class="math">\(\sigma_{ij}(v)\)</span> is the number of those paths that pass through <em>v</em>.</p>
-<p><span class="math">\(burstness\)</span> (0.-1. normalized) is estimated using <a class="reference external" href="http://www.cs.cornell.edu/home/kleinber/bhs.pdf">Kleingberg&#8217;s (2002)</a> automaton model.</p>
+<p><img src="_images/math/1a60d0b27be92d7d3536963948ccf4a6d8c94996.png" alt="g(v) = \sum\limits_{i\neq j\neq v} \frac{\sigma_{ij} (v)}{\sigma_{ij}}"/></p>
+</div><p>...where <img class="math" src="_images/math/f0cee8c1744952f34cf112cbe668b3bd2d52b165.png" alt="\sigma_{ij}" style="vertical-align: -4px"/> is the number of shortest paths from node <em>i</em> to node
+<em>j</em> and <img class="math" src="_images/math/eaf13b862b8c2198f75560982e0efe6832473802.png" alt="\sigma_{ij}(v)" style="vertical-align: -4px"/> is the number of those paths that pass through <em>v</em>.</p>
+<p><img class="math" src="_images/math/0634f886042ea90675ca3b44a7c3b139f0cfbe3d.png" alt="burstness" style="vertical-align: 0px"/> (0.-1. normalized) is estimated using <a class="reference external" href="http://www.cs.cornell.edu/home/kleinber/bhs.pdf">Kleingberg&#8217;s (2002)</a> automaton model.</p>
 <p>First, we&#8217;ll build a time-variant co-citation network. We&#8217;ll then use Chen&#8217;s sigma
-(<span class="math">\(\Sigma\)</span>) metric to identify potential turning-points in our corpus.</p>
+(<img class="math" src="_images/math/fc5ccf0e85f2df730b9ebb7900adc9f4b55aa49e.png" alt="\Sigma" style="vertical-align: 0px"/>) metric to identify potential turning-points in our corpus.</p>
 <div class="section" id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
 <p>Before you begin, be sure to install the latest version of Tethne. Consult the
@@ -203,22 +202,22 @@ of top-cited nodes to include in each time-slice.</p>
 </div>
 <div class="section" id="analyzing-the-graphcollection">
 <h2>Analyzing the GraphCollection<a class="headerlink" href="#analyzing-the-graphcollection" title="Permalink to this headline">¶</a></h2>
-<p>According to the equation for sigma (<span class="math">\(\Sigma\)</span>) given above, we need to calculate
+<p>According to the equation for sigma (<img class="math" src="_images/math/fc5ccf0e85f2df730b9ebb7900adc9f4b55aa49e.png" alt="\Sigma" style="vertical-align: 0px"/>) given above, we need to calculate
 the betweenness centrality and the burstness of each node over time. The
 <tt class="xref py py-func docutils literal"><span class="pre">analyze.cocitation.sigma()</span></tt> method will do both of these things for us, as
 described further down in this tutorial. For the sake of illustration, however, we&#8217;ll walk
 through the intermediate steps.</p>
 <div class="section" id="id1">
 <h3>Betweenness centrality<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<p>Betweenness centrality <span class="math">\(g(v)\)</span> is a measure of the structural importance of a node in
+<p>Betweenness centrality <img class="math" src="_images/math/34cfb73ee8e865342173d00ab630cdf5b5e61d13.png" alt="g(v)" style="vertical-align: -4px"/> is a measure of the structural importance of a node in
 a graph. Formally, betweenness centrality is a measure of the number of shortest paths
 that pass through a particular node. A node with high betweenness centrality tends to
 connect disparate regions of a graph, linking clusters that might otherwise be
 disconnected.</p>
 <div class="math">
-\[g(v) = \sum\limits_{i\neq j\neq v} \frac{\sigma_{ij} (v)}{\sigma_{ij}}\]</div>
-<p>...where <span class="math">\(\sigma_{ij}\)</span> is the number of shortest paths from node <em>i</em> to node
-<em>j</em> and <span class="math">\(\sigma_{ij}(v)\)</span> is the number of those paths that pass through <em>v</em>.</p>
+<p><img src="_images/math/1a60d0b27be92d7d3536963948ccf4a6d8c94996.png" alt="g(v) = \sum\limits_{i\neq j\neq v} \frac{\sigma_{ij} (v)}{\sigma_{ij}}"/></p>
+</div><p>...where <img class="math" src="_images/math/f0cee8c1744952f34cf112cbe668b3bd2d52b165.png" alt="\sigma_{ij}" style="vertical-align: -4px"/> is the number of shortest paths from node <em>i</em> to node
+<em>j</em> and <img class="math" src="_images/math/eaf13b862b8c2198f75560982e0efe6832473802.png" alt="\sigma_{ij}(v)" style="vertical-align: -4px"/> is the number of those paths that pass through <em>v</em>.</p>
 <p>We can calculate the centrality of all nodes in each of the graphs in our
 <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> using the <a class="reference internal" href="tethne.analyze.collection.html#tethne.analyze.collection.algorithm" title="tethne.analyze.collection.algorithm"><tt class="xref py py-func docutils literal"><span class="pre">analyze.collection.algorithm()</span></tt></a> method:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.analyze</span> <span class="kn">import</span> <span class="n">collection</span>
@@ -275,13 +274,13 @@ of which indicates burstness intensity.</p>
 </div>
 <div class="section" id="sigma">
 <h3>Sigma<a class="headerlink" href="#sigma" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference external" href="http://arxiv.org/pdf/0904.1439.pdf">Chen (2009)</a> proposed sigma (<span class="math">\(\Sigma\)</span>) as a
+<p><a class="reference external" href="http://arxiv.org/pdf/0904.1439.pdf">Chen (2009)</a> proposed sigma (<img class="math" src="_images/math/fc5ccf0e85f2df730b9ebb7900adc9f4b55aa49e.png" alt="\Sigma" style="vertical-align: 0px"/>) as a
 metric for potentially transformative cited references:</p>
 <div class="math">
-\[\Sigma(v) = (g(v) + 1)^{burstness(v)}\]</div>
-<p>The module <tt class="xref py py-mod docutils literal"><span class="pre">analyze.cocitation</span></tt> provides methods for calculating <span class="math">\(\Sigma\)</span>
+<p><img src="_images/math/998365376e77533032190d1ae4a9aa537ea592aa.png" alt="\Sigma(v) = (g(v) + 1)^{burstness(v)}"/></p>
+</div><p>The module <tt class="xref py py-mod docutils literal"><span class="pre">analyze.cocitation</span></tt> provides methods for calculating <img class="math" src="_images/math/fc5ccf0e85f2df730b9ebb7900adc9f4b55aa49e.png" alt="\Sigma" style="vertical-align: 0px"/>
 from a cocitation <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> and a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> in one step.</p>
-<p>The method <tt class="xref py py-func docutils literal"><span class="pre">analyze.plot_sigma()</span></tt> calculates <span class="math">\(\Sigma\)</span> for each node in each
+<p>The method <tt class="xref py py-func docutils literal"><span class="pre">analyze.plot_sigma()</span></tt> calculates <img class="math" src="_images/math/fc5ccf0e85f2df730b9ebb7900adc9f4b55aa49e.png" alt="\Sigma" style="vertical-align: 0px"/> for each node in each
 time-slice of our <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>, and also generates a figure that shows
 values for the top nodes in each slice.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.analyze.cocitation</span> <span class="kn">import</span> <span class="n">plot_sigma</span>
@@ -290,21 +289,21 @@ values for the top nodes in each slice.</p>
 </pre></div>
 </div>
 <p>In the figure below, the top 5 most sigma-influential nodes in each slice are shown. Red
-bands indicate periods in which each paper had a high <span class="math">\(\Sigma\)</span>; opacity indicates
-the intensity of <span class="math">\(\Sigma\)</span> (normalized by the highest value in the plot). Those red
+bands indicate periods in which each paper had a high <img class="math" src="_images/math/fc5ccf0e85f2df730b9ebb7900adc9f4b55aa49e.png" alt="\Sigma" style="vertical-align: 0px"/>; opacity indicates
+the intensity of <img class="math" src="_images/math/fc5ccf0e85f2df730b9ebb7900adc9f4b55aa49e.png" alt="\Sigma" style="vertical-align: 0px"/> (normalized by the highest value in the plot). Those red
 bands suggest points at which that particular paper may have significantly altered the
 conceptual framework of the field represented by our corpus.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/sigma_plot.png"><img alt="_images/sigma_plot.png" src="_images/sigma_plot.png" style="width: 600px;" /></a>
 </div>
-<p>In the last step, the nodes in <tt class="docutils literal"><span class="pre">G</span></tt> were also updated with <span class="math">\(\Sigma\)</span> values. We can
+<p>In the last step, the nodes in <tt class="docutils literal"><span class="pre">G</span></tt> were also updated with <img class="math" src="_images/math/fc5ccf0e85f2df730b9ebb7900adc9f4b55aa49e.png" alt="\Sigma" style="vertical-align: 0px"/> values. We can
 write our <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> as a dynamic graph for visualization in Cytoscape
 using the <a class="reference internal" href="tethne.writers.collection.html#tethne.writers.collection.to_dxgmml" title="tethne.writers.collection.to_dxgmml"><tt class="xref py py-func docutils literal"><span class="pre">writers.collection.to_dxgmml()</span></tt></a> method:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.writers</span> <span class="kn">import</span> <span class="n">collection</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">collection</span><span class="o">.</span><span class="n">to_dxgmml</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="s">&#39;~/cocitation.xgmml&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>In the visualization below, node and label sizes are mapped to <span class="math">\(\Sigma\)</span>, and border
+<p>In the visualization below, node and label sizes are mapped to <img class="math" src="_images/math/fc5ccf0e85f2df730b9ebb7900adc9f4b55aa49e.png" alt="\Sigma" style="vertical-align: 0px"/>, and border
 width is mapped to the number of citations for each respective node in each slice.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/cocitation_sigma2.png"><img alt="_images/cocitation_sigma2.png" src="_images/cocitation_sigma2.png" style="width: 600px;" /></a>

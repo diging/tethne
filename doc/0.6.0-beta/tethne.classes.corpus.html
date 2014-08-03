@@ -23,7 +23,6 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/js/copybutton.js"></script>
     <link rel="top" title="tethne 0.6.0-beta documentation" href="index.html" >
     <link rel="up" title="tethne.classes package" href="tethne.classes.html" >
@@ -53,7 +52,7 @@
 	
         <li class="active"><a href="index.html">tethne 0.6.0-beta documentation</a></li>
 	
-          <li class="active"><a href="modules.html" >API</a></li>
+          <li class="active"><a href="tethne.html" >tethne API</a></li>
           <li class="active"><a href="tethne.classes.html" accesskey="U">tethne.classes package</a></li> 
     </ul>
               
@@ -104,6 +103,62 @@ models (see the <a class="reference internal" href="tethne.model.html#module-tet
 <p>You can create new <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> objects from bibliographic datasets
 using the methods in <a class="reference internal" href="tethne.readers.html#module-tethne.readers" title="tethne.readers"><tt class="xref py py-mod docutils literal"><span class="pre">readers</span></tt></a>. For more information about what you
 can do with a <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>, see <a class="reference internal" href="corpora.html#working-with-corpora"><em>Working with Corpora</em></a>.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.N_axes" title="tethne.classes.corpus.Corpus.N_axes"><tt class="xref py py-obj docutils literal"><span class="pre">N_axes</span></tt></a></td>
+<td>Returns the number of slice axes for this <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.abstract_to_features" title="tethne.classes.corpus.Corpus.abstract_to_features"><tt class="xref py py-obj docutils literal"><span class="pre">abstract_to_features</span></tt></a></td>
+<td>Generates a unigram (wordcount) featureset from the abstracts of all <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s in the <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> (if available).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.add_features" title="tethne.classes.corpus.Corpus.add_features"><tt class="xref py py-obj docutils literal"><span class="pre">add_features</span></tt></a></td>
+<td>Add a new featureset to the <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.all_papers" title="tethne.classes.corpus.Corpus.all_papers"><tt class="xref py py-obj docutils literal"><span class="pre">all_papers</span></tt></a></td>
+<td>Yield the complete set of <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> instances in this <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> .</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.distribution" title="tethne.classes.corpus.Corpus.distribution"><tt class="xref py py-obj docutils literal"><span class="pre">distribution</span></tt></a></td>
+<td>Get the distribution of <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s over one or two slice axes.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.feature_counts" title="tethne.classes.corpus.Corpus.feature_counts"><tt class="xref py py-obj docutils literal"><span class="pre">feature_counts</span></tt></a></td>
+<td>Get the frequency of a feature in a particular <tt class="docutils literal"><span class="pre">slice</span></tt> of <tt class="docutils literal"><span class="pre">axis</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.feature_distribution" title="tethne.classes.corpus.Corpus.feature_distribution"><tt class="xref py py-obj docutils literal"><span class="pre">feature_distribution</span></tt></a></td>
+<td>Get the distribution of a <tt class="docutils literal"><span class="pre">feature</span></tt> over one or two slice axes.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.filter_features" title="tethne.classes.corpus.Corpus.filter_features"><tt class="xref py py-obj docutils literal"><span class="pre">filter_features</span></tt></a></td>
+<td>Create a new featureset by applying a filter to an existing featureset.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.get_axes" title="tethne.classes.corpus.Corpus.get_axes"><tt class="xref py py-obj docutils literal"><span class="pre">get_axes</span></tt></a></td>
+<td>Returns a list of all slice axes for this <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> .</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.get_slice" title="tethne.classes.corpus.Corpus.get_slice"><tt class="xref py py-obj docutils literal"><span class="pre">get_slice</span></tt></a></td>
+<td>Get the <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s (or just their IDs) from a single slice.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.get_slices" title="tethne.classes.corpus.Corpus.get_slices"><tt class="xref py py-obj docutils literal"><span class="pre">get_slices</span></tt></a></td>
+<td>Get all of the <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s (or just their IDs) in a  particular slice.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.index" title="tethne.classes.corpus.Corpus.index"><tt class="xref py py-obj docutils literal"><span class="pre">index</span></tt></a></td>
+<td>Indexes <cite>papers</cite>, <cite>features</cite>, and <cite>citations</cite> (if present).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.indices" title="tethne.classes.corpus.Corpus.indices"><tt class="xref py py-obj docutils literal"><span class="pre">indices</span></tt></a></td>
+<td>Yields a list of indices of all <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s in this <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.plot_distribution" title="tethne.classes.corpus.Corpus.plot_distribution"><tt class="xref py py-obj docutils literal"><span class="pre">plot_distribution</span></tt></a></td>
+<td>Plot distribution of papers or features along slice axes, using <a class="reference external" href="http://matplotlib.org/">MatPlotLib</a>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.slice" title="tethne.classes.corpus.Corpus.slice"><tt class="xref py py-obj docutils literal"><span class="pre">slice</span></tt></a></td>
+<td>Slices data by key, using method (if applicable).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.classes.corpus.Corpus.transform" title="tethne.classes.corpus.Corpus.transform"><tt class="xref py py-obj docutils literal"><span class="pre">transform</span></tt></a></td>
+<td>Transform values in featureset <tt class="docutils literal"><span class="pre">fold</span></tt>, creating a new featureset  <tt class="docutils literal"><span class="pre">fnew</span></tt>.</td>
+</tr>
+</tbody>
+</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -454,8 +509,35 @@ of documents in which a feature occurs) rather than the frequency
 
 <dl class="method">
 <dt id="tethne.classes.corpus.Corpus.filter_features">
-<tt class="descname">filter_features</tt><big>(</big><em>fold</em>, <em>fnew</em>, <em>filt</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/corpus.html#Corpus.filter_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.corpus.Corpus.filter_features" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">filter_features</tt><big>(</big><em>fold</em>, <em>fnew</em>, <em>filt=&lt;function _filter at 0x10831bb18&gt;</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/corpus.html#Corpus.filter_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.corpus.Corpus.filter_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new featureset by applying a filter to an existing featureset.</p>
+<p><tt class="docutils literal"><span class="pre">filt</span></tt> is a method applied to each feature in the <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.
+It should return True if the feature is to be retained, and False if the
+feature is to be discarded. <tt class="docutils literal"><span class="pre">filt</span></tt> should accept the following
+parameters:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="87%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">s</span></tt></td>
+<td>Representation of the feature (e.g. a string).</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">C</span></tt></td>
+<td>The overall frequency of the feature in the
+<a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">DC</span></tt></td>
+<td>The number of documents in which the feature occurs.</td>
+</tr>
+</tbody>
+</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -470,15 +552,7 @@ of documents in which a feature occurs) rather than the frequency
 </div></blockquote>
 <p><strong>filt</strong> : method</p>
 <blockquote>
-<div><p>Filter function to apply to the featureset. It should accept three
-arguments (see example below)...</p>
-<ul class="simple">
-<li><tt class="docutils literal"><span class="pre">s</span></tt>, the string representation of the feature,</li>
-<li><tt class="docutils literal"><span class="pre">C</span></tt>, the overall frequency of the feature in the
-<a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>, and</li>
-<li><tt class="docutils literal"><span class="pre">DC</span></tt>, the number of <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s in which the feature
-occurs.</li>
-</ul>
+<div><p>Filter function to apply to the featureset. See above.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -527,7 +601,7 @@ feature called <tt class="docutils literal"><span class="pre">wc</span></tt>, th
 <dl class="method">
 <dt id="tethne.classes.corpus.Corpus.get_slice">
 <tt class="descname">get_slice</tt><big>(</big><em>key</em>, <em>index</em>, <em>papers=False</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/corpus.html#Corpus.get_slice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.corpus.Corpus.get_slice" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the :class:<a href="#id3"><span class="problematic" id="id4">`</span></a>.Paper`s (or just their IDs) from a single slice.</p>
+<dd><p>Get the <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s (or just their IDs) from a single slice.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -587,8 +661,8 @@ than just their IDs.</p>
 <dl class="method">
 <dt id="tethne.classes.corpus.Corpus.get_slices">
 <tt class="descname">get_slices</tt><big>(</big><em>key</em>, <em>papers=False</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/corpus.html#Corpus.get_slices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.corpus.Corpus.get_slices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all of the <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s (or just their IDs) in a particular
-slice.</p>
+<dd><p>Get all of the <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s (or just their IDs) in a 
+particular slice.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -933,6 +1007,71 @@ step_size of 1.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="_images/corpus_plot_distribution.png"><img alt="_images/corpus_plot_distribution.png" src="_images/corpus_plot_distribution.png" style="width: 400px;" /></a>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.classes.corpus.Corpus.transform">
+<tt class="descname">transform</tt><big>(</big><em>fold</em>, <em>fnew</em>, <em>transformer=&lt;function _tfidf at 0x10831b938&gt;</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/corpus.html#Corpus.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.corpus.Corpus.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform values in featureset <tt class="docutils literal"><span class="pre">fold</span></tt>, creating a new featureset 
+<tt class="docutils literal"><span class="pre">fnew</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">transformer</span></tt> is a method that will be applied to each feature in each
+document, returning a new value for that feature. It should accept the
+following parameters:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="87%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">s</span></tt></td>
+<td>Representation of the feature (e.g. string).</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">c</span></tt></td>
+<td>Value of the feature in the document (e.g. frequency).</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">C</span></tt></td>
+<td>Value of the feature in the <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> (e.g. global
+frequency).</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">DC</span></tt></td>
+<td>Number of documents in which the feature occcurs.</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">N</span></tt></td>
+<td>Total number of documents in the <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</td>
+</tr>
+</tbody>
+</table>
+<p>If <tt class="docutils literal"><span class="pre">transformer</span></tt> is not provided, the default behavior is a standard
+<a class="reference external" href="http://en.wikipedia.org/wiki/Tf%E2%80%93idf">tf*idf transformation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fold</strong> : str</p>
+<blockquote>
+<div><p>Name of the featureset to be transformed.</p>
+</div></blockquote>
+<p><strong>fnew</strong> : str</p>
+<blockquote>
+<div><p>Name of the featureset to be created, with transformed values.</p>
+</div></blockquote>
+<p><strong>transformer</strong> : method</p>
+<blockquote>
+<div><p>Applied to each feature in each document in the <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.
+See above.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
