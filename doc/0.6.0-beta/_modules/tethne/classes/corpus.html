@@ -592,6 +592,41 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_define_features</span><span class="p">(</span><span class="n">fnew</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">counts</span><span class="p">,</span> <span class="n">documentCounts</span><span class="p">,</span> <span class="n">fpapers</span><span class="p">)</span>
 </div>
+<div class="viewcode-block" id="Corpus.apply_stoplist"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.apply_stoplist">[docs]</a>    <span class="k">def</span> <span class="nf">apply_stoplist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">fnew</span><span class="p">,</span> <span class="n">stoplist</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply ``stoplist`` to the featureset ``fold``, resulting in featureset</span>
+<span class="sd">        ``fnew``\.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fold : str</span>
+<span class="sd">            Key into ``features`` for existing featureset.</span>
+<span class="sd">        fnew : str</span>
+<span class="sd">            Key into ``features`` for resulting featuresset.</span>
+<span class="sd">        stoplist : list</span>
+<span class="sd">            A list of features to remove from the featureset.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">        </span>
+<span class="sd">           &gt;&gt;&gt; from nltk.corpus import stopwords</span>
+<span class="sd">           &gt;&gt;&gt; MyCorpus.apply_stoplist(&#39;unigrams&#39;, &#39;u_stop&#39;, stopwords.words())</span>
+<span class="sd">           </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="k">def</span> <span class="nf">filt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">stoplist</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_features</span><span class="p">(</span><span class="n">fold</span><span class="p">,</span> <span class="n">fnew</span><span class="p">,</span> <span class="n">filt</span><span class="o">=</span><span class="n">filt</span><span class="p">)</span>
+</div>
 <div class="viewcode-block" id="Corpus.filter_features"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.filter_features">[docs]</a>    <span class="k">def</span> <span class="nf">filter_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">fnew</span><span class="p">,</span> <span class="n">filt</span><span class="o">=</span><span class="n">_filter</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a new featureset by applying a filter to an existing featureset.</span>

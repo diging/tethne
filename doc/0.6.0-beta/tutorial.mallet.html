@@ -159,18 +159,14 @@ a few moments. The reader will attempt to discard junk data (e.g. unigrams with 
 <h3><a class="toc-backref" href="#id5">Using a Stoplist</a><a class="headerlink" href="#using-a-stoplist" title="Permalink to this headline">¶</a></h3>
 <p>You may want to pare down our dataset further still, by applying a list of <a class="reference external" href="http://en.wikipedia.org/wiki/Stop_words">stop
 words</a>. There are a few ways to do this in
-Tethne. You can apply a stop list while loading data by passing it with the <tt class="docutils literal"><span class="pre">exclude</span></tt>
-parameter.</p>
-<p>First, load the <cite>NLTK &lt;http://www.nltk.org/&gt;</cite> stoplist (or use your own):</p>
+Tethne. One way is to use to the <strong>apply_stoplist</strong> method.</p>
+<p>First, load the <a class="reference external" href="http://www.nltk.org/">NLTK</a> stoplist (or use your own):</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stoplist</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Then load your <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> as before, but this time including the <tt class="docutils literal"><span class="pre">exclude</span></tt>
-parameter:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">dfr</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">datapath</span> <span class="o">=</span> <span class="s">&#39;/Users/me/JStor DfR Datasets/2013.5.3.cHrmED8A&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">read_corpus</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uni&#39;</span><span class="p">],</span> <span class="n">exclude</span><span class="o">=</span><span class="n">stoplist</span><span class="p">)</span>
+<p>Then call <strong>apply_stoplist</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">apply_stoplist</span><span class="p">(</span><span class="s">&#39;unigrams&#39;</span><span class="p">,</span> <span class="s">&#39;unigrams_stop&#39;</span><span class="p">,</span> <span class="n">stoplist</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -185,17 +181,17 @@ it...</p>
 <span class="go">241</span>
 </pre></div>
 </div>
-<p>...as well as a featureset called <tt class="docutils literal"><span class="pre">unigrams</span></tt>:</p>
+<p>...as well as a featureset called <tt class="docutils literal"><span class="pre">unigrams_stop</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-<span class="go">[&#39;unigrams&#39;, &#39;citations&#39;]</span>
+<span class="go">[&#39;unigrams&#39;, &#39;unigrams_stop&#39;, &#39;citations&#39;]</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;unigrams&#39;</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">])</span>      <span class="c"># Number of unique features (words).</span>
-<span class="go">52207</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;unigrams_stop&#39;</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">])</span> <span class="c"># Unique features (words).</span>
+<span class="go">51639</span>
 </pre></div>
 </div>
 <p>Some of your papers may not have wordcounts associated with them. You can check how many
 papers have wordcount data:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;unigrams&#39;</span><span class="p">][</span><span class="s">&#39;features&#39;</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;unigrams_stop&#39;</span><span class="p">][</span><span class="s">&#39;features&#39;</span><span class="p">])</span>
 <span class="go">193</span>
 </pre></div>
 </div>
@@ -204,11 +200,11 @@ papers have wordcount data:</p>
 <div class="section" id="filtering-wordcount-data">
 <h2><a class="toc-backref" href="#id7">Filtering Wordcount Data</a><a class="headerlink" href="#filtering-wordcount-data" title="Permalink to this headline">¶</a></h2>
 <p>In the previous section, you loaded some DfR data with wordcounts (unigrams). That
-resulted in a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> with a featurset called <tt class="docutils literal"><span class="pre">unigrams</span></tt>, containing 52,207
-unique words. That&#8217;s a lot of words. Using a large vocabular increases the computational
-cost of building and visualizing your model. There may also be quite a few &#8220;junk&#8221; words
-left in your vocabulary. To pare down your vocabulary, use the
-<tt class="xref py py-func docutils literal"><span class="pre">Corpus.filter_features()</span></tt> method.</p>
+resulted in a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> with a featurset called <tt class="docutils literal"><span class="pre">unigrams_stop</span></tt>, containing
+51,639 unique words. That&#8217;s a lot of words. Using a large vocabular increases the
+computational cost of building and visualizing your model. There may also be quite a few
+&#8220;junk&#8221; words left in your vocabulary. To pare down your vocabulary, use the
+<strong>filter_features</strong> method.</p>
 <p>First, you&#8217;ll need to define a filter. A filter is a Python method that will be applied
 to each feature (word) in the featureset. It should accept three parameters:</p>
 <table border="1" class="docutils">
@@ -238,12 +234,12 @@ length, occur less than four times overall, and are found in less than two docum
 <span class="gp">... </span>    <span class="k">return</span> <span class="bp">False</span>
 </pre></div>
 </div>
-<p>Once your filter method is defined, call <tt class="xref py py-func docutils literal"><span class="pre">Corpus.filter_features()</span></tt>. The first
+<p>Once your filter method is defined, call <strong>filter_features</strong>. The first
 parameter should be the name of the featureset to which the filter will be applied, e.g.
-<tt class="docutils literal"><span class="pre">unigrams</span></tt>. The second parameter should be the name of the new featureset, which will
-be created from the features retained from the old featuret. The third parameter should
-be your filter method.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">filter_features</span><span class="p">(</span><span class="s">&#39;unigrams&#39;</span><span class="p">,</span> <span class="s">&#39;unigrams_filtered&#39;</span><span class="p">,</span> <span class="n">filt</span><span class="p">)</span>
+<tt class="docutils literal"><span class="pre">unigrams_stop</span></tt>. The second parameter should be the name of the new featureset, which
+will be created from the features retained from the old featuret. The third parameter
+should be your filter method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">filter_features</span><span class="p">(</span><span class="s">&#39;unigrams_stop&#39;</span><span class="p">,</span> <span class="s">&#39;unigrams_filtered&#39;</span><span class="p">,</span> <span class="n">filt</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Your new featureset, <tt class="docutils literal"><span class="pre">unigrams_filtered</span></tt>, should be much smaller than the old
@@ -300,8 +296,7 @@ topics, this may take some time to complete (minutes to hours).</p>
 If your model is getting &#8220;better&#8221; at describing your data, then this should increase
 over time. Eventually this value will level off, as subsequent iterations make negligible
 improvements to the model. If you don&#8217;t see that kind of asymptotical leveling, then you
-may need to increase the number of iterations (set <tt class="docutils literal"><span class="pre">max_iterations</span></tt> to a higher
-number).</p>
+may need to increase the number of iterations (set <tt class="docutils literal"><span class="pre">max_iterations</span></tt> higher).</p>
 </div>
 </div>
 <div class="section" id="inspecting-the-model">

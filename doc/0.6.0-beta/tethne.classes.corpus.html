@@ -363,6 +363,41 @@ included.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="tethne.classes.corpus.Corpus.apply_stoplist">
+<tt class="descname">apply_stoplist</tt><big>(</big><em>fold</em>, <em>fnew</em>, <em>stoplist</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/corpus.html#Corpus.apply_stoplist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.corpus.Corpus.apply_stoplist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply <tt class="docutils literal"><span class="pre">stoplist</span></tt> to the featureset <tt class="docutils literal"><span class="pre">fold</span></tt>, resulting in featureset
+<tt class="docutils literal"><span class="pre">fnew</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fold</strong> : str</p>
+<blockquote>
+<div><p>Key into <tt class="docutils literal"><span class="pre">features</span></tt> for existing featureset.</p>
+</div></blockquote>
+<p><strong>fnew</strong> : str</p>
+<blockquote>
+<div><p>Key into <tt class="docutils literal"><span class="pre">features</span></tt> for resulting featuresset.</p>
+</div></blockquote>
+<p><strong>stoplist</strong> : list</p>
+<blockquote>
+<div><p>A list of features to remove from the featureset.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">apply_stoplist</span><span class="p">(</span><span class="s">&#39;unigrams&#39;</span><span class="p">,</span> <span class="s">&#39;u_stop&#39;</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">())</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
 <dt id="tethne.classes.corpus.Corpus.distribution">
 <tt class="descname">distribution</tt><big>(</big><em>x_axis</em>, <em>y_axis=None</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/corpus.html#Corpus.distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.corpus.Corpus.distribution" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the distribution of <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s over one or two slice axes.</p>
@@ -509,7 +544,7 @@ of documents in which a feature occurs) rather than the frequency
 
 <dl class="method">
 <dt id="tethne.classes.corpus.Corpus.filter_features">
-<tt class="descname">filter_features</tt><big>(</big><em>fold</em>, <em>fnew</em>, <em>filt=&lt;function _filter at 0x10831bb18&gt;</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/corpus.html#Corpus.filter_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.corpus.Corpus.filter_features" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">filter_features</tt><big>(</big><em>fold</em>, <em>fnew</em>, <em>filt=&lt;function _filter at 0x10831bd70&gt;</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/corpus.html#Corpus.filter_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.corpus.Corpus.filter_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new featureset by applying a filter to an existing featureset.</p>
 <p><tt class="docutils literal"><span class="pre">filt</span></tt> is a method applied to each feature in the <a class="reference internal" href="#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.
 It should return True if the feature is to be retained, and False if the
@@ -1011,7 +1046,7 @@ step_size of 1.</p>
 
 <dl class="method">
 <dt id="tethne.classes.corpus.Corpus.transform">
-<tt class="descname">transform</tt><big>(</big><em>fold</em>, <em>fnew</em>, <em>transformer=&lt;function _tfidf at 0x10831b938&gt;</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/corpus.html#Corpus.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.corpus.Corpus.transform" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">transform</tt><big>(</big><em>fold</em>, <em>fnew</em>, <em>transformer=&lt;function _tfidf at 0x10831bb90&gt;</em><big>)</big><a class="reference internal" href="_modules/tethne/classes/corpus.html#Corpus.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.classes.corpus.Corpus.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform values in featureset <tt class="docutils literal"><span class="pre">fold</span></tt>, creating a new featureset 
 <tt class="docutils literal"><span class="pre">fnew</span></tt>.</p>
 <p><tt class="docutils literal"><span class="pre">transformer</span></tt> is a method that will be applied to each feature in each
