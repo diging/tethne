@@ -7,6 +7,7 @@ Submodules
 .. toctree::
 
    tethne.networks.authors
+   tethne.networks.features
    tethne.networks.helpers
    tethne.networks.papers
    tethne.networks.topics

@@ -11,8 +11,6 @@ def algorithm(G, method, **kwargs):
     Apply a ``method`` from NetworkX to all ``networkx.Graph`` objects in the
     :class:`.GraphCollection` ``G``.
 
-
-
     Parameters
     ----------
     G : :class:`.GraphCollection`

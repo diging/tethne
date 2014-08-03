@@ -23,7 +23,6 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="top" title="tethne 0.6.0-beta documentation" href="../../../index.html" >
     <link rel="up" title="Module code" href="../../index.html" > 
@@ -85,7 +84,7 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(asctime)-6s</span><span class="s">: </span><span class="si">%(name)s</span><span class="s"> - </span><span class="si">%(levelname)s</span><span class="s"> - </span><span class="si">%(module)s</span><span class="s"> - </span><span class="si">%(funcName)s</span><span class="s"> - </span><span class="si">%(lineno)d</span><span class="s"> - </span><span class="si">%(message)s</span><span class="s">&#39;</span><span class="p">)</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
-<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s">&#39;INFO&#39;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s">&#39;DEBUG&#39;</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
@@ -101,6 +100,16 @@
 
 <span class="kn">from</span> <span class="nn">..utilities</span> <span class="kn">import</span> <span class="n">strip_punctuation</span>
 
+<span class="k">def</span> <span class="nf">_tfidf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">DC</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="n">tf</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">idf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">DC</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">*</span><span class="n">idf</span>
+
+<span class="k">def</span> <span class="nf">_filter</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">DC</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">C</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">DC</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="bp">False</span>
+
 <div class="viewcode-block" id="Corpus"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus">[docs]</a><span class="k">class</span> <span class="nc">Corpus</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A :class:`.Corpus` organizes :class:`.Paper`\s for analysis.</span>
@@ -114,6 +123,26 @@
 <span class="sd">    You can create new :class:`.Corpus` objects from bibliographic datasets</span>
 <span class="sd">    using the methods in :mod:`.readers`\. For more information about what you</span>
 <span class="sd">    can do with a :class:`.Corpus`\, see :ref:`working-with-corpora`\.</span>
+<span class="sd">    </span>
+<span class="sd">    .. autosummary::</span>
+<span class="sd">       :nosignatures:</span>
+
+<span class="sd">       N_axes</span>
+<span class="sd">       abstract_to_features</span>
+<span class="sd">       add_features</span>
+<span class="sd">       all_papers</span>
+<span class="sd">       distribution</span>
+<span class="sd">       feature_counts</span>
+<span class="sd">       feature_distribution</span>
+<span class="sd">       filter_features</span>
+<span class="sd">       get_axes</span>
+<span class="sd">       get_slice</span>
+<span class="sd">       get_slices</span>
+<span class="sd">       index</span>
+<span class="sd">       indices</span>
+<span class="sd">       plot_distribution</span>
+<span class="sd">       slice</span>
+<span class="sd">       transform</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -204,8 +233,9 @@
                         <span class="n">index_citation_by</span><span class="o">=</span><span class="n">index_citation_by</span><span class="p">,</span>
                         <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span> <span class="n">filt</span><span class="o">=</span><span class="n">filt</span>  <span class="p">)</span>
 
-<div class="viewcode-block" id="Corpus.index"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.index">[docs]</a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">papers</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span>
-                    <span class="n">index_citation_by</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="nb">set</span><span class="p">([]),</span> <span class="n">filt</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">stem</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Corpus.index"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.index">[docs]</a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span>  <span class="bp">self</span><span class="p">,</span>   <span class="n">papers</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span>
+                        <span class="n">index_citation_by</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="nb">set</span><span class="p">([]),</span>
+                        <span class="n">filt</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">stem</span><span class="o">=</span><span class="bp">False</span>   <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Indexes `papers`, `features`, and `citations` (if present).</span>
 <span class="sd">        This should be called automatically from :func:`.__init__`, unless</span>
@@ -498,9 +528,87 @@
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;done tokenizing features&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ftype</span><span class="p">,</span> <span class="n">findex</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">counts</span><span class="p">,</span> <span class="n">documentCounts</span><span class="p">,</span> <span class="n">fpapers</span>
 
-<div class="viewcode-block" id="Corpus.filter_features"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.filter_features">[docs]</a>    <span class="k">def</span> <span class="nf">filter_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">fnew</span><span class="p">,</span> <span class="n">filt</span><span class="p">):</span>
+<div class="viewcode-block" id="Corpus.transform"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">fnew</span><span class="p">,</span> <span class="n">transformer</span><span class="o">=</span><span class="n">_tfidf</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform values in featureset ``fold``, creating a new featureset </span>
+<span class="sd">        ``fnew``.</span>
+<span class="sd">        </span>
+<span class="sd">        ``transformer`` is a method that will be applied to each feature in each</span>
+<span class="sd">        document, returning a new value for that feature. It should accept the</span>
+<span class="sd">        following parameters:</span>
+<span class="sd">        </span>
+<span class="sd">        =========   ============================================================</span>
+<span class="sd">        Parameter   Description</span>
+<span class="sd">        =========   ============================================================</span>
+<span class="sd">        ``s``       Representation of the feature (e.g. string).</span>
+<span class="sd">        ``c``       Value of the feature in the document (e.g. frequency).</span>
+<span class="sd">        ``C``       Value of the feature in the :class:`.Corpus` (e.g. global</span>
+<span class="sd">                    frequency).</span>
+<span class="sd">        ``DC``      Number of documents in which the feature occcurs.</span>
+<span class="sd">        ``N``       Total number of documents in the :class:`.Corpus`\.</span>
+<span class="sd">        =========   ============================================================</span>
+<span class="sd">        </span>
+<span class="sd">        If ``transformer`` is not provided, the default behavior is a standard</span>
+<span class="sd">        `tf*idf transformation &lt;http://en.wikipedia.org/wiki/Tf%E2%80%93idf&gt;`_.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fold : str</span>
+<span class="sd">            Name of the featureset to be transformed.</span>
+<span class="sd">        fnew : str  </span>
+<span class="sd">            Name of the featureset to be created, with transformed values.</span>
+<span class="sd">        transformer : method</span>
+<span class="sd">            Applied to each feature in each document in the :class:`.Corpus`\.</span>
+<span class="sd">            See above.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;start transformation: &quot;{0}&quot; -&gt; &quot;{1}&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fold</span><span class="p">,</span> <span class="n">fnew</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;with transformer: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">transformer</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
+        
+        <span class="n">fdict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">fold</span><span class="p">]</span>
+
+        <span class="n">features</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">fdict</span><span class="p">[</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="n">fdict</span><span class="p">[</span><span class="s">&#39;counts&#39;</span><span class="p">]</span>
+        <span class="n">documentCounts</span> <span class="o">=</span> <span class="n">fdict</span><span class="p">[</span><span class="s">&#39;documentCounts&#39;</span><span class="p">]</span>    <span class="c"># Re-use this.</span>
+        <span class="n">fpapers</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">fvect</span> <span class="ow">in</span> <span class="n">fdict</span><span class="p">[</span><span class="s">&#39;features&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">fvect_</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">f</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">fvect</span><span class="p">:</span>
+                <span class="n">v_</span> <span class="o">=</span> <span class="n">transformer</span><span class="p">(</span>
+                    <span class="n">index</span><span class="p">[</span><span class="n">f</span><span class="p">],</span> <span class="n">v</span><span class="p">,</span> <span class="n">counts</span><span class="p">[</span><span class="n">f</span><span class="p">],</span> <span class="n">documentCounts</span><span class="p">[</span><span class="n">f</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">papers</span><span class="p">))</span>
+                <span class="n">fvect_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>  <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">v_</span><span class="p">)</span> <span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">fpapers</span><span class="p">[</span><span class="n">f</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>  <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">v_</span><span class="p">)</span> <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">fpapers</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">v_</span><span class="p">),</span> <span class="p">]</span>
+            
+            <span class="n">features</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">fvect_</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_define_features</span><span class="p">(</span><span class="n">fnew</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">counts</span><span class="p">,</span> <span class="n">documentCounts</span><span class="p">,</span> <span class="n">fpapers</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Corpus.filter_features"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.filter_features">[docs]</a>    <span class="k">def</span> <span class="nf">filter_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">fnew</span><span class="p">,</span> <span class="n">filt</span><span class="o">=</span><span class="n">_filter</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a new featureset by applying a filter to an existing featureset.</span>
+<span class="sd">        </span>
+<span class="sd">        ``filt`` is a method applied to each feature in the :class:`.Corpus`\.</span>
+<span class="sd">        It should return True if the feature is to be retained, and False if the</span>
+<span class="sd">        feature is to be discarded. ``filt`` should accept the following</span>
+<span class="sd">        parameters:</span>
+<span class="sd">        </span>
+<span class="sd">        =========   ============================================================</span>
+<span class="sd">        Parameter   Description</span>
+<span class="sd">        =========   ============================================================</span>
+<span class="sd">        ``s``       Representation of the feature (e.g. a string).</span>
+<span class="sd">        ``C``       The overall frequency of the feature in the</span>
+<span class="sd">                    :class:`.Corpus`\.</span>
+<span class="sd">        ``DC``      The number of documents in which the feature occurs.</span>
+<span class="sd">        =========   ============================================================</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -509,14 +617,7 @@
 <span class="sd">        fnew : str</span>
 <span class="sd">            Key into ``features`` for resulting featuresset.</span>
 <span class="sd">        filt : method</span>
-<span class="sd">            Filter function to apply to the featureset. It should accept three</span>
-<span class="sd">            arguments (see example below)...</span>
-
-<span class="sd">            * ``s``, the string representation of the feature,</span>
-<span class="sd">            * ``C``, the overall frequency of the feature in the</span>
-<span class="sd">              :class:`.Corpus`, and</span>
-<span class="sd">            * ``DC``, the number of :class:`.Paper`\s in which the feature</span>
-<span class="sd">              occurs.</span>
+<span class="sd">            Filter function to apply to the featureset. See above.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -886,8 +987,8 @@
 </div>
 <div class="viewcode-block" id="Corpus.get_slices"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.get_slices">[docs]</a>    <span class="k">def</span> <span class="nf">get_slices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">papers</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get all of the :class:`.Paper`\s (or just their IDs) in a particular</span>
-<span class="sd">        slice.</span>
+<span class="sd">        Get all of the :class:`.Paper`\s (or just their IDs) in a </span>
+<span class="sd">        particular slice.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -944,7 +1045,7 @@
 </div>
 <div class="viewcode-block" id="Corpus.get_slice"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.get_slice">[docs]</a>    <span class="k">def</span> <span class="nf">get_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">papers</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the :class:`.Paper\`s (or just their IDs) from a single slice.</span>
+<span class="sd">        Get the :class:`.Paper`\s (or just their IDs) from a single slice.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>

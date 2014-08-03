@@ -23,12 +23,11 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="_static/js/copybutton.js"></script>
     <link rel="top" title="tethne 0.6.0-beta documentation" href="index.html" >
     <link rel="up" title="Tutorials" href="tutorials.html" >
     <link rel="next" title="Coauthorship Networks" href="tutorial.coauthors.html" >
-    <link rel="prev" title="Getting Bibliographic Data" href="tutorial.getting_data.html" > 
+    <link rel="prev" title="Working with Corpora" href="corpora.html" > 
   </head>
   <body>
 
@@ -71,7 +70,7 @@
            accesskey="N">next</a>
       </li>
       <li class="active">
-        <a href="tutorial.getting_data.html" title="Getting Bibliographic Data"
+        <a href="corpora.html" title="Working with Corpora"
            accesskey="P">previous</a>
       </li>
     </ul>
@@ -175,8 +174,8 @@ desirable to use a normalized overlap value rather than an absolute one. If the
 <tt class="docutils literal"><span class="pre">weighted</span></tt> parameter is set to <tt class="docutils literal"><span class="pre">True</span></tt>, Tethne will use the normalized similarity
 metric <tt class="docutils literal"><span class="pre">s</span></tt>:</p>
 <div class="math">
-\[s = \frac{N_{i|j}}{\sqrt{ N_i N_j }}\]</div>
-<p>If you choose to use absolute overlap (<tt class="docutils literal"><span class="pre">weighted</span></tt> is <tt class="docutils literal"><span class="pre">False</span></tt>), we suggest starting
+<p><img src="_images/math/7a0fc45d19bd6ef302c9c8a71b3eb22ce3cde268.png" alt="s = \frac{N_{i|j}}{\sqrt{ N_i N_j }}"/></p>
+</div><p>If you choose to use absolute overlap (<tt class="docutils literal"><span class="pre">weighted</span></tt> is <tt class="docutils literal"><span class="pre">False</span></tt>), we suggest starting
 with a <tt class="docutils literal"><span class="pre">threshold</span></tt> of <tt class="docutils literal"><span class="pre">5</span></tt>, and then adjusting it upward or downward to achieve optimal
 clustering. If you choose to use normalized overlap (<tt class="docutils literal"><span class="pre">weighted</span></tt> is <tt class="docutils literal"><span class="pre">True</span></tt>), then try
 starting with a <tt class="docutils literal"><span class="pre">threshold</span></tt> of <tt class="docutils literal"><span class="pre">0.05</span></tt>.</p>
@@ -423,8 +422,8 @@ in succession, use the <tt class="docutils literal"><span class="pre">&lt;&lt;</
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="tutorial.getting_data.html"
-                        title="previous chapter">Getting Bibliographic Data</a></p>
+  <p class="topless"><a href="corpora.html"
+                        title="previous chapter">Working with Corpora</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="tutorial.coauthors.html"
                         title="next chapter">Coauthorship Networks</a></p>

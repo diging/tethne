@@ -44,6 +44,26 @@ class Corpus(object):
     You can create new :class:`.Corpus` objects from bibliographic datasets
     using the methods in :mod:`.readers`\. For more information about what you
     can do with a :class:`.Corpus`\, see :ref:`working-with-corpora`\.
+    
+    .. autosummary::
+       :nosignatures:
+
+       N_axes
+       abstract_to_features
+       add_features
+       all_papers
+       distribution
+       feature_counts
+       feature_distribution
+       filter_features
+       get_axes
+       get_slice
+       get_slices
+       index
+       indices
+       plot_distribution
+       slice
+       transform
 
     Parameters
     ----------
@@ -430,6 +450,43 @@ class Corpus(object):
         return ftype, findex, features, counts, documentCounts, fpapers
 
     def transform(self, fold, fnew, transformer=_tfidf):
+        """
+        Transform values in featureset ``fold``, creating a new featureset 
+        ``fnew``.
+        
+        ``transformer`` is a method that will be applied to each feature in each
+        document, returning a new value for that feature. It should accept the
+        following parameters:
+        
+        =========   ============================================================
+        Parameter   Description
+        =========   ============================================================
+        ``s``       Representation of the feature (e.g. string).
+        ``c``       Value of the feature in the document (e.g. frequency).
+        ``C``       Value of the feature in the :class:`.Corpus` (e.g. global
+                    frequency).
+        ``DC``      Number of documents in which the feature occcurs.
+        ``N``       Total number of documents in the :class:`.Corpus`\.
+        =========   ============================================================
+        
+        If ``transformer`` is not provided, the default behavior is a standard
+        `tf*idf transformation <http://en.wikipedia.org/wiki/Tf%E2%80%93idf>`_.
+        
+        Parameters
+        ----------
+        fold : str
+            Name of the featureset to be transformed.
+        fnew : str  
+            Name of the featureset to be created, with transformed values.
+        transformer : method
+            Applied to each feature in each document in the :class:`.Corpus`\.
+            See above.
+            
+        Returns
+        -------
+        None
+        
+        """
         logger.debug('start transformation: "{0}" -> "{1}"'.format(fold, fnew))
         logger.debug('with transformer: {0}'.format(transformer.__name__))
         
@@ -459,6 +516,20 @@ class Corpus(object):
     def filter_features(self, fold, fnew, filt=_filter):
         """
         Create a new featureset by applying a filter to an existing featureset.
+        
+        ``filt`` is a method applied to each feature in the :class:`.Corpus`\.
+        It should return True if the feature is to be retained, and False if the
+        feature is to be discarded. ``filt`` should accept the following
+        parameters:
+        
+        =========   ============================================================
+        Parameter   Description
+        =========   ============================================================
+        ``s``       Representation of the feature (e.g. a string).
+        ``C``       The overall frequency of the feature in the
+                    :class:`.Corpus`\.
+        ``DC``      The number of documents in which the feature occurs.
+        =========   ============================================================
 
         Parameters
         ----------
@@ -467,14 +538,7 @@ class Corpus(object):
         fnew : str
             Key into ``features`` for resulting featuresset.
         filt : method
-            Filter function to apply to the featureset. It should accept three
-            arguments (see example below)...
-
-            * ``s``, the string representation of the feature,
-            * ``C``, the overall frequency of the feature in the
-              :class:`.Corpus`, and
-            * ``DC``, the number of :class:`.Paper`\s in which the feature
-              occurs.
+            Filter function to apply to the featureset. See above.
 
         Returns
         -------
@@ -844,8 +908,8 @@ class Corpus(object):
 
     def get_slices(self, key, papers=False):
         """
-        Get all of the :class:`.Paper`\s (or just their IDs) in a particular
-        slice.
+        Get all of the :class:`.Paper`\s (or just their IDs) in a 
+        particular slice.
 
         Parameters
         ----------
@@ -902,7 +966,7 @@ class Corpus(object):
 
     def get_slice(self, key, index, papers=False):
         """
-        Get the :class:`.Paper\`s (or just their IDs) from a single slice.
+        Get the :class:`.Paper`\s (or just their IDs) from a single slice.
 
         Parameters
         ----------

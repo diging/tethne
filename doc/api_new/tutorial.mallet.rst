@@ -1,4 +1,4 @@
-.. _mallet:
+.. _mallet-tutorial:
 
 Generating and Visualizing Topic Models with Tethne and MALLET
 ==============================================================

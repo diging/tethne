@@ -12,7 +12,8 @@
 # serve to show the default.
 
 import sys, os
-sys.path.append("/Users/bpeirson/Repositories/tethne")
+sys.path.append("/Users/erickpeirson/tethne")
+#sys.path.append("/Users/bpeirson/Repositories/tethne")
 autosummary_generate = True
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -27,7 +28,7 @@ autosummary_generate = True
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.autosummary', 'numpydoc', 'sphinx.ext.mathjax', 'sphinx.ext.intersphinx', 'sphinx.ext.todo']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.autosummary', 'numpydoc', 'sphinx.ext.pngmath', 'sphinx.ext.intersphinx', 'sphinx.ext.todo']
 
 todo_include_todos = True
 

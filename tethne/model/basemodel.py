@@ -1,3 +1,5 @@
+from scipy.sparse import coo_matrix
+
 class BaseModel(object):
     """
     Base class for models. Should not be instantiated directly.
@@ -75,10 +77,9 @@ class BaseModel(object):
         except AttributeError:
             raise NotImplementedError('_item_relationship() not implemented' + \
                                       ' for this model class.')
-
         return relationship
 
-    def dimension(self, d, top=None, **kwargs):
+    def dimension(self, d, top=None, asmatrix=False, **kwargs):
         """
         Describes a dimension (eg a topic).
         
@@ -114,6 +115,12 @@ class BaseModel(object):
 
             description = top_description
 
+        if asmatrix:
+            J,K = zip(*description)
+            I = [ d for i in xrange(len(J)) ]
+            mat = coo_matrix(list(K), (I,list(J))).tocsc()
+            return mat
+        
         return description
         
     def dimension_items(self, d, threshold, **kwargs):
