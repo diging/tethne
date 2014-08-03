@@ -100,13 +100,9 @@
 
 
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">()</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(asctime)-6s</span><span class="s">: </span><span class="si">%(name)s</span><span class="s"> - </span><span class="si">%(levelname)s</span><span class="s"> - </span><span class="si">%(module)s</span><span class="s"> - </span><span class="si">%(funcName)s</span><span class="s"> - </span><span class="si">%(lineno)d</span><span class="s"> - </span><span class="si">%(message)s</span><span class="s">&#39;</span><span class="p">)</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
-
-<span class="c"># MACRO for printing the &#39;print&#39; statement values.</span>
-<span class="c"># 0 prints nothing in the console.</span>
-<span class="c"># 1 prints all print statements in the console.</span>
-<span class="n">DEBUG</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s">&#39;DEBUG&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="author_papers"><a class="viewcode-back" href="../../../tethne.networks.authors.html#tethne.networks.authors.author_papers">[docs]</a><span class="k">def</span> <span class="nf">author_papers</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">node_id</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span> <span class="n">paper_attribs</span><span class="o">=</span><span class="p">[],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -676,10 +672,6 @@
                                                 <span class="n">author_j_str</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
                         <span class="n">authors_pair_inv</span> <span class="o">=</span> <span class="p">(</span><span class="n">author_j_str</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> \
                                                 <span class="n">author_i_str</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
-
-                        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
-                            <span class="k">print</span> <span class="s">&quot;Authors Pairs: &quot;</span><span class="p">,</span> <span class="n">authors_pair</span>
-                            <span class="k">print</span> <span class="s">&quot;Authors Pairs inv: &quot;</span><span class="p">,</span> <span class="n">authors_pair_inv</span>
 
                         <span class="c"># Have these authors been co-cited before?</span>
                         <span class="k">try</span><span class="p">:</span>

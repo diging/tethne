@@ -272,8 +272,7 @@ class TestCorpusTokenization(unittest.TestCase):
         """
         D = Corpus( self.papers,
                     features={'unigrams': self.ngrams},
-                    index_by='doi',
-                    exclude=set(stopwords.words())  )
+                    index_by='doi' )
 
         key = D.features['unigrams']['features'].keys()[0]
         before = D.features['unigrams']['features'][key][0]
@@ -285,6 +284,17 @@ class TestCorpusTokenization(unittest.TestCase):
         idf = numpy.log(float(len(D.papers))/float(DC))
     
         self.assertEqual(after[1], tf*idf)
+
+    def test_apply_stoplist(self):
+        D = Corpus( self.papers,
+                    features={'unigrams': self.ngrams},
+                    index_by='doi' )
+
+        from nltk.corpus import stopwords
+        D.apply_stoplist('unigrams', 'u_stop', stopwords.words())
+
+        self.assertGreater( len(D.features['unigrams']['index']),
+                            len(D.features['u_stop']['index'])   )
 
 if __name__ == '__main__':
     unittest.main()

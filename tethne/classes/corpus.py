@@ -513,6 +513,41 @@ class Corpus(object):
 
         self._define_features(fnew, index, features, counts, documentCounts, fpapers)
 
+    def apply_stoplist(self, fold, fnew, stoplist):
+        """
+        Apply ``stoplist`` to the featureset ``fold``, resulting in featureset
+        ``fnew``\.
+        
+        Parameters
+        ----------
+        fold : str
+            Key into ``features`` for existing featureset.
+        fnew : str
+            Key into ``features`` for resulting featuresset.
+        stoplist : list
+            A list of features to remove from the featureset.
+        
+        Returns
+        -------
+        None
+        
+        Examples
+        --------
+        
+        .. code-block:: python
+        
+           >>> from nltk.corpus import stopwords
+           >>> MyCorpus.apply_stoplist('unigrams', 'u_stop', stopwords.words())
+           
+        """
+    
+        def filt(s, *args, **kwargs):
+            if s in stoplist:
+                return False
+            return True
+        
+        return self.filter_features(fold, fnew, filt=filt)
+
     def filter_features(self, fold, fnew, filt=_filter):
         """
         Create a new featureset by applying a filter to an existing featureset.

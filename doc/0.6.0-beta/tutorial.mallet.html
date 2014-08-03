@@ -90,17 +90,25 @@
 <span id="mallet-tutorial"></span><h1>Generating and Visualizing Topic Models with Tethne and MALLET<a class="headerlink" href="#generating-and-visualizing-topic-models-with-tethne-and-mallet" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#before-you-start" id="id4">Before You Start</a></li>
-<li><a class="reference internal" href="#loading-jstor-dfr" id="id5">Loading JSTOR DfR</a></li>
-<li><a class="reference internal" href="#generating-documents" id="id6">Generating Documents</a></li>
-<li><a class="reference internal" href="#topic-modeling-in-mallet" id="id7">Topic Modeling in MALLET</a></li>
-<li><a class="reference internal" href="#parsing-mallet-output" id="id8">Parsing MALLET Output</a></li>
-<li><a class="reference internal" href="#semantic-network" id="id9">Semantic Network</a><ul>
-<li><a class="reference internal" href="#build-the-network" id="id10">Build the Network</a></li>
-<li><a class="reference internal" href="#visualization" id="id11">Visualization</a></li>
+<li><a class="reference internal" href="#before-you-start" id="id3">Before You Start</a></li>
+<li><a class="reference internal" href="#loading-jstor-dfr" id="id4">Loading JSTOR DfR</a><ul>
+<li><a class="reference internal" href="#using-a-stoplist" id="id5">Using a Stoplist</a></li>
+<li><a class="reference internal" href="#checking-your-data" id="id6">Checking your Data</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wrapping-up-looking-forward" id="id12">Wrapping up, Looking forward</a></li>
+<li><a class="reference internal" href="#filtering-wordcount-data" id="id7">Filtering Wordcount Data</a></li>
+<li><a class="reference internal" href="#topic-modeling-in-mallet" id="id8">Topic Modeling in MALLET</a><ul>
+<li><a class="reference internal" href="#using-a-modelmanager" id="id9">Using a ModelManager</a></li>
+<li><a class="reference internal" href="#running-the-model" id="id10">Running the Model</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inspecting-the-model" id="id11">Inspecting the Model</a></li>
+<li><a class="reference internal" href="#semantic-network" id="id12">Semantic Network</a><ul>
+<li><a class="reference internal" href="#build-the-network" id="id13">Build the Network</a></li>
+<li><a class="reference internal" href="#visualization" id="id14">Visualization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wrapping-up-looking-forward" id="id15">Wrapping up, Looking forward</a></li>
 </ul>
 </div>
 <div class="admonition note">
@@ -121,144 +129,224 @@ MALLET, and then use the results to generate a semantic network like the one sho
 heavier the edge, the more strongly those words are associated with that topic. Each topic
 is represented by a different color. The size of each word indicates the structural
 importance (betweenness centrality) of that word in the semantic network.</p>
-<p><em>As of v0.4, corpus-oriented methods have not yet been implemented in the Tethne
-command-line interface or GUI.</em></p>
 <p>This tutorial assumes that you already have a basic familiarity with <a class="reference external" href="http://www.cytoscape.org">Cytoscape</a>.</p>
 <div class="section" id="before-you-start">
-<h2><a class="toc-backref" href="#id4">Before You Start</a><a class="headerlink" href="#before-you-start" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id3">Before You Start</a><a class="headerlink" href="#before-you-start" title="Permalink to this headline">¶</a></h2>
 <p>You&#8217;ll need some data. See <a class="reference internal" href="tutorial.getting_data.html#getting-jstor"><em>JSTOR Data-for-Research</em></a> for instructions on retrieving data. <em>Note
 that Tethne currently only supports XML output from JSTOR.</em> Be sure to get some wordcounts
 so that you&#8217;ll have some data for modeling.</p>
 <p>Be sure that you have the latest release of Tethne. See <em class="xref std std-ref">installation</em>.</p>
-<p>You should also download and install <a class="reference external" href="http://mallet.cs.umass.edu/download.php">MALLET</a>.
-It&#8217;s also not a bad idea to check out <a class="reference external" href="http://programminghistorian.org/lessons/topic-modeling-and-mallet">this tutorial</a> for topic modeling
-with MALLET.</p>
+<p>You should also download and install <a class="reference external" href="http://mallet.cs.umass.edu/download.php">MALLET</a>.</p>
 </div>
 <div class="section" id="loading-jstor-dfr">
-<h2><a class="toc-backref" href="#id5">Loading JSTOR DfR</a><a class="headerlink" href="#loading-jstor-dfr" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="tethne.readers.dfr.html#module-tethne.readers.dfr" title="tethne.readers.dfr"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.readers.dfr</span></tt></a> provides two mechanisms for loadings data from JSTOR DfR:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li><a class="reference internal" href="tethne.readers.dfr.html#tethne.readers.dfr.read" title="tethne.readers.dfr.read"><tt class="xref py py-func docutils literal"><span class="pre">dfr.read()</span></tt></a> loads bibliographic records from the <tt class="docutils literal"><span class="pre">citations.XML</span></tt> file
-accompanying the dataset. This isn&#8217;t particularly necessary for the purpose of this
-exercise, but is worth knowing about.</li>
-<li><a class="reference internal" href="tethne.readers.dfr.html#tethne.readers.dfr.ngrams" title="tethne.readers.dfr.ngrams"><tt class="xref py py-func docutils literal"><span class="pre">dfr.ngrams()</span></tt></a> loads N-grams (including unigrams/wordcounts) from the dataset.
-We&#8217;ll use these as the raw data for topic modeling.</li>
-</ol>
-</div></blockquote>
+<h2><a class="toc-backref" href="#id4">Loading JSTOR DfR</a><a class="headerlink" href="#loading-jstor-dfr" title="Permalink to this headline">¶</a></h2>
+<p>Use the <a class="reference internal" href="tethne.readers.dfr.html#module-tethne.readers.dfr" title="tethne.readers.dfr"><tt class="xref py py-mod docutils literal"><span class="pre">readers.dfr</span></tt></a> module to load data from JSTOR DfR. Since we&#8217;re working
+with a single DfR dataset that contains wordcounts, we&#8217;ll use the
+<a class="reference internal" href="tethne.readers.dfr.html#tethne.readers.dfr.read_corpus" title="tethne.readers.dfr.read_corpus"><tt class="xref py py-func docutils literal"><span class="pre">readers.dfr.read_corpus()</span></tt></a> method.</p>
 <p>Assuming that you unzipped your JSTOR DfR dataset to
-<tt class="docutils literal"><span class="pre">/Users/erickpeirson/JStor</span> <span class="pre">DfR</span> <span class="pre">Datasets/2013.5.3.cHrmED8A</span></tt>, you can use something like
-the following to load wordcounts from your dataset:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">datapath</span> <span class="o">=</span> <span class="s">&#39;/Users/erickpeirson/JStor DfR Datasets/2013.5.3.cHrmED8A&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">dfr</span><span class="o">.</span><span class="n">ngrams</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="s">&#39;uni&#39;</span><span class="p">)</span>
+<tt class="docutils literal"><span class="pre">/Users/me/JStor</span> <span class="pre">DfR</span> <span class="pre">Datasets/2013.5.3.cHrmED8A</span></tt>, you can use something like
+the following to generate a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> from your dataset:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">dfr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">datapath</span> <span class="o">=</span> <span class="s">&#39;/Users/me/JStor DfR Datasets/2013.5.3.cHrmED8A&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">read_corpus</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uni&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<p><tt class="docutils literal"><span class="pre">wordcounts</span></tt> should now contain a dictionary mapping each paper (by DOI) to a list of
-(word, frequency) tuples. For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
-<span class="go">[&#39;10.2307/1293500&#39;, &#39;10.2307/1936479&#39;, &#39;10.2307/2433815&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts</span><span class="p">[</span><span class="s">&#39;10.2307/1293500&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span>
-<span class="go">[(&#39;the&#39;, 49), (&#39;of&#39;, 49), (&#39;in&#39;, 33), (&#39;and&#39;, 29), (&#39;a&#39;, 21), (&#39;to&#39;, 21)]</span>
+<p>The parameter <tt class="docutils literal"><span class="pre">features=['uni']</span></tt> tells the reader to look for unigrams in your dataset,
+and load them up as a featureset. Depending on the size of your dataset, this might take
+a few moments. The reader will attempt to discard junk data (e.g. unigrams with hashes
+<tt class="docutils literal"><span class="pre">###</span></tt> in them), and index all of the <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s and features in the dataset.</p>
+<div class="section" id="using-a-stoplist">
+<h3><a class="toc-backref" href="#id5">Using a Stoplist</a><a class="headerlink" href="#using-a-stoplist" title="Permalink to this headline">¶</a></h3>
+<p>You may want to pare down our dataset further still, by applying a list of <a class="reference external" href="http://en.wikipedia.org/wiki/Stop_words">stop
+words</a>. There are a few ways to do this in
+Tethne. You can apply a stop list while loading data by passing it with the <tt class="docutils literal"><span class="pre">exclude</span></tt>
+parameter.</p>
+<p>First, load the <cite>NLTK &lt;http://www.nltk.org/&gt;</cite> stoplist (or use your own):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stoplist</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Then load your <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> as before, but this time including the <tt class="docutils literal"><span class="pre">exclude</span></tt>
+parameter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">dfr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">datapath</span> <span class="o">=</span> <span class="s">&#39;/Users/me/JStor DfR Datasets/2013.5.3.cHrmED8A&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">read_corpus</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uni&#39;</span><span class="p">],</span> <span class="n">exclude</span><span class="o">=</span><span class="n">stoplist</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="generating-documents">
-<h2><a class="toc-backref" href="#id6">Generating Documents</a><a class="headerlink" href="#generating-documents" title="Permalink to this headline">¶</a></h2>
-<p>One of the most straight-forward ways to load documents into MALLET for topic modeling is
-to pass it a plain-text file containing the full text of each document on its own line.
-Since JSTOR DfR data consist only of term frequencies for each document, we&#8217;ll need to
-reconstruct each document. Since word order doesn&#8217;t matter in LDA topic modeling, we can
-write a document by simply repeating each term by its corresponding frequency. For
-example, these term frequencies...</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">[(</span><span class="s">&#39;microbiology&#39;</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;with&#39;</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;are&#39;</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;have&#39;</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;be&#39;</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
- <span class="p">(</span><span class="s">&#39;is&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;issue&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;training&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;bioscience&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)]</span>
+<div class="section" id="checking-your-data">
+<h3><a class="toc-backref" href="#id6">Checking your Data</a><a class="headerlink" href="#checking-your-data" title="Permalink to this headline">¶</a></h3>
+<p>If everything goes well, you should have a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> with some <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s in
+it...</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span>
+<span class="go">&lt;tethne.classes.corpus.Corpus object at 0x108403310&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">papers</span><span class="p">)</span>
+<span class="go">241</span>
 </pre></div>
 </div>
-<p>...would result in the document...</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;microbiology microbiology microbiology microbiology microbiology</span>
-<span class="n">microbiology</span> <span class="n">microbiology</span> <span class="k">with</span> <span class="k">with</span> <span class="k">with</span> <span class="k">with</span> <span class="k">with</span> <span class="k">with</span> <span class="k">with</span> <span class="n">are</span> <span class="n">are</span>
-<span class="n">are</span> <span class="n">are</span> <span class="n">are</span> <span class="n">are</span> <span class="n">are</span> <span class="n">have</span> <span class="n">have</span> <span class="n">have</span> <span class="n">have</span> <span class="n">have</span> <span class="n">have</span> <span class="n">have</span> <span class="n">be</span> <span class="n">be</span> <span class="n">be</span> <span class="n">be</span> <span class="n">be</span>
-<span class="n">be</span> <span class="n">be</span> <span class="ow">is</span> <span class="ow">is</span> <span class="ow">is</span> <span class="ow">is</span> <span class="ow">is</span> <span class="ow">is</span> <span class="n">issue</span> <span class="n">issue</span> <span class="n">issue</span> <span class="n">issue</span> <span class="n">issue</span> <span class="n">issue</span> <span class="n">training</span>
-<span class="n">training</span> <span class="n">training</span> <span class="n">training</span> <span class="n">training</span> <span class="n">training</span> <span class="n">g</span> <span class="n">g</span> <span class="n">g</span> <span class="n">g</span> <span class="n">g</span> <span class="n">g</span> <span class="n">bioscience</span>
-<span class="n">bioscience</span> <span class="n">bioscience</span> <span class="n">bioscience</span> <span class="n">bioscience</span> <span class="n">bioscience</span><span class="s">&#39;</span>
+<p>...as well as a featureset called <tt class="docutils literal"><span class="pre">unigrams</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[&#39;unigrams&#39;, &#39;citations&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;unigrams&#39;</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">])</span>      <span class="c"># Number of unique features (words).</span>
+<span class="go">52207</span>
 </pre></div>
 </div>
-<p>We can use <a class="reference internal" href="tethne.writers.corpora.html#tethne.writers.corpora.to_documents" title="tethne.writers.corpora.to_documents"><tt class="xref py py-func docutils literal"><span class="pre">tethne.writers.corpora.to_documents()</span></tt></a> to generate such a corpus.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">corpora</span><span class="o">.</span><span class="n">to_documents</span><span class="p">(</span><span class="s">&#39;./mycorpus&#39;</span><span class="p">,</span> <span class="n">wordcounts</span><span class="p">)</span>
+<p>Some of your papers may not have wordcounts associated with them. You can check how many
+papers have wordcount data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;unigrams&#39;</span><span class="p">][</span><span class="s">&#39;features&#39;</span><span class="p">])</span>
+<span class="go">193</span>
 </pre></div>
 </div>
-<p>This generates a text file called <tt class="docutils literal"><span class="pre">mycorpus_docs.txt</span></tt> containing all of our documents,
-and a file called <tt class="docutils literal"><span class="pre">mycorpus_meta.csv</span></tt> that maps each row in the corpus to a DOI.</p>
+</div>
+</div>
+<div class="section" id="filtering-wordcount-data">
+<h2><a class="toc-backref" href="#id7">Filtering Wordcount Data</a><a class="headerlink" href="#filtering-wordcount-data" title="Permalink to this headline">¶</a></h2>
+<p>In the previous section, you loaded some DfR data with wordcounts (unigrams). That
+resulted in a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> with a featurset called <tt class="docutils literal"><span class="pre">unigrams</span></tt>, containing 52,207
+unique words. That&#8217;s a lot of words. Using a large vocabular increases the computational
+cost of building and visualizing your model. There may also be quite a few &#8220;junk&#8221; words
+left in your vocabulary. To pare down your vocabulary, use the
+<tt class="xref py py-func docutils literal"><span class="pre">Corpus.filter_features()</span></tt> method.</p>
+<p>First, you&#8217;ll need to define a filter. A filter is a Python method that will be applied
+to each feature (word) in the featureset. It should accept three parameters:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="94%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>s</td>
+<td>Representation of the feature (e.g. a string).</td>
+</tr>
+<tr class="row-even"><td>C</td>
+<td>The overall frequency of the feature in the Corpus.</td>
+</tr>
+<tr class="row-odd"><td>DC</td>
+<td>The number of documents in which the feature occurs.</td>
+</tr>
+</tbody>
+</table>
+<p>If your method returns True, then the word will be retained. If it returns False, the word
+will be filtered out.</p>
+<p>The filter method below will remove any words that are shorter than four characters in
+length, occur less than four times overall, and are found in less than two documents.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">filt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">DC</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">C</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">DC</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="bp">True</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="bp">False</span>
+</pre></div>
+</div>
+<p>Once your filter method is defined, call <tt class="xref py py-func docutils literal"><span class="pre">Corpus.filter_features()</span></tt>. The first
+parameter should be the name of the featureset to which the filter will be applied, e.g.
+<tt class="docutils literal"><span class="pre">unigrams</span></tt>. The second parameter should be the name of the new featureset, which will
+be created from the features retained from the old featuret. The third parameter should
+be your filter method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">filter_features</span><span class="p">(</span><span class="s">&#39;unigrams&#39;</span><span class="p">,</span> <span class="s">&#39;unigrams_filtered&#39;</span><span class="p">,</span> <span class="n">filt</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Your new featureset, <tt class="docutils literal"><span class="pre">unigrams_filtered</span></tt>, should be much smaller than the old
+featureset.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;unigrams_filtered&#39;</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">])</span>
+<span class="go">12675</span>
+</pre></div>
+</div>
+<p>In this example, only 12,675 unique words were retained. This is far more computationally
+tractable.</p>
 </div>
 <div class="section" id="topic-modeling-in-mallet">
-<h2><a class="toc-backref" href="#id7">Topic Modeling in MALLET</a><a class="headerlink" href="#topic-modeling-in-mallet" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id8">Topic Modeling in MALLET</a><a class="headerlink" href="#topic-modeling-in-mallet" title="Permalink to this headline">¶</a></h2>
+<p>Tethne provides a ModelManager called <a class="reference internal" href="tethne.model.managers.mallet.html#tethne.model.managers.mallet.MALLETModelManager" title="tethne.model.managers.mallet.MALLETModelManager"><tt class="xref py py-class docutils literal"><span class="pre">MALLETModelManager</span></tt></a> to perform topic
+modeling in MALLET.</p>
 <p>For details about LDA modeling in MALLET, consult the <a class="reference external" href="http://mallet.cs.umass.edu/topics.php">MALLET website</a> as well as <a class="reference external" href="http://programminghistorian.org/lessons/topic-modeling-and-mallet">this tutorial</a>.</p>
-<p>First, tell MALLET to load the corpus that Tethne generated for you. Following the example
-on the MALLET website, use something like:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>bin/mallet import-file --input /Users/erickpeirson/mycorpus_docs.txt <span class="se">\</span>
-&gt; --output mytopic-input.mallet --keep-sequence --remove-stopwords
-</pre></div>
-</div>
-<p>When you train your model, you&#8217;ll want to specify a few output options so that Tethne will
-have something to work with later: <tt class="docutils literal"><span class="pre">--output-doc-topics</span></tt>, <tt class="docutils literal"><span class="pre">--word-topic-counts-file</span></tt>,
-and <tt class="docutils literal"><span class="pre">--output-topic-keys</span></tt>:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>bin/mallet train-topics --input mytopic-input.mallet --num-topics 100 <span class="se">\</span>
-&gt; --output-doc-topics /Users/erickpeirson/doc_top <span class="se">\</span>
-&gt; --word-topic-counts-file /Users/erickpeirson/word_top <span class="se">\</span>
-&gt; --output-topic-keys /Users/erickpeirson/topic_keys
-</pre></div>
-</div>
-<p>Modeling should commence, and run for a few minutes (or longer, depending on the size
-of your corpus and the number of iterations). Note that we chose 100 topics in the
-example above.</p>
-<div class="highlight-bash"><div class="highlight"><pre>&lt;1000&gt; LL/token: -8.62952
-
-Total time: 1 minutes 12 seconds
-$
+<div class="section" id="using-a-modelmanager">
+<h3><a class="toc-backref" href="#id9">Using a ModelManager</a><a class="headerlink" href="#using-a-modelmanager" title="Permalink to this headline">¶</a></h3>
+<p>First, you&#8217;ll need to import and instantiate the <a class="reference internal" href="tethne.model.managers.mallet.html#tethne.model.managers.mallet.MALLETModelManager" title="tethne.model.managers.mallet.MALLETModelManager"><tt class="xref py py-class docutils literal"><span class="pre">MALLETModelManager</span></tt></a>. To do
+that, you&#8217;ll need to know the path to your installation of MALLET. In the example below,
+MALLET is installed in &#8216;/Applications/mallet-2.0.7&#8217;. Tethne will look in that directory
+for a subdirectory, <tt class="docutils literal"><span class="pre">bin</span></tt>, that contains the executable called <tt class="docutils literal"><span class="pre">mallet</span></tt>. If you run
+into trouble at this step, double-check that the path that you provided does indeed
+contain that subdirectory and executable file.</p>
+<p>You&#8217;ll also need to specify an output path. In the example below, output will be written
+to your Desktop.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.model.managers</span> <span class="kn">import</span> <span class="n">MALLETModelManager</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">malletpath</span> <span class="o">=</span> <span class="s">&#39;/Applications/mallet-2.0.7&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outpath</span> <span class="o">=</span> <span class="s">&#39;/Users/me/Desktop&#39;</span>    <span class="c"># Be sure to change this.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">feature</span> <span class="o">=</span> <span class="s">&#39;unigrams_filtered&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MyManager</span> <span class="o">=</span> <span class="n">MALLETModelManager</span><span class="p">(</span><span class="n">MyCorpus</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">outpath</span><span class="p">,</span> <span class="n">mallet_path</span><span class="o">=</span><span class="n">malletpath</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="parsing-mallet-output">
-<h2><a class="toc-backref" href="#id8">Parsing MALLET Output</a><a class="headerlink" href="#parsing-mallet-output" title="Permalink to this headline">¶</a></h2>
-<p>Tethne can read MALLET output using the methods in <tt class="xref py py-mod docutils literal"><span class="pre">tethne.readers.mallet</span></tt>:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li><tt class="xref py py-func docutils literal"><span class="pre">mallet.load()</span></tt> parses MALLET output, and generates a <a class="reference internal" href="tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a>
-object that can be used for subsequent analysis and visualization.</li>
-<li><tt class="xref py py-func docutils literal"><span class="pre">mallet.read()</span></tt> behaves like the <tt class="docutils literal"><span class="pre">read</span></tt> method in any other
-<a class="reference internal" href="tethne.readers.html#module-tethne.readers" title="tethne.readers"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.readers</span></tt></a> sub-module, and generates a list of <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects
-with vectors from the <a class="reference internal" href="tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a> attached.</li>
-</ol>
-</div></blockquote>
-<p>We&#8217;ll start by passing <tt class="xref py py-func docutils literal"><span class="pre">mallet.load()</span></tt> paths to the MALLET output files from the
-previous step:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">td</span> <span class="o">=</span> <span class="s">&#39;/Users/erickpeirson/doc_top&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tw</span> <span class="o">=</span> <span class="s">&#39;/Users/erickpeirson/word_top&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tk</span> <span class="o">=</span> <span class="s">&#39;/Users/erickpeirson/topic_keys&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="s">&#39;/Users/erickpeirson/mycorpus_meta.csv&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Z</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c"># Number of topics</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">mallet</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">td</span><span class="p">,</span> <span class="n">tw</span><span class="p">,</span> <span class="n">tk</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+<div class="section" id="running-the-model">
+<h3><a class="toc-backref" href="#id10">Running the Model</a><a class="headerlink" href="#running-the-model" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="tethne.model.managers.mallet.html#tethne.model.managers.mallet.MALLETModelManager" title="tethne.model.managers.mallet.MALLETModelManager"><tt class="xref py py-class docutils literal"><span class="pre">MALLETModelManager</span></tt></a> will handle all of the dirty-work of building a corpus
+file that MALLET can read, loading that corpus into MALLET, running the model, and reading
+MALLET&#8217;s output. You can trigger all of this using the <tt class="xref py py-func docutils literal"><span class="pre">MALLETModelManager.build()</span></tt>
+method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MyLDAModel</span> <span class="o">=</span> <span class="n">MyManager</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">Z</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">prep</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We can also load up corresponding <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> objects using the same arguments:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">mallet</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">td</span><span class="p">,</span> <span class="n">tw</span><span class="p">,</span> <span class="n">tk</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+<p><tt class="docutils literal"><span class="pre">Z=50</span></tt> tells the ModelManager to estimate parameters for 50 topics. <tt class="docutils literal"><span class="pre">max_iter=300</span></tt>
+tells MALLET to stop after 300 iterations. This value is a bit low for large corpora, but
+is sufficient for the small example corpus used here.</p>
+<p>Depending on the size of your corpus, the size of your vocabulary, and the number of
+topics, this may take some time to complete (minutes to hours).</p>
+<p>When modeling is complete, you should see a new file called <tt class="docutils literal"><span class="pre">ll.png</span></tt> in your outpath.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/ldamodel_LL.png"><img alt="_images/ldamodel_LL.png" src="_images/ldamodel_LL.png" style="width: 400px;" /></a>
+</div>
+<p>This figure shows the log-likelihood of your data given the LDA model over each iteration.
+If your model is getting &#8220;better&#8221; at describing your data, then this should increase
+over time. Eventually this value will level off, as subsequent iterations make negligible
+improvements to the model. If you don&#8217;t see that kind of asymptotical leveling, then you
+may need to increase the number of iterations (set <tt class="docutils literal"><span class="pre">max_iterations</span></tt> to a higher
+number).</p>
+</div>
+</div>
+<div class="section" id="inspecting-the-model">
+<h2><a class="toc-backref" href="#id11">Inspecting the Model</a><a class="headerlink" href="#inspecting-the-model" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="xref py py-func docutils literal"><span class="pre">MALLETModelManager.build()</span></tt> method returns a <a class="reference internal" href="tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a> object. You can
+inspect the model using the <tt class="xref py py-func docutils literal"><span class="pre">LDAModel.print_topics()</span></tt> method, which prints the most
+likely words from each topic. You can control the number of words returned for each topic
+using the <tt class="docutils literal"><span class="pre">Nwords</span></tt> parameter.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">MyLDAModel</span><span class="o">.</span><span class="n">print_topics</span><span class="p">(</span><span class="n">Nwords</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">0: populations, genetic, variation, gene, variability</span>
+<span class="go">1: journal, article, illustrations, papers, form</span>
+<span class="go">2: leaf, water, size, leaves, temperature</span>
+<span class="go">3: found, great, form, number, forms</span>
+<span class="go">4: range, types, plant, type, ecological</span>
+<span class="go">5: research, university, volume, department, applications</span>
+<span class="go">6: populations, grass, soil, plots, plant</span>
+<span class="go">7: populations, population, conditions, environmental, high</span>
+<span class="go">8: seed, seeds, plants, germination, seedlings</span>
+<span class="go">9: spruce, white, british, growth, elevation</span>
+<span class="go">10: forms, harrison, zealand, work, hybrid</span>
+<span class="go">11: forest, plant, tropical, vegetation, ecology</span>
+<span class="go">12: subsp, tetraploid, rotundifolia, diploid, chromosome</span>
+<span class="go">.</span>
+<span class="go">.</span>
+<span class="go">.</span>
+<span class="go">49: taxonomy, plant, taxonomic, evolution, systematics</span>
+</pre></div>
+</div>
+<p>To print the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for a particular topic, use <tt class="xref py py-func docutils literal"><span class="pre">LDAModel.print_topic()</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MyLDAModel</span><span class="o">.</span><span class="n">print_topic</span><span class="p">(</span><span class="mi">33</span><span class="p">,</span> <span class="n">Nwords</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="go">&#39;selection, gene, isolation, disruptive, flow, populations, mating&#39;</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="semantic-network">
-<h2><a class="toc-backref" href="#id9">Semantic Network</a><a class="headerlink" href="#semantic-network" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id12">Semantic Network</a><a class="headerlink" href="#semantic-network" title="Permalink to this headline">¶</a></h2>
 <p>In LDA, topics are clusters of terms that co-occur in documents. We can interpret an LDA
 topic model as a network of terms linked by their participation in particular topics. In
 Tethne, we call this a <em>topic-coupling</em> network.</p>
 <div class="section" id="build-the-network">
-<h3><a class="toc-backref" href="#id10">Build the Network</a><a class="headerlink" href="#build-the-network" title="Permalink to this headline">¶</a></h3>
-<p>We can generate the topic-coupling network using
-<tt class="xref py py-func docutils literal"><span class="pre">tethne.networks.terms.topic_coupling()</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.networks</span> <span class="kn">as</span> <span class="nn">nt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">terms</span><span class="o">.</span><span class="n">topic_coupling</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.015</span><span class="p">)</span>
+<h3><a class="toc-backref" href="#id13">Build the Network</a><a class="headerlink" href="#build-the-network" title="Permalink to this headline">¶</a></h3>
+<p>We can generate the topic-coupling network the <a class="reference internal" href="tethne.networks.features.html#tethne.networks.features.topic_coupling" title="tethne.networks.features.topic_coupling"><tt class="xref py py-func docutils literal"><span class="pre">topic_coupling()</span></tt></a> method
+from the <tt class="xref py py-func docutils literal"><span class="pre">networks.features()</span></tt> module.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.networks</span> <span class="kn">import</span> <span class="n">features</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MyGrap</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">topic_coupling</span><span class="p">(</span><span class="n">MyLDAModel</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.015</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The <tt class="docutils literal"><span class="pre">threshold</span></tt> argument tells Tethne the minimum P(W|T) to consider a topic (T) to
@@ -266,12 +354,12 @@ contain a given word (W). In this example, the threshold was chosen <em>post-hoc
 adjusting its value and eye-balling the resultant network for coherence.</p>
 <p>We can then write this graph to a GraphML file for visualization:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">to_graphml</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="s">&#39;./mymodel_tc.graphml&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">to_graphml</span><span class="p">(</span><span class="n">MyGraph</span><span class="p">,</span> <span class="s">&#39;./mymodel_tc.graphml&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="visualization">
-<h3><a class="toc-backref" href="#id11">Visualization</a><a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id14">Visualization</a><a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h3>
 <p>In <a class="reference external" href="http://www.cytoscape.org">Cytoscape</a>, import your GraphML network by selecting
 <tt class="docutils literal"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Import</span> <span class="pre">&gt;</span> <span class="pre">Network</span> <span class="pre">&gt;</span> <span class="pre">From</span> <span class="pre">file...</span></tt> and choosing the file <tt class="docutils literal"><span class="pre">mymodel_tc.graphml</span></tt>
 from the previous step.</p>
@@ -320,7 +408,7 @@ around 40 to just over 300 pt.</p>
 </div>
 </div>
 <div class="section" id="wrapping-up-looking-forward">
-<h2><a class="toc-backref" href="#id12">Wrapping up, Looking forward</a><a class="headerlink" href="#wrapping-up-looking-forward" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id15">Wrapping up, Looking forward</a><a class="headerlink" href="#wrapping-up-looking-forward" title="Permalink to this headline">¶</a></h2>
 <p>To generate a network of papers connected by topics-in-common, try the
 <a class="reference internal" href="tethne.networks.papers.html#tethne.networks.papers.topic_coupling" title="tethne.networks.papers.topic_coupling"><tt class="xref py py-func docutils literal"><span class="pre">networks.papers.topic_coupling()</span></tt></a> method.</p>
 <p>Since Tethne is still under active development, methods for working with topic modeling
@@ -343,10 +431,18 @@ and extended as development proceeds.</p>
   <ul>
 <li><a class="reference internal" href="#">Generating and Visualizing Topic Models with Tethne and MALLET</a><ul>
 <li><a class="reference internal" href="#before-you-start">Before You Start</a></li>
-<li><a class="reference internal" href="#loading-jstor-dfr">Loading JSTOR DfR</a></li>
-<li><a class="reference internal" href="#generating-documents">Generating Documents</a></li>
-<li><a class="reference internal" href="#topic-modeling-in-mallet">Topic Modeling in MALLET</a></li>
-<li><a class="reference internal" href="#parsing-mallet-output">Parsing MALLET Output</a></li>
+<li><a class="reference internal" href="#loading-jstor-dfr">Loading JSTOR DfR</a><ul>
+<li><a class="reference internal" href="#using-a-stoplist">Using a Stoplist</a></li>
+<li><a class="reference internal" href="#checking-your-data">Checking your Data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#filtering-wordcount-data">Filtering Wordcount Data</a></li>
+<li><a class="reference internal" href="#topic-modeling-in-mallet">Topic Modeling in MALLET</a><ul>
+<li><a class="reference internal" href="#using-a-modelmanager">Using a ModelManager</a></li>
+<li><a class="reference internal" href="#running-the-model">Running the Model</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inspecting-the-model">Inspecting the Model</a></li>
 <li><a class="reference internal" href="#semantic-network">Semantic Network</a><ul>
 <li><a class="reference internal" href="#build-the-network">Build the Network</a></li>
 <li><a class="reference internal" href="#visualization">Visualization</a><ul>
