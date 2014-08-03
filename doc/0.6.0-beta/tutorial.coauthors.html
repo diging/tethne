@@ -86,21 +86,41 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
             
-  <div class="admonition warning" id="coauthorship">
-<p class="first admonition-title">Warning</p>
-<p class="last">This tutorial has been revised for v0.5.0-alpha, but has not been thoroughly
-reviewed for accuracy.</p>
+  <div class="section" id="coauthorship-networks">
+<span id="coauthorship"></span><h1>Coauthorship Networks<a class="headerlink" href="#coauthorship-networks" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#getting-started" id="id17">Getting Started</a></li>
+<li><a class="reference internal" href="#reading-wos-data" id="id18">Reading WoS Data</a></li>
+<li><a class="reference internal" href="#slicing-a-corpus" id="id19">Slicing a Corpus</a></li>
+<li><a class="reference internal" href="#building-a-static-co-author-graph" id="id20">Building a Static Co-author Graph</a></li>
+<li><a class="reference internal" href="#visualize-the-static-graph" id="id21">Visualize the Static Graph</a><ul>
+<li><a class="reference internal" href="#write-the-graph-to-graphml" id="id22">Write the Graph to GraphML</a></li>
+<li><a class="reference internal" href="#cytoscape" id="id23">Cytoscape</a></li>
+<li><a class="reference internal" href="#inter-institutional-collaboration-in-gephi" id="id24">Inter-institutional Collaboration in Gephi</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#coauthorship-network-evolution" id="id25">Coauthorship network evolution</a><ul>
+<li><a class="reference internal" href="#building-a-graphcollection" id="id26">Building a GraphCollection</a></li>
+<li><a class="reference internal" href="#attachment-probability" id="id27">Attachment Probability</a></li>
+<li><a class="reference internal" href="#dynamic-xgmml" id="id28">Dynamic XGMML</a></li>
+<li><a class="reference internal" href="#id16" id="id29">Cytoscape</a></li>
+</ul>
+</li>
+</ul>
 </div>
-<div class="section" id="coauthorship-networks">
-<h1>Coauthorship Networks<a class="headerlink" href="#coauthorship-networks" title="Permalink to this headline">¶</a></h1>
-<p><em>This tutorial was developed for the course</em> <a class="reference external" href="http://devo-evo.lab.asu.edu/methods">Introduction to Digital &amp; Computational
-Methods in the Humanities (HPS)</a>, <em>created and
-taught by</em> <a class="reference external" href="http://devo-evo.lab.asu.edu/?q=damerow">Julia Damerow</a> <em>and</em> <a class="reference external" href="http://gradinfo.cbs.asu.edu/?page_id=49">Erick Peirson</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This tutorial was developed for the course <a class="reference external" href="http://devo-evo.lab.asu.edu/methods">Introduction to Digital &amp;
+Computational Methods in the Humanities (HPS)</a>,
+created and taught by <a class="reference external" href="http://devo-evo.lab.asu.edu/?q=damerow">Julia Damerow</a> and
+<a class="reference external" href="http://gradinfo.cbs.asu.edu/?page_id=49">Erick Peirson</a>.</p>
+</div>
 <p>Coauthorship networks are among the most popular models for studying the structure of
 research communities, due in no small part to the ease with which coauthorship networks
 can be generated.</p>
 <div class="section" id="getting-started">
-<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id17">Getting Started</a><a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
 <p>Before you begin, be sure to install the latest version of Tethne. Consult the
 <em class="xref std std-ref">installation</em> guide for details.</p>
 <p><strong>If you run into problems</strong>, don&#8217;t panic. Tethne is under active development, and there
@@ -115,7 +135,7 @@ the same directory.</p>
 </div>
 </div>
 <div class="section" id="reading-wos-data">
-<h2>Reading WoS Data<a class="headerlink" href="#reading-wos-data" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id18">Reading WoS Data</a><a class="headerlink" href="#reading-wos-data" title="Permalink to this headline">¶</a></h2>
 <p>You can parse WoS data from one or multiple field-tagged data files, using the methods
 in the <a class="reference internal" href="tethne.readers.html#module-tethne.readers" title="tethne.readers"><tt class="xref py py-mod docutils literal"><span class="pre">readers</span></tt></a> module. Since we&#8217;re working with multiple data files, we&#8217;ll
 use the <tt class="xref py py-mod docutils literal"><span class="pre">readers.wos.corpus_from_dir</span></tt> method to parse the WoS data and create
@@ -126,7 +146,7 @@ a new <a class="reference internal" href="tethne.classes.corpus.html#tethne.clas
 </div>
 </div>
 <div class="section" id="slicing-a-corpus">
-<h2>Slicing a Corpus<a class="headerlink" href="#slicing-a-corpus" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id19">Slicing a Corpus</a><a class="headerlink" href="#slicing-a-corpus" title="Permalink to this headline">¶</a></h2>
 <p>In this tutorial, we will analyze the evolution of a coauthorship network over time. To do
 this, we will slice our data using the <tt class="docutils literal"><span class="pre">date</span></tt> field of each paper in our dataset.</p>
 <p>Think of slicing as indexing: we will divide the <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s in our <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>
@@ -153,7 +173,7 @@ never removed.</p>
 </div>
 </div>
 <div class="section" id="building-a-static-co-author-graph">
-<h2>Building a Static Co-author Graph<a class="headerlink" href="#building-a-static-co-author-graph" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id20">Building a Static Co-author Graph</a><a class="headerlink" href="#building-a-static-co-author-graph" title="Permalink to this headline">¶</a></h2>
 <p>Tethne will generate a graph using the <tt class="docutils literal"><span class="pre">AU</span></tt> field in your WoS data. See
 <a class="reference internal" href="tutorial.getting_data.html#fieldtagged"><em>Structure of the WoS Field-Tagged Data File</em></a> for more information about the fields available in a WoS datafile.</p>
 <p>To get a sense of the overall structure of the graph, we can first build a static
@@ -164,9 +184,9 @@ coauthorship graph by calling the <a class="reference internal" href="tethne.net
 </div>
 </div>
 <div class="section" id="visualize-the-static-graph">
-<span id="coauthors-to-graphml"></span><h2>Visualize the Static Graph<a class="headerlink" href="#visualize-the-static-graph" title="Permalink to this headline">¶</a></h2>
+<span id="coauthors-to-graphml"></span><h2><a class="toc-backref" href="#id21">Visualize the Static Graph</a><a class="headerlink" href="#visualize-the-static-graph" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="write-the-graph-to-graphml">
-<h3>Write the Graph to GraphML<a class="headerlink" href="#write-the-graph-to-graphml" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id22">Write the Graph to GraphML</a><a class="headerlink" href="#write-the-graph-to-graphml" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="http://graphml.graphdrawing.org">GraphML</a> is a widely-used static network data format.
 We will write our graph to GraphML for visualization in Cytoscape.</p>
 <p>Use the <a class="reference internal" href="tethne.writers.graph.html#tethne.writers.graph.to_graphml" title="tethne.writers.graph.to_graphml"><tt class="xref py py-func docutils literal"><span class="pre">to_graphml()</span></tt></a> method in <a class="reference internal" href="tethne.writers.collection.html#module-tethne.writers.collection" title="tethne.writers.collection"><tt class="xref py py-mod docutils literal"><span class="pre">writers.collection</span></tt></a> to create a GraphML
@@ -177,7 +197,7 @@ data file.</p>
 </div>
 </div>
 <div class="section" id="cytoscape">
-<h3>Cytoscape<a class="headerlink" href="#cytoscape" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id23">Cytoscape</a><a class="headerlink" href="#cytoscape" title="Permalink to this headline">¶</a></h3>
 <p>Cytoscape was developed in 2002, with funding from the National Instute of General Medical
 Sciences and the National Resource for Network Biology. The primary user base is the
 biomedical research community, especially systems biologists who study gene or protein
@@ -284,7 +304,7 @@ image.</p>
 </div>
 </div>
 <div class="section" id="inter-institutional-collaboration-in-gephi">
-<span id="coauthors-gephi"></span><h3>Inter-institutional Collaboration in Gephi<a class="headerlink" href="#inter-institutional-collaboration-in-gephi" title="Permalink to this headline">¶</a></h3>
+<span id="coauthors-gephi"></span><h3><a class="toc-backref" href="#id24">Inter-institutional Collaboration in Gephi</a><a class="headerlink" href="#inter-institutional-collaboration-in-gephi" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="http://www.gephi.org">Gephi</a> provides additional tools for analyzing coauthorship
 networks. In this section, we&#8217;ll use Gephi to generate an inter-institutional
 collaboration network using your coauthorship network. That is, we will mash authors from
@@ -352,7 +372,7 @@ corner of the Gephi workspace.</p>
 </div>
 </div>
 <div class="section" id="coauthorship-network-evolution">
-<h2>Coauthorship network evolution<a class="headerlink" href="#coauthorship-network-evolution" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id25">Coauthorship network evolution</a><a class="headerlink" href="#coauthorship-network-evolution" title="Permalink to this headline">¶</a></h2>
 <p>This section describes how to generate a dynamic network with Tethne, and visualize that
 network in Cytoscape. Dynamic networks allow us to go beyond analyzing the final structure
 of a network, and ask how the structure of a network changes over time. In this case,
@@ -365,7 +385,7 @@ words, if you&#8217;re already popular then you&#8217;re more likely to make new
 <p>In this tutorial, we will visualize the impact of degree centrality on edge acquisition
 by using the <a class="reference internal" href="tethne.analyze.collection.html#tethne.analyze.collection.attachment_probability" title="tethne.analyze.collection.attachment_probability"><tt class="xref py py-func docutils literal"><span class="pre">analyze.collection.attachment_probability()</span></tt></a> algorithm in Tethne.</p>
 <div class="section" id="building-a-graphcollection">
-<h3>Building a GraphCollection<a class="headerlink" href="#building-a-graphcollection" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id26">Building a GraphCollection</a><a class="headerlink" href="#building-a-graphcollection" title="Permalink to this headline">¶</a></h3>
 <p>A <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a> is a set of graphs generated from a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> or model.
 We can generate a GraphCollection (<tt class="docutils literal"><span class="pre">G</span></tt>) in one step, using the
 <tt class="xref py py-func docutils literal"><span class="pre">GraphCollection.build()</span></tt> method.</p>
@@ -379,7 +399,7 @@ the <a class="reference internal" href="tethne.networks.authors.html#module-teth
 name of the method from that module that we wish to use.</p>
 </div>
 <div class="section" id="attachment-probability">
-<h3>Attachment Probability<a class="headerlink" href="#attachment-probability" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id27">Attachment Probability</a><a class="headerlink" href="#attachment-probability" title="Permalink to this headline">¶</a></h3>
 <p>The <a class="reference internal" href="tethne.analyze.collection.html#tethne.analyze.collection.attachment_probability" title="tethne.analyze.collection.attachment_probability"><tt class="xref py py-func docutils literal"><span class="pre">analyze.collection.attachment_probability()</span></tt></a> method automatically updates node
 attributes in your <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.analyze</span> <span class="kn">import</span> <span class="n">collection</span>
@@ -388,7 +408,7 @@ attributes in your <a class="reference internal" href="tethne.classes.graphcolle
 </div>
 </div>
 <div class="section" id="dynamic-xgmml">
-<h3>Dynamic XGMML<a class="headerlink" href="#dynamic-xgmml" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id28">Dynamic XGMML</a><a class="headerlink" href="#dynamic-xgmml" title="Permalink to this headline">¶</a></h3>
 <p>Use the <a class="reference internal" href="tethne.writers.collection.html#tethne.writers.collection.to_dxgmml" title="tethne.writers.collection.to_dxgmml"><tt class="xref py py-func docutils literal"><span class="pre">writers.collection.to_dxgmml()</span></tt></a> method to create a <a class="reference external" href="https://code.google.com/p/dynnetwork/wiki/DynamicXGMML">dynamic XGMML</a> network data file.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.writers</span> <span class="kn">import</span> <span class="n">collection</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">collection</span><span class="o">.</span><span class="n">to_dxgmml</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="s">&#39;/path/to/my/dynamicnetwork.xgmml&#39;</span><span class="p">)</span>
@@ -396,7 +416,7 @@ attributes in your <a class="reference internal" href="tethne.classes.graphcolle
 </div>
 </div>
 <div class="section" id="id16">
-<h3>Cytoscape<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id29">Cytoscape</a><a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
 <p>In Cytoscape, import your .xgmml file by selecting
 <tt class="docutils literal"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Import</span> <span class="pre">&gt;</span> <span class="pre">Dynamic</span> <span class="pre">Network</span> <span class="pre">&gt;</span> <span class="pre">XGMML</span> <span class="pre">File...</span></tt>. Apply a force-directed or
 spring-embedded layout.</p>

@@ -88,9 +88,28 @@
             
   <div class="section" id="generating-and-visualizing-topic-models-with-tethne-and-mallet">
 <span id="mallet-tutorial"></span><h1>Generating and Visualizing Topic Models with Tethne and MALLET<a class="headerlink" href="#generating-and-visualizing-topic-models-with-tethne-and-mallet" title="Permalink to this headline">¶</a></h1>
-<p><em>This tutorial was developed for the course</em> <a class="reference external" href="http://devo-evo.lab.asu.edu/methods">Introduction to Digital &amp; Computational
-Methods in the Humanities (HPS)</a>, <em>created and
-taught by</em> <a class="reference external" href="http://devo-evo.lab.asu.edu/?q=damerow">Julia Damerow</a> <em>and</em> <a class="reference external" href="http://gradinfo.cbs.asu.edu/?page_id=49">Erick Peirson</a>.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#before-you-start" id="id4">Before You Start</a></li>
+<li><a class="reference internal" href="#loading-jstor-dfr" id="id5">Loading JSTOR DfR</a></li>
+<li><a class="reference internal" href="#generating-documents" id="id6">Generating Documents</a></li>
+<li><a class="reference internal" href="#topic-modeling-in-mallet" id="id7">Topic Modeling in MALLET</a></li>
+<li><a class="reference internal" href="#parsing-mallet-output" id="id8">Parsing MALLET Output</a></li>
+<li><a class="reference internal" href="#semantic-network" id="id9">Semantic Network</a><ul>
+<li><a class="reference internal" href="#build-the-network" id="id10">Build the Network</a></li>
+<li><a class="reference internal" href="#visualization" id="id11">Visualization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wrapping-up-looking-forward" id="id12">Wrapping up, Looking forward</a></li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This tutorial was developed for the course <a class="reference external" href="http://devo-evo.lab.asu.edu/methods">Introduction to Digital &amp;
+Computational Methods in the Humanities (HPS)</a>,
+created and taught by <a class="reference external" href="http://devo-evo.lab.asu.edu/?q=damerow">Julia Damerow</a> and
+<a class="reference external" href="http://gradinfo.cbs.asu.edu/?page_id=49">Erick Peirson</a>.</p>
+</div>
 <p>Tethne provides a variety of methods for working with text corpora and the output of
 modeling tools like <a class="reference external" href="http://mallet.cs.umass.edu/topics.php">MALLET</a>. This tutorial
 focuses on parsing, modeling, and visualizing a Latent Dirichlet Allocation topic model,
@@ -106,7 +125,7 @@ importance (betweenness centrality) of that word in the semantic network.</p>
 command-line interface or GUI.</em></p>
 <p>This tutorial assumes that you already have a basic familiarity with <a class="reference external" href="http://www.cytoscape.org">Cytoscape</a>.</p>
 <div class="section" id="before-you-start">
-<h2>Before You Start<a class="headerlink" href="#before-you-start" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id4">Before You Start</a><a class="headerlink" href="#before-you-start" title="Permalink to this headline">¶</a></h2>
 <p>You&#8217;ll need some data. See <a class="reference internal" href="tutorial.getting_data.html#getting-jstor"><em>JSTOR Data-for-Research</em></a> for instructions on retrieving data. <em>Note
 that Tethne currently only supports XML output from JSTOR.</em> Be sure to get some wordcounts
 so that you&#8217;ll have some data for modeling.</p>
@@ -116,23 +135,15 @@ It&#8217;s also not a bad idea to check out <a class="reference external" href="
 with MALLET.</p>
 </div>
 <div class="section" id="loading-jstor-dfr">
-<h2>Loading JSTOR DfR<a class="headerlink" href="#loading-jstor-dfr" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id5">Loading JSTOR DfR</a><a class="headerlink" href="#loading-jstor-dfr" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="tethne.readers.dfr.html#module-tethne.readers.dfr" title="tethne.readers.dfr"><tt class="xref py py-mod docutils literal"><span class="pre">tethne.readers.dfr</span></tt></a> provides two mechanisms for loadings data from JSTOR DfR:</p>
 <blockquote>
-<div><ol class="arabic">
-<li><dl class="first docutils">
-<dt><a class="reference internal" href="tethne.readers.dfr.html#tethne.readers.dfr.read" title="tethne.readers.dfr.read"><tt class="xref py py-func docutils literal"><span class="pre">dfr.read()</span></tt></a> loads bibliographic records from the</dt>
-<dd><p class="first last"><tt class="docutils literal"><span class="pre">citations.XML</span></tt> file accompanying the dataset. This isn&#8217;t particularly necessary
-for the purpose of this exercise, but is worth knowing about.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt><a class="reference internal" href="tethne.readers.dfr.html#tethne.readers.dfr.ngrams" title="tethne.readers.dfr.ngrams"><tt class="xref py py-func docutils literal"><span class="pre">dfr.ngrams()</span></tt></a> loads N-grams (including unigrams/wordcounts)</dt>
-<dd><p class="first last">from the dataset. We&#8217;ll use these as the raw data for topic modeling.</p>
-</dd>
-</dl>
-</li>
+<div><ol class="arabic simple">
+<li><a class="reference internal" href="tethne.readers.dfr.html#tethne.readers.dfr.read" title="tethne.readers.dfr.read"><tt class="xref py py-func docutils literal"><span class="pre">dfr.read()</span></tt></a> loads bibliographic records from the <tt class="docutils literal"><span class="pre">citations.XML</span></tt> file
+accompanying the dataset. This isn&#8217;t particularly necessary for the purpose of this
+exercise, but is worth knowing about.</li>
+<li><a class="reference internal" href="tethne.readers.dfr.html#tethne.readers.dfr.ngrams" title="tethne.readers.dfr.ngrams"><tt class="xref py py-func docutils literal"><span class="pre">dfr.ngrams()</span></tt></a> loads N-grams (including unigrams/wordcounts) from the dataset.
+We&#8217;ll use these as the raw data for topic modeling.</li>
 </ol>
 </div></blockquote>
 <p>Assuming that you unzipped your JSTOR DfR dataset to
@@ -153,7 +164,7 @@ the following to load wordcounts from your dataset:</p>
 </div>
 </div>
 <div class="section" id="generating-documents">
-<h2>Generating Documents<a class="headerlink" href="#generating-documents" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id6">Generating Documents</a><a class="headerlink" href="#generating-documents" title="Permalink to this headline">¶</a></h2>
 <p>One of the most straight-forward ways to load documents into MALLET for topic modeling is
 to pass it a plain-text file containing the full text of each document on its own line.
 Since JSTOR DfR data consist only of term frequencies for each document, we&#8217;ll need to
@@ -182,7 +193,7 @@ example, these term frequencies...</p>
 and a file called <tt class="docutils literal"><span class="pre">mycorpus_meta.csv</span></tt> that maps each row in the corpus to a DOI.</p>
 </div>
 <div class="section" id="topic-modeling-in-mallet">
-<h2>Topic Modeling in MALLET<a class="headerlink" href="#topic-modeling-in-mallet" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id7">Topic Modeling in MALLET</a><a class="headerlink" href="#topic-modeling-in-mallet" title="Permalink to this headline">¶</a></h2>
 <p>For details about LDA modeling in MALLET, consult the <a class="reference external" href="http://mallet.cs.umass.edu/topics.php">MALLET website</a> as well as <a class="reference external" href="http://programminghistorian.org/lessons/topic-modeling-and-mallet">this tutorial</a>.</p>
 <p>First, tell MALLET to load the corpus that Tethne generated for you. Following the example
 on the MALLET website, use something like:</p>
@@ -210,7 +221,7 @@ $
 </div>
 </div>
 <div class="section" id="parsing-mallet-output">
-<h2>Parsing MALLET Output<a class="headerlink" href="#parsing-mallet-output" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id8">Parsing MALLET Output</a><a class="headerlink" href="#parsing-mallet-output" title="Permalink to this headline">¶</a></h2>
 <p>Tethne can read MALLET output using the methods in <tt class="xref py py-mod docutils literal"><span class="pre">tethne.readers.mallet</span></tt>:</p>
 <blockquote>
 <div><ol class="arabic simple">
@@ -238,12 +249,12 @@ previous step:</p>
 </div>
 </div>
 <div class="section" id="semantic-network">
-<h2>Semantic Network<a class="headerlink" href="#semantic-network" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id9">Semantic Network</a><a class="headerlink" href="#semantic-network" title="Permalink to this headline">¶</a></h2>
 <p>In LDA, topics are clusters of terms that co-occur in documents. We can interpret an LDA
 topic model as a network of terms linked by their participation in particular topics. In
 Tethne, we call this a <em>topic-coupling</em> network.</p>
 <div class="section" id="build-the-network">
-<h3>Build the Network<a class="headerlink" href="#build-the-network" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id10">Build the Network</a><a class="headerlink" href="#build-the-network" title="Permalink to this headline">¶</a></h3>
 <p>We can generate the topic-coupling network using
 <tt class="xref py py-func docutils literal"><span class="pre">tethne.networks.terms.topic_coupling()</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.networks</span> <span class="kn">as</span> <span class="nn">nt</span>
@@ -260,7 +271,7 @@ adjusting its value and eye-balling the resultant network for coherence.</p>
 </div>
 </div>
 <div class="section" id="visualization">
-<h3>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id11">Visualization</a><a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h3>
 <p>In <a class="reference external" href="http://www.cytoscape.org">Cytoscape</a>, import your GraphML network by selecting
 <tt class="docutils literal"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Import</span> <span class="pre">&gt;</span> <span class="pre">Network</span> <span class="pre">&gt;</span> <span class="pre">From</span> <span class="pre">file...</span></tt> and choosing the file <tt class="docutils literal"><span class="pre">mymodel_tc.graphml</span></tt>
 from the previous step.</p>
@@ -309,7 +320,7 @@ around 40 to just over 300 pt.</p>
 </div>
 </div>
 <div class="section" id="wrapping-up-looking-forward">
-<h2>Wrapping up, Looking forward<a class="headerlink" href="#wrapping-up-looking-forward" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id12">Wrapping up, Looking forward</a><a class="headerlink" href="#wrapping-up-looking-forward" title="Permalink to this headline">¶</a></h2>
 <p>To generate a network of papers connected by topics-in-common, try the
 <a class="reference internal" href="tethne.networks.papers.html#tethne.networks.papers.topic_coupling" title="tethne.networks.papers.topic_coupling"><tt class="xref py py-func docutils literal"><span class="pre">networks.papers.topic_coupling()</span></tt></a> method.</p>
 <p>Since Tethne is still under active development, methods for working with topic modeling

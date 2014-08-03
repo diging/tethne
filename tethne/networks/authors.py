@@ -21,13 +21,9 @@ from ..classes import Paper
 
 
 import logging
-logging.basicConfig()
+logging.basicConfig(filename=None, format='%(asctime)-6s: %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(lineno)d - %(message)s')
 logger = logging.getLogger(__name__)
-
-# MACRO for printing the 'print' statement values.
-# 0 prints nothing in the console.
-# 1 prints all print statements in the console.
-DEBUG = 0
+logger.setLevel('DEBUG')
 
 def author_papers(papers, node_id='ayjid', paper_attribs=[], **kwargs):
     """
@@ -597,10 +593,6 @@ def author_cocitation(papers, threshold=1, **kwargs):
                                                 author_j_str.upper())
                         authors_pair_inv = (author_j_str.upper(), \
                                                 author_i_str.upper())
-
-                        if DEBUG:
-                            print "Authors Pairs: ", authors_pair
-                            print "Authors Pairs inv: ", authors_pair_inv
 
                         # Have these authors been co-cited before?
                         try:

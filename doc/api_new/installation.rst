@@ -1,19 +1,24 @@
 Installation
 ============
 
-With Anaconda (Recommended)
----------------------------
-The simplest way to satisfy Tethne's dependencies is to install the Anaconda Python stack.
-Anaconda includes its own Python build, as well as a large array of scientific and
-numerical Python libraries. You can download the latest version of Anaconda for free from
-`Continuum Analytics <https://store.continuum.io/cshop/anaconda/>`_.
-
-This version of Tethne has not been tested on Windows, but there's no reason in principal
+Tethne has been extensively tested in a Mac OSX environment. Although this version of 
+Tethne has not been tested on Windows, there's no reason in principal
 why it shouldn't work. If you do try it on Windows, `let us know how it goes
 <https://github.com/diging/tethne/issues?labels=installation&state=open>`_.
 
+Installing Dependencies
+-----------------------
+
+With Anaconda (Recommended)
+'''''''''''''''''''''''''''
+It is highly recommended that you use Tethne with the `Anaconda Python 
+<https://store.continuum.io/cshop/anaconda/>`_ stack. Anaconda includes its own Python
+build, as well as a large array of scientific and numerical Python libraries.
+
+Once you have downloaded and installed Anaconda, proceed to :ref:`install-tethne`.
+
 Without Anaconda
-----------------
+''''''''''''''''
 
 Python
 ``````
@@ -25,7 +30,8 @@ SciPy/NumPy
 SciPy and NumPy are Python libraries for scientific and numerical computing. For details
 on installing the SciPy stack, see `this page <http://www.scipy.org/install.html>`_.
 
-To install the SciPy stack with Macports (from the terminal):
+Installing SciPy/NumPy with pip doesn't tend to work very well. To install the SciPy stack
+with Macports (from the terminal):
 
 .. code-block:: bash
 
@@ -39,20 +45,27 @@ are SciPy, NumPy, and Matplotlib. But it doesn't hurt to have the rest.
 
 HDF5
 ````
-For ``PyTables`` to work properly (installed in the next step), you will need to download
-and install HDF5. You can get the latest source code and binaries from `here
+For ``PyTables`` to work properly, you will need to download and install HDF5. You can get 
+the latest source code and binaries `here
 <http://www.hdfgroup.org/HDF5/release/obtain5.html#obtain>`_.
 
-NLTK
-````
-You'll also need the `Natural Language ToolKit <http://www.nltk.org/>`_.
+Dependencies
+''''''''''''
+::
 
-.. code-block:: bash
+   scipy==0.14.0
+   numpy==1.8.1
+   networkx==1.8.1
+   matplotlib==1.3.1
+   tables==3.1.1
+   Unidecode==0.04.16
+   geopy==0.99
+   nltk==2.0.4
 
-   $ pip install nltk 
+.. _install-tethne:
 
-Tethne
-------
+Installing Tethne
+-----------------
 You can install Tethne and all of its (other) dependencies using ``pip``.
 
 .. code-block:: bash
@@ -66,16 +79,3 @@ Alternatively, download the latest version of Tethne from the `Python Package In
 
    $ cd /path/to/unzipped/tethne-x.y.z
    $ python setup.py install
-   
-Dependencies
-------------
-::
-
-   scipy==0.14.0
-   numpy==1.8.1
-   networkx==1.8.1
-   matplotlib==1.3.1
-   tables==3.1.1
-   Unidecode==0.04.16
-   geopy==0.99
-   nltk==2.0.4

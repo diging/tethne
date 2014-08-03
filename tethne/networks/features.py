@@ -243,6 +243,8 @@ def keyword_cooccurrence(papers, threshold, connected=False, **kwargs):
         
     Notes
     -----
+    Not thoroughly tested.
+    
     **TODO**
     
     * Incorporate this into the featureset framework.

@@ -86,27 +86,30 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="with-anaconda-recommended">
-<h2>With Anaconda (Recommended)<a class="headerlink" href="#with-anaconda-recommended" title="Permalink to this headline">¶</a></h2>
-<p>The simplest way to satisfy Tethne&#8217;s dependencies is to install the Anaconda Python stack.
-Anaconda includes its own Python build, as well as a large array of scientific and
-numerical Python libraries. You can download the latest version of Anaconda for free from
-<a class="reference external" href="https://store.continuum.io/cshop/anaconda/">Continuum Analytics</a>.</p>
-<p>This version of Tethne has not been tested on Windows, but there&#8217;s no reason in principal
+<p>Tethne has been extensively tested in a Mac OSX environment. Although this version of
+Tethne has not been tested on Windows, there&#8217;s no reason in principal
 why it shouldn&#8217;t work. If you do try it on Windows, <a class="reference external" href="https://github.com/diging/tethne/issues?labels=installation&amp;state=open">let us know how it goes</a>.</p>
+<div class="section" id="installing-dependencies">
+<h2>Installing Dependencies<a class="headerlink" href="#installing-dependencies" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="with-anaconda-recommended">
+<h3>With Anaconda (Recommended)<a class="headerlink" href="#with-anaconda-recommended" title="Permalink to this headline">¶</a></h3>
+<p>It is highly recommended that you use Tethne with the <a class="reference external" href="https://store.continuum.io/cshop/anaconda/">Anaconda Python</a> stack. Anaconda includes its own Python
+build, as well as a large array of scientific and numerical Python libraries.</p>
+<p>Once you have downloaded and installed Anaconda, proceed to <a class="reference internal" href="#install-tethne"><em>Installing Tethne</em></a>.</p>
 </div>
 <div class="section" id="without-anaconda">
-<h2>Without Anaconda<a class="headerlink" href="#without-anaconda" title="Permalink to this headline">¶</a></h2>
+<h3>Without Anaconda<a class="headerlink" href="#without-anaconda" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="python">
-<h3>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h3>
+<h4>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h4>
 <p>Tethne requires Python 2.7 (untested in Python 3.x). You can get the latest release from
 <a class="reference external" href="http://www.python.org">Python.org</a>.</p>
 </div>
 <div class="section" id="scipy-numpy">
-<h3>SciPy/NumPy<a class="headerlink" href="#scipy-numpy" title="Permalink to this headline">¶</a></h3>
+<h4>SciPy/NumPy<a class="headerlink" href="#scipy-numpy" title="Permalink to this headline">¶</a></h4>
 <p>SciPy and NumPy are Python libraries for scientific and numerical computing. For details
 on installing the SciPy stack, see <a class="reference external" href="http://www.scipy.org/install.html">this page</a>.</p>
-<p>To install the SciPy stack with Macports (from the terminal):</p>
+<p>Installing SciPy/NumPy with pip doesn&#8217;t tend to work very well. To install the SciPy stack
+with Macports (from the terminal):</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo port install py27-numpy py27-scipy py27-matplotlib py27-ipython +notebook py27-pandas py27-sympy py27-nose
 </pre></div>
 </div>
@@ -115,32 +118,13 @@ on installing the SciPy stack, see <a class="reference external" href="http://ww
 are SciPy, NumPy, and Matplotlib. But it doesn&#8217;t hurt to have the rest.</p>
 </div>
 <div class="section" id="hdf5">
-<h3>HDF5<a class="headerlink" href="#hdf5" title="Permalink to this headline">¶</a></h3>
-<p>For <tt class="docutils literal"><span class="pre">PyTables</span></tt> to work properly (installed in the next step), you will need to download
-and install HDF5. You can get the latest source code and binaries from <a class="reference external" href="http://www.hdfgroup.org/HDF5/release/obtain5.html#obtain">here</a>.</p>
-</div>
-<div class="section" id="nltk">
-<h3>NLTK<a class="headerlink" href="#nltk" title="Permalink to this headline">¶</a></h3>
-<p>You&#8217;ll also need the <a class="reference external" href="http://www.nltk.org/">Natural Language ToolKit</a>.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install nltk
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="tethne">
-<h2>Tethne<a class="headerlink" href="#tethne" title="Permalink to this headline">¶</a></h2>
-<p>You can install Tethne and all of its (other) dependencies using <tt class="docutils literal"><span class="pre">pip</span></tt>.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install tethne
-</pre></div>
-</div>
-<p>Alternatively, download the latest version of Tethne from the <a class="reference external" href="https://pypi.python.org/pypi/tethne">Python Package Index</a>. Unzip the <tt class="docutils literal"><span class="pre">tar.gz</span></tt> archive, and then:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> /path/to/unzipped/tethne-x.y.z
-<span class="nv">$ </span>python setup.py install
-</pre></div>
+<h4>HDF5<a class="headerlink" href="#hdf5" title="Permalink to this headline">¶</a></h4>
+<p>For <tt class="docutils literal"><span class="pre">PyTables</span></tt> to work properly, you will need to download and install HDF5. You can get
+the latest source code and binaries <a class="reference external" href="http://www.hdfgroup.org/HDF5/release/obtain5.html#obtain">here</a>.</p>
 </div>
 </div>
 <div class="section" id="dependencies">
-<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<h3>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>scipy==0.14.0
 numpy==1.8.1
 networkx==1.8.1
@@ -149,6 +133,19 @@ tables==3.1.1
 Unidecode==0.04.16
 geopy==0.99
 nltk==2.0.4
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="installing-tethne">
+<span id="install-tethne"></span><h2>Installing Tethne<a class="headerlink" href="#installing-tethne" title="Permalink to this headline">¶</a></h2>
+<p>You can install Tethne and all of its (other) dependencies using <tt class="docutils literal"><span class="pre">pip</span></tt>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install tethne
+</pre></div>
+</div>
+<p>Alternatively, download the latest version of Tethne from the <a class="reference external" href="https://pypi.python.org/pypi/tethne">Python Package Index</a>. Unzip the <tt class="docutils literal"><span class="pre">tar.gz</span></tt> archive, and then:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> /path/to/unzipped/tethne-x.y.z
+<span class="nv">$ </span>python setup.py install
 </pre></div>
 </div>
 </div>
@@ -166,16 +163,18 @@ nltk==2.0.4
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#installing-dependencies">Installing Dependencies</a><ul>
 <li><a class="reference internal" href="#with-anaconda-recommended">With Anaconda (Recommended)</a></li>
 <li><a class="reference internal" href="#without-anaconda">Without Anaconda</a><ul>
 <li><a class="reference internal" href="#python">Python</a></li>
 <li><a class="reference internal" href="#scipy-numpy">SciPy/NumPy</a></li>
 <li><a class="reference internal" href="#hdf5">HDF5</a></li>
-<li><a class="reference internal" href="#nltk">NLTK</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#tethne">Tethne</a></li>
 <li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installing-tethne">Installing Tethne</a></li>
 </ul>
 </li>
 </ul>

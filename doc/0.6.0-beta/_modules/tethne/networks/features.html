@@ -156,14 +156,10 @@
 <span class="sd">    networkx.Graph or dict</span>
 <span class="sd">        See ``graph`` parameter, above.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Cooccurrence table for features in {0}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">featureset</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="nb">filter</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>  <span class="c"># Turns filtering off (returns True for everything).</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Filtering is disabled.&#39;</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> <span class="k">return</span> <span class="bp">True</span>
-
-    <span class="n">graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
     
     <span class="n">features</span> <span class="o">=</span> <span class="n">featureset</span><span class="p">[</span><span class="s">&#39;features&#39;</span><span class="p">]</span>
     <span class="n">index</span> <span class="o">=</span> <span class="n">featureset</span><span class="p">[</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
@@ -195,6 +191,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">graph</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;No graph; return coocurrence values only.&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ecounts</span>
+
     <span class="k">else</span><span class="p">:</span>   <span class="c"># Build an undirected graph, with co-occurrence values as weights.</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Building a graph, with co-occurrence values as weights.&#39;</span><span class="p">)</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
@@ -273,10 +270,13 @@
 <span class="sd">       </span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Build a pointwise mutual information graph.&#39;</span><span class="p">)</span>
+    
     <span class="n">graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
     <span class="n">ecounts</span> <span class="o">=</span> <span class="n">cooccurrence</span><span class="p">(</span> <span class="n">papers</span><span class="p">,</span> <span class="n">featureset</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="nb">filter</span><span class="p">,</span>
                             <span class="n">graph</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">indexed_by</span><span class="o">=</span><span class="n">indexed_by</span>  <span class="p">)</span>
-
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Got {0} cooccurrence values&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ecounts</span><span class="p">)))</span>
+    
     <span class="n">features</span> <span class="o">=</span> <span class="n">featureset</span><span class="p">[</span><span class="s">&#39;features&#39;</span><span class="p">]</span>
     <span class="n">index</span> <span class="o">=</span> <span class="n">featureset</span><span class="p">[</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
     <span class="n">counts</span> <span class="o">=</span> <span class="n">featureset</span><span class="p">[</span><span class="s">&#39;counts&#39;</span><span class="p">]</span>
@@ -291,9 +291,11 @@
         <span class="k">if</span> <span class="n">P</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">:</span>
             
             <span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">weight</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">P</span><span class="p">))</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Added {0} edges to graph.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">())))</span>
 
     <span class="n">labels</span> <span class="o">=</span> <span class="p">{</span> <span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">index</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="p">}</span>
     <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="s">&#39;label&#39;</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Added labels to {0} nodes.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)))</span>
 
     <span class="k">return</span> <span class="n">graph</span>
 </div>
@@ -317,6 +319,14 @@
 <span class="sd">    -------</span>
 <span class="sd">    k_coccurrence :  networkx.Graph</span>
 <span class="sd">        A keyword coccurrence network.</span>
+<span class="sd">        </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Not thoroughly tested.</span>
+<span class="sd">    </span>
+<span class="sd">    **TODO**</span>
+<span class="sd">    </span>
+<span class="sd">    * Incorporate this into the featureset framework.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -401,26 +411,35 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">Z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">top_word</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">W</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">top_word</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Z</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">W</span>
+    
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;topic_coupling for {0} features, {1} topics.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">W</span><span class="p">,</span><span class="n">Z</span><span class="p">))</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;threshold: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">threshold</span><span class="p">))</span>
 
     <span class="n">edges</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">Z</span><span class="p">):</span>
         <span class="n">word_sub</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">W</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">top_word</span><span class="p">[</span><span class="n">z</span><span class="p">,</span><span class="n">w</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">:</span>
+        <span class="n">dimension</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dimension</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">asmatrix</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">dimension</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">dimension</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">w</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">:</span>
                 <span class="n">word_sub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+        
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;topic {0} generated {1} edges.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">word_sub</span><span class="p">)))</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">word_sub</span><span class="p">)):</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">word_sub</span><span class="p">)):</span>
                 <span class="n">w_i</span> <span class="o">=</span> <span class="n">word_sub</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
                 <span class="n">w_j</span> <span class="o">=</span> <span class="n">word_sub</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
-                <span class="n">p_i</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">top_word</span><span class="p">[</span><span class="n">z</span><span class="p">,</span><span class="n">w_i</span><span class="p">]</span>
-                <span class="n">p_j</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">top_word</span><span class="p">[</span><span class="n">z</span><span class="p">,</span><span class="n">w_j</span><span class="p">]</span>
+                <span class="n">p_i</span> <span class="o">=</span> <span class="n">dimension</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">w_i</span><span class="p">]</span>
+                <span class="n">p_j</span> <span class="o">=</span> <span class="n">dimension</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">w_j</span><span class="p">]</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">edges</span><span class="p">[(</span><span class="n">w_i</span><span class="p">,</span><span class="n">w_j</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">z</span><span class="p">,</span> <span class="p">(</span><span class="n">p_i</span><span class="o">+</span><span class="n">p_j</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
                 <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                     <span class="n">edges</span><span class="p">[(</span><span class="n">w_i</span><span class="p">,</span><span class="n">w_j</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">z</span><span class="p">,</span> <span class="p">(</span><span class="n">p_i</span><span class="o">+</span><span class="n">p_j</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)]</span>
+                    
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;generated {0} edges&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">)))</span>
+    
     <span class="n">tc</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">e</span><span class="p">,</span> <span class="n">topics</span> <span class="ow">in</span> <span class="n">edges</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
@@ -429,6 +448,8 @@
         <span class="n">j_id</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">vocabulary</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
         <span class="n">tc</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">i_id</span><span class="p">,</span> <span class="n">j_id</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">weight</span><span class="p">),</span> 
                                 <span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">topics</span><span class="p">])</span>
+    
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;done&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">tc</span></div>
 </pre></div>

@@ -3,11 +3,15 @@
 Generating and Visualizing Topic Models with Tethne and MALLET
 ==============================================================
 
-*This tutorial was developed for the course* `Introduction to Digital & Computational 
-Methods in the Humanities (HPS) <http://devo-evo.lab.asu.edu/methods>`_, *created and 
-taught by* `Julia Damerow <http://devo-evo.lab.asu.edu/?q=damerow>`_ *and* `Erick Peirson
-<http://gradinfo.cbs.asu.edu/?page_id=49>`_.
+.. contents::
+   :local:
+   :depth: 2
 
+.. note:: This tutorial was developed for the course `Introduction to Digital &
+   Computational Methods in the Humanities (HPS) <http://devo-evo.lab.asu.edu/methods>`_,
+   created and taught by `Julia Damerow <http://devo-evo.lab.asu.edu/?q=damerow>`_ and   
+   `Erick Peirson <http://gradinfo.cbs.asu.edu/?page_id=49>`_.
+   
 Tethne provides a variety of methods for working with text corpora and the output of
 modeling tools like `MALLET <http://mallet.cs.umass.edu/topics.php>`_. This tutorial
 focuses on parsing, modeling, and visualizing a Latent Dirichlet Allocation topic model,
@@ -50,11 +54,11 @@ Loading JSTOR DfR
 
 :mod:`tethne.readers.dfr` provides two mechanisms for loadings data from JSTOR DfR:
 
-    1. :func:`.dfr.read` loads bibliographic records from the 
-        ``citations.XML`` file accompanying the dataset. This isn't particularly necessary
-        for the purpose of this exercise, but is worth knowing about.
-    2. :func:`.dfr.ngrams` loads N-grams (including unigrams/wordcounts)
-        from the dataset. We'll use these as the raw data for topic modeling.
+    1. :func:`.dfr.read` loads bibliographic records from the ``citations.XML`` file
+       accompanying the dataset. This isn't particularly necessary for the purpose of this 
+       exercise, but is worth knowing about.
+    2. :func:`.dfr.ngrams` loads N-grams (including unigrams/wordcounts) from the dataset.
+       We'll use these as the raw data for topic modeling.
 
 Assuming that you unzipped your JSTOR DfR dataset to 
 ``/Users/erickpeirson/JStor DfR Datasets/2013.5.3.cHrmED8A``, you can use something like

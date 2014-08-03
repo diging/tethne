@@ -86,29 +86,44 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
             
-  <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This tutorial has been revised for v0.5.0-alpha, but has not been thoroughly
-reviewed for accuracy.</p>
-</div>
-<div class="section" id="geographic-networks">
+  <div class="section" id="geographic-networks">
 <h1>Geographic Networks<a class="headerlink" href="#geographic-networks" title="Permalink to this headline">¶</a></h1>
-<p><em>This tutorial was developed for the course</em> <a class="reference external" href="http://devo-evo.lab.asu.edu/methods">Introduction to Digital &amp; Computational
-Methods in the Humanities (HPS)</a>, <em>created and
-taught by</em> <a class="reference external" href="http://devo-evo.lab.asu.edu/?q=damerow">Julia Damerow</a> <em>and</em> <a class="reference external" href="http://gradinfo.cbs.asu.edu/?page_id=49">Erick Peirson</a>.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#requirements" id="id1">Requirements</a></li>
+<li><a class="reference internal" href="#are-your-data-suitable" id="id2">Are your data suitable?</a></li>
+<li><a class="reference internal" href="#coauthorship-network-with-geocoding" id="id3">Coauthorship network with geocoding</a></li>
+<li><a class="reference internal" href="#export-to-graphml" id="id4">Export to GraphML</a></li>
+<li><a class="reference internal" href="#geo-layout-in-gephi" id="id5">Geo Layout in Gephi</a></li>
+<li><a class="reference internal" href="#eigenvector-centrality" id="id6">Eigenvector Centrality</a></li>
+<li><a class="reference internal" href="#plotting-geodata-on-a-basemap" id="id7">Plotting geodata on a basemap</a><ul>
+<li><a class="reference internal" href="#node-size-attribute" id="id8">Node size attribute</a></li>
+<li><a class="reference internal" href="#exporting-kml-kmz" id="id9">Exporting KML (KMZ)</a></li>
+<li><a class="reference internal" href="#visualization-in-google-earth" id="id10">Visualization in Google Earth</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This tutorial was developed for the course <a class="reference external" href="http://devo-evo.lab.asu.edu/methods">Introduction to Digital &amp;
+Computational Methods in the Humanities (HPS)</a>,
+created and taught by <a class="reference external" href="http://devo-evo.lab.asu.edu/?q=damerow">Julia Damerow</a> and
+<a class="reference external" href="http://gradinfo.cbs.asu.edu/?page_id=49">Erick Peirson</a>.</p>
+</div>
 <p>Many bibliographic datasets include institutional affiliations for authors. Using
 geocoding services, such as the <a class="reference external" href="https://developers.google.com/maps/documentation/geocoding/">Google Geocoding API</a>, we can convert
 institution names and addresses into geographic coordinates that can be plotted on a map.
-Tethne provides geocoding services in the <tt class="xref py py-mod docutils literal"><span class="pre">services.geocode</span></tt> module.</p>
+Tethne provides geocoding services in the <a class="reference internal" href="tethne.services.geocode.html#module-tethne.services.geocode" title="tethne.services.geocode"><tt class="xref py py-mod docutils literal"><span class="pre">services.geocode</span></tt></a> module.</p>
 <p>In this tutorial, we will use the Google Geocoding service to obtain geographic
-coordinates for authors in a coauthorship network (see <em class="xref std std-ref">coauthorship</em>) and its
+coordinates for authors in a coauthorship network (see <a class="reference internal" href="tutorial.coauthors.html#coauthorship"><em>Coauthorship Networks</em></a>) and its
 derivative, the institutions network (see <a class="reference internal" href="tethne.networks.authors.html#tethne.networks.authors.institutions" title="tethne.networks.authors.institutions"><tt class="xref py py-func docutils literal"><span class="pre">networks.authors.institutions()</span></tt></a>). We
 will then plot those geo-coded networks in Gephi using the Geo Layout plugin, and overlay
 them on a 3D map of the globe in Google Earth.</p>
 <p>The examples in this tutorial were generated using records for the journal <em>Ecology</em> from
 2001-2013. See <a class="reference internal" href="tutorial.getting_data.html#gettingdata"><em>Getting Bibliographic Data</em></a>.</p>
 <div class="section" id="requirements">
-<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id1">Requirements</a><a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <p>The Python package <a class="reference external" href="https://code.google.com/p/geopy/">geopy</a> must be installed and in
 your Python path. You should be able to install it using:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install geopy
@@ -116,7 +131,7 @@ your Python path. You should be able to install it using:</p>
 </div>
 </div>
 <div class="section" id="are-your-data-suitable">
-<h2>Are your data suitable?<a class="headerlink" href="#are-your-data-suitable" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id2">Are your data suitable?</a><a class="headerlink" href="#are-your-data-suitable" title="Permalink to this headline">¶</a></h2>
 <p>Not all bibliographic data is amenable to geocoding. When parsing data from the Web of
 Science, Tethne looks for author institutional affiliations in the <tt class="docutils literal"><span class="pre">C1</span></tt> field. For
 example:</p>
@@ -163,12 +178,12 @@ most U.S. addresses, the state and zip code are included in the last field, e.g.
 <tt class="docutils literal"><span class="pre">precision</span></tt> field, discussed below.</p>
 </div>
 <div class="section" id="coauthorship-network-with-geocoding">
-<h2>Coauthorship network with geocoding<a class="headerlink" href="#coauthorship-network-with-geocoding" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id3">Coauthorship network with geocoding</a><a class="headerlink" href="#coauthorship-network-with-geocoding" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference internal" href="tethne.networks.authors.html#tethne.networks.authors.coauthors" title="tethne.networks.authors.coauthors"><tt class="xref py py-func docutils literal"><span class="pre">networks.authors.coauthors()</span></tt></a> method accepts a boolean keyword argument called
 <tt class="docutils literal"><span class="pre">geocode</span></tt>. If <tt class="docutils literal"><span class="pre">geocode</span></tt> is <tt class="docutils literal"><span class="pre">True</span></tt>, Tethne will attempt to generate geographic
 coordinates for each node in the coauthorship network based on each authors&#8217;
 institutional affiliation.</p>
-<p>Follow the instructions in <em class="xref std std-ref">coauthorship</em> to generate a coauthorship network. For the
+<p>Follow the instructions in <a class="reference internal" href="tutorial.coauthors.html#coauthorship"><em>Coauthorship Networks</em></a> to generate a coauthorship network. For the
 purpose of this tutorial, we will <strong>not</strong> generate a sliced/dynamic network.</p>
 <p>Include the keyword argument <tt class="docutils literal"><span class="pre">geocode=True</span></tt> when calling
 <a class="reference internal" href="tethne.networks.authors.html#tethne.networks.authors.coauthors" title="tethne.networks.authors.coauthors"><tt class="xref py py-func docutils literal"><span class="pre">networks.authors.coauthors()</span></tt></a>. For example:</p>
@@ -178,10 +193,10 @@ purpose of this tutorial, we will <strong>not</strong> generate a sliced/dynamic
 </div>
 </div>
 <div class="section" id="export-to-graphml">
-<h2>Export to GraphML<a class="headerlink" href="#export-to-graphml" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id4">Export to GraphML</a><a class="headerlink" href="#export-to-graphml" title="Permalink to this headline">¶</a></h2>
 <p>In order to visualize our geographic network in <a class="reference external" href="http://www.gephi.org">Gephi</a>, we will
 export it to GraphML. See the section <a class="reference internal" href="tutorial.coauthors.html#coauthors-to-graphml"><em>Visualize the Static Graph</em></a> in the
-<em class="xref std std-ref">coauthorship</em> tutorial.</p>
+<a class="reference internal" href="tutorial.coauthors.html#coauthorship"><em>Coauthorship Networks</em></a> tutorial.</p>
 <p>If everything went as planned, your GraphML nodes should contain three additional
 attributes: <tt class="docutils literal"><span class="pre">latitude</span></tt>, <tt class="docutils literal"><span class="pre">longitude</span></tt>, and <tt class="docutils literal"><span class="pre">precision</span></tt>. By default,
 <a class="reference internal" href="tethne.networks.authors.html#tethne.networks.authors.coauthors" title="tethne.networks.authors.coauthors"><tt class="xref py py-func docutils literal"><span class="pre">networks.authors.coauthors()</span></tt></a> also includes the <tt class="docutils literal"><span class="pre">institution</span></tt> attribute. For
@@ -234,9 +249,9 @@ nodes without locations to the top of the list.</li>
 <a class="reference internal image-reference" href="_images/geo3.png"><img alt="_images/geo3.png" class="align-center" src="_images/geo3.png" style="width: 700px;" /></a>
 </div>
 <div class="section" id="geo-layout-in-gephi">
-<h2>Geo Layout in Gephi<a class="headerlink" href="#geo-layout-in-gephi" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id5">Geo Layout in Gephi</a><a class="headerlink" href="#geo-layout-in-gephi" title="Permalink to this headline">¶</a></h2>
 <p>Import your GraphML file as described in the section <a class="reference internal" href="tutorial.coauthors.html#coauthors-gephi"><em>Inter-institutional Collaboration in Gephi</em></a> in the
-<em class="xref std std-ref">coauthorship</em> tutorial.</p>
+<a class="reference internal" href="tutorial.coauthors.html#coauthorship"><em>Coauthorship Networks</em></a> tutorial.</p>
 <p>In the <tt class="docutils literal"><span class="pre">Data</span> <span class="pre">Laboratory</span></tt> tab, you should see columns for the four attributes described
 above.</p>
 <a class="reference internal image-reference" href="_images/geo1.png"><img alt="_images/geo1.png" class="align-center" src="_images/geo1.png" style="width: 700px;" /></a>
@@ -276,7 +291,7 @@ some familiar national boundaries, especially the United States and western Euro
 more when we plot this network in Google Earth, below.</p>
 </div>
 <div class="section" id="eigenvector-centrality">
-<h2>Eigenvector Centrality<a class="headerlink" href="#eigenvector-centrality" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id6">Eigenvector Centrality</a><a class="headerlink" href="#eigenvector-centrality" title="Permalink to this headline">¶</a></h2>
 <p>In this tutorial, we&#8217;ll introduce another measure of centrality popular in social network
 analysis.</p>
 <p><strong>Eigenvector Centrality</strong> is a measure of how well-connected a node is in a network.
@@ -322,7 +337,7 @@ authors, which indicates how many papers a pair of authors published together.</
 <a class="reference internal image-reference" href="_images/geo9.png"><img alt="_images/geo9.png" class="align-center" src="_images/geo9.png" style="width: 700px;" /></a>
 </div>
 <div class="section" id="plotting-geodata-on-a-basemap">
-<h2>Plotting geodata on a basemap<a class="headerlink" href="#plotting-geodata-on-a-basemap" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id7">Plotting geodata on a basemap</a><a class="headerlink" href="#plotting-geodata-on-a-basemap" title="Permalink to this headline">¶</a></h2>
 <p>Unfortunately, Gephi does not provide any straightforward way to overlay networks on a
 map of the earth. One approach, which we will not address here, is to export your network
 view as a SVG (Scalable Vector Graphics) file, and then overlay that image on a basemap
@@ -332,7 +347,7 @@ in a graphics editor (e.g. Photoshop or Gimp).</p>
 files. The <tt class="docutils literal"><span class="pre">ExportToEarth</span></tt> plugin in Gephi allows you to save your geocoded network to a
 compressed KML, or KMZ, file.</p>
 <div class="section" id="node-size-attribute">
-<h3>Node size attribute<a class="headerlink" href="#node-size-attribute" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id8">Node size attribute</a><a class="headerlink" href="#node-size-attribute" title="Permalink to this headline">¶</a></h3>
 <p>Before we export our network, we need to make one adjustment to our node attributes so
 that we can take our Eigenvector Centrality data along with us into Google Earth. When
 Gephi exports your network to KML, it looks for a <tt class="docutils literal"><span class="pre">size</span></tt> attribute on your nodes, which
@@ -362,7 +377,7 @@ Then click <tt class="docutils literal"><span class="pre">OK</span></tt>.</p>
 values.</p>
 </div>
 <div class="section" id="exporting-kml-kmz">
-<h3>Exporting KML (KMZ)<a class="headerlink" href="#exporting-kml-kmz" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id9">Exporting KML (KMZ)</a><a class="headerlink" href="#exporting-kml-kmz" title="Permalink to this headline">¶</a></h3>
 <p>To export your network in KML...</p>
 <blockquote>
 <div><ol class="arabic">
@@ -385,7 +400,7 @@ with any other attributes that you&#8217;d like to take along.</p>
 <p>After a few moments, you should receive confirmation that your export is complete.</p>
 </div>
 <div class="section" id="visualization-in-google-earth">
-<h3>Visualization in Google Earth<a class="headerlink" href="#visualization-in-google-earth" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id10">Visualization in Google Earth</a><a class="headerlink" href="#visualization-in-google-earth" title="Permalink to this headline">¶</a></h3>
 <p>Find your <tt class="docutils literal"><span class="pre">.kmz</span></tt> file in your computer&#8217;s filesystem. If Google Earth is installed
 properly, you should be able to simply double-click the file to open it. If that doesn&#8217;t
 work, start Google Earth, go to <tt class="docutils literal"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Open</span></tt>, and select your <tt class="docutils literal"><span class="pre">.kmz</span></tt> file.</p>
@@ -430,7 +445,7 @@ You can also <a class="reference external" href="http://www.google.com/earth/lea
 <h1>Institutional Networks<a class="headerlink" href="#institutional-networks" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
-<p>In <em class="xref std std-ref">coauthorship</em> we used Gephi&#8217;s partition tool to collapse our coauthorship network
+<p>In <a class="reference internal" href="tutorial.coauthors.html#coauthorship"><em>Coauthorship Networks</em></a> we used Gephi&#8217;s partition tool to collapse our coauthorship network
 into an institutional network, in which the connections between institutional nodes
 represented coauthorship between individuals affiliated with those respective
 institutions. Unfortunately, the institutional nodes created by the partition procedure

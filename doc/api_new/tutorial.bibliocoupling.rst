@@ -1,6 +1,10 @@
 Bibliographic Coupling
 ======================
 
+.. contents::
+   :local:
+   :depth: 2
+   
 Bibliographic coupling can be a useful and computationally cheap way to explore the 
 thematic topology of a large scientific literature.
 

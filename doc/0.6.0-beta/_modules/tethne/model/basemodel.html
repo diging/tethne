@@ -77,6 +77,8 @@
           <div class="body" id="spc-section-body">
             
   <h1>Source code for tethne.model.basemodel</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">coo_matrix</span>
+
 <div class="viewcode-block" id="BaseModel"><a class="viewcode-back" href="../../../tethne.model.basemodel.html#tethne.model.basemodel.BaseModel">[docs]</a><span class="k">class</span> <span class="nc">BaseModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for models. Should not be instantiated directly.</span>
@@ -154,10 +156,9 @@
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&#39;_item_relationship() not implemented&#39;</span> <span class="o">+</span> \
                                       <span class="s">&#39; for this model class.&#39;</span><span class="p">)</span>
-
         <span class="k">return</span> <span class="n">relationship</span>
 </div>
-<div class="viewcode-block" id="BaseModel.dimension"><a class="viewcode-back" href="../../../tethne.model.basemodel.html#tethne.model.basemodel.BaseModel.dimension">[docs]</a>    <span class="k">def</span> <span class="nf">dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="BaseModel.dimension"><a class="viewcode-back" href="../../../tethne.model.basemodel.html#tethne.model.basemodel.BaseModel.dimension">[docs]</a>    <span class="k">def</span> <span class="nf">dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">asmatrix</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Describes a dimension (eg a topic).</span>
 <span class="sd">        </span>
@@ -193,6 +194,12 @@
 
             <span class="n">description</span> <span class="o">=</span> <span class="n">top_description</span>
 
+        <span class="k">if</span> <span class="n">asmatrix</span><span class="p">:</span>
+            <span class="n">J</span><span class="p">,</span><span class="n">K</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">description</span><span class="p">)</span>
+            <span class="n">I</span> <span class="o">=</span> <span class="p">[</span> <span class="n">d</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">J</span><span class="p">))</span> <span class="p">]</span>
+            <span class="n">mat</span> <span class="o">=</span> <span class="n">coo_matrix</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">K</span><span class="p">),</span> <span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="nb">list</span><span class="p">(</span><span class="n">J</span><span class="p">)))</span><span class="o">.</span><span class="n">tocsc</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">mat</span>
+        
         <span class="k">return</span> <span class="n">description</span>
         </div>
 <div class="viewcode-block" id="BaseModel.dimension_items"><a class="viewcode-back" href="../../../tethne.model.basemodel.html#tethne.model.basemodel.BaseModel.dimension_items">[docs]</a>    <span class="k">def</span> <span class="nf">dimension_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>

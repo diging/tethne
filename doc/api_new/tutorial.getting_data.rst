@@ -3,9 +3,13 @@
 Getting Bibliographic Data
 ==========================
 
-The current version of Tethne supports bibliographic data from the ISI Web of Science
-and JSTOR's Data-for-Research portal. Future releases will support data from PubMed and
-Scopus.
+The current version of Tethne supports bibliographic data from the ISI Web of Science,
+Scopus, and JSTOR's Data-for-Research portal. Future releases will support data from 
+PubMed.
+
+.. contents::
+   :local:
+   :depth: 2
 
 Web of Science
 --------------
@@ -13,6 +17,8 @@ Web of Science
 The ISI Web of Science is a proprietary database owned by Thompson Reuters. 
 If you are affiliated with an academic institution, you may have access to
 this database via an institutional license.
+
+For information about loading WoS data in Tethne, see the :mod:`.readers.wos` module.
 
 To access the Web of Science database via the Arizona State University library,
 find the Web of Science entry_ in the library's online catalog. You may be prompted 
@@ -146,6 +152,8 @@ of Science records. Increasingly, Tethne is also able to use N-gram counts to ad
 information to networks, and can generate corpora for common topic modeling tools (coming 
 soon!).
 
+For information about loading DfR data in Tethne, see the :mod:`.readers.dfr` module.
+
 Access the DfR portal at 
 `http://dfr.jstor.org/ <http://dfr.jstor.org/>`_ If you don't already have an account, 
 you will need to `create a new account <http://dfr.jstor.org/accounts/register/>`_. 
@@ -190,3 +198,40 @@ those shown below.
 In the example above, the path this dataset is 
 `/Users/erickpeirson/Downloads/DfR/ecology_1960-64`. This is the path used in
 :func:`tethne.readers.dfr.read` .
+
+Scopus
+------
+
+As of v0.6.0-beta, Tethne supports data from the `Scopus 
+<http://www.elsevier.com/online-tools/scopus>`_ bibliographic database.
+
+For information about loading Scopus data in Tethne, see the :mod:`.readers.scopus`
+module.
+
+Perform your search without whatever parameters you prefer. In this example, we are
+searching for documents with ``phenotypic`` or ``plasticity`` in their titles, abstracts,
+or keywords, and we're searching all available data in Scopus.
+
+.. image:: _static/images/tutorial/getting.9.png
+   :width: 60%
+   
+From the search results page, select the records that you wish to export using the
+checkboxes at left. Then click on "Export", just above the search results. This should
+open a menu that looks similar to the one shown below.
+
+Be sure to select the following:
+
+**File type**: CSV
+**Information to export**: All available information
+
+Then click the "Export" button in the bottom right.
+
+.. image:: _static/images/tutorial/getting.10.png
+   :width: 60%
+   
+After a few moments, your browser should begin downloading a file called ``scopus.csv``.
+If you were to open that file in your favorite spreadsheet application, the contents 
+should look something like what is shown below.
+
+.. image:: _static/images/tutorial/getting.11.png
+   :width: 60%
