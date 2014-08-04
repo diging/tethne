@@ -3,9 +3,13 @@ Methods for building networks from terms in bibliographic records. This
 includes keywords, abstract terms, etc.
 
 .. autosummary::
+   :nosignatures:
 
+   cooccurrence
+   mutual_information
    keyword_cooccurrence
    topic_coupling
+   
 """
 
 import logging

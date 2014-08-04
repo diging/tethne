@@ -2,6 +2,7 @@
 Helper functions for generating networks.
 
 .. autosummary::
+   :nosignatures:
 
    citation_count
    simplify_multigraph

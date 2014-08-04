@@ -1,10 +1,8 @@
 """
 Methods for generating networks in which papers are vertices.
 
-Methods
-```````
-
 .. autosummary::
+   :nosignatures:
 
    author_coupling
    bibliographic_coupling

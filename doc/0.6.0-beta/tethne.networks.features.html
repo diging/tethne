@@ -97,17 +97,23 @@ includes keywords, abstract terms, etc.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.features.keyword_cooccurrence" title="tethne.networks.features.keyword_cooccurrence"><tt class="xref py py-obj docutils literal"><span class="pre">keyword_cooccurrence</span></tt></a>(papers,&nbsp;threshold[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.features.cooccurrence" title="tethne.networks.features.cooccurrence"><tt class="xref py py-obj docutils literal"><span class="pre">cooccurrence</span></tt></a></td>
+<td>Generates a cooccurrence graph for features in <tt class="docutils literal"><span class="pre">featureset</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.networks.features.mutual_information" title="tethne.networks.features.mutual_information"><tt class="xref py py-obj docutils literal"><span class="pre">mutual_information</span></tt></a></td>
+<td>Generates a graph of features in <tt class="docutils literal"><span class="pre">featureset</span></tt> based on normalized  <a class="reference external" href="http://en.wikipedia.org/wiki/Pointwise_mutual_information">pointwise mutual information (nPMI)</a>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.features.keyword_cooccurrence" title="tethne.networks.features.keyword_cooccurrence"><tt class="xref py py-obj docutils literal"><span class="pre">keyword_cooccurrence</span></tt></a></td>
 <td>Generates a keyword cooccurrence network.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.networks.features.topic_coupling" title="tethne.networks.features.topic_coupling"><tt class="xref py py-obj docutils literal"><span class="pre">topic_coupling</span></tt></a>(model[,&nbsp;threshold])</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.networks.features.topic_coupling" title="tethne.networks.features.topic_coupling"><tt class="xref py py-obj docutils literal"><span class="pre">topic_coupling</span></tt></a></td>
 <td>Creates a network of words connected by implication in a common topic(s).</td>
 </tr>
 </tbody>
 </table>
 <dl class="function">
 <dt id="tethne.networks.features.cooccurrence">
-<tt class="descclassname">tethne.networks.features.</tt><tt class="descname">cooccurrence</tt><big>(</big><em>papers</em>, <em>featureset</em>, <em>filter=&lt;function _filter at 0x1085e88c0&gt;</em>, <em>graph=True</em>, <em>threshold=20</em>, <em>indexed_by='doi'</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/features.html#cooccurrence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.features.cooccurrence" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">tethne.networks.features.</tt><tt class="descname">cooccurrence</tt><big>(</big><em>papers</em>, <em>featureset</em>, <em>filter=&lt;function _filter at 0x107e10c08&gt;</em>, <em>graph=True</em>, <em>threshold=20</em>, <em>indexed_by='doi'</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/networks/features.html#cooccurrence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.features.cooccurrence" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a cooccurrence graph for features in <tt class="docutils literal"><span class="pre">featureset</span></tt>.</p>
 <p><tt class="docutils literal"><span class="pre">filter</span></tt> is a method applied to each feature, used to determine whether
 a feature should be included in the graph <strong>before</strong> co-occurrence values

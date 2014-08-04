@@ -98,7 +98,21 @@
 <p>Generates a <a class="reference internal" href="tethne.model.corpus.dtmmodel.html#tethne.model.corpus.dtmmodel.DTMModel" title="tethne.model.corpus.dtmmodel.DTMModel"><tt class="xref py py-class docutils literal"><span class="pre">DTMModel</span></tt></a> from a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> using 
 <a class="reference external" href="http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz">Gerrish&#8217;s C++ implementation</a>.</p>
 <p>You should be sure to slice your <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> by &#8216;date&#8217; using the 
-&#8216;time_period&#8217; method (for details, see <tt class="xref py py-func docutils literal"><span class="pre">Corpus.slice()</span></tt>).</p>
+&#8216;time_period&#8217; method (for details, see <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.slice" title="tethne.classes.corpus.Corpus.slice"><tt class="xref py py-meth docutils literal"><span class="pre">Corpus.slice()</span></tt></a>).</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.model.managers.dtm.DTMModelManager.plot_topic_evolution" title="tethne.model.managers.dtm.DTMModelManager.plot_topic_evolution"><tt class="xref py py-obj docutils literal"><span class="pre">plot_topic_evolution</span></tt></a></td>
+<td>Plot the probability of the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> words in topic <tt class="docutils literal"><span class="pre">k</span></tt> over time.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.model.managers.dtm.DTMModelManager.topic_over_time" title="tethne.model.managers.dtm.DTMModelManager.topic_over_time"><tt class="xref py py-obj docutils literal"><span class="pre">topic_over_time</span></tt></a></td>
+<td>Representation of topic <tt class="docutils literal"><span class="pre">k</span></tt> over &#8216;date&#8217; slice axis.</td>
+</tr>
+</tbody>
+</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -187,6 +201,23 @@ restrictive filter to the featureset, using
 <p>Once the <a class="reference internal" href="tethne.model.corpus.dtmmodel.html#tethne.model.corpus.dtmmodel.DTMModel" title="tethne.model.corpus.dtmmodel.DTMModel"><tt class="xref py py-class docutils literal"><span class="pre">DTMModel</span></tt></a> is built, you can access its methods directly.
 See full method descriptions in <a class="reference internal" href="tethne.model.corpus.dtmmodel.html#tethne.model.corpus.dtmmodel.DTMModel" title="tethne.model.corpus.dtmmodel.DTMModel"><tt class="xref py py-class docutils literal"><span class="pre">DTMModel</span></tt></a>. Of special interest 
 are:</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="tethne.model.corpus.dtmmodel.html#tethne.model.corpus.dtmmodel.DTMModel.list_topic_diachronic" title="tethne.model.corpus.dtmmodel.DTMModel.list_topic_diachronic"><tt class="xref py py-obj docutils literal"><span class="pre">DTMModel.list_topic_diachronic</span></tt></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="tethne.model.corpus.dtmmodel.html#tethne.model.corpus.dtmmodel.DTMModel.print_topic_diachronic" title="tethne.model.corpus.dtmmodel.DTMModel.print_topic_diachronic"><tt class="xref py py-obj docutils literal"><span class="pre">DTMModel.print_topic_diachronic</span></tt></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="tethne.model.corpus.dtmmodel.html#tethne.model.corpus.dtmmodel.DTMModel.topic_evolution" title="tethne.model.corpus.dtmmodel.DTMModel.topic_evolution"><tt class="xref py py-obj docutils literal"><span class="pre">DTMModel.topic_evolution</span></tt></a></td>
+<td>Generate a plot that shows p(w|z) over time for the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> terms.</td>
+</tr>
+</tbody>
+</table>
 <p>To plot the evolution of a topic over time, use 
 <tt class="xref py py-func docutils literal"><span class="pre">plot_topic_evolution()</span></tt>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">plot_topic_evolution</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>

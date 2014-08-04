@@ -89,6 +89,97 @@
             
   <div class="section" id="tethne-persistence-hdf5-package">
 <h1>tethne.persistence.hdf5 package<a class="headerlink" href="#tethne-persistence-hdf5-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-tethne.persistence.hdf5">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tethne.persistence.hdf5" title="Permalink to this headline">¶</a></h2>
+<p>Classes and methods for persisting Tethne data objects in HDF5.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.persistence.hdf5.to_hdf5" title="tethne.persistence.hdf5.to_hdf5"><tt class="xref py py-obj docutils literal"><span class="pre">to_hdf5</span></tt></a></td>
+<td>Convert a Tethne data object to its HDF5 representation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.persistence.hdf5.from_hdf5" title="tethne.persistence.hdf5.from_hdf5"><tt class="xref py py-obj docutils literal"><span class="pre">from_hdf5</span></tt></a></td>
+<td>Load a data object from a HDF5 object, or a path to an HDF5 repository.</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="tethne.persistence.hdf5.from_hdf5">
+<tt class="descclassname">tethne.persistence.hdf5.</tt><tt class="descname">from_hdf5</tt><big>(</big><em>HD_or_path</em><big>)</big><a class="reference internal" href="_modules/tethne/persistence/hdf5.html#from_hdf5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.persistence.hdf5.from_hdf5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a data object from a HDF5 object, or a path to an HDF5 repository.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>HD_or_path</strong> : str or object</p>
+<blockquote>
+<div><p>If an object, expects an object from <a class="reference internal" href="#module-tethne.persistence.hdf5" title="tethne.persistence.hdf5"><tt class="xref py py-mod docutils literal"><span class="pre">persistence.hdf5</span></tt></a>. If str,
+expects a path to an H5 repo, and will determine object type from the
+contents of that file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">object</p>
+<blockquote class="last">
+<div><p>Corresponding Tethne data object (e.g. <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>From an HDF5 object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.persistence</span> <span class="kn">import</span> <span class="n">hdf5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span> <span class="o">=</span> <span class="n">hdf5</span><span class="o">.</span><span class="n">from_hdf5</span><span class="p">(</span><span class="n">MyHDF5Corpus</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span>
+<span class="go">&lt;tethne.classes.corpus.Corpus object at 0x1007d5fd0&gt;</span>
+</pre></div>
+</div>
+<p>From an HDF5 repo containing a <a class="reference internal" href="tethne.persistence.hdf5.corpus.html#tethne.persistence.hdf5.corpus.HDF5Corpus" title="tethne.persistence.hdf5.corpus.HDF5Corpus"><tt class="xref py py-class docutils literal"><span class="pre">HDF5Corpus</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span> <span class="o">=</span> <span class="n">hdf5</span><span class="o">.</span><span class="n">from_hdf5</span><span class="p">(</span><span class="s">&#39;/path/to/my/corpus.h5&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span>
+<span class="go">&lt;tethne.classes.corpus.Corpus object at 0x1007d5fd0&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.persistence.hdf5.to_hdf5">
+<tt class="descclassname">tethne.persistence.hdf5.</tt><tt class="descname">to_hdf5</tt><big>(</big><em>obj</em>, <em>datapath=None</em><big>)</big><a class="reference internal" href="_modules/tethne/persistence/hdf5.html#to_hdf5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.persistence.hdf5.to_hdf5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a Tethne data object to its HDF5 representation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>obj</strong> : object</p>
+<blockquote>
+<div><p>Can be a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>, <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>, or an object
+from <a class="reference internal" href="tethne.model.html#module-tethne.model" title="tethne.model"><tt class="xref py py-mod docutils literal"><span class="pre">model</span></tt></a>.</p>
+</div></blockquote>
+<p><strong>datapath</strong> : str</p>
+<blockquote>
+<div><p>Path to HDF5 file (will be created).</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">HDF5 object</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.persistence</span> <span class="kn">import</span> <span class="n">hdf5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MyHDF5Corpus</span> <span class="o">=</span> <span class="n">hdf5</span><span class="o">.</span><span class="n">to_hdf5</span><span class="p">(</span><span class="n">MyCorpus</span><span class="p">,</span> <span class="n">datapath</span><span class="o">=</span><span class="s">&#39;/path/to/my/data.h5&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MyHDF5Corpus</span>
+<span class="go">&lt;tethne.persistence.hdf5.corpus.HDF5Corpus object at 0x10770fd10&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -101,19 +192,6 @@
 <li class="toctree-l1"><a class="reference internal" href="tethne.persistence.hdf5.util.html">tethne.persistence.hdf5.util module</a></li>
 </ul>
 </div>
-</div>
-<div class="section" id="module-tethne.persistence.hdf5">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tethne.persistence.hdf5" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="tethne.persistence.hdf5.from_hdf5">
-<tt class="descclassname">tethne.persistence.hdf5.</tt><tt class="descname">from_hdf5</tt><big>(</big><em>HD_or_path</em><big>)</big><a class="reference internal" href="_modules/tethne/persistence/hdf5.html#from_hdf5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.persistence.hdf5.from_hdf5" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="tethne.persistence.hdf5.to_hdf5">
-<tt class="descclassname">tethne.persistence.hdf5.</tt><tt class="descname">to_hdf5</tt><big>(</big><em>obj</em>, <em>datapath=None</em><big>)</big><a class="reference internal" href="_modules/tethne/persistence/hdf5.html#to_hdf5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.persistence.hdf5.to_hdf5" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </div>
 </div>
 
@@ -129,8 +207,8 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">tethne.persistence.hdf5 package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-tethne.persistence.hdf5">Module contents</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
 </ul>
 </li>
 </ul>

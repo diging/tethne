@@ -1,6 +1,14 @@
 tethne.writers package
 ======================
 
+Module contents
+---------------
+
+.. automodule:: tethne.writers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -11,10 +19,3 @@ Submodules
    tethne.writers.graph
    tethne.writers.matrix
 
-Module contents
----------------
-
-.. automodule:: tethne.writers
-    :members:
-    :undoc-members:
-    :show-inheritance:

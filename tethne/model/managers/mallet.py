@@ -40,6 +40,11 @@ class MALLETModelManager(ModelManager):
     `mallet_path` parameter. This should point to the directory containing
     ``/bin/mallet``.
     
+    .. autosummary::
+       :nosignatures:
+       
+       topic_over_time
+    
     Parameters
     ----------
     D : :class:`.Corpus`

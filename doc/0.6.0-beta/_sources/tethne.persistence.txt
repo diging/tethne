@@ -1,13 +1,6 @@
 tethne.persistence package
 ==========================
 
-Subpackages
------------
-
-.. toctree::
-
-    tethne.persistence.hdf5
-
 Module contents
 ---------------
 
@@ -15,3 +8,11 @@ Module contents
     :members:
     :undoc-members:
     :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+    tethne.persistence.hdf5
+

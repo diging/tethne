@@ -25,9 +25,8 @@ Modules
 .. autosummary::
 
    authors
-   helpers
+   features
    papers
-   terms
    topics
 
 """

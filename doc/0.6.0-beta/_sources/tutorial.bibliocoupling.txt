@@ -299,6 +299,8 @@ view the evolution of your bibliographic coupling network over time. We can do t
 by "slicing" our :class:`.Corpus`\, and generating a :class:`.GraphCollection` that holds
 a set of sequential graphs.
 
+.. _slicing-a-corpus:
+
 Slicing a Corpus
 ````````````````
 

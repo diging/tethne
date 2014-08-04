@@ -1,13 +1,6 @@
 tethne.services package
 =======================
 
-Submodules
-----------
-
-.. toctree::
-
-   tethne.services.geocode
-
 Module contents
 ---------------
 
@@ -15,3 +8,11 @@ Module contents
     :members:
     :undoc-members:
     :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   tethne.services.geocode
+

@@ -1,6 +1,14 @@
 tethne.networks package
 =======================
 
+Module contents
+---------------
+
+.. automodule:: tethne.networks
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -11,11 +19,3 @@ Submodules
    tethne.networks.helpers
    tethne.networks.papers
    tethne.networks.topics
-
-Module contents
----------------
-
-.. automodule:: tethne.networks
-    :members:
-    :undoc-members:
-    :show-inheritance:

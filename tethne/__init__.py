@@ -12,19 +12,16 @@ Cyotoscape and Gephi) and the MatPlotLib Python library.
 
    analyze
    classes
-   managers
    model
    networks
    persistence
    readers
-   services
    writers
    
 """
 
 from analyze import *
 from classes import *
-from managers import *
 from model import *
 from networks import *
 from persistence import *

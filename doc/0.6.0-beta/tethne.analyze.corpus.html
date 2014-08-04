@@ -89,6 +89,30 @@
             
   <div class="section" id="module-tethne.analyze.corpus">
 <span id="tethne-analyze-corpus-module"></span><h1>tethne.analyze.corpus module<a class="headerlink" href="#module-tethne.analyze.corpus" title="Permalink to this headline">¶</a></h1>
+<p>Methods for analyzing <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> objects.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.analyze.corpus.burstness" title="tethne.analyze.corpus.burstness"><tt class="xref py py-obj docutils literal"><span class="pre">burstness</span></tt></a></td>
+<td>Estimate burstness profile for the <tt class="docutils literal"><span class="pre">topn</span></tt> features (or <tt class="docutils literal"><span class="pre">flist</span></tt>) in  <tt class="docutils literal"><span class="pre">feature</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.analyze.corpus.feature_burstness" title="tethne.analyze.corpus.feature_burstness"><tt class="xref py py-obj docutils literal"><span class="pre">feature_burstness</span></tt></a></td>
+<td>Estimate burstness profile for a feature over the <tt class="docutils literal"><span class="pre">'date'</span></tt> axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.analyze.corpus.plot_burstness" title="tethne.analyze.corpus.plot_burstness"><tt class="xref py py-obj docutils literal"><span class="pre">plot_burstness</span></tt></a></td>
+<td>Generate a figure depicting burstness profiles for <tt class="docutils literal"><span class="pre">feature</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.analyze.corpus.plot_sigma" title="tethne.analyze.corpus.plot_sigma"><tt class="xref py py-obj docutils literal"><span class="pre">plot_sigma</span></tt></a></td>
+<td>Plot sigma values for the <tt class="docutils literal"><span class="pre">topn</span></tt> most influential nodes.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.analyze.corpus.sigma" title="tethne.analyze.corpus.sigma"><tt class="xref py py-obj docutils literal"><span class="pre">sigma</span></tt></a></td>
+<td>Calculate sigma (from <a class="reference external" href="http://arxiv.org/pdf/0904.1439.pdf">Chen 2009</a>) for all of the nodes in a <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</td>
+</tr>
+</tbody>
+</table>
 <dl class="function">
 <dt id="tethne.analyze.corpus.burstness">
 <tt class="descclassname">tethne.analyze.corpus.</tt><tt class="descname">burstness</tt><big>(</big><em>corpus</em>, <em>feature</em>, <em>k=5</em>, <em>topn=20</em>, <em>perslice=False</em>, <em>flist=None</em>, <em>normalize=True</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/corpus.html#burstness"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.corpus.burstness" title="Permalink to this definition">¶</a></dt>

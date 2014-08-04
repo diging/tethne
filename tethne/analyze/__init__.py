@@ -1,8 +1,6 @@
 """
-This module provides methods for analyzing :class:`.Corpus`\,
-:class:`.GraphCollection`\, and ``networkx.Graph`` objects.
-
-See the constituent submodules, below, for details.
+Methods for analyzing :class:`.Corpus`\, :class:`.GraphCollection`\, and 
+``networkx.Graph`` objects.
 
 .. autosummary::
 

@@ -89,16 +89,6 @@
             
   <div class="section" id="tethne-model-managers-package">
 <h1>tethne.model.managers package<a class="headerlink" href="#tethne-model-managers-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="tethne.model.managers.dtm.html">tethne.model.managers.dtm module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tethne.model.managers.mallet.html">tethne.model.managers.mallet module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tethne.model.managers.tap.html">tethne.model.managers.tap module</a></li>
-</ul>
-</div>
-</div>
 <div class="section" id="module-tethne.model.managers">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tethne.model.managers" title="Permalink to this headline">¶</a></h2>
 <p>This module provides manager classes for generating, visualizing, and
@@ -110,13 +100,13 @@ analyzing <a class="reference internal" href="tethne.model.html#module-tethne.mo
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="tethne.model.managers.dtm.html#tethne.model.managers.dtm.DTMModelManager" title="tethne.model.managers.dtm.DTMModelManager"><tt class="xref py py-obj docutils literal"><span class="pre">dtm.DTMModelManager</span></tt></a>(D[,&nbsp;feature,&nbsp;outpath,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="tethne.model.managers.dtm.html#tethne.model.managers.dtm.DTMModelManager" title="tethne.model.managers.dtm.DTMModelManager"><tt class="xref py py-obj docutils literal"><span class="pre">dtm.DTMModelManager</span></tt></a></td>
 <td>Generates a <a class="reference internal" href="tethne.model.corpus.dtmmodel.html#tethne.model.corpus.dtmmodel.DTMModel" title="tethne.model.corpus.dtmmodel.DTMModel"><tt class="xref py py-class docutils literal"><span class="pre">DTMModel</span></tt></a> from a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> using  <a class="reference external" href="http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz">Gerrish&#8217;s C++ implementation</a>.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.model.managers.mallet.html#tethne.model.managers.mallet.MALLETModelManager" title="tethne.model.managers.mallet.MALLETModelManager"><tt class="xref py py-obj docutils literal"><span class="pre">mallet.MALLETModelManager</span></tt></a>(D[,&nbsp;feature,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="tethne.model.managers.mallet.html#tethne.model.managers.mallet.MALLETModelManager" title="tethne.model.managers.mallet.MALLETModelManager"><tt class="xref py py-obj docutils literal"><span class="pre">mallet.MALLETModelManager</span></tt></a></td>
 <td>Generates a <a class="reference internal" href="tethne.model.corpus.ldamodel.html#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a> from a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> using <a class="reference external" href="http://mallet.cs.umass.edu/">MALLET</a>.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="tethne.model.managers.tap.html#tethne.model.managers.tap.TAPModelManager" title="tethne.model.managers.tap.TAPModelManager"><tt class="xref py py-obj docutils literal"><span class="pre">tap.TAPModelManager</span></tt></a>([D,&nbsp;G,&nbsp;model])</td>
+<tr class="row-odd"><td><a class="reference internal" href="tethne.model.managers.tap.html#tethne.model.managers.tap.TAPModelManager" title="tethne.model.managers.tap.TAPModelManager"><tt class="xref py py-obj docutils literal"><span class="pre">tap.TAPModelManager</span></tt></a></td>
 <td>Generates a time-sensitive set of <a class="reference internal" href="tethne.model.social.tapmodel.html#tethne.model.social.tapmodel.TAPModel" title="tethne.model.social.tapmodel.TAPModel"><tt class="xref py py-class docutils literal"><span class="pre">TAPModel</span></tt></a>s from a  <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>, a <a class="reference internal" href="tethne.model.corpus.html#module-tethne.model.corpus" title="tethne.model.corpus"><tt class="xref py py-mod docutils literal"><span class="pre">corpus</span></tt></a> model, and a coauthorship  <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><tt class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></tt></a>.</td>
 </tr>
 </tbody>
@@ -193,6 +183,16 @@ metadata file. Default: [&#8216;date&#8217;, &#8216;jtitle&#8217;]</p>
 </dd></dl>
 
 </div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tethne.model.managers.dtm.html">tethne.model.managers.dtm module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tethne.model.managers.mallet.html">tethne.model.managers.mallet module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tethne.model.managers.tap.html">tethne.model.managers.tap module</a></li>
+</ul>
+</div>
+</div>
 </div>
 
 
@@ -207,8 +207,8 @@ metadata file. Default: [&#8216;date&#8217;, &#8216;jtitle&#8217;]</p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">tethne.model.managers package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-tethne.model.managers">Module contents</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
 </ul>
 </li>
 </ul>

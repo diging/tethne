@@ -102,13 +102,16 @@
 <li><a class="reference internal" href="#running-the-model" id="id10">Running the Model</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#inspecting-the-model" id="id11">Inspecting the Model</a></li>
-<li><a class="reference internal" href="#semantic-network" id="id12">Semantic Network</a><ul>
-<li><a class="reference internal" href="#build-the-network" id="id13">Build the Network</a></li>
-<li><a class="reference internal" href="#visualization" id="id14">Visualization</a></li>
+<li><a class="reference internal" href="#inspecting-the-model" id="id11">Inspecting the Model</a><ul>
+<li><a class="reference internal" href="#topics-over-time" id="id12">Topics over Time</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wrapping-up-looking-forward" id="id15">Wrapping up, Looking forward</a></li>
+<li><a class="reference internal" href="#semantic-network" id="id13">Semantic Network</a><ul>
+<li><a class="reference internal" href="#build-the-network" id="id14">Build the Network</a></li>
+<li><a class="reference internal" href="#visualization" id="id15">Visualization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wrapping-up-looking-forward" id="id16">Wrapping up, Looking forward</a></li>
 </ul>
 </div>
 <div class="admonition note">
@@ -159,13 +162,13 @@ a few moments. The reader will attempt to discard junk data (e.g. unigrams with 
 <h3><a class="toc-backref" href="#id5">Using a Stoplist</a><a class="headerlink" href="#using-a-stoplist" title="Permalink to this headline">¶</a></h3>
 <p>You may want to pare down our dataset further still, by applying a list of <a class="reference external" href="http://en.wikipedia.org/wiki/Stop_words">stop
 words</a>. There are a few ways to do this in
-Tethne. One way is to use to the <strong>apply_stoplist</strong> method.</p>
+Tethne. One way is to use to the <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.apply_stoplist" title="tethne.classes.corpus.Corpus.apply_stoplist"><tt class="xref py py-meth docutils literal"><span class="pre">Corpus.apply_stoplist()</span></tt></a> method.</p>
 <p>First, load the <a class="reference external" href="http://www.nltk.org/">NLTK</a> stoplist (or use your own):</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stoplist</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Then call <strong>apply_stoplist</strong>:</p>
+<p>Then call <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.apply_stoplist" title="tethne.classes.corpus.Corpus.apply_stoplist"><tt class="xref py py-meth docutils literal"><span class="pre">Corpus.apply_stoplist()</span></tt></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">apply_stoplist</span><span class="p">(</span><span class="s">&#39;unigrams&#39;</span><span class="p">,</span> <span class="s">&#39;unigrams_stop&#39;</span><span class="p">,</span> <span class="n">stoplist</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -204,7 +207,7 @@ resulted in a <a class="reference internal" href="tethne.classes.corpus.html#tet
 51,639 unique words. That&#8217;s a lot of words. Using a large vocabular increases the
 computational cost of building and visualizing your model. There may also be quite a few
 &#8220;junk&#8221; words left in your vocabulary. To pare down your vocabulary, use the
-<strong>filter_features</strong> method.</p>
+<a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.filter_features" title="tethne.classes.corpus.Corpus.filter_features"><tt class="xref py py-meth docutils literal"><span class="pre">Corpus.filter_features()</span></tt></a> method.</p>
 <p>First, you&#8217;ll need to define a filter. A filter is a Python method that will be applied
 to each feature (word) in the featureset. It should accept three parameters:</p>
 <table border="1" class="docutils">
@@ -234,7 +237,7 @@ length, occur less than four times overall, and are found in less than two docum
 <span class="gp">... </span>    <span class="k">return</span> <span class="bp">False</span>
 </pre></div>
 </div>
-<p>Once your filter method is defined, call <strong>filter_features</strong>. The first
+<p>Once your filter method is defined, call <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.filter_features" title="tethne.classes.corpus.Corpus.filter_features"><tt class="xref py py-meth docutils literal"><span class="pre">Corpus.filter_features()</span></tt></a>. The first
 parameter should be the name of the featureset to which the filter will be applied, e.g.
 <tt class="docutils literal"><span class="pre">unigrams_stop</span></tt>. The second parameter should be the name of the new featureset, which
 will be created from the features retained from the old featuret. The third parameter
@@ -330,14 +333,32 @@ using the <tt class="docutils literal"><span class="pre">Nwords</span></tt> para
 <span class="go">&#39;selection, gene, isolation, disruptive, flow, populations, mating&#39;</span>
 </pre></div>
 </div>
+<div class="section" id="topics-over-time">
+<h3><a class="toc-backref" href="#id12">Topics over Time</a><a class="headerlink" href="#topics-over-time" title="Permalink to this headline">¶</a></h3>
+<p>If your dataset contains data from a broad range of time, you may wish to
+visualize the representation of particular topics over time. First, slice your
+<a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>. The code below will slice your <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> using a 4-year sliding
+time-window. For more information about slicing, see <a class="reference internal" href="tutorial.bibliocoupling.html#slicing-a-corpus"><em>Slicing a Corpus</em></a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;time_window&#39;</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Use the <a class="reference internal" href="tethne.model.managers.mallet.html#tethne.model.managers.mallet.MALLETModelManager.topic_over_time" title="tethne.model.managers.mallet.MALLETModelManager.topic_over_time"><tt class="xref py py-meth docutils literal"><span class="pre">MALLETModelManager.topic_over_time()</span></tt></a> method to generate the visualization.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MyManager</span><span class="o">.</span><span class="n">topic_over_time</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This should generate a PNG image, <tt class="docutils literal"><span class="pre">topic_[#]_over_time.png</span></tt>, in your outpath.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/topic_1_over_time.png"><img alt="_images/topic_1_over_time.png" src="_images/topic_1_over_time.png" style="width: 400px;" /></a>
+</div>
+</div>
 </div>
 <div class="section" id="semantic-network">
-<h2><a class="toc-backref" href="#id12">Semantic Network</a><a class="headerlink" href="#semantic-network" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id13">Semantic Network</a><a class="headerlink" href="#semantic-network" title="Permalink to this headline">¶</a></h2>
 <p>In LDA, topics are clusters of terms that co-occur in documents. We can interpret an LDA
 topic model as a network of terms linked by their participation in particular topics. In
 Tethne, we call this a <em>topic-coupling</em> network.</p>
 <div class="section" id="build-the-network">
-<h3><a class="toc-backref" href="#id13">Build the Network</a><a class="headerlink" href="#build-the-network" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id14">Build the Network</a><a class="headerlink" href="#build-the-network" title="Permalink to this headline">¶</a></h3>
 <p>We can generate the topic-coupling network the <a class="reference internal" href="tethne.networks.features.html#tethne.networks.features.topic_coupling" title="tethne.networks.features.topic_coupling"><tt class="xref py py-func docutils literal"><span class="pre">topic_coupling()</span></tt></a> method
 from the <tt class="xref py py-func docutils literal"><span class="pre">networks.features()</span></tt> module.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.networks</span> <span class="kn">import</span> <span class="n">features</span>
@@ -354,7 +375,7 @@ adjusting its value and eye-balling the resultant network for coherence.</p>
 </div>
 </div>
 <div class="section" id="visualization">
-<h3><a class="toc-backref" href="#id14">Visualization</a><a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id15">Visualization</a><a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h3>
 <p>In <a class="reference external" href="http://www.cytoscape.org">Cytoscape</a>, import your GraphML network by selecting
 <tt class="docutils literal"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Import</span> <span class="pre">&gt;</span> <span class="pre">Network</span> <span class="pre">&gt;</span> <span class="pre">From</span> <span class="pre">file...</span></tt> and choosing the file <tt class="docutils literal"><span class="pre">mymodel_tc.graphml</span></tt>
 from the previous step.</p>
@@ -403,7 +424,7 @@ around 40 to just over 300 pt.</p>
 </div>
 </div>
 <div class="section" id="wrapping-up-looking-forward">
-<h2><a class="toc-backref" href="#id15">Wrapping up, Looking forward</a><a class="headerlink" href="#wrapping-up-looking-forward" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id16">Wrapping up, Looking forward</a><a class="headerlink" href="#wrapping-up-looking-forward" title="Permalink to this headline">¶</a></h2>
 <p>To generate a network of papers connected by topics-in-common, try the
 <a class="reference internal" href="tethne.networks.papers.html#tethne.networks.papers.topic_coupling" title="tethne.networks.papers.topic_coupling"><tt class="xref py py-func docutils literal"><span class="pre">networks.papers.topic_coupling()</span></tt></a> method.</p>
 <p>Since Tethne is still under active development, methods for working with topic modeling
@@ -437,7 +458,10 @@ and extended as development proceeds.</p>
 <li><a class="reference internal" href="#running-the-model">Running the Model</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#inspecting-the-model">Inspecting the Model</a></li>
+<li><a class="reference internal" href="#inspecting-the-model">Inspecting the Model</a><ul>
+<li><a class="reference internal" href="#topics-over-time">Topics over Time</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#semantic-network">Semantic Network</a><ul>
 <li><a class="reference internal" href="#build-the-network">Build the Network</a></li>
 <li><a class="reference internal" href="#visualization">Visualization</a><ul>

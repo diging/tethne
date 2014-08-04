@@ -1,6 +1,14 @@
 tethne.model.corpus package
 ===========================
 
+Module contents
+---------------
+
+.. automodule:: tethne.model.corpus
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    
 Submodules
 ----------
 
@@ -9,10 +17,3 @@ Submodules
    tethne.model.corpus.dtmmodel
    tethne.model.corpus.ldamodel
 
-Module contents
----------------
-
-.. automodule:: tethne.model.corpus
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -36,6 +36,14 @@ class LDAModel(BaseModel):
     Finally, you can use :func:`.from_mallet` to generate a :class:`.LDAModel`
     from MALLET output.
     
+    .. autosummary::
+       :nosignatures:
+       
+       list_topic
+       list_topics
+       print_topic
+       print_topics
+    
     Parameters
     ----------
     theta : matrix-like

@@ -116,6 +116,29 @@ then load the results with <a class="reference internal" href="#tethne.model.cor
 IDs (or whatever you use to identify documents).</li>
 <li><tt class="docutils literal"><span class="pre">vocabulary</span></tt> should map matrix indices for words onto word-strings.</li>
 </ul>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.model.corpus.dtmmodel.DTMModel.list_topic" title="tethne.model.corpus.dtmmodel.DTMModel.list_topic"><tt class="xref py py-obj docutils literal"><span class="pre">list_topic</span></tt></a></td>
+<td>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for topic <tt class="docutils literal"><span class="pre">k</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.model.corpus.dtmmodel.DTMModel.list_topics" title="tethne.model.corpus.dtmmodel.DTMModel.list_topics"><tt class="xref py py-obj docutils literal"><span class="pre">list_topics</span></tt></a></td>
+<td>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for each topic.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.model.corpus.dtmmodel.DTMModel.topic_evolution" title="tethne.model.corpus.dtmmodel.DTMModel.topic_evolution"><tt class="xref py py-obj docutils literal"><span class="pre">topic_evolution</span></tt></a></td>
+<td>Generate a plot that shows p(w|z) over time for the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> terms.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.model.corpus.dtmmodel.DTMModel.print_topic" title="tethne.model.corpus.dtmmodel.DTMModel.print_topic"><tt class="xref py py-obj docutils literal"><span class="pre">print_topic</span></tt></a></td>
+<td>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for topic <tt class="docutils literal"><span class="pre">k</span></tt>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.model.corpus.dtmmodel.DTMModel.print_topics" title="tethne.model.corpus.dtmmodel.DTMModel.print_topics"><tt class="xref py py-obj docutils literal"><span class="pre">print_topics</span></tt></a></td>
+<td>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for each topic.</td>
+</tr>
+</tbody>
+</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -143,7 +166,7 @@ IDs (or whatever you use to identify documents).</li>
 </table>
 <dl class="method">
 <dt id="tethne.model.corpus.dtmmodel.DTMModel.dimension">
-<tt class="descname">dimension</tt><big>(</big><em>d</em>, <em>top=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#tethne.model.corpus.dtmmodel.DTMModel.dimension" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dimension</tt><big>(</big><em>d</em>, <em>top=None</em>, <em>asmatrix=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#tethne.model.corpus.dtmmodel.DTMModel.dimension" title="Permalink to this definition">¶</a></dt>
 <dd><p>Describes a dimension (eg a topic).</p>
 <p>Subclass must provide <tt class="docutils literal"><span class="pre">_dimension_description(d)</span></tt> method.</p>
 <table class="docutils field-list" frame="void" rules="none">

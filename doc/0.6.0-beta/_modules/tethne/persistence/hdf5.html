@@ -77,6 +77,17 @@
           <div class="body" id="spc-section-body">
             
   <h1>Source code for tethne.persistence.hdf5</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Classes and methods for persisting Tethne data objects in HDF5.</span>
+
+<span class="sd">.. autosummary::</span>
+<span class="sd">   :nosignatures:</span>
+
+<span class="sd">   to_hdf5</span>
+<span class="sd">   from_hdf5</span>
+<span class="sd">   </span>
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">graphcollection</span><span class="o">,</span> <span class="nn">ldamodel</span><span class="o">,</span> <span class="nn">tapmodel</span><span class="o">,</span> <span class="nn">dtmmodel</span><span class="o">,</span> <span class="nn">corpus</span>
 <span class="kn">from</span> <span class="nn">util</span> <span class="kn">import</span> <span class="n">get_h5file</span>
 <span class="kn">from</span> <span class="nn">...classes</span> <span class="kn">import</span> <span class="n">GraphCollection</span><span class="p">,</span> <span class="n">Corpus</span>
@@ -91,6 +102,33 @@
 
 
 <div class="viewcode-block" id="to_hdf5"><a class="viewcode-back" href="../../../tethne.persistence.hdf5.html#tethne.persistence.hdf5.to_hdf5">[docs]</a><span class="k">def</span> <span class="nf">to_hdf5</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">datapath</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a Tethne data object to its HDF5 representation.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    obj : object</span>
+<span class="sd">        Can be a :class:`.Corpus`\, :class:`.GraphCollection`\, or an object</span>
+<span class="sd">        from :mod:`.model`\.</span>
+<span class="sd">    datapath : str</span>
+<span class="sd">        Path to HDF5 file (will be created).</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    HDF5 object</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">    </span>
+<span class="sd">       &gt;&gt;&gt; from tethne.persistence import hdf5</span>
+<span class="sd">       &gt;&gt;&gt; MyHDF5Corpus = hdf5.to_hdf5(MyCorpus, datapath=&#39;/path/to/my/data.h5&#39;)</span>
+<span class="sd">       &gt;&gt;&gt; MyHDF5Corpus</span>
+<span class="sd">       &lt;tethne.persistence.hdf5.corpus.HDF5Corpus object at 0x10770fd10&gt;</span>
+<span class="sd">       </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">is</span> <span class="n">GraphCollection</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">graphcollection</span><span class="o">.</span><span class="n">to_hdf5</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">datapath</span><span class="o">=</span><span class="n">datapath</span><span class="p">)</span>
     <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">is</span> <span class="n">LDAModel</span><span class="p">:</span>
@@ -103,6 +141,43 @@
         <span class="k">return</span> <span class="n">corpus</span><span class="o">.</span><span class="n">to_hdf5</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">datapath</span><span class="o">=</span><span class="n">datapath</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="from_hdf5"><a class="viewcode-back" href="../../../tethne.persistence.hdf5.html#tethne.persistence.hdf5.from_hdf5">[docs]</a><span class="k">def</span> <span class="nf">from_hdf5</span><span class="p">(</span><span class="n">HD_or_path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a data object from a HDF5 object, or a path to an HDF5 repository.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    HD_or_path : str or object</span>
+<span class="sd">        If an object, expects an object from :mod:`.persistence.hdf5`\. If str,</span>
+<span class="sd">        expects a path to an H5 repo, and will determine object type from the</span>
+<span class="sd">        contents of that file.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    object</span>
+<span class="sd">        Corresponding Tethne data object (e.g. :class:`.Corpus`\).</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    From an HDF5 object:</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">    </span>
+<span class="sd">       &gt;&gt;&gt; from tethne.persistence import hdf5</span>
+<span class="sd">       &gt;&gt;&gt; MyCorpus = hdf5.from_hdf5(MyHDF5Corpus)</span>
+<span class="sd">       &gt;&gt;&gt; MyCorpus</span>
+<span class="sd">       &lt;tethne.classes.corpus.Corpus object at 0x1007d5fd0&gt;</span>
+<span class="sd">    </span>
+<span class="sd">    From an HDF5 repo containing a :class:`.HDF5Corpus`\:</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">    </span>
+<span class="sd">       &gt;&gt;&gt; MyCorpus = hdf5.from_hdf5(&#39;/path/to/my/corpus.h5&#39;)</span>
+<span class="sd">       &gt;&gt;&gt; MyCorpus</span>
+<span class="sd">       &lt;tethne.classes.corpus.Corpus object at 0x1007d5fd0&gt;</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">HD_or_path</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>     <span class="c"># Determine object type from File.title.</span>
         <span class="n">h5file</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="n">get_h5file</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">HD_or_path</span><span class="p">)</span>
         <span class="n">htype</span> <span class="o">=</span> <span class="n">h5file</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>

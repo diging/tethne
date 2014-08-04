@@ -37,6 +37,12 @@ class TAPModelManager(SocialModelManager):
     evolution of that network and the sequence in which authors adopt features
     in their work.
     
+    .. autosummary::
+       :nosignatures:
+       
+       author_theta
+       graph_collection
+    
     Parameters
     ----------
     D : :class:`.Corpus`

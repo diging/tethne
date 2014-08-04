@@ -27,7 +27,14 @@ class DTMModelManager(ModelManager):
     `Gerrish's C++ implementation <http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz>`_.
 
     You should be sure to slice your :class:`.Corpus` by 'date' using the 
-    'time_period' method (for details, see :func:`.Corpus.slice`\).
+    'time_period' method (for details, see :meth:`.Corpus.slice`\).
+    
+    .. autosummary::
+       :nosignatures:
+       
+       plot_topic_evolution
+       topic_over_time
+       
     
     Parameters
     ----------
@@ -111,8 +118,11 @@ class DTMModelManager(ModelManager):
     See full method descriptions in :class:`.DTMModel`\. Of special interest 
     are:
     
+    
+    .. currentmodule:: tethne.model.corpus.dtmmodel
+    
     .. autosummary::
-       :nosignature:
+       :nosignatures:
     
        DTMModel.list_topic_diachronic
        DTMModel.print_topic_diachronic
