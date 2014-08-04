@@ -1,3 +1,0 @@
-"""
-Tethne test suite
-"""
