@@ -5,6 +5,7 @@ analyzing :mod:`.model`\s.
 The following managers are presently available:
 
 .. autosummary::
+   :nosignatures:
 
    dtm.DTMModelManager
    mallet.MALLETModelManager

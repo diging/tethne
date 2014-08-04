@@ -1,5 +1,15 @@
 """
 Methods for analyzing :class:`.GraphCollection`\s.
+
+.. autosummary::
+   :nosignatures:
+   
+   algorithm
+   attachment_probability
+   connected
+   delta
+   node_global_closeness_centrality
+   
 """
 
 import networkx

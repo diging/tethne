@@ -1,3 +1,17 @@
+"""
+Methods for analyzing :class:`.Corpus` objects.
+
+.. autosummary::
+   :nosignatures:
+   
+   burstness
+   feature_burstness
+   plot_burstness
+   plot_sigma
+   sigma
+   
+"""
+
 import networkx
 import numpy
 from ..networks.helpers import top_cited

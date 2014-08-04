@@ -1,5 +1,12 @@
 """
 Methods for network analysis.
+
+.. autosummary::
+   :nosignatures:
+   
+   global_closeness_centrality
+   node_global_closeness_centrality
+   
 """
 
 import networkx as nx

@@ -1,6 +1,14 @@
 tethne.persistence.hdf5 package
 ===============================
 
+Module contents
+---------------
+
+.. automodule:: tethne.persistence.hdf5
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -13,10 +21,3 @@ Submodules
    tethne.persistence.hdf5.tapmodel
    tethne.persistence.hdf5.util
 
-Module contents
----------------
-
-.. automodule:: tethne.persistence.hdf5
-    :members:
-    :undoc-members:
-    :show-inheritance:

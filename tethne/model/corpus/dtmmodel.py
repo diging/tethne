@@ -40,6 +40,14 @@ class DTMModel(BaseModel):
       IDs (or whatever you use to identify documents).
     * ``vocabulary`` should map matrix indices for words onto word-strings.
     
+    .. autosummary::
+       :nosignatures:
+       
+       list_topic
+       list_topics
+       topic_evolution
+       print_topic
+       print_topics
     
     Parameters
     ----------

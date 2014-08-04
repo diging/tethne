@@ -1,10 +1,8 @@
 """
 Methods for generating networks in which authors are vertices.
 
-Methods
-```````
-
 .. autosummary::
+   :nosignatures:
 
    author_cocitation
    author_coinstitution

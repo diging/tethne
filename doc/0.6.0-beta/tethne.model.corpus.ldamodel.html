@@ -117,6 +117,26 @@ IDs (or whatever you use to identify documents).</li>
 <p><tt class="docutils literal"><span class="pre">metadata</span></tt> and <tt class="docutils literal"><span class="pre">vocabulary</span></tt> mappings.</p>
 <p>Finally, you can use <a class="reference internal" href="#tethne.model.corpus.ldamodel.from_mallet" title="tethne.model.corpus.ldamodel.from_mallet"><tt class="xref py py-func docutils literal"><span class="pre">from_mallet()</span></tt></a> to generate a <a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel" title="tethne.model.corpus.ldamodel.LDAModel"><tt class="xref py py-class docutils literal"><span class="pre">LDAModel</span></tt></a>
 from MALLET output.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel.list_topic" title="tethne.model.corpus.ldamodel.LDAModel.list_topic"><tt class="xref py py-obj docutils literal"><span class="pre">list_topic</span></tt></a></td>
+<td>Yields a list of the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for topic <tt class="docutils literal"><span class="pre">k</span></tt>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel.list_topics" title="tethne.model.corpus.ldamodel.LDAModel.list_topics"><tt class="xref py py-obj docutils literal"><span class="pre">list_topics</span></tt></a></td>
+<td>Yields lists of the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for each topic.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel.print_topic" title="tethne.model.corpus.ldamodel.LDAModel.print_topic"><tt class="xref py py-obj docutils literal"><span class="pre">print_topic</span></tt></a></td>
+<td>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for topic <tt class="docutils literal"><span class="pre">k</span></tt> as a string.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.model.corpus.ldamodel.LDAModel.print_topics" title="tethne.model.corpus.ldamodel.LDAModel.print_topics"><tt class="xref py py-obj docutils literal"><span class="pre">print_topics</span></tt></a></td>
+<td>Yields the top <tt class="docutils literal"><span class="pre">Nwords</span></tt> for each topic, as a string.</td>
+</tr>
+</tbody>
+</table>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -143,7 +163,7 @@ from MALLET output.</p>
 </table>
 <dl class="method">
 <dt id="tethne.model.corpus.ldamodel.LDAModel.dimension">
-<tt class="descname">dimension</tt><big>(</big><em>d</em>, <em>top=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#tethne.model.corpus.ldamodel.LDAModel.dimension" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dimension</tt><big>(</big><em>d</em>, <em>top=None</em>, <em>asmatrix=False</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#tethne.model.corpus.ldamodel.LDAModel.dimension" title="Permalink to this definition">¶</a></dt>
 <dd><p>Describes a dimension (eg a topic).</p>
 <p>Subclass must provide <tt class="docutils literal"><span class="pre">_dimension_description(d)</span></tt> method.</p>
 <table class="docutils field-list" frame="void" rules="none">

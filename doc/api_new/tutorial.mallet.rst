@@ -70,7 +70,7 @@ Using a Stoplist
 
 You may want to pare down our dataset further still, by applying a list of `stop
 words <http://en.wikipedia.org/wiki/Stop_words>`_. There are a few ways to do this in 
-Tethne. One way is to use to the **apply_stoplist** method.
+Tethne. One way is to use to the :meth:`.Corpus.apply_stoplist` method.
 
 First, load the `NLTK <http://www.nltk.org/>`_ stoplist (or use your own):
 
@@ -79,7 +79,7 @@ First, load the `NLTK <http://www.nltk.org/>`_ stoplist (or use your own):
    >>> from nltk.corpus import stopwords
    >>> stoplist = stopwords.words()
 
-Then call **apply_stoplist**:
+Then call :meth:`.Corpus.apply_stoplist`:
 
 .. code-block:: python
 
@@ -125,7 +125,7 @@ resulted in a :class:`.Corpus` with a featurset called ``unigrams_stop``, contai
 51,639 unique words. That's a lot of words. Using a large vocabular increases the
 computational cost of building and visualizing your model. There may also be quite a few 
 "junk" words left in your vocabulary. To pare down your vocabulary, use the 
-**filter_features** method.
+:meth:`.Corpus.filter_features` method.
 
 First, you'll need to define a filter. A filter is a Python method that will be applied
 to each feature (word) in the featureset. It should accept three parameters:
@@ -149,7 +149,7 @@ length, occur less than four times overall, and are found in less than two docum
    ...         return True
    ...     return False
    
-Once your filter method is defined, call **filter_features**. The first 
+Once your filter method is defined, call :meth:`.Corpus.filter_features`\. The first 
 parameter should be the name of the featureset to which the filter will be applied, e.g.
 ``unigrams_stop``. The second parameter should be the name of the new featureset, which 
 will be created from the features retained from the old featuret. The third parameter 
@@ -267,6 +267,30 @@ To print the top ``Nwords`` for a particular topic, use :func:`.LDAModel.print_t
 
    >>> MyLDAModel.print_topic(33, Nwords=7)
    'selection, gene, isolation, disruptive, flow, populations, mating'
+   
+Topics over Time
+````````````````
+
+If your dataset contains data from a broad range of time, you may wish to
+visualize the representation of particular topics over time. First, slice your
+:class:`.Corpus`\. The code below will slice your :class:`.Corpus` using a 4-year sliding
+time-window. For more information about slicing, see :ref:`slicing-a-corpus`\.
+
+.. code-block:: python
+
+   >>> MyCorpus.slice('date', 'time_window', window_size=4)
+   
+Use the :meth:`.MALLETModelManager.topic_over_time` method to generate the visualization. 
+
+.. code-block:: python
+
+   >>> MyManager.topic_over_time(1, plot=True)
+
+This should generate a PNG image, ``topic_[#]_over_time.png``, in your outpath.
+
+.. figure:: _static/images/topic_1_over_time.png
+   :width: 400
+   :align: center
 
 Semantic Network
 ----------------
