@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>tethne.classes.corpus &mdash; tethne 0.6.0-beta documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0-beta',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <link rel="top" title="tethne 0.6.0-beta documentation" href="../../../index.html" >
+    <link rel="up" title="Module code" href="../../index.html" > 
+  </head>
+  <body>
+
+<div class="container">
+  <div class="top-scipy-org-logo-header">
+    <a href="../../../index.html">
+      <img style="border: 0; height: 60px;" alt="SciPy" src="../../../_static/img/logo_long_devo.png"></a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
+	
+        <li class="active"><a href="../../../index.html">tethne 0.6.0-beta documentation</a></li>
+	
+          <li class="active"><a href="../../index.html" accesskey="U">Module code</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <h1>Source code for tethne.classes.corpus</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A :class:`.Corpus` organizes :class:`.Paper`\s for analysis.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(asctime)-6s</span><span class="s">: </span><span class="si">%(name)s</span><span class="s"> - </span><span class="si">%(levelname)s</span><span class="s"> - </span><span class="si">%(module)s</span><span class="s"> - </span><span class="si">%(funcName)s</span><span class="s"> - </span><span class="si">%(lineno)d</span><span class="s"> - </span><span class="si">%(message)s</span><span class="s">&#39;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s">&#39;DEBUG&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">from</span> <span class="nn">paper</span> <span class="kn">import</span> <span class="n">Paper</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
+
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="kn">from</span> <span class="nn">unidecode</span> <span class="kn">import</span> <span class="n">unidecode</span>
+
+<span class="kn">from</span> <span class="nn">..utilities</span> <span class="kn">import</span> <span class="n">strip_punctuation</span>
+
+<span class="k">def</span> <span class="nf">_tfidf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">DC</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="n">tf</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">idf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">DC</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">*</span><span class="n">idf</span>
+
+<span class="k">def</span> <span class="nf">_filter</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">DC</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">C</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">DC</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="bp">False</span>
+
+<div class="viewcode-block" id="Corpus"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus">[docs]</a><span class="k">class</span> <span class="nc">Corpus</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A :class:`.Corpus` organizes :class:`.Paper`\s for analysis.</span>
+
+<span class="sd">    You can instantiate a :class:`.Corpus` directly by providing a list of</span>
+<span class="sd">    :class:`.Paper` instances, and (optionally) some features over those papers,</span>
+<span class="sd">    e.g. wordcounts. Once you have created a :class:`.Corpus` you can use it</span>
+<span class="sd">    to generate a :class:`.GraphCollection`\, or generate corpus or social</span>
+<span class="sd">    models (see the :mod:`.model` module).</span>
+
+<span class="sd">    You can create new :class:`.Corpus` objects from bibliographic datasets</span>
+<span class="sd">    using the methods in :mod:`.readers`\. For more information about what you</span>
+<span class="sd">    can do with a :class:`.Corpus`\, see :ref:`working-with-corpora`\.</span>
+<span class="sd">    </span>
+<span class="sd">    .. autosummary::</span>
+<span class="sd">       :nosignatures:</span>
+
+<span class="sd">       N_axes</span>
+<span class="sd">       abstract_to_features</span>
+<span class="sd">       add_features</span>
+<span class="sd">       all_papers</span>
+<span class="sd">       distribution</span>
+<span class="sd">       feature_counts</span>
+<span class="sd">       feature_distribution</span>
+<span class="sd">       filter_features</span>
+<span class="sd">       get_axes</span>
+<span class="sd">       get_slice</span>
+<span class="sd">       get_slices</span>
+<span class="sd">       index</span>
+<span class="sd">       indices</span>
+<span class="sd">       plot_distribution</span>
+<span class="sd">       slice</span>
+<span class="sd">       transform</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    papers : list</span>
+<span class="sd">        A list of :class:`.Paper` instances.</span>
+<span class="sd">    features : dict</span>
+<span class="sd">        Contains dictionary `{ type: { i: [ (f, w) ] } }` where `i` is an</span>
+<span class="sd">        index for papers (see kwarg `index_by`), `f` is a feature (e.g. an</span>
+<span class="sd">        N-gram), and `w` is a weight on that feature (e.g. a count).</span>
+<span class="sd">    index_by : str</span>
+<span class="sd">        A key in :class:`.Paper` for indexing. If `features` is provided,</span>
+<span class="sd">        then this must by the field from which indices `i` are drawn. For</span>
+<span class="sd">        example, if a dictionary in `features` describes DfR wordcounts for</span>
+<span class="sd">        the :class:`.Paper`\s in `data`, and is indexed by DOI, then</span>
+<span class="sd">        `index_by` should be &#39;doi&#39;.</span>
+<span class="sd">    index_citation_by : str</span>
+<span class="sd">        Just as ``index_by``, except for citations.</span>
+<span class="sd">    exclude : set</span>
+<span class="sd">        (optional) Features to ignore, e.g. stopwords.</span>
+<span class="sd">    filt : function</span>
+<span class="sd">        Takes a lambda function that returns True if a feature should be</span>
+<span class="sd">        included.</span>
+<span class="sd">    index : bool</span>
+<span class="sd">        (default: True) Set to False to supress indexing.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`.Corpus`</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    These examples deal with instantiating a :class:`.Corpus` using its</span>
+<span class="sd">    constructor. To read about loading a :class:`.Corpus` directly from data,</span>
+<span class="sd">    see :ref:`working-with-corpora`\.</span>
+
+<span class="sd">    To create a :class:`.Corpus` from a JSTOR DfR dataset containing wordcounts,</span>
+<span class="sd">    you might do:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; from tethne.readers import dfr</span>
+<span class="sd">       &gt;&gt;&gt; papers = dfr.read(&#39;/path/to/dataset&#39;)</span>
+<span class="sd">       &gt;&gt;&gt; wordcounts = dfr.ngrams(&#39;/path/to/dataset&#39;, N=&#39;uni&#39;)</span>
+
+<span class="sd">       &gt;&gt;&gt; from tethne import Corpus</span>
+<span class="sd">       &gt;&gt;&gt; MyCorpus = Corpus(papers, features={&#39;wc&#39;:wordcounts}, index_by=&#39;doi&#39;)</span>
+<span class="sd">       &gt;&gt;&gt; MyCorpus</span>
+<span class="sd">       &lt;tethne.classes.corpus.Corpus object at 0x107975ad0&gt;</span>
+
+<span class="sd">    :mod:`.readers.dfr` and :mod:`.readers.wos` provide some convenience</span>
+<span class="sd">    functions for generating a :class:`.Corpus` directly from a dataset. For</span>
+<span class="sd">    example:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; from tethne.readers import dfr</span>
+<span class="sd">       &gt;&gt;&gt; MyCorpus = dfr.read_corpus(&#39;/path/to/dataset&#39;, features=(&#39;uni&#39;,))</span>
+<span class="sd">       &gt;&gt;&gt; MyCorpus</span>
+<span class="sd">       &lt;tethne.classes.corpus.Corpus object at 0x107975ad0&gt;</span>
+
+<span class="sd">    You can organize your :class:`.Corpus` using the :meth:`.slice` method, and</span>
+<span class="sd">    generate some descriptive statistics with :meth:`.distribution` and</span>
+<span class="sd">    :meth:`.plot_distribution`\.</span>
+
+<span class="sd">    To save/load your :class:`.Corpus` (e.g. for archiving your data), you can</span>
+<span class="sd">    convert it to or from a :class:`.HDF5Corpus` using :func:`.hdf5.to_hdf5` and</span>
+<span class="sd">    :func:`.hdf5.from_hdf5`\.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">papers</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span>
+                       <span class="n">index_citation_by</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="nb">set</span><span class="p">([]),</span>
+                       <span class="n">filt</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">papers</span> <span class="o">=</span> <span class="p">{}</span>             <span class="c"># { p : paper }, where p is index_by</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">authors</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">citations</span> <span class="o">=</span> <span class="p">{}</span>          <span class="c"># { c : citation }</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">papers_citing</span> <span class="o">=</span> <span class="p">{}</span>      <span class="c"># { c : [ p ] }</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_by</span> <span class="o">=</span> <span class="n">index_by</span>    <span class="c"># Field in Paper, e.g. &#39;wosid&#39;, &#39;doi&#39;.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_citation_by</span> <span class="o">=</span> <span class="n">index_citation_by</span>
+
+        <span class="k">if</span> <span class="n">index</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">(</span> <span class="n">papers</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="n">index_by</span><span class="p">,</span>
+                        <span class="n">index_citation_by</span><span class="o">=</span><span class="n">index_citation_by</span><span class="p">,</span>
+                        <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">,</span> <span class="n">filt</span><span class="o">=</span><span class="n">filt</span>  <span class="p">)</span>
+
+<div class="viewcode-block" id="Corpus.index"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.index">[docs]</a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span>  <span class="bp">self</span><span class="p">,</span>   <span class="n">papers</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span>
+                        <span class="n">index_citation_by</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="nb">set</span><span class="p">([]),</span>
+                        <span class="n">filt</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">stem</span><span class="o">=</span><span class="bp">False</span>   <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Indexes `papers`, `features`, and `citations` (if present).</span>
+<span class="sd">        This should be called automatically from :func:`.__init__`, unless</span>
+<span class="sd">        explicitly supressed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        papers : list</span>
+<span class="sd">            A list of :class:`.Paper` instances.</span>
+<span class="sd">        features : dict</span>
+<span class="sd">            Contains dictionary `{ type: { i: [ (f, w) ] } }` where `i` is an</span>
+<span class="sd">            index for papers (see kwarg `index_by`), `f` is a feature (e.g. an</span>
+<span class="sd">            N-gram), and `w` is a weight on that feature (e.g. a count).</span>
+<span class="sd">        index_by : str</span>
+<span class="sd">            (default: &#39;ayjid&#39;)</span>
+<span class="sd">            A key in :class:`.Paper` for indexing. If `features` is provided,</span>
+<span class="sd">            then this must by the field from which indices `i` are drawn. For</span>
+<span class="sd">            example, if a dictionary in `features` describes DfR wordcounts for</span>
+<span class="sd">            the :class:`.Paper`\s in `data`, and is indexed by DOI, then</span>
+<span class="sd">            `index_by` should be &#39;doi&#39;.</span>
+<span class="sd">        index_citation_by : str</span>
+<span class="sd">            (default: &#39;ayjid&#39;) Similar to ``index_by``, but for citations.</span>
+<span class="sd">        exclude : set</span>
+<span class="sd">            (optional) Features to ignore, e.g. stopwords.</span>
+<span class="sd">        filt : function</span>
+<span class="sd">            Takes a lambda function that returns True if a feature should be</span>
+<span class="sd">            included.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># Check if index_by is a valid key.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datakeys</span> <span class="o">=</span> <span class="n">papers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">index_by</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datakeys</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">index_by</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; not a valid key in data.&quot;</span><span class="p">))</span>
+
+        <span class="c"># Tokenize and index citations (both directions).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index_citations</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+
+        <span class="c"># Index the Papers in data.</span>
+        <span class="k">for</span> <span class="n">paper</span> <span class="ow">in</span> <span class="n">papers</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">papers</span><span class="p">[</span><span class="n">paper</span><span class="p">[</span><span class="n">index_by</span><span class="p">]]</span> <span class="o">=</span> <span class="n">paper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N_p</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">papers</span><span class="p">)</span>
+
+        <span class="c"># Index the Papers by author.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index_papers_by_author</span><span class="p">()</span>
+
+        <span class="c"># Tokenize and index features.</span>
+        <span class="k">if</span> <span class="n">features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ftype</span><span class="p">,</span> <span class="n">fdict</span> <span class="ow">in</span> <span class="n">features</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>   <span class="c"># e.g. unigrams, bigrams</span>
+
+                <span class="c"># Stem only for unigrams, when requested.</span>
+                <span class="k">if</span> <span class="n">stem</span> <span class="ow">and</span> <span class="n">ftype</span> <span class="o">==</span> <span class="s">&#39;unigrams&#39;</span><span class="p">:</span>    <span class="c"># Use stemming?</span>
+                    <span class="kn">from</span> <span class="nn">nltk.stem.porter</span> <span class="kn">import</span> <span class="n">PorterStemmer</span>
+                    <span class="n">stemmer</span> <span class="o">=</span> <span class="n">PorterStemmer</span><span class="p">()</span>
+                    <span class="n">transformer</span> <span class="o">=</span> <span class="n">stemmer</span><span class="o">.</span><span class="n">stem</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">transformer</span> <span class="o">=</span> <span class="bp">None</span>
+
+                <span class="n">tokd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tokenize_features</span><span class="p">(</span> <span class="n">ftype</span><span class="p">,</span> <span class="n">fdict</span><span class="p">,</span> <span class="n">exclude</span><span class="p">,</span> <span class="n">filt</span><span class="p">,</span>
+                                                <span class="n">transformer</span><span class="o">=</span><span class="n">transformer</span> <span class="p">)</span>
+                <span class="n">ft</span><span class="p">,</span> <span class="n">fi</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">dC</span><span class="p">,</span> <span class="n">fp</span> <span class="o">=</span> <span class="n">tokd</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_define_features</span><span class="p">(</span><span class="n">ft</span><span class="p">,</span> <span class="n">fi</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">dC</span><span class="p">,</span> <span class="n">fp</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;features is None, skipping tokenization.&#39;</span><span class="p">)</span>
+            <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="Corpus.add_features"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.add_features">[docs]</a>    <span class="k">def</span> <span class="nf">add_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">[],</span> <span class="n">filt</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a new featureset to the :class:`.Corpus`\.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">        features : dict</span>
+<span class="sd">            Keys should be :class:`.Paper` identifiers</span>
+<span class="sd">            (:prop:`.Corpus.index_by`), and values should be distributions</span>
+<span class="sd">            over features in sparse-tuple formats.</span>
+<span class="sd">        exclude : set</span>
+<span class="sd">            (optional) Features to ignore, e.g. stopwords.</span>
+<span class="sd">        filt : function</span>
+<span class="sd">            Takes a lambda function that returns True if a feature should be</span>
+<span class="sd">            included.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; from tethne.readers import dfr</span>
+<span class="sd">           &gt;&gt;&gt; bigrams = dfr.ngrams(&#39;/path/to/dataset&#39;, N=&#39;bi&#39;)</span>
+<span class="sd">           &gt;&gt;&gt; MyCorpus.add_features(&#39;bigrams&#39;, bigrams)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">tokd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tokenize_features</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">exclude</span><span class="p">,</span> <span class="n">filt</span><span class="p">)</span>
+        <span class="n">ft</span><span class="p">,</span> <span class="n">fi</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">dC</span><span class="p">,</span> <span class="n">fp</span> <span class="o">=</span> <span class="n">tokd</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_define_features</span><span class="p">(</span><span class="n">ft</span><span class="p">,</span> <span class="n">fi</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">dC</span><span class="p">,</span> <span class="n">fp</span><span class="p">)</span>
+        <span class="k">return</span>
+</div>
+    <span class="k">def</span> <span class="nf">_define_features</span><span class="p">(</span>   <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span>
+                            <span class="n">counts</span><span class="p">,</span> <span class="n">documentCounts</span><span class="p">,</span> <span class="n">fpapers</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update :prop:`.features` with a tokenized featureset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;define features with name {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;index&#39;</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span>         <span class="c"># { int(f_i) : str(f) }</span>
+            <span class="s">&#39;features&#39;</span><span class="p">:</span> <span class="n">features</span><span class="p">,</span>   <span class="c"># { str(p) : [ ( f_i, c) ] }</span>
+            <span class="s">&#39;counts&#39;</span><span class="p">:</span> <span class="n">counts</span><span class="p">,</span>       <span class="c"># { int(f_i) : int(C) }</span>
+            <span class="s">&#39;documentCounts&#39;</span><span class="p">:</span> <span class="n">documentCounts</span><span class="p">,</span>   <span class="c"># { int(f_i) : int(C) }</span>
+            <span class="s">&#39;papers&#39;</span><span class="p">:</span> <span class="n">fpapers</span>       <span class="c"># { int(f_i) : [ (str(p), c ] }</span>
+            <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_index_papers_by_author</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates dict `{ author : [ p ] }` where `p` is an index of a</span>
+<span class="sd">        :class:`.Paper` .</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;indexing authors in {0} papers&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N_p</span><span class="p">))</span>
+
+        <span class="n">author_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">authors</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">author_dict</span><span class="p">:</span>
+                    <span class="n">author_dict</span><span class="p">[</span><span class="n">author</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">author_dict</span><span class="p">[</span><span class="n">author</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">N_a</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">author_dict</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">author_dict</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">authors</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;indexed {0} authors&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N_a</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_index_citations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">papers</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates dict `{ c : citation }` and `{ c : [ p ] }`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;indexing citations in {0} papers&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">papers</span><span class="p">)))</span>
+
+        <span class="n">cited</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c"># { p : [ (c,1) ] }</span>
+        <span class="n">citation_counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="n">citation_index</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">citation_index_</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">citations</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">fpapers</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">papers_citing</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">paper</span> <span class="ow">in</span> <span class="n">papers</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">paper</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index_by</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">cited</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+                <span class="k">for</span> <span class="n">citation</span> <span class="ow">in</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]:</span>
+                    <span class="n">c</span> <span class="o">=</span> <span class="n">citation</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index_citation_by</span><span class="p">]</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">c_i</span> <span class="o">=</span> <span class="n">citation_index_</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+                    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                        <span class="n">c_i</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">citation_index</span><span class="p">)</span>
+                        <span class="n">citation_index</span><span class="p">[</span><span class="n">c_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
+                        <span class="n">citation_index_</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">c_i</span>
+
+                    <span class="n">cited</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">c_i</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="n">citation_counts</span><span class="p">[</span><span class="n">c_i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                    <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">citations</span><span class="p">:</span>
+                        <span class="n">citations</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">citation</span>
+
+                    <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">papers_citing</span><span class="p">:</span>
+                        <span class="n">fpapers</span><span class="p">[</span><span class="n">c_i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">]</span>
+                        <span class="n">papers_citing</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span> <span class="n">p</span> <span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">fpapers</span><span class="p">[</span><span class="n">c_i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
+                        <span class="n">papers_citing</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+        <span class="c"># Separating this part allows for more flexibility in what sits behind</span>
+        <span class="c">#  self.papers_citing (e.g. HDF5 VArray).</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">papers_citing</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">papers_citing</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">citations</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">citations</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_define_features</span><span class="p">(</span><span class="s">&#39;citations&#39;</span><span class="p">,</span> <span class="n">citation_index</span><span class="p">,</span> <span class="n">cited</span><span class="p">,</span>
+                                <span class="n">citation_counts</span><span class="p">,</span> <span class="n">citation_counts</span><span class="p">,</span> <span class="n">fpapers</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">N_c</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">citations</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;indexed {0} citations&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N_c</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_tokenize_features</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">ftype</span><span class="p">,</span> <span class="n">fdict</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="nb">set</span><span class="p">([]),</span>
+                            <span class="n">filt</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">transformer</span><span class="o">=</span><span class="bp">None</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ftype : str</span>
+<span class="sd">            Name of featureset.</span>
+<span class="sd">        fdict : dict</span>
+<span class="sd">            Contains dictionary `{ i: [ (f, w) ] }` where `i` is an</span>
+<span class="sd">            index for papers (see kwarg `index_by`), `f` is a feature (e.g. an</span>
+<span class="sd">            N-gram), and `w` is a weight on that feature (e.g. a count).</span>
+<span class="sd">        exclude : set</span>
+<span class="sd">            (optional) Features to ignore, e.g. stopwords.</span>
+<span class="sd">        filt : function</span>
+<span class="sd">            Takes a lambda function that returns True if a feature should be</span>
+<span class="sd">            included.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ftype : str</span>
+<span class="sd">            Name of the featureset.</span>
+<span class="sd">        findex : dict</span>
+<span class="sd">            Maps integer IDs onto features (e.g. words).</span>
+<span class="sd">        features : dict</span>
+<span class="sd">            Keys are identifiers for :class:`.Paper` instances in the</span>
+<span class="sd">            :class:`.Corpus`\, and values are sparse feature vectors.</span>
+<span class="sd">            e.g. [ (f1,v1), (f3,v3) ]</span>
+<span class="sd">        counts : dict</span>
+<span class="sd">            Overall frequency of each feature in the :class:`.Corpus`</span>
+<span class="sd">        documentCounts : dict</span>
+<span class="sd">            Number of documents containing each feature in the :class:`.Corpus`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">filt</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">filt</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="bp">True</span>
+
+        <span class="k">if</span> <span class="n">exclude</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">exclude</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([])</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">exclude</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">:</span>
+            <span class="n">exclude</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">exclude</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="n">w</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">findex_</span><span class="p">:</span>
+                <span class="n">counts</span><span class="p">[</span><span class="n">findex_</span><span class="p">[</span><span class="n">tok</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">w</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="k">def</span> <span class="nf">_transform</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">transformer</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">string</span>
+            <span class="k">return</span> <span class="n">transformer</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;tokenizing features of type {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ftype</span><span class="p">))</span>
+
+        <span class="n">features</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="n">documentCounts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+
+        <span class="c"># List of unique tokens.</span>
+        <span class="n">ftokenset</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span> <span class="n">unidecode</span><span class="p">(</span><span class="nb">unicode</span><span class="p">(</span><span class="n">f</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">fval</span> <span class="ow">in</span> <span class="n">fdict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                                                <span class="k">for</span> <span class="n">f</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">fval</span><span class="p">])</span>
+        <span class="n">ftokens</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span> <span class="n">_transform</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">ftokenset</span> <span class="o">-</span> <span class="n">exclude</span><span class="p">)</span> <span class="k">if</span> <span class="n">filt</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="p">]))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;found {0} unique tokens&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ftokens</span><span class="p">)))</span>
+
+        <span class="c"># Create forward and reverse indices.</span>
+        <span class="n">findex</span> <span class="o">=</span> <span class="p">{</span> <span class="n">i</span><span class="p">:</span><span class="n">ftokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ftokens</span><span class="p">))</span> <span class="p">}</span>
+        <span class="n">findex_</span> <span class="o">=</span> <span class="p">{</span> <span class="n">v</span><span class="p">:</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">findex</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="p">}</span>     <span class="c"># lookup.</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;created forward and reverse indices.&#39;</span><span class="p">)</span>
+
+        <span class="c"># Holds a list of (document, count) tuples for each feature.</span>
+        <span class="n">fpapers</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c"># Tokenize.</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">fval</span> <span class="ow">in</span> <span class="n">fdict</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span> <span class="c"># fval is a list of tuples.</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">fval</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">list</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">fval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">tuple</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Malformed features data.&#39;</span><span class="p">)</span>
+
+            <span class="n">tokenized</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">f</span><span class="p">,</span><span class="n">w</span> <span class="ow">in</span> <span class="n">fval</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">_handle</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">w</span><span class="p">):</span>
+                    <span class="n">tokenized</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span> <span class="n">findex_</span><span class="p">[</span><span class="n">f</span><span class="p">],</span> <span class="n">w</span> <span class="p">)</span> <span class="p">)</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">fpapers</span><span class="p">[</span><span class="n">findex_</span><span class="p">[</span><span class="n">f</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span> <span class="n">key</span><span class="p">,</span> <span class="n">w</span> <span class="p">)</span> <span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                        <span class="n">fpapers</span><span class="p">[</span><span class="n">findex_</span><span class="p">[</span><span class="n">f</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span> <span class="n">key</span><span class="p">,</span> <span class="n">w</span> <span class="p">)</span> <span class="p">]</span>
+
+            <span class="n">features</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">tokenized</span>
+            <span class="k">for</span> <span class="n">t</span><span class="p">,</span><span class="n">w</span> <span class="ow">in</span> <span class="n">tokenized</span><span class="p">:</span>
+                <span class="n">documentCounts</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;done tokenizing features&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ftype</span><span class="p">,</span> <span class="n">findex</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">counts</span><span class="p">,</span> <span class="n">documentCounts</span><span class="p">,</span> <span class="n">fpapers</span>
+
+<div class="viewcode-block" id="Corpus.transform"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">fnew</span><span class="p">,</span> <span class="n">transformer</span><span class="o">=</span><span class="n">_tfidf</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform values in featureset ``fold``, creating a new featureset </span>
+<span class="sd">        ``fnew``.</span>
+<span class="sd">        </span>
+<span class="sd">        ``transformer`` is a method that will be applied to each feature in each</span>
+<span class="sd">        document, returning a new value for that feature. It should accept the</span>
+<span class="sd">        following parameters:</span>
+<span class="sd">        </span>
+<span class="sd">        =========   ============================================================</span>
+<span class="sd">        Parameter   Description</span>
+<span class="sd">        =========   ============================================================</span>
+<span class="sd">        ``s``       Representation of the feature (e.g. string).</span>
+<span class="sd">        ``c``       Value of the feature in the document (e.g. frequency).</span>
+<span class="sd">        ``C``       Value of the feature in the :class:`.Corpus` (e.g. global</span>
+<span class="sd">                    frequency).</span>
+<span class="sd">        ``DC``      Number of documents in which the feature occcurs.</span>
+<span class="sd">        ``N``       Total number of documents in the :class:`.Corpus`\.</span>
+<span class="sd">        =========   ============================================================</span>
+<span class="sd">        </span>
+<span class="sd">        If ``transformer`` is not provided, the default behavior is a standard</span>
+<span class="sd">        `tf*idf transformation &lt;http://en.wikipedia.org/wiki/Tf%E2%80%93idf&gt;`_.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fold : str</span>
+<span class="sd">            Name of the featureset to be transformed.</span>
+<span class="sd">        fnew : str  </span>
+<span class="sd">            Name of the featureset to be created, with transformed values.</span>
+<span class="sd">        transformer : method</span>
+<span class="sd">            Applied to each feature in each document in the :class:`.Corpus`\.</span>
+<span class="sd">            See above.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;start transformation: &quot;{0}&quot; -&gt; &quot;{1}&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fold</span><span class="p">,</span> <span class="n">fnew</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;with transformer: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">transformer</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
+        
+        <span class="n">fdict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">fold</span><span class="p">]</span>
+
+        <span class="n">features</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">fdict</span><span class="p">[</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="n">fdict</span><span class="p">[</span><span class="s">&#39;counts&#39;</span><span class="p">]</span>
+        <span class="n">documentCounts</span> <span class="o">=</span> <span class="n">fdict</span><span class="p">[</span><span class="s">&#39;documentCounts&#39;</span><span class="p">]</span>    <span class="c"># Re-use this.</span>
+        <span class="n">fpapers</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">fvect</span> <span class="ow">in</span> <span class="n">fdict</span><span class="p">[</span><span class="s">&#39;features&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">fvect_</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">f</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">fvect</span><span class="p">:</span>
+                <span class="n">v_</span> <span class="o">=</span> <span class="n">transformer</span><span class="p">(</span>
+                    <span class="n">index</span><span class="p">[</span><span class="n">f</span><span class="p">],</span> <span class="n">v</span><span class="p">,</span> <span class="n">counts</span><span class="p">[</span><span class="n">f</span><span class="p">],</span> <span class="n">documentCounts</span><span class="p">[</span><span class="n">f</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">papers</span><span class="p">))</span>
+                <span class="n">fvect_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>  <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">v_</span><span class="p">)</span> <span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">fpapers</span><span class="p">[</span><span class="n">f</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>  <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">v_</span><span class="p">)</span> <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="n">fpapers</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">v_</span><span class="p">),</span> <span class="p">]</span>
+            
+            <span class="n">features</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">fvect_</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_define_features</span><span class="p">(</span><span class="n">fnew</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">counts</span><span class="p">,</span> <span class="n">documentCounts</span><span class="p">,</span> <span class="n">fpapers</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Corpus.apply_stoplist"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.apply_stoplist">[docs]</a>    <span class="k">def</span> <span class="nf">apply_stoplist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">fnew</span><span class="p">,</span> <span class="n">stoplist</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply ``stoplist`` to the featureset ``fold``, resulting in featureset</span>
+<span class="sd">        ``fnew``\.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fold : str</span>
+<span class="sd">            Key into ``features`` for existing featureset.</span>
+<span class="sd">        fnew : str</span>
+<span class="sd">            Key into ``features`` for resulting featuresset.</span>
+<span class="sd">        stoplist : list</span>
+<span class="sd">            A list of features to remove from the featureset.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">        </span>
+<span class="sd">           &gt;&gt;&gt; from nltk.corpus import stopwords</span>
+<span class="sd">           &gt;&gt;&gt; MyCorpus.apply_stoplist(&#39;unigrams&#39;, &#39;u_stop&#39;, stopwords.words())</span>
+<span class="sd">           </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="k">def</span> <span class="nf">filt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">stoplist</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_features</span><span class="p">(</span><span class="n">fold</span><span class="p">,</span> <span class="n">fnew</span><span class="p">,</span> <span class="n">filt</span><span class="o">=</span><span class="n">filt</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Corpus.filter_features"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.filter_features">[docs]</a>    <span class="k">def</span> <span class="nf">filter_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">fnew</span><span class="p">,</span> <span class="n">filt</span><span class="o">=</span><span class="n">_filter</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new featureset by applying a filter to an existing featureset.</span>
+<span class="sd">        </span>
+<span class="sd">        ``filt`` is a method applied to each feature in the :class:`.Corpus`\.</span>
+<span class="sd">        It should return True if the feature is to be retained, and False if the</span>
+<span class="sd">        feature is to be discarded. ``filt`` should accept the following</span>
+<span class="sd">        parameters:</span>
+<span class="sd">        </span>
+<span class="sd">        =========   ============================================================</span>
+<span class="sd">        Parameter   Description</span>
+<span class="sd">        =========   ============================================================</span>
+<span class="sd">        ``s``       Representation of the feature (e.g. a string).</span>
+<span class="sd">        ``C``       The overall frequency of the feature in the</span>
+<span class="sd">                    :class:`.Corpus`\.</span>
+<span class="sd">        ``DC``      The number of documents in which the feature occurs.</span>
+<span class="sd">        =========   ============================================================</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fold : str</span>
+<span class="sd">            Key into ``features`` for existing featureset.</span>
+<span class="sd">        fnew : str</span>
+<span class="sd">            Key into ``features`` for resulting featuresset.</span>
+<span class="sd">        filt : method</span>
+<span class="sd">            Filter function to apply to the featureset. See above.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; def filt(s, C, DC):</span>
+<span class="sd">           ...     if C &gt; 3 and DC &gt; 1 and len(s) &gt; 3:</span>
+<span class="sd">           ...         return True</span>
+<span class="sd">           ...     return False</span>
+<span class="sd">           &gt;&gt;&gt; MyCorpus.filter_features(&#39;wc&#39;, &#39;wc_filtered&#39;, filt)</span>
+
+<span class="sd">        Assuming that the :class:`.Corpus` ``MyCorpus`` already has a</span>
+<span class="sd">        feature called ``wc``, this would generate a new feature called</span>
+<span class="sd">        ``wc_filtered`` containing only those features that...</span>
+
+<span class="sd">        1. Occur more than three times overall in the :class:`.Corpus`\,</span>
+<span class="sd">        2. Occur in more than one document, and</span>
+<span class="sd">        3. Are at least four characters in length.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="n">w</span><span class="p">):</span> <span class="c"># Counts tokens, and excludes unwanted tokens.</span>
+            <span class="k">if</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">findex_</span><span class="p">:</span>
+                <span class="n">counts</span><span class="p">[</span><span class="n">findex_</span><span class="p">[</span><span class="n">tok</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">w</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Generating a new featureset {0} from {1}.&#39;</span>
+                                                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fnew</span><span class="p">,</span> <span class="n">fold</span><span class="p">))</span>
+        <span class="c"># index, features, counts, documentCounts</span>
+
+        <span class="n">fdict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">fold</span><span class="p">]</span>
+
+        <span class="n">features</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="n">documentCounts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+
+        <span class="n">ftokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">s</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">s</span> <span class="ow">in</span> <span class="n">fdict</span><span class="p">[</span><span class="s">&#39;index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">filt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">fdict</span><span class="p">[</span><span class="s">&#39;counts&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">fdict</span><span class="p">[</span><span class="s">&#39;documentCounts&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="p">)]</span>
+        <span class="n">Ntokens</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ftokens</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;found {0} unique tokens&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Ntokens</span><span class="p">))</span>
+
+        <span class="n">findex</span> <span class="o">=</span> <span class="p">{</span> <span class="n">i</span><span class="p">:</span><span class="n">ftokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">Ntokens</span><span class="p">)</span> <span class="p">}</span>
+        <span class="n">findex_</span> <span class="o">=</span> <span class="p">{</span> <span class="n">v</span><span class="p">:</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">findex</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="p">}</span>
+
+        <span class="n">fpapers</span> <span class="o">=</span> <span class="p">{</span> <span class="n">i</span><span class="p">:[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">findex</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="p">}</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;created forward and reverse indices.&#39;</span><span class="p">)</span>
+
+        <span class="n">feats</span> <span class="o">=</span> <span class="n">fdict</span><span class="p">[</span><span class="s">&#39;features&#39;</span><span class="p">]</span>
+
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">fval</span> <span class="ow">in</span> <span class="n">feats</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">fval</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">list</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">fval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">tuple</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Malformed features data.&#39;</span><span class="p">)</span>
+
+            <span class="n">tokenized</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">f</span><span class="p">,</span><span class="n">w</span> <span class="ow">in</span> <span class="n">fval</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">_handle</span><span class="p">(</span><span class="n">fdict</span><span class="p">[</span><span class="s">&#39;index&#39;</span><span class="p">][</span><span class="n">f</span><span class="p">],</span><span class="n">w</span><span class="p">):</span>
+                    <span class="n">f_</span> <span class="o">=</span> <span class="n">findex_</span><span class="p">[</span><span class="n">fdict</span><span class="p">[</span><span class="s">&#39;index&#39;</span><span class="p">][</span><span class="n">f</span><span class="p">]]</span>
+                    <span class="n">tokenized</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span><span class="n">f_</span><span class="p">,</span><span class="n">w</span><span class="p">)</span> <span class="p">)</span>
+                    <span class="n">fpapers</span><span class="p">[</span><span class="n">f_</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span> <span class="n">key</span><span class="p">,</span> <span class="n">w</span> <span class="p">))</span>
+
+            <span class="n">features</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">tokenized</span>
+            <span class="k">for</span> <span class="n">f</span><span class="p">,</span><span class="n">w</span> <span class="ow">in</span> <span class="n">tokenized</span><span class="p">:</span>
+                <span class="n">documentCounts</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_define_features</span><span class="p">(</span><span class="n">fnew</span><span class="p">,</span> <span class="n">findex</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">counts</span><span class="p">,</span> <span class="n">documentCounts</span><span class="p">,</span> <span class="n">fpapers</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;done indexing features&#39;</span><span class="p">)</span>
+        <span class="k">return</span>
+</div>
+<div class="viewcode-block" id="Corpus.abstract_to_features"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.abstract_to_features">[docs]</a>    <span class="k">def</span> <span class="nf">abstract_to_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remove_stopwords</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">stem</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a unigram (wordcount) featureset from the abstracts of all</span>
+<span class="sd">        :class:`.Paper`\s in the :class:`.Corpus` (if available).</span>
+
+<span class="sd">        Words are automatically tokenized, and stopwords are removed be default</span>
+<span class="sd">        (see parameters).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        remove_stopwords : bool</span>
+<span class="sd">            (default: True) If True, passes tokenizer the NLTK stoplist.</span>
+<span class="sd">        stem : bool</span>
+<span class="sd">            (default: True) If True, passes tokenizer the NLTK Porter stemmer.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; MyCorpus.abstract_to_features()</span>
+<span class="sd">           &gt;&gt;&gt; &#39;abstractTerms&#39; in MyCorpus.features</span>
+<span class="sd">           True</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        **TODO:**</span>
+
+<span class="sd">            * Should be able to pass one&#39;s own stemmer and stoplist, if desired.</span>
+<span class="sd">              [`Issue #23 &lt;https://github.com/diging/tethne/issues/23&gt;`_]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;abstract_to_features: start.&#39;</span><span class="p">)</span>
+
+        <span class="n">unigrams</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">p</span><span class="p">,</span><span class="n">paper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;abstract&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">term_counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+                <span class="n">terms</span> <span class="o">=</span> <span class="n">strip_punctuation</span><span class="p">(</span><span class="n">paper</span><span class="p">[</span><span class="s">&#39;abstract&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">terms</span><span class="p">:</span> <span class="n">term_counts</span><span class="p">[</span><span class="n">term</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">unigrams</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">term_counts</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;abstract_to_features: generated features.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">remove_stopwords</span><span class="p">:</span>    <span class="c"># Use stoplist?</span>
+            <span class="n">stoplist</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">stoplist</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([])</span>
+
+        <span class="k">if</span> <span class="n">stem</span><span class="p">:</span>    <span class="c"># Use stemming?</span>
+            <span class="kn">from</span> <span class="nn">nltk.stem.porter</span> <span class="kn">import</span> <span class="n">PorterStemmer</span>
+            <span class="n">stemmer</span> <span class="o">=</span> <span class="n">PorterStemmer</span><span class="p">()</span>
+            <span class="n">transformer</span> <span class="o">=</span> <span class="n">stemmer</span><span class="o">.</span><span class="n">stem</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">transformer</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="n">tokd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tokenize_features</span><span class="p">(</span> <span class="s">&#39;abstractTerms&#39;</span><span class="p">,</span> <span class="n">unigrams</span><span class="p">,</span>
+                                        <span class="n">exclude</span><span class="o">=</span><span class="n">stoplist</span><span class="p">,</span>
+                                        <span class="n">transformer</span><span class="o">=</span><span class="n">transformer</span> <span class="p">)</span>
+        <span class="n">ft</span><span class="p">,</span> <span class="n">fi</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">dC</span><span class="p">,</span> <span class="n">fp</span> <span class="o">=</span> <span class="n">tokd</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_define_features</span><span class="p">(</span><span class="n">ft</span><span class="p">,</span> <span class="n">fi</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">dC</span><span class="p">,</span> <span class="n">fp</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">unigrams</span>
+</div>
+<div class="viewcode-block" id="Corpus.slice"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.slice">[docs]</a>    <span class="k">def</span> <span class="nf">slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Slices data by key, using method (if applicable).</span>
+
+<span class="sd">        In order to perform comparative analyses among your data, you must</span>
+<span class="sd">        define the &quot;axes&quot; that you wish to compare by &quot;slicing&quot; your</span>
+<span class="sd">        :class:`.Corpus`\. You can slice by (theoretically) any field in your</span>
+<span class="sd">        :class:`.Paper`\s, but most of the time you&#39;ll be slicing by the `date`.</span>
+
+<span class="sd">        Here are some methods for slicing a :class:`.Corpus`\, which you can</span>
+<span class="sd">        specify using the `method` keyword argument.</span>
+
+<span class="sd">        ===========    =============================    =======    =============</span>
+<span class="sd">        Method         Description                      Key        kwargs</span>
+<span class="sd">        ===========    =============================    =======    =============</span>
+<span class="sd">        time_window    Slices data using a sliding      date       window_size</span>
+<span class="sd">                       time-window. Dataslices are                 step_size</span>
+<span class="sd">                       indexed by the start of the</span>
+<span class="sd">                       time-window.</span>
+<span class="sd">        time_period    Slices data into time periods    date       window_size</span>
+<span class="sd">                       of equal length. Dataslices</span>
+<span class="sd">                       are indexed by the start of</span>
+<span class="sd">                       the time period.</span>
+<span class="sd">        ===========    =============================    =======    =============</span>
+
+<span class="sd">        The main difference between the sliding time-window (``time_window``)</span>
+<span class="sd">        and the time-period (``time_period``) slicing methods are whether the</span>
+<span class="sd">        resulting periods can overlap. Whereas time-period slicing divides data</span>
+<span class="sd">        into subsets by sequential non-overlapping time periods, subsets</span>
+<span class="sd">        generated by time-window slicing can overlap.</span>
+
+<span class="sd">        .. figure:: _static/images/bibliocoupling/timeline.timeslice.png</span>
+<span class="sd">           :width: 400</span>
+<span class="sd">           :align: center</span>
+
+<span class="sd">           **Time-period** slicing, with a window-size of 4 years.</span>
+
+<span class="sd">        .. figure:: _static/images/bibliocoupling/timeline.timewindow.png</span>
+<span class="sd">           :width: 400</span>
+<span class="sd">           :align: center</span>
+
+<span class="sd">           **Time-window** slicing, with a window-size of 4 years and a</span>
+<span class="sd">           step-size of 1 year.</span>
+
+<span class="sd">        Avilable kwargs:</span>
+
+<span class="sd">        ===========    ======   ================================================</span>
+<span class="sd">        Argument       Type     Description</span>
+<span class="sd">        ===========    ======   ================================================</span>
+<span class="sd">        window_size    int      Size of time-window or period, in years</span>
+<span class="sd">                                (default = 1).</span>
+<span class="sd">        step_size      int      Amount to advance time-window or period in each</span>
+<span class="sd">                                step (ignored for time_period).</span>
+<span class="sd">        cumulative     bool     If True, the data from each successive slice</span>
+<span class="sd">                                includes the data from all preceding slices.</span>
+<span class="sd">                                Only applies if key is &#39;date&#39; (default = False).</span>
+<span class="sd">        ===========    ======   ================================================</span>
+
+<span class="sd">        If you slice your :class:`.Corpus` by a field other than `date`, you do</span>
+<span class="sd">        not need to specifiy a `method` or any other keyword arguments.</span>
+
+<span class="sd">        Once you have sliced your :class:`.Corpus`\, you can use</span>
+<span class="sd">        :func:`.distribution` or :func:`.plot_distribution` to generate</span>
+<span class="sd">        descriptive statistics about your data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            key in :class:`.Paper` by which to slice data.</span>
+<span class="sd">        method : str (optional)</span>
+<span class="sd">            Dictates how data should be sliced. See table for available methods.</span>
+<span class="sd">            If key is &#39;date&#39;, default method is time_period with window_size and</span>
+<span class="sd">            step_size of 1.</span>
+<span class="sd">        kwargs : kwargs</span>
+<span class="sd">            See methods table, above.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; MyCorpus.slice(&#39;date&#39;, method=&#39;time_period&#39;, window_size=5)</span>
+<span class="sd">           &gt;&gt;&gt; MyCorpus.plot_distribution(&#39;date&#39;)</span>
+
+<span class="sd">        Should generate a plot that looks something like this:</span>
+
+<span class="sd">        .. figure:: _static/images/corpus_plot_distribution.png</span>
+<span class="sd">           :width: 400</span>
+<span class="sd">           :align: center</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;date&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;time_window&#39;</span><span class="p">:</span>
+                <span class="n">kw</span> <span class="o">=</span> <span class="p">{</span>  <span class="s">&#39;window_size&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;window_size&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                        <span class="s">&#39;step_size&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;step_size&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">}</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_slice</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;time_period&#39;</span> <span class="ow">or</span> <span class="n">method</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">kw</span> <span class="o">=</span> <span class="p">{</span>  <span class="s">&#39;window_size&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;window_size&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                        <span class="s">&#39;step_size&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;window_size&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                        <span class="s">&#39;cumulative&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;cumulative&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span> <span class="p">}</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_slice</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">method</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; not a valid slicing method.&quot;</span><span class="p">))</span>
+
+        <span class="c"># TODO: consider removing this, and just focusing on time.</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&#39;author&#39;</span><span class="p">:</span>   <span class="c"># Already indexed.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">authors</span>     <span class="c"># { a : [ p ] }</span>
+
+        <span class="c"># TODO: consider indexing journals in __init__, perhaps optionally.</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datakeys</span><span class="p">:</span> <span class="c"># e.g. &#39;jtitle&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>     <span class="c"># { jtitle : [ p ] }</span>
+            <span class="k">for</span> <span class="n">p</span><span class="p">,</span><span class="n">paper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">paper</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">paper</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; not a valid key in data.&quot;</span><span class="p">))</span>
+</div>
+    <span class="k">def</span> <span class="nf">_time_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Slices data by date.</span>
+
+<span class="sd">        If step_size = 1, this is a sliding time-window. If step_size =</span>
+<span class="sd">        window_size, this is a time period slice.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kwargs : kwargs</span>
+<span class="sd">            See table, below.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        slices : dict</span>
+<span class="sd">            Keys are start date of time slice, values are :class:`.Paper`</span>
+<span class="sd">            indices (controlled by index_by argument in</span>
+<span class="sd">            :func:`.Corpus.__init__` )</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        Avilable kwargs:</span>
+
+<span class="sd">        ===========    ======   ================================================</span>
+<span class="sd">        Argument       Type     Description</span>
+<span class="sd">        ===========    ======   ================================================</span>
+<span class="sd">        window_size    int      Size of time-window or period, in years</span>
+<span class="sd">                                (default = 1).</span>
+<span class="sd">        step_size      int      Amount to advance time-window or period in each</span>
+<span class="sd">                                step (ignored for time_period).</span>
+<span class="sd">        cumulative     bool     If True, the data from each successive slice</span>
+<span class="sd">                                includes the data from all preceding slices.</span>
+<span class="sd">                                Only applies if key is &#39;date&#39; (default = False).</span>
+<span class="sd">        ===========    ======   ================================================</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># Get parameters from kwargs.</span>
+        <span class="n">window_size</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;window_size&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">step_size</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;step_size&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;start&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="p">([</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span>
+                                           <span class="k">for</span> <span class="n">paper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="p">]))</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;start&#39;</span><span class="p">,</span> <span class="nb">max</span><span class="p">([</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span>
+                                           <span class="k">for</span> <span class="n">paper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="p">]))</span>
+        <span class="n">cumulative</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;cumulative&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+
+        <span class="n">slices</span> <span class="o">=</span> <span class="p">{}</span>     <span class="c"># { s : [ p ] }</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">-</span><span class="n">window_size</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="n">step_size</span><span class="p">):</span>
+            <span class="n">slices</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span> <span class="n">p</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span><span class="n">paper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
+                            <span class="k">if</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="n">paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">s</span> <span class="o">+</span> <span class="n">window_size</span> <span class="p">]</span>
+            <span class="k">if</span> <span class="n">cumulative</span> <span class="ow">and</span> <span class="n">last</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">slices</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">+=</span> <span class="n">last</span>
+            <span class="n">last</span> <span class="o">=</span> <span class="n">slices</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">slices</span>
+
+<div class="viewcode-block" id="Corpus.indices"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.indices">[docs]</a>    <span class="k">def</span> <span class="nf">indices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Yields a list of indices of all :class:`.Paper`\s in this</span>
+<span class="sd">        :class:`.Corpus`\.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        keys : list</span>
+<span class="sd">            List of indices.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; indices = MyCorpus.indices()</span>
+<span class="sd">           &gt;&gt;&gt; indices[0]</span>
+<span class="sd">           &#39;10.2307/20037014&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">keys</span>
+</div>
+<div class="viewcode-block" id="Corpus.all_papers"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.all_papers">[docs]</a>    <span class="k">def</span> <span class="nf">all_papers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Yield the complete set of :class:`.Paper` instances in this</span>
+<span class="sd">        :class:`.Corpus` .</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        papers : list</span>
+<span class="sd">            A list of :class:`.Paper` instances.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; papers = MyCorpus.all_papers()</span>
+<span class="sd">           &gt;&gt;&gt; papers[0]</span>
+<span class="sd">           &lt;tethne.classes.paper.Paper at 0x10970e4d0&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">papers</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Corpus.get_slices"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.get_slices">[docs]</a>    <span class="k">def</span> <span class="nf">get_slices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">papers</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all of the :class:`.Paper`\s (or just their IDs) in a </span>
+<span class="sd">        particular slice.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            Key from :class:`.Paper` that has previously been used to slice data</span>
+<span class="sd">            in this :class:`.Corpus` .</span>
+<span class="sd">        papers : bool</span>
+<span class="sd">            (default: False) If True, returns :class:`.Paper` objects rather</span>
+<span class="sd">            than just their IDs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        slices : dict</span>
+<span class="sd">            Keys are slice indices. If `papers` is `True`, values are</span>
+<span class="sd">            lists of :class:`.Paper` instances; otherwise returns paper IDs</span>
+<span class="sd">            (e.g. &#39;wosid&#39; or &#39;doi&#39;).</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError : Corpus has not been sliced.</span>
+<span class="sd">        KeyError : Data has not been sliced by [key]</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; slices = MyCorpus.get_slices(&#39;date&#39;)</span>
+<span class="sd">           &gt;&gt;&gt; slices.keys()</span>
+<span class="sd">           [1921, 1926, 1931, 1936, 1941, 1946, 1951, 1956, 1961, 1966, 1971]</span>
+
+<span class="sd">           &gt;&gt;&gt; slices[1926]</span>
+<span class="sd">           [&#39;10.2307/2470705&#39;,</span>
+<span class="sd">            &#39;10.2307/2480027&#39;,</span>
+<span class="sd">            &#39;10.2307/2255991&#39;,</span>
+<span class="sd">            &#39;10.2307/2428098&#39;,</span>
+<span class="sd">            &#39;10.2307/1654383&#39;,</span>
+<span class="sd">            &#39;10.2307/2256048&#39;,</span>
+<span class="sd">            &#39;10.2307/41421952&#39;]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;Corpus has not been sliced.&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">(</span><span class="s">&quot;Data has not been sliced by &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)))</span>
+
+        <span class="n">slices</span> <span class="o">=</span> <span class="p">{</span> <span class="n">k</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">papers</span><span class="p">:</span>  <span class="c"># Retrieve Papers.</span>
+            <span class="k">return</span> <span class="p">{</span> <span class="n">k</span><span class="p">:[</span> <span class="bp">self</span><span class="o">.</span><span class="n">papers</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">v</span> <span class="p">]</span>
+                     <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">slices</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="n">slices</span>
+</div>
+<div class="viewcode-block" id="Corpus.get_slice"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.get_slice">[docs]</a>    <span class="k">def</span> <span class="nf">get_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">papers</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the :class:`.Paper`\s (or just their IDs) from a single slice.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : str</span>
+<span class="sd">            Key from :class:`.Paper` that has previously been used to slice data</span>
+<span class="sd">            in this :class:`.Corpus` .</span>
+<span class="sd">        index : str or int</span>
+<span class="sd">            Slice index for key (e.g. 1999 for &#39;date&#39;).</span>
+<span class="sd">        papers : bool</span>
+<span class="sd">            (default: False) If True, returns :class:`.Paper` objects rather</span>
+<span class="sd">            than just their IDs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        slice : list</span>
+<span class="sd">            List of paper indices in this :class:`.Corpus` , or (if</span>
+<span class="sd">            `papers` is `True`) a list of :class:`.Paper` instances.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError : Corpus has not been sliced.</span>
+<span class="sd">        KeyError : Data has not been sliced by [key]</span>
+<span class="sd">        KeyError : [index] not a valid index for [key]</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; MyCorpus.get_slice(&#39;date&#39;, 1926)</span>
+<span class="sd">           [&#39;10.2307/2470705&#39;,</span>
+<span class="sd">            &#39;10.2307/2480027&#39;,</span>
+<span class="sd">            &#39;10.2307/2255991&#39;,</span>
+<span class="sd">            &#39;10.2307/2428098&#39;,</span>
+<span class="sd">            &#39;10.2307/1654383&#39;,</span>
+<span class="sd">            &#39;10.2307/2256048&#39;,</span>
+<span class="sd">            &#39;10.2307/41421952&#39;]</span>
+
+<span class="sd">           &gt;&gt;&gt; MyCorpus.get_slice(&#39;date&#39;, 1926, papers=True)</span>
+<span class="sd">           [&lt;tethne.classes.paper.Paper at 0x109942110&gt;,</span>
+<span class="sd">            &lt;tethne.classes.paper.Paper at 0x109922b50&gt;,</span>
+<span class="sd">            &lt;tethne.classes.paper.Paper at 0x109934190&gt;,</span>
+<span class="sd">            &lt;tethne.classes.paper.Paper at 0x109951410&gt;,</span>
+<span class="sd">            &lt;tethne.classes.paper.Paper at 0x10971f350&gt;,</span>
+<span class="sd">            &lt;tethne.classes.paper.Paper at 0x10975f810&gt;,</span>
+<span class="sd">            &lt;tethne.classes.paper.Paper at 0x10975fed0&gt;]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;Corpus has not been sliced.&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">(</span><span class="s">&quot;Data has not been sliced by &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; not a valid index for &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)))</span>
+
+        <span class="nb">slice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">papers</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">papers</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">slice</span> <span class="p">]</span>
+        <span class="k">return</span> <span class="nb">slice</span>
+</div>
+    <span class="k">def</span> <span class="nf">_get_slice_i</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_get_by_i</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_indices</span><span class="p">):</span>
+        <span class="n">slices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">key_indices</span><span class="p">:</span>
+            <span class="nb">slice</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_slice_i</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+            <span class="n">slices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">slice</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span> <span class="nb">set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="o">*</span><span class="n">slices</span><span class="p">)</span> <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_slice_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">slice</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_axes</span><span class="p">():</span>
+            <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="nb">slice</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+<div class="viewcode-block" id="Corpus.get_axes"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.get_axes">[docs]</a>    <span class="k">def</span> <span class="nf">get_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of all slice axes for this :class:`.Corpus` .</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        axes : list</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; MyCorpus.get_axes()</span>
+<span class="sd">           [&#39;date&#39;, &#39;jtitle&#39;]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">axes</span>
+</div>
+<div class="viewcode-block" id="Corpus.N_axes"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.N_axes">[docs]</a>    <span class="k">def</span> <span class="nf">N_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the number of slice axes for this :class:`.Corpus`\.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        N : int</span>
+<span class="sd">            Number of slice axes.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; MyCorpus.N_axes()</span>
+<span class="sd">           2</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">N</span>
+</div>
+<div class="viewcode-block" id="Corpus.distribution"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.distribution">[docs]</a>    <span class="k">def</span> <span class="nf">distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">,</span> <span class="n">y_axis</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the distribution of :class:`.Paper`\s over one or two slice axes.</span>
+
+<span class="sd">        Returns a Numpy array describing the number of :class:`.Paper`</span>
+<span class="sd">        associated with each slice-coordinate.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x_axis : str</span>
+<span class="sd">            Name of a slice axis.</span>
+<span class="sd">        y_axis : str</span>
+<span class="sd">            (optional) Name of a slice axis.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dist : Numpy array</span>
+<span class="sd">            Values are the number of :class:`.Paper` at that slice-coordinate.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; MyCorpus.distribution(&#39;date&#39;)</span>
+<span class="sd">           array([[  1],</span>
+<span class="sd">                  [  7],</span>
+<span class="sd">                  [  8],</span>
+<span class="sd">                  [ 24],</span>
+<span class="sd">                  [ 32],</span>
+<span class="sd">                  [ 30],</span>
+<span class="sd">                  [ 64],</span>
+<span class="sd">                  [ 66],</span>
+<span class="sd">                  [ 78],</span>
+<span class="sd">                  [107],</span>
+<span class="sd">                  [ 76],</span>
+<span class="sd">                  [106]])</span>
+
+<span class="sd">        You can generate a figure for this distribution using</span>
+<span class="sd">        :func:`.plot_distribution`\.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;generate distribution over slices&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Corpus has not been sliced&#39;</span><span class="p">)</span>
+            <span class="k">raise</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;Corpus has not been sliced.&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">x_axis</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_axes</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Corpus has no axis {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x_axis</span><span class="p">))</span>
+            <span class="k">raise</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">(</span><span class="s">&quot;X axis invalid for this Corpus.&quot;</span><span class="p">))</span>
+
+        <span class="n">x_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">x_axis</span><span class="p">])</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;x axis size: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x_axis</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">y_axis</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;y axis: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y_axis</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">y_axis</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_axes</span><span class="p">():</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Corpus has not axis {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y_axis</span><span class="p">))</span>
+                <span class="k">raise</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">(</span><span class="s">&quot;Y axis invalid for this Corpus.&quot;</span><span class="p">))</span>
+            <span class="n">y_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">y_axis</span><span class="p">])</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;y axis size: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y_axis</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>   <span class="c"># Only 1 slice axis.</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;only 1 slice axis&#39;</span><span class="p">)</span>
+            <span class="n">y_size</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_size</span><span class="p">,</span> <span class="n">y_size</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;distribution shape: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">shape</span><span class="p">))</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">x_size</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">y_axis</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_by_i</span><span class="p">([(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">i</span><span class="p">)]))</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">I</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                    <span class="n">J</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="n">K</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">y_size</span><span class="p">):</span>
+                    <span class="n">k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_by_i</span><span class="p">([(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">i</span><span class="p">),(</span><span class="n">y_axis</span><span class="p">,</span> <span class="n">j</span><span class="p">)]))</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">I</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                        <span class="n">J</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                        <span class="n">K</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="c"># TODO: Move away from SciPy, to facilitate PyPy compatibility?</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">((</span><span class="n">K</span><span class="p">,</span> <span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">J</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">dist</span>
+
+    <span class="c"># TODO: Merge this with :func:`.distribution`</span></div>
+<div class="viewcode-block" id="Corpus.feature_distribution"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.feature_distribution">[docs]</a>    <span class="k">def</span> <span class="nf">feature_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">featureset</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">,</span> <span class="n">y_axis</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                                   <span class="n">mode</span><span class="o">=</span><span class="s">&#39;counts&#39;</span><span class="p">,</span> <span class="n">normed</span><span class="o">=</span><span class="bp">True</span>   <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the distribution of a ``feature`` over one or two slice axes.</span>
+
+<span class="sd">        You can generate a figure for this distribution using</span>
+<span class="sd">        :func:`.plot_distribution`\.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        featureset : str</span>
+<span class="sd">            Name of a set of features (eg &#39;unigrams&#39;)</span>
+<span class="sd">        feature : str</span>
+<span class="sd">            String representation of the feature.</span>
+<span class="sd">        x_axis : str</span>
+<span class="sd">            Name of a slice axis.</span>
+<span class="sd">        y_axis : str</span>
+<span class="sd">            (optional) Name of a slice axis.</span>
+<span class="sd">        mode : str</span>
+<span class="sd">            (default: True) &#39;counts&#39; or &#39;documentCounts&#39;</span>
+<span class="sd">        normed : bool</span>
+<span class="sd">            (default: True) If True, values are normalized for each slice.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dist : matrix</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; MyCorpus.feature_distribution(&#39;unigrams&#39;, &#39;four&#39;, &#39;date&#39;,</span>
+<span class="sd">                                        mode=&#39;counts&#39;, normed=True)</span>
+<span class="sd">           [[  7.10025561e-05]</span>
+<span class="sd">            [  1.81508792e-03]</span>
+<span class="sd">            [  3.87657001e-04]</span>
+<span class="sd">            [  7.68344218e-04]</span>
+<span class="sd">            [  9.81739643e-04]</span>
+<span class="sd">            [  1.02986612e-03]</span>
+<span class="sd">            [  5.04682875e-04]</span>
+<span class="sd">            [  6.60851176e-04]</span>
+<span class="sd">            [  1.02951270e-03]</span>
+<span class="sd">            [  9.94742078e-04]</span>
+<span class="sd">            [  1.04085711e-03]]</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        In the future, it may make sense to merge this into</span>
+<span class="sd">        :func:`.distribution`\.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span> <span class="s">&#39;counts&#39;</span><span class="p">,</span> <span class="s">&#39;documentCounts&#39;</span> <span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;No such mode. Try &quot;counts&quot; or &quot;documentCounts&quot;&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">featureset</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&#39;No such featureset in this Corpus&#39;</span><span class="p">)</span>
+
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
+        <span class="n">feature_lookup</span> <span class="o">=</span> <span class="p">{</span> <span class="n">v</span><span class="p">:</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">index</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="p">}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">findex</span> <span class="o">=</span> <span class="n">feature_lookup</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&#39;No such feature in featureset&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">x_axis</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&#39;No such slice axis in this Corpus; try .slice()&#39;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;generate distribution over slices&#39;</span><span class="p">)</span>
+
+        <span class="n">x_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">x_axis</span><span class="p">])</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;x axis size: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x_axis</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">y_axis</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;y axis: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y_axis</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">y_axis</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_axes</span><span class="p">():</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Corpus has not axis {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y_axis</span><span class="p">))</span>
+                <span class="k">raise</span><span class="p">(</span><span class="ne">KeyError</span><span class="p">(</span><span class="s">&quot;Y axis invalid for this Corpus.&quot;</span><span class="p">))</span>
+            <span class="n">y_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">y_axis</span><span class="p">])</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;y axis size: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y_axis</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>   <span class="c"># Only 1 slice axis.</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;only 1 slice axis&#39;</span><span class="p">)</span>
+            <span class="n">y_size</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_size</span><span class="p">,</span> <span class="n">y_size</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;distribution shape: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">shape</span><span class="p">))</span>
+
+        <span class="n">fvalues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset</span><span class="p">][</span><span class="s">&#39;features&#39;</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">_get_value</span><span class="p">(</span><span class="n">papers</span><span class="p">):</span>
+            <span class="n">vtuples</span> <span class="o">=</span> <span class="p">[</span> <span class="n">fv</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">papers</span> <span class="k">for</span> <span class="n">fv</span> <span class="ow">in</span> <span class="n">fvalues</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="p">]</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span> <span class="n">v</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">vtuples</span> <span class="k">if</span> <span class="n">f</span> <span class="o">==</span> <span class="n">findex</span> <span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;counts&#39;</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">normed</span><span class="p">:</span>
+                    <span class="n">Nwords</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span> <span class="n">v</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">vtuples</span><span class="p">])</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">Nwords</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="mf">0.</span>
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;documentCounts&#39;</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">normed</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">papers</span><span class="p">))</span>
+                    <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="mf">0.</span>
+
+            <span class="k">return</span> <span class="n">val</span>
+
+        <span class="n">I</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">x_size</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">y_axis</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">papers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_by_i</span><span class="p">([(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">i</span><span class="p">)])</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">_get_value</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">I</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                    <span class="n">J</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="n">K</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">y_size</span><span class="p">):</span>
+                    <span class="n">papers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_by_i</span><span class="p">([(</span><span class="n">x_axis</span><span class="p">,</span> <span class="n">i</span><span class="p">),(</span><span class="n">y_axis</span><span class="p">,</span> <span class="n">j</span><span class="p">)])</span>
+                    <span class="n">k</span> <span class="o">=</span> <span class="n">_get_value</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">I</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                        <span class="n">J</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                        <span class="n">K</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">((</span><span class="n">K</span><span class="p">,</span> <span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">J</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">dist</span>
+</div>
+<div class="viewcode-block" id="Corpus.feature_counts"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.feature_counts">[docs]</a>    <span class="k">def</span> <span class="nf">feature_counts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">featureset</span><span class="p">,</span> <span class="nb">slice</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s">&#39;date&#39;</span><span class="p">,</span>
+                                                <span class="n">documentCounts</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the frequency of a feature in a particular ``slice`` of ``axis``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        featureset : str</span>
+<span class="sd">            Name of a featureset in the corpus.</span>
+<span class="sd">        slice : int or str</span>
+<span class="sd">            Name of a slice along ``axis``.</span>
+<span class="sd">        axis : str</span>
+<span class="sd">            (default: &#39;date&#39;) Name of slice axis containing ``slice``.</span>
+<span class="sd">        documentCounts : bool</span>
+<span class="sd">            (default: False) If True, returns document counts (i.e. the number</span>
+<span class="sd">            of documents in which a feature occurs) rather than the frequency</span>
+<span class="sd">            (total number of instances) of that feature.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        counts : dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">featureset</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&#39;No such featureset in this Corpus&#39;</span><span class="p">)</span>
+
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
+        <span class="n">feature_lookup</span> <span class="o">=</span> <span class="p">{</span> <span class="n">v</span><span class="p">:</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">index</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="p">}</span>
+
+        <span class="n">fvalues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset</span><span class="p">][</span><span class="s">&#39;features&#39;</span><span class="p">]</span>
+
+        <span class="n">papers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">papers</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">f</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">fvalues</span><span class="p">[</span><span class="n">p</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">documentCounts</span><span class="p">:</span>
+                        <span class="n">counts</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">counts</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">+=</span> <span class="n">v</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Corpus.plot_distribution"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.plot_distribution">[docs]</a>    <span class="k">def</span> <span class="nf">plot_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_axis</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">y_axis</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&#39;bar&#39;</span><span class="p">,</span>
+                                <span class="n">aspect</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;papers&#39;</span><span class="p">,</span>
+                                <span class="n">fkwargs</span><span class="o">=</span><span class="p">{},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot distribution of papers or features along slice axes, using</span>
+<span class="sd">        `MatPlotLib &lt;http://matplotlib.org/&gt;`_.</span>
+
+<span class="sd">        You must first use :func:`.slice` to divide your data up along axes of</span>
+<span class="sd">        interest. Then you can use :func:`.distribution` or</span>
+<span class="sd">        :func:`.plot_distribution` to generate descriptive statistics about your</span>
+<span class="sd">        data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x_axis : str</span>
+<span class="sd">            Name of a slice axis to use for the x axis.</span>
+<span class="sd">        y_axis : str</span>
+<span class="sd">            (optional) Name of a slice axis to use for the y axis. If provided,</span>
+<span class="sd">            uses PyPlot&#39;s :func:`plt.imshow` method to generate a &#39;heatmap&#39;.</span>
+<span class="sd">        type : str</span>
+<span class="sd">            PyPlot method to use for 1-dimensional plots. (&#39;plot&#39; or &#39;bar&#39;).</span>
+<span class="sd">        aspect : float</span>
+<span class="sd">            When making a 2-d plot (i.e. `y_axis` is provided), sets the aspect</span>
+<span class="sd">            ratio for the plot.</span>
+<span class="sd">        step : int</span>
+<span class="sd">            When making a 2-d plot (i.e. `y_axis` is provided), sets the range</span>
+<span class="sd">            step for x axis tick labels.</span>
+<span class="sd">        fig : :class:`matplotlib.figure`</span>
+<span class="sd">            (optional) If not provided, will generate a new instance of</span>
+<span class="sd">            :class:`matplotlib.figure`\.</span>
+<span class="sd">        mode : str</span>
+<span class="sd">            (default: &#39;papers&#39;) Specify whether to plot the distribution of</span>
+<span class="sd">            &#39;papers&#39; or &#39;features&#39;. See examples, below.</span>
+<span class="sd">        fkwargs : dict</span>
+<span class="sd">            Keyword arguments passed to PyPlot method.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fig : :class:`matplotlib.figure`</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        The default behavior is to plot the distribution of paper across</span>
+<span class="sd">        ``x_axis`` (and ``y_axis``):</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; MyCorpus.slice(&#39;date&#39;, method=&#39;time_period&#39;, window_size=5)</span>
+<span class="sd">           &gt;&gt;&gt; MyCorpus.plot_distribution(&#39;date&#39;)</span>
+
+<span class="sd">        Should generate a plot that looks something like this:</span>
+
+<span class="sd">        .. figure:: _static/images/corpus_plot_distribution.png</span>
+<span class="sd">           :width: 400</span>
+<span class="sd">           :align: center</span>
+
+<span class="sd">        To generate a 2-dimensional plot using `date` and `jtitle`, you could do</span>
+<span class="sd">        something like:</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; MyCorpus.slice(&#39;date&#39;, method=&#39;time_period&#39;, window_size=5)</span>
+<span class="sd">           &gt;&gt;&gt; MyCorpus.slice(&#39;jtitle&#39;)</span>
+<span class="sd">           &gt;&gt;&gt; MyCorpus.plot_distribution(&#39;date&#39;, &#39;jtitle&#39;)</span>
+
+<span class="sd">        Which should generate a plot that looks something like:</span>
+
+<span class="sd">        .. figure:: _static/images/corpus_plot_distribution_2d.png</span>
+<span class="sd">           :width: 600</span>
+<span class="sd">           :align: center</span>
+
+<span class="sd">        If ``mode=&#39;features`` is set, this method will plot the distribution</span>
+<span class="sd">        of a feature across ``x_axis`` (and ``y_axis``). Set keyword arguments</span>
+<span class="sd">        for :func:`Corpus.feature_distribution` using ``fkwargs``.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; fkwargs = {</span>
+<span class="sd">           ...     &#39;featureset&#39;: &#39;unigrams&#39;,</span>
+<span class="sd">           ...     &#39;feature&#39;: &#39;four&#39;,</span>
+<span class="sd">           ...     &#39;mode&#39;: &#39;counts&#39;,</span>
+<span class="sd">           ...     &#39;normed&#39;: True,</span>
+<span class="sd">           ...     }</span>
+<span class="sd">           &gt;&gt;&gt; fig = MyCorpus.plot_distribution(&#39;date&#39;, &#39;jtitle&#39;, mode=&#39;features&#39;,</span>
+<span class="sd">                                         fkwargs=fkwargs, interpolation=&#39;none&#39;)</span>
+<span class="sd">           &gt;&gt;&gt; fig.savefig(&#39;/path/to/dist.png&#39;)</span>
+
+<span class="sd">        .. figure:: _static/images/testdist.png</span>
+<span class="sd">           :width: 600</span>
+<span class="sd">           :align: center</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">x_axis</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">x_axis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">xkeys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_slice_keys</span><span class="p">(</span><span class="n">x_axis</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;features&#39;</span><span class="p">:</span>
+            <span class="n">featureset</span> <span class="o">=</span> <span class="n">fkwargs</span><span class="p">[</span><span class="s">&#39;featureset&#39;</span><span class="p">]</span>
+            <span class="n">feature</span> <span class="o">=</span> <span class="n">fkwargs</span><span class="p">[</span><span class="s">&#39;feature&#39;</span><span class="p">]</span>
+            <span class="n">fmode</span> <span class="o">=</span> <span class="n">fkwargs</span><span class="p">[</span><span class="s">&#39;mode&#39;</span><span class="p">]</span>
+            <span class="n">fnormed</span> <span class="o">=</span> <span class="n">fkwargs</span><span class="p">[</span><span class="s">&#39;normed&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">y_axis</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;papers&#39;</span><span class="p">:</span>
+                <span class="n">yvals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="p">(</span><span class="n">x_axis</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;features&#39;</span><span class="p">:</span>
+                <span class="n">yvals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_distribution</span><span class="p">(</span><span class="n">featureset</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">,</span>
+                                                  <span class="n">mode</span><span class="o">=</span><span class="n">fmode</span><span class="p">,</span> <span class="n">normed</span><span class="o">=</span><span class="n">fnormed</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="nb">type</span><span class="p">](</span><span class="n">xkeys</span><span class="p">,</span> <span class="n">yvals</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">xkeys</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xkeys</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>   <span class="c"># Already sorted.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ykeys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_slice_keys</span><span class="p">(</span><span class="n">y_axis</span><span class="p">)</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;papers&#39;</span><span class="p">:</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="p">(</span><span class="n">y_axis</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;features&#39;</span><span class="p">:</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_distribution</span><span class="p">(</span><span class="n">featureset</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">y_axis</span><span class="p">,</span>
+                                                   <span class="n">x_axis</span><span class="p">,</span> <span class="n">fmode</span><span class="p">,</span> <span class="n">fnormed</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ykeys</span><span class="p">)),</span> <span class="n">ykeys</span><span class="p">)</span>
+
+            <span class="n">nxkeys</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xkeys</span><span class="p">)</span>
+            <span class="n">tickstops</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nxkeys</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
+
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">tickstops</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span> <span class="n">xkeys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tickstops</span> <span class="p">])</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nxkeys</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>   <span class="c"># Already sorted.</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fig</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/logo_round.png" alt="Logo">
+            </a></p>
+
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2013, ASU Digital Innovation Group.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
