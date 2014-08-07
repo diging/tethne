@@ -213,7 +213,7 @@ features. For wordcounts, think of this as a vocabulary.</td>
 <tr class="row-odd"><td><tt class="docutils literal"><span class="pre">features</span></tt></td>
 <td>Dictionary mapping <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> IDs onto sparse feature vectors
 (e.g. wordcounts). These vectors are lists of ( feature index,
-value ) tuples.</td>
+value ) tuples. See <em class="xref std std-ref">sparse-feature-vectors</em>.</td>
 </tr>
 <tr class="row-even"><td><tt class="docutils literal"><span class="pre">counts</span></tt></td>
 <td>Dictionary mapping feature indices (in <tt class="docutils literal"><span class="pre">index</span></tt>) onto the sum of
@@ -225,41 +225,92 @@ total number of times that a word occurs in the <a class="reference internal" hr
 of <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s in which the feature occurs (e.g. the number
 of documents containing that word).</td>
 </tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">papers</span></tt></td>
+<td>Dictionary mapping feature indices onto sparse vectors over
+<a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> IDs. Similar to <em class="xref std std-ref">sparse-feature-vectors</em>,
+except that column indices are <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> IDs instead of
+feature indices.</td>
+</tr>
 </tbody>
 </table>
-<p>The following methods in <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> are useful for working with featuresets:</p>
+<div class="section" id="sparse-feature-vector">
+<span id="id2"></span><h3>Sparse feature vector<a class="headerlink" href="#sparse-feature-vector" title="Permalink to this headline">¶</a></h3>
+<p>The number of features associated with a <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a> is potentially much smaller than
+the total number of features in a given featureset. For example, a set of documents may
+have a vocabulary of tens of thousands of words, only a few hundred of which appear in
+any one document alone. Thus ff we were to represent a featureset as a matrix of papers
+and the words that they contain, most of the cells of that matrix would contain zeros.</p>
+<p>To save space on disk and in memory, Tethne represents featuresets sparsely, meaning that
+only non-zero values are stored. In Tethne, a sparse feature vector is a list of
+(feature,value) tuples.</p>
+<p>Consider the document: <tt class="docutils literal"><span class="pre">the</span> <span class="pre">cow</span> <span class="pre">jumped</span> <span class="pre">over</span> <span class="pre">the</span> <span class="pre">moon</span></tt>. We can represent this document
+in terms of a wordcount vector:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span> <span class="p">(</span><span class="s">&#39;the&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;cow&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;jumped&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;over&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;moon&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">]</span>
+</pre></div>
+</div>
+<p>Of course, features are usually indexed by integer IDs. The mapping between integer IDs
+and feature strings are stored in the featureset&#8217;s <tt class="docutils literal"><span class="pre">'index'</span></tt> dictionary, which might
+look something like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">MyCorpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;wordcounts&#39;</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
+<span class="go">{0: &#39;the&#39;, 1: &#39;cow&#39;, 2: &#39;jumped&#39;, 3: &#39;over&#39;, 4: &#39;moon&#39;}</span>
+</pre></div>
+</div>
+<p>So the wordcount vector for this paper would look like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="generating-and-modifying-featuresets">
+<h3>Generating and modifying featuresets<a class="headerlink" href="#generating-and-modifying-featuresets" title="Permalink to this headline">¶</a></h3>
+<p>The following methods in <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> can be used to generate and modify featuresets:</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.abstract_to_features" title="tethne.classes.corpus.Corpus.abstract_to_features"><tt class="xref py py-obj docutils literal"><span class="pre">Corpus.abstract_to_features</span></tt></a>([...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.abstract_to_features" title="tethne.classes.corpus.Corpus.abstract_to_features"><tt class="xref py py-obj docutils literal"><span class="pre">Corpus.abstract_to_features</span></tt></a></td>
 <td>Generates a unigram (wordcount) featureset from the abstracts of all <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s in the <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a> (if available).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.add_features" title="tethne.classes.corpus.Corpus.add_features"><tt class="xref py py-obj docutils literal"><span class="pre">Corpus.add_features</span></tt></a>(name,&nbsp;features[,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.add_features" title="tethne.classes.corpus.Corpus.add_features"><tt class="xref py py-obj docutils literal"><span class="pre">Corpus.add_features</span></tt></a></td>
 <td>Add a new featureset to the <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.apply_stoplist" title="tethne.classes.corpus.Corpus.apply_stoplist"><tt class="xref py py-obj docutils literal"><span class="pre">Corpus.apply_stoplist</span></tt></a>(fold,&nbsp;fnew,&nbsp;stoplist)</td>
+<tr class="row-odd"><td><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.apply_stoplist" title="tethne.classes.corpus.Corpus.apply_stoplist"><tt class="xref py py-obj docutils literal"><span class="pre">Corpus.apply_stoplist</span></tt></a></td>
 <td>Apply <tt class="docutils literal"><span class="pre">stoplist</span></tt> to the featureset <tt class="docutils literal"><span class="pre">fold</span></tt>, resulting in featureset <tt class="docutils literal"><span class="pre">fnew</span></tt>.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.feature_counts" title="tethne.classes.corpus.Corpus.feature_counts"><tt class="xref py py-obj docutils literal"><span class="pre">Corpus.feature_counts</span></tt></a>(featureset,&nbsp;slice[,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.feature_counts" title="tethne.classes.corpus.Corpus.feature_counts"><tt class="xref py py-obj docutils literal"><span class="pre">Corpus.feature_counts</span></tt></a></td>
 <td>Get the frequency of a feature in a particular <tt class="docutils literal"><span class="pre">slice</span></tt> of <tt class="docutils literal"><span class="pre">axis</span></tt>.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.feature_distribution" title="tethne.classes.corpus.Corpus.feature_distribution"><tt class="xref py py-obj docutils literal"><span class="pre">Corpus.feature_distribution</span></tt></a>(featureset,&nbsp;...)</td>
-<td>Get the distribution of a <tt class="docutils literal"><span class="pre">feature</span></tt> over one or two slice axes.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.filter_features" title="tethne.classes.corpus.Corpus.filter_features"><tt class="xref py py-obj docutils literal"><span class="pre">Corpus.filter_features</span></tt></a>(fold,&nbsp;fnew[,&nbsp;filt])</td>
+<tr class="row-odd"><td><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.filter_features" title="tethne.classes.corpus.Corpus.filter_features"><tt class="xref py py-obj docutils literal"><span class="pre">Corpus.filter_features</span></tt></a></td>
 <td>Create a new featureset by applying a filter to an existing featureset.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.plot_distribution" title="tethne.classes.corpus.Corpus.plot_distribution"><tt class="xref py py-obj docutils literal"><span class="pre">Corpus.plot_distribution</span></tt></a>([x_axis,&nbsp;y_axis,&nbsp;...])</td>
-<td>Plot distribution of papers or features along slice axes, using <a class="reference external" href="http://matplotlib.org/">MatPlotLib</a>.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.transform" title="tethne.classes.corpus.Corpus.transform"><tt class="xref py py-obj docutils literal"><span class="pre">Corpus.transform</span></tt></a>(fold,&nbsp;fnew[,&nbsp;transformer])</td>
+<tr class="row-even"><td><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.transform" title="tethne.classes.corpus.Corpus.transform"><tt class="xref py py-obj docutils literal"><span class="pre">Corpus.transform</span></tt></a></td>
 <td>Transform values in featureset <tt class="docutils literal"><span class="pre">fold</span></tt>, creating a new featureset  <tt class="docutils literal"><span class="pre">fnew</span></tt>.</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section" id="analyzing-featuresets">
+<h3>Analyzing featuresets<a class="headerlink" href="#analyzing-featuresets" title="Permalink to this headline">¶</a></h3>
+<p>The following methods are useful for inspecting the distribution of features across a
+<a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><tt class="xref py py-class docutils literal"><span class="pre">Corpus</span></tt></a>:</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.feature_distribution" title="tethne.classes.corpus.Corpus.feature_distribution"><tt class="xref py py-obj docutils literal"><span class="pre">Corpus.feature_distribution</span></tt></a></td>
+<td>Get the distribution of a <tt class="docutils literal"><span class="pre">feature</span></tt> over one or two slice axes.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.plot_distribution" title="tethne.classes.corpus.Corpus.plot_distribution"><tt class="xref py py-obj docutils literal"><span class="pre">Corpus.plot_distribution</span></tt></a></td>
+<td>Plot distribution of papers or features along slice axes, using <a class="reference external" href="http://matplotlib.org/">MatPlotLib</a>.</td>
+</tr>
+</tbody>
+</table>
+<p>The <a class="reference internal" href="tethne.analyze.features.html#module-tethne.analyze.features" title="tethne.analyze.features"><tt class="xref py py-mod docutils literal"><span class="pre">analyze.features</span></tt></a> module provides methods for calculating similarity or
+distance between <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><tt class="xref py py-class docutils literal"><span class="pre">Paper</span></tt></a>s based on features.</p>
+</div>
 </div>
 </div>
 
@@ -280,7 +331,12 @@ of documents containing that word).</td>
 <li><a class="reference internal" href="#directly-from-data">Directly from data</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#featuresets">Featuresets</a></li>
+<li><a class="reference internal" href="#featuresets">Featuresets</a><ul>
+<li><a class="reference internal" href="#sparse-feature-vector">Sparse feature vector</a></li>
+<li><a class="reference internal" href="#generating-and-modifying-featuresets">Generating and modifying featuresets</a></li>
+<li><a class="reference internal" href="#analyzing-featuresets">Analyzing featuresets</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

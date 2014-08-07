@@ -97,10 +97,10 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#tethne.analyze.features.cosine_distance" title="tethne.analyze.features.cosine_distance"><tt class="xref py py-obj docutils literal"><span class="pre">cosine_distance</span></tt></a></td>
-<td>Calculate cosine distance for sparse feature vectors.</td>
+<td>Calculate <a class="reference external" href="http://en.wikipedia.org/wiki/Cosine_similarity">cosine distance</a> for sparse feature  vectors.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.analyze.features.cosine_similarity" title="tethne.analyze.features.cosine_similarity"><tt class="xref py py-obj docutils literal"><span class="pre">cosine_similarity</span></tt></a></td>
-<td></td>
+<td>Calculate <a class="reference external" href="http://en.wikipedia.org/wiki/Cosine_similarity">cosine similarity</a> for sparse feature  vectors.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#tethne.analyze.features.distance" title="tethne.analyze.features.distance"><tt class="xref py py-obj docutils literal"><span class="pre">distance</span></tt></a></td>
 <td>Calculate the distance between two sparse feature vectors using a method from scipy.spatial.distance.</td>
@@ -113,13 +113,62 @@
 <dl class="function">
 <dt id="tethne.analyze.features.cosine_distance">
 <tt class="descclassname">tethne.analyze.features.</tt><tt class="descname">cosine_distance</tt><big>(</big><em>sa</em>, <em>sb</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/features.html#cosine_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.features.cosine_distance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate cosine distance for sparse feature vectors.</p>
+<dd><p>Calculate <a class="reference external" href="http://en.wikipedia.org/wiki/Cosine_similarity">cosine distance</a> for sparse feature 
+vectors.</p>
+<p>Uses the <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cosine.html#scipy.spatial.distance.cosine">cosine method in scipy.spatial.distance</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sa</strong> : list</p>
+<blockquote>
+<div><p>A  <a class="reference internal" href="corpora.html#sparse-feature-vector"><em>Sparse feature vector</em></a>.</p>
+</div></blockquote>
+<p><strong>sb</strong> : list</p>
+<blockquote>
+<div><p>A  <a class="reference internal" href="corpora.html#sparse-feature-vector"><em>Sparse feature vector</em></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>distance</strong> : float</p>
+<blockquote class="last">
+<div><p>Cosine distance.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="tethne.analyze.features.cosine_similarity">
 <tt class="descclassname">tethne.analyze.features.</tt><tt class="descname">cosine_similarity</tt><big>(</big><em>sa</em>, <em>sb</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/features.html#cosine_similarity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.features.cosine_similarity" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculate <a class="reference external" href="http://en.wikipedia.org/wiki/Cosine_similarity">cosine similarity</a> for sparse feature 
+vectors.</p>
+<p>Uses the <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cosine.html#scipy.spatial.distance.cosine">cosine method in scipy.spatial.distance</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sa</strong> : list</p>
+<blockquote>
+<div><p>A  <a class="reference internal" href="corpora.html#sparse-feature-vector"><em>Sparse feature vector</em></a>.</p>
+</div></blockquote>
+<p><strong>sb</strong> : list</p>
+<blockquote>
+<div><p>A  <a class="reference internal" href="corpora.html#sparse-feature-vector"><em>Sparse feature vector</em></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>similarity</strong> : float</p>
+<blockquote class="last">
+<div><p>Cosine similarity</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="tethne.analyze.features.distance">
@@ -194,12 +243,72 @@ from scipy.spatial.distance.</p>
 </tr>
 </tbody>
 </table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sa</strong> : list</p>
+<blockquote>
+<div><p>A  <a class="reference internal" href="corpora.html#sparse-feature-vector"><em>Sparse feature vector</em></a>.</p>
+</div></blockquote>
+<p><strong>sb</strong> : list</p>
+<blockquote>
+<div><p>A  <a class="reference internal" href="corpora.html#sparse-feature-vector"><em>Sparse feature vector</em></a>.</p>
+</div></blockquote>
+<p><strong>method</strong> : str</p>
+<blockquote>
+<div><p>Name of a method in scipy.spatial.distance (see above).</p>
+</div></blockquote>
+<p><strong>normalize</strong> : bool</p>
+<blockquote>
+<div><p>(default: True) If True, <tt class="docutils literal"><span class="pre">sa</span></tt> and <tt class="docutils literal"><span class="pre">sb</span></tt> are normalized so that they
+each sum to 1.0.</p>
+</div></blockquote>
+<p><strong>smooth</strong> : bool</p>
+<blockquote>
+<div><p>(default: False) If True, uses the smoothing method described in <a class="reference external" href="http://lvk.cs.msu.su/~bruzz/articles/classification/Using%20Kullback-Leibler%20Distance%20for%20Text%20Categorization.pdf">Bigi
+2003</a></p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>distance</strong> : float</p>
+<blockquote class="last">
+<div><p>Distance value from <tt class="docutils literal"><span class="pre">method</span></tt>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="tethne.analyze.features.kl_divergence">
 <tt class="descclassname">tethne.analyze.features.</tt><tt class="descname">kl_divergence</tt><big>(</big><em>sa</em>, <em>sb</em><big>)</big><a class="reference internal" href="_modules/tethne/analyze/features.html#kl_divergence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.features.kl_divergence" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate Kullback-Leibler Distance for sparse feature vectors.</p>
+<p>Uses the smoothing method described in <a class="reference external" href="http://lvk.cs.msu.su/~bruzz/articles/classification/Using%20Kullback-Leibler%20Distance%20for%20Text%20Categorization.pdf">Bigi 2003</a>
+to facilitate better comparisons between vectors describing wordcounts.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sa</strong> : list</p>
+<blockquote>
+<div><p>A  <a class="reference internal" href="corpora.html#sparse-feature-vector"><em>Sparse feature vector</em></a>.</p>
+</div></blockquote>
+<p><strong>sb</strong> : list</p>
+<blockquote>
+<div><p>A  <a class="reference internal" href="corpora.html#sparse-feature-vector"><em>Sparse feature vector</em></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>divergence</strong> : float</p>
+<blockquote class="last">
+<div><p>KL divergence.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

@@ -1,13 +1,13 @@
 from distutils.core import setup
 
-DISTNAME = 'Tethne'
+DISTNAME = 'tethne'
 AUTHOR = 'E. Peirson, Digital Innovation Group @ ASU'
 MAINTAINER = 'Erick Peirson'
 MAINTAINER_EMAIL = 'erick [dot] peirson [at] asu [dot] edu'
 DESCRIPTION = ('Bibliographic network and corpus analysis for historians')
 LICENSE = 'GNU GPL 3' 
-URL = 'https://github.com/diging/tethne'
-VERSION = '0.6.0-beta'
+URL = 'http://diging.github.io/tethne/'
+VERSION = '0.6.1-beta'
 PACKAGES = [ 'tethne','tethne.analyze','tethne.networks','tethne.readers',
              'tethne.utilities', 'tethne.writers', 'tethne.model',
              'tethne.services', 'tethne.classes' ]
@@ -22,7 +22,6 @@ setup(
     url=URL,
     version=VERSION,
     packages = PACKAGES,
-    long_description=open('README.md').read(),
     install_requires=[
         "networkx >= 1.8.1",
         "matplotlib >= 1.3.1",

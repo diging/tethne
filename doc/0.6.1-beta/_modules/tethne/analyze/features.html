@@ -124,6 +124,26 @@
 <span class="sd">    yule                `scipy.org &lt;http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.yule.html&gt;`_</span>
 <span class="sd">    ================    ====================</span>
 
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sa : list</span>
+<span class="sd">        A  :ref:`sparse-feature-vector`\.</span>
+<span class="sd">    sb : list</span>
+<span class="sd">        A  :ref:`sparse-feature-vector`\.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        Name of a method in scipy.spatial.distance (see above).</span>
+<span class="sd">    normalize : bool</span>
+<span class="sd">        (default: True) If True, ``sa`` and ``sb`` are normalized so that they</span>
+<span class="sd">        each sum to 1.0.</span>
+<span class="sd">    smooth : bool</span>
+<span class="sd">        (default: False) If True, uses the smoothing method described in `Bigi</span>
+<span class="sd">        2003 </span>
+<span class="sd">        &lt;http://lvk.cs.msu.su/~bruzz/articles/classification/Using%20Kullback-Leibler%20Distance%20for%20Text%20Categorization.pdf&gt;`_</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    distance : float</span>
+<span class="sd">        Distance value from ``method``.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">spat</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>
@@ -151,6 +171,21 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate Kullback-Leibler Distance for sparse feature vectors.</span>
 <span class="sd">    </span>
+<span class="sd">    Uses the smoothing method described in `Bigi 2003 </span>
+<span class="sd">    &lt;http://lvk.cs.msu.su/~bruzz/articles/classification/Using%20Kullback-Leibler%20Distance%20for%20Text%20Categorization.pdf&gt;`_</span>
+<span class="sd">    to facilitate better comparisons between vectors describing wordcounts.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sa : list</span>
+<span class="sd">        A  :ref:`sparse-feature-vector`\.</span>
+<span class="sd">    sb : list</span>
+<span class="sd">        A  :ref:`sparse-feature-vector`\.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    divergence : float</span>
+<span class="sd">        KL divergence.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c"># Convert sparse data into dense arrays.</span>
     <span class="n">adense</span> <span class="o">=</span> <span class="n">_sparse_to_array</span><span class="p">(</span><span class="n">sa</span><span class="p">)</span>
@@ -166,11 +201,30 @@
     <span class="c"># Smooth according to Bigi 2003.</span>
     <span class="n">aprob</span><span class="p">,</span> <span class="n">bprob</span> <span class="o">=</span> <span class="n">_smooth</span><span class="p">(</span><span class="n">aprob</span><span class="p">,</span> <span class="n">bprob</span><span class="p">,</span> <span class="n">Ndiff</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span> <span class="p">(</span><span class="n">aprob</span> <span class="o">-</span> <span class="n">bprob</span><span class="p">)</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">aprob</span><span class="o">/</span><span class="n">bprob</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">divergence</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span> <span class="p">(</span><span class="n">aprob</span> <span class="o">-</span> <span class="n">bprob</span><span class="p">)</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">aprob</span><span class="o">/</span><span class="n">bprob</span><span class="p">)</span> <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">divergence</span>
 </div>
 <div class="viewcode-block" id="cosine_distance"><a class="viewcode-back" href="../../../tethne.analyze.features.html#tethne.analyze.features.cosine_distance">[docs]</a><span class="k">def</span> <span class="nf">cosine_distance</span><span class="p">(</span><span class="n">sa</span><span class="p">,</span> <span class="n">sb</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculate cosine distance for sparse feature vectors.</span>
+<span class="sd">    Calculate `cosine distance</span>
+<span class="sd">    &lt;http://en.wikipedia.org/wiki/Cosine_similarity&gt;`_ for sparse feature </span>
+<span class="sd">    vectors.</span>
+<span class="sd">    </span>
+<span class="sd">    Uses the `cosine method in scipy.spatial.distance</span>
+<span class="sd">    &lt;http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cosine.html#scipy.spatial.distance.cosine&gt;`_.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sa : list</span>
+<span class="sd">        A  :ref:`sparse-feature-vector`\.</span>
+<span class="sd">    sb : list</span>
+<span class="sd">        A  :ref:`sparse-feature-vector`\.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    distance : float</span>
+<span class="sd">        Cosine distance.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c"># Convert sparse data into dense arrays.</span>
     <span class="n">amax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">sa</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
@@ -179,13 +233,37 @@
     <span class="n">bdense</span> <span class="o">=</span> <span class="n">_sparse_to_array</span><span class="p">(</span><span class="n">sb</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">amax</span><span class="p">,</span> <span class="n">bmax</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="kn">import</span> <span class="n">cosine</span>
-    <span class="k">return</span> <span class="n">cosine</span><span class="p">(</span><span class="n">adense</span><span class="p">,</span> <span class="n">bdense</span><span class="p">)</span>
+    <span class="n">distance</span> <span class="o">=</span> <span class="n">cosine</span><span class="p">(</span><span class="n">adense</span><span class="p">,</span> <span class="n">bdense</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">distance</span>
 </div>
 <div class="viewcode-block" id="cosine_similarity"><a class="viewcode-back" href="../../../tethne.analyze.features.html#tethne.analyze.features.cosine_similarity">[docs]</a><span class="k">def</span> <span class="nf">cosine_similarity</span><span class="p">(</span><span class="n">sa</span><span class="p">,</span> <span class="n">sb</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate `cosine similarity </span>
+<span class="sd">    &lt;http://en.wikipedia.org/wiki/Cosine_similarity&gt;`_ for sparse feature </span>
+<span class="sd">    vectors.</span>
+<span class="sd">    </span>
+<span class="sd">    Uses the `cosine method in scipy.spatial.distance</span>
+<span class="sd">    &lt;http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cosine.html#scipy.spatial.distance.cosine&gt;`_.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sa : list</span>
+<span class="sd">        A  :ref:`sparse-feature-vector`\.</span>
+<span class="sd">    sb : list</span>
+<span class="sd">        A  :ref:`sparse-feature-vector`\.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    similarity : float</span>
+<span class="sd">        Cosine similarity</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">return</span> <span class="o">-</span><span class="mf">1.</span><span class="o">*</span><span class="p">(</span><span class="n">cosine_distance</span><span class="p">(</span><span class="n">sa</span><span class="p">,</span> <span class="n">sb</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span>
+    <span class="n">similarity</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span><span class="o">*</span><span class="p">(</span><span class="n">cosine_distance</span><span class="p">(</span><span class="n">sa</span><span class="p">,</span> <span class="n">sb</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">similarity</span>
+
+
+<span class="c">### Helpers ###</span>
 </div>
 <span class="k">def</span> <span class="nf">_sparse_to_coo</span><span class="p">(</span><span class="n">svect</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
