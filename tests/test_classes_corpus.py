@@ -31,7 +31,7 @@ class TestAddFeatures(unittest.TestCase):
                                               exclude=stopwords.words())
 
         self.assertEqual(len(self.D.features['wordcounts']['index']), 51639)
-#
+
 class TestCorpusWoS(unittest.TestCase):
     def setUp(self):
         """
