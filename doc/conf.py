@@ -26,7 +26,9 @@ sys.path.append("/Users/erickpeirson/Dropbox/DigitalHPS/Scripts/tethne")
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.autosummary', 'numpydoc']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.autosummary', 'numpydoc', 'rst2pdf.pdfbuilder']
+
+pdf_documents = [('index', u'tethne', u'Tethne 0.6.0-beta documentation', u'Erick Peirson'),]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -190,7 +192,7 @@ latex_documents = [
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
-#latex_logo = None
+latex_logo = 'logo_round.png'
 
 # For "manual" documents, if this is true, then toplevel headings are parts,
 # not chapters.

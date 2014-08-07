@@ -20,6 +20,10 @@ def algorithm(G, method, **kwargs):
     """
     Apply a ``method`` from NetworkX to all ``networkx.Graph`` objects in the
     :class:`.GraphCollection` ``G``.
+    
+    For options, see the `list of algorithms
+    <http://networkx.github.io/documentation/networkx-1.9/reference/algorithms.html>`_
+    in the NetworkX documentation. Not all of these have been tested.
 
     Parameters
     ----------

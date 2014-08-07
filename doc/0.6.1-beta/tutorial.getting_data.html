@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Getting Bibliographic Data &mdash; tethne 0.6.0-beta documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
+    <link rel="stylesheet" href="_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6.0-beta',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
+    <link rel="top" title="tethne 0.6.0-beta documentation" href="index.html" >
+    <link rel="up" title="Tutorials" href="tutorials.html" >
+    <link rel="next" title="Working with Corpora" href="corpora.html" >
+    <link rel="prev" title="Tutorials" href="tutorials.html" > 
+  </head>
+  <body>
+
+<div class="container">
+  <div class="top-scipy-org-logo-header">
+    <a href="index.html">
+      <img style="border: 0; height: 60px;" alt="SciPy" src="_static/img/logo_long_devo.png"></a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
+	
+        <li class="active"><a href="index.html">tethne 0.6.0-beta documentation</a></li>
+	
+          <li class="active"><a href="tutorials.html" accesskey="U">Tutorials</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="corpora.html" title="Working with Corpora"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="tutorials.html" title="Tutorials"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="getting-bibliographic-data">
+<span id="gettingdata"></span><h1>Getting Bibliographic Data<a class="headerlink" href="#getting-bibliographic-data" title="Permalink to this headline">¶</a></h1>
+<p>The current version of Tethne supports bibliographic data from the ISI Web of Science,
+Scopus, and JSTOR&#8217;s Data-for-Research portal. Future releases will support data from
+PubMed.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#web-of-science" id="id3">Web of Science</a><ul>
+<li><a class="reference internal" href="#structure-of-the-wos-field-tagged-data-file" id="id4">Structure of the WoS Field-Tagged Data File</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jstor-data-for-research" id="id5">JSTOR Data-for-Research</a></li>
+<li><a class="reference internal" href="#scopus" id="id6">Scopus</a></li>
+</ul>
+</div>
+<div class="section" id="web-of-science">
+<h2><a class="toc-backref" href="#id3">Web of Science</a><a class="headerlink" href="#web-of-science" title="Permalink to this headline">¶</a></h2>
+<p>The ISI Web of Science is a proprietary database owned by Thompson Reuters.
+If you are affiliated with an academic institution, you may have access to
+this database via an institutional license.</p>
+<p>For information about loading WoS data in Tethne, see the <a class="reference internal" href="tethne.readers.wos.html#module-tethne.readers.wos" title="tethne.readers.wos"><tt class="xref py py-mod docutils literal"><span class="pre">readers.wos</span></tt></a> module.</p>
+<p>To access the Web of Science database via the Arizona State University library,
+find the Web of Science <a class="reference external" href="http://library.lib.asu.edu/record=e1000458">entry</a> in the library&#8217;s online catalog. You may be prompted
+to log in to the University&#8217;s Central Authentication System.</p>
+<a class="reference internal image-reference" href="_images/getting.0.png"><img alt="_images/getting.0.png" src="_images/getting.0.png" style="width: 60%;" /></a>
+<p>Perform a search for literature of interest using the interface provided.</p>
+<p>Your search criteria will be informed by the objectives of your research project. If you
+are attempting to characterize the development of a research field, for example, you
+should choose terms that pick out that field as uniquely as possible (consider using the
+<tt class="docutils literal"><span class="pre">Publication</span> <span class="pre">Name</span></tt> search field). You can also pick out literatures originating from
+particular institutions, by using the <tt class="docutils literal"><span class="pre">Organization-Enhanced</span></tt> search field.</p>
+<a class="reference internal image-reference" href="_images/getting.1.png"><img alt="_images/getting.1.png" src="_images/getting.1.png" style="width: 60%;" /></a>
+<p>Note also that you can restrict your research to one of three indexes in the Web of Science Core Collection:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Science Citation Index Expanded is the largest index, containing scientific
+publications from 1900 onward.</li>
+<li>Social Sciences Citation Index covers 1956 onward.</li>
+<li>Arts &amp; Humanities Citation Index is the smallest index, containing publications from
+1975 onward.</li>
+</ul>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/getting.1.2.png"><img alt="_images/getting.1.2.png" src="_images/getting.1.2.png" style="width: 60%;" /></a>
+<p>Once you have found the papers that you are interested in, find the <tt class="docutils literal"><span class="pre">Send</span> <span class="pre">to:</span></tt> menu
+at the top of the list of results. Click the small orange down-arrow, and select
+<tt class="docutils literal"><span class="pre">Other</span> <span class="pre">File</span> <span class="pre">Formats</span></tt>.</p>
+<a class="reference internal image-reference" href="_images/getting.2.png"><img alt="_images/getting.2.png" src="_images/getting.2.png" style="width: 60%;" /></a>
+<p>A small in-browser window should open in the foreground. Specify the range of
+records that you wish to download. <strong>Note that you can only download 500 records
+at a time</strong>, so you may have to make multiple download requests. Be sure to specify
+<tt class="docutils literal"><span class="pre">Full</span> <span class="pre">Record</span> <span class="pre">and</span> <span class="pre">Cited</span> <span class="pre">References</span></tt> in the <em>Record Content</em> field, and <tt class="docutils literal"><span class="pre">Plain</span> <span class="pre">Text</span></tt>
+in the <em>File Format</em> field. Then click <tt class="docutils literal"><span class="pre">Send</span></tt>.</p>
+<a class="reference internal image-reference" href="_images/getting.3.png"><img alt="_images/getting.3.png" src="_images/getting.3.png" style="width: 60%;" /></a>
+<p>After a few moments, a download should begin. WoS usually returns a field-tagged
+data file called <tt class="docutils literal"><span class="pre">savedrecs.txt</span></tt>. Put this in a location on your filesystem where
+you can find it later; this is the input for Tethne&#8217;s WoS reader methods.</p>
+<a class="reference internal image-reference" href="_images/getting.4.png"><img alt="_images/getting.4.png" src="_images/getting.4.png" style="width: 60%;" /></a>
+<div class="section" id="structure-of-the-wos-field-tagged-data-file">
+<span id="fieldtagged"></span><h3><a class="toc-backref" href="#id4">Structure of the WoS Field-Tagged Data File</a><a class="headerlink" href="#structure-of-the-wos-field-tagged-data-file" title="Permalink to this headline">¶</a></h3>
+<p>If you open the text file returned by the WoS database (usually named &#8216;savedrecs.txt&#8217;),
+you should see a whole bunch of field-tagged data. &#8220;Field-tagged&#8221; means that each metadata
+field is denoted by a &#8220;tag&#8221; (a two-letter code), followed by values for that field. A
+complete list of WoS field tags can be found <a class="reference external" href="http://images.webofknowledge.com/WOKRS53B4/help/WOS/hs_wos_fieldtags.html">here</a>. For best results, you should avoid
+making changes to the contents of WoS data files.</p>
+<p>The metadata record for each paper in your data file should begin with:</p>
+<div class="highlight-none"><div class="highlight"><pre>PT J
+</pre></div>
+</div>
+<p>...and end with:</p>
+<div class="highlight-none:"><div class="highlight"><pre>ER
+</pre></div>
+</div>
+<p>There are two author fields: the AU field is always provided, and values take the form
+&#8220;Last, FI&#8221;. AF is provided if author full-names are available, and values take the form
+&#8220;Last, First Middle&#8221;. For example:</p>
+<div class="highlight-none"><div class="highlight"><pre>AU Dauvin, JC
+   Grimes, S
+   Bakalem, A
+AF Dauvin, Jean-Claude
+   Grimes, Samir
+   Bakalem, Ali
+</pre></div>
+</div>
+<p>Citations are listed in the CR block. For example:</p>
+<div class="highlight-none:"><div class="highlight"><pre>CR Airoldi L, 2007, OCEANOGR MAR BIOL, V45, P345
+   Alexander Vera, 2011, Marine Biodiversity, V41, P545, DOI 10.1007/s12526-011-0084-1
+   Arvanitidis C, 2002, MAR ECOL PROG SER, V244, P139, DOI 10.3354/meps244139
+   Bakalem A, 2009, ECOL INDIC, V9, P395, DOI 10.1016/j.ecolind.2008.05.008
+   Bakalem Ali, 1995, Mesogee, V54, P49
+   …
+   Zenetos A, 2005, MEDITERR MAR SCI, V6, P63
+   Zenetos A, 2004, CIESM ATLAS EXOTIC S, V3
+</pre></div>
+</div>
+<p>More recent records also include the institutional affiliations of authors in the C1
+block.</p>
+<div class="highlight-none:"><div class="highlight"><pre>C1 [Wang, Changlin; Washida, Haruhiko; Crofts, Andrew J.; Hamada, Shigeki;
+Katsube-Tanaka, Tomoyuki; Kim, Dongwook; Choi, Sang-Bong; Modi, Mahendra; Singh,
+Salvinder; Okita, Thomas W.] Washington State Univ, Inst Biol Chem, Pullman, WA 99164
+USA.
+</pre></div>
+</div>
+<p>For more information about WoS field tags, see a list on the Thompson Reuters website,
+<a class="reference external" href="http://images.webofknowledge.com/WOKRS53B4/help/WOS/hs_wos_fieldtags.html">here</a>.</p>
+</div>
+</div>
+<div class="section" id="jstor-data-for-research">
+<span id="getting-jstor"></span><h2><a class="toc-backref" href="#id5">JSTOR Data-for-Research</a><a class="headerlink" href="#jstor-data-for-research" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="http://dfr.jstor.org/?&amp;helpview=about_dfr">JSTOR Data-for-Research (DfR) portal</a>
+gives researchers access to bibliographic data and N-grams for the entire JSTOR database.
+Tethne can use DfR data to generate coauthorship networks, and to improve metadata for Web
+of Science records. Increasingly, Tethne is also able to use N-gram counts to add
+information to networks, and can generate corpora for common topic modeling tools (coming
+soon!).</p>
+<p>For information about loading DfR data in Tethne, see the <a class="reference internal" href="tethne.readers.dfr.html#module-tethne.readers.dfr" title="tethne.readers.dfr"><tt class="xref py py-mod docutils literal"><span class="pre">readers.dfr</span></tt></a> module.</p>
+<p>Access the DfR portal at
+<a class="reference external" href="http://dfr.jstor.org/">http://dfr.jstor.org/</a> If you don&#8217;t already have an account,
+you will need to <a class="reference external" href="http://dfr.jstor.org/accounts/register/">create a new account</a>.</p>
+<p>After you&#8217;ve logged in, perform a search using whatever criteria you please. When you have
+achieved the result that you desire, create a new dataset request. Under the &#8220;Dataset
+Request&#8221; menu in the upper-right corner of the page, click &#8220;Submit new request&#8221;.</p>
+<a class="reference internal image-reference" href="_images/getting.5.png"><img alt="_images/getting.5.png" src="_images/getting.5.png" style="width: 60%;" /></a>
+<p>On the <strong>Download Options</strong> page, select your desired <strong>Data Type</strong>. If you do not intend
+to make use of the contents of the papers themselves, then &#8220;Citations Only&#8221; is sufficient.
+Otherwise, choose word counts, bigrams, etc.</p>
+<p><strong>Output Format</strong> should be set to <strong>XML</strong>.</p>
+<p>Give your request a title, and set the maximum number of articles. <em>Note that the maximum
+documents allowed per request is 1,000. Setting **Maximum Articles*</em> to a value less than
+the number of search results will yield a random sample of your results.*</p>
+<a class="reference internal image-reference" href="_images/getting.6.png"><img alt="_images/getting.6.png" src="_images/getting.6.png" style="width: 60%;" /></a>
+<p>Your request should now appear in your list of <strong>Data Requests</strong>. When your request is
+ready (hours to days later), you will receive an e-mail with a download link. When
+downloading from the <strong>Data Requests</strong> list, be sure to use the link in the
+<strong>full dataset</strong> column.</p>
+<a class="reference internal image-reference" href="_images/getting.7.png"><img alt="_images/getting.7.png" src="_images/getting.7.png" style="width: 60%;" /></a>
+<p>When your dataset download is complete, unzip it. The contents should look something like
+those shown below.</p>
+<a class="reference internal image-reference" href="_images/getting.8.png"><img alt="_images/getting.8.png" src="_images/getting.8.png" style="width: 40%;" /></a>
+<p><tt class="docutils literal"><span class="pre">citations.XML</span></tt> contains bibliographic data in XML format. The <tt class="docutils literal"><span class="pre">bigrams</span></tt>, <tt class="docutils literal"><span class="pre">trigrams</span></tt>,
+<tt class="docutils literal"><span class="pre">wordcounts</span></tt> folders contain N-gram counts for each document.</p>
+<p>In the example above, the path this dataset is
+<cite>/Users/erickpeirson/Downloads/DfR/ecology_1960-64</cite>. This is the path used in
+<a class="reference internal" href="tethne.readers.dfr.html#tethne.readers.dfr.read" title="tethne.readers.dfr.read"><tt class="xref py py-func docutils literal"><span class="pre">tethne.readers.dfr.read()</span></tt></a> .</p>
+</div>
+<div class="section" id="scopus">
+<h2><a class="toc-backref" href="#id6">Scopus</a><a class="headerlink" href="#scopus" title="Permalink to this headline">¶</a></h2>
+<p>As of v0.6.0-beta, Tethne supports data from the <a class="reference external" href="http://www.elsevier.com/online-tools/scopus">Scopus</a> bibliographic database.</p>
+<p>For information about loading Scopus data in Tethne, see the <a class="reference internal" href="tethne.readers.scopus.html#module-tethne.readers.scopus" title="tethne.readers.scopus"><tt class="xref py py-mod docutils literal"><span class="pre">readers.scopus</span></tt></a>
+module.</p>
+<p>Perform your search without whatever parameters you prefer. In this example, we are
+searching for documents with <tt class="docutils literal"><span class="pre">phenotypic</span></tt> or <tt class="docutils literal"><span class="pre">plasticity</span></tt> in their titles, abstracts,
+or keywords, and we&#8217;re searching all available data in Scopus.</p>
+<a class="reference internal image-reference" href="_images/getting.9.png"><img alt="_images/getting.9.png" src="_images/getting.9.png" style="width: 60%;" /></a>
+<p>From the search results page, select the records that you wish to export using the
+checkboxes at left. Then click on &#8220;Export&#8221;, just above the search results. This should
+open a menu that looks similar to the one shown below.</p>
+<p>Be sure to select the following:</p>
+<p><strong>File type</strong>: CSV
+<strong>Information to export</strong>: All available information</p>
+<p>Then click the &#8220;Export&#8221; button in the bottom right.</p>
+<a class="reference internal image-reference" href="_images/getting.10.png"><img alt="_images/getting.10.png" src="_images/getting.10.png" style="width: 60%;" /></a>
+<p>After a few moments, your browser should begin downloading a file called <tt class="docutils literal"><span class="pre">scopus.csv</span></tt>.
+If you were to open that file in your favorite spreadsheet application, the contents
+should look something like what is shown below.</p>
+<a class="reference internal image-reference" href="_images/getting.11.png"><img alt="_images/getting.11.png" src="_images/getting.11.png" style="width: 60%;" /></a>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_round.png" alt="Logo">
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Getting Bibliographic Data</a><ul>
+<li><a class="reference internal" href="#web-of-science">Web of Science</a><ul>
+<li><a class="reference internal" href="#structure-of-the-wos-field-tagged-data-file">Structure of the WoS Field-Tagged Data File</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jstor-data-for-research">JSTOR Data-for-Research</a></li>
+<li><a class="reference internal" href="#scopus">Scopus</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorials.html"
+                        title="previous chapter">Tutorials</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="corpora.html"
+                        title="next chapter">Working with Corpora</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="_sources/tutorial.getting_data.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div class="this-page-menu">
+  <a href="/scipy/docs/scipy-docs/tutorial.getting_data.rst">Edit page</a>
+</div>
+
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2013, ASU Digital Innovation Group.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2.2.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

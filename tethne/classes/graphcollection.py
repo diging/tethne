@@ -6,7 +6,7 @@ A :class:`.GraphCollection` is a set of graphs generated from a
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel('ERROR')
+logger.setLevel('INFO')
 
 import networkx
 import numpy as np

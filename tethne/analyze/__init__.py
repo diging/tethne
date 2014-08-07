@@ -6,6 +6,7 @@ Methods for analyzing :class:`.Corpus`\, :class:`.GraphCollection`\, and
 
    collection
    corpus
+   features
    graph
 
 """
