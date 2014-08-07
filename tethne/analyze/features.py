@@ -45,6 +45,26 @@ def distance(sa, sb, method, normalize=True, smooth=False):
     yule                `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.yule.html>`_
     ================    ====================
 
+    Parameters
+    ----------
+    sa : list
+        A  :ref:`sparse-feature-vector`\.
+    sb : list
+        A  :ref:`sparse-feature-vector`\.
+    method : str
+        Name of a method in scipy.spatial.distance (see above).
+    normalize : bool
+        (default: True) If True, ``sa`` and ``sb`` are normalized so that they
+        each sum to 1.0.
+    smooth : bool
+        (default: False) If True, uses the smoothing method described in `Bigi
+        2003 
+        <http://lvk.cs.msu.su/~bruzz/articles/classification/Using%20Kullback-Leibler%20Distance%20for%20Text%20Categorization.pdf>`_
+        
+    Returns
+    -------
+    distance : float
+        Distance value from ``method``.
 
     """
     if method not in spat.distance.__dict__:
@@ -72,6 +92,21 @@ def kl_divergence(sa, sb):
     """
     Calculate Kullback-Leibler Distance for sparse feature vectors.
     
+    Uses the smoothing method described in `Bigi 2003 
+    <http://lvk.cs.msu.su/~bruzz/articles/classification/Using%20Kullback-Leibler%20Distance%20for%20Text%20Categorization.pdf>`_
+    to facilitate better comparisons between vectors describing wordcounts.
+    
+    Parameters
+    ----------
+    sa : list
+        A  :ref:`sparse-feature-vector`\.
+    sb : list
+        A  :ref:`sparse-feature-vector`\.
+        
+    Returns
+    -------
+    divergence : float
+        KL divergence.
     """
     # Convert sparse data into dense arrays.
     adense = _sparse_to_array(sa)
@@ -87,11 +122,30 @@ def kl_divergence(sa, sb):
     # Smooth according to Bigi 2003.
     aprob, bprob = _smooth(aprob, bprob, Ndiff)
 
-    return numpy.sum( (aprob - bprob) * numpy.log(aprob/bprob) )
+    divergence = numpy.sum( (aprob - bprob) * numpy.log(aprob/bprob) )
+
+    return divergence
 
 def cosine_distance(sa, sb):
     """
-    Calculate cosine distance for sparse feature vectors.
+    Calculate `cosine distance
+    <http://en.wikipedia.org/wiki/Cosine_similarity>`_ for sparse feature 
+    vectors.
+    
+    Uses the `cosine method in scipy.spatial.distance
+    <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cosine.html#scipy.spatial.distance.cosine>`_.
+    
+    Parameters
+    ----------
+    sa : list
+        A  :ref:`sparse-feature-vector`\.
+    sb : list
+        A  :ref:`sparse-feature-vector`\.
+        
+    Returns
+    -------
+    distance : float
+        Cosine distance.
     """
     # Convert sparse data into dense arrays.
     amax = max(zip(*sa)[0])
@@ -100,13 +154,37 @@ def cosine_distance(sa, sb):
     bdense = _sparse_to_array(sb, size=max(amax, bmax)+1)
 
     from scipy.spatial.distance import cosine
-    return cosine(adense, bdense)
+    distance = cosine(adense, bdense)
+    
+    return distance
 
 def cosine_similarity(sa, sb):
     """
+    Calculate `cosine similarity 
+    <http://en.wikipedia.org/wiki/Cosine_similarity>`_ for sparse feature 
+    vectors.
+    
+    Uses the `cosine method in scipy.spatial.distance
+    <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cosine.html#scipy.spatial.distance.cosine>`_.
+    
+    Parameters
+    ----------
+    sa : list
+        A  :ref:`sparse-feature-vector`\.
+    sb : list
+        A  :ref:`sparse-feature-vector`\.
+        
+    Returns
+    -------
+    similarity : float
+        Cosine similarity
     """
 
-    return -1.*(cosine_distance(sa, sb) - 1.)
+    similarity = -1.*(cosine_distance(sa, sb) - 1.)
+    return similarity
+
+
+### Helpers ###
 
 def _sparse_to_coo(svect, size=None):
     """
