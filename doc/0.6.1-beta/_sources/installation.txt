@@ -71,9 +71,31 @@ You can install Tethne and all of its (other) dependencies using ``pip``.
 .. code-block:: bash
 
    $ pip install tethne
+
+If pip can't find a "stable" release (see `this page 
+<http://pip.readthedocs.org/en/latest/reference/pip_install.html#pre-release-versions>`_)
+then you may get an error that looks like this:
+
+.. code-block:: bash
+
+   Downloading/unpacking tethne
+
+   Could not find a version that satisfies the requirement tethne (from versions: ... )
+   Cleaning up...
+   No distributions matching the version for tethne
+   Storing debug log for failure in ...
+
+In that case, use the ``--pre`` flag:
+
+.. code-block:: bash
+
+   $ pip install tethne --pre
    
-Alternatively, download the latest version of Tethne from the `Python Package Index
-<https://pypi.python.org/pypi/tethne>`_. Unzip the ``tar.gz`` archive, and then:
+You can also download the latest version of Tethne from the `Python Package Index
+<https://pypi.python.org/pypi/tethne>`_, or from the `Tethne project site 
+<https://github.com/diging/tethne/releases>`_.
+
+Unzip the ``tar.gz`` archive, and then:
 
 .. code-block:: bash
 
