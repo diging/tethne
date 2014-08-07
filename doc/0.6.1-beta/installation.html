@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Installation &mdash; tethne 0.6.0-beta documentation</title>
+    <title>Installation &mdash; tethne 0.6.1-beta documentation</title>
     
     <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.6.0-beta',
+        VERSION:     '0.6.1-beta',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/js/copybutton.js"></script>
-    <link rel="top" title="tethne 0.6.0-beta documentation" href="index.html" >
+    <link rel="top" title="tethne 0.6.1-beta documentation" href="index.html" >
     <link rel="next" title="Quickstart" href="quickstart.html" >
     <link rel="prev" title="Tethne: Documentation v0.6.0-beta" href="index.html" > 
   </head>
@@ -49,7 +49,7 @@
     <ul class="nav nav-pills pull-left">
         <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
 	
-        <li class="active"><a href="index.html">tethne 0.6.0-beta documentation</a></li>
+        <li class="active"><a href="index.html">tethne 0.6.1-beta documentation</a></li>
 	 
     </ul>
               
@@ -143,7 +143,22 @@ nltk==2.0.4
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install tethne
 </pre></div>
 </div>
-<p>Alternatively, download the latest version of Tethne from the <a class="reference external" href="https://pypi.python.org/pypi/tethne">Python Package Index</a>. Unzip the <tt class="docutils literal"><span class="pre">tar.gz</span></tt> archive, and then:</p>
+<p>If pip can&#8217;t find a &#8220;stable&#8221; release (see <a class="reference external" href="http://pip.readthedocs.org/en/latest/reference/pip_install.html#pre-release-versions">this page</a>)
+then you may get an error that looks like this:</p>
+<div class="highlight-bash"><div class="highlight"><pre>Downloading/unpacking tethne
+
+Could not find a version that satisfies the requirement tethne <span class="o">(</span>from versions: ... <span class="o">)</span>
+Cleaning up...
+No distributions matching the version <span class="k">for </span>tethne
+Storing debug log <span class="k">for </span>failure in ...
+</pre></div>
+</div>
+<p>In that case, use the <tt class="docutils literal"><span class="pre">--pre</span></tt> flag:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install tethne --pre
+</pre></div>
+</div>
+<p>You can also download the latest version of Tethne from the <a class="reference external" href="https://pypi.python.org/pypi/tethne">Python Package Index</a>, or from the <a class="reference external" href="https://github.com/diging/tethne/releases">Tethne project site</a>.</p>
+<p>Unzip the <tt class="docutils literal"><span class="pre">tar.gz</span></tt> archive, and then:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> /path/to/unzipped/tethne-x.y.z
 <span class="nv">$ </span>python setup.py install
 </pre></div>
