@@ -13,19 +13,6 @@ import numpy
 
 from ..analyze import features
 
-def kl_divergence(model, threshold, *args, **kwargs):
-    for i in xrange(model.M):
-        for j in xrange(i+1, model.M):
-            
-            
-            
-            fwd = features.kl_divergence(manager.model.item(i), manager.model.item(j))
-            rev = features.kl_divergence(manager.model.item(j), manager.model.item(i))        
-            sim = 1/((fwd + rev)/2)
-            if sim > 1.0:
-                thegraph.add_edge(i,j, weight=float(sim))
-
-
 def distance(   model, method='cosine', percentile=90, bidirectional=False,
                 normalize=True, smooth=False, transform='log'    ):
     """
@@ -51,6 +38,8 @@ def distance(   model, method='cosine', percentile=90, bidirectional=False,
         <http://docs.scipy.org/doc/scipy/reference/spatial.distance.html>`_.
         See :func:`.analyze.features.distance` for a list of distance
         statistics. ``hamming`` or ``jaccard`` will raise a RuntimeError.
+        :func:`.analyze.features.kl_divergence` is also available as
+        'kl_divergence'.
     percentile : int
         (default: 90) Edges are included if they are at or above the 
         ``percentile`` for all distances in the ``model``.
@@ -105,8 +94,13 @@ def distance(   model, method='cosine', percentile=90, bidirectional=False,
     edges = {}
     for i in xrange(model.M):
         for j in xrange(i+1, model.M):
-            dist = features.distance(   model.item(i), model.item(j), method,
-                                        normalize=normalize, smooth=smooth  )
+            if method == 'kl_divergence':   # Not a SciPy method.
+                dist = features.kl_divergence( model.item(i), model.item(j) )
+                dist_ = features.kl_divergence( model.item(j), model.item(i) )
+                dist = (dist + dist_)/2.
+            else:
+                dist = features.distance( model.item(i), model.item(j), method,
+                                          normalize=normalize, smooth=smooth  )
 
             if bidirectional:
                 dist_ = features.distance(
