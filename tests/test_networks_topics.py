@@ -45,6 +45,10 @@ nonsense_methods = [
     ]
 
 class TestDistanceNetwork(unittest.TestCase):
+    def test_kl_divergence(self):
+        testgraph = distance(manager.model, method='cosine')
+        self.assertEqual(len(testgraph.edges()), 2892)
+    
     def test_cosine(self):
         testgraph = distance(manager.model, method='cosine')
         self.assertEqual(len(testgraph.edges()), 2892)
