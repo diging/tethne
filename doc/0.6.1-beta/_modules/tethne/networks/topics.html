@@ -81,123 +81,246 @@
 <span class="sd">Build networks from topics in a topic model.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">networkx</span>
 <span class="c">#from scipy import stats</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
 
-<div class="viewcode-block" id="paper_coupling"><a class="viewcode-back" href="../../../tethne.networks.topics.html#tethne.networks.topics.paper_coupling">[docs]</a><span class="k">def</span> <span class="nf">paper_coupling</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">..analyze</span> <span class="kn">import</span> <span class="n">features</span>
 
-    <span class="n">D</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">doc_topic</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">Z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">doc_topic</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<div class="viewcode-block" id="kl_divergence"><a class="viewcode-back" href="../../../tethne.networks.topics.html#tethne.networks.topics.kl_divergence">[docs]</a><span class="k">def</span> <span class="nf">kl_divergence</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">M</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">M</span><span class="p">):</span>
+            
+            
+            
+            <span class="n">fwd</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">kl_divergence</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">manager</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
+            <span class="n">rev</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">kl_divergence</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">manager</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>        
+            <span class="n">sim</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">((</span><span class="n">fwd</span> <span class="o">+</span> <span class="n">rev</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sim</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+                <span class="n">thegraph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">sim</span><span class="p">))</span>
 
-    <span class="n">edges</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">D</span><span class="p">):</span>
-        <span class="n">d_s</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">doc_topic</span><span class="p">[</span><span class="n">d</span><span class="p">,:]</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">Z</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">Z</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">d_s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">threshold</span> <span class="ow">and</span> <span class="n">d_s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="n">edges</span><span class="p">[(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">d_s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">d_s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
-                    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                        <span class="n">edges</span><span class="p">[(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">d</span><span class="p">,</span> <span class="n">d_s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">d_s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)]</span>
-
-    <span class="n">pc</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-
-    <span class="k">for</span> <span class="n">e</span><span class="p">,</span> <span class="n">papers</span> <span class="ow">in</span> <span class="n">edges</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-        <span class="n">weight</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span> <span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">papers</span><span class="p">]</span> <span class="p">)</span> <span class="o">/</span> <span class="n">D</span>
-        <span class="n">pc</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span> \
-                    <span class="n">papers</span><span class="o">=</span><span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">papers</span><span class="p">])</span>
-
-    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">pc</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
-        <span class="n">pc</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="s">&#39;words&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">top_keys</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>  <span class="c"># Add list of top words.</span>
-
-    <span class="k">return</span> <span class="n">pc</span>
 </div>
-<div class="viewcode-block" id="term_coupling"><a class="viewcode-back" href="../../../tethne.networks.topics.html#tethne.networks.topics.term_coupling">[docs]</a><span class="k">def</span> <span class="nf">term_coupling</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+<div class="viewcode-block" id="distance"><a class="viewcode-back" href="../../../tethne.networks.topics.html#tethne.networks.topics.distance">[docs]</a><span class="k">def</span> <span class="nf">distance</span><span class="p">(</span>   <span class="n">model</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;cosine&#39;</span><span class="p">,</span> <span class="n">percentile</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                <span class="n">normalize</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s">&#39;log&#39;</span>    <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">Z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">top_word</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">W</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">top_word</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="n">edges</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">W</span><span class="p">):</span>
-        <span class="n">t_sub</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">Z</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">top_word</span><span class="p">[</span><span class="n">z</span><span class="p">,</span><span class="n">w</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">:</span>
-                <span class="n">t_sub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t_sub</span><span class="p">)):</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">t_sub</span><span class="p">)):</span>
-                <span class="n">t_i</span> <span class="o">=</span> <span class="n">t_sub</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">t_j</span> <span class="o">=</span> <span class="n">t_sub</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
-                <span class="n">p_i</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">top_word</span><span class="p">[</span><span class="n">t_i</span><span class="p">,</span><span class="n">w</span><span class="p">]</span>
-                <span class="n">p_j</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">top_word</span><span class="p">[</span><span class="n">t_j</span><span class="p">,</span><span class="n">w</span><span class="p">]</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">edges</span><span class="p">[(</span><span class="n">t_i</span><span class="p">,</span><span class="n">t_j</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">w</span><span class="p">,</span> <span class="p">(</span><span class="n">p_i</span><span class="o">+</span><span class="n">p_j</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
-                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                    <span class="n">edges</span><span class="p">[(</span><span class="n">t_i</span><span class="p">,</span><span class="n">t_j</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">w</span><span class="p">,</span> <span class="p">(</span><span class="n">p_i</span><span class="o">+</span><span class="n">p_j</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)]</span>
-    <span class="n">tc</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-
-    <span class="c">#print edges</span>
-
-    <span class="k">for</span> <span class="n">e</span><span class="p">,</span> <span class="n">words</span> <span class="ow">in</span> <span class="n">edges</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-        <span class="n">weight</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span> <span class="p">[</span> <span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span> <span class="p">]</span> <span class="p">)</span> <span class="o">/</span> <span class="n">W</span>
-        <span class="n">word_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">vocabulary</span><span class="p">[</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span>
-        <span class="n">tc</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span> <span class="n">words</span><span class="o">=</span><span class="n">word_list</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
-        <span class="n">tc</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="s">&#39;words&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">top_keys</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>  <span class="c"># Add list of top words.</span>
-
-    <span class="k">return</span> <span class="n">tc</span>
-    </div>
-<div class="viewcode-block" id="topic_coupling"><a class="viewcode-back" href="../../../tethne.networks.topics.html#tethne.networks.topics.topic_coupling">[docs]</a><span class="k">def</span> <span class="nf">topic_coupling</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">papers</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Builds a network of topics using inverse symmetric KL-divergence on papers.</span>
+<span class="sd">    Generate a network of :class:`.Paper`\s based on a distance metric from</span>
+<span class="sd">    `scipy.spatial.distance </span>
+<span class="sd">    &lt;http://docs.scipy.org/doc/scipy/reference/spatial.distance.html&gt;`_</span>
+<span class="sd">    using :ref:`sparse-feature-vector`\s over the dimensions in ``model``.</span>
 <span class="sd">    </span>
-<span class="sd">    If `papers` is not None, uses only those papers provided to calculate</span>
-<span class="sd">    KL-divergence.</span>
+<span class="sd">    Refer to the documentation for :func:`.analyze.features.distance` for</span>
+<span class="sd">    a list of distance statistics. The only two methods that will not work</span>
+<span class="sd">    in this context are ``hamming`` and ``jaccard``.</span>
+
+<span class="sd">    Distances are inverted to a similarity metric, which is log-transformed by </span>
+<span class="sd">    default (see ``transform`` parameter, below). Edges are included if they are</span>
+<span class="sd">    at or above the ``percentile``th percentile.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    model : :class:`.LDAModel`</span>
-<span class="sd">    papers : list</span>
-<span class="sd">        A list of paper indices to use in KL-divergence calculation.</span>
-<span class="sd">    threshold : float</span>
-<span class="sd">        Minimum inverse symmetric KL-divergence for an edge. (default = 0.25)</span>
+<span class="sd">    model : :class:`.LDAModel` or :class:`.DTMModel`</span>
+<span class="sd">        :func:`.distance` uses ``model.item`` and ``model.metadata``.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        Name of a distance method from `scipy.spatial.distance</span>
+<span class="sd">        &lt;http://docs.scipy.org/doc/scipy/reference/spatial.distance.html&gt;`_.</span>
+<span class="sd">        See :func:`.analyze.features.distance` for a list of distance</span>
+<span class="sd">        statistics. ``hamming`` or ``jaccard`` will raise a RuntimeError.</span>
+<span class="sd">    percentile : int</span>
+<span class="sd">        (default: 90) Edges are included if they are at or above the </span>
+<span class="sd">        ``percentile`` for all distances in the ``model``.</span>
+<span class="sd">    bidirectional : bool</span>
+<span class="sd">        (default: False) If True, ``method`` is calculated twice for each pair</span>
+<span class="sd">        of :class:`.Paper`\s ( ``(i,j)`` and ``(j,i)`` ), and the mean is used.</span>
+<span class="sd">    normalize : bool</span>
+<span class="sd">        (default: True) If True, vectors over topics are normalized so that they</span>
+<span class="sd">        sum to 1.0 for each :class:`.Paper`.</span>
+<span class="sd">    smooth : bool</span>
+<span class="sd">        (default: False) If True, vectors over topics are smoothed according to </span>
+<span class="sd">        `Bigi 2003 </span>
+<span class="sd">        &lt;http://lvk.cs.msu.su/~bruzz/articles/classification/Using%20Kullback-Leibler%20Distance%20for%20Text%20Categorization.pdf&gt;`_.</span>
+<span class="sd">        This may be useful if vectors over topics are very sparse.</span>
+<span class="sd">    transform : str</span>
+<span class="sd">        (default: &#39;log&#39;) Transformation to apply to similarity values before</span>
+<span class="sd">        building the graph. So far only &#39;log&#39; and None are supported.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    thegraph : networkx.Graph</span>
+<span class="sd">        Similarity values are included as edge weights. Node attributes are set</span>
+<span class="sd">        using the fields in ``model.metadata``.</span>
+<span class="sd">        </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">    </span>
+<span class="sd">       &gt;&gt;&gt; from tethne.networks import topics</span>
+<span class="sd">       &gt;&gt;&gt; thegraph = topics.distance(MyLDAModel, &#39;cosine&#39;)</span>
+
+<span class="sd">       &gt;&gt;&gt; from tethne.writers import graph</span>
+<span class="sd">       &gt;&gt;&gt; graph.to_graphml(thegraph, &#39;~./thegraph.graphml&#39;)</span>
+<span class="sd">       </span>
+<span class="sd">    .. figure:: _static/images/lda_cosine_network.png</span>
+<span class="sd">       :width: 80%</span>
+<span class="sd">       </span>
+<span class="sd">       Edge weight and opacity indicate similarity. Node color indicates the</span>
+<span class="sd">       journal in which each :class:`.Paper` was published. In this graph,</span>
+<span class="sd">       papers published in the same journal tend to cluster together.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     
-    <span class="n">Z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">top_word</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;hamming&#39;</span><span class="p">,</span><span class="s">&#39;jaccard&#39;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="s">&#39;There is no sensicle interpretation of {0} for these data.&#39;</span>
+                                                            <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
     
-    <span class="k">if</span> <span class="n">threshold</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="c"># Scaling factor to remove negative correlation between N_d and number </span>
-        <span class="c"># of edges.</span>
-        <span class="n">threshold</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span><span class="o">**-</span><span class="mf">0.2</span> <span class="o">+</span> <span class="mf">0.1</span>
-        
-    <span class="k">if</span> <span class="n">papers</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">dt_matrix</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">doc_topic</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">N_d</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
-        <span class="n">dt_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_d</span><span class="p">,</span> <span class="n">Z</span><span class="p">))</span>
-        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">N_d</span><span class="p">):</span>
-            <span class="n">dt_matrix</span><span class="p">[</span><span class="n">d</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">doc_topic</span><span class="p">[</span><span class="n">papers</span><span class="p">[</span><span class="n">d</span><span class="p">],</span> <span class="p">:]</span>
+    <span class="n">thegraph</span> <span class="o">=</span> <span class="n">networkx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+    
+    <span class="n">edges</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">M</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">M</span><span class="p">):</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span>   <span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">method</span><span class="p">,</span>
+                                        <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="n">smooth</span>  <span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">Z</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">Z</span><span class="p">):</span>
-            <span class="n">D_ij</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">dt_matrix</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="n">dt_matrix</span><span class="p">[:,</span><span class="n">j</span><span class="p">])</span>
-            <span class="n">D_ji</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">dt_matrix</span><span class="p">[:,</span><span class="n">j</span><span class="p">],</span> <span class="n">dt_matrix</span><span class="p">[:,</span><span class="n">i</span><span class="p">])</span>
-            <span class="n">iD_sym</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">D_ij</span> <span class="o">+</span> <span class="n">D_ji</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">bidirectional</span><span class="p">:</span>
+                <span class="n">dist_</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span>
+                            <span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">method</span><span class="p">,</span>
+                            <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="n">smooth</span>  <span class="p">)</span>
+                            
+                <span class="n">dist</span> <span class="o">=</span> <span class="p">(</span><span class="n">dist</span> <span class="o">+</span> <span class="n">dist_</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
             
-            <span class="k">if</span> <span class="n">iD_sym</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">:</span>
-                <span class="n">G</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">top_keys</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]))</span>
-                <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">weight</span><span class="o">=</span><span class="n">iD_sym</span><span class="p">)</span>
-    
-    <span class="k">return</span> <span class="n">G</span></div>
-</pre></div>
+            <span class="n">sim</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">dist</span>
+            
+            <span class="k">if</span> <span class="n">transform</span> <span class="o">==</span> <span class="s">&#39;log&#39;</span><span class="p">:</span>
+                <span class="n">sim</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+
+            <span class="n">edges</span><span class="p">[(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">sim</span>
+            
+    <span class="n">pct</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">edges</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">percentile</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">edge</span><span class="p">,</span> <span class="n">sim</span> <span class="ow">in</span> <span class="n">edges</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">sim</span> <span class="o">&gt;=</span> <span class="n">pct</span><span class="p">:</span>
+            <span class="n">thegraph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">weight</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">sim</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">{</span> <span class="n">k</span><span class="p">:</span><span class="n">v</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
+                                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">thegraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>    <span class="p">}</span>
+        <span class="n">networkx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">thegraph</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">thegraph</span>
+
+<span class="c">#def paper_coupling(model, threshold=0.1):</span>
+<span class="c">#    &quot;&quot;&quot;</span>
+<span class="c">#    &quot;&quot;&quot;</span>
+<span class="c">#</span>
+<span class="c">#    D = model.doc_topic.shape[0]</span>
+<span class="c">#    Z = model.doc_topic.shape[1]</span>
+<span class="c">#</span>
+<span class="c">#    edges = {}</span>
+<span class="c">#    for d in xrange(D):</span>
+<span class="c">#        d_s = model.doc_topic[d,:]</span>
+<span class="c">#        for i in xrange(Z):</span>
+<span class="c">#            for j in xrange(i+1, Z):</span>
+<span class="c">#                if d_s[i] &gt;= threshold and d_s[j] &gt;= threshold:</span>
+<span class="c">#                    try:</span>
+<span class="c">#                        edges[(i,j)].append( (d, d_s[i]*d_s[j]/2) )</span>
+<span class="c">#                    except KeyError:</span>
+<span class="c">#                        edges[(i,j)] = [(d, d_s[i]*d_s[j]/2)]</span>
+<span class="c">#</span>
+<span class="c">#    pc = nx.Graph()</span>
+<span class="c">#</span>
+<span class="c">#    for e, papers in edges.iteritems():</span>
+<span class="c">#        weight = sum( [p[1] for p in papers] ) / D</span>
+<span class="c">#        pc.add_edge(e[0], e[1], weight=weight, \</span>
+<span class="c">#                    papers=[model.metadata[p[0]] for p in papers])</span>
+<span class="c">#</span>
+<span class="c">#    for t in pc.nodes():</span>
+<span class="c">#        pc.node[t][&#39;words&#39;] = model.top_keys[t][1]  # Add list of top words.</span>
+<span class="c">#</span>
+<span class="c">#    return pc</span>
+<span class="c">#</span>
+<span class="c">#def term_coupling(model, threshold=0.01):</span>
+<span class="c">#    &quot;&quot;&quot;</span>
+<span class="c">#    &quot;&quot;&quot;</span>
+<span class="c">#</span>
+<span class="c">#    Z = model.top_word.shape[0]</span>
+<span class="c">#    W = model.top_word.shape[1]</span>
+<span class="c">#</span>
+<span class="c">#    edges = {}</span>
+<span class="c">#    for w in xrange(W):</span>
+<span class="c">#        t_sub = []</span>
+<span class="c">#</span>
+<span class="c">#        for z in xrange(Z):</span>
+<span class="c">#            if model.top_word[z,w] &gt;= threshold:</span>
+<span class="c">#                t_sub.append(z)</span>
+<span class="c">#</span>
+<span class="c">#        for i in xrange(len(t_sub)):</span>
+<span class="c">#            for j in xrange(i+1, len(t_sub)):</span>
+<span class="c">#                t_i = t_sub[i]</span>
+<span class="c">#                t_j = t_sub[j]</span>
+<span class="c">#                p_i = model.top_word[t_i,w]</span>
+<span class="c">#                p_j = model.top_word[t_j,w]</span>
+<span class="c">#                try:</span>
+<span class="c">#                    edges[(t_i,t_j)].append((w, (p_i+p_j)/2))</span>
+<span class="c">#                except KeyError:</span>
+<span class="c">#                    edges[(t_i,t_j)] = [(w, (p_i+p_j)/2)]</span>
+<span class="c">#    tc = nx.Graph()</span>
+<span class="c">#</span>
+<span class="c">#    #print edges</span>
+<span class="c">#</span>
+<span class="c">#    for e, words in edges.iteritems():</span>
+<span class="c">#        weight = sum( [ w[1] for w in words ] ) / W</span>
+<span class="c">#        word_list = [model.vocabulary[w[0]] for w in words]</span>
+<span class="c">#        tc.add_edge(e[0], e[1], weight=weight, words=word_list)</span>
+<span class="c">#</span>
+<span class="c">#    for t in tc.nodes():</span>
+<span class="c">#        tc.node[t][&#39;words&#39;] = model.top_keys[t][1]  # Add list of top words.</span>
+<span class="c">#</span>
+<span class="c">#    return tc</span>
+<span class="c">#    </span>
+<span class="c">#def topic_coupling(model, papers=None, threshold=None):</span>
+<span class="c">#    &quot;&quot;&quot;</span>
+<span class="c">#    Builds a network of topics using inverse symmetric KL-divergence on papers.</span>
+<span class="c">#    </span>
+<span class="c">#    If `papers` is not None, uses only those papers provided to calculate</span>
+<span class="c">#    KL-divergence.</span>
+<span class="c">#    </span>
+<span class="c">#    Parameters</span>
+<span class="c">#    ----------</span>
+<span class="c">#    model : :class:`.LDAModel`</span>
+<span class="c">#    papers : list</span>
+<span class="c">#        A list of paper indices to use in KL-divergence calculation.</span>
+<span class="c">#    threshold : float</span>
+<span class="c">#        Minimum inverse symmetric KL-divergence for an edge. (default = 0.25)</span>
+<span class="c">#    &quot;&quot;&quot;</span>
+<span class="c">#    </span>
+<span class="c">#    Z = model.top_word.shape[0]</span>
+<span class="c">#    G = nx.Graph()</span>
+<span class="c">#    </span>
+<span class="c">#    if threshold is None:</span>
+<span class="c">#        # Scaling factor to remove negative correlation between N_d and number </span>
+<span class="c">#        # of edges.</span>
+<span class="c">#        threshold = len(papers)**-0.2 + 0.1</span>
+<span class="c">#        </span>
+<span class="c">#    if papers is None:</span>
+<span class="c">#        dt_matrix = model.doc_topic</span>
+<span class="c">#    else:</span>
+<span class="c">#        N_d = len(papers)</span>
+<span class="c">#        dt_matrix = np.zeros((N_d, Z))</span>
+<span class="c">#        for d in xrange(N_d):</span>
+<span class="c">#            dt_matrix[d, :] = model.doc_topic[papers[d], :]</span>
+<span class="c">#</span>
+<span class="c">#    for i in xrange(Z):</span>
+<span class="c">#        for j in xrange(i+1, Z):</span>
+<span class="c">#            D_ij = stats.entropy(dt_matrix[:,i], dt_matrix[:,j])</span>
+<span class="c">#            D_ji = stats.entropy(dt_matrix[:,j], dt_matrix[:,i])</span>
+<span class="c">#            iD_sym = float(1/(D_ij + D_ji))</span>
+<span class="c">#            </span>
+<span class="c">#            if iD_sym &gt;= threshold:</span>
+<span class="c">#                G.add_node(j, label=&#39;, &#39;.join(model.top_keys[i][1]))</span>
+<span class="c">#                G.add_edge(i,j,weight=iD_sym)</span>
+<span class="c">#    </span>
+<span class="c">#    return G</span>
+</pre></div></div>
 
           </div>
         </div>
