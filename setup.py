@@ -8,9 +8,21 @@ DESCRIPTION = ('Bibliographic network and corpus analysis for historians')
 LICENSE = 'GNU GPL 3' 
 URL = 'http://diging.github.io/tethne/'
 VERSION = '0.6.1-beta'
-PACKAGES = [ 'tethne','tethne.analyze','tethne.networks','tethne.readers',
-             'tethne.utilities', 'tethne.writers', 'tethne.model',
-             'tethne.services', 'tethne.classes' ]
+PACKAGES = [ 'tethne',
+             'tethne.analyze',
+             'tethne.classes', 
+             'tethne.model',
+             'tethne.model.corpus',
+             'tethne.model.managers',
+             'tethne.model.social',                          
+             'tethne.networks',
+             'tethne.persistence',
+             'tethne.persistence.hdf5',                          
+             'tethne.readers',
+             'tethne.services',
+             'tethne.utilities', 
+             'tethne.writers', 
+            ]
 
 setup(
     name=DISTNAME,

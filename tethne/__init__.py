@@ -29,7 +29,6 @@ from readers import *
 from services import *
 from writers import *
 
-from persistence import hdf5
 from persistence.hdf5 import *
 
 import logging
