@@ -15,4 +15,4 @@ use one of the model :mod:`.managers`\.
 
 from corpus import *
 from social import *
-from basemodel import *
+from managers import *
