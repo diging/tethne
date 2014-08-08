@@ -81,25 +81,17 @@
 <span class="sd">Build networks from topics in a topic model.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(asctime)-6s</span><span class="s">: </span><span class="si">%(name)s</span><span class="s"> - </span><span class="si">%(levelname)s</span><span class="s"> - </span><span class="si">%(module)s</span><span class="s"> - </span><span class="si">%(funcName)s</span><span class="s"> - </span><span class="si">%(lineno)d</span><span class="s"> - </span><span class="si">%(message)s</span><span class="s">&#39;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s">&#39;INFO&#39;</span><span class="p">)</span>
+
 <span class="kn">import</span> <span class="nn">networkx</span>
 <span class="c">#from scipy import stats</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
 
 <span class="kn">from</span> <span class="nn">..analyze</span> <span class="kn">import</span> <span class="n">features</span>
 
-<div class="viewcode-block" id="kl_divergence"><a class="viewcode-back" href="../../../tethne.networks.topics.html#tethne.networks.topics.kl_divergence">[docs]</a><span class="k">def</span> <span class="nf">kl_divergence</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">M</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">M</span><span class="p">):</span>
-            
-            
-            
-            <span class="n">fwd</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">kl_divergence</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">manager</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
-            <span class="n">rev</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">kl_divergence</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">manager</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>        
-            <span class="n">sim</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">((</span><span class="n">fwd</span> <span class="o">+</span> <span class="n">rev</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">sim</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
-                <span class="n">thegraph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">sim</span><span class="p">))</span>
-
-</div>
 <div class="viewcode-block" id="distance"><a class="viewcode-back" href="../../../tethne.networks.topics.html#tethne.networks.topics.distance">[docs]</a><span class="k">def</span> <span class="nf">distance</span><span class="p">(</span>   <span class="n">model</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;cosine&#39;</span><span class="p">,</span> <span class="n">percentile</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
                 <span class="n">normalize</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s">&#39;log&#39;</span>    <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -125,6 +117,8 @@
 <span class="sd">        &lt;http://docs.scipy.org/doc/scipy/reference/spatial.distance.html&gt;`_.</span>
 <span class="sd">        See :func:`.analyze.features.distance` for a list of distance</span>
 <span class="sd">        statistics. ``hamming`` or ``jaccard`` will raise a RuntimeError.</span>
+<span class="sd">        :func:`.analyze.features.kl_divergence` is also available as</span>
+<span class="sd">        &#39;kl_divergence&#39;.</span>
 <span class="sd">    percentile : int</span>
 <span class="sd">        (default: 90) Edges are included if they are at or above the </span>
 <span class="sd">        ``percentile`` for all distances in the ``model``.</span>
@@ -179,8 +173,13 @@
     <span class="n">edges</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">M</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">M</span><span class="p">):</span>
-            <span class="n">dist</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span>   <span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">method</span><span class="p">,</span>
-                                        <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="n">smooth</span>  <span class="p">)</span>
+            <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;kl_divergence&#39;</span><span class="p">:</span>   <span class="c"># Not a SciPy method.</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">kl_divergence</span><span class="p">(</span> <span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="p">)</span>
+                <span class="n">dist_</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">kl_divergence</span><span class="p">(</span> <span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="p">)</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="p">(</span><span class="n">dist</span> <span class="o">+</span> <span class="n">dist_</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span> <span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">model</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">method</span><span class="p">,</span>
+                                          <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="n">smooth</span>  <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">bidirectional</span><span class="p">:</span>
                 <span class="n">dist_</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span>
