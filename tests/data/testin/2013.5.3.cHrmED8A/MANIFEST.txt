@@ -1,9 +1,0 @@
-Job Title: Experimental taxonomy, 1921-1980
-Job ID: 2013.5.3.cHrmED8A
-Requester: erickpeirson
-Query: http://dfr.jstor.org/fsearch/submitrequest?cs=any%3A%22experimental+taxonomy%22%7Cyear%3A%5B1921+TO+1980%5D%5E1.0&fs=yrm1&view=text&
-View(s): citations|wordcounts
-Format: XML
-Documents Requested: 1000
-Date Processed: 2013-05-03 08:34:02.022359
-
