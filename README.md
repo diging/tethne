@@ -15,8 +15,8 @@ Key features
 
 Documentation
 -------------
-For more information, see the Tethne [website](https://github.com/diging/tethne) and
-[documentation](http://diging.github.io/tethne/api/) (under development).
+For more information, see the Tethne [website](http://diging.github.io/tethne/) and
+[documentation](http://diging.github.io/tethne/doc/0.6.1-beta/index.html) (under development).
 
 Requirements
 ------------
