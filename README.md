@@ -1,4 +1,4 @@
-![alt text](https://raw.github.com/diging/tethne/python/doc/logo_round.png "Tethneus, an orb weaving spider.")
+![alt text](http://diging.github.io/tethne/doc/0.6.1-beta/_static/logo_round.png"Tethneus, an orb weaving spider.")
 
 Tethne
 ======
