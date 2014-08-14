@@ -63,6 +63,7 @@ class Paper(dict):
             'pmid':None,    # PubMed
             'wosid':None,   # ISI Web of Science
             'eid':None,     # Scopus
+            'uri':None,     # Repository
             'abstract':None,
             'accession':None,
             'topics':None    }
