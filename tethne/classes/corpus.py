@@ -692,7 +692,7 @@ class Corpus(object):
         
         unigrams = self._field_to_features('contents', remove_stopwords, stem)
 
-        return unigrams
+        return None
         
     
     def abstract_to_features(self, remove_stopwords=True, stem=True):
@@ -731,7 +731,7 @@ class Corpus(object):
 
         unigrams = self._field_to_features('abstract', remove_stopwords, stem)
 
-        return unigrams
+        return None
 
     def slice(self, key, method=None, **kwargs):
         """
