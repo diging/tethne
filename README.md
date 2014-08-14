@@ -1,4 +1,4 @@
-![alt text](http://diging.github.io/tethne/doc/0.6.1-beta/_static/logo_round.png Tethneus, an orb weaving spider.")
+![Tethneus, an orb weaving spider](http://diging.github.io/tethne/doc/0.6.1-beta/_static/logo_round.png)
 
 Tethne
 ======
