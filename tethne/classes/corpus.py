@@ -5,7 +5,7 @@ A :class:`.Corpus` organizes :class:`.Paper`\s for analysis.
 import logging
 logging.basicConfig(filename=None, format='%(asctime)-6s: %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(lineno)d - %(message)s')
 logger = logging.getLogger(__name__)
-logger.setLevel('INFO')
+logger.setLevel('DEBUG')
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -653,7 +653,46 @@ class Corpus(object):
 
         logger.debug('done indexing features')
         return
+    
+    def _field_to_features(self, field, remove_stopwords=True, stem=True):
 
+        unigrams = {}
+        for p,paper in self.papers.iteritems():
+            if paper[field] is not None:
+                term_counts = Counter()
+                terms = strip_punctuation(paper[field].lower()).split()
+                for term in terms: term_counts[term] += 1
+                unigrams[p] = term_counts.items()
+
+        logger.debug('generated features.')
+        if remove_stopwords:    # Use stoplist?
+            stoplist = set(stopwords.words())
+        else:
+            stoplist = set([])
+
+        if stem:    # Use stemming?
+            from nltk.stem.porter import PorterStemmer
+            stemmer = PorterStemmer()
+            transformer = stemmer.stem
+        else:
+            transformer = None
+
+        tokd = self._tokenize_features( '{0}Terms'.format(field), unigrams,
+                                        exclude=stoplist,
+                                        transformer=transformer )
+        ft, fi, fs, c, dC, fp = tokd
+        self._define_features(ft, fi, fs, c, dC, fp)
+        
+        return unigrams
+    
+    def contents_to_features(self, remove_stopwords=True, stem=True):
+        logger.debug('Converting contents to featureset.')
+        
+        unigrams = self._field_to_features('contents', remove_stopwords, stem)
+
+        return unigrams
+        
+    
     def abstract_to_features(self, remove_stopwords=True, stem=True):
         """
         Generates a unigram (wordcount) featureset from the abstracts of all
@@ -686,34 +725,9 @@ class Corpus(object):
               [`Issue #23 <https://github.com/diging/tethne/issues/23>`_]
 
         """
-        logger.debug('abstract_to_features: start.')
+        logger.debug('Converting abstracts to features')
 
-        unigrams = {}
-        for p,paper in self.papers.iteritems():
-            if paper['abstract'] is not None:
-                term_counts = Counter()
-                terms = strip_punctuation(paper['abstract'].lower()).split()
-                for term in terms: term_counts[term] += 1
-                unigrams[p] = term_counts.items()
-
-        logger.debug('abstract_to_features: generated features.')
-        if remove_stopwords:    # Use stoplist?
-            stoplist = set(stopwords.words())
-        else:
-            stoplist = set([])
-
-        if stem:    # Use stemming?
-            from nltk.stem.porter import PorterStemmer
-            stemmer = PorterStemmer()
-            transformer = stemmer.stem
-        else:
-            transformer = None
-
-        tokd = self._tokenize_features( 'abstractTerms', unigrams,
-                                        exclude=stoplist,
-                                        transformer=transformer )
-        ft, fi, fs, c, dC, fp = tokd
-        self._define_features(ft, fi, fs, c, dC, fp)
+        unigrams = self._field_to_features('abstract', remove_stopwords, stem)
 
         return unigrams
 

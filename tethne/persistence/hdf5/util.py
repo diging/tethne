@@ -196,8 +196,9 @@ class HDF5Paper(tables.IsDescription):
     :class:`.HDF5Corpus`\.
     """
     mindex = tables.StringCol(100)
-    aulast = tables.StringCol(1000)
-    auinit = tables.StringCol(1000)
+    aulast = tables.StringCol(2000)
+    auinit = tables.StringCol(2000)
+    auuri =  tables.StringCol(2000)
     atitle = tables.StringCol(200)
     jtitle = tables.StringCol(200)
     volume = tables.StringCol(6)
@@ -209,6 +210,7 @@ class HDF5Paper(tables.IsDescription):
     pmid = tables.StringCol(100)
     wosid = tables.StringCol(100)
     abstract = tables.StringCol(5000)
+    contents = tables.StringCol(100000)
     accession = tables.StringCol(100)
     date = tables.Int32Col()
     citations = tables.StringCol(5000)  # List of citation keys.

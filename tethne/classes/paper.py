@@ -48,6 +48,7 @@ class Paper(dict):
         fields = {
             'aulast':None,
             'auinit':None,
+            'auuri':None,
             'institutions':None,
             'atitle':None,
             'jtitle':None,
@@ -65,6 +66,7 @@ class Paper(dict):
             'eid':None,     # Scopus
             'uri':None,     # Repository
             'abstract':None,
+            'contents':None,
             'accession':None,
             'topics':None    }
 
@@ -74,6 +76,7 @@ class Paper(dict):
         # Fields that require list values.
         self.list_fields = [ 'aulast',
                              'auinit',
+                             'auuri',
                              'citations' ]
 
         # Fields that require string values.
@@ -89,6 +92,7 @@ class Paper(dict):
                                'pmid',
                                'wosid',
                                'abstract',
+                               'contents',
                                'accession' ]
 
         # Fields that require int values.

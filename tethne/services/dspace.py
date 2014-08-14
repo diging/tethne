@@ -69,8 +69,10 @@ class DSpace:
                 'uri': self._item_uri(item),
                 'primary_bitstream': self._item_primary_bitstream(item),
                 'creators' : self._item_creators(item),
+                'creators_string': self._item_creators_string(item),
                 'dateCreated': self._item_dateCreated(item),
-                'dateDigitized': self._item_dateDigitized(item)
+                'dateDigitized': self._item_dateDigitized(item),
+                'abstract': self._item_abstract(item)
              } for item in items ]
         return I
         
@@ -113,6 +115,9 @@ class DSpace:
         except TypeError:   # Something is wrong with this item, apparently.
             return None
     
+    def _item_creators_string(self, item):
+        return self._item_metadata(item, 'creator', list=True)
+    
     def _item_creators(self, item):
         return self._item_metadata(item, 'creator', 'uri', list=True)
     
@@ -124,6 +129,9 @@ class DSpace:
         
     def _item_dateDigitized(self, item):
         return self._item_metadata(item, 'date', 'digitized')
+        
+    def _item_abstract(self, item):
+        return self._item_metadata(item, 'description', 'abstract')
         
     def _item_metadata(self, item, element, qualifier='None', schema='dc', list=False):
         values = []
