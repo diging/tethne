@@ -24,11 +24,19 @@ The documentation project (ReST sources, etc.) can be found in [``tethne-docs``]
 
 Requirements
 ------------
-* [Python 2.7](http://www.python.org/)
-* [NetworkX](http://networkx.github.io/)
-* [Numpy](http://numpy.org)
-* [ElementTree](http://docs.python.org/2/library/xml.etree.elementtree.html)
-* [PyTables](http://www.pytables.org/moin)
+We recommend using the Anaconda Python suite. See
+[installation](http://diging.github.io/tethne/doc/0.6.1-beta/installation.html#installation) for details.
+
+```
+scipy==0.14.0
+numpy==1.8.1
+networkx==1.8.1
+matplotlib==1.3.1
+tables==3.1.1
+Unidecode==0.04.16
+geopy==0.99
+nltk==2.0.4
+```
 
 Questions?
 ----------
