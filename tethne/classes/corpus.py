@@ -430,6 +430,8 @@ class Corpus(object):
 
         # Tokenize.
         for key, fval in fdict.iteritems(): # fval is a list of tuples.
+            if len(fval) == 0:  # Sometimes there are no data.
+                continue
             if type(fval) is not list or type(fval[0]) is not tuple:
                 raise ValueError('Malformed features data.')
 
