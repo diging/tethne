@@ -1410,7 +1410,7 @@ class Corpus(object):
 
         return dict(counts)
 
-    def plot_distribution(self, x_axis=None, y_axis=None, type='bar',
+    def plot_distribution(self, x_axis=None, y_axis=None, ftype='bar',
                                 aspect=0.2, step=2, fig=None, mode='papers',
                                 fkwargs={}, **kwargs):
         """
@@ -1522,10 +1522,27 @@ class Corpus(object):
             if mode == 'papers':
                 yvals = self.distribution(x_axis)
             elif mode == 'features':
-                yvals = self.feature_distribution(featureset, feature, x_axis,
-                                                  mode=fmode, normed=fnormed)
-            plt.__dict__[type](xkeys, yvals, **kwargs)
-            plt.xlim(xkeys[0], xkeys[-1])   # Already sorted.
+                yvals = self.feature_distribution( featureset, feature, x_axis,
+                                                   mode=fmode, normed=fnormed  )
+                    
+            if type(xkeys[0]) is str or unicode:
+                X = range(len(xkeys))
+            elif type(xkeys[0]) is int or float:
+                X = [ x for x in xkeys ]
+            
+            ax = fig.add_subplot(111)
+            plt.__dict__[ftype](X, yvals, **kwargs)
+            if ftype == 'barh':
+                ax.set_ylim(min(X), max(X)+1)
+                ax.set_yticks(X)
+                ax.set_yticklabels(xkeys)
+            else:
+                ax.set_xlim(min(X), max(X))
+                ax.set_xticks(X)
+                ax.set_xticklabels(xkeys, rotation=45, ha='right')
+#            plt.subplots_adjust(bottom=0.25)
+            plt.tight_layout()
+
         else:
             ykeys = self._get_slice_keys(y_axis)
             ax = fig.add_subplot(111)
