@@ -1525,22 +1525,24 @@ class Corpus(object):
                 yvals = self.feature_distribution( featureset, feature, x_axis,
                                                    mode=fmode, normed=fnormed  )
                     
+            # Generate X positions for string-indexed axes (e.g. jtitle).
             if type(xkeys[0]) is str or unicode:
                 X = range(len(xkeys))
             elif type(xkeys[0]) is int or float:
                 X = [ x for x in xkeys ]
             
+            # Plotting.
             ax = fig.add_subplot(111)
             plt.__dict__[ftype](X, yvals, **kwargs)
-            if ftype == 'barh':
+            if ftype == 'barh': # Horizontal bar chart.
                 ax.set_ylim(min(X), max(X)+1)
                 ax.set_yticks(X)
                 ax.set_yticklabels(xkeys)
-            else:
+            else:   # Bar chart.
                 ax.set_xlim(min(X), max(X))
                 ax.set_xticks(X)
                 ax.set_xticklabels(xkeys, rotation=45, ha='right')
-#            plt.subplots_adjust(bottom=0.25)
+
             plt.tight_layout()
 
         else:
@@ -1551,6 +1553,7 @@ class Corpus(object):
             elif mode == 'features':
                 values = self.feature_distribution(featureset, feature, y_axis,
                                                    x_axis, fmode, fnormed)
+
             ax.imshow(values, aspect=aspect, **kwargs)
             plt.yticks(np.arange(len(ykeys)), ykeys)
 
