@@ -132,7 +132,7 @@ def cooccurrence(   papers, featureset, filter=_filter, graph=True,
 
 
 def mutual_information( papers, featureset, filter=None,
-                        threshold=0.5, indexed_by='doi', **kwargs   ):
+                        percentile=90, indexed_by='doi', **kwargs   ):
     """
     Generates a graph of features in ``featureset`` based on normalized 
     `pointwise mutual information (nPMI)
@@ -207,15 +207,19 @@ def mutual_information( papers, featureset, filter=None,
     counts = featureset['counts']
     dCounts = featureset['documentCounts']
 
+    ecounts_ = {}
     for k,v in ecounts.iteritems():
         p_i = min(float(dCounts[k[0]])/float(len(papers)), 1.0)
         p_j = min(float(dCounts[k[1]])/float(len(papers)), 1.0)
         p_ij = min(float(v)/float(len(papers)), 1.0)
         P = _nPMI(p_ij, p_i, p_j)
+        ecounts_[k] = P
 
-        if P >= threshold:
-            
+    pct = np.percentile(ecounts_.values(), percentile)
+    for k,v in ecounts_.iteritems():
+        if v >= pct:
             graph.add_edge(k[0], k[1], weight=float(P))
+
     logger.debug('Added {0} edges to graph.'.format(len(graph.edges())))
 
     labels = { k:v for k,v in index.iteritems() if k in graph.nodes() }
