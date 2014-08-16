@@ -198,8 +198,9 @@ def institutions(papers, threshold=1, edge_attrbs=['ayjid'],
         
     return G
 
-def coauthors(papers, threshold=1, edge_attribs=['ayjid'], 
-              node_attribs=['institution'], geocode=False,  **kwargs):
+def coauthors(  papers, threshold=1, edge_attribs=['ayjid'],
+                node_attribs=['institution'], geocode=False, auuri=False,
+                                                                **kwargs    ):
     """
     Generate a co-author network.
 
@@ -263,19 +264,22 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
 
     author_inst = {}
     
+    
     for entry in papers:
-        if entry['aulast'] is not None:
+        if auuri:
+            authors = entry['auuri']
+        else:
+            authors = entry.authors()
+
+        if authors is not None:
             # edge_att dictionary has the atributes given by user input
             #  for any edges that get added
             edge_att = util.subdict(entry, edge_attribs)
-            # make a new list of aulast, auinit names
-            full_names = util.concat_list(entry['aulast'],
-                                          entry['auinit'],
-                                          ' ')
 
-            for a in xrange(len(full_names)):
+            Nauthors = len(authors)
+            for a in xrange(Nauthors):
                 # Update global author-institution mappings.
-                n = full_names[a]
+                n = authors[a]
                 if entry['institutions'] is not None:
                     try:
                         inst = entry['institutions'][n]
@@ -283,30 +287,19 @@ def coauthors(papers, threshold=1, edge_attribs=['ayjid'],
                             author_inst[n] += inst
                         except KeyError:
                             author_inst[n] = inst
-
                     except KeyError:
                         pass
                     
-                for b in xrange(a+1, len(entry['aulast'])):
-                    # (author_a,author_b) tuple is key for coauthor_dict.
-                    authors = full_names[a], full_names[b]
-                    authors_inv = full_names[b], full_names[a]
+                for b in xrange(a+1, Nauthors):
+                    au_pair = tuple(sorted((authors[a], authors[b])))
+                    
+                    if au_pair not in coauthor_dict:
+                        coauthor_dict[au_pair] = { k:[] for k in edge_att.keys() }
+                        coauthor_dict[au_pair]['weight'] = 0
+                    coauthor_dict[au_pair]['weight'] += 1
 
-                    try:
-                        assert type(coauthor_dict[authors]) is dict
-                        key = authors
-                    except (AssertionError, KeyError):
-                        try:
-                            assert type(coauthor_dict[authors_inv]) is dict
-                            key = authors_inv
-                        except (AssertionError, KeyError):
-                            coauthor_dict[authors] = { k:[] for k 
-                                                        in edge_att.keys() }
-                            coauthor_dict[authors]['weight'] = 0
-                            key = authors
                     for k, v in edge_att.iteritems():
-                        coauthor_dict[key][k].append(v)
-                    coauthor_dict[key]['weight'] += 1
+                        coauthor_dict[au_pair][k].append(v)
 
     caller = logger.findCaller()
     logger.debug("{0}: done iterating over papers".format(caller[1]))

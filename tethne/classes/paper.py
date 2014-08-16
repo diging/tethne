@@ -135,8 +135,9 @@ class Paper(dict):
             returns an empty list.
         """
         
-        auths = []
-        if self['aulast'] is not None:
-             auths = [ ' '.join([ a,l ]).upper()
-                         for a,l in zip (self['aulast'], self['auinit']) ]
+        if self['aulast'] is None:
+            return None
+        
+        auths = [ ' '.join([ a,l ]).upper()
+                     for a,l in zip (self['aulast'], self['auinit']) ]
         return auths
