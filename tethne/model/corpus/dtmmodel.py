@@ -199,7 +199,7 @@ class DTMModel(BaseModel):
             s.append('{0}: {1}'.format(key, ', '.join(value)))
         as_string = '\n'.join(s)
         
-        return as_string
+        print as_string
     
     def print_topic(self, k, t, Nwords=10):
         """
@@ -222,7 +222,7 @@ class DTMModel(BaseModel):
 
         as_string = ', '.join(self.list_topic(k, t=t, Nwords=Nwords))
     
-        return as_string
+        print as_string
     
     def list_topics(self, t, Nwords=10):
         """
@@ -270,7 +270,7 @@ class DTMModel(BaseModel):
             s.append('{0}: {1}'.format(key, ', '.join(value)))
         as_string = '\n'.join(s)
         
-        return as_string
+        print as_string
 
 def from_gerrish(target, metadata, vocabulary, metadata_key='doi'):
     """

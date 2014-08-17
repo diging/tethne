@@ -182,8 +182,8 @@ class LDAModel(BaseModel):
         """
 
         as_string = ', '.join(self.list_topic(k, Nwords))
-    
-        return as_string
+
+        print as_string
     
     def list_topics(self, Nwords=10):
         """
@@ -227,7 +227,7 @@ class LDAModel(BaseModel):
             s.append('{0}: {1}'.format(key, ', '.join(value)))
         as_string = '\n'.join(s)
         
-        return as_string
+        print as_string
 
 def from_mallet(top_doc, word_top, metadata):
     """
