@@ -1,7 +1,7 @@
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel('ERROR')
+logger.setLevel('INFO')
 
 from ...classes import GraphCollection
 from util import *

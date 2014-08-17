@@ -21,7 +21,7 @@ from ..classes import Paper
 import logging
 logging.basicConfig(filename=None, format='%(asctime)-6s: %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(lineno)d - %(message)s')
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
+logger.setLevel('INFO')
 
 def author_papers(papers, node_id='ayjid', paper_attribs=[], **kwargs):
     """
