@@ -48,6 +48,7 @@ class Paper(dict):
         fields = {
             'aulast':None,
             'auinit':None,
+            'auuri':None,
             'institutions':None,
             'atitle':None,
             'jtitle':None,
@@ -63,7 +64,9 @@ class Paper(dict):
             'pmid':None,    # PubMed
             'wosid':None,   # ISI Web of Science
             'eid':None,     # Scopus
+            'uri':None,     # Repository
             'abstract':None,
+            'contents':None,
             'accession':None,
             'topics':None    }
 
@@ -73,6 +76,7 @@ class Paper(dict):
         # Fields that require list values.
         self.list_fields = [ 'aulast',
                              'auinit',
+                             'auuri',
                              'citations' ]
 
         # Fields that require string values.
@@ -88,6 +92,7 @@ class Paper(dict):
                                'pmid',
                                'wosid',
                                'abstract',
+                               'contents',
                                'accession' ]
 
         # Fields that require int values.
@@ -129,9 +134,11 @@ class Paper(dict):
             Author names are in the format ``LAST F``. If there are no authors,
             returns an empty list.
         """
+
+        if self['aulast'] is None:
+            return None
         
-        auths = []
-        if self['aulast'] is not None:
-             auths = [ ' '.join([ a,l ]).upper()
-                         for a,l in zip (self['aulast'], self['auinit']) ]
+        auths = [ ' '.join([ a,l ]).upper()
+                     for a,l in zip (self['aulast'], self['auinit']) ]
         return auths
+        

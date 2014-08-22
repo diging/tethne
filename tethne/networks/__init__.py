@@ -31,15 +31,8 @@ Modules
 
 """
 
-
-#import papers
-#import authors
-#import helpers
-#import terms
-
-#Added because of pylint error.
-import tethne.networks.papers
-import tethne.networks.authors
-import tethne.networks.helpers
-import tethne.networks.topics
+import papers
+import authors
+import helpers
+import topics
 import features

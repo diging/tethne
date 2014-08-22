@@ -3,6 +3,8 @@ Classes and methods related to the :class:`.LDAModel`\.
 """
 
 from ..basemodel import BaseModel
+from ...classes.paper import Paper
+
 import numpy as np
 
 import csv
@@ -182,8 +184,8 @@ class LDAModel(BaseModel):
         """
 
         as_string = ', '.join(self.list_topic(k, Nwords))
-    
-        return as_string
+
+        print as_string
     
     def list_topics(self, Nwords=10):
         """
@@ -226,8 +228,8 @@ class LDAModel(BaseModel):
         for key, value in as_dict.iteritems():
             s.append('{0}: {1}'.format(key, ', '.join(value)))
         as_string = '\n'.join(s)
-        
-        return as_string
+
+        print as_string
 
 def from_mallet(top_doc, word_top, metadata):
     """
@@ -406,17 +408,30 @@ class MALLETLoader(object):
         """
         path = self.metapath
 
+        p = Paper()
+        
+        def recast(field, value):
+            """
+            """
+            if field in p.string_fields:
+                return str(value)
+            elif field in p.int_fields:
+                return int(value)
+            return value
+        
+        
         lookup = { v:k for k,v in self.doc_index.iteritems() }
         
+        
         md = {}
-
         with open(path, "rU") as f:
             reader = csv.reader(f, delimiter='\t')
             all_lines = [ l for l in reader ]
             keys = all_lines[0]
             lines = all_lines[1:]
             for l in lines:
-                md[lookup[l[0]]] = { keys[i]:l[i] for i in xrange(0, len(l)) }
+                md[lookup[l[0]]] = { keys[i]:recast(keys[i],l[i])
+                                        for i in xrange(0, len(l)) }
 
         self.metadata = md
 

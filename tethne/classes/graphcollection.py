@@ -102,14 +102,15 @@ class GraphCollection(object):
             
             node[1]['label'] = node[0]  # Keep label.
             graph_.add_node(n, node[1]) # Include node attributes.
-        
+
+        edges = []
         for edge in graph.edges(data=True):
             n_i = self.node_lookup[edge[0]] # Already indexed all nodes.
             n_j = self.node_lookup[edge[1]]
-            self.edge_list.append((n_i, n_j))
-        
-            graph_.add_edge(n_i, n_j, edge[2])  # Include edge attributes.
+            edges.append((n_i, n_j))
 
+            graph_.add_edge(n_i, n_j, edge[2])  # Include edge attributes.
+        self.edge_list = list(set(self.edge_list + edges))
         self.graphs[index] = graph_
 
     def __getitem__(self, key):
@@ -244,9 +245,7 @@ class GraphCollection(object):
         # TODO: is there a way to simplify this?
 
         if len(self.edge_list) == 0 or overwrite :
-            edges = set([])
-            for G in self.graphs.values():
-                edges = edges | set(G.edges())
+            edges = set( [ e for G in self.graphs.values() for e in G.edges() ])
             self.edge_list = list(edges)
         return self.edge_list
         

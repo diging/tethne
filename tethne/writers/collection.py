@@ -10,8 +10,7 @@ Write :class:`.GraphCollection` to a structured data format.
 import networkx as nx
 import pickle as pk
 
-
-def to_dxgmml(C, path): # [#61510094]
+def to_dxgmml(graphcollection, path): # [#61510094]
     """
     Writes a :class:`.GraphCollection` to 
     `dynamic XGMML. <https://code.google.com/p/dynnetwork/wiki/DynamicXGMML>`_.
@@ -48,7 +47,7 @@ def to_dxgmml(C, path): # [#61510094]
     
     Parameters
     ----------
-    C : :class:`.GraphCollection`
+    graphcollection : :class:`.GraphCollection`
         The :class:`.GraphCollection` to be written to XGMML.
     path : str
         Path to file to be written. Will be created/overwritten.
@@ -67,20 +66,20 @@ def to_dxgmml(C, path): # [#61510094]
     # TODO: make sure C is a GraphCollection.
 
     nodes = {}
-    for n in C.nodes():
+    for n in graphcollection.nodes():
         nodes[n] = { 'periods' : [] }   # Each period will be a dict with
                                         #  'start' and 'end' values.
     edges = {}
-    for e in C.edges():
+    for e in graphcollection.edges():
         edges[e] = { 'periods' : [] }
 
     # Build node list.
     current = []
-    for k in sorted(C.graphs.keys()):
-        G = _strip_list_attributes(C[k])
-        preceding = current
+    for k in sorted(graphcollection.graphs.keys()):
+        graph = _strip_list_attributes(graphcollection[k])
+        preceding = [ c for c in current ]
         current = []
-        for n in G.nodes(data=True):
+        for n in graph.nodes(data=True):
             if n[0] not in preceding:   # Looking for gaps in presence of node.
                 nodes[n[0]]['periods'].append( { 'start': k, 'end': k } )
             else:
@@ -96,14 +95,18 @@ def to_dxgmml(C, path): # [#61510094]
 
     # Build edge list.
     current = []
-    for k in sorted(C.graphs.keys()):
-        G = _strip_list_attributes(C[k])
-        preceding = current
+    for k in sorted(graphcollection.graphs.keys()):
+        graph = _strip_list_attributes(graphcollection[k])
+        preceding = [ c for c in current ]
         current = []
-        for e in G.edges(data=True):
+        for e in graph.edges(data=True):
             e_key = (e[0], e[1])
             if e_key not in preceding:   # Looking for gaps in presence of edge.
-                edges[e_key]['periods'].append( { 'start': k, 'end': k } )
+                try:
+                    edges[e_key]['periods'].append( { 'start': k, 'end': k } )
+                except KeyError:
+                    e_key = (e[1], e[0])
+                    edges[e_key]['periods'].append( { 'start': k, 'end': k } )
             else:
                 if k > edges[e_key]['periods'][-1]['end']:
                     edges[e_key]['periods'][-1]['end'] = k
@@ -174,18 +177,18 @@ def to_dxgmml(C, path): # [#61510094]
                 f.write(ene)    # End edge element.
         f.write(eg) # End graph element.
         
-def _strip_list_attributes(G):
+def _strip_list_attributes(graph_):
     """Converts lists attributes to strings for all nodes and edges in G."""
-    for n in G.nodes(data=True):
-        for k,v in n[1].iteritems():
+    for n_ in graph_.nodes(data=True):
+        for k,v in n_[1].iteritems():
             if type(v) is list:
-                G.node[n[0]][k] = str(v)
-    for e in G.edges(data=True):
-        for k,v in e[2].iteritems():
+                graph_.node[n_[0]][k] = str(v)
+    for e_ in graph_.edges(data=True):
+        for k,v in e_[2].iteritems():
             if type(v) is list:
-                G.edge[e[0]][e[1]][k] = str(v)
+                graph_.edge[e_[0]][e_[1]][k] = str(v)
 
-    return G        
+    return graph_
 
 def _safe_type(value):
     """Converts Python type names to XGMML-safe type names."""

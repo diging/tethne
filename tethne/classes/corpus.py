@@ -430,6 +430,8 @@ class Corpus(object):
 
         # Tokenize.
         for key, fval in fdict.iteritems(): # fval is a list of tuples.
+            if len(fval) == 0:  # Sometimes there are no data.
+                continue
             if type(fval) is not list or type(fval[0]) is not tuple:
                 raise ValueError('Malformed features data.')
 
@@ -653,6 +655,44 @@ class Corpus(object):
 
         logger.debug('done indexing features')
         return
+    
+    def _field_to_features(self, field, remove_stopwords=True, stem=True):
+
+        unigrams = {}
+        for p,paper in self.papers.iteritems():
+            if paper[field] is not None:
+                term_counts = Counter()
+                terms = strip_punctuation(paper[field].lower()).split()
+                for term in terms: term_counts[term] += 1
+                unigrams[p] = term_counts.items()
+
+        logger.debug('generated features.')
+        if remove_stopwords:    # Use stoplist?
+            stoplist = set(stopwords.words())
+        else:
+            stoplist = set([])
+
+        if stem:    # Use stemming?
+            from nltk.stem.porter import PorterStemmer
+            stemmer = PorterStemmer()
+            transformer = stemmer.stem
+        else:
+            transformer = None
+
+        tokd = self._tokenize_features( '{0}Terms'.format(field), unigrams,
+                                        exclude=stoplist,
+                                        transformer=transformer )
+        ft, fi, fs, c, dC, fp = tokd
+        self._define_features(ft, fi, fs, c, dC, fp)
+        
+        return unigrams
+    
+    def contents_to_features(self, remove_stopwords=True, stem=True):
+        logger.debug('Converting contents to featureset.')
+        
+        unigrams = self._field_to_features('contents', remove_stopwords, stem)
+
+        return None
 
     def abstract_to_features(self, remove_stopwords=True, stem=True):
         """
@@ -686,36 +726,12 @@ class Corpus(object):
               [`Issue #23 <https://github.com/diging/tethne/issues/23>`_]
 
         """
-        logger.debug('abstract_to_features: start.')
 
-        unigrams = {}
-        for p,paper in self.papers.iteritems():
-            if paper['abstract'] is not None:
-                term_counts = Counter()
-                terms = strip_punctuation(paper['abstract'].lower()).split()
-                for term in terms: term_counts[term] += 1
-                unigrams[p] = term_counts.items()
+        logger.debug('Converting abstracts to features')
 
-        logger.debug('abstract_to_features: generated features.')
-        if remove_stopwords:    # Use stoplist?
-            stoplist = set(stopwords.words())
-        else:
-            stoplist = set([])
+        unigrams = self._field_to_features('abstract', remove_stopwords, stem)
 
-        if stem:    # Use stemming?
-            from nltk.stem.porter import PorterStemmer
-            stemmer = PorterStemmer()
-            transformer = stemmer.stem
-        else:
-            transformer = None
-
-        tokd = self._tokenize_features( 'abstractTerms', unigrams,
-                                        exclude=stoplist,
-                                        transformer=transformer )
-        ft, fi, fs, c, dC, fp = tokd
-        self._define_features(ft, fi, fs, c, dC, fp)
-
-        return unigrams
+        return None
 
     def slice(self, key, method=None, **kwargs):
         """
@@ -1394,7 +1410,7 @@ class Corpus(object):
 
         return dict(counts)
 
-    def plot_distribution(self, x_axis=None, y_axis=None, type='bar',
+    def plot_distribution(self, x_axis=None, y_axis=None, ftype='bar',
                                 aspect=0.2, step=2, fig=None, mode='papers',
                                 fkwargs={}, **kwargs):
         """
@@ -1506,10 +1522,29 @@ class Corpus(object):
             if mode == 'papers':
                 yvals = self.distribution(x_axis)
             elif mode == 'features':
-                yvals = self.feature_distribution(featureset, feature, x_axis,
-                                                  mode=fmode, normed=fnormed)
-            plt.__dict__[type](xkeys, yvals, **kwargs)
-            plt.xlim(xkeys[0], xkeys[-1])   # Already sorted.
+                yvals = self.feature_distribution( featureset, feature, x_axis,
+                                                   mode=fmode, normed=fnormed  )
+                    
+            # Generate X positions for string-indexed axes (e.g. jtitle).
+            if type(xkeys[0]) is str or unicode:
+                X = range(len(xkeys))
+            elif type(xkeys[0]) is int or float:
+                X = [ x for x in xkeys ]
+            
+            # Plotting.
+            ax = fig.add_subplot(111)
+            plt.__dict__[ftype](X, yvals, **kwargs)
+            if ftype == 'barh': # Horizontal bar chart.
+                ax.set_ylim(min(X), max(X)+1)
+                ax.set_yticks(X)
+                ax.set_yticklabels(xkeys)
+            else:   # Bar chart.
+                ax.set_xlim(min(X), max(X))
+                ax.set_xticks(X)
+                ax.set_xticklabels(xkeys, rotation=45, ha='right')
+
+            plt.tight_layout()
+
         else:
             ykeys = self._get_slice_keys(y_axis)
             ax = fig.add_subplot(111)
@@ -1518,6 +1553,7 @@ class Corpus(object):
             elif mode == 'features':
                 values = self.feature_distribution(featureset, feature, y_axis,
                                                    x_axis, fmode, fnormed)
+
             ax.imshow(values, aspect=aspect, **kwargs)
             plt.yticks(np.arange(len(ykeys)), ykeys)
 

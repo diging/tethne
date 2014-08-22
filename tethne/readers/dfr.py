@@ -12,9 +12,6 @@ Methods for parsing JSTOR Data-for-Research datasets.
 
 """
 
-import sys
-sys.path.append('/Users/erickpeirson/Dropbox/DigitalHPS/Scripts/tethne')
-
 from ..classes import Paper, Corpus
 
 import os

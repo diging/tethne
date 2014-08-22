@@ -5,7 +5,7 @@ Classes and methods related to the :class:`.TAPModel`\.
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
+logger.setLevel('INFO')
 
 import numpy as np
 import networkx as nx

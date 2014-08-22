@@ -79,10 +79,6 @@ import os
 import re
 import uuid
 
-# MACRO for printing the 'print' statement values.
-# 0 prints nothing in the console.
-# 1 prints all print statements in the console.
-DEBUG = 0
 
 def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     """
@@ -380,8 +376,6 @@ def _parse_cr(ref):
         if match:
             # remove the [] and make it a proper one.
             name = name[match.start()+1:match.end()-1]
-            if DEBUG :
-                print  'stripped name: ', name
 
         name_tokens = name.split(' ')
         if len(name_tokens) < 2:
@@ -390,9 +384,6 @@ def _parse_cr(ref):
 
         paper['aulast'] = [name_tokens[0]]
         paper['auinit'] = [''.join(name_tokens[1:]).replace('.','')]
-
-        if DEBUG:
-            print "Final Meta Dicts", paper['aulast'], paper['auinit']
 
         # Temp Solution for #62809724
         if paper['auinit'] == 'None' or paper['aulast'] == 'None' :
@@ -729,9 +720,6 @@ def _validate(wos_data):
     ValueError - according to the severity of the issue,
     whether the wrong format will affect the further processing.
     """
-    if DEBUG:
-        print wos_data
-
 
     # Create a translator dict whose keys are the fields which needs to be
     # validated from the input.
@@ -743,8 +731,6 @@ def _validate(wos_data):
     for wos_dict in wos_data:
         #direct translations
         for key in translator.iterkeys():
-            if DEBUG :
-                print wos_dict[key]
             # Validate for 'CR' field
             if wos_dict['CR'] is not None:
                 for cr in wos_dict['CR']:
