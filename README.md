@@ -1,18 +1,11 @@
-<<<<<<< HEAD
-![alt text](https://raw.github.com/diging/tethne/python/doc/logo_round.png "Tethneus, an orb weaving spider.")
-=======
 ![Tethneus, an orb weaving spider](http://diging.github.io/tethne/doc/0.6.1-beta/_static/logo_round.png)
->>>>>>> c9995a4e3bdcee8d8bdecc731621bb27394cbcdb
 
 Tethne
 ======
 Tethne is a Python package for integrated bibliographic and corpus analysis developed by the Digital Innovation Group at Arizona State University. Tethne provides simple tools for generating networks from bibliographic datasets, and provides a framework for weaving together techniques from scientometrics, computational linguistics, topic modeling, and social influence modeling. Rather than reinvent or re- implement existing algorithms, Tethne is designed to interface with existing software packages, and to provide mechanisms for drawing the results and functionalities of those packages together.
 
-<<<<<<< HEAD
-=======
 Over 270 unit tests can be found in [``tethne-tests``](https://github.com/diging/tethne-tests). 
 
->>>>>>> c9995a4e3bdcee8d8bdecc731621bb27394cbcdb
 Key features
 ------------
 * Flexible core model for text and citation-data.
@@ -27,15 +20,6 @@ Documentation
 For more information, see the Tethne [website](http://diging.github.io/tethne/) and
 [documentation](http://diging.github.io/tethne/doc/0.6.1-beta/index.html) (under development).
 
-<<<<<<< HEAD
-Requirements
-------------
-* [Python 2.7](http://www.python.org/)
-* [NetworkX](http://networkx.github.io/)
-* [Numpy](http://numpy.org)
-* [ElementTree](http://docs.python.org/2/library/xml.etree.elementtree.html)
-* [PyTables](http://www.pytables.org/moin)
-=======
 The documentation project (ReST sources, etc.) can be found in [``tethne-docs``](https://github.com/diging/tethne-docs).
 
 Requirements
@@ -53,7 +37,6 @@ Unidecode==0.04.16
 geopy==0.99
 nltk==2.0.4
 ```
->>>>>>> c9995a4e3bdcee8d8bdecc731621bb27394cbcdb
 
 Questions?
 ----------
