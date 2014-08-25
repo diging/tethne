@@ -173,11 +173,23 @@ class GraphCollection(object):
         self : :class:`.GraphCollection`
 
         """
-        method = nt.__dict__[node_type].__dict__[graph_type]
-        for key, data in corpus.get_slices('date', papers=True).iteritems():
+        # Don't overwrite explicitly-provided method_kwargs!
+        if 'node_attribs' not in method_kwargs:
             # Include sliced fields as node attributes.
             method_kwargs['node_attribs'] = corpus.get_axes()
-            method_kwargs['node_id'] = corpus.index_by
+        if 'node_id' not in method_kwargs:
+            if graph_type == 'cocitation':
+                method_kwargs['node_id'] = 'ayjid'
+            else:
+                method_kwargs['node_id'] = corpus.index_by
+        
+        # Select the method from the networks module.
+        method = nt.__dict__[node_type].__dict__[graph_type]
+        
+        # Apply method to each slice.
+        for key, data in corpus.get_slices('date', papers=True).iteritems():
+            
+            # Apply the method.
             self[key] = method(data, **method_kwargs)
 
         return self
