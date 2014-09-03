@@ -79,6 +79,11 @@ import os
 import re
 import uuid
 
+import logging
+logging.basicConfig(filename=None, format='%(asctime)-6s: %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(lineno)d - %(message)s')
+logger = logging.getLogger(__name__)
+logger.setLevel('DEBUG')
+
 
 def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     """
@@ -408,7 +413,7 @@ def _parse_cr(ref):
 
     return paper
 
-def convert(wos_data):
+def convert(wos_data, **kwargs):
     """
     Convert parsed field-tagged data to :class:`.Paper` instances.
 
@@ -448,7 +453,7 @@ def convert(wos_data):
     accession = str(uuid.uuid4())
     
     #create a Paper for each wos_dict and append to this list
-    papers = []
+    papers = kwargs.get('papers', [])
 
     #handle dict inputs by converting to a 1-item list
     if type(wos_data) is dict:
@@ -600,7 +605,7 @@ def _handle_author_institutions(wos_dict):
     # Convert values back to lists before returning.
     return { k:list(v) for k,v in author_institutions.iteritems() }
 
-def read(datapath):
+def read(datapath, **kwargs):
     """
     Yields a list of :class:`.Paper` instances from a Web of Science data file.
 
@@ -623,10 +628,11 @@ def read(datapath):
        >>> papers = rd.wos.read("/Path/to/data.txt")
 
     """
-    # Added Try Except 
+    logger.debug('kwargs: {0}'.format(kwargs))
+
     try:
         wl = parse(datapath)
-        papers = convert(wl)
+        papers = convert(wl, **kwargs)
     except IOError:
         raise IOError("Invalid path.")
 
