@@ -82,7 +82,7 @@ import uuid
 import logging
 logging.basicConfig(filename=None, format='%(asctime)-6s: %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(lineno)d - %(message)s')
 logger = logging.getLogger(__name__)
-logger.setLevel('DEBUG')
+logger.setLevel('INFO')
 
 
 def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
@@ -603,9 +603,16 @@ def _handle_author_institutions(wos_dict):
                     author_institutions[author_au] = [inst_name]
 
     # Should have the same order as the author names.
-    return [ (author_institutions[k.upper().replace(',','')] or []) 
-                for k in wos_dict['AU'] ]
+    inst_list = []
+    for k in wos_dict['AU']:
+        k = k.upper().replace(',','')
+        if k in author_institutions:
+            inst_list.append(author_institutions[k])
+        else:
+            inst_list.append([])
 
+    return inst_list
+    
 def read(datapath, **kwargs):
     """
     Yields a list of :class:`.Paper` instances from a Web of Science data file.

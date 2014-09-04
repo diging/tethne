@@ -127,7 +127,7 @@ def read(datapath, **kwargs):
                         p['aulast'], p['auinit'], p['date'], p['jtitle'])
     
         p['institutions'] = _handle_affiliations(
-                            rawdatum['Authors with affiliations'], p['aulast'], p['auinit'])
+                rawdatum['Authors with affiliations'], p['aulast'], p['auinit'])
         p['atitle'] = rawdatum['Title'].strip().upper()
         p['jtitle'] = rawdatum['Source title'].strip().upper()
         p['volume'] = rawdatum['Volume'].strip()
