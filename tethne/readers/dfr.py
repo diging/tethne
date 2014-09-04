@@ -132,7 +132,7 @@ class GramGenerator(object):
 
         return doi, grams   # Default behavior.
 
-def read(datapath):
+def read(datapath, **kwargs):
     """
     Yields :class:`.Paper` s from JSTOR DfR package.
 
@@ -166,7 +166,7 @@ def read(datapath):
 
     accession = str(uuid.uuid4())
 
-    papers = []
+    papers = kwargs.get('papers', [])
     for article in root:
         paper = _handle_paper(article)
         paper['accession'] = accession

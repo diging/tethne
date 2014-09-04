@@ -159,42 +159,48 @@ class SQLPapers(list):
         #  with precisel the same structure as the main table for Papers. That
         #  means that we can represent citations using SQLPapers later on.
         citations = obj['citations']
-        cit_ids = []    # IDs from citations table.
-        for citation in citations:
-            cur = self.conn.cursor()
-            vals = { k:v for k,v in citation.iteritems() if k != 'citations' }
-            keys = ', '.join(vals.keys())
-            vkeys = ', '.join( [ '%({0})s'.format(k) for k in vals.keys() ])
-            arg = self.insert_pattern.format(
+
+        if citations is None:
+            cit_ids = None
+        else:
+            cit_ids = []    # IDs from citations table.
+            for citation in citations:
+                cur = self.conn.cursor()
+                vals = { k:v for k,v in citation.iteritems() 
+                            if k != 'citations' }
+                keys = ', '.join(vals.keys())
+                vkeys = ', '.join( [ '%({0})s'.format(k) for k in vals.keys() ])
+                arg = self.insert_pattern.format(
                                         self.name + '_citations', keys, vkeys  )
 
-            try:    # Insert the citation into the citation table.
-                cur.execute(arg, vals)
-                id = cur.fetchone()[0]
-                self.conn.commit()
-                cur.close()                
+                try:    # Insert the citation into the citation table.
+                    cur.execute(arg, vals)
+                    id = cur.fetchone()[0]
+                    self.conn.commit()
+                    cur.close()                
 
-            # This will frequently hit duplicates, which raises IntegrityError.
-            except psycopg2.IntegrityError as E:
-                self.conn.commit()   # Clear the error.
+                # This will frequently hit duplicates, raising IntegrityError.
+                except psycopg2.IntegrityError as E:
+                    self.conn.commit()   # Clear the error.
 
-                # Search error message for the conflicting key.
-                error = str(E)
-                try:    # If this fails to match, then something else happened.
-                    ckey = re.search('Key \((.*?)\)', error).group(1)
-                except:
-                    continue    # ...in that case, just ignore this citation.
+                    # Search error message for the conflicting key.
+                    error = str(E)
+                    try:    
+                        # If this fails to match, then something else happened.
+                        ckey = re.search('Key \((.*?)\)', error).group(1)
+                    except:
+                        continue   # ...in that case, just ignore this citation.
 
-                # Get the id of the existing citation.
-                cname = self.name + '_citations'    # Name of citation table.
-                arg = """SELECT id FROM {0} WHERE {1} = %s;""".format(  cname,
-                                                                        ckey   )
-                cval = vals[ckey]
-                cur.execute(arg, (cval,))
-                id = cur.fetchone()[0]  # Got it!
-                cur.close()
+                    # Get the id of the existing citation.
+                    cname = self.name + '_citations'   # Name of citation table.
+                    arg = """SELECT id FROM {0} WHERE {1} = %s;""".format(  
+                                                                   cname, ckey )
+                    cval = vals[ckey]
+                    cur.execute(arg, (cval,))
+                    id = cur.fetchone()[0]  # Got it!
+                    cur.close()
 
-            cit_ids.append(int(id))  # This gets stored as a list of integers.
+                cit_ids.append(int(id))  # This is stored as a list of integers.
 
         # Then handle the Paper itself.
         vals = { k:v for k,v in obj.iteritems() if k != 'citations'   }
