@@ -233,7 +233,13 @@ def _handle_affiliations(affiliationsdata, aulast, auinit):
         except IndexError:  # Blank record part (stray delimiter).
             pass
     authors = [ ' '.join(a) for a in zip(aulast, auinit) ]
-    inst_list = [ institutions[au] for au in authors ]  # List of lists.
+    inst_list = []
+    for au in authors:
+        if au in institutions:
+            inst_list.append(institutions[au])
+        else:
+            inst_list.append([])
+
     return inst_list
 
 def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
