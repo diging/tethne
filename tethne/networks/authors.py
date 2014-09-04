@@ -355,7 +355,7 @@ def coauthors(  papers, threshold=1, edge_attribs=['ayjid'],
     
     return G
 
-def author_institution(Papers, edge_attribs=[], **kwargs):
+def author_institution(Papers, **kwargs):
     """
     Generate a bi-partite graph connecting authors and their institutions.
     
@@ -375,10 +375,6 @@ def author_institution(Papers, edge_attribs=[], **kwargs):
     ----------
     Papers : list
         A list of :class:`.Paper` instances.
-    edge_attribs : list
-        List of edge_attributes specifying which :class:`.Paper` keys (from the
-        authored paper) to use as edge attributes. For example, the 'date' key
-        in :class:`.Paper` .
 
     Returns
     -------
@@ -386,30 +382,34 @@ def author_institution(Papers, edge_attribs=[], **kwargs):
         A graph describing institutional affiliations of authors in the corpus.
     """
 
-    author_institution_graph = nx.MultiGraph(type='author_institution')
-    #The Field in Papers which corresponds to authors and affliated institutions
-    # is "institutions"
-    # { 'institutions' : { Authors:[institutions_list]}}
+    graph = nx.MultiGraph(type='author_institution')
+
+    all_authors = set([])
+    all_institutions = set([])
+    edges = Counter()
     for paper in Papers:
         if paper['institutions'] is not None:
-            auth_inst = paper['institutions']
-            edge_attrib_dict = util.subdict(paper, edge_attribs)
-            authors = auth_inst.keys()
-            for au in authors:
-                #add node of type 'author'
-                author_institution_graph.add_node(au, type='author')
-                ins_list = Counter(auth_inst[au])
-                for ins_str,count in ins_list.iteritems():
-                    # Add node of type 'institutions'.
-                    author_institution_graph.add_node(ins_str, \
-                                                      type='institution')
+            # auth_inst is a list of lists in order of aulast.
+            auth_inst = paper['institutions']   
+            
+            authors = paper.authors()
+            A = len(authors)
+            for a in xrange(A):
+                au = authors[a]
+                all_authors.add(au)
+                for inst in auth_inst[a]:
+                    all_institutions.add(inst)
+                    edges[(au, inst)] += 1
 
-                    author_institution_graph.add_edge(au, ins_str, \
-                                              attr_dict=edge_attrib_dict, \
-                                              weight=count )
+    for edge, weight in edges.iteritems():
+        graph.add_edge(edge[0], edge[1], weight=weight)
 
+    # Set node attributes.
+    types = { n:'institution' for n in list(all_institutions) }
+    types.update({ n:'author' for n in list(all_authors) })
+    nx.set_node_attributes(graph, 'type', types)
 
-    return author_institution_graph
+    return graph
 
 def coinstitution(Papers, threshold=1, **kwargs):
     """
