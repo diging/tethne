@@ -232,13 +232,15 @@ def _handle_affiliations(affiliationsdata, aulast, auinit):
             institutions[aname] = [', '.join([inst, nation])]
         except IndexError:  # Blank record part (stray delimiter).
             pass
-    authors = [ ' '.join(a) for a in zip(aulast, auinit) ]
+            
+    # inst_list should be a list of lists, ordered by aulast/auinit.
+    authors = [ ' '.join(a) for a in zip(aulast, auinit) ]  # To use as keys.
     inst_list = []
     for au in authors:
-        if au in institutions:
+        if au in institutions:      # Data available.
             inst_list.append(institutions[au])
         else:
-            inst_list.append([])
+            inst_list.append([])    # No data for that author.
 
     return inst_list
 
