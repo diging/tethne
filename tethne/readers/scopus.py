@@ -127,20 +127,28 @@ def read(datapath, **kwargs):
                         p['aulast'], p['auinit'], p['date'], p['jtitle'])
     
         p['institutions'] = _handle_affiliations(
-                                rawdatum['Authors with affiliations']   )
+                            rawdatum['Authors with affiliations'], p['aulast'], p['auinit'])
         p['atitle'] = rawdatum['Title'].strip().upper()
         p['jtitle'] = rawdatum['Source title'].strip().upper()
         p['volume'] = rawdatum['Volume'].strip()
         p['issue'] = rawdatum['Issue'].strip()
         p['spage'] = rawdatum['Page start'].strip()
         p['epage'] = rawdatum['Page end'].strip()
-        p['doi'] = rawdatum['DOI'].strip()
-        p['pmid'] = rawdatum['PubMed ID'].strip()
-        p['eid'] = rawdatum['EID'].strip()
+        
         p['abstract'] = rawdatum['Abstract'].strip().upper()
-
         p['citations'] = _handle_references(rawdatum['References'])
         p['accession'] = accession
+        
+        # DOI and PMID are not always present, but must be unique. If they are
+        #  not provided, should be set to None so that they can be handled
+        #  appropriately downstream. EID should always be present.
+        doi = rawdatum['DOI'].strip()
+        if doi == '': doi = None
+        p['doi'] = doi
+        pmid = rawdatum['PubMed ID'].strip()
+        if pmid == '': pmid = None
+        p['pmid'] = pmid
+        p['eid'] = rawdatum['EID'].strip()        
 
         papers.append(p)
 
@@ -149,25 +157,64 @@ def read(datapath, **kwargs):
 def _handle_authors(authordata):
     aulast = []
     auinit = []
+
     for author in authordata.split(', '):
         try:
-            a = author.split()
-            aulast.append(a[0].upper())
-            auinit.append(a[1].replace('.', '').upper())
+            a = [a_.strip().upper().replace('.','') for a_ in author.split()]
+            aulast.append(' '.join(a[0:-1]))
+            auinit.append(a[-1])
         except IndexError:  # Empty record; stray delimiter.
             pass
 
     return aulast, auinit
 
-def _handle_affiliations(affiliationsdata):
+def _handle_affiliations(affiliationsdata, aulast, auinit):
+    def matching_author(last, init, instcleaned):
+        au_parts = [last, init]
+        matching = 0
+        for x in xrange(len(au_parts)):
+            if au_parts[x] == instcleaned[x]:
+                matching += 1
+        if matching > 1:
+            return True, matching
+        return False, 0
+        
     institutions = {}
-    
-    for aff in affiliationsdata.split(';'):
+
+    aff_split = affiliationsdata.split(';')
+    A = len(aff_split)
+    for i in xrange(A):
+        aff = aff_split[i]
         a = aff.split(', ')
+
         try:
-            aname = '{0} {1}'.format(   a[0].strip().upper(),
-                                        a[1].replace('.', '').upper().strip()  )
-            institution = a[2:]
+            cleaned = [ a_.strip().upper().replace('.','') for a_ in a ]
+            
+            # First work on the assumption that affiliations are in the same 
+            #  order as author names.
+            aul = aulast[i]
+            aui = auinit[i]
+            match, overlap = matching_author(aul, aui, cleaned)
+            if match:     
+                aname = ' '.join([aul, aui])     
+                
+            # That might not always be true, so we'll try the other authors 
+            #  just in case.
+            else:
+                found = False
+                for x in xrange(len(aulast)):
+                    aul = aulast[x]
+                    aui = auinit[x]
+
+                    match, overlap = matching_author(aul, aui, cleaned)
+                    if match:
+                        aname = ' '.join([aul, aui])
+                        found = True
+                        break
+                if not found:   # If the author can't be identified, discard.
+                    break
+                    
+            institution = a[match+1:] # The remainder is the institution name.
             l = len(institution)
 
             if l == 0:
@@ -185,7 +232,9 @@ def _handle_affiliations(affiliationsdata):
             institutions[aname] = [', '.join([inst, nation])]
         except IndexError:  # Blank record part (stray delimiter).
             pass
-    return institutions
+    authors = [ ' '.join(a) for a in zip(aulast, auinit) ]
+    inst_list = [ institutions[au] for au in authors ]  # List of lists.
+    return inst_list
 
 def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     """
