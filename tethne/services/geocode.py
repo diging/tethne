@@ -44,8 +44,9 @@ import pickle
 from ssl import SSLError
 
 import logging
-logging.basicConfig()
+logging.basicConfig(filename=None, format='%(asctime)-6s: %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(lineno)d - %(message)s')
 logger = logging.getLogger(__name__)
+logger.setLevel('DEBUG')
 
 class Location(object):
     """
@@ -65,10 +66,10 @@ class BaseCoder(object):
     """
     Base class for geocoders.
     """
-    persistent = True   # Triggers on-disk cacheing with Pickle
+    persistent = True       # Triggers on-disk cacheing with Pickle.
     sleep_interval = 0.5    # Avoid rate-limiting. Adjust as desired.
-    timeout = 3         # Duration in seconds until timeout.
-    max_tries = 3       # How many times to re-try after a timeout.
+    timeout = 3             # Duration in seconds until timeout.
+    max_tries = 3           # How many times to re-try after a timeout.
 
     def __init__(self, **kwargs):
         if self.persistent:

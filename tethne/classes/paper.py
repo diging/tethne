@@ -31,7 +31,6 @@ class Paper(dict):
     spage           str     Starting page of article in journal.
     epage           str     Ending page of article in journal.
     date            int     Article date of publication.
-    country         dict    Author-Country mapping.
     citations       list    A list of :class:`.Paper` instances.
     ayjid           str     First author's name (last fi), pubdate, and journal.
     doi             str     Digital Object Identifier.
@@ -58,7 +57,6 @@ class Paper(dict):
             'epage':None,
             'date':None,
             'citations':None,
-            'country':None,
             'ayjid':None,
             'doi':None,
             'pmid':None,    # PubMed
