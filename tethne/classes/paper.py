@@ -48,7 +48,7 @@ class Paper(dict):
             'aulast':None,
             'auinit':None,
             'auuri':None,
-            'institutions':None,
+            'institutions':None,    # List of lists in same order as aulast.
             'atitle':None,
             'jtitle':None,
             'volume':None,

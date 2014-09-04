@@ -603,7 +603,7 @@ def _handle_author_institutions(wos_dict):
                     author_institutions[author_au] = [inst_name]
 
     # Should have the same order as the author names.
-    return [ author_institutions[k.upper().replace(',','')] 
+    return [ (author_institutions[k.upper().replace(',','')] or []) 
                 for k in wos_dict['AU'] ]
 
 def read(datapath, **kwargs):

@@ -162,8 +162,7 @@ class SQLPapers(list):
         cit_ids = []    # IDs from citations table.
         for citation in citations:
             cur = self.conn.cursor()
-            vals = { k:v for k,v in citation.iteritems()
-                        if k not in ['citations', 'country' ] }
+            vals = { k:v for k,v in citation.iteritems() if k != 'citations' }
             keys = ', '.join(vals.keys())
             vkeys = ', '.join( [ '%({0})s'.format(k) for k in vals.keys() ])
             arg = self.insert_pattern.format(
@@ -198,8 +197,7 @@ class SQLPapers(list):
             cit_ids.append(int(id))  # This gets stored as a list of integers.
 
         # Then handle the Paper itself.
-        vals = { k:v for k,v in obj.iteritems()
-                    if k not in ['citations', 'country' ]   }
+        vals = { k:v for k,v in obj.iteritems() if k != 'citations'   }
         vals['citations'] = cit_ids     # Store the list of citation ids, too.
         keys = ', '.join(vals.keys())
         vkeys = ', '.join( [ '%({0})s'.format(k) for k in vals.keys() ])

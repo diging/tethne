@@ -281,11 +281,10 @@ def coauthors(  papers, threshold=1, edge_attribs=['ayjid'],
                 n = authors[a]
                 if entry['institutions'] is not None:
                     try:
-                        inst = entry['institutions'][n]
-                        try:
-                            author_inst[n] += inst
-                        except KeyError:
-                            author_inst[n] = inst
+                        inst = entry['institutions'][a]
+                        if n not in author_inst:
+                            author_inst[n] = []
+                        author_inst[n] += inst
                     except KeyError:
                         pass
                     
@@ -412,7 +411,7 @@ def author_institution(Papers, edge_attribs=[], **kwargs):
 
     return author_institution_graph
 
-def author_coinstitution(Papers, threshold=1, **kwargs):
+def coinstitution(Papers, threshold=1, **kwargs):
     """
     Generate a co-institution graph, where edges indicate shared affiliation.
 
