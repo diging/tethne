@@ -82,7 +82,7 @@ def from_dir(path):
 
     return papers
 
-def read(datapath):
+def read(datapath, **kwargs):
     """
     Yields a list of :class:`.Paper` instances from a Scopus CSV data file.
 
@@ -108,7 +108,7 @@ def read(datapath):
     
     accession = str(uuid.uuid4())   # Accession ID.
     
-    papers = [] # List of Paper objects.
+    papers = kwargs.get('papers', [])   # Can provide an alternate container.
 
     rawdata = []
     with open(datapath, 'rb') as f:
@@ -123,7 +123,8 @@ def read(datapath):
         rawdatum = { headers[i]:datum[i] for i in xrange(len(headers)) }
         p['aulast'], p['auinit'] = _handle_authors( rawdatum['Authors'] )
         p['date'] = int(rawdatum['Year'].strip())
-        p['ayjid'] = _create_ayjid(p['aulast'], p['auinit'], p['date'], p['jtitle'])
+        p['ayjid'] = _create_ayjid(
+                        p['aulast'], p['auinit'], p['date'], p['jtitle'])
     
         p['institutions'] = _handle_affiliations(
                                 rawdatum['Authors with affiliations']   )
@@ -165,7 +166,7 @@ def _handle_affiliations(affiliationsdata):
         a = aff.split(', ')
         try:
             aname = '{0} {1}'.format(   a[0].strip().upper(),
-                                        a[1].replace('.', '').upper().strip()   )
+                                        a[1].replace('.', '').upper().strip()  )
             institution = a[2:]
             l = len(institution)
 
@@ -321,7 +322,8 @@ def _handle_references(referencesdata):
         p['jtitle'] = jtitle
         p['spage'] = spage
         p['epage'] = epage
-        p['ayjid'] = _create_ayjid(p['aulast'], p['auinit'], p['date'], p['jtitle'])
+        p['ayjid'] = _create_ayjid(
+                            p['aulast'], p['auinit'], p['date'], p['jtitle'])
 
         references.append(p)
 
