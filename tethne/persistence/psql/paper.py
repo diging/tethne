@@ -101,9 +101,7 @@ class SQLPapers(list):
         return self.__get_by_id(id)
 
     def __get_by_id(self, id):
-        paper = Paper()
-
-
+        
         cur = self.conn.cursor()
 
         # Search the table for id.
@@ -111,10 +109,17 @@ class SQLPapers(list):
         cur.execute(arg, (id,))     # This won't fail, even if no match.
         try:    # If there is no corresponding record, raise an error.
             data = cur.fetchone()
+            cur.close()
         except psycopg2.ProgrammingError:   # No matching record found!
             logger.debug('No Paper with id {0}'.format(id))
             raise KeyError('No Paper with that ID exists.')
 
+        paper = self._yield_paper(data)
+        return paper
+        
+    def _yield_paper(self, data):
+        paper = Paper()
+            
         # Populate the Paper with values.
         for i in xrange(len(data)):
             key = self.cols[i]
@@ -126,6 +131,7 @@ class SQLPapers(list):
                 #  as a SQLPapers instance.
                 citations = SQLPapers(  self.conn, self.dbparams,
                                         table=self.name + '_citations'  )
+
                 value = [ citations.__get_by_id(k) for k in value ]
             try:
                 paper[key] = value
@@ -133,8 +139,6 @@ class SQLPapers(list):
                     #  corresponding field in the Paper instance. This should
                     #  effectively just ignore the 'id' field.
                 pass
-
-        cur.close()
 
         return paper    # A Paper instance.
 
@@ -145,11 +149,10 @@ class SQLPapers(list):
             self.append(other)  # Just pass through to .append()
         return self
 
-    def append(self, obj):
+    def append(self, obj, complain=True):
         """
         Adds a new row to the table.
         """
-        cur = self.conn.cursor()
 
         # Handle citations first. Each citation is stored in a citations table
         #  with precisel the same structure as the main table for Papers. That
@@ -157,6 +160,7 @@ class SQLPapers(list):
         citations = obj['citations']
         cit_ids = []    # IDs from citations table.
         for citation in citations:
+            cur = self.conn.cursor()
             vals = { k:v for k,v in citation.iteritems()
                         if k not in ['citations', 'institutions', 'country' ] }
             keys = ', '.join(vals.keys())
@@ -167,6 +171,9 @@ class SQLPapers(list):
             try:    # Insert the citation into the citation table.
                 cur.execute(arg, vals)
                 id = cur.fetchone()[0]
+                self.conn.commit()
+                cur.close()                
+                stat= 'new'
 
             # This will frequently hit duplicates, which raises IntegrityError.
             except psycopg2.IntegrityError as E:
@@ -186,10 +193,12 @@ class SQLPapers(list):
                 cval = vals[ckey]
                 cur.execute(arg, (cval,))
                 id = cur.fetchone()[0]  # Got it!
+                cur.close()
+                stat = 'found'
 
-            cit_ids.append(id)  # This gets stored as a list of integers, below.
+            cit_ids.append(int(id))  # This gets stored as a list of integers, below.
 
-        # Then handle then Paper itself.
+        # Then handle the Paper itself.
         vals = { k:v for k,v in obj.iteritems()
                     if k not in ['citations', 'institutions', 'country' ]   }
         vals['citations'] = cit_ids     # Store the list of citation ids, too.
@@ -198,32 +207,41 @@ class SQLPapers(list):
 
         arg = self.insert_pattern.format(self.name, keys, vkeys)
 
-        try:
+        try:    # Attempt to add the Paper to the SQL table.
+            cur = self.conn.cursor()
             cur.execute(arg, vals)
-        except psycopg2.IntegrityError as E:    # Handle violations of UNIQUE
-                                                #  constraint.
-            raise ValueError('Paper already exists: {0}'.format(E))
+            id = cur.fetchone()[0]
+            self.conn.commit()   
+            cur.close()
 
-        id = cur.fetchone()[0]
-        list.append(self, id)   # Instead of a list of Papers, we have a list of
-                                #  ids into the paper table. We can use these
-                                #  to retrieve Papers later.
+            # Instead of a list of Papers, we build a list of ids into the paper
+            #  table. We can use these to retrieve Papers later, using 
+            #  __get_by_id().
+            list.append(self, id)   
 
-        self.conn.commit()
-        cur.close()
+        # Handle violations of UNIQUE loudly...
+        except psycopg2.IntegrityError as E: 
+            if complain:
+                self.conn.commit()  # Commit any pending changes before failing.
+                raise ValueError('Paper already exists: {0}'.format(E))
+            else:
+                pass
+
 
     def __iter__(self):
-
-        return self
-
-    def next(self):
-        current = self.last + 1
-        if current >= len(self):
-            raise StopIteration
-	print current
-        self.last += 1
-        id = list.__getitem__(self, current)
-        paper = self.__get_by_id(id)
-        return paper
+        """
+        Yields :class:`.Paper` objects from records in the Paper table, one at
+        a time.
+        """
+        cur = self.conn.cursor()
+        cur.execute("""SELECT * FROM {0};""".format(self.name))
+        remaining = True
+        while remaining:            
+            datum = cur.fetchone()  # Only load one at a time.
+            if datum is None:
+                remaining = False
+                cur.close()
+            else:
+                yield self._yield_paper(datum)
 
 
