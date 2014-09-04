@@ -54,10 +54,12 @@ class SQLPapers(list):
 
     insert_pattern = """INSERT INTO {0} ({1}) VALUES ({2}) RETURNING id;"""
 
-    def __init__(self, dbparams, table=None):
+    def __init__(self, conn, dbparams, table=None):
+        self.last = 0
+
         self.dbparams = dbparams
-        conn = self.__connect__()
-        cur = conn.cursor()
+        self.conn = conn
+        cur = self.conn.cursor()
 
         if table is None:
             # Create main table for Papers in the dataset.
@@ -67,17 +69,22 @@ class SQLPapers(list):
                 .format(self.name)   )
 
             cur.execute(PAPER_TABLE.format(self.name))
-            conn.commit()
+            self.conn.commit()
             logger.debug(
                 'Successfully created {0}'.format(self.name)    )
 
             # Create a secondary table for cited references (also Papers).
             logger.debug('Creating a citations table.')
             cur.execute(PAPER_TABLE.format(self.name + '_citations'))
-            conn.commit()
+            self.conn.commit()
 
-        else:
+        else:   # Table should already exist.
             self.name = table
+
+            # Get the IDs of all Papers in the table.
+            cur.execute("""SELECT id FROM {0};""".format(self.name))
+            for id in cur:
+                list.append(self, id[0])
 
         # Get the names of all of the columns in the table. This allows us to
         #  change the structure of the Papers table down the road without
@@ -87,15 +94,6 @@ class SQLPapers(list):
         self.cols = [ col[3] for col in cur ]   # col[3] is the column name.
 
         cur.close()
-        conn.close()
-
-    def __connect__(self):
-
-        dbargs = ' '.join(
-                ['{0}={1}'.format(k,v) for k,v in self.dbparams.iteritems()]
-                )
-        conn = psycopg2.connect(dbargs)
-        return conn
 
     def __getitem__(self, key):
         # Key is just a list index, which points to an id from the Papers table.
@@ -105,8 +103,8 @@ class SQLPapers(list):
     def __get_by_id(self, id):
         paper = Paper()
 
-        conn = self.__connect__()
-        cur = conn.cursor()
+
+        cur = self.conn.cursor()
 
         # Search the table for id.
         arg = """SELECT * FROM {0} WHERE id = %s;""".format(self.name)
@@ -126,7 +124,7 @@ class SQLPapers(list):
                 #  we want is a list of Papers. Since the citations table has
                 #  the same structure as the Papers table, we can access it
                 #  as a SQLPapers instance.
-                citations = SQLPapers(  self.dbparams,
+                citations = SQLPapers(  self.conn, self.dbparams,
                                         table=self.name + '_citations'  )
                 value = [ citations.__get_by_id(k) for k in value ]
             try:
@@ -137,7 +135,6 @@ class SQLPapers(list):
                 pass
 
         cur.close()
-        conn.close()
 
         return paper    # A Paper instance.
 
@@ -152,8 +149,7 @@ class SQLPapers(list):
         """
         Adds a new row to the table.
         """
-        conn = self.__connect__()
-        cur = conn.cursor()
+        cur = self.conn.cursor()
 
         # Handle citations first. Each citation is stored in a citations table
         #  with precisel the same structure as the main table for Papers. That
@@ -174,7 +170,7 @@ class SQLPapers(list):
 
             # This will frequently hit duplicates, which raises IntegrityError.
             except psycopg2.IntegrityError as E:
-                conn.commit()   # Clear the error.
+                self.conn.commit()   # Clear the error.
 
                 # Search error message for the conflicting key.
                 error = str(E)
@@ -213,6 +209,20 @@ class SQLPapers(list):
                                 #  ids into the paper table. We can use these
                                 #  to retrieve Papers later.
 
-        conn.commit()
+        self.conn.commit()
         cur.close()
-        conn.close()
+
+    def __iter__(self):
+
+        return self
+
+    def next(self):
+        current = self.last + 1
+        if current >= len(self):
+            raise StopIteration
+        self.last += 1
+        id = list.__getitem__(self, current)
+        paper = self.__get_by_id(id)
+        return paper
+
+
