@@ -220,6 +220,7 @@ class SQLPapers(list):
         current = self.last + 1
         if current >= len(self):
             raise StopIteration
+	print current
         self.last += 1
         id = list.__getitem__(self, current)
         paper = self.__get_by_id(id)
