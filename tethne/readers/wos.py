@@ -602,8 +602,9 @@ def _handle_author_institutions(wos_dict):
                 except KeyError:
                     author_institutions[author_au] = [inst_name]
 
-    # Convert values back to lists before returning.
-    return { k:list(v) for k,v in author_institutions.iteritems() }
+    # Should have the same order as the author names.
+    return [ author_institutions[k.upper().replace(',','')] 
+                for k in wos_dict['AU'] ]
 
 def read(datapath, **kwargs):
     """

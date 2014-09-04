@@ -77,7 +77,8 @@ class Paper(dict):
         self.list_fields = [ 'aulast',
                              'auinit',
                              'auuri',
-                             'citations' ]
+                             'citations',
+                             'institutions' ]
 
         # Fields that require string values.
         self.string_fields = [ 'atitle',
@@ -99,7 +100,7 @@ class Paper(dict):
         self.int_fields = [ 'date' ]
 
         # Fields that require dict values.
-        self.dict_fields = [ 'institutions' ]
+        self.dict_fields = [''] #[ 'institutions' ]
 
     def __setitem__(self, key, value):
         """

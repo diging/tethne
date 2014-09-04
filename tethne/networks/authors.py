@@ -457,36 +457,23 @@ def author_coinstitution(Papers, threshold=1, **kwargs):
     """
     coinstitution = nx.Graph(type='author_coinstitution')
 
-
-    # The Field in Papers which corresponds to the affiliation is "institutions"
-    #  { 'institutions' : { Authors:[institutions_list]}}
-    author_institutions = {}  # keys: author names, values: list of institutions
+    edges = Counter()
+    nodes = set([])
+    
     for paper in Papers:
         if paper['institutions'] is not None:
-            for key, value in paper['institutions'].iteritems():
-                try:
-                    author_institutions[key] += value
-                except KeyError:
-                    author_institutions[key] = value
-        authors = author_institutions.keys()
-        for i in xrange(len(authors)):
-            for j in xrange(len(authors)):
-                if i != j:
-                    # Compare 2 author dict elements.
-                    overlap = (set(author_institutions[authors[i]])
-                                &
-                                set(author_institutions[authors[j]]))
-                    if len(overlap) >= threshold:
-                        coinstitution.add_edge(authors[i], authors[j], \
-                                               overlap=len(overlap))
-                    else :
-                        pass
-        #62809656
-        attribs_dict = {}
-        for node in coinstitution.nodes():
-            attribs_dict[node] = 'author'
-        nx.set_node_attributes( coinstitution, 'type', attribs_dict )
+            inst = paper['institutions']
+            authors = paper.authors()
+            A = len(authors)    # Number of authors in this paper.
+            for i in xrange(A):
+                for j in xrange(i + 1, A):
+                    overlap = len(set(inst[i]) & set(inst[j]))
+                    if overlap >= threshold:
+                        ename = tuple(sorted([authors[i], authors[j]]))
+                        edges[ename] += overlap                        
 
+    for edge,overlap in edges.iteritems():
+        coinstitution.add_edge(edge[0], edge[1], weight=overlap)
 
     return coinstitution
 

@@ -13,6 +13,7 @@ PAPER_TABLE = """CREATE TABLE {0} (
                     aulast          text[],
                     auinit          text[],
                     auuri           text[],
+                    institutions    text[][],
                     atitle          text,
                     jtitle          text,
                     volume          text,
@@ -162,7 +163,7 @@ class SQLPapers(list):
         for citation in citations:
             cur = self.conn.cursor()
             vals = { k:v for k,v in citation.iteritems()
-                        if k not in ['citations', 'institutions', 'country' ] }
+                        if k not in ['citations', 'country' ] }
             keys = ', '.join(vals.keys())
             vkeys = ', '.join( [ '%({0})s'.format(k) for k in vals.keys() ])
             arg = self.insert_pattern.format(
@@ -173,7 +174,6 @@ class SQLPapers(list):
                 id = cur.fetchone()[0]
                 self.conn.commit()
                 cur.close()                
-                stat= 'new'
 
             # This will frequently hit duplicates, which raises IntegrityError.
             except psycopg2.IntegrityError as E:
@@ -194,13 +194,12 @@ class SQLPapers(list):
                 cur.execute(arg, (cval,))
                 id = cur.fetchone()[0]  # Got it!
                 cur.close()
-                stat = 'found'
 
-            cit_ids.append(int(id))  # This gets stored as a list of integers, below.
+            cit_ids.append(int(id))  # This gets stored as a list of integers.
 
         # Then handle the Paper itself.
         vals = { k:v for k,v in obj.iteritems()
-                    if k not in ['citations', 'institutions', 'country' ]   }
+                    if k not in ['citations', 'country' ]   }
         vals['citations'] = cit_ids     # Store the list of citation ids, too.
         keys = ', '.join(vals.keys())
         vkeys = ', '.join( [ '%({0})s'.format(k) for k in vals.keys() ])
@@ -226,7 +225,6 @@ class SQLPapers(list):
                 raise ValueError('Paper already exists: {0}'.format(E))
             else:
                 pass
-
 
     def __iter__(self):
         """
