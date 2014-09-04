@@ -476,7 +476,7 @@ def coinstitution(Papers, threshold=1, **kwargs):
 
     return coinstitution
 
-def author_cocitation(papers, threshold=1, **kwargs):
+def cocitation(papers, threshold=1, **kwargs):
     """
     Generates an author co-citation network; edges indicate co-citation of
     authors' papers.
@@ -510,12 +510,12 @@ def author_cocitation(papers, threshold=1, **kwargs):
 
     Returns
     -------
-    cocitation : :class:`.networkx.Graph`
+    graph : :class:`.networkx.Graph`
         A cocitation network.
 
     """
 
-    author_cocitations = nx.Graph(type='author_cocitation')
+    graph = nx.Graph(type='author_cocitation')
 
     # We'll use tuples as keys. Values are the number of times each pair
     # of 2 authors is co-cited.
@@ -600,6 +600,6 @@ def author_cocitation(papers, threshold=1, **kwargs):
         # If the weight is greater or equal to the user I/P threshold
         if val >= threshold :
             # Add edge between the 2 co-cited authors
-            author_cocitations.add_edge(key[0], key[1], weight=val)
+            graph.add_edge(key[0], key[1], weight=val)
 
-    return author_cocitations
+    return graph
