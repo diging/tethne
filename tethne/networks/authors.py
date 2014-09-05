@@ -328,27 +328,28 @@ def coauthors(  papers, threshold=1, edge_attribs=['ayjid'],
         logger.debug("{0}: adding institutional information".format(caller[1]))
         
         for k,v in author_inst.iteritems():
-            top_inst = max(Counter(v))
-            try:    # If an author has no coauthors, they will not appear in G.
-                G.node[k]['institution'] = top_inst
-                
-                # Optionally, include positional information, if possible.
-                if geocode:
+            if len(v) > 0:
+                top_inst = max(Counter(v))
+                try:    # If an author has no coauthors, they will not appear in G.
+                    G.node[k]['institution'] = top_inst
+                    
+                    # Optionally, include positional information, if possible.
+                    if geocode:
 
-                    location = gc.code_this(top_inst)
+                        location = gc.code_this(top_inst)
+                
+                        if location is None:
+                            location = gc.code_this(top_inst.split(',')[-1])
+                            precision = 'country'
+                        else:
+                            precision = 'institution'
+                        if location is not None:
+                            G.node[k]['latitude'] = location.latitude
+                            G.node[k]['longitude'] = location.longitude
+                            G.node[k]['precision'] = precision
             
-                    if location is None:
-                        location = gc.code_this(top_inst.split(',')[-1])
-                        precision = 'country'
-                    else:
-                        precision = 'institution'
-                    if location is not None:
-                        G.node[k]['latitude'] = location.latitude
-                        G.node[k]['longitude'] = location.longitude
-                        G.node[k]['precision'] = precision
-        
-            except KeyError:
-                pass
+                except KeyError:
+                    pass
     
     caller = logger.findCaller()
     logger.debug("{0}: done building coauthors graph".format(caller[1]))
