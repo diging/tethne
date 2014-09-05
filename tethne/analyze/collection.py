@@ -73,13 +73,22 @@ def algorithm(G, method, **kwargs):
             raise(ValueError("No such method in networkx."))
         else:
             for k, g in G.graphs.iteritems():
-                r = networkx.__dict__[method](g, **kwargs)
-                for elem, value in r.iteritems():
-                    try:
-                        results[elem][k] = value
-                    except KeyError:
-                        results[elem] = { k: value }
-                networkx.set_node_attributes(g, method, r)    # [#61510128]
+                try:
+                    r = networkx.__dict__[method](g, **kwargs)
+                except:
+                    r = 0.
+                # Some methods return a value for each node.
+                if type(r) is dict and len(r) == len(g.nodes()):
+                    for elem, value in r.iteritems():
+                        try:
+                            results[elem][k] = value
+                        except KeyError:
+                            results[elem] = { k: value }
+                    # Update the nodes in the graph with the results.
+                    networkx.set_node_attributes(g, method, r)    # [#61510128]
+                # Other methods return other kinds of values.
+                else:
+                    results[k] = r
     return results
 
 def delta(G, attribute):

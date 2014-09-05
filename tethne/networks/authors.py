@@ -83,7 +83,7 @@ def author_papers(papers, node_id='ayjid', paper_attribs=[], **kwargs):
 
     return author_papers_graph
 
-def institutions(papers, threshold=1, edge_attrbs=['ayjid'], 
+def institutions(papers, threshold=1, edge_attrbs=[], 
                  node_attribs=['authors'], geocode=False, **kwargs):
     """
     Generates an institutional network based on coauthorship.

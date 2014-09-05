@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 from paper import Paper
 from collections import Counter
+from ..analyze import corpus as az_corpus
 from nltk.corpus import stopwords
 import scipy
 
@@ -153,6 +154,15 @@ class Corpus(object):
             self.index( papers, features, index_by=index_by,
                         index_citation_by=index_citation_by,
                         exclude=exclude, filt=filt  )
+
+    def analyze(self, method, **kwargs):
+        try:
+            method_callable = az_corpus.__dict__[method]
+        except KeyError:
+            raise ValueError('No such method.')
+        
+        return method_callable(corpus=self, **kwargs)
+        
 
     def index(  self,   papers, features=None, index_by='ayjid',
                         index_citation_by='ayjid', exclude=set([]),
@@ -1204,6 +1214,8 @@ class Corpus(object):
             y_size = 1
         shape = (x_size, y_size)
         logger.debug('distribution shape: {0}'.format(shape))
+        
+        # Construct the sparse matrix.
         I = []
         J = []
         K = []
@@ -1223,8 +1235,10 @@ class Corpus(object):
                         K.append(k)
 
         # TODO: Move away from SciPy, to facilitate PyPy compatibility?
-        dist = np.array(scipy.sparse.coo_matrix((K, (I,J)), shape=shape).todense())
-
+        csr = scipy.sparse.coo_matrix((K, (I,J)), shape=shape).tocsr()
+        nonzero = csr.nonzero()
+        dist = np.array(csr.todense())
+        
         return dist
 
     # TODO: Merge this with :func:`.distribution`
@@ -1320,7 +1334,12 @@ class Corpus(object):
         fvalues = self.features[featureset]['features']
 
         def _get_value(papers):
-            vtuples = [ fv for p in papers for fv in fvalues[p] ]
+            vtuples = []
+            for p in papers:
+                if p in fvalues:
+                    vtuples += fvalues[p]
+
+#            vtuples = [ fv for p in papers for fv in fvalues[p] ]
             values = [ v for f,v in vtuples if f == findex ]
 
             if mode == 'counts':

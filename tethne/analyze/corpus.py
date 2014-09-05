@@ -15,7 +15,6 @@ Methods for analyzing :class:`.Corpus` objects.
 import networkx
 import numpy
 from ..networks.helpers import top_cited
-from ..classes import GraphCollection
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -93,7 +92,7 @@ def _top_features(corpus, feature, topn=20, perslice=False, axis='date'):
         top = [ counts.keys()[c] for c in cvalues.argsort()[-topn:][::-1] ]
     return top
 
-def plot_burstness(corpus, feature, k=5, topn=20, perslice=False,
+def plot_burstness(corpus, feature=None, k=5, topn=20, perslice=False,
                                 flist=None, normalize=True, fig=None, **kwargs):
     """
     Generate a figure depicting burstness profiles for ``feature``.
@@ -145,6 +144,9 @@ def plot_burstness(corpus, feature, k=5, topn=20, perslice=False,
        :align: center
 
     """
+    if feature is None:
+        raise ValueError('No feature specified.')
+        
     B = burstness(corpus, feature, k=k, topn=topn, perslice=perslice,
                                 flist=flist, normalize=normalize, **kwargs)
     
@@ -201,7 +203,7 @@ def plot_burstness(corpus, feature, k=5, topn=20, perslice=False,
     
     return fig
 
-def burstness(corpus, feature, k=5, topn=20, perslice=False,
+def burstness(corpus, feature=None, k=5, topn=20, perslice=False,
                       flist=None, normalize=True, **kwargs):
     """
     Estimate burstness profile for the ``topn`` features (or ``flist``) in 
@@ -248,6 +250,9 @@ def burstness(corpus, feature, k=5, topn=20, perslice=False,
        ([1990, 1991, 1992, 1993], [0., 0.4, 0.6, 0.])
 
     """
+    
+    if feature is None:
+        raise ValueError('No feature specified.')
 
     if flist is None:
         top = _top_features(corpus, feature, topn=topn, perslice=perslice)
@@ -267,7 +272,7 @@ def burstness(corpus, feature, k=5, topn=20, perslice=False,
                                             normalize=normalize, **kwargs)
     return B
 
-def feature_burstness(corpus, feature, findex, k=5, normalize=True, **kwargs):
+def feature_burstness(corpus, feature=None, findex=None, k=5, normalize=True, **kwargs):
     """
     Estimate burstness profile for a feature over the ``'date'`` axis.
     
@@ -286,6 +291,9 @@ def feature_burstness(corpus, feature, findex, k=5, normalize=True, **kwargs):
     kwargs : kwargs
         Parameters for burstness automaton HMM.
     """
+    
+    if feature is None:
+        raise ValueError('No feature specified.')
     
     # Get time-intervals between occurrences.
     last = min(corpus.axes['date'].keys())-1
@@ -339,7 +347,7 @@ def feature_burstness(corpus, feature, findex, k=5, normalize=True, **kwargs):
     return D, [ A_[d] for d in D ]
 
 
-def plot_sigma(G, corpus, feature, topn=20, sort_by='max', perslice=False,
+def plot_sigma(G=None, corpus=None, feature=None, topn=20, sort_by='max', perslice=False,
                                                 flist=None, fig=None, **kwargs):
     """
     Plot sigma values for the ``topn`` most influential nodes.
@@ -393,6 +401,16 @@ def plot_sigma(G, corpus, feature, topn=20, sort_by='max', perslice=False,
        :width: 600
        :align: center
     """
+    if G is None:
+        raise ValueError('No GraphCollection specified.')
+    
+    
+    if feature is None:
+        raise ValueError('No feature specified.')
+        
+    if corpus is None:
+        raise ValueError('No corpus specified.')                
+    
     G = sigma(G, corpus, feature)
     nodes = G.nodes()
 
@@ -491,7 +509,7 @@ def plot_sigma(G, corpus, feature, topn=20, sort_by='max', perslice=False,
             rect = mpatches.Rectangle(  xy, width, height, fill=True,
                                                            linewidth=0.0    )
             rect.set_facecolor(color)
-            rect.set_alpha(state + 0.1)
+            rect.set_alpha(min(state + 0.1, 1.0))
             ax.add_patch(rect)
         
         ax.set_ylabel(  G.node_index[node], rotation=0,
@@ -500,9 +518,9 @@ def plot_sigma(G, corpus, feature, topn=20, sort_by='max', perslice=False,
 
     plt.subplots_adjust(left=0.5)
     fig.tight_layout(h_pad=0.25)
-    return fig, G
+    return fig
 
-def sigma(G, corpus, feature, **kwargs):
+def sigma(G, corpus=None, feature=None, **kwargs):
     """
     Calculate sigma (from `Chen 2009 <http://arxiv.org/pdf/0904.1439.pdf>`_) for
     all of the nodes in a :class:`.GraphCollection`\.
@@ -563,6 +581,12 @@ def sigma(G, corpus, feature, **kwargs):
        :align: center
 
     """
+    
+    if feature is None:
+        raise ValueError('No feature specified.')
+        
+    if corpus is None:
+        raise ValueError('No corpus specified.')      
     
     nodes = G.node_lookup.keys()
 

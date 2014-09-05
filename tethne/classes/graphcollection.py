@@ -11,6 +11,7 @@ logger.setLevel('INFO')
 import networkx
 import numpy as np
 import matplotlib.pyplot as plt
+from ..analyze.collection import algorithm
 
 import warnings
 
@@ -121,7 +122,57 @@ class GraphCollection(object):
 
     def __len__(self):
         return len(self.graphs)
-    
+        
+    def analyze(self, method, **kwargs):
+        """
+        Apply a ``method`` from NetworkX to all ``networkx.Graph`` objects in the
+        :class:`.GraphCollection` ``G``.
+        
+        For options, see the `list of algorithms
+        <http://networkx.github.io/documentation/networkx-1.9/reference/algorithms.html>`_
+        in the NetworkX documentation. Not all of these have been tested.
+
+        Parameters
+        ----------
+        G : :class:`.GraphCollection`
+            The :class:`.GraphCollection` to analyze. The specified method will be
+            applied to each graph in ``G``.
+        method : string
+            Name of a method in NetworkX to execute on graph collection.
+        **kwargs
+            A list of keyword arguments that should correspond to the parameters
+            of the specified method.
+
+        Returns
+        -------
+        results : dict
+            Indexed by element (node or edge) and graph index (e.g. ``date``).
+
+        Raises
+        ------
+        ValueError
+            If no such method exists.
+
+        Examples
+        --------
+
+        *Betweenness centrality:* (``G`` is a :class:`.GraphCollection`\)
+
+        .. code-block:: python
+
+           >>> from tethne.analyze import collection
+           >>> BC = collection.algorithm(G, 'betweenness_centrality')
+           >>> print BC[0]
+           {1999: 0.010101651117889644,
+           2000: 0.0008689093723107329,
+           2001: 0.010504898852426189,
+           2002: 0.009338654511194512,
+           2003: 0.007519105636349891}
+
+        """    
+        results = algorithm(self, method, **kwargs)
+        return results
+        
     def build(self, corpus, axis, node_type, graph_type, method_kwargs={},
                                                                       **kwargs):
         """
@@ -471,7 +522,10 @@ class GraphCollection(object):
             # Ignore warnings; will handle NaNs below.
             with warnings.catch_warnings():
                 warnings.simplefilter('ignore')
-                v = stat(A)
+                try:
+                    v = stat(A)
+                except ValueError:  # Raised by max with empty sequence.
+                    v = 0.
 
             if np.isnan(v):
                 v = 0.
