@@ -135,7 +135,7 @@ class Paper(dict):
         """
 
         if self['aulast'] is None:
-            return None
+            return []
         
         auths = [ ' '.join([ a,l ]).upper()
                      for a,l in zip (self['aulast'], self['auinit']) ]
