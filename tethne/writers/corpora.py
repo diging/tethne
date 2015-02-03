@@ -56,7 +56,11 @@ def to_documents(target, ngrams, metadata=None, vocab=None):
             # Write metadata.
             meta = [ str(p) ]
             if metadata is not None:
-                meta += [ str(metadict[p][f]) for f in metakeys ]
+                if p in metadict:
+                    for f in metakeys:
+                        if f in metadict[p]:    meta.append(str(metadict[p][f]))
+                        else:                   meta.append('')
+
                 metaFile.write('\t'.join(meta) + '\n')
 
     except AttributeError:  # .iteritems() raises an AttributeError if ngrams
