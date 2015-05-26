@@ -1,23 +1,16 @@
 """
-A :class:`.Paper` represents a document in a :class:`.Corpus`\. :class:`.Paper`
-objects behave a lot like conventional Python dictionaries, except that they are
-picky about the kind of data that you throw into them.
-
-Most operations in Tethne don't require you to interact with :class:`.Paper`\s
-directly.
+A :class:`.Paper` represents a single document. :class:`.Paper` objects behave
+much like conventional Python dictionaries, except that they are picky about
+the kind of data that you throw into them.
 """
 
-import logging
-logging.basicConfig()
-logger = logging.getLogger(__name__)
-logger.setLevel('INFO')
 
 class Paper(dict):
     """
     Tethne's representation of a bibliographic record.
 
     The following fields (and corresponding data types) are permitted.
-    
+
     ===========     =====   ====================================================
     Field           Type    Description
     ===========     =====   ====================================================
@@ -42,63 +35,28 @@ class Paper(dict):
     None values are also allowed for all fields.
     """
 
+    fields = ['aulast', 'auinit', 'auuri', 'institutions', 'atitle', 'jtitle',
+              'volume', 'issue', 'spage', 'epage', 'date', 'citations',
+              'ayjid', 'doi', 'pmid', 'wosid', 'eid', 'uri', 'abstract',
+              'contents', 'accession', 'topics']
+
+    # Fields that require list values.
+    list_fields = ['aulast', 'auinit', 'auuri', 'citations', 'institutions']
+
+    # Fields that require string values.
+    string_fields = ['atitle', 'jtitle', 'volume', 'issue', 'spage',
+                     'epage', 'ayjid', 'doi', 'eid', 'pmid', 'wosid',
+                     'abstract', 'contents', 'accession']
+
+    # Fields that require int values.
+    int_fields = [ 'date' ]
+
+    # Fields that require dict values.
+    dict_fields = []
+
     def __init__(self):
-        # Default values.
-        fields = {
-            'aulast':None,
-            'auinit':None,
-            'auuri':None,
-            'institutions':None,    # List of lists in same order as aulast.
-            'atitle':None,
-            'jtitle':None,
-            'volume':None,
-            'issue':None,
-            'spage':None,
-            'epage':None,
-            'date':None,
-            'citations':None,
-            'ayjid':None,
-            'doi':None,
-            'pmid':None,    # PubMed
-            'wosid':None,   # ISI Web of Science
-            'eid':None,     # Scopus
-            'uri':None,     # Repository
-            'abstract':None,
-            'contents':None,
-            'accession':None,
-            'topics':None    }
-
-        for k,v in fields.iteritems():
-            dict.__setitem__(self, k, v)
-
-        # Fields that require list values.
-        self.list_fields = [ 'aulast',
-                             'auinit',
-                             'auuri',
-                             'citations',
-                             'institutions' ]
-
-        # Fields that require string values.
-        self.string_fields = [ 'atitle',
-                               'jtitle',
-                               'volume',
-                               'issue',
-                               'spage',
-                               'epage',
-                               'ayjid',
-                               'doi',
-                               'eid',
-                               'pmid',
-                               'wosid',
-                               'abstract',
-                               'contents',
-                               'accession' ]
-
-        # Fields that require int values.
-        self.int_fields = [ 'date' ]
-
-        # Fields that require dict values.
-        self.dict_fields = [''] #[ 'institutions' ]
+        for field in self.fields:
+            dict.__setitem__(self, field, None)
 
     def __setitem__(self, key, value):
         """
@@ -106,27 +64,36 @@ class Paper(dict):
         values.
         """
 
-        vt = type(value)
-        ks = str(key)
-
         if key not in self.keys():
-            raise KeyError(ks + " is not a valid key in Paper.")
-        elif key in self.list_fields and vt is not list and value is not None:
-            raise ValueError("Value for field '"+ ks +"' must be a list.")
-        elif key in self.string_fields and vt is not str \
-                and vt is not unicode and value is not None:
-            raise ValueError("Value for field '"+ ks +"' must be a string.")
-        elif key in self.int_fields and vt is not int and value is not None:
-            raise ValueError("Value for field '"+ ks +"' must be an integer.")
-        elif key in self.dict_fields and vt is not dict and value is not None:
-            raise ValueError("Value for field '"+ ks +"' must be a dictionary.")
-        else:
+            err, msg = KeyError, "{0} is not a valid key in Paper.".format(key)
+
+        if self._valid(key, value):
             dict.__setitem__(self, key, value)
+
+    def __getattr__(self, key):
+        return self.__getitem__(key)
+
+    def _valid(self, key, value):
+        err, vmsg = None, "Value for field '{0}' must be a {1}."
+
+        if value is None:
+            pass
+        elif key in self.list_fields and type(value) is not list:
+            err, msg = ValueError, vmsg.format(key, 'list')
+        elif key in self.string_fields and type(value) not in [str, unicode]:
+            err, msg = ValueError, vmsg.format(key, 'string or unicode')
+        elif key in self.int_fields and type(value) is not int:
+            err, msg = ValueError, vmsg.format(key, 'integer')
+        elif key in self.dict_fields and type(value) is not dict:
+            err, msg = ValueError, vmsg.format(key, 'dict')
+        if err is not None:
+            raise err(msg)
+        return True
 
     def authors(self):
         """
         Get the authors of the current :class:`.Paper` instance.
-        
+
         Returns
         -------
         authors : list
@@ -136,8 +103,7 @@ class Paper(dict):
 
         if self['aulast'] is None:
             return []
-        
-        auths = [ ' '.join([ a,l ]).upper()
-                     for a,l in zip (self['aulast'], self['auinit']) ]
+
+        auths = [' '.join([a, l]).upper() for a,l
+                 in zip(self['aulast'], self['auinit'])]
         return auths
-        
