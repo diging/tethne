@@ -1,15 +1,15 @@
 """
 Reader for Web of Science field-tagged bibliographic data.
 
-Tethne parses Web of Science field-tagged data into a list of :class:`.Paper` 
-objects. This is a two-step process: data are first parsed into a list of 
+Tethne parses Web of Science field-tagged data into a list of :class:`.Paper`
+objects. This is a two-step process: data are first parsed into a list of
 dictionaries with field-tags as keys, and then each dictionary is converted to a
 :class:`.Paper` . :func:`.readers.wos.read` performs both steps in sequence.
 
 One-step Parsing
 ````````````````
 
-The method :func:`.readers.wos.read` performs both :func:`.readers.wos.parse` 
+The method :func:`.readers.wos.read` performs both :func:`.readers.wos.parse`
 and :func:`.readers.wos.convert` . This is the preferred (simplest) approach in
 most cases.
 
@@ -19,7 +19,7 @@ most cases.
    >>> papers[0]
    <tethne.data.Paper instance at 0x101b575a8>
 
-Alternatively, if you have many data files saved in the same directory, you can 
+Alternatively, if you have many data files saved in the same directory, you can
 use :func:`.readers.wos.from_dir` :
 
 .. code-block:: python
@@ -29,7 +29,7 @@ use :func:`.readers.wos.from_dir` :
 Two-step Parsing
 ````````````````
 
-Use the two-step approach if you need to access fields not included in 
+Use the two-step approach if you need to access fields not included in
 :class:`.Paper`\, or if you wish to perform some intermediate manipulation on
 the raw parsed data.
 
@@ -39,24 +39,24 @@ First import the :mod:`.readers.wos` module:
 
    >>> import tethne.readers as rd
 
-Then parse the WoS data to a list of field-tagged dictionaries using 
+Then parse the WoS data to a list of field-tagged dictionaries using
 :func:`.readers.wos.parse` :
 
 .. code-block:: python
 
-   >>> wos_list = rd.wos.parse("/Path/to/savedrecs.txt")
-   >>> wos_list[0].keys()
-   ['EM', '', 'CL', 'AB', 'WC', 'GA', 'DI', 'IS', 'DE', 'VL', 'CY', 'AU', 'JI', 
-    'AF', 'CR', 'DT', 'TC', 'EP', 'CT', 'PG', 'PU', 'PI', 'RP', 'J9', 'PT', 
-    'LA', 'UT', 'PY', 'ID', 'SI', 'PA', 'SO', 'Z9', 'PD', 'TI', 'SC', 'BP', 
+   >>> papers = rd.wos.parse("/Path/to/savedrecs.txt")
+   >>> papers[0].keys()
+   ['EM', '', 'CL', 'AB', 'WC', 'GA', 'DI', 'IS', 'DE', 'VL', 'CY', 'AU', 'JI',
+    'AF', 'CR', 'DT', 'TC', 'EP', 'CT', 'PG', 'PU', 'PI', 'RP', 'J9', 'PT',
+    'LA', 'UT', 'PY', 'ID', 'SI', 'PA', 'SO', 'Z9', 'PD', 'TI', 'SC', 'BP',
     'C1', 'NR', 'RI', 'ER', 'SN']
 
-Convert those field-tagged dictionaries to :class:`.Paper` objects using 
+Convert those field-tagged dictionaries to :class:`.Paper` objects using
 :func:`.readers.wos.convert` :
 
 .. code-block:: python
 
-   >>> papers = rd.wos.convert(wos_list)
+   >>> papers = rd.wos.convert(papers)
    >>> papers[0]
    <tethne.data.Paper instance at 0x101b575a8>
 
@@ -80,7 +80,10 @@ import re
 import uuid
 
 import logging
-logging.basicConfig(filename=None, format='%(asctime)-6s: %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(lineno)d - %(message)s')
+logging.basicConfig(filename=None,
+                    format=''.join(['%(asctime)-6s: %(name)s - %(levelname)s',
+                                    ' - %(module)s - %(funcName)s - ',
+                                    '%(lineno)d - %(message)s']))
 logger = logging.getLogger(__name__)
 logger.setLevel('INFO')
 
@@ -126,15 +129,15 @@ def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     if jtitle is None:
         jtitle = ''
 
-    ayj = aulast + ' ' + auinit + ' ' + str(date) + ' ' + jtitle
+    ayj = ' '.join([aulast, auinit, str(date), jtitle]).upper().strip()
 
-    if ayj == '   ':
-        ayj = 'Unknown paper'
+    if ayj == '':
+        ayj = 'None'
 
-    return ayj.upper()
+    return ayj
 
-def _create_ainstid(aulast=None, auinit=None, addr1=None, \
-                   addr2=None, country=None, **kwargs):
+def _create_ainstid(aulast=None, auinit=None, addr1=None, addr2=None,
+                    country=None, **kwargs):
     """
     This function is to create an fuzzy identifier ainstid.
     Convert aulast, auinit, and jtitle into the fuzzy identifier ainstid.
@@ -174,21 +177,19 @@ def _create_ainstid(aulast=None, auinit=None, addr1=None, \
 
     if addr1 is None:
         addr1 = ''
-
     if  addr2 is None:
         addr2 = ''
     if  country is None:
         country = ''
 
-    ainstid = aulast + ' ' + auinit + ' ' + addr1 + ' ' + addr2 + ' ' + country
+    ainstid = ' '.join([aulast, auinit, addr1, addr2, country]).upper().strip()
 
-    if ainstid == ' ':
-        ainstid = 'Unknown Institution'
+    if ainstid == '':
+        ainstid = 'None'
 
     return ainstid
 
 
-# Web of Science functions
 def parse(filepath):
     """
     Parse Web of Science field-tagged data.
@@ -200,7 +201,7 @@ def parse(filepath):
 
     Returns
     -------
-    wos_list : list
+    papers : list
         A list of dictionaries each associated with a paper from the Web of
         Science with keys from docs/fieldtags.txt as encountered in the file;
         most values associated with keys are strings with special exceptions
@@ -208,9 +209,11 @@ def parse(filepath):
 
     Raises
     ------
-    KeyError : Key value which needs to be converted to an 'int' is not present.
-    AttributeError :
-    IOError : File at filepath not found, not readable, or empty.
+    KeyError
+        Key value which needs to be converted to an 'int' is not present.
+    AttributeError
+    IOError
+        File at filepath not found, not readable, or empty.
 
     Examples
     --------
@@ -218,111 +221,105 @@ def parse(filepath):
     .. code-block:: python
 
        >>> import tethne.readers as rd
-       >>> wos_list = rd.wos.parse("/Path/to/data.txt")
+       >>> papers = rd.wos.parse("/Path/to/data.txt")
 
     Notes
     -----
     Unknown keys: RI, OI, Z9
 
     """
-    wos_list = []
 
-    paper_start_key = 'PT'
-    paper_end_key = 'ER'
-    stop_flag = 0
-    
+    def _set_singleValue(p, k, v):
+        p[k] = v
 
-    # Try to read filepath
-    line_list = []
+    def _set_listValue(p, k, v):
+        if p[k] is None:
+            p[k] = []
+        p[k].append(v)
+
+    def _handle_author(p, k, v):
+        tokens = tuple([t.upper().strip() for t in v.split(',')])
+        if len(tokens) > 0:
+            aulast, auinit = tokens
+        else:
+            aulast, auinit = tokens[0], ''
+        _set_listValue(p, 'aulast', aulast)
+        _set_listValue(p, 'auinit', auinit)
+
+    def _handle_groupAuthor(p, v):
+        _set_listValue(p, 'aulast', v)
+        _set_listValue(p, 'auinit', '')
+        _set_listValue(p, 'aufull', v)
+
+    def _handle_date(p, v):
+        _set_singleValue(p, 'date', int(v))
+
+
+    translator = {
+                'AU': 'aulast',
+                'AI': 'auinit',
+                'AF': 'aufull',
+                'CA': _handle_groupAuthor,
+                'DI':'doi',
+                'TI':'atitle',
+                'SO':'jtitle',
+                'VL':'volume',
+                'IS':'issue',
+                'BP':'spage',
+                'EP':'epage',
+                'PY':'date',
+                'UT':'wosid',
+                'AB':'abstract',
+                'PT': None,   }
+
+    papers = []
+
+    startKey = 'PT'
+    endKey = 'ER'
+
     try:
         with open(filepath,'r') as f:
-            line_list = f.read().splitlines()
+            lines = f.read().splitlines()
     except IOError: # File does not exist, or couldn't be read.
         raise IOError("File does not exist, or cannot be read.")
 
-    if len(line_list) is 0:
-        raise IOError("Unable to read filepath or filepath is empty.")
+    if len(lines) == 0:
+        raise IOError("File at {0} is empty".format(filepath))
+
     # Convert the data in the file to a usable list of dictionaries.
     # Note: first two lines of file are not related to any paper therein.
-    last_field_tag = paper_start_key #initialize to something.
-    for line in line_list[2:]:
+    lastTag = startKey #initialize to something.
+    for line in lines[2:]:
         line = strip_non_ascii(line)
-        field_tag = line[:2]
-        
-        if field_tag == ' ':
-            pass
-        
-        if field_tag == paper_start_key:
-            # Then prepare for next paper.
-            wos_dict = _new_wos_dict()
+        fieldTag, value = line[:2].strip(), line[3:].strip()
+        field = translator[fieldTag]
 
-        if field_tag == paper_end_key:
-            # Then add paper to our list.
-            wos_list.append(wos_dict)  
+        if fieldTag == startKey:
+            paper = Paper()
+        if fieldTag == endKey:
+            papers.append(paper)
 
         # Handle keys like AU,AF,CR that continue over many lines.
-        if field_tag == '  ':
-            field_tag = last_field_tag
+        if len(fieldTag) == 0:
+            fieldTag = lastTag
 
-        # Add value for the key to the wos_dict: the rest of the line.
-        try:
-            if field_tag in ['AU', 'AF', 'CR', 'C1', 'CA']:
-                # These unique fields use the new line delimiter to distinguish
-                # their list elements below.
-                # The field C1 can be either in multiple lines or in a single
-                # line -- It is the address/institutions of the author.
-                wos_dict[field_tag] += '\n' + str(line[3:])
-            else:
-                wos_dict[field_tag] += ' ' + str(line[3:])
-        except (KeyError, TypeError, UnboundLocalError):
-                wos_dict[field_tag] = str(line[3:])
+        # Add value for the key to the paper: the rest of the line.
+        if fieldTag in ['AU', 'AF', 'CR', 'C1', 'CA']:
+            if paper[field] is None:
+                paper[field] = []
+            paper[field].append(value)
+        elif fieldTag in ['DE', 'ID']:
+            paper[field] = value.split(';')
+        elif fieldTag in ['PY']:
+            paper[field] = int(value)
+        else:
+            if paper[field] is None:
+                paper[field] = ''
+            paper[fieldTag] += ' ' + line[3:]
 
-        last_field_tag = field_tag
-    # End line loop.
+        lastTag = fieldTag
 
-    # Define keys that should be lists instead of default string.
-    list_keys = ['AU', 'AF', 'DE', 'ID', 'CR', 'C1', 'CA']
-    delims = {'AU':'\n',
-              'AF':'\n',
-              'DE':';',
-              'ID':';',
-              'C1':'\n',
-              'CR':'\n',
-              'CA':'\n'}
-
-    # And convert the data at those keys into lists.
-    for wos_dict in wos_list:
-        for key in list_keys:
-            delim = delims[key]
-            try:
-                key_contents = wos_dict[key]
-                if delim != '\n':
-                    wos_dict[key] = key_contents.split(delim)
-                else:
-                    wos_dict[key] = key_contents.splitlines()
-            except KeyError:
-                # One of the keys to be converted to a list didn't exist.
-                pass
-            except AttributeError:
-                # Again a key didn't exist but it belonged to the wos
-                # data_struct set of keys; can't split a None.
-                pass
-
-    # Similarly convert some data from string to int.
-    int_keys = ['PY']
-    for wos_dict in wos_list:
-        for key in int_keys:
-            try:
-                wos_dict[key] = int(wos_dict[key])
-            except KeyError:
-                # One of the keys to be converted to an int didn't exist.
-                pass
-            except TypeError:
-                # Again a key didn't exist but it belonged to the wos
-                # data_struct set of keys; can't convert None to an int.
-                pass
-
-    return wos_list
+    return papers
 
 def _parse_cr(ref):
 
@@ -420,7 +417,7 @@ def convert(wos_data, **kwargs):
     Convert a dictionary or list of dictionaries with keys from the
     Web of Science field tags into a :class:`.Paper` instance or list of
     :class:`.Paper` instances, the standard for Tethne.
-    
+
     Each :class:`.Paper` is tagged with an accession id for this conversion.
 
     Parameters
@@ -439,8 +436,8 @@ def convert(wos_data, **kwargs):
     .. code-block:: python
 
        >>> import tethne.readers as rd
-       >>> wos_list = rd.wos.parse("/Path/to/data.txt")
-       >>> papers = rd.wos.convert(wos_list)
+       >>> papers = rd.wos.parse("/Path/to/data.txt")
+       >>> papers = rd.wos.convert(papers)
 
     Notes
     -----
@@ -449,10 +446,10 @@ def convert(wos_data, **kwargs):
     important for any graph with authors as nodes.
 
     """
-    
+
     accession = str(uuid.uuid4())
-    
-    #create a Paper for each wos_dict and append to this list
+
+    #create a Paper for each paper and append to this list
     papers = kwargs.get('papers', [])
 
     #handle dict inputs by converting to a 1-item list
@@ -470,56 +467,56 @@ def convert(wos_data, **kwargs):
 
     # Define the direct relationships between WoS fieldtags and Paper keys.
     translator = _wos2paper_map()
-    
+
     # Perform the key convertions
-    for wos_dict in wos_data:
+    for paper in wos_data:
         paper = Paper()
 
         #direct translations
         for key in translator.iterkeys():
-            paper[translator[key]] = wos_dict[key]
-            
+            paper[translator[key]] = paper[key]
+
         # Group authors ('CA') are treated as personal authors.
-        if 'CA' in wos_dict.keys():
-            try: wos_dict['AU'] += wos_dict['CA']
-            except TypeError: wos_dict['AU'] = wos_dict['CA']
-            try: wos_dict['AF'] += wos_dict['CA']
-            except KeyError: wos_dict['AF'] = wos_dict['CA']
-    
+        if 'CA' in paper.keys():
+            try: paper['AU'] += paper['CA']
+            except TypeError: paper['AU'] = paper['CA']
+            try: paper['AF'] += paper['CA']
+            except KeyError: paper['AF'] = paper['CA']
+
         # more complicated translations
         # FIXME: not robust to all names, organziation authors, etc.
-        if wos_dict['AU'] is not None:
-            paper['aulast'], paper['auinit'] = _handle_authors(wos_dict)
+        if paper['AU'] is not None:
+            paper['aulast'], paper['auinit'] = _handle_authors(paper)
 
         #construct ayjid
         ayjid = _create_ayjid(paper['aulast'], paper['auinit'],
-                             paper['date'], paper['jtitle'])
+                              paper['date'], paper['jtitle'])
         paper['ayjid'] = ayjid
 
         # Parse author-institution affiliations. #60216226, #57746858.
-        if wos_dict['C1'] is not None:
-            paper['institutions'] = _handle_author_institutions(wos_dict)
+        if paper['C1'] is not None:
+            paper['institutions'] = _handle_author_institutions(paper)
 
         # Convert CR references into paper format
-        if wos_dict['CR'] is not None:
+        if paper['CR'] is not None:
             meta_cr_list = []
-            for ref in wos_dict['CR']:
+            for ref in paper['CR']:
                 meta_cr_list.append(_parse_cr(ref))
                 #print 'meta_cr_list' , meta_cr_list
             paper['citations'] = meta_cr_list
 
         paper['accession'] = accession
-        
+
         papers.append(paper)
-    # End wos_dict for loop.
+    # End paper for loop.
 
     return papers
-    
-def _handle_authors(wos_dict):
+
+def _handle_authors(paper):
 
     aulast_list = []
     auinit_list = []
-    for name in wos_dict['AU']:
+    for name in paper['AU']:
         name_tokens = name.split(',')
         aulast = name_tokens[0].upper().strip()
         try:
@@ -529,30 +526,29 @@ def _handle_authors(wos_dict):
             # then no first initial character
             # preserve parallel name lists with empty string
             auinit = ''
-        aulast_list.append(aulast)
-        auinit_list.append(auinit)
-    
+        aulast_list.append(aulast), auinit_list.append(auinit)
+
     return aulast_list, auinit_list
 
-def _handle_author_institutions(wos_dict):
+def _handle_author_institutions(paper):
     pattern = re.compile(r'\[(.*?)\]')
     author_institutions = {}
 
-    for c1_str in wos_dict['C1']:   # One C1 line for each institution.
-    
+    for c1_str in paper['C1']:   # One C1 line for each institution.
+
         match = pattern.search(c1_str)
         if match:   # Explicit author-institution mappings are provided.
             # For example:
             #
-            # [Lin, Bing-Sian; Lee, Chon-Lin] Natl Sun Yat Sen Univ, Dept 
+            # [Lin, Bing-Sian; Lee, Chon-Lin] Natl Sun Yat Sen Univ, Dept
             #   Marine Environm & Engn, Kaohsiung 80424, Taiwan.
             # [Brimblecombe, Peter] Univ E Anglia, Sch Environm Sci, Norwich NR4
             #   7TJ, Norfolk, England.
             # [Lee, Chon-Lin] Natl Sun Yat Sen Univ, Asia Pacific Ocean Res Ctr,
             #   Kuroshio Res Grp, Kaohsiung 80424, Taiwan.
-            # [Lee, Chon-Lin] Natl Sun Yat Sen Univ, Ctr Emerging Contaminants 
+            # [Lee, Chon-Lin] Natl Sun Yat Sen Univ, Ctr Emerging Contaminants
             #   Res, Kaohsiung 80424, Taiwan.
-            # [Liu, James T.] Natl Sun Yat Sen Univ, Inst Marine Geol & Chem, 
+            # [Liu, James T.] Natl Sun Yat Sen Univ, Inst Marine Geol & Chem,
             #   Kaohsiung 80424, Taiwan.
 
             authors = c1_str[match.start()+1:match.end()-1].split('; ')
@@ -560,14 +556,14 @@ def _handle_author_institutions(wos_dict):
                                               .strip()      \
                                               .strip('.')   \
                                               .split(', ')
-            
+
             for author in authors:
                 # The A-I mapping (in data) uses the AF representation
                 #  of author names. But we use the AU representation
                 #  as our mapping key to ensure consistency with older
                 #  datasets.
-                author_index = wos_dict['AF'].index(author)
-                author_au = wos_dict['AU'][author_index].upper()    \
+                author_index = paper['AF'].index(author)
+                author_au = paper['AU'][author_index].upper()    \
                                                         .replace(',','')
                 inst_name = ', '.join([institution[0], institution[-1].strip()])
 
@@ -584,11 +580,11 @@ def _handle_author_institutions(wos_dict):
             #
             # UN, Environm Programme, Nairobi, Kenya.
             # Univ Haifa, Dept Geog, IL-31095 Haifa, Israel.
-            
-            for author_au in wos_dict['AU']:
+
+            for author_au in paper['AU']:
                 author_au = author_au.upper()       \
                                      .replace(',','')
-            
+
                 institution = c1_str.upper()        \
                                     .strip()        \
                                     .strip('.')     \
@@ -604,7 +600,7 @@ def _handle_author_institutions(wos_dict):
 
     # Should have the same order as the author names.
     inst_list = []
-    for k in wos_dict['AU']:
+    for k in paper['AU']:
         k = k.upper().replace(',','')
         if k in author_institutions:
             inst_list.append(author_institutions[k])
@@ -612,7 +608,7 @@ def _handle_author_institutions(wos_dict):
             inst_list.append([])
 
     return inst_list
-    
+
 def read(datapath, **kwargs):
     """
     Yields a list of :class:`.Paper` instances from a Web of Science data file.
@@ -626,10 +622,10 @@ def read(datapath, **kwargs):
     -------
     papers : list
         A list of :class:`.Paper` instances.
-        
+
     Examples
     --------
-    
+
     .. code-block:: python
 
        >>> import tethne.readers as rd
@@ -666,36 +662,36 @@ def from_dir(path):
     ------
     IOError
         Invalid path.
-        
+
     Examples
     --------
 
     .. code-block:: python
 
        >>> import tethne.readers as rd
-       >>> papers = rd.wos.from_dir("/Path/to/datadir")        
+       >>> papers = rd.wos.from_dir("/Path/to/datadir")
 
     """
 
-    wos_list = []
+    papers = []
 
     try:
         files = os.listdir(path)
     except IOError:
         raise IOError("Invalid path.")
-            
+
     for f in files:
         if not f.startswith('.'): # Ignore hidden files.
             try:
-                wos_list += parse(path + "/" + f)
-            except (IOError,UnboundLocalError): # Ignore files that don't 
+                papers += parse(path + "/" + f)
+            except (IOError,UnboundLocalError): # Ignore files that don't
                 pass                            #  contain WoS data.
-    papers = convert(wos_list)
+    papers = convert(papers)
     return papers
 
 def read_corpus(path):
     """
-    
+
     """
 
     papers = read(path)
@@ -703,7 +699,7 @@ def read_corpus(path):
 
 def corpus_from_dir(path):
     """
-    
+
     Parameters
     ----------
     path : string
@@ -738,20 +734,20 @@ def _validate(wos_data):
     # Create a translator dict whose keys are the fields which needs to be
     # validated from the input.
     # Any new field which needs validation in the future
-    translator = _new_wos_dict()
+    translator = _new_paper()
 
     # Now all these input fields needs to be validated as per requirements.
 
-    for wos_dict in wos_data:
+    for paper in wos_data:
         #direct translations
         for key in translator.iterkeys():
             # Validate for 'CR' field
-            if wos_dict['CR'] is not None:
-                for cr in wos_dict['CR']:
+            if paper['CR'] is not None:
+                for cr in paper['CR']:
                     # check if the CR field is populated correctly
                     pass
-            if wos_dict['C1'] is not None:
-                for cr in wos_dict['C1']:
+            if paper['C1'] is not None:
+                for cr in paper['C1']:
                     # check if the C1 field is populated correctly
                     pass
 
@@ -778,18 +774,18 @@ def _new_query_dict():
     return q_dict
 
 
-def _new_wos_dict():
+def _new_paper():
     """
     Defines the set of field tags that will try to be converted, and intializes
     them to 'None'.
 
     Returns
     -------
-    wos_dict : dict
-        A wos_list dictionary with 'None' as default values for all keys.
+    paper : dict
+        A papers dictionary with 'None' as default values for all keys.
 
     """
-    wos_dict = {
+    paper = {
                     'DI':None,
                     'AU':None,
                     'C1':None,
@@ -804,11 +800,11 @@ def _new_wos_dict():
                     'CR':None,
                     'AB':None   }
 
-    return wos_dict
+    return paper
 
 def _wos2paper_map():
     """
-    Defines the direct relationships between the wos_dict and :class:`.Paper`.
+    Defines the direct relationships between the paper and :class:`.Paper`.
 
     Returns
     -------
@@ -833,4 +829,3 @@ def _wos2paper_map():
 #Custom Error Defined
 class DataError(Exception):
     pass
-        

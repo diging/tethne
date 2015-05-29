@@ -16,6 +16,7 @@ class Paper(dict):
     ===========     =====   ====================================================
     aulast          list    Authors' last name, as a list.
     auinit          list    Authors' first initial as a list.
+    aufull          list    Authors' full names.
     institution     dict    Institutions with which the authors are affiliated.
     atitle          str     Article title.
     jtitle          str     Journal title or abbreviated title.
@@ -35,13 +36,14 @@ class Paper(dict):
     None values are also allowed for all fields.
     """
 
-    fields = ['aulast', 'auinit', 'auuri', 'institutions', 'atitle', 'jtitle',
-              'volume', 'issue', 'spage', 'epage', 'date', 'citations',
-              'ayjid', 'doi', 'pmid', 'wosid', 'eid', 'uri', 'abstract',
-              'contents', 'accession', 'topics']
+    fields = ['aulast', 'auinit', 'aufull', 'auuri', 'institutions', 'atitle',
+              'jtitle', 'volume', 'issue', 'spage', 'epage', 'date',
+              'citations', 'ayjid', 'doi', 'pmid', 'wosid', 'eid', 'uri',
+              'abstract', 'contents', 'accession', 'topics']
 
     # Fields that require list values.
-    list_fields = ['aulast', 'auinit', 'auuri', 'citations', 'institutions']
+    list_fields = ['aulast', 'auinit', 'aufull', 'auuri', 'citations',
+                   'institutions']
 
     # Fields that require string values.
     string_fields = ['atitle', 'jtitle', 'volume', 'issue', 'spage',
