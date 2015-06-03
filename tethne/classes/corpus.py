@@ -7,22 +7,9 @@ logging.basicConfig(filename=None, format='%(asctime)-6s: %(name)s - %(levelname
 logger = logging.getLogger(__name__)
 logger.setLevel('INFO')
 
+from tethne.classes.feature import FeatureSet
 from tethne.utilities import _iterable
 
-# import numpy as np
-# import matplotlib.pyplot as plt
-# import matplotlib
-# from paper import Paper
-# from collections import Counter
-# from ..analyze import corpus as az_corpus
-# from nltk.corpus import stopwords
-# import scipy
-# 
-# import copy
-# 
-# from unidecode import unidecode
-# 
-# from ..utilities import strip_punctuation
 
 def _tfidf(f, c, C, DC, N):
     tf = float(c)
@@ -36,32 +23,41 @@ def _filter(s, C, DC):
     
     
 class Corpus(object):
-	def __init__(self, papers=None, index_by=None, index_fields=None, **kwargs):
-		"""
-		Parameters
-		----------
-		paper : list
-		index_by : str
-		index_fields : str or iterable of strs
-		"""
-
-		if not index_by:
-			if hasattr(papers[0], 'doi'):		index_by = 'doi'
-			elif hasattr(papers[0], 'wosid'):	index_by = 'wosid'
-			elif hasattr(papers[0], 'uri'):		index_by = 'uri'			
-
-		self.indexed_papers = {getattr(paper, index_by): paper for paper in papers}
-		self.index_by = index_by
-		self.indices = {}
-		
-		if index_fields:
-			for attr in _iterable(index_fields):
-				self.index(attr)
+    @property
+    def papers(self):
+        return self.indexed_papers.values()
 
 
-	@property
-	def papers(self):
-		return self.indexed_papers.values()
+    def __init__(self, papers=None, index_by=None, index_fields=None,
+                 index_features=None, **kwargs):
+        """
+        Parameters
+        ----------
+        paper : list
+        index_by : str
+        index_fields : str or iterable of strs
+        """
+
+        if not index_by:
+            if hasattr(papers[0], 'doi'):		index_by = 'doi'
+            elif hasattr(papers[0], 'wosid'):	index_by = 'wosid'
+            elif hasattr(papers[0], 'uri'):		index_by = 'uri'			
+
+        self.indexed_papers = {getattr(paper, index_by): paper
+                               for paper in papers}
+
+        self.index_by = index_by
+        self.indices = {}
+        self.features = {}
+
+        if index_features:
+            for feature_name in index_features:
+                features = {p: getattr(p, feature_name) for p in papers}
+                self.features[feature_name] = FeatureSet(features)
+
+        if index_fields:
+            for attr in _iterable(index_fields):
+                self.index(attr)
 
 
 	def index(self, attr):
