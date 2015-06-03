@@ -20,18 +20,18 @@ Cyotoscape and Gephi) and the MatPlotLib Python library.
    
 """
 
-from analyze import *
-from classes import *
-from model import *
-from networks import *
-from persistence import *
-from readers import *
-from services import *
-from writers import *
-
-from persistence.hdf5 import *
-
-import logging
-logging.basicConfig(filename=None, format='%(asctime)-6s: %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(lineno)d - %(message)s')
-logger = logging.getLogger(__name__)
-logger.setLevel('INFO')
+# from analyze import *
+# from classes import *
+# from model import *
+# from networks import *
+# from persistence import *
+# from readers import *
+# from services import *
+# from writers import *
+# 
+# from persistence.hdf5 import *
+# 
+# import logging
+# logging.basicConfig(filename=None, format='%(asctime)-6s: %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(lineno)d - %(message)s')
+# logger = logging.getLogger(__name__)
+# logger.setLevel('INFO')

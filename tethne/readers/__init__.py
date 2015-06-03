@@ -51,10 +51,10 @@ Missing data here also results in the above keys being set to None.
 
 """
 
-import wos
-import dfr
+# import wos
+# import dfr
 
-from ..classes import Paper
+# from ..classes import Paper
 
 class DataError(Exception):
     def __init__(self, value):

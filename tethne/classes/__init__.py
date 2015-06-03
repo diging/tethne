@@ -13,12 +13,3 @@ data archiving) can be found in :mod:`.persistence`\.
    graphcollection
    
 """
-
-import logging
-logging.basicConfig()
-logger = logging.getLogger(__name__)
-logger.setLevel('ERROR')
-
-from paper import Paper
-from corpus import Corpus
-from graphcollection import GraphCollection

@@ -4,6 +4,22 @@ Helper functions.
 import string
 import copy
 
+def _iterable(o):
+	if hasattr(o, '__iter__'):
+		return o
+	else:
+		return [o]
+
+def _strip_punctuation(s):
+    exclude = set(string.punctuation)
+    return ''.join(ch for ch in s if ch not in exclude)
+
+def _space_sep(s):
+	if len(s) > 3:
+		return s
+	return ' '.join(list(s))
+
+
 def swap(u,v):
     """
     exchange the values of u and v
