@@ -23,41 +23,42 @@ def _filter(s, C, DC):
     
     
 class Corpus(object):
-    @property
-    def papers(self):
-        return self.indexed_papers.values()
+	@property
+	def papers(self):
+		return self.indexed_papers.values()
 
 
-    def __init__(self, papers=None, index_by=None, index_fields=None,
-                 index_features=None, **kwargs):
-        """
-        Parameters
-        ----------
-        paper : list
-        index_by : str
-        index_fields : str or iterable of strs
-        """
+	def __init__(self, papers=None, index_by=None, index_fields=None,
+				 index_features=None, **kwargs):
+		"""
+		Parameters
+		----------
+		paper : list
+		index_by : str
+		index_fields : str or iterable of strs
+		"""
 
-        if not index_by:
-            if hasattr(papers[0], 'doi'):		index_by = 'doi'
-            elif hasattr(papers[0], 'wosid'):	index_by = 'wosid'
-            elif hasattr(papers[0], 'uri'):		index_by = 'uri'			
+		if not index_by:
+			if hasattr(papers[0], 'doi'):		index_by = 'doi'
+			elif hasattr(papers[0], 'wosid'):	index_by = 'wosid'
+			elif hasattr(papers[0], 'uri'):		index_by = 'uri'			
 
-        self.indexed_papers = {getattr(paper, index_by): paper
-                               for paper in papers}
+		self.indexed_papers = {getattr(paper, index_by): paper
+							   for paper in papers}
 
-        self.index_by = index_by
-        self.indices = {}
-        self.features = {}
+		self.index_by = index_by
+		self.indices = {}
+		self.features = {}
+		self.slices = []
 
-        if index_features:
-            for feature_name in index_features:
-                features = {p: getattr(p, feature_name) for p in papers}
-                self.features[feature_name] = FeatureSet(features)
+		if index_features:
+			for feature_name in index_features:
+				features = {p: getattr(p, feature_name) for p in papers}
+				self.features[feature_name] = FeatureSet(features)
 
-        if index_fields:
-            for attr in _iterable(index_fields):
-                self.index(attr)
+		if index_fields:
+			for attr in _iterable(index_fields):
+				self.index(attr)
 
 
 	def index(self, attr):
@@ -74,6 +75,220 @@ class Corpus(object):
 						self.indices[attr][v] = []
 					self.indices[attr][v].append(i)
 
+	
+	def __getitem__(self, args):
+		attr, value = args
+		return [self.indexed_papers[p] for p in self.indices[attr][value]]
+
+
+	def slice(self, method='period', window_size=1, step_size=1, papers=False):
+		if 'date' not in self.indices:
+			self.index('date')
+		
+		
+		start = min(self.indices['date'].keys())
+		end = max(self.indices['date'].keys())
+		while start <= end - (window_size - 1):
+			yield [pset for i in xrange(start, start + window_size, 1) 
+		           for pset in self['date', i]]
+			start += step_size
+		
+			
+	def distribution(self, **slice_kwargs):
+		return [len(papers) for papers in self.slice(**slice_kwargs)]
+		
+	
+	def feature_distribution(self, feature, element, mode='counts', **slice_kwargs):
+		def get_value(d, elem):
+			if elem in d:
+				return d[elem]
+			return 0
+			
+		values = []
+		for papers in self.slice(**slice_kwargs):
+			values.append(sum([get_value(dict(getattr(paper, feature)), element)
+							   for paper in papers]))
+		return values
+
+#     def slice(self, key, method=None, **kwargs):
+#         """
+#         Slices data by key, using method (if applicable).
+# 
+#         In order to perform comparative analyses among your data, you must
+#         define the "axes" that you wish to compare by "slicing" your
+#         :class:`.Corpus`\. You can slice by (theoretically) any field in your
+#         :class:`.Paper`\s, but most of the time you'll be slicing by the `date`.
+# 
+#         Here are some methods for slicing a :class:`.Corpus`\, which you can
+#         specify using the `method` keyword argument.
+# 
+#         ===========    =============================    =======    =============
+#         Method         Description                      Key        kwargs
+#         ===========    =============================    =======    =============
+#         time_window    Slices data using a sliding      date       window_size
+#                        time-window. Dataslices are                 step_size
+#                        indexed by the start of the
+#                        time-window.
+#         time_period    Slices data into time periods    date       window_size
+#                        of equal length. Dataslices
+#                        are indexed by the start of
+#                        the time period.
+#         ===========    =============================    =======    =============
+# 
+#         The main difference between the sliding time-window (``time_window``)
+#         and the time-period (``time_period``) slicing methods are whether the
+#         resulting periods can overlap. Whereas time-period slicing divides data
+#         into subsets by sequential non-overlapping time periods, subsets
+#         generated by time-window slicing can overlap.
+# 
+#         .. figure:: _static/images/bibliocoupling/timeline.timeslice.png
+#            :width: 400
+#            :align: center
+# 
+#            **Time-period** slicing, with a window-size of 4 years.
+# 
+#         .. figure:: _static/images/bibliocoupling/timeline.timewindow.png
+#            :width: 400
+#            :align: center
+# 
+#            **Time-window** slicing, with a window-size of 4 years and a
+#            step-size of 1 year.
+# 
+#         Avilable kwargs:
+# 
+#         ===========    ======   ================================================
+#         Argument       Type     Description
+#         ===========    ======   ================================================
+#         window_size    int      Size of time-window or period, in years
+#                                 (default = 1).
+#         step_size      int      Amount to advance time-window or period in each
+#                                 step (ignored for time_period).
+#         cumulative     bool     If True, the data from each successive slice
+#                                 includes the data from all preceding slices.
+#                                 Only applies if key is 'date' (default = False).
+#         ===========    ======   ================================================
+# 
+#         If you slice your :class:`.Corpus` by a field other than `date`, you do
+#         not need to specifiy a `method` or any other keyword arguments.
+# 
+#         Once you have sliced your :class:`.Corpus`\, you can use
+#         :func:`.distribution` or :func:`.plot_distribution` to generate
+#         descriptive statistics about your data.
+# 
+#         Parameters
+#         ----------
+#         key : str
+#             key in :class:`.Paper` by which to slice data.
+#         method : str (optional)
+#             Dictates how data should be sliced. See table for available methods.
+#             If key is 'date', default method is time_period with window_size and
+#             step_size of 1.
+#         kwargs : kwargs
+#             See methods table, above.
+# 
+#         Examples
+#         --------
+# 
+#         .. code-block:: python
+# 
+#            >>> MyCorpus.slice('date', method='time_period', window_size=5)
+#            >>> MyCorpus.plot_distribution('date')
+# 
+#         Should generate a plot that looks something like this:
+# 
+#         .. figure:: _static/images/corpus_plot_distribution.png
+#            :width: 400
+#            :align: center
+# 
+#         """
+# 
+#         if key == 'date':
+#             if method == 'time_window':
+#                 kw = {  'window_size': kwargs.get('window_size', 1),
+#                         'step_size': kwargs.get('step_size', 1) }
+#                 self.axes[key] = self._time_slice(**kw)
+# 
+#             elif method == 'time_period' or method is None:
+#                 kw = {  'window_size': kwargs.get('window_size', 1),
+#                         'step_size': kwargs.get('window_size', 1),
+#                         'cumulative': kwargs.get('cumulative', False) }
+# 
+#                 self.axes[key] = self._time_slice(**kw)
+#             else:
+#                 raise(ValueError(str(method) + " not a valid slicing method."))
+# 
+#         # TODO: consider removing this, and just focusing on time.
+#         elif key == 'author':   # Already indexed.
+#             self.axes[key] = self.authors     # { a : [ p ] }
+# 
+#         # TODO: consider indexing journals in __init__, perhaps optionally.
+#         elif key in self.datakeys: # e.g. 'jtitle'
+#             self.axes[key] = {}     # { jtitle : [ p ] }
+#             for p,paper in self.papers.iteritems():
+#                 try:
+#                     self.axes[key][paper[key]].append(p)
+#                 except KeyError:
+#                     self.axes[key][paper[key]] = [p]
+#         else:
+#             raise(KeyError(str(key) + " not a valid key in data."))
+# 
+# 
+#     def _time_slice(self, **kwargs):
+#         """
+#         Slices data by date.
+# 
+#         If step_size = 1, this is a sliding time-window. If step_size =
+#         window_size, this is a time period slice.
+# 
+#         Parameters
+#         ----------
+#         kwargs : kwargs
+#             See table, below.
+# 
+#         Returns
+#         -------
+#         slices : dict
+#             Keys are start date of time slice, values are :class:`.Paper`
+#             indices (controlled by index_by argument in
+#             :func:`.Corpus.__init__` )
+# 
+#         Notes
+#         -----
+# 
+#         Avilable kwargs:
+# 
+#         ===========    ======   ================================================
+#         Argument       Type     Description
+#         ===========    ======   ================================================
+#         window_size    int      Size of time-window or period, in years
+#                                 (default = 1).
+#         step_size      int      Amount to advance time-window or period in each
+#                                 step (ignored for time_period).
+#         cumulative     bool     If True, the data from each successive slice
+#                                 includes the data from all preceding slices.
+#                                 Only applies if key is 'date' (default = False).
+#         ===========    ======   ================================================
+# 
+#         """
+# 
+#         # Get parameters from kwargs.
+#         window_size = kwargs.get('window_size', 1)
+#         step_size = kwargs.get('step_size', 1)
+#         start = kwargs.get('start', min([ paper['date']
+#                                            for paper in self.papers.values() ]))
+#         end = kwargs.get('start', max([ paper['date']
+#                                            for paper in self.papers.values() ]))
+#         cumulative = kwargs.get('cumulative', False)
+# 
+#         slices = {}     # { s : [ p ] }
+#         last = None
+#         for s in xrange(start, end-window_size+2, step_size):
+#             slices[s] = [ p for p,paper in self.papers.iteritems()
+#                             if s <= paper['date'] < s + window_size ]
+#             if cumulative and last is not None:
+#                 slices[s] += last
+#             last = slices[s]
+#         return slices
 
 # class Corpus(object):
 #     """
@@ -786,184 +1001,7 @@ class Corpus(object):
 # 
 #         return None
 # 
-#     def slice(self, key, method=None, **kwargs):
-#         """
-#         Slices data by key, using method (if applicable).
-# 
-#         In order to perform comparative analyses among your data, you must
-#         define the "axes" that you wish to compare by "slicing" your
-#         :class:`.Corpus`\. You can slice by (theoretically) any field in your
-#         :class:`.Paper`\s, but most of the time you'll be slicing by the `date`.
-# 
-#         Here are some methods for slicing a :class:`.Corpus`\, which you can
-#         specify using the `method` keyword argument.
-# 
-#         ===========    =============================    =======    =============
-#         Method         Description                      Key        kwargs
-#         ===========    =============================    =======    =============
-#         time_window    Slices data using a sliding      date       window_size
-#                        time-window. Dataslices are                 step_size
-#                        indexed by the start of the
-#                        time-window.
-#         time_period    Slices data into time periods    date       window_size
-#                        of equal length. Dataslices
-#                        are indexed by the start of
-#                        the time period.
-#         ===========    =============================    =======    =============
-# 
-#         The main difference between the sliding time-window (``time_window``)
-#         and the time-period (``time_period``) slicing methods are whether the
-#         resulting periods can overlap. Whereas time-period slicing divides data
-#         into subsets by sequential non-overlapping time periods, subsets
-#         generated by time-window slicing can overlap.
-# 
-#         .. figure:: _static/images/bibliocoupling/timeline.timeslice.png
-#            :width: 400
-#            :align: center
-# 
-#            **Time-period** slicing, with a window-size of 4 years.
-# 
-#         .. figure:: _static/images/bibliocoupling/timeline.timewindow.png
-#            :width: 400
-#            :align: center
-# 
-#            **Time-window** slicing, with a window-size of 4 years and a
-#            step-size of 1 year.
-# 
-#         Avilable kwargs:
-# 
-#         ===========    ======   ================================================
-#         Argument       Type     Description
-#         ===========    ======   ================================================
-#         window_size    int      Size of time-window or period, in years
-#                                 (default = 1).
-#         step_size      int      Amount to advance time-window or period in each
-#                                 step (ignored for time_period).
-#         cumulative     bool     If True, the data from each successive slice
-#                                 includes the data from all preceding slices.
-#                                 Only applies if key is 'date' (default = False).
-#         ===========    ======   ================================================
-# 
-#         If you slice your :class:`.Corpus` by a field other than `date`, you do
-#         not need to specifiy a `method` or any other keyword arguments.
-# 
-#         Once you have sliced your :class:`.Corpus`\, you can use
-#         :func:`.distribution` or :func:`.plot_distribution` to generate
-#         descriptive statistics about your data.
-# 
-#         Parameters
-#         ----------
-#         key : str
-#             key in :class:`.Paper` by which to slice data.
-#         method : str (optional)
-#             Dictates how data should be sliced. See table for available methods.
-#             If key is 'date', default method is time_period with window_size and
-#             step_size of 1.
-#         kwargs : kwargs
-#             See methods table, above.
-# 
-#         Examples
-#         --------
-# 
-#         .. code-block:: python
-# 
-#            >>> MyCorpus.slice('date', method='time_period', window_size=5)
-#            >>> MyCorpus.plot_distribution('date')
-# 
-#         Should generate a plot that looks something like this:
-# 
-#         .. figure:: _static/images/corpus_plot_distribution.png
-#            :width: 400
-#            :align: center
-# 
-#         """
-# 
-#         if key == 'date':
-#             if method == 'time_window':
-#                 kw = {  'window_size': kwargs.get('window_size', 1),
-#                         'step_size': kwargs.get('step_size', 1) }
-#                 self.axes[key] = self._time_slice(**kw)
-# 
-#             elif method == 'time_period' or method is None:
-#                 kw = {  'window_size': kwargs.get('window_size', 1),
-#                         'step_size': kwargs.get('window_size', 1),
-#                         'cumulative': kwargs.get('cumulative', False) }
-# 
-#                 self.axes[key] = self._time_slice(**kw)
-#             else:
-#                 raise(ValueError(str(method) + " not a valid slicing method."))
-# 
-#         # TODO: consider removing this, and just focusing on time.
-#         elif key == 'author':   # Already indexed.
-#             self.axes[key] = self.authors     # { a : [ p ] }
-# 
-#         # TODO: consider indexing journals in __init__, perhaps optionally.
-#         elif key in self.datakeys: # e.g. 'jtitle'
-#             self.axes[key] = {}     # { jtitle : [ p ] }
-#             for p,paper in self.papers.iteritems():
-#                 try:
-#                     self.axes[key][paper[key]].append(p)
-#                 except KeyError:
-#                     self.axes[key][paper[key]] = [p]
-#         else:
-#             raise(KeyError(str(key) + " not a valid key in data."))
-# 
-#     def _time_slice(self, **kwargs):
-#         """
-#         Slices data by date.
-# 
-#         If step_size = 1, this is a sliding time-window. If step_size =
-#         window_size, this is a time period slice.
-# 
-#         Parameters
-#         ----------
-#         kwargs : kwargs
-#             See table, below.
-# 
-#         Returns
-#         -------
-#         slices : dict
-#             Keys are start date of time slice, values are :class:`.Paper`
-#             indices (controlled by index_by argument in
-#             :func:`.Corpus.__init__` )
-# 
-#         Notes
-#         -----
-# 
-#         Avilable kwargs:
-# 
-#         ===========    ======   ================================================
-#         Argument       Type     Description
-#         ===========    ======   ================================================
-#         window_size    int      Size of time-window or period, in years
-#                                 (default = 1).
-#         step_size      int      Amount to advance time-window or period in each
-#                                 step (ignored for time_period).
-#         cumulative     bool     If True, the data from each successive slice
-#                                 includes the data from all preceding slices.
-#                                 Only applies if key is 'date' (default = False).
-#         ===========    ======   ================================================
-# 
-#         """
-# 
-#         # Get parameters from kwargs.
-#         window_size = kwargs.get('window_size', 1)
-#         step_size = kwargs.get('step_size', 1)
-#         start = kwargs.get('start', min([ paper['date']
-#                                            for paper in self.papers.values() ]))
-#         end = kwargs.get('start', max([ paper['date']
-#                                            for paper in self.papers.values() ]))
-#         cumulative = kwargs.get('cumulative', False)
-# 
-#         slices = {}     # { s : [ p ] }
-#         last = None
-#         for s in xrange(start, end-window_size+2, step_size):
-#             slices[s] = [ p for p,paper in self.papers.iteritems()
-#                             if s <= paper['date'] < s + window_size ]
-#             if cumulative and last is not None:
-#                 slices[s] += last
-#             last = slices[s]
-#         return slices
+
 # 
 #     def indices(self):
 #         """
