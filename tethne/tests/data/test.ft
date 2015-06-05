@@ -1,0 +1,20 @@
+TestData 1.0
+Some headers that should be ignored
+
+ST
+FI	Some data
+SE Badly-behaving whitespace.
+TH  First of multiple lines
+	Second of multiple lines.
+	The last lines.
+
+ED
+
+ST
+FI	Some additional data
+TH  First of multiple lines
+	Second of multiple lines.
+	Third line!
+	The last lines.
+
+ED
