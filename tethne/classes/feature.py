@@ -4,10 +4,11 @@ from tethne.utilities import _iterable
 
 class Feature(list):
     def __init__(self, data):
-        if type(data[0]) is tuple and type(data[0][-1]) in [float, int]:
-            self.extend(data)
-        else:
-            self.extend(Counter(_iterable(data)).items())
+        if len(data) > 0:
+            if type(data[0]) is tuple and type(data[0][-1]) in [float, int]:
+                self.extend(data)
+            else:
+                self.extend(Counter(_iterable(data)).items())
 
 
     @property
@@ -15,7 +16,9 @@ class Feature(list):
         """
         The `set` of unique elements in this :class:`.Feature`\.
         """
-        return set(zip(*self)[0])
+        if len(self) > 0:
+            return set(zip(*self)[0])
+        return set()
 
 
 class FeatureSet(object):

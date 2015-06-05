@@ -16,7 +16,6 @@ class Paper(object):
     def __getitem__(self, key):
         return getattr(self, key)
 
-
     @property
     def ayjid(self):
         """
@@ -25,12 +24,16 @@ class Paper(object):
         """
 
         al, ai = self.authors_init[0]
-        if hasattr(self, 'date'):       date = str(self.date)
-        else:                           date = ''
-        if hasattr(self, 'journal'):    journal = self.journal
-        else:                           journal = ''
+        if hasattr(self, 'date'):
+            date = str(self.date)
+        else:
+            date = ''
+        if hasattr(self, 'journal'):
+            journal = self.journal
+        else:
+            journal = ''
 
-        ayjid =' '.join([al, ai.replace(' ',''), date, journal]).strip()
+        ayjid = ' '.join([al, ai.replace(' ',''), date, journal]).strip()
         return ayjid
 
 
@@ -54,13 +57,15 @@ class Paper(object):
         else:
             return []
 
-        
+
     @property
     @feature
     def citations(self):
         """
         Cited references as a :class:`.Feature`\.
         """
-        return [cr.ayjid for cr in self.citedReferences]
+        if hasattr(self, 'citedReferences'):
+            return [cr.ayjid for cr in self.citedReferences]
+        return []
 
 

@@ -12,15 +12,13 @@ Methods for parsing JSTOR Data-for-Research datasets.
 
 """
 
-from ..classes import Paper, Corpus
-
 import os
 import xml.etree.ElementTree as ET
 import re
-from ..utilities import dict_from_node, strip_non_ascii
-from nltk.corpus import stopwords
-import uuid
 from collections import Counter
+
+from tethne import Paper, Corpus
+from tethne.utilities import dict_from_node, strip_non_ascii
 
 from unidecode import unidecode
 
@@ -85,27 +83,29 @@ class GramGenerator(object):
         """
         Returns a :class:`GramGenerator` that produces key,value tuples.
         """    
-        return GramGenerator(self.path, self.elem, ignore_hash=self.ignore_hash)
+        return GramGenerator(self.path, self.elem,
+                             ignore_hash=self.ignore_hash)
     
     def iteritems(self):
         """
         Returns a :class:`GramGenerator` that produces key,value tuples.
         """    
-        return GramGenerator(self.path, self.elem, ignore_hash=self.ignore_hash)
+        return GramGenerator(self.path, self.elem,
+                             ignore_hash=self.ignore_hash)
     
     def values(self):
         """
         Returns a :class:`GramGenerator` that produces only values.
         """
         return GramGenerator(self.path, self.elem, values=True, 
-                                                   ignore_hash=self.ignore_hash)
+                             ignore_hash=self.ignore_hash)
                                                    
     def keys(self):
         """
         Returns a :class:`GramGenerator` that produces only keys.
         """
         return GramGenerator(self.path, self.elem, keys=True, 
-                                                   ignore_hash=self.ignore_hash)
+                             ignore_hash=self.ignore_hash)
                                                    
     def __getitem__(self, key):
         return self._get(key)
@@ -132,7 +132,7 @@ class GramGenerator(object):
 
         return doi, grams   # Default behavior.
 
-def read(datapath, **kwargs):
+def read(datapath, corpus=True, **kwargs):
     """
     Yields :class:`.Paper` s from JSTOR DfR package.
 
@@ -164,14 +164,13 @@ def read(datapath, **kwargs):
         
         root = ET.fromstring(data)
 
-    accession = str(uuid.uuid4())
-
     papers = kwargs.get('papers', [])
     for article in root:
         paper = _handle_paper(article)
-        paper['accession'] = accession
         papers.append(paper)
 
+    if corpus:
+        return Corpus(papers)
     return papers
 
 def read_corpus(path, features=None, exclude=None, **kwargs):
@@ -501,9 +500,7 @@ def _handle_paper(article):
     paper = Paper()
     pdata = dict_from_node(article)
 
-    # Direct mappings.
-    translator = _dfr2paper_map()
-    for key, value in translator.iteritems():
+    for key, value in pdata.iteritems():
         if key in pdata:    # Article may not have all keys of interest.
             datum = pdata[key]
             if type(datum) is str:
