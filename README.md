@@ -4,7 +4,7 @@ Tethne [![Build Status](https://travis-ci.org/diging/tethne.svg?branch=python)](
 ======
 Tethne is a Python package for integrated bibliographic and corpus analysis developed by the Digital Innovation Group at Arizona State University. Tethne provides simple tools for generating networks from bibliographic datasets, and provides a framework for weaving together techniques from scientometrics, computational linguistics, topic modeling, and social influence modeling. Rather than reinvent or re- implement existing algorithms, Tethne is designed to interface with existing software packages, and to provide mechanisms for drawing the results and functionalities of those packages together.
 
-Over 270 unit tests can be found in [``tethne-tests``](https://github.com/diging/tethne-tests). 
+Over 270 unit tests can be found in [``tethne-tests``](https://travis-ci.org/diging/tethne.svg?branch=refactor). 
 
 Key features
 ------------
