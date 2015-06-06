@@ -271,6 +271,11 @@ class TestGraphCollectionMethods(unittest.TestCase):
         for gname in self.G.keys():
             self.assertIn(gname, results)
 
+    def test_analyze_path(self):
+        results = self.G.analyze(['connected', 'is_connected'])
+        for gname in self.G.keys():
+            self.assertIn(gname, results)
+
     def test_node_history(self):
         results = self.G.analyze('betweenness_centrality', invert=True)
         hist = self.G.node_history(0, 'betweenness_centrality')

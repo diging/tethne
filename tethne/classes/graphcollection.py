@@ -220,7 +220,7 @@ class GraphCollection(dict):
                 graph[s][t][k][gname] = v
         return graph
 
-    def analyze(self, method, mapper=map, invert=False, **kwargs):
+    def analyze(self, method_name, mapper=map, invert=False, **kwargs):
         """
         Apply a method from NetworkX to each of the graphs in the
         :class:`.GraphCollection`\.
@@ -240,12 +240,14 @@ class GraphCollection(dict):
 
         Parameters
         ----------
-        method : str
+        method : str or iterable
             Must be the name of a method accessible directly from the
-            `networkx` namespace.
+            `networkx` namespace. If an iterable, should be the complete
+            dot-path to the method, e.g. ``nx.connected.is_connected`` would be
+            written as ``['connected', 'is_connected']``.
         mapper : func
-            A mapping function. Be default uses Python's builtin ``map``. MUST
-            return results in order.
+            A mapping function. Be default uses Python's builtin ``map`` 
+            function. MUST return results in order.
         results_by : str
             (default: 'graph'). By default, the top-level key in the results
             are graph names. If results_by='node', node labels are used as
@@ -258,50 +260,64 @@ class GraphCollection(dict):
         dict
 
         """
-        if hasattr(nx, method):
-            keys, graphs = zip(*self.items())
-            results = mapper(getattr(nx, method), graphs, **kwargs)
+        if hasattr(method_name, '__iter__'):
+            mpath = list(method_name)
+            root = nx
+            while len(mpath) > 0:
+                head = getattr(root, mpath.pop(0))
+            if hasattr(head, '__call__'):
+                method = head
+            else:
+                raise NameError("No matching method in NetworkX")
 
-            by_graph = dict(zip(keys, results))
+        elif hasattr(nx, method_name):
+            method = getattr(nx, method_name)
+        else:
+            raise AttributeError('No such method in NetworkX')
 
-            # Invert results.
-            inverse = defaultdict(dict)
-            for gname, result in by_graph.iteritems():
-                if hasattr(result, '__iter__'):
-                    for n, val in result.iteritems():
-                        inverse[n].update({gname: val})
+        keys, graphs = zip(*self.items())
+        results = mapper(method, graphs, **kwargs)
 
-            if type(by_graph.values()[0]) is dict:
-                if type(by_graph.values()[0].keys()[0]) is tuple:
-                    # Results correspond to edges.
-                    by_edge = dict(inverse)
+        by_graph = dict(zip(keys, results))
 
-                    # Set edge attributes in each graph.
-                    for graph, attrs in by_graph.iteritems():
-                        nx.set_edge_attributes(self[graph], method, attrs)
+        # Invert results.
+        inverse = defaultdict(dict)
+        for gname, result in by_graph.iteritems():
+            if hasattr(result, '__iter__'):
+                for n, val in result.iteritems():
+                    inverse[n].update({gname: val})
 
-                    # Set edge attributes in the master graph.
-                    for (s, t), v in by_edge.iteritems():
-                        for i, attrs in self.master_graph.edge[s][t].iteritems():
-                            val = v[attrs['graph']]
-                            self.master_graph.edge[s][t][i][method] = val
+        if type(by_graph.values()[0]) is dict:
+            if type(by_graph.values()[0].keys()[0]) is tuple:
+                # Results correspond to edges.
+                by_edge = dict(inverse)
 
-                    if invert:
-                        return by_edge
-                else:
-                    # Results correspond to nodes.
-                    by_node = dict(inverse)
+                # Set edge attributes in each graph.
+                for graph, attrs in by_graph.iteritems():
+                    nx.set_edge_attributes(self[graph], method_name, attrs)
 
-                    # Set node attributes for each graph.
-                    for graph, attrs in by_graph.iteritems():
-                        nx.set_node_attributes(self[graph], method, attrs)
+                # Set edge attributes in the master graph.
+                for (s, t), v in by_edge.iteritems():
+                    for i, attrs in self.master_graph.edge[s][t].iteritems():
+                        val = v[attrs['graph']]
+                        self.master_graph.edge[s][t][i][method_name] = val
 
-                    # Store node attributes in the master graph.
-                    nx.set_node_attributes(self.master_graph, method, by_node)
-                    if invert:
-                        return by_node
-            return by_graph
-        raise AttributeError('No such method in NetworkX')
+                if invert:
+                    return by_edge
+            else:
+                # Results correspond to nodes.
+                by_node = dict(inverse)
+
+                # Set node attributes for each graph.
+                for graph, attrs in by_graph.iteritems():
+                    nx.set_node_attributes(self[graph], method_name, attrs)
+
+                # Store node attributes in the master graph.
+                nx.set_node_attributes(self.master_graph, method_name, by_node)
+
+                if invert:
+                    return by_node
+        return by_graph
 
     def node_history(self, node, attribute):
         """
