@@ -1,13 +1,9 @@
 language: python
 python:
   - "2.7"
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq libhdf5-serial-dev liblapack-dev libblas-dev libatlas-dev gfortran
-  - sudo apt-get install -qq liblapack-dev
 install:
   - pip install -r requirements.txt
 script:
-  - git clone https://github.com/diging/tethne-tests
-  - cd tethne-tests
-  - python -m unittest discover
+  - pip install nose
+  - cd tethne
+  - nosetests
