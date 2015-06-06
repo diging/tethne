@@ -10,4 +10,4 @@ Tethne presently represents one social model:
 
 """
 
-from tapmodel import *
+#from tapmodel import *

@@ -1,6 +1,6 @@
 from collectionmanager import CollectionManager
 
-from ..classes import Corpus
+from tethne import Corpus
 
 class CorpusManager(CollectionManager):
     """

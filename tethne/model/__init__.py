@@ -13,6 +13,6 @@ To generate models from a :class:`.Corpus` and/or :class:`.GraphCollection`\,
 use one of the model :mod:`.managers`\.
 """
 
-from corpus import *
-from social import *
-from managers import *
+#from corpus import *
+#from social import *
+#from managers import *

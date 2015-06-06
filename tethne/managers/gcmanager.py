@@ -1,7 +1,7 @@
 from collectionmanager import CollectionManager
-from .. import networks as nt
-from ..classes import GraphCollection
-from ..writers.collection import to_dxgmml
+from tethne import networks as nt
+from tethne.classes.graphcollection import GraphCollection
+from tethne.writers.collection import to_dxgmml
 
 class GraphCollectionManager(CollectionManager):
     """
