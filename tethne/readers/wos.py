@@ -92,7 +92,9 @@ class WoSParser(FTParser):
             aulast, auinit = tokens[0:2]    # Ignore JR, II, III, etc.
         else:
             aulast, auinit = tokens[0], ''
-        return _strip_punctuation(aulast), _strip_punctuation(auinit)
+        aulast = _strip_punctuation(aulast).upper()
+        auinit = _strip_punctuation(auinit).upper()
+        return aulast, auinit
 
     def handle_AF(self, value):
         return self.parse_author(value)

@@ -29,10 +29,21 @@ class TestWoSParser(unittest.TestCase):
                 self.assertIsInstance(e.date, int,
                                       derror.format('date', 'int',
                                                     type(e.date)))
+            uppererr = "Author names should be uppercase"
             if hasattr(e, 'authors_full'):
                 self.assertIsInstance(e.authors_full, list,
                                       derror.format('authors_full', 'list',
                                                     type(e.authors_full)))
+                for a in e.authors_full:
+                    self.assertTrue(a[0].isupper(), uppererr)
+                    self.assertTrue(a[1].isupper(), uppererr)
+            if hasattr(e, 'authors_init'):
+                self.assertIsInstance(e.authors_init, list,
+                                      derror.format('authors_init', 'list',
+                                                    type(e.authors_init)))
+                for a in e.authors_init:
+                    self.assertTrue(a[0].isupper(), uppererr)
+                    self.assertTrue(a[1].isupper(), uppererr)
             if hasattr(e, 'journal'):
                 self.assertIsInstance(e.journal, str,
                                       derror.format('journal', 'str',
