@@ -47,27 +47,26 @@ class TestCorpus(unittest.TestCase):
 
     def test_slice(self):
         corpus = Corpus(self.papers, index_by='wosid')
-        for papers in corpus.slice():
-            self.assertIsInstance(papers, list)
+        for key, papers in corpus.slice():
+            self.assertIsInstance(papers, Corpus)
             self.assertIsInstance(papers[0], Paper)
 
     def test_slice_sliding(self):
         corpus = Corpus(self.papers, index_by='wosid')
         allpapers = [papers for papers in corpus.slice(window_size=2)]
 
-        self.assertEqual(len(allpapers[0]), 10)
+        self.assertEqual(len(allpapers[0][1]), 10)
 
     def test_slice_larger(self):
         corpus = Corpus(self.papers, index_by='wosid')
-        allpapers = [papers for papers in corpus.slice(window_size=2,
-                                                       step_size=2)]
+        allpapers = [papers for papers
+                     in corpus.slice(window_size=2, step_size=2)]
 
-        self.assertEqual(len(allpapers[0]), 10)
+        self.assertEqual(len(allpapers[0][1]), 10)
 
     def test_distribution(self):
         corpus = Corpus(self.papers, index_by='wosid')
         values = corpus.distribution()
-
         self.assertListEqual(values, [5, 5])
 
     def test_feature_distribution(self):
@@ -75,6 +74,20 @@ class TestCorpus(unittest.TestCase):
         values = corpus.feature_distribution('authors', ('ZENG', 'EDDY Y'))
 
         self.assertListEqual(values, [0, 1])
+
+    def test_getitem(self):
+        corpus = Corpus(self.papers, index_by='wosid')
+
+        self.assertIsInstance(corpus[0], Paper)
+        self.assertEqual(len(corpus[[0, 2, 3]]), 3)
+        print corpus[[0, 2, 3]]
+        self.assertIsInstance(corpus[[0, 2, 3]][0], Paper)
+        self.assertEqual(len(corpus['authors', ('ZENG', 'EDDY Y')]), 1)
+        self.assertIsInstance(corpus['authors', ('ZENG', 'EDDY Y')][0], Paper)
+        ikeys = corpus.indexed_papers.keys()[0:2]
+        self.assertEqual(len(corpus[ikeys]), len(ikeys))
+        self.assertIsInstance(corpus[ikeys][0], Paper)
+
 
 
 if __name__ == '__main__':

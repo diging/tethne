@@ -6,6 +6,7 @@ A :class:`.GraphCollection` is a set of graphs generated from a
 import networkx as nx
 from collections import defaultdict
 import warnings
+from tethne import networks
 
 class GraphCollection(dict):
     """
@@ -33,9 +34,34 @@ class GraphCollection(dict):
        >>> G.node_index, G.node_lookup
        ({0: 'B', 1: 'A', -1: None}, {'A': 1, None: -1, 'B': 0})
     
+    To build a :class:`.GraphCollection` from a :class:`.Corpus`, pass it and
+    a method to the constructor, or use :meth:`.GraphCollection.build`\.
+    
+    .. code-block:: python
+    
+       >>> corpus = read(datapath)
+       >>> G = GraphCollection(corpus, coauthors)
+       
+       >>> G.build(corpus, authors)
+
     """
 
-    def __init__(self, directed=False):
+    def __init__(self, corpus=None, method=None, slice_kwargs={},
+                 method_kwargs={}, directed=False):
+        """
+
+        Parameters
+        ----------
+        corpus : :class:`.Corpus`
+        method : str or func
+            If str, looks for ``method`` in the ``tethne`` namespace.
+        slice_kwargs : dict
+            Keyword arguments to pass to ``corpus``' ``slice`` method.
+        method_kwargs : dict
+            Keyword arguments to pass to ``method`` along with ``corpus``.
+        directed : bool
+            If True, graphs will be treated as directed during indexing.
+        """
         self.directed = directed
         if directed:
             self.master_graph = nx.MultiDiGraph()
@@ -44,6 +70,9 @@ class GraphCollection(dict):
         self.node_index = {-1: None}
         self.node_lookup = {None: -1}
         self.graphs_containing = defaultdict(list)
+
+        if corpus and method:
+            self.build(corpus, method, slice_kwargs, method_kwargs)
 
     def __setitem__(self, name, graph):
         self.add(name, graph)
@@ -54,6 +83,29 @@ class GraphCollection(dict):
         if hasattr(self, name):
             return object.__getattr__(self, name)
         raise AttributeError('GraphCollection has no such attribute or graph.')
+
+    def build(self, corpus, method, slice_kwargs={}, method_kwargs={}):
+        """
+        Generate a set of :class:`networkx.Graph`\s using ``method`` on the
+        slices in ``corpus``\.
+        
+        Parameters
+        ----------
+        corpus : :class:`.Corpus`
+        method : str or func
+            If str, looks for ``method`` in the ``tethne`` namespace.
+        slice_kwargs : dict
+            Keyword arguments to pass to ``corpus``' ``slice`` method.
+        method_kwargs : dict
+            Keyword arguments to pass to ``method`` along with ``corpus``.
+        """
+        if type(method) is str:
+            if not hasattr(networks, method):
+                raise NameError('No such method')
+            method = getattr(networks, method)
+        for key, subcorpus in corpus.slice(**slice_kwargs):
+            graph = method(subcorpus, **method_kwargs)
+            self.add(key, graph)
 
     def add(self, name, graph):
         """
@@ -73,7 +125,7 @@ class GraphCollection(dict):
         """
         if name in self:
             raise ValueError("{0} exists in this GraphCollection".format(name))
-        elif hasattr(self, name):
+        elif hasattr(self, str(name)):
             raise ValueError("Name conflicts with an existing attribute")
 
         indexed_graph = self.index(name, graph)
@@ -91,7 +143,6 @@ class GraphCollection(dict):
                 self.master_graph.node[n][k][name] = v
 
         dict.__setitem__(self, name, indexed_graph)
-
 
     def index(self, name, graph):
         """
@@ -124,7 +175,6 @@ class GraphCollection(dict):
 
         return indexed_graph
 
-
     def nodes(self, data=False):
         """
         Returns a list of all nodes in the :class:`.GraphCollection`\.
@@ -140,7 +190,6 @@ class GraphCollection(dict):
         nodes : list
         """
         return self.master_graph.nodes(data=data)
-
 
     def edges(self, data=False):
         """

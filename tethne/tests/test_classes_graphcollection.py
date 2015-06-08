@@ -6,9 +6,12 @@ import unittest
 import networkx as nx
 
 from tethne.classes.graphcollection import GraphCollection
+from tethne.readers.wos import read
+from tethne.networks.authors import coauthors
 
 
 datapath = './tethne/tests/data/wos.txt'
+datapath2 = './tethne/tests/data/wos2.txt'
 
 class TestGraphCollectionCreation(unittest.TestCase):
     def test_init(self):
@@ -41,6 +44,22 @@ class TestGraphCollectionCreation(unittest.TestCase):
         self.assertTrue(matcher.is_isomorphic)
         matcher = nx.isomorphism.DiGraphMatcher(G[graph2_name], graph2)
         self.assertTrue(matcher.is_isomorphic)
+
+    def test_init_build(self):
+        """
+        Should build `graphs` if passed a corpus and method.
+        """
+        corpus = read(datapath)
+        G = GraphCollection(corpus, coauthors)
+        self.assertEqual(len(G), len(corpus.indices['date']))
+
+    def test_build(self):
+        """
+        """
+        corpus = read(datapath)
+        G = GraphCollection()
+        G.build(corpus, coauthors)
+        self.assertEqual(len(G), len(corpus.indices['date']))
 
     def test_index(self):
         """
