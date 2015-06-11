@@ -175,7 +175,7 @@ class GraphCollection(dict):
 
         return indexed_graph
 
-    def nodes(self, data=False):
+    def nodes(self, data=False, native=True):
         """
         Returns a list of all nodes in the :class:`.GraphCollection`\.
         
@@ -189,9 +189,16 @@ class GraphCollection(dict):
         -------
         nodes : list
         """
-        return self.master_graph.nodes(data=data)
 
-    def edges(self, data=False):
+        nodes = self.master_graph.nodes(data=data)
+        if native:
+            if data:
+                nodes = [(self.node_index[n], attrs) for n, attrs in nodes]
+            else:
+                nodes = [self.node_index[n] for n in nodes]
+        return nodes
+
+    def edges(self, data=False, native=True):
         """
         Returns a list of all edges in the :class:`.GraphCollection`\.
         
@@ -205,7 +212,15 @@ class GraphCollection(dict):
         -------
         edges : list
         """
-        return self.master_graph.edges(data=data)
+        edges = self.master_graph.edges(data=data)
+        if native:
+            if data:
+                edges = [(self.node_index[s], self.node_index[t], attrs)
+                         for s, t, attrs in edges]
+            else:
+                edges = [(self.node_index[s], self.node_index[t])
+                         for s, t in edges]
+        return edges
 
     def order(self, piecewise=False):
         """

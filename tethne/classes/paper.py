@@ -65,7 +65,7 @@ class Paper(object):
         Cited references as a :class:`.Feature`\.
         """
         if hasattr(self, 'citedReferences'):
-            return [cr.ayjid for cr in self.citedReferences]
+            return [cr.ayjid for cr in self.citedReferences if cr is not None]
         return []
 
 

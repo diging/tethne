@@ -105,7 +105,7 @@ class WoSParser(FTParser):
         return aulast, auinit
 
     def handle_TI(self, value):
-        return value.title()
+        return str(value).title()
 
     def handle_VL(self, value):
         return str(value)

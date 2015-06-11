@@ -73,14 +73,13 @@ class TestCorpus(unittest.TestCase):
         corpus = Corpus(self.papers, index_by='wosid')
         values = corpus.feature_distribution('authors', ('ZENG', 'EDDY Y'))
 
-        self.assertListEqual(values, [0, 1])
+        self.assertListEqual(values[1], [0, 1])
 
     def test_getitem(self):
         corpus = Corpus(self.papers, index_by='wosid')
 
         self.assertIsInstance(corpus[0], Paper)
         self.assertEqual(len(corpus[[0, 2, 3]]), 3)
-        print corpus[[0, 2, 3]]
         self.assertIsInstance(corpus[[0, 2, 3]][0], Paper)
         self.assertEqual(len(corpus['authors', ('ZENG', 'EDDY Y')]), 1)
         self.assertIsInstance(corpus['authors', ('ZENG', 'EDDY Y')][0], Paper)
@@ -88,6 +87,19 @@ class TestCorpus(unittest.TestCase):
         self.assertEqual(len(corpus[ikeys]), len(ikeys))
         self.assertIsInstance(corpus[ikeys][0], Paper)
 
+    def test_top_features(self):
+        corpus = Corpus(self.papers, index_by='wosid')
+
+        N = 2
+        top = corpus.top_features('authors', topn=N)
+
+        self.assertIsInstance(top, list)
+        self.assertIsInstance(top[0], tuple)
+        self.assertEqual(len(top), N)
+
+        top_sliced = corpus.top_features('authors', topn=N, perslice=True)
+        self.assertIsInstance(top, list)
+        self.assertEqual(len(top), len(corpus.indices['date']))
 
 
 if __name__ == '__main__':

@@ -19,6 +19,33 @@ def strip_tags(html):
     s.feed(html)
     return s.get_data()
 
+def argsort(seq):
+    return sorted(range(len(seq)), key=seq.__getitem__)
+
+def argmin(iterable):
+    i_min = -1
+    v_min = max(iterable)
+    for i, v in enumerate(iterable):
+        if v < v_min:
+            i_min = i
+            v_min = v
+    return i_min
+
+def argmax(iterable):
+    i_max = -1
+    v_max = min(iterable)
+    for i, v in enumerate(iterable):
+        if v > v_max:
+            i_max = i
+            v_max = v
+    return i_max
+
+def mean(iterable):
+    if len(iterable) > 0:
+        return float(sum(iterable))/len(iterable)
+    else:
+        return float('nan')
+
 def _iterable(o):
 	if hasattr(o, '__iter__'):
 		return o

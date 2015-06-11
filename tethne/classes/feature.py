@@ -1,6 +1,6 @@
 from collections import Counter
 
-from tethne.utilities import _iterable
+from tethne.utilities import _iterable, argsort
 
 class Feature(list):
     def __init__(self, data):
@@ -83,6 +83,17 @@ class FeatureSet(object):
             self.documentCounts[x] = 0.
             self.with_feature[x] = []
 
+    def top(self, topn, by='counts'):
+        """
+        Get the top ``topn`` features in the :class:`.FeatureSet`\.
+        """
+
+        if by not in ['counts', 'documentCounts']:
+            raise NameError('kwarg `by` must be "counts" or "documentCounts"')
+
+        cvalues = getattr(self, by)
+        top = [cvalues.keys()[i] for i in argsort(cvalues.values())][::-1]
+        return [(self.index[x], cvalues[x]) for x in top][:topn]
 
 
 def feature(f):

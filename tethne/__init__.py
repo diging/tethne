@@ -22,4 +22,9 @@ Cyotoscape and Gephi) and the MatPlotLib Python library.
 
 from tethne.classes.paper import Paper
 from tethne.classes.corpus import Corpus
+from tethne.classes.graphcollection import GraphCollection
+from tethne.networks.base import *
+from tethne.networks.authors import *
+from tethne.networks.papers import *
+from tethne.networks.features import *
 from tethne.writers.graph import write_graphml, write_csv

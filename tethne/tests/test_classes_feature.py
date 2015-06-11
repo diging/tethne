@@ -102,6 +102,27 @@ class TestFeatureSest(unittest.TestCase):
         self.assertEqual(featureset.documentCount('bob'), 1)
         self.assertEqual(featureset.count('bob'), 3)
 
+    def test_top(self):
+        featureset = FeatureSet()
+        feature = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
+        feature2 = Feature([('blob', 3), ('joe', 1), ('brobert', 1)])
+        feature3 = Feature([('blob', 1), ('joe', 1), ('brobert', 1)])
+        featureset.add('p1', feature)
+        featureset.add('p2', feature2)
+        featureset.add('p3', feature3)
+
+        N = 3
+        top = featureset.top(N)
+        self.assertIsInstance(top, list)
+        self.assertIsInstance(top[0], tuple)
+        self.assertEqual(len(top), N)
+        self.assertSetEqual(set(zip(*top)[0]), set(['blob', 'bob', 'joe']))
+
+        top = featureset.top(N, by='documentCounts')
+        self.assertIsInstance(top, list)
+        self.assertIsInstance(top[0], tuple)
+        self.assertEqual(len(top), N)
+        self.assertSetEqual(set(zip(*top)[0]), set(['blob', 'brobert', 'joe']))
 
 if __name__ == '__main__':
     unittest.main()

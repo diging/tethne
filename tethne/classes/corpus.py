@@ -5,7 +5,7 @@ A :class:`.Corpus` organizes :class:`.Paper`\s for analysis.
 from collections import Counter
 
 from tethne.classes.feature import FeatureSet, Feature
-from tethne.utilities import _iterable
+from tethne.utilities import _iterable, argsort
 
 
 def _tfidf(f, c, C, DC, N):
@@ -277,12 +277,20 @@ class Corpus(object):
             return 0
             
         values = []
+        keys = []
         for key, subcorpus in self.slice(**slice_kwargs):
             S = sum([get_value(dict(getattr(paper, feature)), element)
                      for paper in subcorpus.papers])
             values.append(S)
-        return values
+            keys.append(key)
+        return keys, values
 
+    def top_features(self, featureset_name, topn=20, by='counts',
+                     perslice=False, slice_kwargs={}):
+        if perslice:
+            return [(k, subcorpus.features[featureset_name].top(topn, by=by))
+                    for k, subcorpus in self.slice(**slice_kwargs)]
+        return self.features[featureset_name].top(topn, by=by)
 
     def subcorpus(self, selector):
         """
