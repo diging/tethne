@@ -262,7 +262,7 @@ class TestGraphCollectionMethods(unittest.TestCase):
         # Passing results_by='node' re-organizes the results so that node
         #  labels are the top-level key.
         results_n = self.G.analyze('betweenness_centrality', invert=True)
-        for n in self.G.nodes():
+        for n in self.G.nodes(native=False):
             self.assertIn(n, results_n)
 
         # Asking for a non-existent method results in an AttributeError.
@@ -282,7 +282,7 @@ class TestGraphCollectionMethods(unittest.TestCase):
 
     def test_analyze_edge(self):
         results = self.G.analyze('edge_betweenness_centrality', invert=True)
-        for e in self.G.edges():
+        for e in self.G.edges(native=False):
             self.assertIn(e, results)
 
     def test_analyze_graph(self):
