@@ -20,6 +20,11 @@ class Feature(list):
             return set(zip(*self)[0])
         return set()
 
+    @property
+    def norm(self):
+        T = sum(zip(*self)[1])
+        return [(i,float(v)/T) for i,v in self]
+
 
 class FeatureSet(object):
     def __init__(self, features={}):
@@ -39,6 +44,9 @@ class FeatureSet(object):
     def __getitem__(self, key):
         return getattr(self, key)
 
+    def __len__(self):
+        return len(self.features)
+
     def items(self):
         return self.features.items()
 
@@ -48,6 +56,14 @@ class FeatureSet(object):
         The `set` of unique elements in this :class:`.FeatureSet`\.
         """
         return set(self.lookup.keys())
+
+    @property
+    def N_features(self):
+        return len(self.unique)
+
+    @property
+    def N_documents(self):
+        return len(self.features)
 
     def count(self, elem):
         return self.counts[self.lookup[elem]]
@@ -94,6 +110,40 @@ class FeatureSet(object):
         cvalues = getattr(self, by)
         top = [cvalues.keys()[i] for i in argsort(cvalues.values())][::-1]
         return [(self.index[x], cvalues[x]) for x in top][:topn]
+
+    def as_matrix(self):
+        """
+        
+        """
+
+        matrix = [[0. for e in xrange(self.N_features)]
+                  for i in xrange(self.N_documents)]
+        for i, p in enumerate(self.features.keys()):
+            f = self.features[p]
+            for e, c in f:
+                j = self.lookup[e]
+                matrix[i][j] = c
+
+        return matrix
+
+    def as_vector(self, p, norm=False):
+        m = len(self.index.keys())
+
+        if norm:
+            values = dict(self.features[p].norm)
+        else:
+            values = dict(self.features[p])
+
+        vect = []
+        for i in xrange(m):
+            e = self.index[i]
+            if e in values:
+                c = float(values[e])
+            else:
+                c = 0.
+            vect.append(c)
+
+        return vect
 
 
 def feature(f):

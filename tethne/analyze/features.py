@@ -11,46 +11,43 @@ Methods for analyzing featuresets.
    
 """
 
-import numpy
-from scipy.sparse import coo_matrix
-import scipy.spatial as spat
+from math import sqrt, log, acos, pi
+from tethne.utilities import nonzero
 
-def distance(sa, sb, method, normalize=True, smooth=False):
+def distance(V_a, V_b, method, normalize=True, smooth=False):
     """
     Calculate the distance between two sparse feature vectors using a method
     from scipy.spatial.distance.
     
     Supported distance methods:
 
-    ================    ====================
-    Method              Documentation
-    ================    ====================
-    braycurtis          `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.braycurtis.html>`_
-    canberra            `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.canberra.html>`_
-    chebyshev           `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.chebyshev.html>`_
-    cityblock           `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cityblock.html>`_
-    correlation         `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.correlation.html>`_
-    cosine              `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cosine.html>`_
-    dice                `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.dice.html>`_
-    euclidean           `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.euclidean.html>`_
-    hamming             `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.hamming.html>`_
-    jaccard             `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.jaccard.html>`_
-    kulsinski           `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.kulsinski.html>`_
-    matching            `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.matching.html>`_
-    rogerstanimoto      `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.rogerstanimoto.html>`_
-    russellrao          `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.russellrao.html>`_
-    sokalmichener       `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.sokalmichener.html>`_
-    sokalsneath         `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.sokalsneath.html>`_
-    sqeuclidean         `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.sqeuclidean.html>`_
-    yule                `scipy.org <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.yule.html>`_
-    ================    ====================
+    ================
+    Method
+    ================
+    braycurtis
+    canberra
+    chebyshev
+    cityblock
+    correlation
+    cosine
+    dice
+    euclidean
+    hamming
+    jaccard
+    kulsinski
+    matching
+    rogerstanimoto
+    russellrao
+    sokalmichener
+    sokalsneath
+    sqeuclidean
+    yule
+    ================
 
     Parameters
     ----------
-    sa : list
-        A  :ref:`sparse-feature-vector`\.
-    sb : list
-        A  :ref:`sparse-feature-vector`\.
+    V_a : list
+    V_b : list
     method : str
         Name of a method in scipy.spatial.distance (see above).
     normalize : bool
@@ -67,30 +64,28 @@ def distance(sa, sb, method, normalize=True, smooth=False):
         Distance value from ``method``.
 
     """
+    try:
+        import scipy.spatial as spat
+    except ImportError as E:
+        raise E('Missing dependency. Please install scipy.')
+
     if method not in spat.distance.__dict__:
-        raise RuntimeError('No method named {0} in scipy.spatial.distance'
-                                                                .format(method))
-    
-    # Convert sparse data into dense arrays.
-    amax = max(zip(*sa)[0])
-    bmax = max(zip(*sb)[0])
-    adense = _sparse_to_array(sa, size=max(amax, bmax)+1)
-    bdense = _sparse_to_array(sb, size=max(amax, bmax)+1)
-    
+        raise RuntimeError('No method named {0}'.format(method))
+
     if normalize:
-        adense = numpy.array(adense/float(numpy.sum(adense)))
-        bdense = numpy.array(bdense/float(numpy.sum(bdense)))
+        V_a = map(lambda a: float(a)/sum(V_a), V_a)
+        V_b = map(lambda b: float(b)/sum(V_b), V_b)
 
     if smooth:
         # Smooth according to Bigi 2003.
-        Ndiff = _shared_features(adense, bdense)
-        adense, bdense = _smooth(adense, bdense, Ndiff)
+        Ndiff = _shared_features(V_a, V_b)
+        V_a, V_b = _smooth(V_a, V_b, Ndiff)
 
-    return spat.distance.__dict__[method](adense, bdense)
+    return spat.distance.__dict__[method](V_a, V_b)
 
-def kl_divergence(sa, sb):
+def kl_divergence(V_a, V_b):
     """
-    Calculate Kullback-Leibler Distance for sparse feature vectors.
+    Calculate Kullback-Leibler distance.
     
     Uses the smoothing method described in `Bigi 2003 
     <http://lvk.cs.msu.su/~bruzz/articles/classification/Using%20Kullback-Leibler%20Distance%20for%20Text%20Categorization.pdf>`_
@@ -98,91 +93,72 @@ def kl_divergence(sa, sb):
     
     Parameters
     ----------
-    sa : list
-        A  :ref:`sparse-feature-vector`\.
-    sb : list
-        A  :ref:`sparse-feature-vector`\.
+    V_a : list
+    V_b : list
         
     Returns
     -------
     divergence : float
         KL divergence.
     """
-    # Convert sparse data into dense arrays.
-    adense = _sparse_to_array(sa)
-    bdense = _sparse_to_array(sb, size=adense.size)
- 
+
     # Find shared features.
-    Ndiff = _shared_features(adense, bdense)
+    Ndiff = _shared_features(V_a, V_b)
     
     # aprob and bprob should each sum to 1.0
-    aprob = numpy.array(adense/float(numpy.sum(adense)))
-    bprob = numpy.array(bdense/float(numpy.sum(bdense)))
+    aprob = map(lambda v: float(v)/sum(V_a), V_a)
+    bprob = map(lambda v: float(v)/sum(V_b), V_b)
 
     # Smooth according to Bigi 2003.
     aprob, bprob = _smooth(aprob, bprob, Ndiff)
 
-    divergence = numpy.sum( (aprob - bprob) * numpy.log(aprob/bprob) )
+    return sum(map(lambda a, b: (a-b)*log(a/b), aprob, bprob))
 
-    return divergence
-
-def cosine_distance(sa, sb):
+def cosine_similarity(F_a, F_b):
     """
-    Calculate `cosine distance
-    <http://en.wikipedia.org/wiki/Cosine_similarity>`_ for sparse feature 
+    Calculate `cosine similarity
+    <http://en.wikipedia.org/wiki/Cosine_similarity>`_ for sparse feature
     vectors.
-    
-    Uses the `cosine method in scipy.spatial.distance
-    <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cosine.html#scipy.spatial.distance.cosine>`_.
     
     Parameters
     ----------
-    sa : list
-        A  :ref:`sparse-feature-vector`\.
-    sb : list
-        A  :ref:`sparse-feature-vector`\.
-        
-    Returns
-    -------
-    distance : float
-        Cosine distance.
-    """
-    # Convert sparse data into dense arrays.
-    amax = max(zip(*sa)[0])
-    bmax = max(zip(*sb)[0])
-    adense = _sparse_to_array(sa, size=max(amax, bmax)+1)
-    bdense = _sparse_to_array(sb, size=max(amax, bmax)+1)
+    F_a : :class:`.Feature`
+    F_b : :class:`.Feature`
 
-    from scipy.spatial.distance import cosine
-    distance = cosine(adense, bdense)
-    
-    return distance
-
-def cosine_similarity(sa, sb):
-    """
-    Calculate `cosine similarity 
-    <http://en.wikipedia.org/wiki/Cosine_similarity>`_ for sparse feature 
-    vectors.
-    
-    Uses the `cosine method in scipy.spatial.distance
-    <http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cosine.html#scipy.spatial.distance.cosine>`_.
-    
-    Parameters
-    ----------
-    sa : list
-        A  :ref:`sparse-feature-vector`\.
-    sb : list
-        A  :ref:`sparse-feature-vector`\.
-        
     Returns
     -------
     similarity : float
-        Cosine similarity
+        Cosine similarity.
     """
 
-    similarity = -1.*(cosine_distance(sa, sb) - 1.)
-    return similarity
+    shared = list(F_a.unique & F_b.unique)
+    A = [dict(F_a.norm)[i] for i in shared]
+    B = [dict(F_b.norm)[i] for i in shared]
+    dot = sum(map(lambda a, b: a*b, A, B))
+    mag_A = sqrt(sum(map(lambda a: a**2, A)))
+    mag_B = sqrt(sum(map(lambda a: a**2, B)))
 
+    return dot / (mag_A + mag_B)
+
+def angular_similarity(F_a, F_b):
+    """
+    Calculate the `angular similarity
+    <http://en.wikipedia.org/wiki/Cosine_similarity#Angular_similarity>`_ for
+    sparse feature vectors.
+    
+    Unlike `cosine_similarity`, this is a true distance metric.
+    
+    Parameters
+    ----------
+    F_a : :class:`.Feature`
+    F_b : :class:`.Feature`
+
+    Returns
+    -------
+    similarity : float
+        Cosine similarity.
+    """
+    return 1. - (2.*acos(cosine_similarity(F_a, F_b)))/pi
 
 ### Helpers ###
 
@@ -217,8 +193,8 @@ def _shared_features(adense, bdense):
     """
     Number of features in ``adense`` that are also in ``bdense``.
     """
-    a_indices = set(numpy.nonzero(adense)[0])
-    b_indices = set(numpy.nonzero(bdense)[0])  
+    a_indices = set(nonzero(adense))
+    b_indices = set(nonzero(bdense))
     
     shared = list(a_indices & b_indices)
     diff = list(a_indices - b_indices) 
@@ -227,10 +203,10 @@ def _shared_features(adense, bdense):
     return Ndiff
 
 def _smoothing_parameters(aprob, bprob, Ndiff):
-    min_a = numpy.min(aprob[numpy.nonzero(aprob)])
-    sum_a = numpy.sum(aprob)    
-    min_b = numpy.min(bprob[numpy.nonzero(bprob)])
-    sum_b = numpy.sum(bprob)
+    min_a = min([aprob[i] for i in nonzero(aprob)])
+    sum_a = sum(aprob)
+    min_b = min([bprob[i] for i in nonzero(bprob)])
+    sum_b = sum(bprob)
     
     epsilon = min((min_a/sum_a), (min_b/sum_b)) * 0.001
     gamma = 1 - Ndiff * epsilon   
@@ -245,11 +221,11 @@ def _smooth(aprob, bprob, Ndiff):
     gamma, epsilon = _smoothing_parameters(aprob, bprob, Ndiff)
 
     # Remove zeros.
-    in_a = numpy.nonzero(aprob)  # Use these indices only.
-    aprob = aprob[in_a]
-    bprob = bprob[in_a]*gamma
+    in_a = [i for i,v in enumerate(aprob) if abs(v) > 0.0]
+    aprob = [aprob[i] for i in in_a]
+    bprob = [bprob[i]*gamma for i in in_a]
     
     # Replace zero values with epsilon.
-    numpy.place(bprob, bprob == 0., (epsilon,))
+    bprob = map(lambda v: v if v != 0. else epsilon, bprob)
     
     return aprob, bprob

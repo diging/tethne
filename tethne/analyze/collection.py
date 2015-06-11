@@ -14,6 +14,7 @@ Methods for analyzing :class:`.GraphCollection`\s.
 
 import networkx
 import graph
+import warnings
 
 def algorithm(G, method_name, **kwargs):
     """

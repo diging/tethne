@@ -40,6 +40,9 @@ def argmax(iterable):
             v_max = v
     return i_max
 
+def nonzero(iterable):
+    return [i for i,v in enumerate(iterable) if abs(v) > 0.0]
+
 def mean(iterable):
     if len(iterable) > 0:
         return float(sum(iterable))/len(iterable)

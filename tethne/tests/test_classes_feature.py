@@ -42,6 +42,12 @@ class TestFeature(unittest.TestCase):
         self.assertEqual(len(feature), 2)
         self.assertEqual(dict(feature)[('bob', 'dole')], 1)
 
+    def test_norm(self):
+        feature = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
+        T = sum(zip(*feature)[1])
+        for n, r in zip(zip(*feature.norm)[1], zip(*feature)[1]):
+            self.assertEqual(n, float(r)/T)
+
 
 class TestFeatureSest(unittest.TestCase):
     def test_init_empty(self):
@@ -123,6 +129,40 @@ class TestFeatureSest(unittest.TestCase):
         self.assertIsInstance(top[0], tuple)
         self.assertEqual(len(top), N)
         self.assertSetEqual(set(zip(*top)[0]), set(['blob', 'brobert', 'joe']))
+
+    def test_as_matrix(self):
+        featureset = FeatureSet()
+        feature = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
+        feature2 = Feature([('blob', 3), ('joe', 1), ('brobert', 1)])
+        feature3 = Feature([('blob', 1), ('joe', 1), ('brobert', 1)])
+        featureset.add('p1', feature)
+        featureset.add('p2', feature2)
+        featureset.add('p3', feature3)
+
+        M = featureset.as_matrix()
+        self.assertEqual(len(M), len(featureset))
+        self.assertEqual(len(M[0]), len(featureset.unique))
+
+    def test_as_vector(self):
+        featureset = FeatureSet()
+        feature = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
+        feature2 = Feature([('blob', 3), ('joe', 1), ('brobert', 1)])
+        feature3 = Feature([('blob', 1), ('joe', 1), ('brobert', 1)])
+        featureset.add('p1', feature)
+        featureset.add('p2', feature2)
+        featureset.add('p3', feature3)
+
+        v = featureset.as_vector('p1')
+        v_norm = featureset.as_vector('p1', norm=True)
+
+        self.assertIsInstance(v, list)
+        self.assertIsInstance(v_norm, list)
+        self.assertEqual(len(v), len(v_norm))
+        self.assertEqual(len(v), len(featureset.unique))
+        self.assertGreater(sum(v), 0)
+        self.assertGreater(sum(v_norm), 0)
+        self.assertEqual(sum(v_norm), 1.0)
+
 
 if __name__ == '__main__':
     unittest.main()
