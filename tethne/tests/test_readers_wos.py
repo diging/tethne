@@ -69,6 +69,11 @@ class TestWoSParser(unittest.TestCase):
                                       derror.format('volume', 'str',
                                                     type(e.volume)))
 
+            if hasattr(e, 'title'):
+                self.assertIsInstance(e.title, str,
+                                      derror.format('title', 'str',
+                                                    type(e.title)))
+
         # Check integrity of tag-to-field mapping.
         for tag, attr in parser.tags.iteritems():
             self.assertFalse(hasattr(e, tag),

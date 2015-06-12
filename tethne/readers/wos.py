@@ -225,6 +225,10 @@ class WoSParser(FTParser):
         if type(entry.citedReferences) is not list:
             entry.citedReferences = [entry.citedReferences]
 
+    def postprocess_title(self, entry):
+        if type(entry.title) is list:
+            entry.title = ' '.join(entry.title)
+
 
 def from_dir(path, corpus=True, **kwargs):
     papers = []
