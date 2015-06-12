@@ -66,8 +66,8 @@ def distance(V_a, V_b, method, normalize=True, smooth=False):
     """
     try:
         import scipy.spatial as spat
-    except ImportError as E:
-        raise E('Missing dependency. Please install scipy.')
+    except ImportError:
+        raise ImportError('Missing dependency. Please install scipy.')
 
     if method not in spat.distance.__dict__:
         raise RuntimeError('No method named {0}'.format(method))
@@ -158,36 +158,10 @@ def angular_similarity(F_a, F_b):
     similarity : float
         Cosine similarity.
     """
-    return 1. - (2.*acos(cosine_similarity(F_a, F_b)))/pi
+    return 1. - (2. *  acos(cosine_similarity(F_a, F_b))) / pi
 
 ### Helpers ###
 
-def _sparse_to_coo(svect, size=None):
-    """
-    Convert a sparse feature [(i,v),] to a SciPy COO sparse matrix.
-    """
-    svect = [ (t,v) for t,v in svect if v != 0 ]
-    JK = zip(*svect)
-    J = list(JK[0])
-    K = list(JK[1])
-    I = [0]*len(J)
-    
-    # Adding a null value with an index of size-1 makes it easier to work with
-    #  arrays of different size.
-    if size is not None:
-        I.append(0)
-        J.append(size-1)
-        K.append(0)
-    coo = coo_matrix((K, (I,J)), shape=(1, max(J)+1))
-    return coo
-
-def _sparse_to_array(coo, size=None):
-    """
-    Convert a sparse feature [(i,v),] to a vector array.
-    """
-    dense = _sparse_to_coo(coo, size=size).todense()
-    l = dense.shape[1]
-    return dense.reshape((l,))
 
 def _shared_features(adense, bdense):
     """
