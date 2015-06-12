@@ -85,7 +85,8 @@ def multipartite(corpus, featureset_names, min_weight=1, filters={}):
     """
 
     pairs = Counter()
-    node_type = {p: {'type': 'paper'} for p in corpus.papers}
+    node_type = {getattr(p, corpus.index_by): {'type': 'paper'}
+                 for p in corpus.papers}
     for featureset_name in featureset_names:
         ftypes = {}
         
