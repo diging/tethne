@@ -48,7 +48,7 @@ def cooccurrence(corpus, featureset_name, min_weight=1,
             pairs[combo] += 1
 
             for a in edge_attrs:    # Include edge attributes.
-                eattrs[combo][a] = paper[a]
+                eattrs[combo][a] = corpus.indexed_papers[paper][a]
 
     # Generate node attributes.
     for n in list(nset):

@@ -29,7 +29,7 @@ def write_documents(corpus, target, featureset_name, metadata_fields=[]):
     # Generate metadata.
     with codecs.open(metapath, 'w', encoding='utf-8') as f:
         writer = csv.writer(f)
-        writer.writerow(['id'] + metadata_fields)
+        writer.writerow([corpus.index_by] + metadata_fields)
         for i, p in corpus.indexed_papers.iteritems():
             getter = lambda m: getattr(p, m) if hasattr(p, m) else None
             writer.writerow([i] + map(getter, metadata_fields))
@@ -37,14 +37,16 @@ def write_documents(corpus, target, featureset_name, metadata_fields=[]):
     # Write documents content.
     with codecs.open(docpath, 'w', encoding='utf-8') as f:
         for i, p in corpus.indexed_papers.iteritems():
-            if p in features:
-                row = [i, 'en'] + [' '.join(repeat(e, c)) for e, c in features[p]]
+            if i in features:
+                row = [i, 'en']
+                row += [' '.join(repeat(e, c)) for e, c in features[i]]
                 f.write('\t'.join(row) + '\n')
 
     return docpath, metapath
 
 
-def write_documents_dtm(corpus, target, featureset_name, slice_kwargs={}, metadata_fields=['date','title']):
+def write_documents_dtm(corpus, target, featureset_name, slice_kwargs={},
+                        metadata_fields=['date','title']):
     """
     
     Parameters
@@ -93,10 +95,11 @@ def write_documents_dtm(corpus, target, featureset_name, slice_kwargs={}, metada
     for date, subcorpus in corpus.slice(**slice_kwargs):
         with codecs.open(multpath, 'w', encoding='utf-8') as f:
             for p in subcorpus.papers:
+                i = getattr(p, subcorpus.index_by)
                 N[date] += 1
                 docLine = [':'.join([str(lookup[e]), str(c)])
-                           for e,c in features[p]]
-                unique = str(len(features[p]))
+                           for e,c in features[i]]
+                unique = str(len(features[i]))
                 f.write(' '.join([unique] + docLine) + '\n')
 
     # And -meta.dat file (with DOIs).
@@ -110,8 +113,8 @@ def write_documents_dtm(corpus, target, featureset_name, slice_kwargs={}, metada
         for date, subcorpus in corpus.slice(**slice_kwargs):
             for p in subcorpus.papers:
                 getter = lambda m: getattr(p, m) if hasattr(p, m) else None
-                writer.writerow([getattr(p, corpus.index_by)] + map(getter, metadata_fields))
-
+                fieldData = map(getter, metadata_fields)
+                writer.writerow([getattr(p, corpus.index_by)] + fieldData)
 
     # Generate -seq.dat file (number of papers per year).
     #   From the DTM example:

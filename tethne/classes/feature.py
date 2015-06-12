@@ -23,7 +23,10 @@ class Feature(list):
     @property
     def norm(self):
         T = sum(zip(*self)[1])
-        return [(i,float(v)/T) for i,v in self]
+        return Feature([(i,float(v)/T) for i,v in self])
+
+    def top(self, topn=10):
+        return [self[i] for i in argsort(zip(*self)[1])[::-1][:topn]]
 
 
 class FeatureSet(object):
@@ -66,25 +69,31 @@ class FeatureSet(object):
         return len(self.features)
 
     def count(self, elem):
-        return self.counts[self.lookup[elem]]
+        if elem in self.lookup:
+            return self.counts[self.lookup[elem]]
+        else:
+            return 0.
 
     def documentCount(self, elem):
-        return self.documentCounts[self.lookup[elem]]
+        if elem in self.lookup:
+            return self.documentCounts[self.lookup[elem]]
+        else:
+            return 0.
 
     def papers_containing(self, elem):
         return self.with_feature[self.lookup[elem]]
 
-    def add(self, paper, feature):
+    def add(self, paper_id, feature):
         if type(feature) is not Feature:
             raise ValueError('`feature` must be an instance of class Feature')
 
-        self.features[paper] = feature
+        self.features[paper_id] = feature
 
         self.extend_index(feature.unique)
         for elem, count in feature:
             self.counts[self.lookup[elem]] += count
             self.documentCounts[self.lookup[elem]] += 1.
-            self.with_feature[self.lookup[elem]].append(paper)
+            self.with_feature[self.lookup[elem]].append(paper_id)
 
     def extend_index(self, elements):
         """

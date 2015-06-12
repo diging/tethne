@@ -160,9 +160,9 @@ class Corpus(object):
         Create a new :class:`.Feature` from the attribute ``feature_name``
         in each :class:`.Paper`\.
         """
-        features = {p: Feature(getattr(p, feature_name)) for p
-                    in self.papers if hasattr(p, feature_name)}
-        self.features[feature_name] = FeatureSet(features)
+        feats = {getattr(p, self.index_by): Feature(getattr(p, feature_name))
+                 for p in self.papers if hasattr(p, feature_name)}
+        self.features[feature_name] = FeatureSet(feats)
 
     def index(self, attr):
         """
@@ -269,19 +269,14 @@ class Corpus(object):
         """
         return [len(papers[1]) for papers in self.slice(**slice_kwargs)]
 
-    def feature_distribution(self, feature, element, mode='counts',
+    def feature_distribution(self, featureset_name, feature, mode='counts',
                              **slice_kwargs):
-        def get_value(d, elem):
-            if elem in d:
-                return d[elem]
-            return 0
             
         values = []
         keys = []
+
         for key, subcorpus in self.slice(**slice_kwargs):
-            S = sum([get_value(dict(getattr(paper, feature)), element)
-                     for paper in subcorpus.papers])
-            values.append(S)
+            values.append(subcorpus.features[featureset_name].count(feature))
             keys.append(key)
         return keys, values
 
@@ -305,6 +300,18 @@ class Corpus(object):
            >>> c.subcorpus(['doi/123', 'doi/456'])
         """
 
-        return Corpus(self[selector], index_by=self.index_by,
-                      index_fields=self.indices.keys(),
-                      index_features=self.features.keys())
+        subcorpus = Corpus(self[selector], index_by=self.index_by,
+                           index_fields=self.indices.keys(),
+                           index_features=self.features.keys())
+
+        # Transfer FeatureSets.
+        for featureset_name, featureset in self.features.iteritems():
+            if featureset_name not in subcorpus:
+                new_featureset = FeatureSet()
+                for k, f in featureset.items():
+                    if k in subcorpus.indexed_papers:
+                        new_featureset.add(k, f)
+                subcorpus.features[featureset_name] = new_featureset
+
+        return subcorpus
+
