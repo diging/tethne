@@ -92,37 +92,5 @@ class TestKLDivergence(unittest.TestCase):
         self.assertGreater(k, 0.)
 
 
-class TestEuclidean(unittest.TestCase):
-    def test_euclidean(self):
-        feature = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
-        feature2 = Feature([('blob', 3), ('joe', 1), ('brobert', 1)])
-        feature3 = Feature([('blob', 1), ('joe', 2), ('brobert', 1)])
-        featureset = FeatureSet()
-        featureset.add('p1', feature)
-        featureset.add('p2', feature2)
-        featureset.add('p3', feature3)
-
-        V_a = featureset.as_vector('p2')
-        V_b = featureset.as_vector('p3')
-        k = distance(V_a, V_b, 'euclidean')
-
-        self.assertIsInstance(k, float)
-        self.assertGreater(k, 0.)
-
-    def test_euclidean_citations(self):
-        corpus = read(datapath, index_by='wosid')
-
-        top = corpus.top_features('citations', 1)[0][0]
-
-        P = corpus.features['citations'].papers_containing(top)
-        V_a = corpus.features['citations'].as_vector(P[0])
-        V_b = corpus.features['citations'].as_vector(P[1])
-
-        k = distance(V_a, V_b, 'euclidean')
-
-        self.assertIsInstance(k, float)
-        self.assertGreater(k, 0.)
-
-
 if __name__ == '__main__':
     unittest.main()
