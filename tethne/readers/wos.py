@@ -21,7 +21,7 @@ import os
 
 from tethne.readers.base import FTParser
 from tethne import Corpus, Paper
-from tethne.utilities import _strip_punctuation, _space_sep, strip_tags
+from tethne.utilities import _strip_punctuation, _space_sep, strip_tags, is_number
 
 
 class WoSParser(FTParser):
@@ -117,6 +117,7 @@ class WoSParser(FTParser):
         citation = self.entry_class()
 
         value = strip_tags(value)
+
         # First-author name and publication date.
         ptn = '([\w\s\W]+),\s([0-9]{4}),\s([\w\s]+)'
         ny_match = re.match(ptn, value.decode('utf-8'), flags=re.U)
@@ -129,21 +130,28 @@ class WoSParser(FTParser):
             date = None
         else:
             return
-            
-        name_tokens = [t.replace('.', '') for t in name_raw.split(' ')]
-        if len(name_tokens) > 4:    # Probably not a person.
-            proc = lambda x: _strip_punctuation(x)
-            aulast = ' '.join([proc(n) for n in name_tokens]).upper()
-            auinit = ''
-        elif len(name_tokens) > 0:
-            aulast = name_tokens[0].upper()
-            proc = lambda x: _space_sep(_strip_punctuation(x))
-            auinit = ' '.join([proc(n) for n in name_tokens[1:]]).upper()
-        else:
-            aulast = name_tokens[0].upper()
-            auinit = ''
 
-        setattr(citation, 'authors_init', [(aulast, auinit)])
+        datematch = re.match('([0-9]{4})', value)
+        if datematch:
+            date = datematch.group(1)
+            name_raw = None
+
+        if name_raw:
+            name_tokens = [t.replace('.', '') for t in name_raw.split(' ')]
+            if len(name_tokens) > 4 or value.startswith('*'):    # Probably not a person.
+                proc = lambda x: _strip_punctuation(x)
+                aulast = ' '.join([proc(n) for n in name_tokens]).upper()
+                auinit = ''
+            elif len(name_tokens) > 0:
+                aulast = name_tokens[0].upper()
+                proc = lambda x: _space_sep(_strip_punctuation(x))
+                auinit = ' '.join([proc(n) for n in name_tokens[1:]]).upper()
+            else:
+                aulast = name_tokens[0].upper()
+                auinit = ''
+
+            setattr(citation, 'authors_init', [(aulast, auinit)])
+
         if date:
             date = int(date)
         setattr(citation, 'date', date)

@@ -16,7 +16,6 @@ import os
 import xml.etree.ElementTree as ET
 import re
 from collections import Counter
-
 from tethne import Paper, Corpus
 from tethne.utilities import dict_from_node, strip_non_ascii
 
@@ -501,20 +500,18 @@ def _handle_paper(article):
     pdata = dict_from_node(article)
 
     for key, value in pdata.iteritems():
-        if key in pdata:    # Article may not have all keys of interest.
-            datum = pdata[key]
-            if type(datum) is str:
-                datum = unicode(datum)
-            if type(datum) is unicode:
-                datum = unidecode(datum).upper()
 
-            try:    # For now, ignore weird types that come through in datum.
-                paper[value] = datum
-            except ValueError:  
-                pass
+        datum = pdata[key]
+        if type(datum) is str:
+            datum = unicode(datum)
+        if type(datum) is unicode:
+            datum = unidecode(datum).upper()
+
+        paper[key] = datum
 
     # Handle author names.
-    paper['aulast'], paper['auinit'] = _handle_authors(pdata['author'])
+    adata = _handle_authors(pdata['author'])
+    paper.authors_init = zip(adata[0], adata[1])
 
     # Handle pubdate.
     paper['date'] = _handle_pubdate(pdata['pubdate'])
@@ -522,13 +519,7 @@ def _handle_paper(article):
     # Handle pagerange.
     paper['spage'], paper['epage'] = _handle_pagerange(pdata['pagerange'])
 
-    # Generate ayjid.
-    try:
-        paper['ayjid'] = _create_ayjid(paper['aulast'][0], paper['auinit'][0], \
-                                       paper['date'], paper['jtitle'])
-    except IndexError:  # Article may not have authors.
-        pass
-
+    print type(paper.title)
     return paper
 
 def _handle_pagerange(pagerange):

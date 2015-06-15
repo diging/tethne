@@ -1,12 +1,24 @@
 import sys
 sys.path.append('../tethne')
 
+import re
+
 import unittest
 from tethne.readers.wos import WoSParser, read
 from tethne import Corpus, Paper
 
 datapath = './tethne/tests/data/wos2.txt'
+datapath_v = './tethne/tests/data/valentin.txt'
 
+def is_number(value):
+    try:
+        int(value)
+    except ValueError:
+        try:
+            float(value)
+        except ValueError:
+            return False
+    return True
 
 class TestWoSParser(unittest.TestCase):
     def test_read(self):
@@ -90,6 +102,35 @@ class TestWoSParser(unittest.TestCase):
             if cr.date:
                 self.assertIsInstance(cr.date, int)
             self.assertTrue(hasattr(cr, 'journal'))
+
+class TestWithStarCR(unittest.TestCase):
+    def setUp(self):
+        class TestParser(WoSParser):
+            def handle_CR(self, value):
+                citation = super(TestParser, self).handle_CR(value)
+                # The lastname part of the first author name should match the
+                #  CR author name as written, but without the leading *.
+                datematch = re.match('([0-9]{4})', value)
+                if datematch:
+                    date = datematch.group(1)
+                    if len(citation.authors) > 0:
+                        last = [str(v[0]) for v
+                                in zip(*zip(*citation.authors)[0])]
+                        assert str(date) not in last
+
+                if value.startswith('*'):
+                    expected = re.match('\*([\w\s]+)\,', value).group(1)
+                    assert expected == citation.authors[0][0][0]
+                    assert not is_number(citation.authors[0][0][0])
+
+        self.parser = TestParser(datapath_v)
+
+    def test_citedRefs(self):
+        try:
+            self.parser.parse()
+        except AssertionError:
+            self.fail('Trouble processing cited references')
+
 
 
 if __name__ == '__main__':

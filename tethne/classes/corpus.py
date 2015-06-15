@@ -206,6 +206,12 @@ class Corpus(object):
             papers = self.papers[selector]
         return papers
 
+    def __getattr__(self, key):
+        if hasattr(self, key):
+            return getattr(self, key)
+        elif key in self.indices:
+            return self.indices[key]
+        raise AttributeError("Corpus has no such attribute")
 
     def slice(self, window_size=1, step_size=1):
         """

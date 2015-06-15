@@ -5,6 +5,16 @@ import string
 import copy
 from HTMLParser import HTMLParser
 
+def is_number(value):
+    try:
+        int(value)
+    except ValueError:
+        try:
+            float(value)
+        except ValueError:
+            return False
+    return True
+
 class MLStripper(HTMLParser):
     def __init__(self):
         self.reset()

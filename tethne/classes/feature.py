@@ -41,11 +41,11 @@ class FeatureSet(object):
         for paper, feature in features.items():
             self.add(paper, feature)
 
-    def __setitem__(self, key, value):
-        setattr(self, key, value)
-
+#    def __setitem__(self, key, value):
+#        setattr(self, key, value)
+#
     def __getitem__(self, key):
-        return getattr(self, key)
+        return self.features[key]
 
     def __len__(self):
         return len(self.features)

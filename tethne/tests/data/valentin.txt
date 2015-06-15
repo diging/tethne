@@ -1,0 +1,215 @@
+FN Thomson Reuters Web of Science™
+VR 1.0
+PT J
+AU Osbaldiston, N
+AF Osbaldiston, Nicholas
+TI Elementary forms of place in Seachange
+SO JOURNAL OF SOCIOLOGY
+LA English
+DT Article
+DE cultural sociology; Durkheim; place; Seachange; sociological theory;
+   urban-rural migration
+AB The recent migratory movement known as Seachange is investigated in this article through the concept of place. Using Smith's 'Elementary Forms of Place' model as a guide, and textual/media analysis coupled with qualitative research as examples, it is argued that the Seachange narrative is constructed on a dichotomous relationship to the city. While metropolitan areas are perceived as dull, stressful and degrading, the country and beach are sacralized through narratives of peace, quiet and serenity. Furthermore, the Seachange locales are also considered as places entrenched in the past, invoking aesthetics of traditional community values. Yet the sacralization of Seachange places is threatened by counter-narratives such as gentrification, commodification and sustainability issues which degrade the attractiveness of the locale.
+C1 Queensland Univ Technol, Humanities Res Program, Kelvin Grove, Qld 4059, Australia.
+RP Osbaldiston, N (reprint author), Queensland Univ Technol, Humanities Res Program, QUT Kelvin Grove Campus,K Block, Kelvin Grove, Qld 4059, Australia.
+EM n.osbaldiston@qut.edu.au
+CR *ABS, 2004, SEACH NEW COAST RES
+   Alexander J., 2005, CAMBRIDGE COMPANION, P136
+   Alexander J.C., 2005, CAMBRIDGE COMPANION
+   [Anonymous], 2006, SYDNEY MORNING HERAL
+   Australian Bureau of Statistics (ABS), 2007, REG POP GROWTH AUSTR
+   Bataille G., 1991, ACCURSED SHARE ESSAY
+   Booth D., 2001, AUSTR BEACH CULTURES
+   Burnley I., 2004, SEA CHANGE MOVEMENT
+   Carroll J, 1982, INTRUDERS BUSH AUSTR
+   *CLAR VALL COUNC, 2006, TREECH ROOM PONY
+   *CLAR VALL COUNC, 2006, SEACH CAN YOU HEAR W
+   Clarence Valley Council, 2006, LIF ITS ALL CHOIC LO
+   Davis Fred, 1979, YEARNING YESTERDAY S
+   Dixon R., 1995, WRITING COLONIAL ADV
+   Dowling Cindy, 2004, SEACHANGE AUSTR PURS
+   Durkheim E., 1995, ELEMENTARY FORMS REL
+   Evans-Pritchard E. E., 1960, DEATH RIGHT HAND, P9
+   Fields Karen E, 1995, ELEMENTARY FORMS REL
+   FORD K, 2004, AUSTR SCREEN ED, V35, P113
+   Frye Northrop, 1957, ANATOMY CRITICISM 4
+   Goffman E., 1971, PRESENTATION SELF EV
+   Gurran Nicole, 2006, M SEACHANGE CHALLENG
+   Halbwachs Maurice, 1992, COLLECTIVE MEMORY
+   Hamilton C, 2003, GROWTH FETISH
+   Hertz Robert, 2009, SAINTS HEROES MYTHS, P88
+   Honore C, 2004, PRAISE SLOWNESS WORL
+   INGOLD T, 1993, WORLD ARCHAEOL, V25, P152
+   Locke H, 2006, AMENITY MIGRANTS: SEEKING AND SUSTAINING MOUNTAINS AND THEIR CULTURES, P26, DOI 10.1079/9780851990842.0026
+   Lukes S., 1973, EMILE DURKHEIM HIS L
+   Michael M., 2000, RECONNECTING CULTURE
+   Moss LAG, 2006, AMENITY MIGRANTS: SEEKING AND SUSTAINING MOUNTAINS AND THEIR CULTURES, P1, DOI 10.1079/9780851990842.0000
+   ORUETA FD, 2004, REV ARGENT SOCIOL, V2, P115
+   OSBALDISTON N, 2009, P ANN AUSTR SOC ASS
+   Osbaldiston Nicholas, 2006, THESIS QUEENSLAND U
+   OSULLIVAN K, 2008, SYDNEY MORNING HERAL
+   Pahl R, 2005, SOCIOL REV, V53, P621, DOI 10.1111/j.1467-954X.2005.00587.x
+   RAGUSA A, 2007, P TASA SAANZ JOINT C
+   Riley A, 2008, VISUAL STUD, V23, P4, DOI 10.1080/14725860801908502
+   Riley A. T., 2005, CAMBRIDGE COMPANION, P274
+   Rosati M, 2009, RETHINK CLASS SOCIOL, P1
+   Salt B., 2001, BIG SHIFT WELCOME 3
+   Schor J, 1998, OVERSPENT AM WHY WE
+   Shields R., 1991, PLACES MARGIN ALTERN
+   SIMMEL G, 1991, SIMMEL CULTURE SELEC, P174
+   SMITH P, 2008, PUNISHMENT CULTURE P
+   Smith Philip, 1999, QUALITATIVE SOCIOLOG, V22, P13, DOI 10.1023/A:1022179131684
+   Soja Edward, 2000, POSTMETROPOLIS CRITI
+   Szerszynski B, 2005, RELIG SPIRIT MOD WOR, P1, DOI 10.1002/9780470774311
+   Urry J., 1998, CONTESTED NATURES
+   Urry J., 1995, CONSUMING PLACES
+   West B, 2008, SOCIOL THEOR, V26, P258, DOI 10.1111/j.1467-9558.2008.00328.x
+   Williams Raymond, 1973, COUNTRY CITY
+   1999, DOWN EARTH AUSTR LAN
+   Zukin S., 1995, CULTURE CITIES
+NR 54
+TC 5
+Z9 5
+PU SAGE PUBLICATIONS LTD
+PI LONDON
+PA 1 OLIVERS YARD, 55 CITY ROAD, LONDON EC1Y 1SP, ENGLAND
+SN 1440-7833
+EI 1741-2978
+J9 J SOCIOL
+JI J. Sociol.
+PD SEP
+PY 2010
+VL 46
+IS 3
+BP 239
+EP 256
+DI 10.1177/1440783310365585
+PG 18
+WC Sociology
+SC Sociology
+GA 644DQ
+UT WOS:000281352900002
+ER
+
+PT J
+AU Poynting, S
+   Mason, V
+AF Poynting, Scott
+   Mason, Victoria
+TI The resistible rise of Islamophobia - Anti-Muslim racism in the UK and
+   Australia before 11 September 2001
+SO JOURNAL OF SOCIOLOGY
+LA English
+DT Article
+DE anti-Muslim racism; Australia; Britain; Islamophobia
+AB This article compares the rise of anti-Muslim racism in Britain and Australia, from 1989 to 2001, as a foundation for assessing the extent to which the upsurge of Islamophobia after 11 September was a development of existing patterns of racism in these two countries. The respective histories of immigration and settlement by Muslim populations are outlined, along with the relevant immigration and 'ethnic affairs' policies and the resulting demographics. The article traces the ideologies of xenophobia that developed in Britain and Australia over this period. It records a transition from anti-Asian and anti-Arab racism to anti-Muslim racism, reflected in and responding to changes in the identities and cultural politics of the minority communities. It outlines instances of the racial and ethnic targeting by the state of the ethnic and religious minorities concerned, and postulates a causal relationship between this and the shifting patterns of acts of racial hatred, vilification and discrimination.
+C1 Univ Western Sydney, Sch Humanities, Penrith, NSW 1797, Australia.
+RP Poynting, S (reprint author), Univ Western Sydney, Sch Humanities, Penrith, NSW 1797, Australia.
+EM s.poynting@uws.edu.au
+CR Abbas Tahir, 2005, MUSLIM BRIT COMMUNIT
+   ABOUJAHJAH D, 2006, ASSIMILATION DEPORTA
+   AHDAR L, 1993, FOREIGN AFFAIRS  SPR, P27
+   Al-Azmeh A, 1993, ISLAMS MODERNITIES
+   Amin A, 2003, INT J URBAN REGIONAL, V27, P460, DOI 10.1111/1468-2427.00459
+   [Anonymous], 2005, SYDNEY MORNING HERAL
+   ASMAR C, 1992, ARAB AUSTR EXPERIENC, P57
+   *BBC NEWS, 2001, MUSL COMM TART RAC T
+   Blainey Geoffrey, 1984, ALL AUSTR
+   Brah A, 1996, CARTOGRAPHIES DIASPO
+   BUCHANAN M, 2002, WAR TERRORISM INTERN
+   BURNSIDE J, 2002, TAMPA CASE      0123
+   Castles S., 1984, HERE GOOD W EUROPES
+   CHULOV M, 2001, AUSTRALIAN, V18, P1
+   CLELAND B, 2006, HIST ISLAM AUSTR
+   COLLISN J, 2000, KEBABS KIDS COPS CRI
+   COLLISN J, 1991, MIGRATN HANDS DISTAN
+   *COMM DISCR AR AUS, 1990, GULF AUSTR RAC AR MU, V1
+   DOHERTY L, 2001, SYDNEY MORNING  0823
+   DUFF E, 2002, SYDNEY MORNING  0721
+   EVANS K, 2005, ANN C BRIT SECT EUR
+   FICKLING D, 2002, GUARDIAN UNLIMI 0923
+   FYFE M, 2001, AGE             0825, P4
+   GEE S, 2001, DAILY TELEGRAPH 0810, P1
+   HAGE G, 2002, ARAB AUSTR TODAY, P173
+   HAGE G, 1991, ARENA, V96, P8
+   HAGE G, 2002, CANBERRA TIMES  0131
+   HAGE G, 2003, SYDNEY MORNING  0217, P15
+   Hage Ghassan, 1998, WHITE NATION FANTASI
+   HEFFER S, 2001, SPECTATOR       1124, P14
+   HREOC, 2004, ISM LIST NAT CONS EL
+   *HREOC, 1991, RAC VIOL REP NAL INQ
+   Human Rights Watch, 1997, RAC VIOL UK
+   Huntington Samuel, 1993, FOREIGN AFF, V72, P3
+   Huntington S.P., 1997, CLASH CIVILIZATIONS
+   Kabir N., 2004, MUSLIMS AUSTR IMMIGR
+   KENNEDY L, 2001, SYDNEY MORNING  0817
+   Kepel Gilles, 1997, ALLAH W ISLAMIC MOVE
+   Khan Zafar, 2000, CURR SOCIOL, V48, P29, DOI [10.1177/0011392100048004001, DOI 10.1177/0011392100048004004]
+   KIDMAN J, 2001, SUN HERALD      0729, P1
+   KUNDNANI A, 2002, IRR NEWS        0401
+   Kundnani A, 2001, RACE CLASS, V43, P105, DOI 10.1177/0306396801432009
+   LACK J, 1995, BOLD EXPERIMENT DOCU
+   Lewis Philip, 1994, ISLAMIC BRIT RELIG P
+   MACEY M., 2002, ISLAM CRIME CRIMINAL, P19
+   MACKAY H, 2002, SYDNEY MORNING  0216, P31
+   Marr David, 2004, DARK VICTORY
+   MCDOUGALL BK, 2001, DIALY TELEGRAPH 0806, P1
+   MIRANDA C, 2001, DAILY TELEGRAPH 0816, P1
+   Modood T., 2005, MULTICULTURAL POLITI
+   MORRIS R, 2001, DAILY TELEGRAPH 0905, P1
+   MRIANDA C, 2001, DAILY TELEGRAPH 0815, P1
+   Nagel C, 2002, ETHNIC RACIAL STUD, V25, P258, DOI 10.1080/01419870120109485
+   *NAT STAT, 2001, REL POP URL
+   Noble G., 1999, COMMUNAL PLURAL, V7, P29
+   NOBLE G, 2003, MEDIA INT AUST, V106, P110
+   OBRIEN M, 2000, CURR SOCIOL, V48, P1
+   PARENTI C, 2002, BEYOND SEPTEMBER 11, P10
+   Peach C., 2005, MUSLIM BRITAIN COMMU, P18
+   PEARSON G, 1976, WORKING CLASS YOUTH
+   PINKSTONE B, 1992, GLBOAL CONNECTIONS H
+   POYNTING S, 1999, CURRENT ISSUES CRIMI, V11, P74
+   Poynting Scott, 2002, CURRENT ISSUES CRIMI, V14, P43
+   Poynting Scott, 2004, B LADEN SUBURBS CRIM
+   *RUNN TRUST, 1990, BRIT PLUR SOC REP SE
+   Runnymede Trust, 1997, ISL CHALL US ALL
+   Said Edward, 1978, ORIENTALISM
+   Saikal A., 2003, ISLAM W CONFLICT COO
+   *SEN SEL COMM CERT, 2002, HANS 25 26 MARCH 4 5
+   SHEEHAN P, 2001, SYDNEY MORNING  0829, P20
+   Sivanandan A, 2001, RACE CLASS, V43, P1, DOI 10.1177/0306396801432001
+   SMYTH G, 1996, NEW STATESMAN, V125, P21
+   SMYTH H, 2002, MANCHESTER EVEN 0125
+   STANI N, 2000, MEDIA REPORT
+   STEVENSON A, 1998, DAILY TELEGRAPH 1107, P32
+   *UNHCR, 2005, TAMPA BOYS
+   WALKER F, 2001, SUN HERALD      0826, P10
+   WAZIR B, 2002, NEW STATESMAN, V131, P32
+   WEAHTERBURN D, 2001, MEDIA RELEASE FACTS
+   WHITE R, 1999, ETHNIC YOUTH GANGS D
+   WOOD M, 2001, SUN HERALD      0819, P1
+   2001, INSIGHT
+   2002, 4 CORNERS
+NR 83
+TC 48
+Z9 48
+PU SAGE PUBLICATIONS LTD
+PI LONDON
+PA 1 OLIVERS YARD, 55 CITY ROAD, LONDON EC1Y 1SP, ENGLAND
+SN 1440-7833
+J9 J SOCIOL
+JI J. Sociol.
+PD MAR
+PY 2007
+VL 43
+IS 1
+BP 61
+EP 86
+DI 10.1177/1440783307073935
+PG 26
+WC Sociology
+SC Sociology
+GA 149VU
+UT WOS:000245175800004
+ER
+
+EF
