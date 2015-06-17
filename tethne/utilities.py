@@ -24,7 +24,6 @@ class MLStripper(HTMLParser):
     def feed(self, data):
         self.rawdata = self.rawdata + str(data)
         self.goahead(0)
-
     def get_data(self):
         return ''.join(self.fed)
 

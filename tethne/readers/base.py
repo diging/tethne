@@ -1,175 +1,237 @@
 import os
 import re
+import xml.etree.ElementTree as ET
 
 class dobject(object):
-	pass
+    pass
 
 def _cast(value):
-	"""
-	Attempt to convert ``value`` to an ``int`` or ``float``. If unable, return the value
-	unchanged.
-	"""
+    """
+    Attempt to convert ``value`` to an ``int`` or ``float``. If unable, return the value
+    unchanged.
+    """
 
-	try:
-		return int(value)
-	except ValueError:
-		try:
-			return float(value)
-		except ValueError:
-			return value
-	
+    try:
+        return int(value)
+    except ValueError:
+        try:
+            return float(value)
+        except ValueError:
+            return value
 
-class FTParser(object):
-	"""
-	Base parser for field-tagged data files.
-	"""
-	
-	start_tag = 'ST'
-	"""Signals the start of a data entry."""
 
-	end_tag = 'ED'
-	"""Signals the end of a data entry."""
+class BaseParser(object):
+    entry_class = dobject
+    """Model for data entry."""
 
-	entry_class = dobject
-	"""Model for data entry."""
-	
-	concat_fields = []
-	"""Multi-line fields here should be concatenated, rather than represented as lists."""
-	
-	tags = {}
+    concat_fields = []
+    """
+    Multi-line fields here should be concatenated, rather than represented
+    as lists.
+    """
 
-	def __init__(self, path, **kwargs):
-		self.path = path
+    tags = {}
 
-		self.current_tag = None
-		self.last_tag = None
-		self.data = []
-		self.fields = set([])
-		
-		self.open()
-		
-		if kwargs.get('autostart', True):
-			self.start()
-		
-	def open(self):
-		"""
-		Open the data file.
-		"""
+    def __init__(self, path, **kwargs):
+        self.path = path
 
-		if not os.path.exists(self.path):
-			raise IOError("No such path: {0}".format(self.path))
-	
-		self.buffer = open(self.path, 'r')
-	
-	def next(self):
-		"""
-		Get the next line of data.
-		
-		Returns
-		-------
-		tag : str
-		data : 
-		"""
-		line = self.buffer.readline()
-		while line == '\n':		# Skip forward to the next line with content.
-			line = self.buffer.readline()
-			
-		if line == '':			# End of file.
-			return None, None
-			
-		match = re.match('([A-Z]{2})\W+(.*)', line)
-		if match is not None:
-			self.current_tag, data = match.groups()
-		else:
-			self.current_tag = self.last_tag
-			data = line.strip()
+        self.current_tag = None
+        self.last_tag = None
+        self.data = []
+        self.fields = set([])
+        
+        self.open()
+        
+        if kwargs.get('autostart', True):
+            self.start()
 
-		return self.current_tag, _cast(data)
-		
-	def start(self):
-		"""
-		Find the first data entry and prepare to parse.
-		"""
+    def parse(self):
+        """
+        
+        """
+        while True:        # Main loop.
+            tag, data = self.next()
+            if self.is_eof(tag):
+                break
 
-		while self.current_tag != self.start_tag:
-			self.next()
-		self.new_entry()
-			
-	def parse(self):
-		"""
-		
-		"""
-		while True:		# Main loop.
-			tag, data = self.next()
-			if tag is None and data is None:	# End of file.
-				break
+            self.handle(tag, data)
+            self.last_tag = tag
+        return self.data
 
-			self.handle(tag, data)
-			self.last_tag = tag
-		return self.data
-					
-	def _get_handler(self, tag):
-		handler_name = 'handle_{tag}'.format(tag=tag)
-		if hasattr(self, handler_name):
-			return getattr(self, handler_name)
-		return
-	
-	def __del__(self):
-		if hasattr(self, 'buffer'):
-			self.buffer.close()
-			
-	def handle(self, tag, data):
-		"""
-		Process a single line of data, and store the result.
-		
-		Parameters
-		----------
-		tag : str
-		data :
-		"""
+    def start(self):
+        """
+        Find the first data entry and prepare to parse.
+        """
 
-		if data is None or tag is None:
-			return
-			
-		if tag == self.start_tag:
-			self.new_entry()
-			return	
-			
-		if tag == self.end_tag:
-			self.postprocess_entry()
-			return
+        while not self.is_start(self.current_tag):
+            self.next()
+        self.new_entry()
+                    
+    def _get_handler(self, tag):
+        handler_name = 'handle_{tag}'.format(tag=tag)
+        if hasattr(self, handler_name):
+            return getattr(self, handler_name)
+        return
 
-		handler = self._get_handler(tag)
-		if handler is not None:
-			data = handler(data)
-			
-		if tag in self.tags:	# Rename the field.
-			tag = self.tags[tag]
+    def new_entry(self):
+        """
+        Prepare a new data entry.
+        """
+        self.data.append(self.entry_class())
+        
+    def postprocess_entry(self):
+        for field in self.fields:
+            processor_name = 'postprocess_{0}'.format(field)
+            if hasattr(self.data[-1], field) and hasattr(self, processor_name):
+                getattr(self, processor_name)(self.data[-1])
 
-		# Multiline fields are represented as lists of values.
-		if hasattr(self.data[-1], tag):
-			value = getattr(self.data[-1], tag)
-			if tag in self.concat_fields:
-				value = ' '.join([value, data])
-			elif type(value) is list:
-				value.append(data)
-			elif value not in [None, '']:
-				value = [value, data]
-		else:
-			value = data
-		setattr(self.data[-1], tag, value)
-		self.fields.add(tag)
-		
-	def new_entry(self):
-		"""
-		Prepare a new data entry.
-		"""
+    def handle(self, tag, data):
+        """
+        Process a single line of data, and store the result.
+        
+        Parameters
+        ----------
+        tag : str
+        data :
+        """
 
-		self.data.append(self.entry_class())
-		
-	def postprocess_entry(self):
-		for field in self.fields:
-			postprocessor_name = 'postprocess_{0}'.format(field)
-			if hasattr(self.data[-1], field) and hasattr(self, postprocessor_name):
-				getattr(self, postprocessor_name)(self.data[-1])
-		
+        if self.is_end(tag):
+            self.postprocess_entry()
+
+        if self.is_start(tag):
+            self.new_entry()
+
+        if data is None or tag is None:
+            return
+
+        handler = self._get_handler(tag)
+        if handler is not None:
+            data = handler(data)
+            
+        if tag in self.tags:    # Rename the field.
+            tag = self.tags[tag]
+
+        # Multiline fields are represented as lists of values.
+        if hasattr(self.data[-1], tag):
+            value = getattr(self.data[-1], tag)
+            if tag in self.concat_fields:
+                value = ' '.join([value, data])
+            elif type(value) is list:
+                value.append(data)
+            elif value not in [None, '']:
+                value = [value, data]
+        else:
+            value = data
+        setattr(self.data[-1], tag, value)
+        self.fields.add(tag)
+
+class FTParser(BaseParser):
+    """
+    Base parser for field-tagged data files.
+    """
+    
+    start_tag = 'ST'
+    """Signals the start of a data entry."""
+
+    end_tag = 'ED'
+    """Signals the end of a data entry."""
+
+    def is_start(self, tag):
+        return tag == self.start_tag
+
+    def is_end(self, tag):
+        return tag == self.end_tag
+
+    def is_eof(self, tag):
+        return self.at_eof
+
+    def open(self):
+        """
+        Open the data file.
+        """
+
+        if not os.path.exists(self.path):
+            raise IOError("No such path: {0}".format(self.path))
+    
+        self.buffer = open(self.path, 'r')
+        self.at_eof = False
+    
+    def next(self):
+        """
+        Get the next line of data.
+        
+        Returns
+        -------
+        tag : str
+        data : 
+        """
+        line = self.buffer.readline()
+        while line == '\n':       # Skip forward to the next line with content.
+            line = self.buffer.readline()
+            
+        if line == '':            # End of file.
+            self.at_eof = True
+            return None, None
+            
+        match = re.match('([A-Z]{2})\W+(.*)', line)
+        if match is not None:
+            self.current_tag, data = match.groups()
+        else:
+            self.current_tag = self.last_tag
+            data = line.strip()
+
+        return self.current_tag, _cast(data)
+    
+    def __del__(self):
+        if hasattr(self, 'buffer'):
+            self.buffer.close()
+
+
+class XMLParser(BaseParser):
+    entry_element = 'article'
+    entry_class = dobject
+
+    def open(self):
+        with open(self.path, 'r') as f:
+            # JSTOR hasn't always represented ampersands correctly.
+            contents = re.sub('(&)(?!amp;)', lambda match: '&amp;', f.read())
+            self.root = ET.fromstring(contents)
+        pattern = './/{elem}'.format(elem=self.entry_element)
+        self.elements = self.root.findall(pattern)
+
+        self.at_start = False
+        self.at_end = False
+        self.children = []
+
+    def is_start(self, tag):
+        return self.at_start
+
+    def is_end(self, tag):
+        return self.at_end
+
+    def is_eof(self, tag):
+        return len(self.elements) == 0 and len(self.children) == 0
+
+    def next(self):
+        if len(self.children) > 0:
+            child = self.children.pop(0)
+            tag, text = child.tag, child.text
+
+        else:
+            tag, text = None, None
+            if self.at_end:
+                self.at_end = False
+                self.at_start = True
+
+            elif self.at_start:
+                element = self.elements.pop(0)
+                self.children = element.getchildren()
+                self.at_start = False
+                tag, text = self.next()
+
+            elif len(self.data) == 0 and len(self.elements) > 0:
+                self.at_start = True
+            else:
+                self.at_end = True
+
+        return tag, text
