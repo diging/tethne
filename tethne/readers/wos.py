@@ -38,7 +38,7 @@ class WoSParser(FTParser):
 
     start_tag = 'PT'
     end_tag = 'ER'
-    concat_fields = ['abstract', 'keywords', 'funding']
+    concat_fields = ['abstract', 'keywords', 'funding', 'title', 'references']
     entry_class = Paper
 
     tags = {
@@ -237,13 +237,6 @@ class WoSParser(FTParser):
         if type(entry.citedReferences) is not list:
             entry.citedReferences = [entry.citedReferences]
 
-    def postprocess_title(self, entry):
-        if type(entry.title) is list:
-            entry.title = ' '.join(entry.title)
-
-    def postprocess_journal(self, entry):
-        if type(entry.journal) is list:
-            entry.journal = ' '.join(entry.journal)
 
 def from_dir(path, corpus=True, **kwargs):
     papers = []

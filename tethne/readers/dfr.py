@@ -18,8 +18,56 @@ import re
 from collections import Counter
 from tethne import Paper, Corpus
 from tethne.utilities import dict_from_node, strip_non_ascii
+from tethne.readers.base import XMLParser
+import iso8601
 
 from unidecode import unidecode
+
+class DfRParser(XMLParser):
+    entry_class = Paper
+
+    tags = {
+        'type': 'documentType',
+        'pubdate': 'date',
+        'journaltitle': 'journal',
+        'author': 'authors_full',
+    }
+
+    def handle_unicode(self, value):
+        if type(value) is not str:
+            value = unidecode(value)
+        return value
+
+    def handle_journaltitle(self, value):
+        return self.handle_unicode(value)
+
+    def handle_title(self, value):
+        return self.handle_unicode(value)
+
+    def handle_author(self, value):
+        if type(value) is not str:
+            value = unidecode(value)
+
+        lname = value.split(' ')
+
+        final = lname[-1].upper()
+        if final in ['JR.', 'III']:
+            aulast = lname[-2].upper() + " " + final.strip(".")
+            auinit = ' '.join(lname[0:-2]).replace('.','').strip().upper()
+        else:
+            aulast = final
+            auinit = ' '.join(lname[0:-1]).replace('.','').strip().upper()
+
+        return aulast, auinit
+
+    def handle_pubdate(self, value):
+        return iso8601.parse_date(value).year
+
+    def postprocess_authors_full(self, entry):
+        if type(entry.authors_full) is not list:
+            entry.authors_full = [entry.authors_full]
+
+
 
 class GramGenerator(object):
     """
@@ -131,7 +179,7 @@ class GramGenerator(object):
 
         return doi, grams   # Default behavior.
 
-def read(datapath, corpus=True, **kwargs):
+def read(datapath, corpus=True, index_by='doi', **kwargs):
     """
     Yields :class:`.Paper` s from JSTOR DfR package.
 
@@ -156,21 +204,25 @@ def read(datapath, corpus=True, **kwargs):
        >>> from tethne.readers import dfr
        >>> papers = dfr.read("/Path/to/DfR")
     """
+    parser = DfRParser(datapath + "/citations.XML")
+    parser.parse()
+    return Corpus(parser.data, index_by=index_by, **kwargs)
 
-    with open(datapath + "/citations.XML", mode='r') as f:
-        data = f.read()
-        data = data.replace('&', '&amp;')
-        
-        root = ET.fromstring(data)
-
-    papers = kwargs.get('papers', [])
-    for article in root:
-        paper = _handle_paper(article)
-        papers.append(paper)
-
-    if corpus:
-        return Corpus(papers)
-    return papers
+#
+#    with open(datapath + "/citations.XML", mode='r') as f:
+#        data = f.read()
+#        data = data.replace('&', '&amp;')
+#        
+#        root = ET.fromstring(data)
+#
+#    papers = kwargs.get('papers', [])
+#    for article in root:
+#        paper = _handle_paper(article)
+#        papers.append(paper)
+#
+#    if corpus:
+#        return Corpus(papers)
+#    return papers
 
 def read_corpus(path, features=None, exclude=None, **kwargs):
     """
@@ -519,7 +571,6 @@ def _handle_paper(article):
     # Handle pagerange.
     paper['spage'], paper['epage'] = _handle_pagerange(pdata['pagerange'])
 
-    print type(paper.title)
     return paper
 
 def _handle_pagerange(pagerange):

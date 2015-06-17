@@ -52,6 +52,7 @@ class BaseParser(object):
         while True:        # Main loop.
             tag, data = self.next()
             if self.is_eof(tag):
+                self.postprocess_entry()
                 break
 
             self.handle(tag, data)

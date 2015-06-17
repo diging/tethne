@@ -15,12 +15,12 @@ class TestDFRReader(unittest.TestCase):
         self.assertIsInstance(corpus, Corpus)
 
         for e in corpus.papers:
-#            print e.title
             if hasattr(e, 'date'):
                 self.assertIsInstance(e.date, int)
 
             uppererr = "Author names should be uppercase"
             if hasattr(e, 'authors_full'):
+#                print e.authors_full            
                 self.assertIsInstance(e.authors_full, list)
                 for a in e.authors_full:
                     self.assertTrue(a[0].isupper(), uppererr)

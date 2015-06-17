@@ -46,8 +46,6 @@ class TestXMLParser(unittest.TestCase):
         N = len(parser.data)
         self.assertEqual(N, 398, 'Expected 398 entries, found {0}'.format(N))
 
-        print parser.data[0].__dict__
-
 
 class TestFTParser(unittest.TestCase):
     def test_badpath(self):
