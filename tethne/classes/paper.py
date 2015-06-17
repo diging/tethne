@@ -22,8 +22,11 @@ class Paper(object):
         Fuzzy WoS-style identifier, comprised of first author's name (LAST I),
         pubdate, and journal.
         """
-
-        al, ai = self.authors_init[0]
+	
+	if hasattr(self, 'authors_init'):
+            al, ai = self.authors_init[0]
+        else:
+            al, ai = '', ''
         if hasattr(self, 'date'):
             date = str(self.date)
         else:

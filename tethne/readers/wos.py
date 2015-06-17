@@ -89,7 +89,11 @@ class WoSParser(FTParser):
         if len(tokens) == 1:
             tokens = value.split(' ')
         if len(tokens) > 0:
-            aulast, auinit = tokens[0:2]    # Ignore JR, II, III, etc.
+            if len(tokens) > 1:
+                aulast, auinit = tokens[0:2]    # Ignore JR, II, III, etc.
+            else:
+                aulast = tokens[0]
+                auinit = ''
         else:
             aulast, auinit = tokens[0], ''
         aulast = _strip_punctuation(aulast).upper()
@@ -188,7 +192,7 @@ class WoSParser(FTParser):
         """
 
         if type(entry.authorKeywords) not in [str, unicode]:
-            aK = ' '.join(entry.authorKeywords)
+            aK = ' '.join([str(k) for k in entry.authorKeywords])
         else:
             aK = entry.authorKeywords
         entry.authorKeywords = [k.strip().upper() for k in aK.split(';')]
@@ -237,6 +241,9 @@ class WoSParser(FTParser):
         if type(entry.title) is list:
             entry.title = ' '.join(entry.title)
 
+    def postprocess_journal(self, entry):
+        if type(entry.journal) is list:
+            entry.journal = ' '.join(entry.journal)
 
 def from_dir(path, corpus=True, **kwargs):
     papers = []
@@ -260,7 +267,7 @@ def read_corpus(path, **kwargs):
     return read(path, corpus=True, **kwargs)
 
 
-def read(path, corpus=True, **kwargs):
+def read(path, corpus=True, index_by='wosid', **kwargs):
     """
     Parse one or more WoS field-tagged data files.
 
@@ -293,5 +300,5 @@ def read(path, corpus=True, **kwargs):
         papers = WoSParser(path).parse()
 
     if corpus:
-        return Corpus(papers, **kwargs)
+        return Corpus(papers, index_by=index_by,  **kwargs)
     return papers
