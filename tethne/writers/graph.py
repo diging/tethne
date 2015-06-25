@@ -1,26 +1,51 @@
 """
 Write NetworkX graphs to structured and unstructured network file formats.
 
-Many methods simply invoke equivalent methods in NetworkX.
-
 .. autosummary::
 
-   to_gexf
-   to_graphml
-   to_sif
+   write_csv
+   write_graphml
 
 """
 
 import networkx as nx
 from networkx.readwrite.graphml import GraphMLWriter
 import csv
-try:
-    from xml.etree.cElementTree import Element, ElementTree, tostring
-except ImportError:
-    try:
-        from xml.etree.ElementTree import Element, ElementTree, tostring
-    except ImportError:
-        pass
+import warnings
+from itertools import repeat
+
+from xml.etree.cElementTree import Element, ElementTree, tostring
+
+def write_csv(graph, prefix):
+    """
+    Write ``graph`` as tables of nodes (``prefix-nodes.csv``) and edges
+    (``prefix-edges.csv``).
+
+    Parameters
+    ----------
+    graph : :class:`networkx.Graph`
+    prefix : str
+    """
+    node_headers = list(set([a for n, attrs in graph.nodes(data=True)
+                             for a in attrs.keys()]))
+    edge_headers = list(set([a for s, t, attrs in graph.edges(data=True)
+                             for a in attrs.keys()]))
+
+    value = lambda attrs, h: _recast_value(attrs[h]) if h in attrs else ''
+    with open(prefix + '_nodes.csv', 'w') as f:
+        writer = csv.writer(f)
+        writer.writerow(['node'] + node_headers)
+        for n, attrs in graph.nodes(data=True):
+            values = map(value, repeat(attrs, len(node_headers)), node_headers)
+            writer.writerow([_recast_value(n)] + values)
+
+    with open(prefix + '_edges.csv', 'w') as f:
+        writer = csv.writer(f)
+        writer.writerow(['source', 'target'] + edge_headers)
+        for s, t, attrs in graph.edges(data=True):
+            values = map(value, repeat(attrs, len(edge_headers)), edge_headers)
+            writer.writerow([_recast_value(s), _recast_value(t)] + values)
+
 
 def to_sif(graph, output_path):
     """
@@ -44,6 +69,8 @@ def to_sif(graph, output_path):
         ./graphFolder/graphFile.sif, and corresponding .eda and .noa files.
 
     """
+
+    warnings.warn("Removed in 0.8. Use write_csv instead.", DeprecationWarning)
     
     graph = _strip_list_attributes(graph)
     
@@ -156,6 +183,7 @@ def to_sif(graph, output_path):
                                       '.eda', 'a') as g:
                                 g.write(eda_line)
 
+
 def to_gexf(graph, output_path):
     """Writes graph to `GEXF <http://gexf.net>`_.
     
@@ -171,12 +199,14 @@ def to_gexf(graph, output_path):
         e.g. using "./graphFolder/graphFile" will result in a GEXF file at
         ./graphFolder/graphFile.gexf.
     """
+    warnings.warn("Removed in 0.8.", DeprecationWarning)
+
     graph = _strip_list_attributes(graph)
     
     nx.write_gexf(graph, output_path + ".gexf")
 
 
-def to_graphml(graph, path, encoding='utf-8', prettyprint=True):
+def write_graphml(graph, path, encoding='utf-8', prettyprint=True):
     """Writes graph to `GraphML <http://graphml.graphdrawing.org/>`_.
     
     Uses the NetworkX method 
@@ -197,83 +227,74 @@ def to_graphml(graph, path, encoding='utf-8', prettyprint=True):
     writer.add_graph_element(graph)
     writer.dump(open(path, 'wb'))
 
+
+def to_graphml(graph, path, encoding='utf-8', prettyprint=True):
+    warnings.warn("Removed in 0.8. Use write_graphml instead.",
+                  DeprecationWarning)
+
+    write_graphml(graph, path, encoding=encoding, prettyprint=prettyprint)
+
+
 class TethneGraphMLWriter(GraphMLWriter):
-    """
-    """
-    
     def get_key(self, name, attr_type, scope, default):
-        """
-        Modified to use attribute name as key, rather than numeric ID.
-        """
+        # Modified to use attribute name as key, rather than numeric ID.
         keys_key = (name, attr_type, scope)
         try:
             return self.keys[keys_key]
         except KeyError:
-            # new_id = "d%i" % len(list(self.keys)) <-- old way.
             new_id = name
             self.keys[keys_key] = new_id
-            key_kwargs = {"id":new_id,
-                          "for":scope,
-                          "attr.name":name, 
-                          "attr.type":attr_type}
-            key_element=Element("key",**key_kwargs)
+            key_kwargs = {"id": new_id,
+                          "for": scope,
+                          "attr.name": name,
+                          "attr.type": attr_type}
+            key_element = Element("key", **key_kwargs)
             # add subelement for data default value if present
             if default is not None:
-                default_element=Element("default")
-                default_element.text=make_str(default)
+                default_element = Element("default")
+                default_element.text = _recast_value(default)
                 key_element.append(default_element)
-            self.xml.insert(0,key_element)
+            self.xml.insert(0, key_element)
         return new_id
 
-#def to_csv(file, delim=","):
-#    '''
-#    Parameters
-#    ----------
-#    file : string
-#        Path to output file (will be created).
-#    delim : string
-#        String to use as field delimiter (default is ',').
-#
-#    Notes
-#    -----
-#    TODO: should operate on a (provided) graph. Still uses old library approach.
-#    '''
-#    
-#    graph = _strip_list_attributes(graph)
-#    
-#    f = open(file, "w")
-#
-#    # Headers
-#    f.write("Identifier" + delim + "Title" + delim + "Authors" +
-#            delim + "WoS Identifier" + delim + "Journal" + delim +
-#            "Volume" + delim + "Page" + delim + "DOI" + delim +
-#            "Num Authors\n")
-#    for entry in self.library:
-#        # Authors are separated by a colon -> : <-
-#        authors = ""
-#        for author in entry.meta['AU']:
-#            authors += ":" + author
-#        authors = authors[1:]
-#        datum = (entry.identifier + delim + entry.meta['TI'][0] +
-#                 delim + authors + delim + entry.wosid + delim +
-#                 entry.meta['SO'][0])
-#        if 'VL' in entry.meta:
-#            datum += delim + entry.meta['VL'][0]
-#            if 'BP' in entry.meta:
-#                datum += delim + entry.meta['BP'][0]
-#            else:
-#                datum += delim
-#        else:
-#            datum += delim + delim
-#        if 'DI' in entry.meta:
-#            datum += delim + entry.meta['DI'][0]
-#        else:
-#            datum += delim
-#        datum += delim + str(entry.meta['num_authors'])
-#        f.write(datum + "\n")
-#    f.close()
+    def add_data(self, name, e_type, value, scope="all", default=None):
+        if e_type not in self.xml_type:
+            raise nx.NetworkXError('GraphML writer does not support '
+                                   '%s as data values.'%e_type)
+        key_id = self.get_key(name, self.xml_type[e_type], scope, default)
+        data_element = Element("data", key=key_id)
+        data_element.text = _recast_value(value)
+        return data_element
+
+    def add_nodes(self, G, graph_element):
+        for node,data in G.nodes_iter(data=True):
+            node_element = Element("node", id=_recast_value(node))
+            default = G.graph.get('node_default', {})
+            self.add_attributes("node", node_element, data, default)
+            graph_element.append(node_element)
+
+    def add_edges(self, G, graph_element):        
+        if G.is_multigraph():
+            for u,v,key,data in G.edges_iter(data=True, keys=True):
+                edge_element = Element("edge",source=_recast_value(u),
+                                       target=_recast_value(v))
+                default = G.graph.get('edge_default',{})
+                self.add_attributes("edge", edge_element, data, default)
+                self.add_attributes("edge", edge_element, {'key': key},
+                                    default)
+                graph_element.append(edge_element)                
+        else:
+            for u,v,data in G.edges_iter(data=True):
+                edge_element = Element("edge", source=_recast_value(u),
+                                       target=_recast_value(v))
+                default = G.graph.get('edge_default', {})
+                self.add_attributes("edge", edge_element, data, default)
+                graph_element.append(edge_element)
+
 
 def to_table(graph, path):
+    warnings.warn("Removed in 0.8. Use write_csv instead.",
+                  DeprecationWarning)
 
     graph = _strip_list_attributes(graph)
 
@@ -283,7 +304,7 @@ def to_table(graph, path):
         writer = csv.writer(f, delimiter='\t')
         
         # Header.
-        writer.writerow(['source','target'] + [ k for k in edges[0][2].keys() ])
+        writer.writerow(['source','target'] + [ k for k in edges[0][2].keys()])
         
         # Values.
         for e in edges:
@@ -315,3 +336,8 @@ def _strip_list_attributes(G):
     return G
 
 
+def _recast_value(value):
+    if type(value) in [str, int, unicode, float]:
+        return str(value)
+    if hasattr(value, '__iter__'):
+        return ', '.join(list(value))

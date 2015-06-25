@@ -13,10 +13,10 @@ Methods for analyzing :class:`.GraphCollection`\s.
 """
 
 import networkx
-import types
 import graph
+import warnings
 
-def algorithm(G, method, **kwargs):
+def algorithm(G, method_name, **kwargs):
     """
     Apply a ``method`` from NetworkX to all ``networkx.Graph`` objects in the
     :class:`.GraphCollection` ``G``.
@@ -30,7 +30,7 @@ def algorithm(G, method, **kwargs):
     G : :class:`.GraphCollection`
         The :class:`.GraphCollection` to analyze. The specified method will be
         applied to each graph in ``G``.
-    method : string
+    method_name : string
         Name of a method in NetworkX to execute on graph collection.
     **kwargs
         A list of keyword arguments that should correspond to the parameters
@@ -63,80 +63,13 @@ def algorithm(G, method, **kwargs):
        2003: 0.007519105636349891}
 
     """
+    warnings.warn("To be removed in 0.8. Use GraphCollection.analyze instead.",
+                  DeprecationWarning)
 
-    results = {}
+    return G.analyze(method_name, **kwargs)
 
-    if not method in networkx.__dict__:
-        raise(ValueError("No such name in networkx."))
-    else:
-        if type(networkx.__dict__[method]) is not types.FunctionType:
-            raise(ValueError("No such method in networkx."))
-        else:
-            for k, g in G.graphs.iteritems():
-                try:
-                    r = networkx.__dict__[method](g, **kwargs)
-                except:
-                    r = 0.
-                # Some methods return a value for each node.
-                if type(r) is dict and len(r) == len(g.nodes()):
-                    for elem, value in r.iteritems():
-                        try:
-                            results[elem][k] = value
-                        except KeyError:
-                            results[elem] = { k: value }
-                    # Update the nodes in the graph with the results.
-                    networkx.set_node_attributes(g, method, r)    # [#61510128]
-                # Other methods return other kinds of values.
-                else:
-                    results[k] = r
-    return results
 
-def delta(G, attribute):
-    """
-    Updates a :class:`.GraphCollection` with deltas of a node attribute.
-    
-    Parameters
-    ----------
-    G : :class:`.GraphCollection`
-    attribute : str
-        Name of a node attribute in ``G``.
-        
-    Returns
-    -------
-    deltas : dict
-
-    """
-    import copy
-
-    keys = sorted(G.graphs.keys())
-    all_nodes =  G.nodes()
-    deltas = { k:{} for k in keys }
-    #n:{} for n in all_nodes }
-    last = { n:None for n in all_nodes }
-    
-    for k in keys:
-        graph = G[k]
-        asdict = { v[0]:v[1] for v in graph.nodes(data=True) }
-    
-        for n in all_nodes:
-            try:
-                curr = float(asdict[n][attribute])
-                if last[n] is not None and curr is not None:
-                    delta = float(curr) - float(last[n])
-                    last[n] = float(curr)
-                elif last[n] is None and curr is not None:
-                    delta = float(curr)
-                    last[n] = float(curr)
-                else:
-                    delta = 0.
-                deltas[k][n] = float(delta)
-            except KeyError:
-                pass
-        networkx.set_node_attributes(G[k], attribute+'_delta', deltas[k])
-
-    return deltas
-
-def connected(G, method, **kwargs):
+def connected(G, method_name, **kwargs):
     """
     Performs analysis methods from networkx.connected on each graph in the
     collection.
@@ -162,32 +95,12 @@ def connected(G, method, **kwargs):
         If name is not in networkx.connected, or if no such method exists.
 
     """
+    warnings.warn("To be removed in 0.8. Use GraphCollection.analyze instead.",
+                  DeprecationWarning)
 
-    results = {}
+    return G.analyze(['connected', method_name], **kwargs)
 
-    if not method in networkx.connected.__dict__:
-        raise(ValueError("No such name in networkx.connected."))
-    else:
-        if type(networkx.connected.__dict__[method]) is not types.FunctionType:
-            raise(ValueError("No such method in networkx.connected."))
-        else:
-            for k, g in G.graphs.iteritems():
-                results[k] = networkx.connected.__dict__[method](g, **kwargs)
-    return results
 
-def node_global_closeness_centrality(G, node):
-    """
-    Calculates global closeness centrality for node in each graph in
-    :class:`.GraphCollection` G.
-
-    """
-
-    results = {}
-    for key, g in G.graphs.iteritems():
-        results[key] = graph.node_global_closeness_centrality(g, node)
-
-    return results
-    
 def attachment_probability(G):
     """
     Calculates the observed attachment probability for each node at each
@@ -209,7 +122,8 @@ def attachment_probability(G):
     probs : dict
         Keyed by index in G.graphs, and then by node.
     """
-    
+    warnings.warn("Removed in 0.8. Too domain-specific.")
+
     probs = {}
     G_ = None
     k_ = None
@@ -237,7 +151,9 @@ def attachment_probability(G):
                         pass
 
             if probs[k_] is not None:
-                networkx.set_node_attributes(G.graphs[k_], 'attachment_probability', probs[k_])
+                networkx.set_node_attributes(G.graphs[k_],
+                                             'attachment_probability',
+                                             probs[k_])
     
         G_ = G
         k_ = k

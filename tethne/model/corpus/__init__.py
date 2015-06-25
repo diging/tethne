@@ -16,5 +16,5 @@ of dimensions that describe those items (eg topics), and a set of features
 that comprise those dimensions (eg words).
 """
 
-from dtmmodel import *
-from ldamodel import *
+#from dtmmodel import *
+#from ldamodel import *

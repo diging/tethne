@@ -12,17 +12,62 @@ Methods for parsing JSTOR Data-for-Research datasets.
 
 """
 
-from ..classes import Paper, Corpus
-
 import os
 import xml.etree.ElementTree as ET
 import re
-from ..utilities import dict_from_node, strip_non_ascii
-from nltk.corpus import stopwords
-import uuid
 from collections import Counter
+from tethne import Paper, Corpus
+from tethne.utilities import dict_from_node, strip_non_ascii
+from tethne.readers.base import XMLParser
+import iso8601
 
 from unidecode import unidecode
+
+class DfRParser(XMLParser):
+    entry_class = Paper
+
+    tags = {
+        'type': 'documentType',
+        'pubdate': 'date',
+        'journaltitle': 'journal',
+        'author': 'authors_full',
+    }
+
+    def handle_unicode(self, value):
+        if type(value) is not str:
+            value = unidecode(value)
+        return value
+
+    def handle_journaltitle(self, value):
+        return self.handle_unicode(value)
+
+    def handle_title(self, value):
+        return self.handle_unicode(value)
+
+    def handle_author(self, value):
+        if type(value) is not str:
+            value = unidecode(value)
+
+        lname = value.split(' ')
+
+        final = lname[-1].upper()
+        if final in ['JR.', 'III']:
+            aulast = lname[-2].upper() + " " + final.strip(".")
+            auinit = ' '.join(lname[0:-2]).replace('.','').strip().upper()
+        else:
+            aulast = final
+            auinit = ' '.join(lname[0:-1]).replace('.','').strip().upper()
+
+        return aulast, auinit
+
+    def handle_pubdate(self, value):
+        return iso8601.parse_date(value).year
+
+    def postprocess_authors_full(self, entry):
+        if type(entry.authors_full) is not list:
+            entry.authors_full = [entry.authors_full]
+
+
 
 class GramGenerator(object):
     """
@@ -85,27 +130,29 @@ class GramGenerator(object):
         """
         Returns a :class:`GramGenerator` that produces key,value tuples.
         """    
-        return GramGenerator(self.path, self.elem, ignore_hash=self.ignore_hash)
+        return GramGenerator(self.path, self.elem,
+                             ignore_hash=self.ignore_hash)
     
     def iteritems(self):
         """
         Returns a :class:`GramGenerator` that produces key,value tuples.
         """    
-        return GramGenerator(self.path, self.elem, ignore_hash=self.ignore_hash)
+        return GramGenerator(self.path, self.elem,
+                             ignore_hash=self.ignore_hash)
     
     def values(self):
         """
         Returns a :class:`GramGenerator` that produces only values.
         """
         return GramGenerator(self.path, self.elem, values=True, 
-                                                   ignore_hash=self.ignore_hash)
+                             ignore_hash=self.ignore_hash)
                                                    
     def keys(self):
         """
         Returns a :class:`GramGenerator` that produces only keys.
         """
         return GramGenerator(self.path, self.elem, keys=True, 
-                                                   ignore_hash=self.ignore_hash)
+                             ignore_hash=self.ignore_hash)
                                                    
     def __getitem__(self, key):
         return self._get(key)
@@ -132,7 +179,7 @@ class GramGenerator(object):
 
         return doi, grams   # Default behavior.
 
-def read(datapath, **kwargs):
+def read(datapath, corpus=True, index_by='doi', **kwargs):
     """
     Yields :class:`.Paper` s from JSTOR DfR package.
 
@@ -157,22 +204,25 @@ def read(datapath, **kwargs):
        >>> from tethne.readers import dfr
        >>> papers = dfr.read("/Path/to/DfR")
     """
+    parser = DfRParser(datapath + "/citations.XML")
+    parser.parse()
+    return Corpus(parser.data, index_by=index_by, **kwargs)
 
-    with open(datapath + "/citations.XML", mode='r') as f:
-        data = f.read()
-        data = data.replace('&', '&amp;')
-        
-        root = ET.fromstring(data)
-
-    accession = str(uuid.uuid4())
-
-    papers = kwargs.get('papers', [])
-    for article in root:
-        paper = _handle_paper(article)
-        paper['accession'] = accession
-        papers.append(paper)
-
-    return papers
+#
+#    with open(datapath + "/citations.XML", mode='r') as f:
+#        data = f.read()
+#        data = data.replace('&', '&amp;')
+#        
+#        root = ET.fromstring(data)
+#
+#    papers = kwargs.get('papers', [])
+#    for article in root:
+#        paper = _handle_paper(article)
+#        papers.append(paper)
+#
+#    if corpus:
+#        return Corpus(papers)
+#    return papers
 
 def read_corpus(path, features=None, exclude=None, **kwargs):
     """
@@ -501,36 +551,25 @@ def _handle_paper(article):
     paper = Paper()
     pdata = dict_from_node(article)
 
-    # Direct mappings.
-    translator = _dfr2paper_map()
-    for key, value in translator.iteritems():
-        if key in pdata:    # Article may not have all keys of interest.
-            datum = pdata[key]
-            if type(datum) is str:
-                datum = unicode(datum)
-            if type(datum) is unicode:
-                datum = unidecode(datum).upper()
+    for key, value in pdata.iteritems():
 
-            try:    # For now, ignore weird types that come through in datum.
-                paper[value] = datum
-            except ValueError:  
-                pass
+        datum = pdata[key]
+        if type(datum) is str:
+            datum = unicode(datum)
+        if type(datum) is unicode:
+            datum = unidecode(datum).upper()
+
+        paper[key] = datum
 
     # Handle author names.
-    paper['aulast'], paper['auinit'] = _handle_authors(pdata['author'])
+    adata = _handle_authors(pdata['author'])
+    paper.authors_init = zip(adata[0], adata[1])
 
     # Handle pubdate.
     paper['date'] = _handle_pubdate(pdata['pubdate'])
 
     # Handle pagerange.
     paper['spage'], paper['epage'] = _handle_pagerange(pdata['pagerange'])
-
-    # Generate ayjid.
-    try:
-        paper['ayjid'] = _create_ayjid(paper['aulast'][0], paper['auinit'][0], \
-                                       paper['date'], paper['jtitle'])
-    except IndexError:  # Article may not have authors.
-        pass
 
     return paper
 

@@ -20,18 +20,13 @@ Cyotoscape and Gephi) and the MatPlotLib Python library.
    
 """
 
-from analyze import *
-from classes import *
-from model import *
-from networks import *
-from persistence import *
-from readers import *
-from services import *
-from writers import *
-
-from persistence.hdf5 import *
-
-import logging
-logging.basicConfig(filename=None, format='%(asctime)-6s: %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(lineno)d - %(message)s')
-logger = logging.getLogger(__name__)
-logger.setLevel('INFO')
+from tethne.classes.paper import Paper
+from tethne.classes.corpus import Corpus
+from tethne.classes.feature import Feature, FeatureSet
+from tethne.classes.graphcollection import GraphCollection
+from tethne.networks.base import *
+from tethne.networks.authors import *
+from tethne.networks.papers import *
+from tethne.networks.features import *
+from tethne.writers.graph import write_graphml, write_csv
+from tethne.writers.corpus import write_documents, write_documents_dtm
