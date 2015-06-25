@@ -7,23 +7,9 @@ MAINTAINER_EMAIL = 'erick [dot] peirson [at] asu [dot] edu'
 DESCRIPTION = ('Bibliographic network and corpus analysis for historians')
 LICENSE = 'GNU GPL 3' 
 URL = 'http://diging.github.io/tethne/'
-VERSION = '0.6.3.3-beta'
+VERSION = '0.7'
 
-PACKAGES = [ 'tethne',
-             'tethne.analyze',
-             'tethne.classes', 
-             'tethne.model',
-             'tethne.model.corpus',
-             'tethne.model.managers',
-             'tethne.model.social',                          
-             'tethne.networks',
-             'tethne.persistence',
-             'tethne.persistence.hdf5',                          
-             'tethne.readers',
-             'tethne.services',
-             'tethne.utilities', 
-             'tethne.writers', 
-            ]
+PACKAGES = ['tethne']
 
 setup(
     name=DISTNAME,
@@ -37,12 +23,7 @@ setup(
     packages = PACKAGES,
     install_requires=[
         "networkx >= 1.8.1",
-        "matplotlib >= 1.3.1",
-        "tables >= 3.1.1",
         "Unidecode >= 0.04.16",
-        "geopy >= 0.99",
-        "scipy >= 0.14.0",
-        "numpy >= 1.8.1",
-        "nltk",
+	"iso8601",
     ],
 )
