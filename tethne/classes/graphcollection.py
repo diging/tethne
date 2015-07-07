@@ -422,3 +422,53 @@ class GraphCollection(dict):
 
         return {attr['graph']: attr[attribute] for i, attr
                 in self.master_graph.edge[source][target].iteritems()}
+
+    def union(self, weight_attr='_weight'):
+        """
+        Returns the union of all graphs in this :class:`.GraphCollection`\.
+        
+        The number of graphs in which an edge exists between each node pair `u` and `v`
+        is stored in the edge attribute given be `weight_attr` (default: `_weight`).
+        
+        Parameters
+        ----------
+        weight_attr : str
+            (default: '_weight') Name of the edge attribute used to store the number of
+            graphs in which an edge exists between node pairs.
+        
+        Returns
+        -------
+        graph : :class:`networkx.Graph`
+        """
+
+        if type(self.master_graph) is nx.MultiDiGraph:
+            graph = nx.DiGraph()
+        else:
+            graph = nx.Graph()
+                
+        edge_attrs = defaultdict(list)
+
+        for u, v, a in self.master_graph.edges(data=True):
+            if not graph.has_edge(u, v):
+                graph.add_edge(u, v)
+                graph[u][v]['graphs'] = []
+                graph[u][v][weight_attr] = 0.
+
+            for key, value in a.iteritems():
+                if key not in graph[u][v]:
+                    graph[u][v][key] = []
+                graph[u][v][key].append(value)
+            graph[u][v]['graphs'].append(a['graph'])
+            graph[u][v][weight_attr] += 1.
+        
+        for u, a in self.master_graph.nodes(data=True):
+            for key, value in a.iteritems():
+                graph.node[u][key] = value
+        
+        return graph
+            
+
+                            
+            
+            
+            
