@@ -306,6 +306,29 @@ class TestGraphCollectionMethods(unittest.TestCase):
         hist = self.G.edge_history(0, 1, 'edge_betweenness_centrality')
 
         self.assertDictEqual(results[0, 1], hist)
+        
+    def test_union(self):
+        weight_attr = 'test_weight'
+        graph = self.G.union(weight_attr=weight_attr)
+
+        self.assertIsInstance(graph, nx.Graph)
+        self.assertGreater(self.G.size(), graph.size())
+        self.assertEqual(graph.order(), self.G.order())
+        self.assertIn(weight_attr, graph.edges(data=True)[0][2])
+        
+        # Node attributes present.
+        for u, a in self.G.master_graph.nodes(data=True):
+            for key, value in a.iteritems():
+                self.assertIn(key, graph.node[u])
+                
+        # Edge attributes present.
+        for u, v, a in self.G.master_graph.edges(data=True):
+            for key, value in a.iteritems():
+                self.assertIn(key, graph[u][v])
+                if key == weight_attr:
+                    self.assertIsInstance(value, float)
+                else:
+                    self.assertIsInstance(graph[u][v][key], list)
 
 if __name__ == '__main__':
     unittest.main()
