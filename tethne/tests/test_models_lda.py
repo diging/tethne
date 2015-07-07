@@ -10,6 +10,7 @@ import csv
 
 from tethne.model.corpus.mallet import LDAModel
 from tethne.readers.wos import read
+from tethne import FeatureSet
 
 datapath = './tethne/tests/data/wos3.txt'
 
@@ -22,6 +23,9 @@ class TestLDAModel(unittest.TestCase):
         dates, rep = model.topic_over_time(1)
         self.assertGreater(sum(rep), 0)
         self.assertEqual(len(dates), len(rep))
+        
+        self.assertIsInstance(model.phi, FeatureSet)
+        self.assertIsInstance(model.theta, FeatureSet)        
 
 
 if __name__ == '__main__':
