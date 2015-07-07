@@ -111,6 +111,19 @@ class FeatureSet(object):
     def top(self, topn, by='counts'):
         """
         Get the top ``topn`` features in the :class:`.FeatureSet`\.
+        
+        Parameters
+        ----------
+        topn : int
+            Number of features to return.
+        by : str
+            (default: 'counts') How features should be sorted. Must be 'counts' or 
+            'documentcounts'.
+        
+        Returns
+        -------
+        list
+
         """
 
         if by not in ['counts', 'documentCounts']:
