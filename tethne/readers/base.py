@@ -2,7 +2,6 @@ import os
 import re
 import xml.etree.ElementTree as ET
 import rdflib
-import iso8601
 
 class dobject(object):
     pass
@@ -25,6 +24,7 @@ class BaseParser(object):
     def __init__(self, path, **kwargs):
         self.path = path
         self.data = []
+        self.fields = set([])
         
         self.open()
 
@@ -39,6 +39,15 @@ class BaseParser(object):
         if hasattr(self, handler_name):
             return getattr(self, handler_name)
         return
+        
+    def set_value(self, tag, value):
+        setattr(self.data[-1], tag, value)
+        
+    def postprocess_entry(self):
+        for field in self.fields:
+            processor_name = 'postprocess_{0}'.format(field)
+            if hasattr(self.data[-1], field) and hasattr(self, processor_name):
+                getattr(self, processor_name)(self.data[-1])        
 
 
 class IterParser(BaseParser):
@@ -58,7 +67,6 @@ class IterParser(BaseParser):
 
         self.current_tag = None
         self.last_tag = None
-        self.fields = set([])
         
         if kwargs.get('autostart', True):
             self.start()
@@ -85,12 +93,6 @@ class IterParser(BaseParser):
         while not self.is_start(self.current_tag):
             self.next()
         self.new_entry()
-        
-    def postprocess_entry(self):
-        for field in self.fields:
-            processor_name = 'postprocess_{0}'.format(field)
-            if hasattr(self.data[-1], field) and hasattr(self, processor_name):
-                getattr(self, processor_name)(self.data[-1])
 
     def handle(self, tag, data):
         """
@@ -247,13 +249,14 @@ class XMLParser(IterParser):
 class RDFParser(BaseParser):
     entry_elements = ['Document']   # 
     meta_elements = []
+    concat_fields = []
 
     def open(self):
         self.graph = rdflib.Graph()
         self.graph.parse(self.path)
         self.entries = []
         
-        for element in entry_elements:
+        for element in self.entry_elements:
             query = 'SELECT * WHERE { ?p a ' + element + ' }'
             self.entries += [r[0] for r in self.graph.query(query)]
     
@@ -274,29 +277,35 @@ class RDFParser(BaseParser):
             for s, p, o in self.graph.triples((entry, None, None)):
                 if p in meta_refs:  # Look for metadata fields.
                     tag = meta_fields[meta_refs.index(p)]
-                    self.handle(tag, o)                                 
+                    self.handle(tag, o)    
+            self.postprocess_entry()
+            
+        return self.data                             
 
     def handle(self, tag, data):                
         handler = self._get_handler(tag)
+        
         if handler is not None:
             data = handler(data)
         
         if tag in self.tags:    # Rename the field.
             tag = self.tags[tag] 
+        
+        if data is not None:
+            # Multiline fields are represented as lists of values.
+            if hasattr(self.data[-1], tag):
+                value = getattr(self.data[-1], tag)
+                if tag in self.concat_fields:
+                    value = ' '.join([value, data])
+                elif type(value) is list:
+                    value.append(data)
+                elif value not in [None, '']:
+                    value = [value, data]
+            else:
+                value = data
 
-        # Multiline fields are represented as lists of values.
-        if hasattr(self.data[-1], tag):
-            value = getattr(self.data[-1], tag)
-            if tag in self.concat_fields:
-                value = ' '.join([value, data])
-            elif type(value) is list:
-                value.append(data)
-            elif value not in [None, '']:
-                value = [value, data]
-        else:
-            value = data
-            
-        setattr(self.data[-1], tag, value)  
+            setattr(self.data[-1], tag, value)
+            self.fields.add(tag)  
         
 
 

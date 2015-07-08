@@ -4,17 +4,22 @@ sys.path.append('../tethne')
 import re
 
 import unittest
-from tethne.readers.zotero import read
+from tethne.readers.zotero import read, ZoteroParser
 from tethne import Corpus, Paper
 
-datapath = './tethne/tests/data/wos2.txt'
-datapath_v = './tethne/tests/data/valentin.txt'
+datapath = './tethne/tests/data/zotero'
+datapath2 = './tethne/tests/data/zotero2'
 
 
-class TestWoSParser(unittest.TestCase):
+class TestZoteroParser(unittest.TestCase):
     def test_read(self):
         corpus = read(datapath)
         self.assertIsInstance(corpus, Corpus)
+        
+    def test_read_files(self):
+        # TODO: attempt to read contents of files?
+        corpus = read(datapath2, index_by='uri')
+        self.assertIsInstance(corpus, Corpus)        
 
     def test_read_nocorpus(self):
         papers = read(datapath, corpus=False)
@@ -22,7 +27,7 @@ class TestWoSParser(unittest.TestCase):
         self.assertIsInstance(papers[0], Paper)
 
     def test_parse(self):
-        parser = WoSParser(datapath)
+        parser = ZoteroParser(datapath)
         parser.parse()
 
         # Check data types for the most common fields.
@@ -55,6 +60,7 @@ class TestWoSParser(unittest.TestCase):
                 self.assertIsInstance(e.abstract, str,
                                       derror.format('abstract', 'str',
                                                     type(e.abstract)))
+                
             if hasattr(e, 'authorKeywords'):
                 self.assertIsInstance(e.authorKeywords, list,
                                       derror.format('authorKeywords', 'list',
@@ -85,14 +91,7 @@ class TestWoSParser(unittest.TestCase):
 
         # Check number of records.
         N = len(parser.data)
-        self.assertEqual(N, 100, 'Expected 100 entries, found {0}.'.format(N))
-
-        self.assertTrue(hasattr(parser.data[0], 'citedReferences'))
-        for cr in parser.data[0].citedReferences:
-            self.assertTrue(hasattr(cr, 'date'))
-            if cr.date:
-                self.assertIsInstance(cr.date, int)
-            self.assertTrue(hasattr(cr, 'journal'))
+        self.assertEqual(N, 12, 'Expected 12 entries, found {0}.'.format(N))
 
 
 if __name__ == '__main__':
