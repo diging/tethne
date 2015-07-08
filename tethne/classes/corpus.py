@@ -157,12 +157,14 @@ class Corpus(object):
         """
 
         if self.index_by is None or not hasattr(paper, self.index_by):
-            authors = zip(*paper.authors)[0]
-            m = hashlib.md5()            
-            hashable = ' '.join(list([paper.title] + [l + f for l, f in authors]))
-            m.update(hashable)
-            return m.hexdigest()
-        return getattr(paper, self.index_by)    # Identifier is available.
+            if not hasattr(paper, 'hashIndex'): # Generate a new index for this paper.
+                authors = zip(*paper.authors)[0]
+                m = hashlib.md5()            
+                hashable = ' '.join(list([paper.title] + [l + f for l, f in authors]))
+                m.update(hashable)
+                setattr(paper, 'hashIndex', m.hexdigest())
+            return getattr(paper, 'hashIndex')
+        return getattr(paper, self.index_by)    # Identifier is already available.
 
     def index_feature(self, feature_name):
         """
