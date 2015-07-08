@@ -100,6 +100,15 @@ class TestCorpus(unittest.TestCase):
         top_sliced = corpus.top_features('authors', topn=N, perslice=True)
         self.assertIsInstance(top, list)
         self.assertEqual(len(top), len(corpus.indices['date']))
+        
+    def test_featureselector(self):
+        corpus = Corpus(self.papers, index_by='wosid')
+        corpus.index('journal')
+        subcorpus = corpus['journal', 'ENVIRONMENTAL MONITORING AND ASSESSMENT']
+
+        self.assertIsInstance(subcorpus[0], Paper)
+        self.assertIsInstance(subcorpus, list)
+        self.assertEqual(len(subcorpus), 2)
 
 
 if __name__ == '__main__':
