@@ -1,6 +1,8 @@
 import os
 import re
 import xml.etree.ElementTree as ET
+import rdflib
+import iso8601
 
 class dobject(object):
     pass
@@ -19,8 +21,27 @@ def _cast(value):
         except ValueError:
             return value
 
-
 class BaseParser(object):
+    def __init__(self, path, **kwargs):
+        self.path = path
+        self.data = []
+        
+        self.open()
+
+    def new_entry(self):
+        """
+        Prepare a new data entry.
+        """
+        self.data.append(self.entry_class())
+
+    def _get_handler(self, tag):
+        handler_name = 'handle_{tag}'.format(tag=tag)
+        if hasattr(self, handler_name):
+            return getattr(self, handler_name)
+        return
+
+
+class IterParser(BaseParser):
     entry_class = dobject
     """Model for data entry."""
 
@@ -32,15 +53,12 @@ class BaseParser(object):
 
     tags = {}
 
-    def __init__(self, path, **kwargs):
-        self.path = path
+    def __init__(self, *args, **kwargs):
+        super(IterParser, self).__init__(*args, **kwargs)
 
         self.current_tag = None
         self.last_tag = None
-        self.data = []
         self.fields = set([])
-        
-        self.open()
         
         if kwargs.get('autostart', True):
             self.start()
@@ -67,18 +85,6 @@ class BaseParser(object):
         while not self.is_start(self.current_tag):
             self.next()
         self.new_entry()
-                    
-    def _get_handler(self, tag):
-        handler_name = 'handle_{tag}'.format(tag=tag)
-        if hasattr(self, handler_name):
-            return getattr(self, handler_name)
-        return
-
-    def new_entry(self):
-        """
-        Prepare a new data entry.
-        """
-        self.data.append(self.entry_class())
         
     def postprocess_entry(self):
         for field in self.fields:
@@ -126,7 +132,7 @@ class BaseParser(object):
         setattr(self.data[-1], tag, value)
         self.fields.add(tag)
 
-class FTParser(BaseParser):
+class FTParser(IterParser):
     """
     Base parser for field-tagged data files.
     """
@@ -188,7 +194,7 @@ class FTParser(BaseParser):
             self.buffer.close()
 
 
-class XMLParser(BaseParser):
+class XMLParser(IterParser):
     entry_element = 'article'
     entry_class = dobject
 
@@ -236,3 +242,65 @@ class XMLParser(BaseParser):
                 self.at_end = True
 
         return tag, text
+
+
+class RDFParser(BaseParser):
+    entry_elements = ['Document']   # 
+    meta_elements = []
+
+    def open(self):
+        self.graph = rdflib.Graph()
+        self.graph.parse(self.path)
+        self.entries = []
+        
+        for element in entry_elements:
+            query = 'SELECT * WHERE { ?p a ' + element + ' }'
+            self.entries += [r[0] for r in self.graph.query(query)]
+    
+    def next(self):
+        if len(self.entries) > 0:
+            return self.entries.pop(0)
+            
+    def parse(self):
+        meta_fields, meta_refs = zip(*self.meta_elements)
+
+        while True:        # Main loop.
+            entry = self.next()
+            if entry is None:
+                break
+                
+            self.new_entry()
+
+            for s, p, o in self.graph.triples((entry, None, None)):
+                if p in meta_refs:  # Look for metadata fields.
+                    tag = meta_fields[meta_refs.index(p)]
+                    self.handle(tag, o)                                 
+
+    def handle(self, tag, data):                
+        handler = self._get_handler(tag)
+        if handler is not None:
+            data = handler(data)
+        
+        if tag in self.tags:    # Rename the field.
+            tag = self.tags[tag] 
+
+        # Multiline fields are represented as lists of values.
+        if hasattr(self.data[-1], tag):
+            value = getattr(self.data[-1], tag)
+            if tag in self.concat_fields:
+                value = ' '.join([value, data])
+            elif type(value) is list:
+                value.append(data)
+            elif value not in [None, '']:
+                value = [value, data]
+        else:
+            value = data
+            
+        setattr(self.data[-1], tag, value)  
+        
+
+
+    
+
+        
+    

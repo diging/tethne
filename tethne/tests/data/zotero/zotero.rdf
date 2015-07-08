@@ -1,0 +1,363 @@
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:z="http://www.zotero.org/namespaces/export#"
+ xmlns:dcterms="http://purl.org/dc/terms/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/"
+ xmlns:bib="http://purl.org/net/biblio#"
+ xmlns:foaf="http://xmlns.com/foaf/0.1/">
+    <bib:Article rdf:about="#item_382">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>American Journal of Botany</dc:title>
+                <prism:volume>58</prism:volume>
+                <dc:identifier>DOI 10.2307/2441258</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>May</foaf:surname>
+                        <foaf:givenname>David S.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>The Role of Populational Differentiation in Experimental Infection of Prosopis by Phoradendron</dc:title>
+        <bib:pages>921–931</bib:pages>
+        <dc:date>1971</dc:date>
+    </bib:Article>
+    <bib:Article rdf:about="#item_510">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>Ecology</dc:title>
+                <prism:volume>46</prism:volume>
+                <dc:identifier>DOI 10.2307/1935256</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Peacock</foaf:surname>
+                        <foaf:givenname>J. Talmer</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>McMillan</foaf:surname>
+                        <foaf:givenname>Calvin</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Ecotypic Differentiation in Prosopis (Mesquite)</dc:title>
+        <bib:pages>35–51</bib:pages>
+        <dc:date>1965</dc:date>
+    </bib:Article>
+    <bib:Article rdf:about="#item_551">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>American Journal of Botany</dc:title>
+                <prism:volume>75</prism:volume>
+                <dc:identifier>DOI 10.2307/2443997</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Auken</foaf:surname>
+                        <foaf:givenname>O. W. van</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Bush</foaf:surname>
+                        <foaf:givenname>J. K.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Competition between Schizachyrium scoparium and Prosopis glandulosa</dc:title>
+        <bib:pages>782–789</bib:pages>
+        <dc:date>1988</dc:date>
+    </bib:Article>
+    <bib:Article rdf:about="#item_624">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>Bulletin of the Torrey Botanical Club</dc:title>
+                <prism:volume>116</prism:volume>
+                <dc:identifier>DOI 10.2307/2997106</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Bush</foaf:surname>
+                        <foaf:givenname>J. K.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Auken</foaf:surname>
+                        <foaf:givenname>O. W. Van</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Soil Resource Levels and Competition between a Woody and Herbaceous Species</dc:title>
+        <bib:pages>22–30</bib:pages>
+        <dc:date>1989</dc:date>
+    </bib:Article>
+    <bib:Article rdf:about="#item_964">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>The Southwestern Naturalist</dc:title>
+                <prism:volume>9</prism:volume>
+                <dc:identifier>DOI 10.2307/3669575</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>McMillan</foaf:surname>
+                        <foaf:givenname>Calvin</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Peacock</foaf:surname>
+                        <foaf:givenname>J. Talmer</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Bud-Bursting in Diverse Populations of Mesquite (Prosopis: Leguminosae) under Uniform Conditions</dc:title>
+        <bib:pages>181–188</bib:pages>
+        <dc:date>1964</dc:date>
+    </bib:Article>
+    <bib:Article rdf:about="#item_972">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>Bulletin of the Torrey Botanical Club</dc:title>
+                <prism:volume>114</prism:volume>
+                <dc:identifier>DOI 10.2307/2995994</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Auken</foaf:surname>
+                        <foaf:givenname>O. W. Van</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Bush</foaf:surname>
+                        <foaf:givenname>J. K.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Influence of Plant Density on the Growth of Prosopis glandulosa var. glandulosa and Buchloe dactyloides</dc:title>
+        <bib:pages>393–401</bib:pages>
+        <dc:date>1987</dc:date>
+    </bib:Article>
+    <bib:Article rdf:about="#item_1115">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>American Journal of Botany</dc:title>
+                <prism:volume>69</prism:volume>
+                <dc:identifier>DOI 10.2307/2442966</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Sharifi</foaf:surname>
+                        <foaf:givenname>M. Rasoul</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Nilsen</foaf:surname>
+                        <foaf:givenname>Erik T.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Rundel</foaf:surname>
+                        <foaf:givenname>Philip W.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Biomass and Net Primary Production of Prosopis glandulosa (Fabaceae) in the Sonoran Desert of California</dc:title>
+        <bib:pages>760–767</bib:pages>
+        <dc:date>1982</dc:date>
+    </bib:Article>
+    <bib:Article rdf:about="#item_1133">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>Ecology</dc:title>
+                <prism:volume>46</prism:volume>
+                <dc:identifier>DOI 10.2307/1935256</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Peacock</foaf:surname>
+                        <foaf:givenname>J. Talmer</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>McMillan</foaf:surname>
+                        <foaf:givenname>Calvin</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Ecotypic Differentiation in Prosopis (Mesquite)</dc:title>
+        <bib:pages>35–51</bib:pages>
+        <dc:date>1965</dc:date>
+    </bib:Article>
+    <bib:Article rdf:about="#item_1157">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>American Midland Naturalist</dc:title>
+                <prism:volume>118</prism:volume>
+                <dc:identifier>DOI 10.2307/2425795</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Auken</foaf:surname>
+                        <foaf:givenname>O. W. Van</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Bush</foaf:surname>
+                        <foaf:givenname>J. K.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Interspecific Competition Between Prosopis glandulosa Torr. (Honey Mesquite) and Diospyros texana Scheele (Texas Persimmon)</dc:title>
+        <bib:pages>385–392</bib:pages>
+        <dc:date>1987</dc:date>
+    </bib:Article>
+    <bib:Article rdf:about="#item_1425">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>Botanical Gazette</dc:title>
+                <prism:volume>151</prism:volume>
+                <dc:identifier>DOI 10.2307/2995460</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Bush</foaf:surname>
+                        <foaf:givenname>J. K.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Auken</foaf:surname>
+                        <foaf:givenname>O. W. van</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Growth and Survival of Prosopis glandulosa Seedlings Associated with Shade and Herbaceous Competition</dc:title>
+        <bib:pages>234–239</bib:pages>
+        <dc:date>1990</dc:date>
+    </bib:Article>
+    <bib:Article rdf:about="#item_1427">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>The Southwestern Naturalist</dc:title>
+                <prism:volume>35</prism:volume>
+                <dc:identifier>DOI 10.2307/3672038</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Auken</foaf:surname>
+                        <foaf:givenname>O. W. Van</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Bush</foaf:surname>
+                        <foaf:givenname>J. K.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Importance of Grass Density and Time of Planting on Prosopis glandulosa Seedling Growth</dc:title>
+        <bib:pages>411–415</bib:pages>
+        <dc:date>1990</dc:date>
+    </bib:Article>
+    <bib:Article rdf:about="#item_1546">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>Madroo</dc:title>
+                <prism:volume>29</prism:volume>
+                <dc:identifier>DOI 10.2307/41426172</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Hilu</foaf:surname>
+                        <foaf:givenname>Khidir W.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Boyd</foaf:surname>
+                        <foaf:givenname>Steve</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Felker</foaf:surname>
+                        <foaf:givenname>Peter</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>MORPHOLOGICAL DIVERSITY AND TAXONOMY OF CALIFORNIA MESQUITES (PROSOPIS, LEGUMINOSAE)</dc:title>
+        <bib:pages>237–254</bib:pages>
+        <dc:date>1982</dc:date>
+    </bib:Article>
+</rdf:RDF>
