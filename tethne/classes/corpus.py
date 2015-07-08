@@ -3,6 +3,7 @@ A :class:`.Corpus` organizes :class:`.Paper`\s for analysis.
 """
 
 from collections import Counter
+import hashlib
 
 from tethne.classes.feature import FeatureSet, Feature
 from tethne.utilities import _iterable, argsort
@@ -130,18 +131,12 @@ class Corpus(object):
         index_fields : str or iterable of strs
         """
 
-        if not index_by:
-            if hasattr(papers[0], 'doi'):        index_by = 'doi'
-            elif hasattr(papers[0], 'wosid'):    index_by = 'wosid'
-            elif hasattr(papers[0], 'uri'):        index_by = 'uri'            
-
-        self.indexed_papers = {getattr(paper, index_by): paper
-                               for paper in papers}
-
         self.index_by = index_by
         self.indices = {}
         self.features = {}
         self.slices = []
+
+        self.indexed_papers = {self._generate_index(paper): paper for paper in papers}
 
         if index_features:
             for feature_name in index_features:
@@ -154,13 +149,29 @@ class Corpus(object):
 
     def __len__(self):
         return len(self.indexed_papers)
+        
+    def _generate_index(self, paper):
+        """
+        If the ``index_by`` field is not set or not available, generate a unique
+        identifier using the :class:`.Paper`\'s title and author names.
+        """
+
+        if self.index_by is None or not hasattr(paper, self.index_by):
+            if not hasattr(paper, 'hashIndex'): # Generate a new index for this paper.
+                authors = zip(*paper.authors)[0]
+                m = hashlib.md5()            
+                hashable = ' '.join(list([paper.title] + [l + f for l, f in authors]))
+                m.update(hashable)
+                setattr(paper, 'hashIndex', m.hexdigest())
+            return getattr(paper, 'hashIndex')
+        return getattr(paper, self.index_by)    # Identifier is already available.
 
     def index_feature(self, feature_name):
         """
         Create a new :class:`.Feature` from the attribute ``feature_name``
         in each :class:`.Paper`\.
         """
-        feats = {getattr(p, self.index_by): Feature(getattr(p, feature_name))
+        feats = {self._generate_index(p): Feature(getattr(p, feature_name))
                  for p in self.papers if hasattr(p, feature_name)}
         self.features[feature_name] = FeatureSet(feats)
 

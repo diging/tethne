@@ -1,0 +1,294 @@
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:z="http://www.zotero.org/namespaces/export#"
+ xmlns:dcterms="http://purl.org/dc/terms/"
+ xmlns:bib="http://purl.org/net/biblio#"
+ xmlns:foaf="http://xmlns.com/foaf/0.1/"
+ xmlns:link="http://purl.org/rss/1.0/modules/link/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/">
+    <bib:Article rdf:about="http://llc.oxfordjournals.org.ezproxy1.lib.asu.edu/content/28/2/271">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:0268-1145,%201477-4615"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Kimura</foaf:surname>
+                        <foaf:givenname>Fuminori</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Osaki</foaf:surname>
+                        <foaf:givenname>Takahiko</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Tezuka</foaf:surname>
+                        <foaf:givenname>Taro</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Maeda</foaf:surname>
+                        <foaf:givenname>Akira</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_8544"/>
+        <link:link rdf:resource="#item_9012"/>
+        <dc:title>Visualization of relationships among historical persons from Japanese historical documents</dc:title>
+        <dcterms:abstract>Digitization of Japanese historical documents has gained much attraction in the field of humanities in Japan recently, and numbers of documents are already available in digitized text format. However, text analysis of these documents has rarely been done mainly due to the lack of natural language processing tools that can handle pre-modern Japanese. In this article, we propose a method to extract and visualize the relationships among persons from Japanese historical documents with an aid of supplementary information such as personal name and place name indices. The goal of the method is to extract dynamics of relationships among historical persons. The method utilizes locational information to obtain latent relationships among persons based on their spatial activities. The proposed method is applied to a Japanese historical chronicle written in the 12th century. Experimental results showed a strong correspondence to the known historical facts, and the results of a user survey completed by researchers of Japanese history demonstrated some potential for the method to serve as a new approach in the fields of humanities.</dcterms:abstract>
+        <bib:pages>271-278</bib:pages>
+        <dc:date>06/01/2013</dc:date>
+        <z:language>en</z:language>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://llc.oxfordjournals.org.ezproxy1.lib.asu.edu/content/28/2/271</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2014-01-08 22:44:58</dcterms:dateSubmitted>
+        <z:libraryCatalog>llc.oxfordjournals.org.ezproxy1.lib.asu.edu</z:libraryCatalog>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:0268-1145,%201477-4615">
+        <dc:title>Literary and Linguistic Computing</dc:title>
+        <prism:volume>28</prism:volume>
+        <prism:number>2</prism:number>
+        <dcterms:alternative>Lit Linguist Computing</dcterms:alternative>
+        <dc:identifier>DOI 10.1093/llc/fqs045</dc:identifier>
+        <dc:identifier>ISSN 0268-1145, 1477-4615</dc:identifier>
+    </bib:Journal>
+    <z:Attachment rdf:about="#item_8544">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/8544/Kimura et al. - 2013 - Visualization of relationships among historical pe.pdf"/>
+        <dc:title>Full Text PDF</dc:title>
+        <dcterms:dateSubmitted>2014-01-08 22:44:58</dcterms:dateSubmitted>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://llc.oxfordjournals.org.ezproxy1.lib.asu.edu/content/28/2/271.full.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_9012">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/9012/271.html"/>
+        <dc:title>Snapshot</dc:title>
+        <dcterms:dateSubmitted>2014-01-08 22:44:58</dcterms:dateSubmitted>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://llc.oxfordjournals.org.ezproxy1.lib.asu.edu/content/28/2/271.full</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <link:type>text/html</link:type>
+        <link:charset>utf-8</link:charset>
+    </z:Attachment>
+    <bib:Article rdf:about="http://llc.oxfordjournals.org/content/28/4/668">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>Literary and Linguistic Computing</dc:title>
+                <prism:volume>28</prism:volume>
+                <prism:number>4</prism:number>
+                <dcterms:alternative>Lit Linguist Computing</dcterms:alternative>
+                <dc:identifier>DOI 10.1093/llc/fqt017</dc:identifier>
+                <dc:identifier>ISSN 0268-1145, 1477-4615</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Juola</foaf:surname>
+                        <foaf:givenname>Patrick</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_7069"/>
+        <link:link rdf:resource="#item_6390"/>
+        <dc:title>Using the Google N-Gram corpus to measure cultural complexity</dc:title>
+        <dcterms:abstract>Empirical studies of broad-ranging aspects of culture, such as ‘cultural complexities’ are often extremely difficult. Following the model of Michel et al. (Michel, J.-B., Shen, Y. K., Aiden, A. P. et al. (2011). Quantitative analysis of culture using millions of digitized books. Science, 331(6014): 176–82), and using a set of techniques originally developed to measure the complexity of language, we propose a text-based analysis of a large corpus of topic-uncontrolled text to determine how cultural complexity varies over time within a single culture. Using the Google Books American 2Gram corpus, we are able to show that (as predicted from the cumulative nature of culture), US culture has been steadily increasing in complexity, even when (for economic reasons) the amount of actual discourse as measured by publication volume decreases. We discuss several implication of this novel analysis technique as well as its implications for discussion of the meaning of ‘culture.’</dcterms:abstract>
+        <bib:pages>668-675</bib:pages>
+        <dc:date>12/01/2013</dc:date>
+        <z:language>en</z:language>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://llc.oxfordjournals.org/content/28/4/668</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2014-01-08 22:28:06</dcterms:dateSubmitted>
+        <z:libraryCatalog>llc.oxfordjournals.org</z:libraryCatalog>
+    </bib:Article>
+    <z:Attachment rdf:about="#item_7069">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/7069/Juola - 2013 - Using the Google N-Gram corpus to measure cultural.pdf"/>
+        <dc:title>Full Text PDF</dc:title>
+        <dcterms:dateSubmitted>2014-01-08 22:28:06</dcterms:dateSubmitted>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://llc.oxfordjournals.org/content/28/4/668.full.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_6390">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/6390/668.html"/>
+        <dc:title>Snapshot</dc:title>
+        <dcterms:dateSubmitted>2014-01-08 22:28:06</dcterms:dateSubmitted>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://llc.oxfordjournals.org/content/28/4/668</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <link:type>text/html</link:type>
+        <link:charset>utf-8</link:charset>
+    </z:Attachment>
+    <bib:Article rdf:about="http://llc.oxfordjournals.org.ezproxy1.lib.asu.edu/content/28/3/404">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>Literary and Linguistic Computing</dc:title>
+                <prism:volume>28</prism:volume>
+                <prism:number>3</prism:number>
+                <dcterms:alternative>Lit Linguist Computing</dcterms:alternative>
+                <dc:identifier>DOI 10.1093/llc/fqs015</dc:identifier>
+                <dc:identifier>ISSN 0268-1145, 1477-4615</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Weingart</foaf:surname>
+                        <foaf:givenname>Scott</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Jorgensen</foaf:surname>
+                        <foaf:givenname>Jeana</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_7306"/>
+        <link:link rdf:resource="#item_8877"/>
+        <dc:title>Computational analysis of the body in European fairy tales</dc:title>
+        <dcterms:abstract>This article explores how digital humanities research methods can be used to analyze the representations of gendered bodies in European fairy tales, a flexible and pervasive genre that has influenced Western children's education and acquisition of gender identity for centuries. By blending the theoretical and methodological concerns of folkloristics, gender studies, and large-scale scientific research, this article demonstrates the utility of cross-disciplinary collaboration in asking traditional questions of traditional materials with new methods. To facilitate this research, a hand-coded database listing every reference to a body or body part in the 233 fairy tales was created. Analysis revealed strong indications that the gender and age of fairy-tale protagonists correlate in ways that indicate societal value being placed on certain perspectives, with youthful and masculine perspectives being validated as universal, whereas feminine and aged bodies are often marked as ‘other’. Feminist scholars have articulated some of these ideas in the past, and this approach allows for a more empirical exploration of such claims.</dcterms:abstract>
+        <bib:pages>404-416</bib:pages>
+        <dc:date>09/01/2013</dc:date>
+        <z:language>en</z:language>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://llc.oxfordjournals.org.ezproxy1.lib.asu.edu/content/28/3/404</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2014-01-08 22:32:36</dcterms:dateSubmitted>
+        <z:libraryCatalog>llc.oxfordjournals.org.ezproxy1.lib.asu.edu</z:libraryCatalog>
+    </bib:Article>
+    <z:Attachment rdf:about="#item_7306">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/7306/Weingart and Jorgensen - 2013 - Computational analysis of the body in European fai.pdf"/>
+        <dc:title>Full Text PDF</dc:title>
+        <dcterms:dateSubmitted>2014-01-08 22:32:36</dcterms:dateSubmitted>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://llc.oxfordjournals.org.ezproxy1.lib.asu.edu/content/28/3/404.full.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_8877">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/8877/404.html"/>
+        <dc:title>Snapshot</dc:title>
+        <dcterms:dateSubmitted>2014-01-08 22:32:36</dcterms:dateSubmitted>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://llc.oxfordjournals.org.ezproxy1.lib.asu.edu/content/28/3/404.full</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <link:type>text/html</link:type>
+        <link:charset>utf-8</link:charset>
+    </z:Attachment>
+    <bib:Article rdf:about="http://llc.oxfordjournals.org.ezproxy1.lib.asu.edu/content/27/4/395">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <dc:title>Literary and Linguistic Computing</dc:title>
+                <prism:volume>27</prism:volume>
+                <prism:number>4</prism:number>
+                <dcterms:alternative>Lit Linguist Computing</dcterms:alternative>
+                <dc:identifier>DOI 10.1093/llc/fqs017</dc:identifier>
+                <dc:identifier>ISSN 0268-1145, 1477-4615</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Pumfrey</foaf:surname>
+                        <foaf:givenname>Stephen</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Rayson</foaf:surname>
+                        <foaf:givenname>Paul</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Mariani</foaf:surname>
+                        <foaf:givenname>John</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_9212"/>
+        <link:link rdf:resource="#item_6505"/>
+        <dc:title>Experiments in 17th century English: manual versus automatic conceptual history</dc:title>
+        <dcterms:abstract>Previous research in conceptual history, the study of change over time of key terms and value systems, has been carried out manually using a restricted number of pre-identified texts. We propose that a method combining techniques from corpus and computational linguistics can be exploited to support conceptual history with semantic searches on a vast sample of texts. To exemplify this method, we focus on a fundamental concept in modern science, the experimental method, in order to trace when the pre-existing and primarily religious concept of experiment (or experience) took on its modern, scientific meaning. We contrast a manual approach using the existing Early English Books Online search interface with an automatic method using corpus linguistics software and methods to turn the transcribed portion of the same dataset into a corpus. Both approaches allow us to separate the religious and scientific senses and plot their change over time. We observe a rapid change in the meaning of experimental from overwhelmingly religious to largely scientific within the 1660s. However, the automatic corpus method is much more efficient and will support future scholars in carrying out iterative studies in a matter of minutes rather than through weeks of painstaking work. Such methodological innovation has the potential to support the formation of new research questions, which could not have been considered previously.</dcterms:abstract>
+        <bib:pages>395-408</bib:pages>
+        <dc:date>12/01/2012</dc:date>
+        <z:language>en</z:language>
+        <z:shortTitle>Experiments in 17th century English</z:shortTitle>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://llc.oxfordjournals.org.ezproxy1.lib.asu.edu/content/27/4/395</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2014-01-08 22:57:03</dcterms:dateSubmitted>
+        <z:libraryCatalog>llc.oxfordjournals.org.ezproxy1.lib.asu.edu</z:libraryCatalog>
+    </bib:Article>
+    <z:Attachment rdf:about="#item_9212">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/9212/Pumfrey et al. - 2012 - Experiments in 17th century English manual versus.pdf"/>
+        <dc:title>Full Text PDF</dc:title>
+        <dcterms:dateSubmitted>2014-01-08 22:57:03</dcterms:dateSubmitted>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://llc.oxfordjournals.org.ezproxy1.lib.asu.edu/content/27/4/395.full.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_6505">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/6505/395.html"/>
+        <dc:title>Snapshot</dc:title>
+        <dcterms:dateSubmitted>2014-01-08 22:57:03</dcterms:dateSubmitted>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://llc.oxfordjournals.org.ezproxy1.lib.asu.edu/content/27/4/395.full</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <link:type>text/html</link:type>
+        <link:charset>utf-8</link:charset>
+    </z:Attachment>
+</rdf:RDF>
