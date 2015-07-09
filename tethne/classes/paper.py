@@ -4,13 +4,25 @@ A :class:`.Paper` represents a single bibliographic record.
 
 from tethne.classes.feature import Feature, feature
 
-
 class Paper(object):
     """
     Tethne's representation of a bibliographic record.
+    
+    Fields can be set using dict-like assignment, and accessed as attributes.
+    
+    .. code-block:: python
+    
+       >>> myPaper = Paper()
+       >>> myPaper['date'] = 1965
+       >>> myPaper.date
+       1965
+
     """
 
     def __setitem__(self, key, value):
+        if hasattr(self, key):  # Don't mess with class methods.
+            if hasattr(getattr(self, key), '__call__'):
+                return
         setattr(self, key, value)
 
     def __getitem__(self, key):
@@ -21,10 +33,14 @@ class Paper(object):
         """
         Fuzzy WoS-style identifier, comprised of first author's name (LAST I),
         pubdate, and journal.
+        
+        Returns
+        -------
+        ayjid : str
         """
-	
-	if hasattr(self, 'authors_init'):
-            al, ai = self.authors_init[0]
+    
+        if hasattr(self, 'authors_init'):
+                al, ai = self.authors_init[0]
         else:
             al, ai = '', ''
         if hasattr(self, 'date'):
@@ -46,11 +62,13 @@ class Paper(object):
         """
         Get the authors of the current :class:`.Paper` instance.
 
+        Uses ``authors_full`` if it is available. Otherwise, uses
+        ``authors_init``.
+
         Returns
         -------
-        authors : list
-        Author names are in the format ``LAST F``. If there are no authors,
-        returns an empty list.
+        authors : :class:`.Feature`
+            Author names are in the format ``LAST F``.
         """
 
         if hasattr(self, 'authors_full'):
@@ -66,9 +84,12 @@ class Paper(object):
     def citations(self):
         """
         Cited references as a :class:`.Feature`\.
+        
+        Returns
+        -------
+        citations : :class:`.Feature`
         """
+        
         if hasattr(self, 'citedReferences'):
             return [cr.ayjid for cr in self.citedReferences if cr is not None]
         return []
-
-

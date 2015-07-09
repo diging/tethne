@@ -1,15 +1,63 @@
-from collections import Counter
+from collections import Counter, defaultdict
 
 from tethne.utilities import _iterable, argsort
 
 class Feature(list):
+    """
+    A :class:`.Feature` instance is a sparse vector of features over a given
+    concept (usually a :class:`.Paper`\).
+    
+    For example, a :class:`.Feature` might represent word counts for a single
+    :class:`.Paper`\.
+    
+    A :class:`.Feature` may be initialized from a list of ``(feature, value)``
+    tuples...
+    
+    .. code-block:: python
+    
+       >>> myFeature = Feature([('the', 2), ('pine', 1), ('trapezoid', 5)])
+       
+    ...or by passing a list of raw feature tokens:
+    
+    .. codeblock:: python
+    
+       >>> myFeature = Feature(['the', 'the', 'pine', 'trapezoid', 'trapezoid',
+       ...                      'trapezoid', 'trapezoid', 'trapezoid'])
+       >>> myFeature
+       [('the', 2), ('pine', 1), ('trapezoid', 5)]
+
+    To get the set of unique features in this :class:`.Feature`\, use 
+    :prop:`.Feature.unique`\:
+    
+    .. code-block:: python
+    
+       >>> myFeature.unique
+       set(['the', 'pine', 'trapezoid'])
+       
+    Normalized feature values (so that all values sum to 1.) can be accessed
+    using :prop:`.Feature.norm`\.
+    
+    .. code-block:: python
+    
+       >>> myFeature.norm
+       [('the', 0.25), ('pine', 0.125), ('trapezoid', 0.625)]
+
+    """
+
     def __init__(self, data):
         if len(data) > 0:
-            if type(data[0]) is tuple and type(data[0][-1]) in [float, int]:
-                self.extend(data)
-            else:
-                self.extend(Counter(_iterable(data)).items())
+            self.extend(data)
 
+    def extend(self, data):
+        if type(data[0]) is tuple and type(data[0][-1]) in [float, int]:
+            combined_data = defaultdict(float)
+            for k, v in data + self:
+                existing_data[k] += v
+            super(Feature, self).extend(data)
+        else:
+            
+            self.extend(Counter(_iterable(data)).items())    
+            
 
     @property
     def unique(self):
@@ -26,6 +74,26 @@ class Feature(list):
         return Feature([(i,float(v)/T) for i,v in self])
 
     def top(self, topn=10):
+        """
+        Get a list of the top ``topn`` features in this :class:`.Feature`\.
+        
+        Example
+        -------
+        
+        .. code-block:: python
+        
+        >>> myFeature = Feature([('the', 2), ('pine', 1), ('trapezoid', 5)])
+        >>> myFeature.top(1)
+        [('trapezoid', 5)]
+        
+        Parameters
+        ----------
+        topn : int
+        
+        Returns
+        -------
+        list
+        """
         return [self[i] for i in argsort(zip(*self)[1])[::-1][:topn]]
 
 

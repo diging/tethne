@@ -1,9 +1,14 @@
 ![Tethneus, an orb weaving spider](http://diging.github.io/tethne/doc/0.6.1-beta/_static/logo_round.png)
 
-Tethne [![Build Status](https://travis-ci.org/diging/tethne.svg?branch=refactor)](https://travis-ci.org/diging/tethne)
+Tethne [![Build Status](https://travis-ci.org/diging/tethne.svg?branch=python)](https://travis-ci.org/diging/tethne)
 ======
-Tethne is a Python package for integrated bibliographic and corpus analysis developed by the Digital Innovation Group at Arizona State University. Tethne provides simple tools for generating networks from bibliographic datasets, and provides a framework for weaving together techniques from scientometrics, computational linguistics, topic modeling, and social influence modeling. Rather than reinvent or re- implement existing algorithms, Tethne is designed to interface with existing software packages, and to provide mechanisms for drawing the results and functionalities of those packages together.
-
+Tethne is a Python package for integrated bibliographic and corpus analysis developed by
+the Digital Innovation Group at Arizona State University. Tethne provides simple tools
+for generating networks from bibliographic datasets, and provides a framework for weaving
+together techniques from scientometrics, computational linguistics, topic modeling, and
+social influence modeling. Rather than reinvent or re-implement existing algorithms,
+Tethne is designed to interface with existing software packages, and to provide
+mechanisms for drawing the results and functionalities of those packages together.
 
 Key features
 ------------
@@ -12,34 +17,50 @@ Key features
 * Integrates popular topic modeling software (e.g. MALLET).
 * Export network models to mainstream formats (e.g. for visualization in Cytoscape).
 * Leverages powerful computational and network-analysis libraries in Python. 
-* HDF5 data management for persistence and interoperability.
 
 Documentation
 -------------
-For more information, see the Tethne [website](http://diging.github.io/tethne/) and
-[documentation](http://diging.github.io/tethne/doc/0.6.1-beta/index.html) (under development).
+For more information, see the Tethne [website](http://diging.github.io/tethne/).
 
 The documentation project (ReST sources, etc.) can be found in [``tethne-docs``](https://github.com/diging/tethne-docs).
 
 Requirements
 ------------
-We recommend using the Anaconda Python suite. See
-[installation](http://diging.github.io/tethne/doc/0.6.1-beta/installation.html#installation) for details.
+These should be installed automatically when you install Tethne, but just in case they
+aren't:
 
 ```
-scipy==0.14.0
-numpy==1.8.1
-networkx==1.8.1
-matplotlib==1.3.1
-tables==3.1.1
-Unidecode==0.04.16
-geopy==0.99
-nltk==2.0.4
+networkx>=1.8.1
+Unidecode>=0.04.16
+iso8601
+rdflib
 ```
+
+New in v0.7
+-----------
+v0.7 was a nearly ground-up refactor, resulting in a more modular and testable codebase
+and a simplified API. Here are some of the most notable changes:
+* Network-building functions were made significantly more abstract and flexible.
+* Numpy and SciPy are no longer required. We weren't really taking advantage of the
+  performance gains afforded by those packages, and some users were running into
+  installation issues with SciPy.
+* Plotting functionality has been removed. This was causing bloat, and we were making
+  aesthetic and formatting decisions for the user that weren't easily customizable.
+* Huge improvements to the WoS reader. The old reader was bloated and suffered from some
+  nasty bugs.
+* Re-designed ``Corpus`` and ``Paper`` classes. See the docs for more information.
+* Introduced ``Feature`` and ``FeatureSet`` classes to provide a more consistent and
+  user-friendly mechanism for managing document features.
+  
+Coming in v0.8
+--------------
+* Support for [igraph](http://igraph.org/redirect.html) and 
+  [graph-tool](https://graph-tool.skewed.de/).
+* 
 
 Questions?
 ----------
-Ask [Erick](https://cbs.asu.edu/gradinfo/?page_id=49)
+Ask [Erick](https://asu.academia.edu/ErickPeirson)
 
 Contributors
 ------------

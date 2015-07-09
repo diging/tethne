@@ -1,4 +1,1 @@
-networkx
-Unidecode
-iso8601
-rdflib
+-e .
