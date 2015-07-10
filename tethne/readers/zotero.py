@@ -129,6 +129,44 @@ class ZoteroParser(RDFParser):
         del entry.pages
 
 def read(path, corpus=True, index_by='identifier', **kwargs):
+    """
+    Read bibliographic data from Zotero RDF.
+    
+    Example
+    -------
+    Assuming that the Zotero collection was exported to the directory
+    ``/my/working/dir`` with the name ``myCollection``, a subdirectory should
+    have been created at ``/my/working/dir/myCollection``, and an RDF file 
+    should exist at ``/my/working/dir/myCollection/myCollection.rdf``.
+    
+    .. code-block:: python
+    
+       >>> from tethne.readers.zotero import read
+       >>> myCorpus = read('/my/working/dir/myCollection')
+       >>> myCorpus
+       <tethne.classes.corpus.Corpus object at 0x10047e350>
+       
+    
+    Parameters
+    ----------
+    path : str
+        Path to the output directory created by Zotero. Expected to contain a
+        file called ``[directory_name].rdf``.
+    corpus : bool
+        (default: True) If True, returns a :class:`.Corpus`\. Otherwise,
+        returns a list of :class:`.Paper`\s.
+    index_by : str
+        (default: ``'identifier'``) :class:`.Paper` attribute name to use as
+        the primary indexing field. If the field is missing on a 
+        :class:`.Paper`\, a unique identifier will be generated based on the
+        title and author names.
+    kwargs : kwargs
+        Passed to the :class:`.Corpus` constructor.
+    
+    Returns
+    -------
+    corpus : :class:`.Corpus`
+    """
     # TODO: is there a case where `from_dir` would make sense?
     papers = ZoteroParser(path).parse()
 
