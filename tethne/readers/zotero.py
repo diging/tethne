@@ -12,6 +12,12 @@ from tethne.readers.base import RDFParser
 
 
 class ZoteroParser(RDFParser):
+    """
+    Reads Zotero RDF files.
+    
+    TODO: Extend to read in content of associated files?    
+    """
+
     entry_class = Paper
     entry_elements = ['bib:Illustration', 'bib:Recording', 'bib:Legislation', 
                       'bib:Document', 'bib:BookSection', 'bib:Book', 'bib:Data', 

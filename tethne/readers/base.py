@@ -202,9 +202,7 @@ class XMLParser(IterParser):
 
     def open(self):
         with open(self.path, 'r') as f:
-            # JSTOR hasn't always represented ampersands correctly.
-            contents = re.sub('(&)(?!amp;)', lambda match: '&amp;', f.read())
-            self.root = ET.fromstring(contents)
+            self.root = ET.fromstring(f.read())
         pattern = './/{elem}'.format(elem=self.entry_element)
         self.elements = self.root.findall(pattern)
 

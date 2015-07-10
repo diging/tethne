@@ -2,8 +2,8 @@ import sys
 sys.path.append('../tethne')
 
 import unittest
-from tethne.readers.dfr import read
-from tethne import Corpus, Paper
+from tethne.readers.dfr import read, ngrams
+from tethne import Corpus, Paper, FeatureSet
 
 datapath = './tethne/tests/data/dfr'
 
@@ -19,8 +19,7 @@ class TestDFRReader(unittest.TestCase):
                 self.assertIsInstance(e.date, int)
 
             uppererr = "Author names should be uppercase"
-            if hasattr(e, 'authors_full'):
-#                print e.authors_full            
+            if hasattr(e, 'authors_full'):            
                 self.assertIsInstance(e.authors_full, list)
                 for a in e.authors_full:
                     self.assertTrue(a[0].isupper(), uppererr)
@@ -50,6 +49,19 @@ class TestDFRReader(unittest.TestCase):
 
             if hasattr(e, 'title'):
                 self.assertIsInstance(e.title, str)
+                
+        self.assertIn('wordcounts', corpus.features)
+        
+        self.assertGreaterEqual(len(corpus), 
+                                len(corpus.features['wordcounts']))
+        
+class TestNGrams(unittest.TestCase):
+    def test_ngrams(self):
+        grams = ngrams(datapath, 'wordcounts')
+        
+        self.assertIsInstance(grams, FeatureSet)
+        self.assertEqual(len(grams), 398)
+        
 
 
 if __name__ == '__main__':

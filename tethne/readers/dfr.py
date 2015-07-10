@@ -3,12 +3,6 @@ Methods for parsing JSTOR Data-for-Research datasets.
 
 .. autosummary::
 
-   read
-   ngrams
-   read_corpus
-   from_dir
-   ngrams_from_dir
-   corpus_from_dir
 
 """
 
@@ -16,7 +10,7 @@ import os
 import xml.etree.ElementTree as ET
 import re
 from collections import Counter
-from tethne import Paper, Corpus
+from tethne import Paper, Corpus, Feature, FeatureSet
 from tethne.utilities import dict_from_node, strip_non_ascii
 from tethne.readers.base import XMLParser
 import iso8601
@@ -32,6 +26,18 @@ class DfRParser(XMLParser):
         'journaltitle': 'journal',
         'author': 'authors_full',
     }
+
+    def open(self):
+        with open(self.path, 'r') as f:
+            # JSTOR hasn't always represented ampersands correctly.
+            contents = re.sub('(&)(?!amp;)', lambda match: '&amp;', f.read())
+            self.root = ET.fromstring(contents)
+        pattern = './/{elem}'.format(elem=self.entry_element)
+        self.elements = self.root.findall(pattern)
+
+        self.at_start = False
+        self.at_end = False
+        self.children = []
 
     def handle_unicode(self, value):
         if type(value) is not str:
@@ -99,7 +105,7 @@ class GramGenerator(object):
         self.elem = elem
         self.ignore_hash = ignore_hash
                 
-        self.files = os.listdir(path)
+        self.files = os.listdir(os.path.join(path, elem))
         self.N = len([ d for d in self.files if d.split('.')[-1] == 'XML' ])
         self.i = 0
         
@@ -161,7 +167,10 @@ class GramGenerator(object):
         """
         Retrieve data for the ith file in the dataset.
         """
-        root = ET.parse(self.path + "/" + self.files[i]).getroot()
+        with open(os.path.join(self.path, self.elem, self.files[i]), 'r') as f:
+            # JSTOR hasn't always produced valid XML.
+            contents = re.sub('(&)(?!amp;)', lambda match: '&amp;', f.read())
+            root = ET.fromstring(contents)
         doi = root.attrib['id']
 
         if self.K:  # Keys only.
@@ -179,7 +188,8 @@ class GramGenerator(object):
 
         return doi, grams   # Default behavior.
 
-def read(datapath, corpus=True, index_by='doi', **kwargs):
+
+def read(path, corpus=True, index_by='doi', **kwargs):
     """
     Yields :class:`.Paper` s from JSTOR DfR package.
 
@@ -204,261 +214,40 @@ def read(datapath, corpus=True, index_by='doi', **kwargs):
        >>> from tethne.readers import dfr
        >>> papers = dfr.read("/Path/to/DfR")
     """
-    parser = DfRParser(datapath + "/citations.XML")
+    parser = DfRParser(os.path.join(path, "citations.XML"))
     parser.parse()
-    return Corpus(parser.data, index_by=index_by, **kwargs)
-
-#
-#    with open(datapath + "/citations.XML", mode='r') as f:
-#        data = f.read()
-#        data = data.replace('&', '&amp;')
-#        
-#        root = ET.fromstring(data)
-#
-#    papers = kwargs.get('papers', [])
-#    for article in root:
-#        paper = _handle_paper(article)
-#        papers.append(paper)
-#
-#    if corpus:
-#        return Corpus(papers)
-#    return papers
-
-def read_corpus(path, features=None, exclude=None, **kwargs):
-    """
-    Generate a :class:`.Corpus` from a single DfR dataset.
+    corpus = Corpus(parser.data, index_by=index_by, **kwargs)
     
-    If ``features`` is provided (see below), will also load ngrams.
+    # Find and read N-gram data.
+    for sname in os.listdir(path):
+        fpath = os.path.join(path, sname)   # Full path.
+        if os.path.isdir(fpath) and not sname.startswith('.'):
+            corpus.features[sname] = ngrams(path, sname)
+    return corpus  
     
-    Parameters
-    ----------
-    filepath : string
-        Filepath to unzipped JSTOR DfR folder containing a citations.XML file.
-    features : list
-        List of feature-grams (e.g. 'uni', 'bi', 'tri') to load from dataset.
-    exclude : list
-        Stoplist for feature-grams.
-    **kwargs
-        Use this to pass kwargs to :func:`.ngrams`.
-        
-    Returns
-    -------
-    :class:`.Corpus`
-    
-    Examples
-    --------
 
-    .. code-block:: python
-
-       >>> from nltk.corpus import stopwords    # Get a stoplist.
-       >>> stoplist = stopwords.words()
-       >>> from tethne.readers import dfr
-       >>> MyCorpus = dfr.read_corpus("/Path/to/DfR", ['uni'], stoplist)
-    """
-
-    papers = read(path)
-    grams = {}
-    if features is not None:
-        for feat in features:
-            grams[feat+'grams'] = ngrams(path, feat, **kwargs)
-
-    return Corpus(papers, features=grams, index_by='doi', exclude=exclude)
-
-def from_dir(path):
-    """
-    Convenience function for generating a list of :class:`.Paper` from a
-    directory of JSTOR DfR datasets.
-
-    Parameters
-    ----------
-    path : string
-        Path to directory containing DfR dataset directories.
-
-    Returns
-    -------
-    papers : list
-        A list of :class:`.Paper` objects.
-
-    Raises
-    ------
-    IOError
-        Invalid path.
-
-    Examples
-    --------
-
-    .. code-block:: python
-
-       >>> from tethne.readers import dfr
-       >>> papers = dfr.from_dir("/Path/to/datadir")
-
-    """
-
-    papers = []
-
-    try:
-        files = os.listdir(path)
-    except IOError:
-        raise IOError("Invalid path.")  # Ignore hidden files.
-
-    for f in files:
-        if not f.startswith('.') and os.path.isdir(path + "/" + f):
-            try:
-                papers += read(path + "/" + f)
-            except (IOError, UnboundLocalError):    # Ignore directories that
-                pass                                #  don't contain DfR data.
-
-    return papers
-
-def ngrams_from_dir(path, N='uni', ignore_hash=True, mode='heavy'):
-    """
-    Load ngrams from a directory of JSTOR DfR datasets.
-    
-    Parameters
-    ----------
-    path : string
-        Path to directory containing DfR dataset directories.
-    N : string
-        'uni', 'bi', 'tri', or 'quad'
-    ignore_hash : bool
-        If True, will exclude all N-grams that contain the hash '#' character.
-    mode : str
-        If 'heavy' (default), loads all data into memory and returns a dict. If
-        'light', returns a (somewhat) reusable :class:`.GramGenerator`\. See
-        :class:`.GramGenerator` for usage.
-        
-    Returns
-    -------
-    ngrams : dict
-        Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
-        
-    Examples
-    --------
-    
-    .. code-block:: python
-    
-       >>> from tethne.readers import dfr
-       >>> ngrams = dfr.ngrams_from_dir("/Path/to/datadir", 'uni')
-       
-    """
-
-    grams = {}
-    try:
-        files = os.listdir(path)
-    except IOError:
-        raise IOError('Invalid path.')
-
-    for f in files:
-        if not f.startswith('.') and os.path.isdir(path + '/' + f):
-            try:
-                fpath = path + '/' + f
-                grams.update(ngrams(fpath, N, ignore_hash, mode))
-            except (IOError, UnboundLocalError, OSError):
-                pass
-
-    return grams
-                                
-def corpus_from_dir(path, features=None, exclude=None, **kwargs):
-    """
-    Generate a :class:`.Corpus` from a directory containing multiple DfR 
-    datasets.
-    
-    If ``features`` is provided (see below), will also load ngrams.
-
-    Parameters
-    ----------
-    path : string
-        Path to directory containing DfR dataset directories.
-    features : list
-        List of feature-grams (e.g. 'uni', 'bi', 'tri') to load from dataset.
-    exclude : list
-        Stoplist for feature-grams.
-    **kwargs
-        Use this to pass kwargs to :func:`.ngrams`.
-    
-    Returns
-    -------
-    :class:`.Corpus`
-    
-    Examples
-    --------
-    
-    .. code-block:: python
-    
-       >>> from nltk.corpus import stopwords    # Get a stoplist.
-       >>> stoplist = stopwords.words()
-       >>> from tethne.readers import dfr
-       >>> C = dfr.corpus_from_dir('/path/to/DfR/datasets', 'uni', stoplist)
-
-    """
-
-    papers = from_dir(path)
-    grams = {}
-    if features is not None:
-        for feat in features:
-            grams[feat+'grams'] = ngrams_from_dir(path, **kwargs)
-
-    return Corpus(papers, features=grams, index_by='doi', exclude=exclude)
-
-def ngrams(datapath, N='uni', ignore_hash=True, mode='heavy'):
+def ngrams(path, elem, ignore_hash=True):
     """
     Yields N-grams from a JSTOR DfR dataset.
 
     Parameters
     ----------
-    datapath : string
-        Path to unzipped JSTOR DfR folder containing N-grams (e.g. 'bigrams').
-    N : string
-        'uni', 'bi', 'tri', or 'quad'
+    path : string
+        Path to unzipped JSTOR DfR folder containing N-grams.
+    elem : string
+        Name of subdirectory containing N-grams. (e.g. 'bigrams').
     ignore_hash : bool
         If True, will exclude all N-grams that contain the hash '#' character.
-    mode : str
-        If 'heavy' (default), loads all data into memory and returns a dict. If
-        'light', returns a (somewhat) reusable :class:`.GramGenerator`\. See
-        :class:`.GramGenerator` for usage.
 
     Returns
     -------
-    ngrams : dict
-        Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
+    ngrams : :class:`.FeatureSet`
 
-    Examples
-    --------
-
-    .. code-block:: python
-
-       >>> from tethne.readers import dfr
-       >>> trigrams = dfr.ngrams("/Path/to/DfR", N='tri')
     """
 
-    if  N =='uni':
-        gram_dir = "/wordcounts"
-        elem = "wordcount"
-    else:
-        gram_dir = "/" + N + "grams"
-        elem = N + "gram"
-    gram_path = datapath + gram_dir
+    grams = GramGenerator(path, elem, ignore_hash=ignore_hash)
+    return FeatureSet({k: Feature(f) for k, f in grams})
 
-    if mode == 'light':
-        return GramGenerator(gram_path, elem, ignore_hash=ignore_hash)
-        
-    elif mode == 'heavy':
-        ngrams = {}
-
-        for file in os.listdir(gram_path):
-            if file.split('.')[-1] == 'XML':
-                root = ET.parse(gram_path + "/" + file).getroot()
-                doi = root.attrib['id']
-                grams = []
-                for gram in root.findall(elem):
-                    text = unidecode(unicode(gram.text.strip()))
-                    if ( not ignore_hash or '#' not in list(text) ):
-                        c = ( text, int(gram.attrib['weight']) )
-                        grams.append(c)
-
-                ngrams[doi] = grams
-
-        return ngrams
         
 def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
     """
