@@ -49,38 +49,44 @@ class Feature(list):
             self.extend(data)
             
     def __add__(self, data):
-        if type(data[0]) is tuple and type(data[0][-1]) in [float, int]:
-            # There may be overlap with existing features, 
-            combined_data = defaultdict(type(data[0][-1]))
-            for k, v in data + self:
-                combined_data[k] += v
-            return combined_data.items()
-        else:
-            return self.__add__(Counter(_iterable(data)).items())  # Recurses.
+        if len(data) > 0:
+            if type(data[0]) is tuple and type(data[0][-1]) in [float, int]:
+                # There may be overlap with existing features, 
+                combined_data = defaultdict(type(data[0][-1]))
+                for k, v in data + list(self):
+                    combined_data[k] += v
+                return combined_data.items()        
+            else:   # Recurses.
+                return self.__add__(Counter(_iterable(data)).items())
+        return self
     
     def __sub__(self, data):
-        if type(data[0]) is tuple and type(data[0][-1]) in [float, int]:
-            combined_data = defaultdict(type(data[0][-1]))
-            combined_data.update(dict(self))
-            for k, v in data:
-                combined_data[k] -= v
-            return combined_data.items()
-        else:
-            return self.__sub__(Counter(_iterable(data)).items())  # Recurses.    
+        if len(data) > 0:    
+            if type(data[0]) is tuple and type(data[0][-1]) in [float, int]:
+                combined_data = defaultdict(type(data[0][-1]))
+                combined_data.update(dict(self))
+                for k, v in data:
+                    combined_data[k] -= v
+                return combined_data.items()
+            else:   # Recurses.
+                return self.__sub__(Counter(_iterable(data)).items())
+        return self
     
     def __iadd__(self, data):
         return self.extend(data)
 
     def __isub__(self, data):
-        combined_data = self.__sub__(data)
-        del self[:]
-        super(Feature, self).extend(combined_data)
+        if len(data) > 0:   
+            combined_data = self.__sub__(data)
+            del self[:]
+            super(Feature, self).extend(combined_data)
         return self        
 
     def extend(self, data):
-        combined_data = self.__add__(data)  # Combines new and existing data.
-        del self[:]                         # Clear old data.
-        super(Feature, self).extend(combined_data)
+        if len(data) > 0:       
+            combined_data = self.__add__(data)  # Combines new and extant data.
+            del self[:]                         # Clear old data.
+            super(Feature, self).extend(combined_data)
         return self
             
     @property
