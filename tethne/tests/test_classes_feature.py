@@ -47,9 +47,46 @@ class TestFeature(unittest.TestCase):
         T = sum(zip(*feature)[1])
         for n, r in zip(zip(*feature.norm)[1], zip(*feature)[1]):
             self.assertEqual(n, float(r)/T)
+            
+    def test_extend(self):
+        feature = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
+     
+        feature.extend([('bob', 1)])
+        self.assertEqual(feature.value('bob'), 4)
+        
+        feature.extend(['bob'])
+        self.assertEqual(feature.value('bob'), 5)        
+        
+        feature.extend('bob')
+        self.assertEqual(feature.value('bob'), 6)        
+        
+        
+    def test_iadd(self):
+        feature = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
+   
+        feature += [('bob', 1)]
+        self.assertEqual(feature.value('bob'), 4)
+        
+        feature += ['bob']
+        self.assertEqual(feature.value('bob'), 5)
+        
+        feature += 'bob'
+        self.assertEqual(feature.value('bob'), 6)        
+        
+    def test_isub(self):
+        feature = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
+   
+        feature -= [('bob', 1)]
+        self.assertEqual(feature.value('bob'), 2)
+        
+        feature -= ['bob']
+        self.assertEqual(feature.value('bob'), 1)
+        
+        feature -= 'bob'
+        self.assertEqual(feature.value('bob'), 0)           
 
 
-class TestFeatureSest(unittest.TestCase):
+class TestFeatureSet(unittest.TestCase):
     def test_init_empty(self):
         """
         Initialize with no Features.
