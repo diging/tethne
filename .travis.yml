@@ -4,5 +4,6 @@ python:
 jdk:
   - oraclejdk8
 script:
+  - pip install coverage
   - pip install nose
   - nosetests --with-coverage --cover-package=tethne --cover-min-percentage=95
