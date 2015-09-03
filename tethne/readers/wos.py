@@ -103,6 +103,9 @@ class WoSParser(FTParser):
     def handle_AF(self, value):
         return self.parse_author(value)
 
+    def handle_PY(self, value):
+        return int(value)
+
     def handle_AU(self, value):
         aulast, auinit = self.parse_author(value)
         auinit = _space_sep(auinit)

@@ -16,7 +16,8 @@ PACKAGES = ['tethne',
             'tethne.model.corpus',
             'tethne.networks',
             'tethne.readers',
-            'tethne.writers']
+            'tethne.writers',
+	    'tethne.utilities']
 
 setup(
     name=DISTNAME,
