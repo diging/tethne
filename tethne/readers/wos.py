@@ -38,7 +38,7 @@ class WoSParser(FTParser):
 
     start_tag = 'PT'
     end_tag = 'ER'
-    concat_fields = ['abstract', 'keywords', 'funding', 'title', 'references']
+    concat_fields = ['abstract', 'keywords', 'funding', 'title', 'references', 'journal']
     entry_class = Paper
 
     tags = {

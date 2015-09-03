@@ -5,11 +5,18 @@ AUTHOR = 'E. Peirson, Digital Innovation Group @ ASU'
 MAINTAINER = 'Erick Peirson'
 MAINTAINER_EMAIL = 'erick [dot] peirson [at] asu [dot] edu'
 DESCRIPTION = ('Bibliographic network and corpus analysis for historians')
-LICENSE = 'GNU GPL 3' 
+LICENSE = 'GNU GPL 3'
 URL = 'http://diging.github.io/tethne/'
 VERSION = '0.7'
 
-PACKAGES = ['tethne']
+PACKAGES = ['tethne',
+            'tethne.analyze',
+            'tethne.classes',
+            'tethne.model',
+            'tethne.model.corpus',
+            'tethne.networks',
+            'tethne.readers',
+            'tethne.writers']
 
 setup(
     name=DISTNAME,
