@@ -58,7 +58,7 @@ class ZoteroParser(RDFParser):
         super(ZoteroParser, self).open()
     
     def handle_title(self, value):
-        return str(value)
+        return unidecode(value)
         
     def handle_abstract(self, value):
         return unidecode(value)
@@ -80,11 +80,14 @@ class ZoteroParser(RDFParser):
                 return str(o).replace('file://', '')                 
 
     def handle_date(self, value):
-        try:
-            return iso8601.parse_date(str(value)).year    
-        except iso8601.ParseError:
-            return datetime.strptime(str(value), "%m/%d/%Y").date().year
-        
+    		print "Parsed Date:{0}".format(str(value))
+    		for datefmt in ("%B %d, %Y", "%Y-%m", "%Y-%m-%d"):
+		        try:
+		            print datetime.strptime(str(value), datefmt).date().year
+		        except iso8601.ParseError:
+		            print ParseError
+		        except ValueError:
+		        	pass
     def handle_documentType(self, value):
         return str(value)
         
