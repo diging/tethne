@@ -81,7 +81,7 @@ class ZoteroParser(RDFParser):
 
     def handle_date(self, value):
     		print "Parsed Date:{0}".format(str(value))
-    		for datefmt in ("%B %d, %Y", "%Y-%m", "%Y-%m-%d"):
+    		for datefmt in ("%B %d, %Y", "%Y-%m", "%Y-%m-%d", "%m/%d/%Y"):
 		        try:
 		            print datetime.strptime(str(value), datefmt).date().year
 		        except iso8601.ParseError:
