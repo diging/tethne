@@ -2,43 +2,212 @@ from collections import Counter, defaultdict
 
 from tethne.utilities import _iterable, argsort
 
+
+class StructuredFeature(list):
+    """
+    A :class:`.StructuredFeature` represents the contents of a document as an
+    array of tokens, divisible into a set of nested contexts.
+
+    The canonical use-case is to represent a document as a set of words divided
+    into sentences, paragraphs, and (perhaps) pages.
+
+    Parameters
+    ----------
+    tokens : list
+        An ordered list of tokens.
+    contexts : list
+        A list of (name, indices) 2-tuples, where ``name`` is string-like and
+        indices is an iterable of int token indices.
+    reference : tuple
+        A (feature, map) 2-tuple, where ``feature`` is a
+        :class:`.StructuredFeature` and ``map`` is a dict mapping token indices
+        in this :class:`.StructuredFeature` to token indices in ``feature``.
+    """
+    def __init__(self, tokens, contexts=None, reference=None):
+        self.extend(tokens)
+        self.contexts = {}
+        self.contexts_ranked = []
+        self.referenceFeature = None
+        self.referenceMap = None
+
+        if contexts:
+            self._validate_contexts(contexts)
+            for context in contexts:
+                self._validate_context(context)
+                self.add_context(*context)
+
+        if reference:
+            self._validate_reference(reference)
+
+            self.referenceFeature, self.referenceMap = reference
+
+    @property
+    def unique(self):
+        """
+        The `set` of unique elements in this :class:`.Feature`\.
+        """
+        if len(self) > 0:
+            return set(self)
+        return set()
+
+    def __getitem__(self, selector):
+        if type(selector) is int:
+            return super(StructuredFeature, self).__getitem__(selector)
+
+        if type(selector) in [str, unicode]:
+            if selector in self.contexts:
+                return self.context_chunks(selector)
+        elif type(selector) is tuple:
+            if selector[0] in self.contexts:
+                return self.context_chunk(*selector)
+
+    def context_chunks(self, context):
+        """
+        Retrieves all tokens, divided into the chunks in context ``context``.
+
+        Parameters
+        ----------
+        context : str
+            Context name.
+
+        Returns
+        -------
+        chunks : list
+            Each item in ``chunks`` is a list of tokens.
+        """
+        N_chunks = len(self.contexts[context])
+        chunks = []
+        for j in xrange(N_chunks):
+            chunks.append(self.context_chunk(context, j))
+        return chunks
+
+    def context_chunk(self, context, j):
+        """
+        Retrieve the tokens in the ``j``th chunk of context ``context``.
+
+        Parameters
+        ----------
+        context : str
+            Context name.
+        j : int
+            Index of a context chunk.
+
+        Returns
+        -------
+        chunk : list
+            List of tokens in the selected chunk.
+        """
+
+        N_chunks = len(self.contexts[context])
+        start = self.contexts[context][j]
+        if j == N_chunks - 1:
+            end = len(self)
+        else:
+            end = self.contexts[context][j+1]
+        return [self[i] for i in xrange(start, end)]
+
+    def _validate_context(self, context):
+        try:
+            assert hasattr(context, '__iter__')
+            assert len(context) == 2
+            assert type(context[0]) in [str, unicode]
+            assert hasattr(context[1], '__iter__')
+            assert type(context[1][0]) is int
+        except AssertionError:
+            raise ValueError("""a context should be a (name, indices) 2-tuple,
+            where ``name`` is string-like and indices is an iterable of int
+            token indices.""")
+
+        if max(context[1]) > len(self):
+            raise ValueError("""One or more indices in the specified context
+            exceed the number of tokens in this StructuredFeature.""")
+
+    @staticmethod
+    def _validate_contexts(contexts):
+        try:
+            assert hasattr(contexts, '__iter__')
+        except AssertionError:
+            raise ValueError("""contexts should be a list of (name, indices)
+            2-tuples, where ``name`` is string-like and indices is an iterable
+            of int token indices.""")
+
+    @staticmethod
+    def _validate_reference(reference):
+        try:
+            assert type(reference) is tuple
+            assert type(reference[0]) is StructuredFeature
+            assert type(reference[1]) is dict
+        except AssertionError:
+            raise ValueError("""reference should be a (feature, map) 2-tuple
+            where ``feature`` is a StructuredFeature and ``map`` is a dict
+            mapping token indices in this StructuredFeature to token indices
+            in ``feature``.""")
+
+    def add_context(self, name, indices, level=None):
+        """
+        Add a new context level to the hierarchy.
+
+        By default, new contexts are added to the lowest level of the hierarchy.
+        To insert the context elsewhere in the hierarchy, use the ``level``
+        argument. For example, ``level=0`` would insert the context at the
+        highest level of the hierarchy.
+
+        Parameters
+        ----------
+        name : str
+        indices : list
+            Token indices at which each chunk in the context begins.
+        level : int
+            Level in the hierarchy at which to insert the context. By default,
+            inserts context at the lowest level of the hierarchy
+
+        """
+
+        self._validate_context((name, indices))
+
+        if level is None:
+            level = len(self.contexts_ranked)
+        self.contexts_ranked.insert(level, name)
+        self.contexts[name] = indices
+
+
 class Feature(list):
     """
     A :class:`.Feature` instance is a sparse vector of features over a given
     concept (usually a :class:`.Paper`\).
-    
+
     For example, a :class:`.Feature` might represent word counts for a single
     :class:`.Paper`\.
-    
+
     A :class:`.Feature` may be initialized from a list of ``(feature, value)``
     tuples...
-    
+
     .. code-block:: python
-    
+
        >>> myFeature = Feature([('the', 2), ('pine', 1), ('trapezoid', 5)])
-       
+
     ...or by passing a list of raw feature tokens:
-    
+
     .. codeblock:: python
-    
+
        >>> myFeature = Feature(['the', 'the', 'pine', 'trapezoid', 'trapezoid',
        ...                      'trapezoid', 'trapezoid', 'trapezoid'])
        >>> myFeature
        [('the', 2), ('pine', 1), ('trapezoid', 5)]
 
-    To get the set of unique features in this :class:`.Feature`\, use 
+    To get the set of unique features in this :class:`.Feature`\, use
     :prop:`.Feature.unique`\:
-    
+
     .. code-block:: python
-    
+
        >>> myFeature.unique
        set(['the', 'pine', 'trapezoid'])
-       
+
     Normalized feature values (so that all values sum to 1.) can be accessed
     using :prop:`.Feature.norm`\.
-    
+
     .. code-block:: python
-    
+
        >>> myFeature.norm
        [('the', 0.25), ('pine', 0.125), ('trapezoid', 0.625)]
 
@@ -47,21 +216,21 @@ class Feature(list):
     def __init__(self, data):
         if len(data) > 0:
             self.extend(data)
-            
+
     def __add__(self, data):
         if len(data) > 0:
             if type(data[0]) is tuple and type(data[0][-1]) in [float, int]:
-                # There may be overlap with existing features, 
+                # There may be overlap with existing features,
                 combined_data = defaultdict(type(data[0][-1]))
                 for k, v in data + list(self):
                     combined_data[k] += v
-                return combined_data.items()        
+                return combined_data.items()
             else:   # Recurses.
                 return self.__add__(Counter(_iterable(data)).items())
         return self
-    
+
     def __sub__(self, data):
-        if len(data) > 0:    
+        if len(data) > 0:
             if type(data[0]) is tuple and type(data[0][-1]) in [float, int]:
                 combined_data = defaultdict(type(data[0][-1]))
                 combined_data.update(dict(self))
@@ -71,24 +240,24 @@ class Feature(list):
             else:   # Recurses.
                 return self.__sub__(Counter(_iterable(data)).items())
         return self
-    
+
     def __iadd__(self, data):
         return self.extend(data)
 
     def __isub__(self, data):
-        if len(data) > 0:   
+        if len(data) > 0:
             combined_data = self.__sub__(data)
             del self[:]
             super(Feature, self).extend(combined_data)
-        return self        
+        return self
 
     def extend(self, data):
-        if len(data) > 0:       
+        if len(data) > 0:
             combined_data = self.__add__(data)  # Combines new and extant data.
             del self[:]                         # Clear old data.
             super(Feature, self).extend(combined_data)
         return self
-            
+
     @property
     def unique(self):
         """
@@ -106,31 +275,31 @@ class Feature(list):
     def top(self, topn=10):
         """
         Get a list of the top ``topn`` features in this :class:`.Feature`\.
-        
+
         Example
         -------
-        
+
         .. code-block:: python
-        
+
         >>> myFeature = Feature([('the', 2), ('pine', 1), ('trapezoid', 5)])
         >>> myFeature.top(1)
         [('trapezoid', 5)]
-        
+
         Parameters
         ----------
         topn : int
-        
+
         Returns
         -------
         list
         """
         return [self[i] for i in argsort(zip(*self)[1])[::-1][:topn]]
-        
+
     def value(self, element):
         return dict(self)[element]
 
 
-class FeatureSet(object):
+class BaseFeatureSet(object):
     def __init__(self, features={}):
         self.index = {}
         self.lookup = {}
@@ -142,9 +311,6 @@ class FeatureSet(object):
         for paper, feature in features.items():
             self.add(paper, feature)
 
-#    def __setitem__(self, key, value):
-#        setattr(self, key, value)
-#
     def __getitem__(self, key):
         return self.features[key]
 
@@ -185,20 +351,27 @@ class FeatureSet(object):
         return self.with_feature[self.lookup[elem]]
 
     def add(self, paper_id, feature):
-        if type(feature) is not Feature:
-            raise ValueError('`feature` must be an instance of class Feature')
+        if type(feature) not in [Feature, StructuredFeature]:
+            raise ValueError("""`feature` must be an instance of Feature or
+            StructuredFeature""")
 
         self.features[paper_id] = feature
 
         self.extend_index(feature.unique)
-        for elem, count in feature:
+        for item in feature:
+            if type(item) is tuple:
+                elem, count = item
+            else:
+                elem = item
+                count = 1.
+
             self.counts[self.lookup[elem]] += count
             self.documentCounts[self.lookup[elem]] += 1.
             self.with_feature[self.lookup[elem]].append(paper_id)
 
     def extend_index(self, elements):
         """
-        
+
         """
         new_elements = list(set(elements) - self.unique)
         for i in xrange(len(new_elements)):
@@ -212,15 +385,15 @@ class FeatureSet(object):
     def top(self, topn, by='counts'):
         """
         Get the top ``topn`` features in the :class:`.FeatureSet`\.
-        
+
         Parameters
         ----------
         topn : int
             Number of features to return.
         by : str
-            (default: 'counts') How features should be sorted. Must be 'counts' or 
+            (default: 'counts') How features should be sorted. Must be 'counts' or
             'documentcounts'.
-        
+
         Returns
         -------
         list
@@ -234,9 +407,53 @@ class FeatureSet(object):
         top = [cvalues.keys()[i] for i in argsort(cvalues.values())][::-1]
         return [(self.index[x], cvalues[x]) for x in top][:topn]
 
+
+class StructuredFeatureSet(BaseFeatureSet):
+    """
+    A :class:`.StructuredFeatureSet` organizes several
+    :class:`.StructuredFeature` instances.
+    """
+
+    def context_chunks(self, context):
+        """
+        Retrieves all tokens, divided into the chunks in context ``context``.
+
+        If ``context`` is not found in a feature, then the feature will be
+        treated as a single chunk.
+
+        Parameters
+        ----------
+        context : str
+            Context name.
+
+        Returns
+        -------
+        papers : list
+            2-tuples of (paper ID, chunk indices).
+        chunks : list
+            Each item in ``chunks`` is a list of tokens.
+        """
+
+        chunks = []
+        papers = []
+        for paper, feature in self.features.items():
+            if context in feature.contexts:
+                new_chunks = feature.context_chunks(context)
+            else:
+                new_chunks = list(feature)
+            indices = range(len(chunks), len(chunks) + len(new_chunks))
+            papers.append((paper, indices))
+            chunks += new_chunks
+        return papers, chunks
+
+
+class FeatureSet(BaseFeatureSet):
+    """
+    A :class:`.FeatureSet` organizes multiple :class:`.Feature` instances.
+    """
     def as_matrix(self):
         """
-        
+
         """
 
         matrix = [[0. for e in xrange(self.N_features)]
