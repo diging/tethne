@@ -6,4 +6,4 @@ jdk:
 script:
   - pip install coverage
   - pip install nose
-  - nosetests --with-coverage --cover-package=tethne --cover-min-percentage=95
+  - nosetests --with-coverage --cover-package=tethne
