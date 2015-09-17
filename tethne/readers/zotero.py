@@ -80,7 +80,6 @@ class ZoteroParser(RDFParser):
                 return str(o).replace('file://', '')                 
 
     def handle_date(self, value):
-    		print "Parsed Date:{0}".format(str(value))
     		for datefmt in ("%B %d, %Y", "%Y-%m", "%Y-%m-%d", "%m/%d/%Y"):
 		        try:
 		            print datetime.strptime(str(value), datefmt).date().year
