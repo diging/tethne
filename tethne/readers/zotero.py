@@ -79,14 +79,15 @@ class ZoteroParser(RDFParser):
             if p == link_elem:
                 return str(o).replace('file://', '')                 
 
-    def handle_date(self, value):
-    		for datefmt in ("%B %d, %Y", "%Y-%m", "%Y-%m-%d", "%m/%d/%Y"):
-		        try:
-		            print datetime.strptime(str(value), datefmt).date().year
-		        except iso8601.ParseError:
-		            print ParseError
-		        except ValueError:
-		        	pass
+    def handle_date(self, value):		
+        try:
+            return iso8601.parse_date(str(value)).year
+        except iso8601.ParseError:
+            for datefmt in ("%B %d, %Y", "%Y-%m", "%Y-%m-%d", "%m/%d/%Y"):
+                try:
+                    return datetime.strptime(str(value), datefmt).date().year
+                except ValueError:
+        	       pass
     def handle_documentType(self, value):
         return str(value)
         
