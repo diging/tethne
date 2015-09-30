@@ -214,7 +214,11 @@ def read(path, corpus=True, index_by='doi', **kwargs):
        >>> from tethne.readers import dfr
        >>> papers = dfr.read("/Path/to/DfR")
     """
-    parser = DfRParser(os.path.join(path, "citations.xml"))
+    citationfname = "citations.xml"
+    if not os.path.isfile(os.path.join(path,citationfname)):
+        citationfname = "citations.XML"
+
+    parser = DfRParser(os.path.join(path, citationfname))
     parser.parse()
     corpus = Corpus(parser.data, index_by=index_by, **kwargs)
     
