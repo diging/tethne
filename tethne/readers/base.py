@@ -103,7 +103,7 @@ class IterParser(BaseParser):
         tag : str
         data :
         """
-
+        data = str(data)
         if self.is_end(tag):
             self.postprocess_entry()
 

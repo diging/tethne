@@ -127,9 +127,9 @@ class WoSParser(FTParser):
 
         # First-author name and publication date.
         ptn = '([\w\s\W]+),\s([0-9]{4}),\s([\w\s]+)'
-        ny_match = re.match(ptn, value.decode('utf-8'), flags=re.U)
+        ny_match = re.match(ptn, value.decode('latin-1'), flags=re.U)
         nj_match = re.match('([\w\s\W]+),\s([\w\s]+)',
-                            value.decode('utf-8'), flags=re.U)
+                            value.decode('latin-1'), flags=re.U)
         if ny_match is not None:
             name_raw, date, journal = ny_match.groups()
         elif nj_match is not None:
