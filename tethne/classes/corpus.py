@@ -170,7 +170,7 @@ class Corpus(object):
             if not hasattr(paper, 'hashIndex'): # Generate a new index for this paper.
                 authors = zip(*paper.authors)[0]
                 m = hashlib.md5()
-                hashable = ' '.join(list([paper.title] + [l + f for l, f in authors]))
+                hashable = ' '.join(list([paper.title] + [unicode(l) + unicode(f) for l, f in authors])).encode('utf-8')
                 m.update(hashable)
                 setattr(paper, 'hashIndex', m.hexdigest())
             return getattr(paper, 'hashIndex')
