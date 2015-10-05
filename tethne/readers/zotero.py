@@ -88,7 +88,7 @@ class ZoteroParser(RDFParser):
                     return datetime.strptime(str(value), datefmt).date().year
                 except ValueError:
         	       pass
-                   
+
     def handle_documentType(self, value):
         return str(value)
 
@@ -133,7 +133,11 @@ class ZoteroParser(RDFParser):
         return tuple(unidecode(value).split('-'))
 
     def postprocess_pages(self, entry):
-        start, end = entry.pages
+        if len(entry.pages) == 1:
+            start = entry.pages
+            end = None
+        else:
+            start, end = entry.pages
         setattr(entry, 'pageStart', start)
         setattr(entry, 'pageEnd', end)
         del entry.pages
