@@ -14,41 +14,41 @@ from tethne.readers.base import RDFParser
 class ZoteroParser(RDFParser):
     """
     Reads Zotero RDF files.
-    
-    TODO: Extend to read in content of associated files?    
+
+    TODO: Extend to read in content of associated files?
     """
 
     entry_class = Paper
-    entry_elements = ['bib:Illustration', 'bib:Recording', 'bib:Legislation', 
-                      'bib:Document', 'bib:BookSection', 'bib:Book', 'bib:Data', 
+    entry_elements = ['bib:Illustration', 'bib:Recording', 'bib:Legislation',
+                      'bib:Document', 'bib:BookSection', 'bib:Book', 'bib:Data',
                       'bib:Letter', 'bib:Report', 'bib:Article', 'bib:Manuscript',
-                      'bib:Image', 'bib:ConferenceProceedings', 'bib:Thesis']    
+                      'bib:Image', 'bib:ConferenceProceedings', 'bib:Thesis']
     tags = {
         'isPartOf': 'journal'
     }
-                      
+
     meta_elements = [
         ('date', rdflib.URIRef("http://purl.org/dc/elements/1.1/date")),
-        ('identifier', rdflib.URIRef("http://purl.org/dc/elements/1.1/identifier")),        
+        ('identifier', rdflib.URIRef("http://purl.org/dc/elements/1.1/identifier")),
         ('abstract', rdflib.URIRef("http://purl.org/dc/terms/abstract")),
         ('authors_full', rdflib.URIRef("http://purl.org/net/biblio#authors")),
         ('link', rdflib.URIRef("http://purl.org/rss/1.0/modules/link/link")),
         ('title', rdflib.URIRef("http://purl.org/dc/elements/1.1/title")),
         ('isPartOf', rdflib.URIRef("http://purl.org/dc/terms/isPartOf")),
         ('pages', rdflib.URIRef("http://purl.org/net/biblio#pages")),
-        ('documentType', 
-         rdflib.URIRef("http://www.zotero.org/namespaces/export#itemType"))]     
-    
+        ('documentType',
+         rdflib.URIRef("http://www.zotero.org/namespaces/export#itemType"))]
+
     def __init__(self, path, **kwargs):
         name = os.path.split(path)[1]
         path = os.path.join(path, '{0}.rdf'.format(name))
         super(ZoteroParser, self).__init__(path, **kwargs)
-    
+
     def open(self):
-    
+
         # Fix validation issues. Zotero incorrectly uses rdf:resource as a
         # child element for Attribute; rdf:resource should instead be used
-        # as an attribute of link:link.    
+        # as an attribute of link:link.
         with open(self.path, 'r') as f:
             corrected = f.read().replace('rdf:resource rdf:resource',
                                          'link:link rdf:resource')
@@ -56,13 +56,13 @@ class ZoteroParser(RDFParser):
             f.write(corrected)
 
         super(ZoteroParser, self).open()
-    
+
     def handle_title(self, value):
-        return str(value)
-        
+        return unidecode(value)
+
     def handle_abstract(self, value):
         return unidecode(value)
-    
+
     def handle_identifier(self, value):
         uri_elem = rdflib.URIRef("http://purl.org/dc/terms/URI")
         type_elem = rdflib.term.URIRef(u'http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
@@ -72,33 +72,37 @@ class ZoteroParser(RDFParser):
         if ident_type == uri_elem:
             self.set_value('uri', identifier)
 
-    
+
     def handle_link(self, value):
         link_elem = rdflib.URIRef("http://purl.org/rss/1.0/modules/link/link")
         for s, p, o in self.graph.triples((value, None, None)):
             if p == link_elem:
-                return str(o).replace('file://', '')                 
+                return str(o).replace('file://', '')
 
     def handle_date(self, value):
         try:
-            return iso8601.parse_date(str(value)).year    
+            return iso8601.parse_date(str(value)).year
         except iso8601.ParseError:
-            return datetime.strptime(str(value), "%m/%d/%Y").date().year
-        
+            for datefmt in ("%B %d, %Y", "%Y-%m", "%Y-%m-%d", "%m/%d/%Y"):
+                try:
+                    return datetime.strptime(str(value), datefmt).date().year
+                except ValueError:
+        	       pass
+                   
     def handle_documentType(self, value):
         return str(value)
-        
+
     def handle_authors_full(self, value):
         authors = [self.handle_author(o) for s, p, o
-                   in self.graph.triples((value, None, None))]        
+                   in self.graph.triples((value, None, None))]
         return [a for a in authors if a is not None]
-        
+
     def handle_author(self, value):
         forename_elem = rdflib.URIRef('http://xmlns.com/foaf/0.1/givenname')
-        forename_iter = self.graph.triples((value, forename_elem, None))        
+        forename_iter = self.graph.triples((value, forename_elem, None))
         surname_elem = rdflib.URIRef('http://xmlns.com/foaf/0.1/surname')
         surname_iter = self.graph.triples((value, surname_elem, None))
-        
+
         try:
             forename = str([e[2] for e in forename_iter][0]).upper().replace('.', '')
         except IndexError:
@@ -111,23 +115,23 @@ class ZoteroParser(RDFParser):
 
         if surname == '' and forename == '':
             return
-        return surname, forename            
-    
+        return surname, forename
+
     def handle_isPartOf(self, value):
         vol = rdflib.term.URIRef(u'http://prismstandard.org/namespaces/1.2/basic/volume')
         ident = rdflib.URIRef("http://purl.org/dc/elements/1.1/identifier")
         journal = None
         for s, p, o in self.graph.triples((value, None, None)):
-           
+
             if p == vol:        # Volume number
-                self.set_value('volume', str(o))                    
+                self.set_value('volume', str(o))
             elif p == rdflib.term.URIRef(u'http://purl.org/dc/elements/1.1/title'):
                 journal = str(o)    # Journal title.
         return journal
-        
+
     def handle_pages(self, value):
         return tuple(unidecode(value).split('-'))
-        
+
     def postprocess_pages(self, entry):
         start, end = entry.pages
         setattr(entry, 'pageStart', start)
@@ -137,22 +141,22 @@ class ZoteroParser(RDFParser):
 def read(path, corpus=True, index_by='identifier', **kwargs):
     """
     Read bibliographic data from Zotero RDF.
-    
+
     Example
     -------
     Assuming that the Zotero collection was exported to the directory
     ``/my/working/dir`` with the name ``myCollection``, a subdirectory should
-    have been created at ``/my/working/dir/myCollection``, and an RDF file 
+    have been created at ``/my/working/dir/myCollection``, and an RDF file
     should exist at ``/my/working/dir/myCollection/myCollection.rdf``.
-    
+
     .. code-block:: python
-    
+
        >>> from tethne.readers.zotero import read
        >>> myCorpus = read('/my/working/dir/myCollection')
        >>> myCorpus
        <tethne.classes.corpus.Corpus object at 0x10047e350>
-       
-    
+
+
     Parameters
     ----------
     path : str
@@ -163,12 +167,12 @@ def read(path, corpus=True, index_by='identifier', **kwargs):
         returns a list of :class:`.Paper`\s.
     index_by : str
         (default: ``'identifier'``) :class:`.Paper` attribute name to use as
-        the primary indexing field. If the field is missing on a 
+        the primary indexing field. If the field is missing on a
         :class:`.Paper`\, a unique identifier will be generated based on the
         title and author names.
     kwargs : kwargs
         Passed to the :class:`.Corpus` constructor.
-    
+
     Returns
     -------
     corpus : :class:`.Corpus`
@@ -179,4 +183,3 @@ def read(path, corpus=True, index_by='identifier', **kwargs):
     if corpus:
         return Corpus(papers, index_by=index_by, **kwargs)
     return papers
-        

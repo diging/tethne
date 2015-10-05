@@ -15,16 +15,23 @@ class TestZoteroParser(unittest.TestCase):
     def test_read(self):
         corpus = read(datapath)
         self.assertIsInstance(corpus, Corpus)
-        
+
     def test_read_files(self):
         # TODO: attempt to read contents of files?
         corpus = read(datapath2, index_by='uri')
-        self.assertIsInstance(corpus, Corpus)        
+        self.assertIsInstance(corpus, Corpus)
 
     def test_read_nocorpus(self):
         papers = read(datapath, corpus=False)
         self.assertIsInstance(papers, list)
         self.assertIsInstance(papers[0], Paper)
+
+    def test_handle_date(self):
+        parser = ZoteroParser(datapath)
+        parser.parse()
+        date_list = ["January 23, 2015","2015-9","2015-9-23","09/23/2015","2015-09-23"]
+        for each_date in date_list:
+            self.assertEqual(2015, parser.handle_date(each_date), "Test Failed, Date Not properly Formatted.")
 
     def test_parse(self):
         parser = ZoteroParser(datapath)
@@ -60,7 +67,7 @@ class TestZoteroParser(unittest.TestCase):
                 self.assertIsInstance(e.abstract, str,
                                       derror.format('abstract', 'str',
                                                     type(e.abstract)))
-                
+
             if hasattr(e, 'authorKeywords'):
                 self.assertIsInstance(e.authorKeywords, list,
                                       derror.format('authorKeywords', 'list',

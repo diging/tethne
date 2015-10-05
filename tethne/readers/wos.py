@@ -38,7 +38,7 @@ class WoSParser(FTParser):
 
     start_tag = 'PT'
     end_tag = 'ER'
-    concat_fields = ['abstract', 'keywords', 'funding', 'title', 'references']
+    concat_fields = ['abstract', 'keywords', 'funding', 'title', 'references', 'journal']
     entry_class = Paper
 
     tags = {
@@ -102,6 +102,9 @@ class WoSParser(FTParser):
 
     def handle_AF(self, value):
         return self.parse_author(value)
+
+    def handle_PY(self, value):
+        return int(value)
 
     def handle_AU(self, value):
         aulast, auinit = self.parse_author(value)

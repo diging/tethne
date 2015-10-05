@@ -61,6 +61,12 @@ class TestNGrams(unittest.TestCase):
         
         self.assertIsInstance(grams, FeatureSet)
         self.assertEqual(len(grams), 398)
+
+class TestCitationFile(unittest.TestCase):
+    def test_citations_file(self):
+        datapath2 = './tethne/tests/data/dfr2'
+        self.assertIsInstance(read(datapath2), Corpus, "Citations not excepted")
+
         
 
 
