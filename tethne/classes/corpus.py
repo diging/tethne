@@ -283,6 +283,7 @@ class Corpus(object):
             A list of :class:`.Paper`\s.
         """
 
+        papers = None
         if type(selector) is tuple: # Select papers by index.
             index, value = selector
             if type(value) is list:  # Set of index values.
@@ -298,7 +299,12 @@ class Corpus(object):
                 papers = [self.papers[i] for i in selector]
         elif type(selector) is int:
             papers = self.papers[selector]
-        return papers
+        elif type(selector) in [str, unicode]:
+            if selector in self.indexed_papers:
+                papers = self.indexed_papers[selector]
+        if papers:
+            return papers
+        raise KeyError('No Papers can be found for this selector')
 
     def slice(self, window_size=1, step_size=1):
         """
