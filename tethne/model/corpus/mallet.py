@@ -125,8 +125,6 @@ class LDAModel(Model):
     def __init__(self, *args, **kwargs):
         super(LDAModel, self).__init__(*args, **kwargs)
         os.environ['MALLET_HOME'] = self.mallet_path
-        if platform.system() == 'Windows':
-            self.mallet_path += '.bat'
 
     def prep(self):
         self.dt = os.path.join(self.temp, "dt.dat")
@@ -154,6 +152,8 @@ class LDAModel(Model):
         #     --output mytopic-input.mallet --keep-sequence --remove-stopwords
 
         self.mallet_bin = os.path.join(self.mallet_path, "bin", "mallet")
+        if platform.system() == 'Windows':
+            self.mallet_bin += '.bat'
 
         if not os.path.exists(self.mallet_bin):
             raise IOError("MALLET path invalid or non-existent.")

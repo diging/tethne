@@ -283,14 +283,17 @@ class Corpus(object):
             A list of :class:`.Paper`\s.
         """
 
-        papers = None
+        papers = []
         if type(selector) is tuple: # Select papers by index.
             index, value = selector
             if type(value) is list:  # Set of index values.
                 papers = [p for v in value for p in self[index, v]]
             else:
-                papers = [self.indexed_papers[p] for p  # Single index value.
-                          in self.indices[index][value]]
+                if value in self.indices[index]:
+                    papers = [self.indexed_papers[p] for p  # Single index value.
+                              in self.indices[index][value]]
+                else:
+                    papers = []
         elif type(selector) is list:
             if selector[0] in self.indexed_papers:
                 # Selector is a list of primary indices.
@@ -302,9 +305,7 @@ class Corpus(object):
         elif type(selector) in [str, unicode]:
             if selector in self.indexed_papers:
                 papers = self.indexed_papers[selector]
-        if papers:
-            return papers
-        raise KeyError('No Papers can be found for this selector')
+        return papers
 
     def slice(self, window_size=1, step_size=1):
         """
