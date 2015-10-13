@@ -119,7 +119,7 @@ class LDAModel(Model):
 
     """
 
-    mallet_path = os.path.join(os.cwd, 'tethne', 'bin', 'mallet-2.0.7')
+    mallet_path = os.path.join(os.getcwd, 'tethne', 'bin', 'mallet-2.0.7')
 
     def prep(self):
         self.dt = os.path.join(self.temp, "dt.dat")
