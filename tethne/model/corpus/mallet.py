@@ -159,7 +159,7 @@ class LDAModel(Model):
             raise IOError("MALLET path invalid or non-existent.")
         self.input_path = os.path.join(self.temp, "input.mallet")
 
-        exit = subprocess.call( ['java', self.mallet_bin,
+        exit = subprocess.call( [self.mallet_bin,
                 'import-file',
                 '--input {0}'.format(self.corpus_path),
                 '--output {0}'.format(self.input_path),
