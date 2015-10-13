@@ -7,6 +7,8 @@ python:
   - "3.5"
 jdk:
   - oraclejdk8
+before_install:
+  - pip install virtualenv
 script:
   - pip install coverage
   - pip install nose
