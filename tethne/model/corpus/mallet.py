@@ -8,6 +8,7 @@ import shutil
 import tempfile
 import subprocess
 import csv
+import platform
 from collections import defaultdict
 
 from networkx import Graph
@@ -121,6 +122,12 @@ class LDAModel(Model):
 
     mallet_path = os.path.join(os.getcwd(), 'tethne', 'bin', 'mallet-2.0.7')
 
+    def __init__(self, *args, **kwargs):
+        super(LDAModel, self).__init__(*args, **kwargs)
+        os.environ['MALLET_HOME'] = self.mallet_path
+        if platform.system() == 'Windows':
+            self.mallet_path += '.bat'
+
     def prep(self):
         self.dt = os.path.join(self.temp, "dt.dat")
         self.wt = os.path.join(self.temp, "wt.dat")
@@ -152,7 +159,7 @@ class LDAModel(Model):
             raise IOError("MALLET path invalid or non-existent.")
         self.input_path = os.path.join(self.temp, "input.mallet")
 
-        exit = subprocess.call( [ self.mallet_bin,
+        exit = subprocess.call( ['java', self.mallet_bin,
                 'import-file',
                 '--input {0}'.format(self.corpus_path),
                 '--output {0}'.format(self.input_path),
