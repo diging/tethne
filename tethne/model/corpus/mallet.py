@@ -162,8 +162,8 @@ class LDAModel(Model):
         exit = subprocess.call([
                 self.mallet_bin,
                 'import-file',
-                '--input {0}'.format(self.corpus_path),
-                '--output {0}'.format(self.input_path),
+                '--input', self.corpus_path,
+                '--output', self.input_path,
                 '--keep-sequence',          # Required for LDA.
                 '--remove-stopwords'])      # Probably redundant.
 
@@ -196,12 +196,12 @@ class LDAModel(Model):
         p = subprocess.Popen([
                     self.mallet_bin,
                     'train-topics',
-                    '--input {0}'.format(self.input_path),
-                    '--num-topics {0}'.format(self.Z),
-                    '--num-iterations {0}'.format(self.max_iter),
-                    '--output-doc-topics {0}'.format(self.dt),
-                    '--word-topic-counts-file {0}'.format(self.wt),
-                    '--output-model {0}'.format(self.om) ],
+                    '--input', self.input_path,
+                    '--num-topics', self.Z,
+                    '--num-iterations', self.max_iter,
+                    '--output-doc-topics', self.dt,
+                    '--word-topic-counts-file', self.wt,
+                    '--output-model', self.om],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
 
