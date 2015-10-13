@@ -20,7 +20,8 @@ def is_number(value):
 
 class MLStripper(HTMLParser):
     def __init__(self):
-        super(MLStripper, self).__init__()
+        super(type(self), self).__init__()
+
         self.reset()
         self.fed = []
     def handle_data(self, d):
