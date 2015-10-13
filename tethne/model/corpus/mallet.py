@@ -127,9 +127,8 @@ class LDAModel(Model):
         self.mallet_bin = os.path.join(self.mallet_path, "bin", "mallet")
         if platform.system() == 'Windows':
             self.mallet_bin += '.bat'
-
-        super(LDAModel, self).__init__(*args, **kwargs)
         os.putenv('MALLET_HOME', self.mallet_path)
+        super(LDAModel, self).__init__(*args, **kwargs)
 
     def prep(self):
         self.dt = os.path.join(self.temp, "dt.dat")
