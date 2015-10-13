@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup, Extension
 
 DISTNAME = 'tethne'
 AUTHOR = 'E. Peirson, Digital Innovation Group @ ASU'
