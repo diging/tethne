@@ -125,6 +125,10 @@ class LDAModel(Model):
     def __init__(self, *args, **kwargs):
         super(LDAModel, self).__init__(*args, **kwargs)
         os.environ['MALLET_HOME'] = self.mallet_path
+        os.environ['%MALLET_HOME%'] = self.mallet_path
+        self.mallet_bin = os.path.join(self.mallet_path, "bin", "mallet")
+        if platform.system() == 'Windows':
+            self.mallet_bin += '.bat'
 
     def prep(self):
         self.dt = os.path.join(self.temp, "dt.dat")
@@ -151,20 +155,17 @@ class LDAModel(Model):
         # bin/mallet import-file --input /Users/erickpeirson/mycorpus_docs.txt
         #     --output mytopic-input.mallet --keep-sequence --remove-stopwords
 
-        self.mallet_bin = os.path.join(self.mallet_path, "bin", "mallet")
-        if platform.system() == 'Windows':
-            self.mallet_bin += '.bat'
-
         if not os.path.exists(self.mallet_bin):
             raise IOError("MALLET path invalid or non-existent.")
         self.input_path = os.path.join(self.temp, "input.mallet")
 
-        exit = subprocess.call( [self.mallet_bin,
+        exit = subprocess.call([
+                self.mallet_bin,
                 'import-file',
                 '--input {0}'.format(self.corpus_path),
                 '--output {0}'.format(self.input_path),
-                '--keep-sequence',          # Required (oddly) for LDA.
-                '--remove-stopwords' ])     # Probably redundant.
+                '--keep-sequence',          # Required for LDA.
+                '--remove-stopwords'])      # Probably redundant.
 
         if exit != 0:
             msg = "MALLET import-file failed with exit code {0}.".format(exit)
@@ -192,7 +193,8 @@ class LDAModel(Model):
 
         prog = re.compile('\<([^\)]+)\>')
         ll_prog = re.compile(r'(\d+)')
-        p = subprocess.Popen( [ self.mallet_bin,
+        p = subprocess.Popen([
+                    self.mallet_bin,
                     'train-topics',
                     '--input {0}'.format(self.input_path),
                     '--num-topics {0}'.format(self.Z),

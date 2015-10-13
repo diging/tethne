@@ -20,7 +20,6 @@ class Model(object):
 
         self.corpus = corpus
         self.temp = tempfile.mkdtemp()
-        os.chmod(self.temp, 0666)
 
         for attr in ['run', 'prep']:
             if not hasattr(self, attr):
