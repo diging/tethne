@@ -124,7 +124,7 @@ class LDAModel(Model):
 
 
     def __init__(self, *args, **kwargs):
-        self.mallet_bin = os.path.join(mallet_path, "bin", "mallet")
+        self.mallet_bin = os.path.join(self.mallet_path, "bin", "mallet")
         if platform.system() == 'Windows':
             self.mallet_bin += '.bat'
 
