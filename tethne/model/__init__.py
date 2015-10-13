@@ -12,7 +12,7 @@ class Model(object):
     """
     Base class for models.
     """
-    
+
     def __init__(self, corpus, **kwargs):
         """
         Initialize the ModelManager.
@@ -20,6 +20,7 @@ class Model(object):
 
         self.corpus = corpus
         self.temp = tempfile.mkdtemp()
+        os.chmod(self.temp, 0666)
 
         for attr in ['run', 'prep']:
             if not hasattr(self, attr):
@@ -49,7 +50,7 @@ class Model(object):
         """
         Plots LL/topic over iterations.
         """
-        
+
         return self.ll
 
     def fit(self, **kwargs):
@@ -61,4 +62,3 @@ class Model(object):
             setattr(self, key, value)
 
         self.run(**kwargs)
-
