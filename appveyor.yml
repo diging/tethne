@@ -97,6 +97,10 @@ install:
   # Install the build dependencies of the project.
   - "%CMD_IN_ENV% pip install -r requirements.txt"
 
+  - "pip install coverage"
+  - "pip install nose"
+
+
 build_script:
   - cd .
 
