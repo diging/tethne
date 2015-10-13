@@ -106,4 +106,4 @@ build_script:
 
 test_script:
   # Run the project tests
-  - "%CMD_IN_ENV% python nosetests"
+  - "%CMD_IN_ENV% python setup.py nosetests"

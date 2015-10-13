@@ -258,7 +258,11 @@ def corpus_from_dir(path, **kwargs):
 
 
 def read_corpus(path, **kwargs):
-    raise DeprecationWarning("corpus_from_dir is deprecated in v0.8, use" +
+    """
+    .. DANGER::
+       read_corpus is deprecated in v0.8, use :func:`.read` instead.
+    """
+    raise DeprecationWarning("read_corpus is deprecated in v0.8, use" +
                              " read directly, instead.")
     return read(path, corpus=True, **kwargs)
 
