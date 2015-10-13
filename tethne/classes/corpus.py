@@ -359,7 +359,6 @@ class Corpus(object):
 
         start = min(self.indices['date'].keys())
         end = max(self.indices['date'].keys())
-        print start, type(start), end, type(end), window_size, type(window_size)
         while start <= end - (window_size - 1):
             selector = ('date', range(start, start + window_size, 1))
             yield start, self.subcorpus(selector)
