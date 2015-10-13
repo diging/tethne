@@ -84,8 +84,10 @@ class GraphCollection(dict):
     def __getattr__(self, name):
         if name in self:
             return self[name]
-        if hasattr(self, name):
+        try:    # hasttr() causes endless recursion in Python 3.x
             return object.__getattr__(self, name)
+        except AttributeError:
+            pass
         raise AttributeError('GraphCollection has no such attribute or graph.')
 
     def build(self, corpus, method, slice_kwargs={}, method_kwargs={}):
