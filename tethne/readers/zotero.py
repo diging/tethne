@@ -77,7 +77,7 @@ class ZoteroParser(RDFParser):
         link_elem = rdflib.URIRef("http://purl.org/rss/1.0/modules/link/link")
         for s, p, o in self.graph.triples((value, None, None)):
             if p == link_elem:
-                return str(o).replace('file://', '')
+                return unicode(o).replace('file://', '')
 
     def handle_date(self, value):
         try:
@@ -104,12 +104,12 @@ class ZoteroParser(RDFParser):
         surname_iter = self.graph.triples((value, surname_elem, None))
 
         try:
-            forename = str([e[2] for e in forename_iter][0]).upper().replace('.', '')
+            forename = unicode([e[2] for e in forename_iter][0]).upper().replace('.', '')
         except IndexError:
             forename = ''
 
         try:
-            surname = str([e[2] for e in surname_iter][0]).upper().replace('.', '')
+            surname = unicode([e[2] for e in surname_iter][0]).upper().replace('.', '')
         except IndexError:
             surname = ''
 
