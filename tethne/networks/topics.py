@@ -11,24 +11,28 @@ import networkx
 #from scipy import stats
 import numpy
 
+import sys
+if sys.version_info[0] > 2:
+    xrange = range
+
 from ..analyze import features
 
 def distance(   model, method='cosine', percentile=90, bidirectional=False,
                 normalize=True, smooth=False, transform='log'    ):
     """
     Generate a network of :class:`.Paper`\s based on a distance metric from
-    `scipy.spatial.distance 
+    `scipy.spatial.distance
     <http://docs.scipy.org/doc/scipy/reference/spatial.distance.html>`_
     using :ref:`sparse-feature-vector`\s over the dimensions in ``model``.
-    
+
     Refer to the documentation for :func:`.analyze.features.distance` for
     a list of distance statistics. The only two methods that will not work
     in this context are ``hamming`` and ``jaccard``.
 
-    Distances are inverted to a similarity metric, which is log-transformed by 
+    Distances are inverted to a similarity metric, which is log-transformed by
     default (see ``transform`` parameter, below). Edges are included if they are
     at or above the ``percentile``th percentile.
-    
+
     Parameters
     ----------
     model : :class:`.LDAModel` or :class:`.DTMModel`
@@ -41,7 +45,7 @@ def distance(   model, method='cosine', percentile=90, bidirectional=False,
         :func:`.analyze.features.kl_divergence` is also available as
         'kl_divergence'.
     percentile : int
-        (default: 90) Edges are included if they are at or above the 
+        (default: 90) Edges are included if they are at or above the
         ``percentile`` for all distances in the ``model``.
     bidirectional : bool
         (default: False) If True, ``method`` is calculated twice for each pair
@@ -50,47 +54,47 @@ def distance(   model, method='cosine', percentile=90, bidirectional=False,
         (default: True) If True, vectors over topics are normalized so that they
         sum to 1.0 for each :class:`.Paper`.
     smooth : bool
-        (default: False) If True, vectors over topics are smoothed according to 
-        `Bigi 2003 
+        (default: False) If True, vectors over topics are smoothed according to
+        `Bigi 2003
         <http://lvk.cs.msu.su/~bruzz/articles/classification/Using%20Kullback-Leibler%20Distance%20for%20Text%20Categorization.pdf>`_.
         This may be useful if vectors over topics are very sparse.
     transform : str
         (default: 'log') Transformation to apply to similarity values before
         building the graph. So far only 'log' and None are supported.
-        
+
     Returns
     -------
     thegraph : networkx.Graph
         Similarity values are included as edge weights. Node attributes are set
         using the fields in ``model.metadata``.
-        
+
     Examples
     --------
-    
+
     .. code-block:: python
-    
+
        >>> from tethne.networks import topics
        >>> thegraph = topics.distance(MyLDAModel, 'cosine')
 
        >>> from tethne.writers import graph
        >>> graph.to_graphml(thegraph, '~./thegraph.graphml')
-       
+
     .. figure:: _static/images/lda_cosine_network.png
        :width: 80%
-       
+
        Edge weight and opacity indicate similarity. Node color indicates the
        journal in which each :class:`.Paper` was published. In this graph,
        papers published in the same journal tend to cluster together.
 
     """
-    
+
     if method in ['hamming','jaccard']:
         raise RuntimeError(
             'There is no sensicle interpretation of {0} for these data.'
                                                             .format(method))
-    
+
     thegraph = networkx.Graph()
-    
+
     edges = {}
     for i in xrange(model.M):
         for j in xrange(i+1, model.M):
@@ -106,16 +110,16 @@ def distance(   model, method='cosine', percentile=90, bidirectional=False,
                 dist_ = features.distance(
                             model.item(j), model.item(i), method,
                             normalize=normalize, smooth=smooth  )
-                            
+
                 dist = (dist + dist_)/2.
-            
+
             sim = 1./dist
-            
+
             if transform == 'log':
                 sim = numpy.log(sim)
 
             edges[(i,j)] = sim
-            
+
     pct = numpy.percentile(edges.values(), percentile)
     for edge, sim in edges.iteritems():
         if sim >= pct:
@@ -196,14 +200,14 @@ def distance(   model, method='cosine', percentile=90, bidirectional=False,
 #        tc.node[t]['words'] = model.top_keys[t][1]  # Add list of top words.
 #
 #    return tc
-#    
+#
 #def topic_coupling(model, papers=None, threshold=None):
 #    """
 #    Builds a network of topics using inverse symmetric KL-divergence on papers.
-#    
+#
 #    If `papers` is not None, uses only those papers provided to calculate
 #    KL-divergence.
-#    
+#
 #    Parameters
 #    ----------
 #    model : :class:`.LDAModel`
@@ -212,15 +216,15 @@ def distance(   model, method='cosine', percentile=90, bidirectional=False,
 #    threshold : float
 #        Minimum inverse symmetric KL-divergence for an edge. (default = 0.25)
 #    """
-#    
+#
 #    Z = model.top_word.shape[0]
 #    G = nx.Graph()
-#    
+#
 #    if threshold is None:
-#        # Scaling factor to remove negative correlation between N_d and number 
+#        # Scaling factor to remove negative correlation between N_d and number
 #        # of edges.
 #        threshold = len(papers)**-0.2 + 0.1
-#        
+#
 #    if papers is None:
 #        dt_matrix = model.doc_topic
 #    else:
@@ -234,12 +238,9 @@ def distance(   model, method='cosine', percentile=90, bidirectional=False,
 #            D_ij = stats.entropy(dt_matrix[:,i], dt_matrix[:,j])
 #            D_ji = stats.entropy(dt_matrix[:,j], dt_matrix[:,i])
 #            iD_sym = float(1/(D_ij + D_ji))
-#            
+#
 #            if iD_sym >= threshold:
 #                G.add_node(j, label=', '.join(model.top_keys[i][1]))
 #                G.add_edge(i,j,weight=iD_sym)
-#    
+#
 #    return G
-
-
-

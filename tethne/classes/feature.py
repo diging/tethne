@@ -2,6 +2,10 @@ from collections import Counter, defaultdict
 
 from tethne.utilities import _iterable, argsort
 
+import sys
+if sys.version_info[0] > 2:
+    xrange = range
+
 
 class StructuredFeature(list):
     """

@@ -9,11 +9,15 @@ import uuid
 
 from unidecode import unidecode
 
+import sys
+if sys.version_info[0] > 2:
+    xrange = range
+
 from ..classes import Paper, Corpus
 
 def read_corpus(path):
     """
-    
+
     """
 
     papers = read(path)
@@ -21,7 +25,7 @@ def read_corpus(path):
 
 def corpus_from_dir(path):
     """
-    
+
     Parameters
     ----------
     path : string
@@ -55,7 +59,7 @@ def from_dir(path):
     ------
     IOError
         Invalid path.
-        
+
     Examples
     --------
 
@@ -67,12 +71,12 @@ def from_dir(path):
     """
 
     papers = []
-    
+
     try:
         files = os.listdir(path)
     except IOError:
         raise IOError("Invalid path.")
-            
+
     for f in files:
         if not f.startswith('.') and f.endswith('csv'): # Ignore hidden files.
             try:
@@ -95,19 +99,19 @@ def read(datapath, **kwargs):
     -------
     papers : list
         A list of :class:`.Paper` instances.
-        
+
     Examples
     --------
-    
+
     .. code-block:: python
 
        >>> import tethne.readers as rd
        >>> papers = rd.scopus.read("/Path/to/scopus.csv")
 
     """
-    
+
     accession = str(uuid.uuid4())   # Accession ID.
-    
+
     papers = kwargs.get('papers', [])   # Can provide an alternate container.
 
     rawdata = []
@@ -125,7 +129,7 @@ def read(datapath, **kwargs):
         p['date'] = int(rawdatum['Year'].strip())
         p['ayjid'] = _create_ayjid(
                         p['aulast'], p['auinit'], p['date'], p['jtitle'])
-    
+
         p['institutions'] = _handle_affiliations(
                 rawdatum['Authors with affiliations'], p['aulast'], p['auinit'])
         p['atitle'] = rawdatum['Title'].strip().upper()
@@ -134,11 +138,11 @@ def read(datapath, **kwargs):
         p['issue'] = rawdatum['Issue'].strip()
         p['spage'] = rawdatum['Page start'].strip()
         p['epage'] = rawdatum['Page end'].strip()
-        
+
         p['abstract'] = rawdatum['Abstract'].strip().upper()
         p['citations'] = _handle_references(rawdatum['References'])
         p['accession'] = accession
-        
+
         # DOI and PMID are not always present, but must be unique. If they are
         #  not provided, should be set to None so that they can be handled
         #  appropriately downstream. EID should always be present.
@@ -148,7 +152,7 @@ def read(datapath, **kwargs):
         pmid = rawdatum['PubMed ID'].strip()
         if pmid == '': pmid = None
         p['pmid'] = pmid
-        p['eid'] = rawdatum['EID'].strip()        
+        p['eid'] = rawdatum['EID'].strip()
 
         papers.append(p)
 
@@ -178,7 +182,7 @@ def _handle_affiliations(affiliationsdata, aulast, auinit):
         if matching > 1:
             return True, matching
         return False, 0
-        
+
     institutions = {}
 
     aff_split = affiliationsdata.split(';')
@@ -189,16 +193,16 @@ def _handle_affiliations(affiliationsdata, aulast, auinit):
 
         try:
             cleaned = [ a_.strip().upper().replace('.','') for a_ in a ]
-            
-            # First work on the assumption that affiliations are in the same 
+
+            # First work on the assumption that affiliations are in the same
             #  order as author names.
             aul = aulast[i]
             aui = auinit[i]
             match, overlap = matching_author(aul, aui, cleaned)
-            if match:     
-                aname = ' '.join([aul, aui])     
-                
-            # That might not always be true, so we'll try the other authors 
+            if match:
+                aname = ' '.join([aul, aui])
+
+            # That might not always be true, so we'll try the other authors
             #  just in case.
             else:
                 found = False
@@ -213,7 +217,7 @@ def _handle_affiliations(affiliationsdata, aulast, auinit):
                         break
                 if not found:   # If the author can't be identified, discard.
                     break
-                    
+
             institution = a[match+1:] # The remainder is the institution name.
             l = len(institution)
 
@@ -228,11 +232,11 @@ def _handle_affiliations(affiliationsdata, aulast, auinit):
             else:
                 nation = institution[-1].upper()
                 inst = ', '.join(institution[0:2]).upper()
-        
+
             institutions[aname] = [', '.join([inst, nation])]
         except IndexError:  # Blank record part (stray delimiter).
             pass
-            
+
     # inst_list should be a list of lists, ordered by aulast/auinit.
     authors = [ ' '.join(a) for a in zip(aulast, auinit) ]  # To use as keys.
     inst_list = []
@@ -299,21 +303,21 @@ def _handle_references(referencesdata):
     """
 
     references = [] # A list of Papers.
-    
+
     for r in referencesdata.strip().split(';'): # Each cited reference.
-    
+
         # Split at date first, e.g. ' ... (1995) ... '
         m = re.search('(.*)\((?P<date>[0-9]{4})\)(.*)', r)
         if m is not None:
             date = int(m.group('date'))
-            
+
             pre_date = m.group(1).strip() # Authors, title (unless it's a book).
             post_date = m.group(3).strip() # Journal, volume, pages, etc.
-        
+
             # Handle authors and title.
             #  Looks for one or more like 'Author, J.K.L., '
             m_ = re.findall('([a-zA-Z]*,\s[A-Z\.]*,[\s]*)', pre_date)
-            
+
             if m_ is not None:  # Books will pass, but we won't use title.
 
                 # Remove commas between surnames and initials.
@@ -326,14 +330,14 @@ def _handle_references(referencesdata):
 
             else:   # Let the rest go for now.
                 continue
-    
+
             # Handle journal, volume, issue, pages.
             m_ = re.search('(.*)[p]{1,2}\.(.*)', post_date)
-            
+
             if m_ is not None:  # Books will fail here.
                 pages = m_.group(2).strip()
                 pre_pp = m_.group(1)
-                
+
                 # Get start (and end) page number(s).
                 if len(pages.split('-')) == 2:  # Both start and end.
                     spage = pages.split('-')[0]
@@ -341,11 +345,11 @@ def _handle_references(referencesdata):
                 else:   # Only one page.
                     spage = pages
                     epage = pages
-                
+
                 # Get journal details.
                 jtitle = pre_pp.split(', ')[0].strip().upper()
                 issue_volume = pre_pp.split(', ')[1].strip()
-                
+
                 # Look for an issue number, in parentheses.
                 j = re.search('([a-z0-9]*) \(([a-z0-9]*)\)', issue_volume)
                 if j is not None:
@@ -355,7 +359,7 @@ def _handle_references(referencesdata):
                 else:   # No issue number.
                     volume = issue_volume
                     issue = ''
-            
+
             else:   # Probably a book.
                 # TODO: Make this better.
                 title = post_date.strip()   # Includes publisher, etc.

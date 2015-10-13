@@ -1,5 +1,5 @@
 """
-A :class:`.GraphCollection` is a set of graphs generated from a 
+A :class:`.GraphCollection` is a set of graphs generated from a
 :class:`.Corpus` or model.
 """
 
@@ -8,6 +8,10 @@ from collections import defaultdict
 import warnings
 from tethne import networks
 
+import sys
+if sys.version_info[0] > 2:
+    xrange = range
+
 class GraphCollection(dict):
     """
     A :class:`.GraphCollection` is an indexed set of
@@ -15,9 +19,9 @@ class GraphCollection(dict):
 
     When you add a :class:`networx.Graph`\, the nodes are indexed and
     relabeled.
-    
+
     .. code-block:: python
-    
+
        >>> from tethne import GraphCollection
        >>> import networkx as nx
 
@@ -30,18 +34,18 @@ class GraphCollection(dict):
 
        >>> G.graph1.nodes(data=True)
        [(0, {}), (1, {'yes': 'no'})]
-       
+
        >>> G.node_index, G.node_lookup
        ({0: 'B', 1: 'A', -1: None}, {'A': 1, None: -1, 'B': 0})
-    
+
     To build a :class:`.GraphCollection` from a :class:`.Corpus`, pass it and
     a method to the constructor, or use :meth:`.GraphCollection.build`\.
-    
+
     .. code-block:: python
-    
+
        >>> corpus = read(datapath)
        >>> G = GraphCollection(corpus, coauthors)
-       
+
        >>> G.build(corpus, authors)
 
     """
@@ -88,7 +92,7 @@ class GraphCollection(dict):
         """
         Generate a set of :class:`networkx.Graph`\s using ``method`` on the
         slices in ``corpus``\.
-        
+
         Parameters
         ----------
         corpus : :class:`.Corpus`
@@ -117,7 +121,7 @@ class GraphCollection(dict):
         name : hashable
             Unique name used to identify the `graph`.
         graph : networkx.Graph
-        
+
         Raises
         ------
         ValueError
@@ -148,13 +152,13 @@ class GraphCollection(dict):
         """
         Index any new nodes in `graph`, and relabel the nodes in `graph` using
         the index.
-        
+
         Parameters
         ----------
         name : hashable
             Unique name used to identify the `graph`.
         graph : networkx.Graph
-        
+
         Returns
         -------
         indexed_graph : networkx.Graph
@@ -178,13 +182,13 @@ class GraphCollection(dict):
     def nodes(self, data=False, native=True):
         """
         Returns a list of all nodes in the :class:`.GraphCollection`\.
-        
+
         Parameters
         ----------
         data : bool
             (default: False) If True, returns a list of 2-tuples containing
             node labels and attributes.
-        
+
         Returns
         -------
         nodes : list
@@ -201,7 +205,7 @@ class GraphCollection(dict):
     def edges(self, data=False, native=True):
         """
         Returns a list of all edges in the :class:`.GraphCollection`\.
-        
+
         Parameters
         ----------
         data : bool
@@ -288,18 +292,18 @@ class GraphCollection(dict):
         """
         Apply a method from NetworkX to each of the graphs in the
         :class:`.GraphCollection`\.
-        
+
         Example
         -------
         .. code-block:: python
-        
+
            >>> G.analyze('betweenness_centrality')
-           {'test': {0: 1.0, 1: 0.0, 2: 0.0}, 
+           {'test': {0: 1.0, 1: 0.0, 2: 0.0},
             'test2': {0: 0.0, 1: 0.0, 2: 0.0, 3: 0.0}}
            >>> G.analyze('betweenness_centrality', results_by='node')
-           {0: {'test': 1.0, 'test2': 0.0}, 
-            1: {'test': 0.0, 'test2': 0.0}, 
-            2: {'test': 0.0, 'test2': 0.0}, 
+           {0: {'test': 1.0, 'test2': 0.0},
+            1: {'test': 0.0, 'test2': 0.0},
+            2: {'test': 0.0, 'test2': 0.0},
             3: {'test2': 0.0}}
 
         Parameters
@@ -310,7 +314,7 @@ class GraphCollection(dict):
             dot-path to the method, e.g. ``nx.connected.is_connected`` would be
             written as ``['connected', 'is_connected']``.
         mapper : func
-            A mapping function. Be default uses Python's builtin ``map`` 
+            A mapping function. Be default uses Python's builtin ``map``
             function. MUST return results in order.
         results_by : str
             (default: 'graph'). By default, the top-level key in the results
@@ -318,7 +322,7 @@ class GraphCollection(dict):
             top-level keys.
         kwargs : kwargs
             Any additional kwargs are passed to the NetworkX method.
-            
+
         Returns
         -------
         dict
@@ -426,16 +430,16 @@ class GraphCollection(dict):
     def union(self, weight_attr='_weight'):
         """
         Returns the union of all graphs in this :class:`.GraphCollection`\.
-        
+
         The number of graphs in which an edge exists between each node pair `u` and `v`
         is stored in the edge attribute given be `weight_attr` (default: `_weight`).
-        
+
         Parameters
         ----------
         weight_attr : str
             (default: '_weight') Name of the edge attribute used to store the number of
             graphs in which an edge exists between node pairs.
-        
+
         Returns
         -------
         graph : :class:`networkx.Graph`
@@ -445,7 +449,7 @@ class GraphCollection(dict):
             graph = nx.DiGraph()
         else:
             graph = nx.Graph()
-                
+
         edge_attrs = defaultdict(list)
 
         for u, v, a in self.master_graph.edges(data=True):
@@ -460,15 +464,9 @@ class GraphCollection(dict):
                 graph[u][v][key].append(value)
             graph[u][v]['graphs'].append(a['graph'])
             graph[u][v][weight_attr] += 1.
-        
+
         for u, a in self.master_graph.nodes(data=True):
             for key, value in a.iteritems():
                 graph.node[u][key] = value
-        
-        return graph
-            
 
-                            
-            
-            
-            
+        return graph

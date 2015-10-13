@@ -7,6 +7,7 @@ try:
     from HTMLParser import HTMLParser   # Python 2.x
 except ImportError:
     from html.parser import HTMLParser  # Python 3.x
+    xrange = range
 
 def is_number(value):
     try:
