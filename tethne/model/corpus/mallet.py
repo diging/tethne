@@ -124,8 +124,7 @@ class LDAModel(Model):
 
     def __init__(self, *args, **kwargs):
         super(LDAModel, self).__init__(*args, **kwargs)
-        os.environ['MALLET_HOME'] = self.mallet_path
-        os.environ['%MALLET_HOME%'] = self.mallet_path
+        os.putenv('MALLET_HOME', self.mallet_path)
         self.mallet_bin = os.path.join(self.mallet_path, "bin", "mallet")
         if platform.system() == 'Windows':
             self.mallet_bin += '.bat'
