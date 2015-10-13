@@ -226,7 +226,9 @@ class Feature(list):
                     combined_data[k] += v
                 return combined_data.items()
             else:   # Recurses.
-                return self.__add__(Counter(_iterable(data)).items())
+                c = Counter(_iterable(data))
+                keys = list(c.keys())
+                return self.__add__(list(zip(keys, c.values())))
         return self
 
     def __sub__(self, data):
@@ -264,12 +266,12 @@ class Feature(list):
         The `set` of unique elements in this :class:`.Feature`\.
         """
         if len(self) > 0:
-            return set(zip(*self)[0])
+            return set(list(zip(*self))[0])
         return set()
 
     @property
     def norm(self):
-        T = sum(zip(*self)[1])
+        T = sum(list(zip(*self))[1])
         return Feature([(i,float(v)/T) for i,v in self])
 
     def top(self, topn=10):
@@ -293,7 +295,7 @@ class Feature(list):
         -------
         list
         """
-        return [self[i] for i in argsort(zip(*self)[1])[::-1][:topn]]
+        return [self[i] for i in argsort(list(zip(*self))[1])[::-1][:topn]]
 
     def value(self, element):
         return dict(self)[element]
