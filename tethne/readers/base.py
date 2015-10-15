@@ -2,6 +2,11 @@ import os
 import re
 import xml.etree.ElementTree as ET
 import rdflib
+import codecs
+from unidecode import unidecode
+#import chardet 
+import cchardet as chardet
+import nltk
 
 class dobject(object):
     pass
@@ -80,7 +85,6 @@ class IterParser(BaseParser):
             if self.is_eof(tag):
                 self.postprocess_entry()
                 break
-
             self.handle(tag, data)
             self.last_tag = tag
         return self.data
@@ -103,6 +107,7 @@ class IterParser(BaseParser):
         tag : str
         data :
         """
+
         data = str(data)
         if self.is_end(tag):
             self.postprocess_entry()
@@ -162,7 +167,12 @@ class FTParser(IterParser):
         if not os.path.exists(self.path):
             raise IOError("No such path: {0}".format(self.path))
     
-        self.buffer = open(self.path, 'r')
+        with open(self.path, "r") as f:
+            msg = f.read()
+        result = chardet.detect(msg)
+
+        #self.buffer = open(self.path, 'r').read()
+        self.buffer = codecs.open(self.path, "r", result['encoding'].encode("utf-8"))
         self.at_eof = False
     
     def next(self):
@@ -175,6 +185,7 @@ class FTParser(IterParser):
         data : 
         """
         line = self.buffer.readline()
+
         while line == '\n':       # Skip forward to the next line with content.
             line = self.buffer.readline()
             
@@ -188,6 +199,7 @@ class FTParser(IterParser):
         else:
             self.current_tag = self.last_tag
             data = line.strip()
+        data=unidecode(data)
 
         return self.current_tag, _cast(data)
     
