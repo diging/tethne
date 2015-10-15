@@ -7,6 +7,7 @@ from unidecode import unidecode
 #import chardet 
 import cchardet as chardet
 import nltk
+import unicodedata
 
 class dobject(object):
     pass
@@ -85,6 +86,7 @@ class IterParser(BaseParser):
             if self.is_eof(tag):
                 self.postprocess_entry()
                 break
+            data = unicode(data)
             self.handle(tag, data)
             self.last_tag = tag
         return self.data
@@ -107,7 +109,7 @@ class IterParser(BaseParser):
         tag : str
         data :
         """
-
+        data = unicodedata.normalize('NFKD', data).encode('utf-8','ignore')
         data = str(data)
         if self.is_end(tag):
             self.postprocess_entry()
@@ -172,6 +174,7 @@ class FTParser(IterParser):
         result = chardet.detect(msg)
 
         #self.buffer = open(self.path, 'r').read()
+
         self.buffer = codecs.open(self.path, "r", result['encoding'].encode("utf-8"))
         self.at_eof = False
     
