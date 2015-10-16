@@ -144,6 +144,7 @@ class Corpus(object):
         self.index_by = index_by
         self.indices = {}
         self.features = {}
+        self.structuredfeatures = {}
         self.slices = []
 
         self.indexed_papers = {self._generate_index(paper): paper for paper in papers}
