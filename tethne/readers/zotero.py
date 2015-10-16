@@ -261,6 +261,9 @@ class ZoteroParser(RDFParser):
         Attempt to load full-text content from resource.
         """
 
+        if not self.follow_links:
+            return
+
         if type(entry.link) is not list:
             entry.link = [entry.link]
 
@@ -291,7 +294,7 @@ class ZoteroParser(RDFParser):
             self.full_text[fset_name][ident] = structuredfeature
 
 
-def read(path, corpus=True, index_by='uri', **kwargs):
+def read(path, corpus=True, index_by='uri', follow_links=True, **kwargs):
     """
     Read bibliographic data from Zotero RDF.
 
@@ -323,6 +326,9 @@ def read(path, corpus=True, index_by='uri', **kwargs):
         the primary indexing field. If the field is missing on a
         :class:`.Paper`\, a unique identifier will be generated based on the
         title and author names.
+    follow_links : bool
+        If ``True``, attempts to load full-text content from attached files
+        (e.g. PDFs with embedded text).
     kwargs : kwargs
         Passed to the :class:`.Corpus` constructor.
 
@@ -332,7 +338,7 @@ def read(path, corpus=True, index_by='uri', **kwargs):
     """
     # TODO: is there a case where `from_dir` would make sense?
 
-    parser = ZoteroParser(path, index_by=index_by)
+    parser = ZoteroParser(path, index_by=index_by, follow_links=follow_links)
     papers = parser.parse()
 
     if corpus:

@@ -188,6 +188,11 @@ class GramGenerator(object):
 
         return doi, grams   # Default behavior.
 
+def _get_citation_filename(basepath):
+    for fname in ["citations.xml", "citations.XML"]:
+        if os.path.exists(os.path.join(basepath, fname)):
+            return fname
+
 
 def read(path, corpus=True, index_by='doi', **kwargs):
     """
@@ -214,20 +219,35 @@ def read(path, corpus=True, index_by='doi', **kwargs):
        >>> from tethne.readers import dfr
        >>> papers = dfr.read("/Path/to/DfR")
     """
-    citationfname = "citations.xml"
-    if not os.path.isfile(os.path.join(path,citationfname)):
-        citationfname = "citations.XML"
 
-    parser = DfRParser(os.path.join(path, citationfname))
-    parser.parse()
-    corpus = Corpus(parser.data, index_by=index_by, **kwargs)
+    citationfname = _get_citation_filename(path)
 
-    # Find and read N-gram data.
-    for sname in os.listdir(path):
-        fpath = os.path.join(path, sname)   # Full path.
-        if os.path.isdir(fpath) and not sname.startswith('.'):
-            corpus.features[sname] = ngrams(path, sname)
-    return corpus
+    papers = []
+    if citationfname:   # Valid DfR dataset.
+        parser = DfRParser(os.path.join(path, citationfname))
+        papers += parser.parse()
+
+    else:   # Possibly a directory containing several DfR datasets?
+        papers = []
+        # Search for DfR datasets in subdirectories.
+        for dirpath, dirnames, filenames in os.walk(path):
+            citationfname = _get_citation_filename(dirpath)
+            if citationfname:
+                papers += read(dirpath, corpus=False)
+
+    if len(papers) == 0:
+        raise ValueError('No DfR datasets found at %s' % path)
+
+    if corpus:
+        corpus = Corpus(parser.data, index_by=index_by, **kwargs)
+
+        # Find and read N-gram data.
+        for sname in os.listdir(path):
+            fpath = os.path.join(path, sname)   # Full path.
+            if os.path.isdir(fpath) and not sname.startswith('.'):
+                corpus.features[sname] = ngrams(path, sname)
+        return corpus
+    return papers
 
 
 def ngrams(path, elem, ignore_hash=True):

@@ -296,6 +296,10 @@ def read(path, corpus=True, index_by='wosid', **kwargs):
 
     if os.path.isdir(path):
         papers = from_dir(path)
+        papers = []
+        for sname in os.listdir(path):
+            if sname.endswith('txt') and not sname.startswith('.'):
+                papers += read(os.path.join(path, sname), corpus=False)
     else:
         papers = WoSParser(path).parse()
 
