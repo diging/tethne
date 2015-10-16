@@ -9,4 +9,5 @@ jdk:
 script:
   - pip install coverage
   - pip install nose
+  - python -m nltk.downloader all
   - nosetests --with-coverage --cover-package=tethne
