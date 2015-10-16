@@ -1,3 +1,8 @@
+"""
+Classes in this module provide structures for additional data about
+:class:`.Paper`\s.
+"""
+
 from collections import Counter, defaultdict
 
 from tethne.utilities import _iterable, argsort
