@@ -1,0 +1,583 @@
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:z="http://www.zotero.org/namespaces/export#"
+ xmlns:dcterms="http://purl.org/dc/terms/"
+ xmlns:bib="http://purl.org/net/biblio#"
+ xmlns:foaf="http://xmlns.com/foaf/0.1/"
+ xmlns:link="http://purl.org/rss/1.0/modules/link/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/">
+    <bib:Article rdf:about="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2211313/">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:1471-2148"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Ruiz-Herrera</foaf:surname>
+                        <foaf:givenname>Aurora</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Robinson</foaf:surname>
+                        <foaf:givenname>Terence J</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_5"/>
+        <link:link rdf:resource="#item_4"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2211313/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <bib:pages>199</bib:pages>
+        <dc:date>2007-10-24</dc:date>
+        <dc:description>PMID: 17958882
+PMCID: PMC2211313</dc:description>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <z:libraryCatalog>PubMed Central</z:libraryCatalog>
+        <dcterms:abstract>Background
+Extant placental mammals are divided into four major clades (Laurasiatheria, Supraprimates, Xenarthra and Afrotheria). Given that Afrotheria is generally thought to root the eutherian tree in phylogenetic analysis of large nuclear gene data sets, the study of the organization of the genomes of afrotherian species provides new insights into the dynamics of mammalian chromosomal evolution. Here we test if there are chromosomal bands with a high tendency to break and reorganize in Afrotheria, and by analyzing the expression of aphidicolin-induced common fragile sites in three afrotherian species, whether these are coincidental with recognized evolutionary breakpoints.
+
+Results
+We described 29 fragile sites in the aardvark (OAF) genome, 27 in the golden mole (CAS), and 35 in the elephant-shrew (EED) genome. We show that fragile sites are conserved among afrotherian species and these are correlated with evolutionary breakpoints when compared to the human (HSA) genome. Inddition, by computationally scanning the newly released opossum (Monodelphis domestica) and chicken sequence assemblies for use as outgroups to Placentalia, we validate the HSA 3/21/5 chromosomal synteny as a rare genomic change that defines the monophyly of this ancient African clade of mammals. On the other hand, support for HSA 1/19p, which is also thought to underpin Afrotheria, is currently ambiguous.
+
+Conclusion
+We provide evidence that (i) the evolutionary breakpoints that characterise human syntenies detected in the basal Afrotheria correspond at the chromosomal band level with fragile sites, (ii) that HSA 3p/21 was in the amniote ancestor (i.e., common to turtles, lepidosaurs, crocodilians, birds and mammals) and was subsequently disrupted in the lineage leading to marsupials. Its expansion to include HSA 5 in Afrotheria is unique and (iii) that its fragmentation to HSA 3p/21 + HSA 5/21 in elephant and manatee was due to a fission within HSA 21 that is probably shared by all Paenungulata.</dcterms:abstract>
+        <dc:title>Chromosomal instability in Afrotheria: fragile sites, evolutionary breakpoints and phylogenetic inference from genome sequence assemblies</dc:title>
+        <z:shortTitle>Chromosomal instability in Afrotheria</z:shortTitle>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:1471-2148">
+        <prism:volume>7</prism:volume>
+        <dc:title>BMC Evolutionary Biology</dc:title>
+        <dc:identifier>ISSN 1471-2148</dc:identifier>
+        <dcterms:alternative>BMC Evol Biol</dcterms:alternative>
+        <dc:identifier>DOI 10.1186/1471-2148-7-199</dc:identifier>
+    </bib:Journal>
+    <z:Attachment rdf:about="#item_5">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/5/Ruiz-Herrera and Robinson - 2007 - Chromosomal instability in Afrotheria fragile sit.pdf"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2211313/pdf/1471-2148-7-199.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <dc:title>PubMed Central Full Text PDF</dc:title>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_4">
+        <z:itemType>attachment</z:itemType>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2211313/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <dc:title>PubMed Central Link</dc:title>
+    </z:Attachment>
+    <bib:Article rdf:about="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1513266/">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:1553-7390"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Svartman</foaf:surname>
+                        <foaf:givenname>Marta</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Stone</foaf:surname>
+                        <foaf:givenname>Gary</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Stanyon</foaf:surname>
+                        <foaf:givenname>Roscoe</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_8"/>
+        <link:link rdf:resource="#item_7"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1513266/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dc:date>2006-7</dc:date>
+        <dc:description>PMID: 16848642
+PMCID: PMC1513266</dc:description>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <z:libraryCatalog>PubMed Central</z:libraryCatalog>
+        <dcterms:abstract>Molecular studies have led recently to the proposal of a new super-ordinal arrangement of the 18 extant Eutherian orders. From the four proposed super-orders, Afrotheria and Xenarthra were considered the most basal. Chromosome-painting studies with human probes in these two mammalian groups are thus key in the quest to establish the ancestral Eutherian karyotype. Although a reasonable amount of chromosome-painting data with human probes have already been obtained for Afrotheria, no Xenarthra species has been thoroughly analyzed with this approach. We hybridized human chromosome probes to metaphases of species (Dasypus novemcinctus, Tamandua tetradactyla, and Choloepus hoffmanii) representing three of the four Xenarthra families. Our data allowed us to review the current hypotheses for the ancestral Eutherian karyotype, which range from 2n = 44 to 2n = 48. One of the species studied, the two-toed sloth C. hoffmanii (2n = 50), showed a chromosome complement strikingly similar to the proposed 2n = 48 ancestral Eutherian karyotype, strongly reinforcing it., Living mammals are classified into three major groups: monotremes, marsupials, and placental mammals or Eutherians, composed of 18 orders. Phylogenetic studies point to Afrotheria (a clade of six endemic African orders) or Xenarthra (armadillos, anteaters, and sloths, mostly found in Central and South America) as the most basal Eutherian group. One of the most daring aims of molecular cytogenetics in the past decade has been to establish the karyotype present in a common ancestor of all Eutherians. The approach used, cross-species chromosome painting, involves the use of probes from specific chromosomes or chromosome segments from one species, which are hybridized to metaphases of another species, highlighting regions of homology between both genomes. More than 60 species have already been analyzed with this method, and it is believed that the ancestral karyotype had 44, 46, or 48 chromosomes. The authors, using human chromosomes as probes to study three Xenarthra species, found that one of them, the two-toed sloth Choloepus hoffmannii (2n = 50), has a karyotype strikingly similar to the proposed 2n = 48 ancestral Eutherian complement. This observation, besides reinforcing the hypothesized karyotype, suggests that Xenarthra may be at the root of the Eutherian tree.</dcterms:abstract>
+        <dc:title>The Ancestral Eutherian Karyotype Is Present in Xenarthra</dc:title>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:1553-7390">
+        <prism:volume>2</prism:volume>
+        <prism:number>7</prism:number>
+        <dc:title>PLoS Genetics</dc:title>
+        <dc:identifier>ISSN 1553-7390</dc:identifier>
+        <dcterms:alternative>PLoS Genet</dcterms:alternative>
+        <dc:identifier>DOI 10.1371/journal.pgen.0020109</dc:identifier>
+    </bib:Journal>
+    <z:Attachment rdf:about="#item_8">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/8/Svartman et al. - 2006 - The Ancestral Eutherian Karyotype Is Present in Xe.pdf"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1513266/pdf/pgen.0020109.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <dc:title>PubMed Central Full Text PDF</dc:title>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_7">
+        <z:itemType>attachment</z:itemType>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1513266/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <dc:title>PubMed Central Link</dc:title>
+    </z:Attachment>
+    <bib:Article rdf:about="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC455692/">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:1477-7827"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Carter</foaf:surname>
+                        <foaf:givenname>Anthony M</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Enders</foaf:surname>
+                        <foaf:givenname>Allen C</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_11"/>
+        <link:link rdf:resource="#item_10"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC455692/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <bib:pages>46</bib:pages>
+        <dc:date>2004-7-5</dc:date>
+        <dc:description>PMID: 15236656
+PMCID: PMC455692</dc:description>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <z:libraryCatalog>PubMed Central</z:libraryCatalog>
+        <dcterms:abstract>Based on the number of tissues separating maternal from fetal blood, placentas are classified as epitheliochorial, endotheliochorial or hemochorial. We review the occurrence of these placental types in the various orders of eutherian mammals within the framework of the four superorders identified by the techniques of molecular phylogenetics. The superorder Afrotheria diversified in ancient Africa and its living representatives include elephants, sea cows, hyraxes, aardvark, elephant shrews and tenrecs. Xenarthra, comprising armadillos, anteaters and sloths, diversified in South America. All placentas examined from members of these two oldest superorders are either endotheliochorial or hemochorial. The superorder Euarchontoglires includes two sister groups, Glires and Euarchonta. The former comprises rodents and lagomorphs, which typically have hemochorial placentas. The most primitive members of Euarchonta, the tree shrews, have endotheliochorial placentation. Flying lemurs and all higher primates have hemochorial placentas. However, the lemurs and lorises are exceptional among primates in having epitheliochorial placentation. Laurasiatheria, the last superorder to arise, includes several orders with epitheliochorial placentation. These comprise whales, camels, pigs, ruminants, horses and pangolins. In contrast, nearly all carnivores have endotheliochorial placentation, whilst bats have endotheliochorial or hemochorial placentas. Also included in Laurasiatheria are a number of insectivores that have many conserved morphological characters; none of these has epitheliochorial placentation. Consideration of placental type in relation to the findings of molecular phylogenetics suggests that the likely path of evolution in Afrotheria was from endotheliochorial to hemochorial placentation. This is also a likely scenario for Xenarthra and the bats. We argue that a definitive epitheliochorial placenta is a secondary specialization and that it evolved twice, once in the Laurasiatheria and once in the lemurs and lorises.</dcterms:abstract>
+        <dc:title>Comparative aspects of trophoblast development and placentation</dc:title>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:1477-7827">
+        <prism:volume>2</prism:volume>
+        <dc:title>Reproductive biology and endocrinology : RB&amp;E</dc:title>
+        <dc:identifier>ISSN 1477-7827</dc:identifier>
+        <dcterms:alternative>Reprod Biol Endocrinol</dcterms:alternative>
+        <dc:identifier>DOI 10.1186/1477-7827-2-46</dc:identifier>
+    </bib:Journal>
+    <z:Attachment rdf:about="#item_11">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/11/Carter and Enders - 2004 - Comparative aspects of trophoblast development and.pdf"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC455692/pdf/1477-7827-2-46.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <dc:title>PubMed Central Full Text PDF</dc:title>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_10">
+        <z:itemType>attachment</z:itemType>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC455692/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <dc:title>PubMed Central Link</dc:title>
+    </z:Attachment>
+    <bib:Article rdf:about="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1914331/">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:0962-8452"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Pardini</foaf:surname>
+                        <foaf:givenname>A.T</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>O'Brien</foaf:surname>
+                        <foaf:givenname>P.C.M</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Fu</foaf:surname>
+                        <foaf:givenname>B</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Bonde</foaf:surname>
+                        <foaf:givenname>R.K</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Elder</foaf:surname>
+                        <foaf:givenname>F.F.B</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Ferguson-Smith</foaf:surname>
+                        <foaf:givenname>M.A</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Yang</foaf:surname>
+                        <foaf:givenname>F</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Robinson</foaf:surname>
+                        <foaf:givenname>T.J</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_14"/>
+        <link:link rdf:resource="#item_13"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1914331/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <bib:pages>1333-1340</bib:pages>
+        <dc:date>2007-5-22</dc:date>
+        <dc:description>PMID: 17374594
+PMCID: PMC1914331</dc:description>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <z:libraryCatalog>PubMed Central</z:libraryCatalog>
+        <dcterms:abstract>Despite marked improvements in the interpretation of systematic relationships within Eutheria, particular nodes, including Paenungulata (Hyracoidea, Sirenia and Proboscidea), remain ambiguous. The combination of a rapid radiation, a deep divergence and an extensive morphological diversification has resulted in a limited phylogenetic signal confounding resolution within this clade both at the morphological and nucleotide levels. Cross-species chromosome painting was used to delineate regions of homology between Loxodonta africana (2n=56), Procavia capensis (2n=54), Trichechus manatus latirostris (2n=48) and an outgroup taxon, the aardvark (Orycteropus afer, 2n=20). Changes specific to each lineage were identified and although the presence of a minimum of 11 synapomorphies confirmed the monophyly of Paenungulata, no change characterizing intrapaenungulate relationships was evident. The reconstruction of an ancestral paenungulate karyotype and the estimation of rates of chromosomal evolution indicate a reduced rate of genomic repatterning following the paenungulate radiation. In comparison to data available for other mammalian taxa, the paenungulate rate of chromosomal evolution is slow to moderate. As a consequence, the absence of a chromosomal character uniting two paenungulates (at the level of resolution characterized in this study) may be due to a reduced rate of chromosomal change relative to the length of time separating successive divergence events.</dcterms:abstract>
+        <dc:title>Chromosome painting among Proboscidea, Hyracoidea and Sirenia: support for Paenungulata (Afrotheria, Mammalia) but not Tethytheria</dc:title>
+        <z:shortTitle>Chromosome painting among Proboscidea, Hyracoidea and Sirenia</z:shortTitle>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:0962-8452">
+        <prism:volume>274</prism:volume>
+        <prism:number>1615</prism:number>
+        <dc:title>Proceedings of the Royal Society B: Biological Sciences</dc:title>
+        <dc:identifier>ISSN 0962-8452</dc:identifier>
+        <dcterms:alternative>Proc Biol Sci</dcterms:alternative>
+        <dc:identifier>DOI 10.1098/rspb.2007.0088</dc:identifier>
+    </bib:Journal>
+    <z:Attachment rdf:about="#item_14">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/14/Pardini et al. - 2007 - Chromosome painting among Proboscidea, Hyracoidea .pdf"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1914331/pdf/rspb20070088.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <dc:title>PubMed Central Full Text PDF</dc:title>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_13">
+        <z:itemType>attachment</z:itemType>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1914331/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <dc:title>PubMed Central Link</dc:title>
+    </z:Attachment>
+    <bib:Article rdf:about="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3527233/">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <prism:volume>10</prism:volume>
+                <dc:title>Reproductive Biology and Endocrinology : RB&amp;E</dc:title>
+                <dc:identifier>ISSN 1477-7827</dc:identifier>
+                <dcterms:alternative>Reprod Biol Endocrinol</dcterms:alternative>
+                <dc:identifier>DOI 10.1186/1477-7827-10-102</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Mess</foaf:surname>
+                        <foaf:givenname>Andrea M</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Favaron</foaf:surname>
+                        <foaf:givenname>Phelipe O</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Pfarrer</foaf:surname>
+                        <foaf:givenname>Christiane</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Osmann</foaf:surname>
+                        <foaf:givenname>Christine</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Melo</foaf:surname>
+                        <foaf:givenname>Allan PF</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Rodrigues</foaf:surname>
+                        <foaf:givenname>Rosangela F</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Ambrósio</foaf:surname>
+                        <foaf:givenname>Carlos E</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Bevilacqua</foaf:surname>
+                        <foaf:givenname>Estela</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Miglino</foaf:surname>
+                        <foaf:givenname>Maria A</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_17"/>
+        <link:link rdf:resource="#item_16"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3527233/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <bib:pages>102</bib:pages>
+        <dc:date>2012-11-30</dc:date>
+        <dc:description>PMID: 23199198
+PMCID: PMC3527233</dc:description>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <z:libraryCatalog>PubMed Central</z:libraryCatalog>
+        <dcterms:abstract>Background
+Since Xenarthra are serious candidates for being basal to Eutheria, their characteristics, e.g. the placental system, influence perceptions of evolution. However, in the subgroup containing the anteaters, data are very limited. The present study aims to elucidate the nature of the feto-maternal interface in the anteater placenta and to interpret these data within an evolutionary context.
+
+Methods
+Placentas of two species were investigated with histology, immunohistochemistry and transmission electron microscopy.
+
+Results
+Remnants of the maternal vessel endothelium were absent, resulting in a fully haemochorial barrier throughout the placenta. Two structurally different parts, the villous and trabecular areas were complex and intermingled. In particular, the trabeculae which consisted of cellular, proliferative trophoblast, associated with connective tissue, were attached to the decidua. The villi contained fetal capillaries and hypertrophied mesenchymal cells that occured near the surface near the end of gestation. The surface of the villi consisted of flat, syncytial trophoblast, interspersed with proliferative trophoblast cells.
+
+Conclusions
+Based on fundamental differences between anteaters and armadillos, we inferred that placental evolution was more complex than previously thought. The haemochorial pattern of anteaters was likely an ancient condition of xenarthrans. Consequently, villous placentation may be attributed, at least in part, by convergent evolution, but was also characterized by some features that were widespread among xenarthrans.</dcterms:abstract>
+        <dc:title>Placentation in the anteaters Myrmecophaga tridactyla and Tamandua tetradactyla (Eutheria, Xenarthra)</dc:title>
+    </bib:Article>
+    <z:Attachment rdf:about="#item_17">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/17/Mess et al. - 2012 - Placentation in the anteaters Myrmecophaga tridact.pdf"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3527233/pdf/1477-7827-10-102.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <dc:title>PubMed Central Full Text PDF</dc:title>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_16">
+        <z:itemType>attachment</z:itemType>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3527233/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <dc:title>PubMed Central Link</dc:title>
+    </z:Attachment>
+    <bib:Article rdf:about="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4252046/">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:1431-6730"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Kawasaki</foaf:surname>
+                        <foaf:givenname>Kazuhiko</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Hu</foaf:surname>
+                        <foaf:givenname>Jan C.-C</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Simmer</foaf:surname>
+                        <foaf:givenname>James P.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_20"/>
+        <link:link rdf:resource="#item_19"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4252046/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <bib:pages>1003-1013</bib:pages>
+        <dc:date>2014-9</dc:date>
+        <dc:description>PMID: 25153384
+PMCID: PMC4252046</dc:description>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <z:libraryCatalog>PubMed Central</z:libraryCatalog>
+        <dcterms:abstract>Kallikrein-related peptidase 4 (KLK4) is a secreted serine protease that degrades residual enamel proteins to facilitate their removal by ameloblasts, which increases mineralization and hardens the enamel. Mutations in human KLK4 cause hypomaturation amelogenesis imperfecta. Enamel formed by Klk4 null mice is normal in thickness and prism structure, but the enamel layer retains proteins, is hypomineralized, and undergoes rapid attrition following tooth eruption. We searched multiple databases, retrieved Klk4 and Klk5 from various mammalian genomes, and identified Klk4 in 47 boreoeutherian genomes. In non-Boreoeutheria, Klk4 was detected in only one afrotherian genome (as a pseudogene), and not in the other six afrotherian, two xenarthran, or three marsupial genomes. In contrast, Klk5 was detected in both marsupial and eutherian mammals. Our phylogenetic and mutation rate analyses support the hypothesis that Klk4 arose from Klk5 by gene duplication near the divergence of Afrotheria, Xenarthra and Boreoeutheria, and that functionally- differentiated Klk4 survived only in Boreoeutheria. Afrotherian mammals share the feature of delayed dental eruption relative to boreoeutherian mammals. KLK4 shortens the time required for enamel maturation and could have alleviated negative selection following mutations that resulted in thicker enamel or earlier tooth eruption, without reducing enamel hardness or causing dental attrition.</dcterms:abstract>
+        <dc:title>Evolution of Klk4 and enamel maturation in eutherians</dc:title>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:1431-6730">
+        <prism:volume>395</prism:volume>
+        <prism:number>9</prism:number>
+        <dc:title>Biological chemistry</dc:title>
+        <dc:identifier>ISSN 1431-6730</dc:identifier>
+        <dcterms:alternative>Biol Chem</dcterms:alternative>
+        <dc:identifier>DOI 10.1515/hsz-2014-0122</dc:identifier>
+    </bib:Journal>
+    <z:Attachment rdf:about="#item_20">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/20/Kawasaki et al. - 2014 - Evolution of Klk4 and enamel maturation in eutheri.pdf"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4252046/pdf/nihms644461.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <dc:title>PubMed Central Full Text PDF</dc:title>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_19">
+        <z:itemType>attachment</z:itemType>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4252046/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <dc:title>PubMed Central Link</dc:title>
+    </z:Attachment>
+    <bib:Article rdf:about="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2886068/">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <prism:volume>10</prism:volume>
+                <dc:title>BMC Evolutionary Biology</dc:title>
+                <dc:identifier>ISSN 1471-2148</dc:identifier>
+                <dcterms:alternative>BMC Evol Biol</dcterms:alternative>
+                <dc:identifier>DOI 10.1186/1471-2148-10-133</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Hagey</foaf:surname>
+                        <foaf:givenname>Lee R</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Vidal</foaf:surname>
+                        <foaf:givenname>Nicolas</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Hofmann</foaf:surname>
+                        <foaf:givenname>Alan F</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Krasowski</foaf:surname>
+                        <foaf:givenname>Matthew D</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_23"/>
+        <link:link rdf:resource="#item_22"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2886068/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <bib:pages>133</bib:pages>
+        <dc:date>2010-5-6</dc:date>
+        <dc:description>PMID: 20444292
+PMCID: PMC2886068</dc:description>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <z:libraryCatalog>PubMed Central</z:libraryCatalog>
+        <dcterms:abstract>Background
+Bile salts are the major end-metabolites of cholesterol and are also important in lipid and protein digestion and in influencing the intestinal microflora. We greatly extend prior surveys of bile salt diversity in both reptiles and mammals, including analysis of 8,000 year old human coprolites and coprolites from the extinct Shasta ground sloth (Nothrotherium shastense).
+
+Results
+While there is significant variation of bile salts across species, bile salt profiles are generally stable within families and often within orders of reptiles and mammals, and do not directly correlate with differences in diet. The variation of bile salts generally accords with current molecular phylogenies of reptiles and mammals, including more recent groupings of squamate reptiles. For mammals, the most unusual finding was that the Paenungulates (elephants, manatees, and the rock hyrax) have a very different bile salt profile from the Rufous sengi and South American aardvark, two other mammals classified with Paenungulates in the cohort Afrotheria in molecular phylogenies. Analyses of the approximately 8,000 year old human coprolites yielded a bile salt profile very similar to that found in modern human feces. Analysis of the Shasta ground sloth coprolites (approximately 12,000 years old) showed the predominant presence of glycine-conjugated bile acids, similar to analyses of bile and feces of living sloths, in addition to a complex mixture of plant sterols and stanols expected from an herbivorous diet.
+
+Conclusions
+The bile salt synthetic pathway has become longer and more complex throughout vertebrate evolution, with some bile salt modifications only found within single groups such as marsupials. Analysis of the evolution of bile salt structures in different species provides a potentially rich model system for the evolution of a complex biochemical pathway in vertebrates. Our results also demonstrate the stability of bile salts in coprolites preserved in arid climates, suggesting that bile salt analysis may have utility in selected paleontological research.</dcterms:abstract>
+        <dc:title>Evolutionary diversity of bile salts in reptiles and mammals, including analysis of ancient human and extinct giant ground sloth coprolites</dc:title>
+    </bib:Article>
+    <z:Attachment rdf:about="#item_23">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/23/Hagey et al. - 2010 - Evolutionary diversity of bile salts in reptiles a.pdf"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2886068/pdf/1471-2148-10-133.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <dc:title>PubMed Central Full Text PDF</dc:title>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_22">
+        <z:itemType>attachment</z:itemType>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2886068/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2015-10-15 17:00:19</dcterms:dateSubmitted>
+        <dc:title>PubMed Central Link</dc:title>
+    </z:Attachment>
+</rdf:RDF>

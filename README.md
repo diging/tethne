@@ -16,13 +16,39 @@ Key features
 * Provides core analytic features of popular citation-analysis software (e.g. Citespace).
 * Integrates popular topic modeling software (e.g. MALLET).
 * Export network models to mainstream formats (e.g. for visualization in Cytoscape).
-* Leverages powerful computational and network-analysis libraries in Python. 
+* Leverages powerful computational and network-analysis libraries in Python.
 
 Documentation
 -------------
 For more information, see the Tethne [website](http://diging.github.io/tethne/).
 
 The documentation project (ReST sources, etc.) can be found in [``tethne-docs``](https://github.com/diging/tethne-docs).
+
+How to Contribute
+-----------------
+
+1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository.
+2. Check out the ``develop`` branch: ``git checkout develop``
+3. Create a new branch for your contribution, e.g. ``git checkout -b issue45``
+4. Make your changes. Be sure to include a docstring for each function and
+   class!
+5. Write tests. We aim for 95% test coverage. Put your tests in ``tests``, where
+   they belong.
+6. Ensure that all of your tests are passing. We use
+   [nose](https://nose.readthedocs.org/en/latest/). Test with:
+
+   ```shell
+   $ nosetests --with-coverage --cover-package=tethne --cover-min-percentage=95
+   ```
+7. Check for code cleanliness! Code should conform to
+   [PEP 0008](https://www.python.org/dev/peps/pep-0008/). We use
+   [Pylint](http://www.pylint.org/). For example:
+
+   ```shell
+   $ pylint tethne/mycontribution.py
+   ```
+8. Create a [pull request](https://help.github.com/articles/using-pull-requests).
+   Be sure to select ``diging/develop`` as the base branch.
 
 Requirements
 ------------
@@ -51,12 +77,12 @@ and a simplified API. Here are some of the most notable changes:
 * Re-designed ``Corpus`` and ``Paper`` classes. See the docs for more information.
 * Introduced ``Feature`` and ``FeatureSet`` classes to provide a more consistent and
   user-friendly mechanism for managing document features.
-  
+
 Coming in v0.8
 --------------
-* Support for [igraph](http://igraph.org/redirect.html) and 
+* Support for [igraph](http://igraph.org/redirect.html) and
   [graph-tool](https://graph-tool.skewed.de/).
-* 
+*
 
 Questions?
 ----------
@@ -84,11 +110,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 
 About
 -----
-Tethne is developed by the 
+Tethne is developed by the
 [ASU Digital Innovation Group (DigInG)](http://devo-evo.lab.asu.edu/diging),
-part of the [Laubichler Lab](http://devo-evo.lab.asu.edu) in the Center for Biology & 
+part of the [Laubichler Lab](http://devo-evo.lab.asu.edu) in the Center for Biology &
 Society, School of Life Sciences.
 
-This material is based upon work supported by the National Science Foundation Graduate 
-Research Fellowship Program under Grant No. 2011131209, and NSF Doctoral Dissertation 
+This material is based upon work supported by the National Science Foundation Graduate
+Research Fellowship Program under Grant No. 2011131209, and NSF Doctoral Dissertation
 Research Improvement Grant No. 1256752.
