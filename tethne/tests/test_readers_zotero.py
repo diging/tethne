@@ -5,10 +5,47 @@ import re
 
 import unittest
 from tethne.readers.zotero import read, ZoteroParser
-from tethne import Corpus, Paper
+from tethne import Corpus, Paper, StructuredFeatureSet
 
 datapath = './tethne/tests/data/zotero'
 datapath2 = './tethne/tests/data/zotero2'
+datapath3 = './tethne/tests/data/zotero_withfiles'
+
+
+class TestZoteroParserWithFiles(unittest.TestCase):
+    """
+    When Tethne reads a Zotero collection, it should attempt to extract
+    full-text content for the constituent bibliographic records.
+    """
+
+    def test_read_pdf(self):
+        corpus = read(datapath3)
+
+        self.assertIsInstance(corpus, Corpus)
+
+        self.assertTrue(hasattr(corpus, 'structuredfeatures'),
+        """
+        A Corpus instance should have an attribute called
+        'structuredfeatures'
+        """)
+
+        self.assertIn('pdf_text', corpus.structuredfeatures,
+        """
+        If a dataset has full-text content available in PDFs, then
+        'structuredfeatures' should contain an element called 'pdf_text'.
+        """)
+
+        self.assertIsInstance(corpus.structuredfeatures['pdf_text'],
+                              StructuredFeatureSet,
+        """
+        'pdf_text' should be an instance of StructuredFeatureSet.
+        """)
+
+        self.assertEqual(len(corpus.structuredfeatures['pdf_text']), 7,
+        """
+        There should be seven (7) full-text pdf StructuredFeatures for this
+        particular dataset.
+        """)
 
 
 class TestZoteroParser(unittest.TestCase):
@@ -29,9 +66,17 @@ class TestZoteroParser(unittest.TestCase):
     def test_handle_date(self):
         parser = ZoteroParser(datapath)
         parser.parse()
-        date_list = ["January 23, 2015","2015-9","2015-9-23","09/23/2015","2015-09-23"]
+        date_list = ["January 23, 2015",
+                     "2015-9",
+                     "2015-9-23",
+                     "09/23/2015",
+                     "2015-09-23"]
+
         for each_date in date_list:
-            self.assertEqual(2015, parser.handle_date(each_date), "Test Failed, Date Not properly Formatted.")
+            self.assertEqual(2015, parser.handle_date(each_date),
+            """
+            Date Not properly Formatted.
+            """)
 
     def test_parse(self):
         parser = ZoteroParser(datapath)
