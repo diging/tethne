@@ -38,7 +38,7 @@ class WoSParser(FTParser):
 
     start_tag = 'PT'
     end_tag = 'ER'
-    concat_fields = ['abstract', 'keywords', 'funding', 'title', 'references']
+    concat_fields = ['abstract', 'keywords', 'funding', 'title', 'references', 'journal']
     entry_class = Paper
 
     tags = {
@@ -103,6 +103,9 @@ class WoSParser(FTParser):
     def handle_AF(self, value):
         return self.parse_author(value)
 
+    def handle_PY(self, value):
+        return int(value)
+
     def handle_AU(self, value):
         aulast, auinit = self.parse_author(value)
         auinit = _space_sep(auinit)
@@ -124,9 +127,9 @@ class WoSParser(FTParser):
 
         # First-author name and publication date.
         ptn = '([\w\s\W]+),\s([0-9]{4}),\s([\w\s]+)'
-        ny_match = re.match(ptn, value.decode('utf-8'), flags=re.U)
+        ny_match = re.match(ptn, value.encode('utf-8'), flags=re.U)
         nj_match = re.match('([\w\s\W]+),\s([\w\s]+)',
-                            value.decode('utf-8'), flags=re.U)
+                            value.encode('utf-8'), flags=re.U)
         if ny_match is not None:
             name_raw, date, journal = ny_match.groups()
         elif nj_match is not None:
