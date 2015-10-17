@@ -86,6 +86,7 @@ class IterParser(BaseParser):
             if self.is_eof(tag):
                 self.postprocess_entry()
                 break
+
             data = unicode(data)
             self.handle(tag, data)
             self.last_tag = tag
