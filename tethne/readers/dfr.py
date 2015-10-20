@@ -101,8 +101,16 @@ class GramGenerator(object):
             (key,value) tuples.
         """
 
+        if not os.path.exists(path):
+            raise ValueError('No such file or directory')
+
         self.path = path
         self.elem = elem
+        if elem.endswith('s'):
+            self.elem_xml = elem[:-1]
+        else:
+            self.elem_xml = elem
+
         self.ignore_hash = ignore_hash
 
         self.files = os.listdir(os.path.join(path, elem))
@@ -177,7 +185,7 @@ class GramGenerator(object):
             return doi
 
         grams = []
-        for gram in root.findall(self.elem):
+        for gram in root.findall(self.elem_xml):
             text = unidecode(unicode(gram.text.strip()))
             if ( not self.ignore_hash or '#' not in list(text) ):
                 c = ( text, int(gram.attrib['weight']) )
@@ -313,7 +321,7 @@ def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
         stoplist = stopwords.words()
 
     # Now tokenize.
-    for doi,grams in ngrams.iteritems():
+    for doi, grams in ngrams.iteritems():
         t_ngrams[doi] = []
         for g,c in grams:
             ignore = False

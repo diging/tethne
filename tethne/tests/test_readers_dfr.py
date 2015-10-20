@@ -19,7 +19,7 @@ class TestDFRReader(unittest.TestCase):
                 self.assertIsInstance(e.date, int)
 
             uppererr = "Author names should be uppercase"
-            if hasattr(e, 'authors_full'):            
+            if hasattr(e, 'authors_full'):
                 self.assertIsInstance(e.authors_full, list)
                 for a in e.authors_full:
                     self.assertTrue(a[0].isupper(), uppererr)
@@ -49,25 +49,25 @@ class TestDFRReader(unittest.TestCase):
 
             if hasattr(e, 'title'):
                 self.assertIsInstance(e.title, str)
-                
+
         self.assertIn('wordcounts', corpus.features)
-        
-        self.assertGreaterEqual(len(corpus), 
+
+        self.assertGreaterEqual(len(corpus),
                                 len(corpus.features['wordcounts']))
-        
+
 class TestNGrams(unittest.TestCase):
     def test_ngrams(self):
         grams = ngrams(datapath, 'wordcounts')
-        
+
         self.assertIsInstance(grams, FeatureSet)
         self.assertEqual(len(grams), 398)
+        self.assertEqual(len(grams.index), 105156)
+
 
 class TestCitationFile(unittest.TestCase):
     def test_citations_file(self):
         datapath2 = './tethne/tests/data/dfr2'
-        self.assertIsInstance(read(datapath2), Corpus, "Citations not excepted")
-
-        
+        self.assertIsInstance(read(datapath2), Corpus)
 
 
 if __name__ == '__main__':
