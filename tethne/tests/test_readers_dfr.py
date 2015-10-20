@@ -58,7 +58,7 @@ class TestDFRReader(unittest.TestCase):
     def test_transform(self):
         corpus = read(datapath)
         wordcounts = corpus.features['wordcounts']
-        def filter(featureset, feature, f, v):
+        def filter(f, v, c, dc):
             if f == 'the':
                 return 0
             return v

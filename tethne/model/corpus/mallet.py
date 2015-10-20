@@ -285,6 +285,7 @@ class LDAModel(Model):
 
         self.phi = FeatureSet()
 
+        # TODO: make this encoding-safe.
         with open(wt, "r") as f:
             reader = csv.reader(f, delimiter=' ')
             topics = defaultdict(list)
@@ -293,8 +294,8 @@ class LDAModel(Model):
                 self.vocabulary[w] = term
 
                 for l in line[2:]:
-                    k, c = l.split(':')
-                    topics[int(k)].append((w, c))
+                    k, c = l.split(':')    # Topic and assignment count.
+                    topics[int(k)].append((w, int(c)))
 
         for k, data in topics.iteritems():
             self.phi.add(k, Feature(data).norm)
@@ -305,7 +306,7 @@ class LDAModel(Model):
         """
         return self.theta.features[d].top(topn)
 
-    def list_topic(self, k, topn=10):
+    def list_topic(self, k, Nwords=10):
         """
         List the top ``topn`` words for topic ``k``.
 
@@ -321,14 +322,23 @@ class LDAModel(Model):
         """
 
         return [(self.vocabulary[w], p) for w, p
-                in self.phi.features[k].top(topn)]
+                in self.phi.features[k].top(Nwords)]
 
     def list_topics(self, Nwords=10):
         """
-        List the top ``topn`` words for each topic.
+        List the top ``Nwords`` words for each topic.
         """
+        return [(k, self.list_topic(k, Nwords)) for k in xrange(len(self.phi))]
 
-        return [(k, self.list_topic(k, topn)) for k in xrange(len(self.phi))]
+
+    def print_topics(self, Nwords=10):
+        """
+        Print the top ``Nwords`` words for each topic.
+        """
+        print('Topic\tTop %i words' % 10)
+        for k, words in self.list_topics(Nwords):
+            print(str(k).ljust(3) + '\t' + ' '.join(list(zip(*words))[0]))
+
 
     def topic_over_time(self, k, mode='counts', slice_kwargs={}):
         """

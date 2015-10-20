@@ -281,7 +281,7 @@ class Feature(list):
     @property
     def norm(self):
         T = sum(list(zip(*self))[1])
-        return Feature([(i,float(v)/T) for i,v in self])
+        return Feature([(i, float(v)/T) for i, v in self])
 
     def top(self, topn=10):
         """
@@ -323,7 +323,12 @@ class BaseFeatureSet(object):
             self.add(paper, feature)
 
     def __getitem__(self, key):
-        return self.features[key]
+        try:
+            return self.features[key]
+        except KeyError as E:
+            if type(key) is int:
+                return self.features.values()[key]
+            raise E
 
     def __len__(self):
         return len(self.features)
@@ -425,6 +430,19 @@ class StructuredFeatureSet(BaseFeatureSet):
     :class:`.StructuredFeature` instances.
     """
 
+    def transform(self, func):
+        features = {}
+        for i, feature in self.features.iteritems():
+            feature_ = []
+            for f in feature:
+                t = self.lookup[f]
+                v_ = func(f, v, feature.count(f), self.documentCounts[t])
+                if v_ > 0 and v_ is not None:
+                    feature_.append((f, v_))
+            features[i] = Feature(feature_)
+
+        return FeatureSet(features)
+
     def context_chunks(self, context):
         """
         Retrieves all tokens, divided into the chunks in context ``context``.
@@ -468,10 +486,12 @@ class FeatureSet(BaseFeatureSet):
         for i, feature in self.features.iteritems():
             feature_ = []
             for f, v in feature:
-                v_ = func(self, feature, f, v)
-                if v_ > 0:
+                t = self.lookup[f]
+                v_ = func(f, v, self.counts[t], self.documentCounts[t])
+                if v_ > 0 and v_ is not None:
                     feature_.append((f, v_))
             features[i] = Feature(feature_)
+
         return FeatureSet(features)
 
     def as_matrix(self):

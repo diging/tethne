@@ -14,6 +14,7 @@ Methods for generating networks in which papers are vertices.
 
 from tethne.networks.base import multipartite, coupling, cooccurrence
 
+
 def direct_citation(corpus, min_weight=1):
     """
     A directed paper-citation network.
@@ -54,11 +55,6 @@ def cocitation(corpus, min_weight=1, edge_attrs=['ayjid', 'date']):
     return cooccurrence(corpus, 'citations', min_weight=min_weight,
                         edge_attrs=edge_attrs)
 
+
 def author_coupling(corpus, min_weight=1):
     return coupling(corpus, 'authors', min_weight=min_weight)
-
-def topic_coupling(corpus, min_weight=0.7):
-    """
-    Two papers are coupled if they both contain a shared topic above threshold.
-    """
-    return coupling(corpus, 'topics', min_weight=min_weight)

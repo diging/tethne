@@ -43,3 +43,5 @@ graveyard/*
 play.py
 
 .DS_Store
+
+dist/*

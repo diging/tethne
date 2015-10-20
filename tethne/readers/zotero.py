@@ -9,6 +9,7 @@ import slate    # PDF processing.
 import chardet  # Detect character encodings.
 from math import log
 logging.basicConfig(level=40)
+logging.getLogger('iso8601').setLevel(40)
 
 from unidecode import unidecode
 from datetime import datetime

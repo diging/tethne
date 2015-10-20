@@ -11,26 +11,43 @@ import csv
 from tethne.model.corpus.mallet import LDAModel
 from tethne.readers.wos import read
 from tethne import FeatureSet, tokenize
+from tethne.networks import topics
 
 datapath = './tethne/tests/data/wos3.txt'
 
 
 class TestLDAModel(unittest.TestCase):
-    def test_ldamodel(self):
+    def setUp(self):
         corpus = read(datapath, index_by='wosid')
+        corpus.index_feature('abstract', tokenize, structured=True)
+        self.model = LDAModel(corpus, featureset_name='abstract')
+        self.model.fit(Z=20, max_iter=500)
 
-        corpus.index_feature('title', tokenize, structured=True)
-        model = LDAModel(corpus, featureset_name='title')
-
-        model.fit(Z=20, max_iter=500)
-
-        dates, rep = model.topic_over_time(1)
+    def test_ldamodel(self):
+        dates, rep = self.model.topic_over_time(1)
         self.assertGreater(sum(rep), 0)
         self.assertEqual(len(dates), len(rep))
 
-        self.assertIsInstance(model.phi, FeatureSet)
-        self.assertIsInstance(model.theta, FeatureSet)
+        self.assertIsInstance(self.model.phi, FeatureSet)
+        self.assertIsInstance(self.model.theta, FeatureSet)
 
+        self.assertIsInstance(self.model.list_topics(), list)
+        self.assertGreater(len(self.model.list_topics()), 0)
+        self.assertIsInstance(self.model.list_topic(0), list)
+        self.assertGreater(len(self.model.list_topic(0)), 0)
+
+    def test_networks(self):
+        termGraph = topics.terms(self.model)
+        self.assertGreater(termGraph.size(), 100)
+        self.assertGreater(termGraph.order(), 10)
+
+        topicGraph = topics.cotopics(self.model)
+        self.assertGreater(topicGraph.size(), 5)
+        self.assertEqual(topicGraph.order(), 20)
+
+        paperGraph = topics.topic_coupling(self.model)
+        self.assertGreater(paperGraph.size(), 100)
+        self.assertGreater(paperGraph.order(), 20)
 
 
 if __name__ == '__main__':

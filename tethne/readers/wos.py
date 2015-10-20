@@ -133,6 +133,15 @@ class WoSParser(FTParser):
         """
         return int(value)
 
+    def handle_SO(self, value):
+        return unicode(value)
+
+    def handle_AB(self, value):
+        return unicode(value)
+
+    def handle_DI(self, value):
+        return unicode(value)
+
     def handle_AU(self, value):
         aulast, auinit = self.parse_author(value)
         auinit = _space_sep(auinit)   # Separate author initials with spaces.
@@ -236,7 +245,7 @@ class WoSParser(FTParser):
         """
 
         if type(entry.authorKeywords) not in [str, unicode]:
-            aK = ' '.join([str(k) for k in entry.authorKeywords])
+            aK = u' '.join([unicode(k) for k in entry.authorKeywords])
         else:
             aK = entry.authorKeywords
         entry.authorKeywords = [k.strip().upper() for k in aK.split(';')]

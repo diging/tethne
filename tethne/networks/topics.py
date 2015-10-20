@@ -16,9 +16,47 @@ if sys.version_info[0] > 2:
     xrange = range
 
 from ..analyze import features
+from tethne.networks.base import cooccurrence, coupling
 
-def distance(   model, method='cosine', percentile=90, bidirectional=False,
-                normalize=True, smooth=False, transform='log'    ):
+
+def terms(model, threshold=0.01):
+    """
+    Two terms are coupled if they belong to the same topic with phi > threshold.
+    """
+    select = lambda f, v, c, dc: v > threshold
+    graph = cooccurrence(model.phi, filter=select)
+
+    # Only include labels for terms that are actually in the graph.
+    label_map = {k: v for k, v in model.vocabulary.iteritems()
+                 if k in graph.nodes()}
+    # print label_map
+
+    return networkx.relabel_nodes(graph, label_map)
+
+
+def topic_coupling(model, threshold=None):
+    """
+    Two papers are coupled if they both contain a shared topic above threshold.
+    """
+    if not threshold:
+        threshold = 3./model.Z
+    select = lambda f, v, c, dc: v > threshold
+    return coupling(model.corpus, 'topics', filter=select)
+
+
+def cotopics(model, threshold=None):
+    """
+    Two topics are coupled if they occur in the same documents.
+    """
+    if not threshold:
+        threshold = 2./model.Z
+
+    select = lambda f, v, c, dc: v > threshold
+    return cooccurrence(model.corpus, 'topics', filter=select)
+
+
+def distance(model, method='cosine', percentile=90, bidirectional=False,
+             normalize=True, smooth=False, transform='log'):
     """
     Generate a network of :class:`.Paper`\s based on a distance metric from
     `scipy.spatial.distance

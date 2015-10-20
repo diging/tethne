@@ -57,12 +57,12 @@ class TestWoSParser(unittest.TestCase):
                     self.assertTrue(a[0].isupper(), uppererr)
                     self.assertTrue(a[1].isupper(), uppererr)
             if hasattr(e, 'journal'):
-                self.assertIsInstance(e.journal, str,
-                                      derror.format('journal', 'str',
+                self.assertIsInstance(e.journal, unicode,
+                                      derror.format('journal', 'unicode',
                                                     type(e.journal)))
             if hasattr(e, 'abstract'):
-                self.assertIsInstance(e.abstract, str,
-                                      derror.format('abstract', 'str',
+                self.assertIsInstance(e.abstract, unicode,
+                                      derror.format('abstract', 'unicode',
                                                     type(e.abstract)))
             if hasattr(e, 'authorKeywords'):
                 self.assertIsInstance(e.authorKeywords, list,
@@ -73,17 +73,17 @@ class TestWoSParser(unittest.TestCase):
                                       derror.format('keywordsPlus', 'list',
                                                     type(e.keywordsPlus)))
             if hasattr(e, 'doi'):
-                self.assertIsInstance(e.doi, str,
-                                      derror.format('doi', 'str',
+                self.assertIsInstance(e.doi, unicode,
+                                      derror.format('doi', 'unicode',
                                                     type(e.doi)))
             if hasattr(e, 'volume'):
-                self.assertIsInstance(e.volume, str,
-                                      derror.format('volume', 'str',
+                self.assertIsInstance(e.volume, unicode,
+                                      derror.format('volume', 'unicode',
                                                     type(e.volume)))
 
             if hasattr(e, 'title'):
-                self.assertIsInstance(e.title, str,
-                                      derror.format('title', 'str',
+                self.assertIsInstance(e.title, unicode,
+                                      derror.format('title', 'unicode',
                                                     type(e.title)))
 
         # Check integrity of tag-to-field mapping.
@@ -114,9 +114,9 @@ class TestWithStarCR(unittest.TestCase):
                 if datematch:
                     date = datematch.group(1)
                     if len(citation.authors) > 0:
-                        last = [str(v[0]) for v
+                        last = [unicode(v[0]) for v
                                 in zip(*zip(*citation.authors)[0])]
-                        assert str(date) not in last
+                        assert unicode(date) not in last
 
                 if value.startswith('*'):
                     expected = re.match('\*([\w\s]+)\,', value).group(1)
