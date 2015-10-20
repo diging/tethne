@@ -20,9 +20,11 @@ logger.setLevel('ERROR')
 
 from tethne import write_documents, Feature, FeatureSet
 from tethne.model import Model
+import tethne
 
-
-
+# Determine path to MALLET.
+TETHNE_PATH = os.path.split(os.path.abspath(tethne.__file__))[0]
+MALLET_PATH = os.path.join(TETHNE_PATH, 'bin', 'mallet-2.0.7')
 
 import sys
 if sys.version_info[0] > 2:
@@ -123,11 +125,13 @@ class LDAModel(Model):
 
     """
 
-    mallet_path = os.path.join(os.getcwd(), 'tethne', 'bin', 'mallet-2.0.7')
+    # mallet_path = os.path.join(os.getcwd(), 'tethne', 'bin', 'mallet-2.0.7')
+    mallet_path = MALLET_PATH
 
 
     def __init__(self, *args, **kwargs):
         self.mallet_bin = os.path.join(self.mallet_path, "bin", "mallet")
+
         if platform.system() == 'Windows':
             self.mallet_bin += '.bat'
         os.putenv('MALLET_HOME', self.mallet_path)
@@ -146,9 +150,10 @@ class LDAModel(Model):
         """
 
         target = self.temp + 'mallet'
-        self.corpus_path, self.metapath = write_documents(self.corpus, target,
-                                                          self.featureset_name,
-                                                          ['date', 'title'])
+        paths = write_documents(self.corpus, target, self.featureset_name,
+                                ['date', 'title'])
+        self.corpus_path, self.metapath = paths
+
         self._export_corpus()
 
     def _export_corpus(self):

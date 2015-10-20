@@ -29,3 +29,5 @@ from tethne.networks.features import *
 from tethne.writers.graph import write_graphml, write_csv
 from tethne.writers.corpus import write_documents, write_documents_dtm
 from tethne.model.corpus.mallet import LDAModel
+
+from tethne.utilities import tokenize, normalize

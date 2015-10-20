@@ -142,7 +142,7 @@ class WoSParser(FTParser):
         """
         Convert article titles to Title Case.
         """
-        return value.title()
+        return unicode(value).title()
 
     def handle_VL(self, value):
         """
@@ -291,7 +291,7 @@ class WoSParser(FTParser):
         """
         If only a single cited reference was found, ensure that
         ``citedReferences`` is nonetheless a list.
-        """"
+        """
         if type(entry.citedReferences) is not list:
             entry.citedReferences = [entry.citedReferences]
 

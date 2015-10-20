@@ -5,7 +5,8 @@ This module provides :class:`.Corpus`\.
 from collections import Counter
 import hashlib
 
-from tethne.classes.feature import FeatureSet, Feature
+from tethne.classes.feature import FeatureSet, Feature, \
+                                   StructuredFeatureSet, StructuredFeature
 from tethne.utilities import _iterable, argsort
 
 
@@ -171,11 +172,6 @@ class Corpus(object):
     using :meth:`.index_feature`\.
     """
 
-    structuredfeatures = {}
-    """
-    Contains :class:`.StructuredFeatureSet`\s for a :class:`.Corpus` instance.
-    """
-
     indices = {}
     """
     Contains field indices for the :class:`Paper`\s in a :class:`.Corpus`
@@ -235,6 +231,9 @@ class Corpus(object):
 
         self.index_by = index_by
         self.slices = []
+        self.indices = {}
+        self.features = {}
+
         self.indexed_papers = {self._generate_index(paper): paper for paper in papers}
 
         if index_features:
@@ -265,7 +264,7 @@ class Corpus(object):
             return getattr(paper, 'hashIndex')
         return getattr(paper, self.index_by)    # Identifier is already available.
 
-    def index_feature(self, feature_name):
+    def index_feature(self, feature_name, tokenize=lambda x: x, structured=False):
         """
         Creates a new :class:`.FeatureSet` from the attribute ``feature_name``
         in each :class:`.Paper`\.
@@ -278,9 +277,16 @@ class Corpus(object):
             The name of a :class:`.Paper` attribute.
 
         """
-        feats = {self._generate_index(p): Feature(getattr(p, feature_name))
+        if structured:
+            fclass = StructuredFeature
+            fsclass = StructuredFeatureSet
+        else:
+            fclass = Feature
+            fsclass = FeatureSet
+
+        feats = {self._generate_index(p): fclass(tokenize(getattr(p, feature_name)))
                  for p in self.papers if hasattr(p, feature_name)}
-        self.features[feature_name] = FeatureSet(feats)
+        self.features[feature_name] = fsclass(feats)
 
     def index(self, attr):
         """
@@ -485,7 +491,6 @@ class Corpus(object):
         -------
         list
         """
-
         return [len(papers[1]) for papers in self.slice(**slice_kwargs)]
 
     def feature_distribution(self, featureset_name, feature, mode='counts',
@@ -574,7 +579,8 @@ class Corpus(object):
 
         """
 
-        subcorpus = Corpus(self[selector], index_by=self.index_by,
+        subcorpus = Corpus(self[selector],
+                           index_by=self.index_by,
                            index_fields=self.indices.keys(),
                            index_features=self.features.keys())
 

@@ -7,6 +7,9 @@ import codecs
 import os
 import csv
 
+from tethne import FeatureSet, StructuredFeatureSet
+
+
 def write_documents(corpus, target, featureset_name, metadata_fields=[]):
     """
     Parameters
@@ -19,6 +22,7 @@ def write_documents(corpus, target, featureset_name, metadata_fields=[]):
     metapath = target + '_meta.csv'
 
     features = corpus.features[featureset_name].features
+    ftype = type(corpus.features[featureset_name])
     index = corpus.features[featureset_name].index
 
     try:
@@ -39,7 +43,10 @@ def write_documents(corpus, target, featureset_name, metadata_fields=[]):
         for i, p in corpus.indexed_papers.iteritems():
             if i in features:
                 row = [i, 'en']
-                row += [' '.join(repeat(e, c)) for e, c in features[i]]
+                if ftype is FeatureSet:
+                    row += [' '.join(repeat(e, c)) for e, c in features[i]]
+                elif ftype is StructuredFeatureSet:
+                    row += features[i]
                 f.write('\t'.join(row) + '\n')
 
     return docpath, metapath
@@ -48,13 +55,13 @@ def write_documents(corpus, target, featureset_name, metadata_fields=[]):
 def write_documents_dtm(corpus, target, featureset_name, slice_kwargs={},
                         metadata_fields=['date','title']):
     """
-    
+
     Parameters
     ----------
     target : str
-        Target path for documents; e.g. './mycorpus' will result in 
+        Target path for documents; e.g. './mycorpus' will result in
         './mycorpus-mult.dat', './mycorpus-seq.dat', 'mycorpus-vocab.dat', and
-        './mycorpus-meta.dat'.    
+        './mycorpus-meta.dat'.
     D : :class:`.Corpus`
         Contains :class:`.Paper` objects generated from the same DfR dataset
         as t_ngrams, indexed by doi and sliced by date.
@@ -63,11 +70,11 @@ def write_documents_dtm(corpus, target, featureset_name, slice_kwargs={},
         modeling.
     fields : list
         (optional) Fields in :class:`.Paper` to include in the metadata file.
-        
+
     Returns
     -------
     None : If all goes well.
-    
+
     Raises
     ------
     IOError

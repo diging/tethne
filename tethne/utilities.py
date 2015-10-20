@@ -9,6 +9,7 @@ except ImportError:
     from html.parser import HTMLParser  # Python 3.x
     xrange = range
 
+
 def is_number(value):
     try:
         int(value)
@@ -18,6 +19,11 @@ def is_number(value):
         except ValueError:
             return False
     return True
+
+
+def tokenize(s):
+    return s.lower()
+
 
 class MLStripper(HTMLParser):
     def __init__(self):
@@ -33,13 +39,16 @@ class MLStripper(HTMLParser):
     def get_data(self):
         return ''.join(self.fed)
 
+
 def strip_tags(html):
     s = MLStripper()
     s.feed(html)
     return s.get_data()
 
+
 def argsort(seq):
     return sorted(range(len(seq)), key=seq.__getitem__)
+
 
 def argmin(iterable):
     i_min = -1
@@ -50,6 +59,7 @@ def argmin(iterable):
             v_min = v
     return i_min
 
+
 def argmax(iterable):
     i_max = -1
     v_max = min(iterable)
@@ -59,8 +69,10 @@ def argmax(iterable):
             v_max = v
     return i_max
 
+
 def nonzero(iterable):
     return [i for i,v in enumerate(iterable) if abs(v) > 0.0]
+
 
 def mean(iterable):
     if len(iterable) > 0:
@@ -68,15 +80,49 @@ def mean(iterable):
     else:
         return float('nan')
 
+
 def _iterable(o):
 	if hasattr(o, '__iter__'):
 		return o
 	else:
 		return [o]
 
+
 def _strip_punctuation(s):
-    exclude = set(string.punctuation)
-    return ''.join(ch for ch in s if ch not in exclude)
+    """
+    Removes all punctuation characters from a string.
+    """
+    if type(s) is str:    # Bytestring (default in Python 2.x).
+        return s.translate(string.maketrans("",""), string.punctuation)
+    else:                 # Unicode string (default in Python 3.x).
+        translate_table = dict((ord(char), u'') for char in u'!"#%\'()*+,-./:;<=>?@[\]^_`{|}~')
+        return s.translate(translate_table)
+
+def _strip_numbers(s):
+    """
+    Removes all numbers from a string.
+    """
+    return ''.join([c for c in s if not is_number(c)])
+
+
+def normalize(s):
+    """
+    Normalize a token.
+
+    * Convert to lower-case,
+    * Remove all punctuation,
+    * Remove all numbers.
+    """
+    return _strip_numbers(_strip_punctuation(s.lower()))
+
+
+def tokenize(passage):
+    """
+    Convert a string into a list of normalized words.
+    """
+
+    return [normalize(s) for s in passage.split(' ')]
+
 
 def _space_sep(s):
 	if len(s) > 3:
@@ -226,6 +272,7 @@ def dict_from_node(node, recursive=False):
         else:
             dict[snode.tag] = value     # Default behavior.
     return dict
+
 
 class Dictionary:
     """

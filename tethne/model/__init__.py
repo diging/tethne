@@ -8,6 +8,7 @@ import shutil
 import tempfile
 import subprocess
 
+
 class Model(object):
     """
     Base class for models.

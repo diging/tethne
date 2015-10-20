@@ -29,25 +29,19 @@ class TestZoteroParserWithFiles(unittest.TestCase):
 
         self.assertIsInstance(corpus, Corpus)
 
-        self.assertTrue(hasattr(corpus, 'structuredfeatures'),
-        """
-        A Corpus instance should have an attribute called
-        'structuredfeatures'
-        """)
-
-        self.assertIn('pdf_text', corpus.structuredfeatures,
+        self.assertIn('pdf_text', corpus.features,
         """
         If a dataset has full-text content available in PDFs, then
         'structuredfeatures' should contain an element called 'pdf_text'.
         """)
 
-        self.assertIsInstance(corpus.structuredfeatures['pdf_text'],
+        self.assertIsInstance(corpus.features['pdf_text'],
                               StructuredFeatureSet,
         """
         'pdf_text' should be an instance of StructuredFeatureSet.
         """)
 
-        self.assertEqual(len(corpus.structuredfeatures['pdf_text']), 7,
+        self.assertEqual(len(corpus.features['pdf_text']), 7,
         """
         There should be seven (7) full-text pdf StructuredFeatures for this
         particular dataset.
