@@ -462,6 +462,18 @@ class FeatureSet(BaseFeatureSet):
     """
     A :class:`.FeatureSet` organizes multiple :class:`.Feature` instances.
     """
+
+    def transform(self, func):
+        features = {}
+        for i, feature in self.features.iteritems():
+            feature_ = []
+            for f, v in feature:
+                v_ = func(self, feature, f, v)
+                if v_ > 0:
+                    feature_.append((f, v_))
+            features[i] = Feature(feature_)
+        return FeatureSet(features)
+
     def as_matrix(self):
         """
 

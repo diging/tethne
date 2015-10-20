@@ -55,6 +55,18 @@ class TestDFRReader(unittest.TestCase):
         self.assertGreaterEqual(len(corpus),
                                 len(corpus.features['wordcounts']))
 
+    def test_transform(self):
+        corpus = read(datapath)
+        wordcounts = corpus.features['wordcounts']
+        def filter(featureset, feature, f, v):
+            if f == 'the':
+                return 0
+            return v
+
+        # filter() should remove a single token.
+        self.assertEqual(len(wordcounts.index) - 1,
+                         len(wordcounts.transform(filter).index))
+
 class TestNGrams(unittest.TestCase):
     def test_ngrams(self):
         grams = ngrams(datapath, 'wordcounts')
