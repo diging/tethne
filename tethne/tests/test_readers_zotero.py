@@ -4,12 +4,18 @@ sys.path.append('../tethne')
 import re
 
 import unittest
-from tethne.readers.zotero import read, ZoteroParser
+from tethne.readers.zotero import read, ZoteroParser, _infer_spaces
 from tethne import Corpus, Paper, StructuredFeatureSet
 
 datapath = './tethne/tests/data/zotero'
 datapath2 = './tethne/tests/data/zotero2'
 datapath3 = './tethne/tests/data/zotero_withfiles'
+
+
+class TestInferSpaces(unittest.TestCase):
+    def test_infer(self):
+        s = "Thisisastringwithnospaces."
+        self.assertEqual(_infer_spaces(s), 'this is a string with no spaces .')
 
 
 class TestZoteroParserWithFiles(unittest.TestCase):

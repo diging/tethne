@@ -7,6 +7,7 @@ import codecs
 import magic    # To detect file mime-type.
 import slate    # PDF processing.
 import chardet  # Detect character encodings.
+from math import log
 logging.basicConfig(level=40)
 
 from unidecode import unidecode
@@ -14,6 +15,7 @@ from datetime import datetime
 
 from tethne import Paper, Corpus, StructuredFeature, StructuredFeatureSet
 from tethne.readers.base import RDFParser
+from tethne.utilities import _strip_punctuation, mean
 
 # RDF terms.
 RDF = u'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
@@ -31,6 +33,44 @@ SURNAME_ELEM = rdflib.URIRef(FOAF + u'surname')
 VOL = rdflib.term.URIRef(PRISM + u'volume')
 IDENT = rdflib.URIRef(DC + u"identifier")
 TITLE = rdflib.term.URIRef(DC + u'title')
+
+
+# Build a cost dictionary, assuming Zipf's law and cost = -math.log(probability).
+from tethne.readers._rankedwords import WORDS
+WORDCOST = dict((k, log((i+1)*log(len(WORDS)))) for i, k in enumerate(WORDS))
+MAXWORD = max(len(x) for x in WORDS)
+
+def _infer_spaces(s):
+    """
+    Uses dynamic programming to infer the location of spaces in a string
+    without spaces.
+    """
+    s = s.lower()
+
+    # Find the best match for the i first characters, assuming cost has
+    # been built for the i-1 first characters.
+    # Returns a pair (match_cost, match_length).
+    def best_match(i):
+        candidates = enumerate(reversed(cost[max(0, i - MAXWORD):i]))
+        return min((c + WORDCOST.get(s[i-k-1: i], 9e999), k + 1)
+                    for k, c in candidates)
+
+    # Build the cost array.
+    cost = [0]
+    for i in range(1, len(s) + 1):
+        c, k = best_match(i)
+        cost.append(c)
+
+    # Backtrack to recover the minimal-cost string.
+    out = []
+    i = len(s)
+    while i > 0:
+        c, k = best_match(i)
+        assert c == cost[i]
+        out.append(s[i-k:i])
+        i -= k
+
+    return u" ".join(reversed(out))
 
 
 def extract_text(fpath):
@@ -102,6 +142,14 @@ def extract_pdf(fpath):
             sentences.append(i)
 
             for word in nltk.tokenize.word_tokenize(sentence):
+                if len(word) > 15:
+                    words = nltk.tokenize.word_tokenize(_infer_spaces(word))
+                    if mean([len(w) for w in words]) > 2:
+                        for w in words:
+                            tokens.append(w)
+                            i += 1
+                        continue
+
                 tokens.append(word)
                 i += 1
 
