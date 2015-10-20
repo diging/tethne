@@ -436,12 +436,12 @@ class StructuredFeatureSet(BaseFeatureSet):
             feature_ = []
             for f in feature:
                 t = self.lookup[f]
-                v_ = func(f, v, feature.count(f), self.documentCounts[t])
-                if v_ > 0 and v_ is not None:
-                    feature_.append((f, v_))
-            features[i] = Feature(feature_)
+                v_ = func(f, self.count(f), feature.count(f), self.documentCounts[t])
+                if v_ is not None:
+                    feature_.append(f)
+            features[i] = StructuredFeature(feature_)
 
-        return FeatureSet(features)
+        return StructuredFeatureSet(features)
 
     def context_chunks(self, context):
         """
