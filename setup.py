@@ -33,7 +33,6 @@ setup(
         "Unidecode >= 0.04.16",
         "iso8601",
         "rdflib",
-        "cchardet",
-        "unicodedata"
+        "cchardet"
     ],
 )
