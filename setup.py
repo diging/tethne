@@ -32,6 +32,9 @@ setup(
         "networkx >= 1.8.1",
         "Unidecode >= 0.04.16",
         "iso8601",
-        "rdflib"
+        "rdflib",
+        "codecs",
+        "cchardet",
+        "unicodedata"
     ],
 )

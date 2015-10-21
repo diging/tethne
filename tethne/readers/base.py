@@ -4,9 +4,7 @@ import xml.etree.ElementTree as ET
 import rdflib
 import codecs
 from unidecode import unidecode
-#import chardet 
 import cchardet as chardet
-import nltk
 import unicodedata
 
 class dobject(object):
