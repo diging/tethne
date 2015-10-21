@@ -110,7 +110,8 @@ class IterParser(BaseParser):
         tag : str
         data :
         """
-        data = unicodedata.normalize('NFKD', data).encode('utf-8','ignore')
+        if isinstance(data,unicode):
+            data = unicodedata.normalize('NFKD', data).encode('utf-8','ignore')
         data = str(data)
         if self.is_end(tag):
             self.postprocess_entry()

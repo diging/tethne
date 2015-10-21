@@ -355,7 +355,7 @@ def _handle_paper(article):
         paper[key] = datum
 
     # Handle author names.
-    adata = _handle_authors(pdata['author'])
+    adata = _handle_authors(pdata['author'])    
     paper.authors_init = zip(adata[0], adata[1])
 
     # Handle pubdate.
