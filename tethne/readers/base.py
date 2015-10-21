@@ -175,8 +175,6 @@ class FTParser(IterParser):
             msg = f.read()
         result = chardet.detect(msg)
 
-        #self.buffer = open(self.path, 'r').read()
-
         self.buffer = codecs.open(self.path, "r", result['encoding'].encode("utf-8"))
         self.at_eof = False
     
