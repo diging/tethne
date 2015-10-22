@@ -29,3 +29,4 @@ tox==2.0.2
 Unidecode==0.4.17
 virtualenv==13.0.3
 wheel==0.24.0
+cchardet
