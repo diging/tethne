@@ -14,7 +14,7 @@ PYTHON_3 = sys.version_info[0] == 3
 if PYTHON_3:
     unicode = str
     xrange = range
-    str = byte
+    str = bytes
 
 
 class GraphCollection(dict):
