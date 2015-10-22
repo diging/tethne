@@ -2,18 +2,27 @@ import os
 import re
 import xml.etree.ElementTree as ET
 import rdflib
+
 import codecs
 from unidecode import unidecode
 import cchardet as chardet
 import unicodedata
 
+import logging
+
+# rdflib complains a lot.
+logging.getLogger("rdflib").setLevel(logging.ERROR)
+
+
+
 class dobject(object):
     pass
 
+
 def _cast(value):
     """
-    Attempt to convert ``value`` to an ``int`` or ``float``. If unable, return the value
-    unchanged.
+    Attempt to convert ``value`` to an ``int`` or ``float``. If unable, return
+    the value unchanged.
     """
 
     try:
@@ -24,12 +33,19 @@ def _cast(value):
         except ValueError:
             return value
 
+
 class BaseParser(object):
+    """
+    Base class for all data parsers. Do not instantiate directly.
+    """
     def __init__(self, path, **kwargs):
         self.path = path
         self.data = []
         self.fields = set([])
-        
+
+        for k, v in kwargs.iteritems():
+            setattr(self, k, v)
+
         self.open()
 
     def new_entry(self):
@@ -43,15 +59,15 @@ class BaseParser(object):
         if hasattr(self, handler_name):
             return getattr(self, handler_name)
         return
-        
+
     def set_value(self, tag, value):
         setattr(self.data[-1], tag, value)
-        
+
     def postprocess_entry(self):
         for field in self.fields:
             processor_name = 'postprocess_{0}'.format(field)
             if hasattr(self.data[-1], field) and hasattr(self, processor_name):
-                getattr(self, processor_name)(self.data[-1])        
+                getattr(self, processor_name)(self.data[-1])
 
 
 class IterParser(BaseParser):
@@ -71,13 +87,13 @@ class IterParser(BaseParser):
 
         self.current_tag = None
         self.last_tag = None
-        
+
         if kwargs.get('autostart', True):
             self.start()
 
     def parse(self):
         """
-        
+
         """
         while True:        # Main loop.
             tag, data = self.next()
@@ -102,7 +118,7 @@ class IterParser(BaseParser):
     def handle(self, tag, data):
         """
         Process a single line of data, and store the result.
-        
+
         Parameters
         ----------
         tag : str
@@ -123,7 +139,7 @@ class IterParser(BaseParser):
         handler = self._get_handler(tag)
         if handler is not None:
             data = handler(data)
-            
+
         if tag in self.tags:    # Rename the field.
             tag = self.tags[tag]
 
@@ -141,11 +157,12 @@ class IterParser(BaseParser):
         setattr(self.data[-1], tag, value)
         self.fields.add(tag)
 
+
 class FTParser(IterParser):
     """
     Base parser for field-tagged data files.
     """
-    
+
     start_tag = 'ST'
     """Signals the start of a data entry."""
 
@@ -168,32 +185,37 @@ class FTParser(IterParser):
 
         if not os.path.exists(self.path):
             raise IOError("No such path: {0}".format(self.path))
-    
+<<<<<<< HEAD
+
         with open(self.path, "r") as f:
             msg = f.read()
         result = chardet.detect(msg)
 
         self.buffer = codecs.open(self.path, "r", result['encoding'].encode("utf-8"))
+=======
+
+        self.buffer = open(self.path, 'r')
+>>>>>>> develop
         self.at_eof = False
-    
+
     def next(self):
         """
         Get the next line of data.
-        
+
         Returns
         -------
         tag : str
-        data : 
+        data :
         """
         line = self.buffer.readline()
 
         while line == '\n':       # Skip forward to the next line with content.
             line = self.buffer.readline()
-            
+
         if line == '':            # End of file.
             self.at_eof = True
             return None, None
-            
+
         match = re.match('([A-Z]{2})\W+(.*)', line)
         if match is not None:
             self.current_tag, data = match.groups()
@@ -203,7 +225,7 @@ class FTParser(IterParser):
         data=unidecode(data)
 
         return self.current_tag, _cast(data)
-    
+
     def __del__(self):
         if hasattr(self, 'buffer'):
             self.buffer.close()
@@ -258,7 +280,7 @@ class XMLParser(IterParser):
 
 
 class RDFParser(BaseParser):
-    entry_elements = ['Document']   # 
+    entry_elements = ['Document']   #
     meta_elements = []
     concat_fields = []
 
@@ -266,15 +288,15 @@ class RDFParser(BaseParser):
         self.graph = rdflib.Graph()
         self.graph.parse(self.path)
         self.entries = []
-        
+
         for element in self.entry_elements:
             query = 'SELECT * WHERE { ?p a ' + element + ' }'
             self.entries += [r[0] for r in self.graph.query(query)]
-    
+
     def next(self):
         if len(self.entries) > 0:
             return self.entries.pop(0)
-            
+
     def parse(self):
         meta_fields, meta_refs = zip(*self.meta_elements)
 
@@ -282,26 +304,26 @@ class RDFParser(BaseParser):
             entry = self.next()
             if entry is None:
                 break
-                
+
             self.new_entry()
 
             for s, p, o in self.graph.triples((entry, None, None)):
                 if p in meta_refs:  # Look for metadata fields.
                     tag = meta_fields[meta_refs.index(p)]
-                    self.handle(tag, o)    
+                    self.handle(tag, o)
             self.postprocess_entry()
-            
-        return self.data                             
 
-    def handle(self, tag, data):                
+        return self.data
+
+    def handle(self, tag, data):
         handler = self._get_handler(tag)
-        
+
         if handler is not None:
             data = handler(data)
-        
+
         if tag in self.tags:    # Rename the field.
-            tag = self.tags[tag] 
-        
+            tag = self.tags[tag]
+
         if data is not None:
             # Multiline fields are represented as lists of values.
             if hasattr(self.data[-1], tag):
@@ -316,11 +338,4 @@ class RDFParser(BaseParser):
                 value = data
 
             setattr(self.data[-1], tag, value)
-            self.fields.add(tag)  
-        
-
-
-    
-
-        
-    
+            self.fields.add(tag)

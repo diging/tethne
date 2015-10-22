@@ -17,6 +17,7 @@ import iso8601
 
 from unidecode import unidecode
 
+
 class DfRParser(XMLParser):
     entry_class = Paper
 
@@ -74,26 +75,25 @@ class DfRParser(XMLParser):
             entry.authors_full = [entry.authors_full]
 
 
-
 class GramGenerator(object):
     """
     Yields N-gram data from on-disk dataset, to make loading big datasets a bit
     more memory-friendly.
-    
+
     Reusable, in the sense that :func:`.items`\, :func:`.iteritems`\,
     :func:`.keys`\, and :func:`.values` all return new :class:`.GramGenerator`
-    instances with the same path. This allows a :class:`.GramGenerator` to 
+    instances with the same path. This allows a :class:`.GramGenerator` to
     sneakily pass as an ngrams dict in most practical situations.
     """
 
     def __init__(self, path, elem, values=False, keys=False, ignore_hash=True):
         """
-        
+
         Parameters
         ----------
         path : str
-            Path to unzipped JSTOR DfR folder containing N-grams (e.g. 
-            'bigrams'). 
+            Path to unzipped JSTOR DfR folder containing N-grams (e.g.
+            'bigrams').
         elem : str
             Element in DfR dataset containing data of interest. E.g. 'bigrams'.
         values : bool
@@ -101,29 +101,37 @@ class GramGenerator(object):
             (key,value) tuples.
         """
 
+        if not os.path.exists(path):
+            raise ValueError('No such file or directory')
+
         self.path = path
         self.elem = elem
+        if elem.endswith('s'):
+            self.elem_xml = elem[:-1]
+        else:
+            self.elem_xml = elem
+
         self.ignore_hash = ignore_hash
-                
+
         self.files = os.listdir(os.path.join(path, elem))
         self.N = len([ d for d in self.files if d.split('.')[-1] == 'XML' ])
         self.i = 0
-        
+
         self.V = values
         self.K = keys
-        
+
         if self.V and self.K:
             raise ValueError('values and keys cannot both be true.')
-    
+
     def __len__(self):
         return self.N
-    
+
     def __iter__(self):
         return self
-    
+
     def __next__(self):
         return self.next()
-    
+
     def next(self):
         if self.i < self.N:
             cur = int(self.i)
@@ -131,38 +139,38 @@ class GramGenerator(object):
             return self._get(cur)
         else:
             raise StopIteration()
-            
+
     def items(self):
         """
         Returns a :class:`GramGenerator` that produces key,value tuples.
-        """    
+        """
         return GramGenerator(self.path, self.elem,
                              ignore_hash=self.ignore_hash)
-    
+
     def iteritems(self):
         """
         Returns a :class:`GramGenerator` that produces key,value tuples.
-        """    
+        """
         return GramGenerator(self.path, self.elem,
                              ignore_hash=self.ignore_hash)
-    
+
     def values(self):
         """
         Returns a :class:`GramGenerator` that produces only values.
         """
-        return GramGenerator(self.path, self.elem, values=True, 
+        return GramGenerator(self.path, self.elem, values=True,
                              ignore_hash=self.ignore_hash)
-                                                   
+
     def keys(self):
         """
         Returns a :class:`GramGenerator` that produces only keys.
         """
-        return GramGenerator(self.path, self.elem, keys=True, 
+        return GramGenerator(self.path, self.elem, keys=True,
                              ignore_hash=self.ignore_hash)
-                                                   
+
     def __getitem__(self, key):
         return self._get(key)
-    
+
     def _get(self, i):
         """
         Retrieve data for the ith file in the dataset.
@@ -177,16 +185,21 @@ class GramGenerator(object):
             return doi
 
         grams = []
-        for gram in root.findall(self.elem):
+        for gram in root.findall(self.elem_xml):
             text = unidecode(unicode(gram.text.strip()))
             if ( not self.ignore_hash or '#' not in list(text) ):
                 c = ( text, int(gram.attrib['weight']) )
                 grams.append(c)
-        
+
         if self.V:  # Values only.
             return grams
 
         return doi, grams   # Default behavior.
+
+def _get_citation_filename(basepath):
+    for fname in ["citations.xml", "citations.XML"]:
+        if os.path.exists(os.path.join(basepath, fname)):
+            return fname
 
 
 def read(path, corpus=True, index_by='doi', **kwargs):
@@ -214,21 +227,35 @@ def read(path, corpus=True, index_by='doi', **kwargs):
        >>> from tethne.readers import dfr
        >>> papers = dfr.read("/Path/to/DfR")
     """
-    citationfname = "citations.xml"
-    if not os.path.isfile(os.path.join(path,citationfname)):
-        citationfname = "citations.XML"
 
-    parser = DfRParser(os.path.join(path, citationfname))
-    parser.parse()
-    corpus = Corpus(parser.data, index_by=index_by, **kwargs)
-    
-    # Find and read N-gram data.
-    for sname in os.listdir(path):
-        fpath = os.path.join(path, sname)   # Full path.
-        if os.path.isdir(fpath) and not sname.startswith('.'):
-            corpus.features[sname] = ngrams(path, sname)
-    return corpus  
-    
+    citationfname = _get_citation_filename(path)
+
+    papers = []
+    if citationfname:   # Valid DfR dataset.
+        parser = DfRParser(os.path.join(path, citationfname))
+        papers += parser.parse()
+
+    else:   # Possibly a directory containing several DfR datasets?
+        papers = []
+        # Search for DfR datasets in subdirectories.
+        for dirpath, dirnames, filenames in os.walk(path):
+            citationfname = _get_citation_filename(dirpath)
+            if citationfname:
+                papers += read(dirpath, corpus=False)
+
+    if len(papers) == 0:
+        raise ValueError('No DfR datasets found at %s' % path)
+
+    if corpus:
+        corpus = Corpus(parser.data, index_by=index_by, **kwargs)
+
+        # Find and read N-gram data.
+        for sname in os.listdir(path):
+            fpath = os.path.join(path, sname)   # Full path.
+            if os.path.isdir(fpath) and not sname.startswith('.'):
+                corpus.features[sname] = ngrams(path, sname)
+        return corpus
+    return papers
 
 def ngrams(path, elem, ignore_hash=True):
     """
@@ -252,19 +279,19 @@ def ngrams(path, elem, ignore_hash=True):
     grams = GramGenerator(path, elem, ignore_hash=ignore_hash)
     return FeatureSet({k: Feature(f) for k, f in grams})
 
-        
+
 def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
     """
     Builds a vocabulary, and replaces words with vocab indices.
-    
+
     Parameters
     ----------
     ngrams : dict
         Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
     apply_stoplist : bool
         If True, will exclude all N-grams that contain words in the NLTK
-        stoplist.        
-        
+        stoplist.
+
     Returns
     -------
     t_ngrams : dict
@@ -282,22 +309,22 @@ def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
     token_tf = Counter()
     token_df = Counter()
     t_ngrams = {}
-    
+
     # Get global word counts, first.
     for grams in ngrams.values():
         for g,c in grams:
             word_tf[g] += c
             word_df[g] += 1
-            
+
     if apply_stoplist:
         stoplist = stopwords.words()
-            
+
     # Now tokenize.
-    for doi,grams in ngrams.iteritems():
+    for doi, grams in ngrams.iteritems():
         t_ngrams[doi] = []
         for g,c in grams:
             ignore = False
-                        
+
             # Ignore extremely rare words (probably garbage).
             if word_tf[g] < min_tf or word_df[g] < min_df or len(g) < min_len:
                 ignore = True
@@ -306,15 +333,15 @@ def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
             elif apply_stoplist:
                 for w in g.split():
                     if w in stoplist:
-                        ignore = True            
+                        ignore = True
 
             if not ignore:
-                
+
                 # Coerce unicode to string.
                 if type(g) is str:
                     g = unicode(g)
                 g = unidecode(g)
-                
+
                 if g not in vocab.values():
                     i = len(vocab)
                     vocab[i] = g
@@ -355,7 +382,7 @@ def _handle_paper(article):
         paper[key] = datum
 
     # Handle author names.
-    adata = _handle_authors(pdata['author'])    
+    adata = _handle_authors(pdata['author'])
     paper.authors_init = zip(adata[0], adata[1])
 
     # Handle pubdate.

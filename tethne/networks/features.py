@@ -21,13 +21,15 @@ from tethne.networks.base import cooccurrence, coupling, multipartite
 def _nPMI(p_ij, p_i, p_j):
     return (log(p_ij/(p_i*p_j)))/(-1.*log(p_ij))
 
+
 def feature_cooccurrence(corpus, featureset_name, min_weight=1,
-                         filter=lambda fs, s: True):
+                         filter=lambda f, v, c, dc: True):
     return cooccurrence(corpus, featureset_name, min_weight=min_weight,
                         filter=filter)
 
+
 def mutual_information(corpus, featureset_name, min_weight=0.9,
-                       filter=lambda fs, s: True):
+                       filter=lambda f, v, c, dc: True):
     """
     Generates a graph of features in ``featureset`` based on normalized
     `pointwise mutual information (nPMI)
@@ -63,10 +65,9 @@ def mutual_information(corpus, featureset_name, min_weight=0.9,
 
     return mgraph
 
-def keyword_cooccurrence(corpus, min_weight=1, filter=lambda fs, s: True):
+def keyword_cooccurrence(corpus, min_weight=1, filter=lambda f, v, c, dc: True):
     warnings.warn('keyword_cooccurrence will be removed in v0.8. Use ' +
                   'feature_cooccurrence with "authorKeywords" or '+
                   '"keywordsPlus" instead.', DeprecationWarning)
     return feature_cooccurrence(corpus, 'authorKeywords',
                                 min_weight=min_weight, filter=filter)
-

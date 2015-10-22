@@ -24,8 +24,24 @@ class TestBaseNeworkMethods(unittest.TestCase):
         self.assertGreater(len(g.nodes()), 0)
         self.assertGreater(len(g.edges()), 0)
 
+    def test_coocurrence_feature(self):
+        g = cooccurrence(self.corpus.features['authors'])
+
+        self.assertIsInstance(g, nx.Graph)
+        self.assertGreater(len(g.nodes()), 0)
+        self.assertGreater(len(g.edges()), 0)
+
     def test_coupling(self):
         g = coupling(self.corpus, 'citations')
+
+        self.assertIsInstance(g, nx.Graph)
+        self.assertGreater(len(g.nodes()), 0)
+        self.assertGreater(len(g.edges()), 0)
+        for s, t, attrs in g.edges(data=True):
+            self.assertEqual(len(attrs['features']), attrs['weight'])
+
+    def test_coupling_feature(self):
+        g = coupling(self.corpus.features['citations'])
 
         self.assertIsInstance(g, nx.Graph)
         self.assertGreater(len(g.nodes()), 0)

@@ -18,8 +18,6 @@ class TestDFRReader(unittest.TestCase):
             if hasattr(e, 'date'):
                 self.assertIsInstance(e.date, int)
 
-            
-
             if hasattr(e, 'authors_init'):
                 self.assertIsInstance(e.authors_init, list)
                 for a in e.authors_init:
@@ -44,19 +42,37 @@ class TestDFRReader(unittest.TestCase):
 
             if hasattr(e, 'title'):
                 self.assertIsInstance(e.title, str)
-                
+
         self.assertIn('wordcounts', corpus.features)
-        
-        self.assertGreaterEqual(len(corpus), 
+
+        self.assertGreaterEqual(len(corpus),
                                 len(corpus.features['wordcounts']))
-        
+
+    def test_transform(self):
+        corpus = read(datapath)
+        wordcounts = corpus.features['wordcounts']
+        def filter(f, v, c, dc):
+            if f == 'the':
+                return 0
+            return v
+
+        # filter() should remove a single token.
+        self.assertEqual(len(wordcounts.index) - 1,
+                         len(wordcounts.transform(filter).index))
+
 class TestNGrams(unittest.TestCase):
     def test_ngrams(self):
         grams = ngrams(datapath, 'wordcounts')
-        
+
         self.assertIsInstance(grams, FeatureSet)
         self.assertEqual(len(grams), 398)
-        
+        self.assertEqual(len(grams.index), 105156)
+
+
+class TestCitationFile(unittest.TestCase):
+    def test_citations_file(self):
+        datapath2 = './tethne/tests/data/dfr2'
+        self.assertIsInstance(read(datapath2), Corpus)
 
 
 if __name__ == '__main__':

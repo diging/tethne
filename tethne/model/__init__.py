@@ -8,11 +8,12 @@ import shutil
 import tempfile
 import subprocess
 
+
 class Model(object):
     """
     Base class for models.
     """
-    
+
     def __init__(self, corpus, **kwargs):
         """
         Initialize the ModelManager.
@@ -49,7 +50,7 @@ class Model(object):
         """
         Plots LL/topic over iterations.
         """
-        
+
         return self.ll
 
     def fit(self, **kwargs):
@@ -61,4 +62,3 @@ class Model(object):
             setattr(self, key, value)
 
         self.run(**kwargs)
-

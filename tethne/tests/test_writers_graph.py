@@ -37,7 +37,10 @@ class GraphMLTest(unittest.TestCase):
         self.assertTrue(nx.is_isomorphic(self.graph, rgraph))
 
     def tearDown(self):
-        os.remove(self.temp)
+        try:
+            os.remove(self.temp)
+        except WindowsError:
+            pass
 
 class CSVTest(unittest.TestCase):
     def setUp(self):
@@ -67,9 +70,12 @@ class CSVTest(unittest.TestCase):
             self.fail(E.message)
 
     def tearDown(self):
-        os.remove(self.prefix + '_nodes.csv')
-        os.remove(self.prefix + '_edges.csv')
-        os.rmdir(self.temp)
+        try:
+            os.remove(self.prefix + '_nodes.csv')
+            os.remove(self.prefix + '_edges.csv')
+            os.rmdir(self.temp)
+        except WindowsError:
+            pass
 
 
 

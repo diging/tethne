@@ -33,4 +33,5 @@ Modules
 
 from tethne.networks.authors import author_papers, coauthors
 from tethne.networks.papers import author_coupling, bibliographic_coupling, \
-                                   cocitation, direct_citation, topic_coupling
+                                   cocitation, direct_citation
+from tethne.networks.topics import topic_coupling

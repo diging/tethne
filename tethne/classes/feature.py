@@ -1,6 +1,15 @@
+"""
+Classes in this module provide structures for additional data about
+:class:`.Paper`\s.
+"""
+
 from collections import Counter, defaultdict
 
 from tethne.utilities import _iterable, argsort
+
+import sys
+if sys.version_info[0] > 2:
+    xrange = range
 
 
 class StructuredFeature(list):
@@ -226,7 +235,9 @@ class Feature(list):
                     combined_data[k] += v
                 return combined_data.items()
             else:   # Recurses.
-                return self.__add__(Counter(_iterable(data)).items())
+                c = Counter(_iterable(data))
+                keys = list(c.keys())
+                return self.__add__(list(zip(keys, c.values())))
         return self
 
     def __sub__(self, data):
@@ -264,13 +275,13 @@ class Feature(list):
         The `set` of unique elements in this :class:`.Feature`\.
         """
         if len(self) > 0:
-            return set(zip(*self)[0])
+            return set(list(zip(*self))[0])
         return set()
 
     @property
     def norm(self):
-        T = sum(zip(*self)[1])
-        return Feature([(i,float(v)/T) for i,v in self])
+        T = sum(list(zip(*self))[1])
+        return Feature([(i, float(v)/T) for i, v in self])
 
     def top(self, topn=10):
         """
@@ -293,7 +304,7 @@ class Feature(list):
         -------
         list
         """
-        return [self[i] for i in argsort(zip(*self)[1])[::-1][:topn]]
+        return [self[i] for i in argsort(list(zip(*self))[1])[::-1][:topn]]
 
     def value(self, element):
         return dict(self)[element]
@@ -312,7 +323,12 @@ class BaseFeatureSet(object):
             self.add(paper, feature)
 
     def __getitem__(self, key):
-        return self.features[key]
+        try:
+            return self.features[key]
+        except KeyError as E:
+            if type(key) is int:
+                return self.features.values()[key]
+            raise E
 
     def __len__(self):
         return len(self.features)
@@ -414,6 +430,19 @@ class StructuredFeatureSet(BaseFeatureSet):
     :class:`.StructuredFeature` instances.
     """
 
+    def transform(self, func):
+        features = {}
+        for i, feature in self.features.iteritems():
+            feature_ = []
+            for f in feature:
+                t = self.lookup[f]
+                v_ = func(f, self.count(f), feature.count(f), self.documentCounts[t])
+                if v_ is not None:
+                    feature_.append(f)
+            features[i] = StructuredFeature(feature_)
+
+        return StructuredFeatureSet(features)
+
     def context_chunks(self, context):
         """
         Retrieves all tokens, divided into the chunks in context ``context``.
@@ -451,6 +480,20 @@ class FeatureSet(BaseFeatureSet):
     """
     A :class:`.FeatureSet` organizes multiple :class:`.Feature` instances.
     """
+
+    def transform(self, func):
+        features = {}
+        for i, feature in self.features.iteritems():
+            feature_ = []
+            for f, v in feature:
+                t = self.lookup[f]
+                v_ = func(f, v, self.counts[t], self.documentCounts[t])
+                if v_ > 0 and v_ is not None:
+                    feature_.append((f, v_))
+            features[i] = Feature(feature_)
+
+        return FeatureSet(features)
+
     def as_matrix(self):
         """
 

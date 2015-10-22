@@ -8,6 +8,7 @@ import shutil
 import tempfile
 import subprocess
 import csv
+import platform
 from collections import defaultdict
 
 from networkx import Graph
@@ -19,30 +20,39 @@ logger.setLevel('ERROR')
 
 from tethne import write_documents, Feature, FeatureSet
 from tethne.model import Model
+import tethne
+
+# Determine path to MALLET.
+TETHNE_PATH = os.path.split(os.path.abspath(tethne.__file__))[0]
+MALLET_PATH = os.path.join(TETHNE_PATH, 'bin', 'mallet-2.0.7')
+
+import sys
+if sys.version_info[0] > 2:
+    xrange = range
 
 class LDAModel(Model):
     """
     Generates a :class:`.LDAModel` from a :class:`.Corpus` using
     `MALLET <http://mallet.cs.umass.edu/>`_.
-    
+
     The :class:`.Corpus` should already contain at least one featurset,
     indicated by the `feature` parameter, such as wordcounts. You may
     specify two working directories: `temppath` should be a working
     directory that will contain intermediate files (e.g. documents, data
-    files, metadata), while `outpath` will contain the final model and any 
+    files, metadata), while `outpath` will contain the final model and any
     plots generated during the modeling process. If `temppath` is not
     provided, generates and uses a system temporary directory.
-    
+
     Tethne comes bundled with a recent version of MALLET. If you would
-    rather use your own install, you can do so by providing the 
+    rather use your own install, you can do so by providing the
     `mallet_path` parameter. This should point to the directory containing
     ``/bin/mallet``.
-    
+
     .. autosummary::
        :nosignatures:
-       
+
        topic_over_time
-    
+
     Parameters
     ----------
     D : :class:`.Corpus`
@@ -55,67 +65,77 @@ class LDAModel(Model):
         Path to temporary directory.
     mallet_path : str
         Path to MALLET install directory (contains bin/mallet).
-        
+
     Examples
     --------
-        
+
     Starting with some JSTOR DfR data (with wordcounts), a typical workflow
     might look something like this:
-    
+
     .. code-block:: python
-    
+
        >>> from nltk.corpus import stopwords                 #  1. Get stoplist.
        >>> stoplist = stopwords.words()
-       
+
        >>> from tethne.readers import dfr                    #  2. Build Corpus.
        >>> C = dfr.corpus_from_dir('/path/to/DfR/datasets', 'uni', stoplist)
-       
+
        >>> def filt(s, C, DC):                           # 3. Filter wordcounts.
        ...     if C > 3 and DC > 1 and len(s) > 3:
        ...         return True
        ...     return False
        >>> C.filter_features('wordcounts', 'wc_filtered', filt)
-       
+
        >>> from tethne.model import MALLETModelManager       #   4. Get Manager.
        >>> outpath = '/path/to/my/working/directory'
        >>> mallet = '/Applications/mallet-2.0.7'
        >>> M = MALLETModelManager(C, 'wc_filtered', outpath, mallet_path=mallet)
-       
+
        >>> M.prep()                                          #    5. Prep model.
-       
+
        >>> model = M.build(Z=50, max_iter=300)               #   6. Build model.
        >>> model                                             # (may take awhile)
        <tethne.model.corpus.ldamodel.LDAModel at 0x10bfac710>
 
     A plot showing the log-likelihood/topic over modeling iterations should be
     generated in your `outpath`. For example:
-    
+
     .. figure:: _static/images/ldamodel_LL.png
        :width: 400
        :align: center
-       
+
     Behind the scenes, the :func:`.prep` procedure generates a plain-text corpus
     file at `temppath`, along with a metadata file. MALLET's ``import-file``
     procedure is then called, which translates the corpus into MALLET's internal
     format (also stored at the `temppath`).
-    
+
     The :func:`.build` procedure then invokes MALLET's ``train-topics``
-    procedure. This step may take a considerable amount of time, anywhere from 
+    procedure. This step may take a considerable amount of time, anywhere from
     a few minutes (small corpus, few topics) to a few hours (large corpus, many
     topics).
 
-    For a :class:`.Corpus` with a few thousand :class:`.Paper`\s, 300 - 500 
+    For a :class:`.Corpus` with a few thousand :class:`.Paper`\s, 300 - 500
     iterations is often sufficient to achieve convergence for 20-100 topics.
-    
+
     Once the :class:`.LDAModel` is built, you can access its methods directly.
     See full method descriptions in :class:`.LDAModel`\.
-    
-    For more information about topic modeling with MALLET see 
+
+    For more information about topic modeling with MALLET see
     `this tutorial <http://programminghistorian.org/lessons/topic-modeling-and-mallet>`_.
-    
+
     """
 
-    mallet_path='./tethne/bin/mallet-2.0.7'
+    # mallet_path = os.path.join(os.getcwd(), 'tethne', 'bin', 'mallet-2.0.7')
+    mallet_path = MALLET_PATH
+
+
+    def __init__(self, *args, **kwargs):
+        self.mallet_bin = os.path.join(self.mallet_path, "bin", "mallet")
+
+        if platform.system() == 'Windows':
+            self.mallet_bin += '.bat'
+        os.putenv('MALLET_HOME', self.mallet_path)
+        super(LDAModel, self).__init__(*args, **kwargs)
 
     def prep(self):
         self.dt = os.path.join(self.temp, "dt.dat")
@@ -130,30 +150,30 @@ class LDAModel(Model):
         """
 
         target = self.temp + 'mallet'
-        self.corpus_path, self.metapath = write_documents(self.corpus, target,
-                                                          self.featureset_name,
-                                                          ['date', 'title'])
+        paths = write_documents(self.corpus, target, self.featureset_name,
+                                ['date', 'title'])
+        self.corpus_path, self.metapath = paths
+
         self._export_corpus()
-    
+
     def _export_corpus(self):
         """
         Calls MALLET's `import-file` method.
         """
         # bin/mallet import-file --input /Users/erickpeirson/mycorpus_docs.txt
         #     --output mytopic-input.mallet --keep-sequence --remove-stopwords
-        
-        self.mallet_bin = os.path.join(self.mallet_path, "bin", "mallet")
 
         if not os.path.exists(self.mallet_bin):
             raise IOError("MALLET path invalid or non-existent.")
         self.input_path = os.path.join(self.temp, "input.mallet")
 
-        exit = subprocess.call( [ self.mallet_bin,
+        exit = subprocess.call([
+                self.mallet_bin,
                 'import-file',
-                '--input {0}'.format(self.corpus_path),
-                '--output {0}'.format(self.input_path),
-                '--keep-sequence',          # Required (oddly) for LDA.
-                '--remove-stopwords' ])     # Probably redundant.
+                '--input', self.corpus_path,
+                '--output', self.input_path,
+                '--keep-sequence',          # Required for LDA.
+                '--remove-stopwords'])      # Probably redundant.
 
         if exit != 0:
             msg = "MALLET import-file failed with exit code {0}.".format(exit)
@@ -165,8 +185,8 @@ class LDAModel(Model):
         """
         #$ bin/mallet train-topics --input mytopic-input.mallet
         #> --num-topics 100
-        #> --output-doc-topics /Users/erickpeirson/doc_top 
-        #> --word-topic-counts-file /Users/erickpeirson/word_top 
+        #> --output-doc-topics /Users/erickpeirson/doc_top
+        #> --word-topic-counts-file /Users/erickpeirson/word_top
         #> --output-topic-keys /Users/erickpeirson/topic_keys
 
         if not os.path.exists(self.mallet_bin):
@@ -181,28 +201,29 @@ class LDAModel(Model):
 
         prog = re.compile('\<([^\)]+)\>')
         ll_prog = re.compile(r'(\d+)')
-        p = subprocess.Popen( [ self.mallet_bin,
+        p = subprocess.Popen([
+                    self.mallet_bin,
                     'train-topics',
-                    '--input {0}'.format(self.input_path),
-                    '--num-topics {0}'.format(self.Z),
-                    '--num-iterations {0}'.format(self.max_iter),
-                    '--output-doc-topics {0}'.format(self.dt),
-                    '--word-topic-counts-file {0}'.format(self.wt),
-                    '--output-model {0}'.format(self.om) ],
+                    '--input', self.input_path,
+                    '--num-topics', str(self.Z),
+                    '--num-iterations', str(self.max_iter),
+                    '--output-doc-topics', self.dt,
+                    '--word-topic-counts-file', self.wt,
+                    '--output-model', self.om],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
-    
+
         # Handle output of MALLET in real time.
         while p.poll() is None:
             l = p.stderr.readline()
-            
+
             # Keep track of LL/topic.
             try:
                 this_ll = float(re.findall('([-+]\d+\.\d+)', l)[0])
                 self.ll.append(this_ll)
             except IndexError:  # Not every line will match.
                 pass
-            
+
             # Keep track of modeling progress.
             try:
                 this_iter = float(prog.match(l).group(1))
@@ -214,7 +235,7 @@ class LDAModel(Model):
 
         self.num_iters += self.max_iter
         self.load()
-            
+
     def load(self, **kwargs):
         dt = kwargs.get('dt', self.dt)
         wt = kwargs.get('dt', self.wt)
@@ -225,7 +246,7 @@ class LDAModel(Model):
         """
         Used by :func:`.from_mallet` to reconstruct theta posterior
         distributions.
-        
+
         Returns
         -------
         td : Numpy array
@@ -241,7 +262,7 @@ class LDAModel(Model):
                 i += 1
                 if i == 0:
                     continue     # Avoid header row.
-                
+
                 d, id, t = int(line[0]), str(line[1]), line[2:]
                 feature = Feature([(int(t[i]), float(t[i + 1]))
                                    for i in xrange(0, len(t) - 1, 2)])
@@ -249,11 +270,11 @@ class LDAModel(Model):
 
         self.corpus.features['topics'] = self.theta
         return self.theta
-        
+
     def _read_phi(self, wt):
         """
         Used by :func:`.from_mallet` to reconstruct phi posterior distributions.
-        
+
         Returns
         -------
         wt : Numpy array
@@ -264,6 +285,7 @@ class LDAModel(Model):
 
         self.phi = FeatureSet()
 
+        # TODO: make this encoding-safe.
         with open(wt, "r") as f:
             reader = csv.reader(f, delimiter=' ')
             topics = defaultdict(list)
@@ -272,8 +294,8 @@ class LDAModel(Model):
                 self.vocabulary[w] = term
 
                 for l in line[2:]:
-                    k, c = l.split(':')
-                    topics[int(k)].append((w, c))
+                    k, c = l.split(':')    # Topic and assignment count.
+                    topics[int(k)].append((w, int(c)))
 
         for k, data in topics.iteritems():
             self.phi.add(k, Feature(data).norm)
@@ -283,31 +305,40 @@ class LDAModel(Model):
         List the top ``topn`` topics in document ``d``.
         """
         return self.theta.features[d].top(topn)
-    
-    def list_topic(self, k, topn=10):
+
+    def list_topic(self, k, Nwords=10):
         """
         List the top ``topn`` words for topic ``k``.
 
 
         Examples
         --------
-        
+
         .. code-block:: python
-        
+
            >>> model.list_topic(1, Nwords=5)
            [ 'opposed', 'terminates', 'trichinosis', 'cistus', 'acaule' ]
-           
+
         """
 
         return [(self.vocabulary[w], p) for w, p
-                in self.phi.features[k].top(topn)]
-    
+                in self.phi.features[k].top(Nwords)]
+
     def list_topics(self, Nwords=10):
         """
-        List the top ``topn`` words for each topic.
+        List the top ``Nwords`` words for each topic.
         """
+        return [(k, self.list_topic(k, Nwords)) for k in xrange(len(self.phi))]
 
-        return [(k, self.list_topic(k, topn)) for k in xrange(len(self.phi))]
+
+    def print_topics(self, Nwords=10):
+        """
+        Print the top ``Nwords`` words for each topic.
+        """
+        print('Topic\tTop %i words' % 10)
+        for k, words in self.list_topics(Nwords):
+            print(str(k).ljust(3) + '\t' + ' '.join(list(zip(*words))[0]))
+
 
     def topic_over_time(self, k, mode='counts', slice_kwargs={}):
         """
@@ -316,4 +347,3 @@ class LDAModel(Model):
 
         return self.corpus.feature_distribution('topics', k, mode=mode,
                                                 **slice_kwargs)
-

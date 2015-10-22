@@ -37,9 +37,27 @@ class WoSParser(FTParser):
     """
 
     start_tag = 'PT'
+    """
+    Field-tag used to mark the start of a record.
+    """
+
     end_tag = 'ER'
-    concat_fields = ['abstract', 'keywords', 'funding', 'title', 'references', 'journal']
+    """
+    Field-tag used to mark the end of a record.
+    """
+
+    concat_fields = ['abstract', 'keywords', 'funding', 'title', 'references',
+                     'journal']
+    """
+    Fields that span multiple lines that should be concatenated into a single
+    value.
+    """
+
     entry_class = Paper
+    """
+    The class that should be used to represent a single bibliographic record.
+    This can be changed to support more sophisticated data models.
+    """
 
     tags = {
         'PY': 'date',
@@ -83,8 +101,14 @@ class WoSParser(FTParser):
         'UT': 'wosid',
         'JI': 'isoSource',
     }
+    """
+    Maps field-tags onto field names.
+    """
 
     def parse_author(self, value):
+        """
+        Attempts to split an author name into last and first parts.
+        """
         tokens = tuple([t.upper().strip() for t in value.split(',')])
         if len(tokens) == 1:
             tokens = value.split(' ')
@@ -104,23 +128,47 @@ class WoSParser(FTParser):
         return self.parse_author(value)
 
     def handle_PY(self, value):
+        """
+        WoS publication years are cast to integers.
+        """
         return int(value)
+
+    def handle_SO(self, value):
+        return unicode(value)
+
+    def handle_AB(self, value):
+        return unicode(value)
+
+    def handle_DI(self, value):
+        return unicode(value)
 
     def handle_AU(self, value):
         aulast, auinit = self.parse_author(value)
-        auinit = _space_sep(auinit)
+        auinit = _space_sep(auinit)   # Separate author initials with spaces.
         return aulast, auinit
 
     def handle_TI(self, value):
-        return str(value).title()
+        """
+        Convert article titles to Title Case.
+        """
+        return unicode(value).title()
 
     def handle_VL(self, value):
-        return str(value)
+        """
+        Cast volume to a unicode string.
+        """
+        return unicode(value)
 
     def handle_IS(self, value):
-        return str(value)
+        """
+        Cast issue to a unicode string.
+        """
+        return unicode(value)
 
     def handle_CR(self, value):
+        """
+        Parses cited references.
+        """
         citation = self.entry_class()
 
         value = strip_tags(value)
@@ -191,17 +239,21 @@ class WoSParser(FTParser):
 
     def postprocess_authorKeywords(self, entry):
         """
-        Author Keywords are usually semicolon-delimited.
+        Parse author keywords.
+
+        Author keywords are usually semicolon-delimited.
         """
 
         if type(entry.authorKeywords) not in [str, unicode]:
-            aK = ' '.join([str(k) for k in entry.authorKeywords])
+            aK = u' '.join([unicode(k) for k in entry.authorKeywords])
         else:
             aK = entry.authorKeywords
         entry.authorKeywords = [k.strip().upper() for k in aK.split(';')]
 
     def postprocess_keywordsPlus(self, entry):
         """
+        Parse WoS "Keyword Plus" keywords.
+
         Keyword Plus keywords are usually semicolon-delimited.
         """
 
@@ -211,7 +263,7 @@ class WoSParser(FTParser):
 
     def postprocess_funding(self, entry):
         """
-        Separate funding agency from grant numbers.
+        Separates funding agency from grant numbers.
         """
 
         if type(entry.funding) not in [str, unicode]:
@@ -229,19 +281,32 @@ class WoSParser(FTParser):
         entry.funding = sources_processed
 
     def postprocess_authors_full(self, entry):
+        """
+        If only a single author was found, ensure that ``authors_full`` is
+        nonetheless a list.
+        """
         if type(entry.authors_full) is not list:
             entry.authors_full = [entry.authors_full]
 
     def postprocess_authors_init(self, entry):
+        """
+        If only a single author was found, ensure that ``authors_init`` is
+        nonetheless a list.
+        """
         if type(entry.authors_init) is not list:
             entry.authors_init = [entry.authors_init]
 
     def postprocess_citedReferences(self, entry):
+        """
+        If only a single cited reference was found, ensure that
+        ``citedReferences`` is nonetheless a list.
+        """
         if type(entry.citedReferences) is not list:
             entry.citedReferences = [entry.citedReferences]
 
 
 def from_dir(path, corpus=True, **kwargs):
+    raise DeprecationWarning("from_dir() is deprecated. Use read() instead.")
     papers = []
     for sname in os.listdir(path):
         if sname.endswith('txt') and not sname.startswith('.'):
@@ -258,7 +323,11 @@ def corpus_from_dir(path, **kwargs):
 
 
 def read_corpus(path, **kwargs):
-    raise DeprecationWarning("corpus_from_dir is deprecated in v0.8, use" +
+    """
+    .. DANGER::
+       read_corpus is deprecated in v0.8, use :func:`.read` instead.
+    """
+    raise DeprecationWarning("read_corpus is deprecated in v0.8, use" +
                              " read directly, instead.")
     return read(path, corpus=True, **kwargs)
 
@@ -290,9 +359,15 @@ def read(path, corpus=True, index_by='wosid', **kwargs):
     :class:`.Corpus` or :class:`.Paper`
     """
 
-    if os.path.isdir(path):
-        papers = from_dir(path)
-    else:
+    if not os.path.exists(path):
+        raise ValueError('No such file or directory')
+
+    if os.path.isdir(path):    # Directory containing 1+ WoS data files.
+        papers = []
+        for sname in os.listdir(path):
+            if sname.endswith('txt') and not sname.startswith('.'):
+                papers += read(os.path.join(path, sname), corpus=False)
+    else:   # A single data file.
         papers = WoSParser(path).parse()
 
     if corpus:

@@ -4,27 +4,79 @@ sys.path.append('../tethne')
 import re
 
 import unittest
-from tethne.readers.zotero import read, ZoteroParser
-from tethne import Corpus, Paper
+from tethne.readers.zotero import read, ZoteroParser, _infer_spaces
+from tethne import Corpus, Paper, StructuredFeatureSet
 
 datapath = './tethne/tests/data/zotero'
 datapath2 = './tethne/tests/data/zotero2'
+datapath3 = './tethne/tests/data/zotero_withfiles'
+
+
+class TestInferSpaces(unittest.TestCase):
+    def test_infer(self):
+        s = "Thisisastringwithnospaces."
+        self.assertEqual(_infer_spaces(s), 'this is a string with no spaces .')
+
+
+class TestZoteroParserWithFiles(unittest.TestCase):
+    """
+    When Tethne reads a Zotero collection, it should attempt to extract
+    full-text content for the constituent bibliographic records.
+    """
+
+    def test_read_pdf(self):
+        corpus = read(datapath3)
+
+        self.assertIsInstance(corpus, Corpus)
+
+        self.assertIn('pdf_text', corpus.features,
+        """
+        If a dataset has full-text content available in PDFs, then
+        'structuredfeatures' should contain an element called 'pdf_text'.
+        """)
+
+        self.assertIsInstance(corpus.features['pdf_text'],
+                              StructuredFeatureSet,
+        """
+        'pdf_text' should be an instance of StructuredFeatureSet.
+        """)
+
+        self.assertEqual(len(corpus.features['pdf_text']), 7,
+        """
+        There should be seven (7) full-text pdf StructuredFeatures for this
+        particular dataset.
+        """)
 
 
 class TestZoteroParser(unittest.TestCase):
     def test_read(self):
         corpus = read(datapath)
         self.assertIsInstance(corpus, Corpus)
-        
+
     def test_read_files(self):
         # TODO: attempt to read contents of files?
         corpus = read(datapath2, index_by='uri')
-        self.assertIsInstance(corpus, Corpus)        
+        self.assertIsInstance(corpus, Corpus)
 
     def test_read_nocorpus(self):
         papers = read(datapath, corpus=False)
         self.assertIsInstance(papers, list)
         self.assertIsInstance(papers[0], Paper)
+
+    def test_handle_date(self):
+        parser = ZoteroParser(datapath)
+        parser.parse()
+        date_list = ["January 23, 2015",
+                     "2015-9",
+                     "2015-9-23",
+                     "09/23/2015",
+                     "2015-09-23"]
+
+        for each_date in date_list:
+            self.assertEqual(2015, parser.handle_date(each_date),
+            """
+            Date Not properly Formatted.
+            """)
 
     def test_parse(self):
         parser = ZoteroParser(datapath)
@@ -60,7 +112,7 @@ class TestZoteroParser(unittest.TestCase):
                 self.assertIsInstance(e.abstract, str,
                                       derror.format('abstract', 'str',
                                                     type(e.abstract)))
-                
+
             if hasattr(e, 'authorKeywords'):
                 self.assertIsInstance(e.authorKeywords, list,
                                       derror.format('authorKeywords', 'list',
