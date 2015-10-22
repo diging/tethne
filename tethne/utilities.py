@@ -21,6 +21,16 @@ def is_number(value):
     return True
 
 
+def number(value):
+    try:
+        return int(value)
+    except ValueError:
+        try:
+            return float(value)
+        except ValueError:
+            return value
+
+
 def tokenize(s):
     return s.lower()
 

@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 import re
 from collections import Counter
 from tethne import Paper, Corpus, Feature, FeatureSet
-from tethne.utilities import dict_from_node, strip_non_ascii
+from tethne.utilities import dict_from_node, strip_non_ascii, number
 from tethne.readers.base import XMLParser
 import iso8601
 
@@ -188,7 +188,7 @@ class GramGenerator(object):
         for gram in root.findall(self.elem_xml):
             text = unidecode(unicode(gram.text.strip()))
             if ( not self.ignore_hash or '#' not in list(text) ):
-                c = ( text, int(gram.attrib['weight']) )
+                c = ( text, number(gram.attrib['weight']) )
                 grams.append(c)
 
         if self.V:  # Values only.

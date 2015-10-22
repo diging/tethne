@@ -6,7 +6,7 @@ from tethne.readers.dfr import read, ngrams
 from tethne import Corpus, Paper, FeatureSet
 
 datapath = './tethne/tests/data/dfr'
-
+datapath_float_weights = './tethne/tests/data/dfr_float_weights'
 
 class TestDFRReader(unittest.TestCase):
     def test_read(self):
@@ -67,6 +67,7 @@ class TestDFRReader(unittest.TestCase):
         self.assertEqual(len(wordcounts.index) - 1,
                          len(wordcounts.transform(filter).index))
 
+
 class TestNGrams(unittest.TestCase):
     def test_ngrams(self):
         grams = ngrams(datapath, 'wordcounts')
@@ -74,6 +75,16 @@ class TestNGrams(unittest.TestCase):
         self.assertIsInstance(grams, FeatureSet)
         self.assertEqual(len(grams), 398)
         self.assertEqual(len(grams.index), 105156)
+
+    def test_float_weights(self):
+        """
+        Some DfR features have floating-point weights, rather than ints.
+        """
+        grams = ngrams(datapath_float_weights, 'keyterms')
+
+        self.assertIsInstance(grams, FeatureSet)
+        self.assertEqual(len(grams), 2)
+        self.assertEqual(len(grams.index), 43)
 
 
 class TestCitationFile(unittest.TestCase):
