@@ -18,6 +18,13 @@ from collections import defaultdict
 
 from tethne.utilities import argmin, mean
 
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
+    xrange = range
+
+
 
 def _forward(X, s=1.1, gamma=1., k=5):
     """
