@@ -104,9 +104,9 @@ def _strip_punctuation(s):
     """
     Removes all punctuation characters from a string.
     """
-    if type(s) is str:    # Bytestring (default in Python 2.x).
+    try:  # Bytestring (default in Python 2.x).
         return s.translate(string.maketrans("",""), string.punctuation)
-    else:                 # Unicode string (default in Python 3.x).
+    except AttributeError:           # Unicode string (default in Python 3.x).
         translate_table = dict((ord(char), u'') for char in u'!"#%\'()*+,-./:;<=>?@[\]^_`{|}~')
         return s.translate(translate_table)
 

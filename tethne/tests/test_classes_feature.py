@@ -45,7 +45,7 @@ class TestFeature(unittest.TestCase):
     def test_norm(self):
         feature = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
         T = sum(list(zip(*feature))[1])
-        for n, r in zip(zip(*feature.norm)[1], zip(*feature)[1]):
+        for n, r in zip(list(zip(*feature.norm))[1], list(zip(*feature))[1]):
             self.assertEqual(n, float(r)/T)
 
     def test_extend(self):

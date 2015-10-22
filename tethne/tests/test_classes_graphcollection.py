@@ -121,7 +121,7 @@ class TestGraphCollectionCreation(unittest.TestCase):
             self.assertIn(graph_name, G.graphs_containing[n])
 
             i = G.node_lookup[n]
-            for k, v in attrs.iteritems():
+            for k, v in attrs.items():
                 self.assertIn(k, G.master_graph.node[i])
                 self.assertIn(graph_name, G.master_graph.node[i][k])
                 self.assertEqual(v, G.master_graph.node[i][k][graph_name])
@@ -247,7 +247,7 @@ class TestGraphCollectionMethods(unittest.TestCase):
         # Edge attributes should be retained, keyed on the graph associated
         #  with the edge from which each value was obtained.
         for s, t, attrs in cgraph.edges(data=True):
-            for k, v in attrs.iteritems():
+            for k, v in attrs.items():
                 if k != 'weight':
                     for v_ in v.keys():
                         self.assertIn(v_, ['test', 'test2'])
@@ -273,10 +273,10 @@ class TestGraphCollectionMethods(unittest.TestCase):
         #  future).
         def mymapper(func, iterable, **kwargs):
             r = map(func, iterable, **kwargs)
-            return [{k: v+5. for k, v in values.iteritems()} for values in r]
+            return [{k: v+5. for k, v in values.items()} for values in r]
 
         results_m = self.G.analyze('betweenness_centrality', mapper=mymapper)
-        for key, value in results.iteritems():
+        for key, value in results.items():
             for k in value.keys():
                 self.assertEqual(results[key][k] + 5., results_m[key][k])
 
@@ -306,7 +306,7 @@ class TestGraphCollectionMethods(unittest.TestCase):
         hist = self.G.edge_history(0, 1, 'edge_betweenness_centrality')
 
         self.assertDictEqual(results[0, 1], hist)
-        
+
     def test_union(self):
         weight_attr = 'test_weight'
         graph = self.G.union(weight_attr=weight_attr)
@@ -315,15 +315,15 @@ class TestGraphCollectionMethods(unittest.TestCase):
         self.assertGreater(self.G.size(), graph.size())
         self.assertEqual(graph.order(), self.G.order())
         self.assertIn(weight_attr, graph.edges(data=True)[0][2])
-        
+
         # Node attributes present.
         for u, a in self.G.master_graph.nodes(data=True):
-            for key, value in a.iteritems():
+            for key, value in a.items():
                 self.assertIn(key, graph.node[u])
-                
+
         # Edge attributes present.
         for u, v, a in self.G.master_graph.edges(data=True):
-            for key, value in a.iteritems():
+            for key, value in a.items():
                 self.assertIn(key, graph[u][v])
                 if key == weight_attr:
                     self.assertIsInstance(value, float)
