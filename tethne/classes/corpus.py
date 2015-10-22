@@ -253,12 +253,20 @@ class Corpus(object):
         If the ``index_by`` field is not set or not available, generate a unique
         identifier using the :class:`.Paper`\'s title and author names.
         """
-
         if self.index_by is None or not hasattr(paper, self.index_by):
             if not hasattr(paper, 'hashIndex'): # Generate a new index for this paper.
-                authors = zip(*paper.authors)[0]
                 m = hashlib.md5()
-                hashable = ' '.join(list([paper.title] + [unicode(l) + unicode(f) for l, f in authors])).encode('utf-8')
+
+                # If we dont have author name then we just use the title of the paper
+                # to generate unique identifier.
+                if paper.authors is None:
+                    hashable = paper.title
+                elif len(paper.authors) == 0:
+                    hashable = paper.title
+                else:
+                    authors = zip(*paper.authors)[0]
+                    hashable = ' '.join(list([paper.title] + [l + f for l, f in authors]))
+
                 m.update(hashable)
                 setattr(paper, 'hashIndex', m.hexdigest())
             return getattr(paper, 'hashIndex')
