@@ -11,7 +11,6 @@ from math import log
 logging.basicConfig(level=40)
 logging.getLogger('iso8601').setLevel(40)
 
-from unidecode import unidecode
 from datetime import datetime
 
 from tethne import Paper, Corpus, StructuredFeature, StructuredFeatureSet
@@ -214,18 +213,6 @@ class ZoteroParser(RDFParser):
 
         super(ZoteroParser, self).open()
 
-    def handle_title(self, value):
-        """
-        TODO: consider removing the unidecode step.
-        """
-        return unidecode(value)
-
-    def handle_abstract(self, value):
-        """
-        TODO: consider removing the unidecode step.
-        """
-        return unidecode(value)
-
     def handle_identifier(self, value):
         """
 
@@ -298,8 +285,7 @@ class ZoteroParser(RDFParser):
         return journal
 
     def handle_pages(self, value):
-        # TODO: consider removing unidecode step.
-        return tuple(unidecode(value).split('-'))
+        return tuple(value.split('-'))
 
     def postprocess_pages(self, entry):
         if len(entry.pages) == 1:
