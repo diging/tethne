@@ -4,7 +4,6 @@ import xml.etree.ElementTree as ET
 import rdflib
 
 import codecs
-from unidecode import unidecode
 import chardet
 import unicodedata
 
@@ -105,7 +104,6 @@ class IterParser(BaseParser):
                 self.postprocess_entry()
                 break
 
-            data = unicode(data)
             self.handle(tag, data)
             self.last_tag = tag
         return self.data
@@ -129,8 +127,8 @@ class IterParser(BaseParser):
         data :
         """
         if isinstance(data,unicode):
-            data = unicodedata.normalize('NFKD', data).encode('utf-8','ignore')
-        data = str(data)
+            data = unicodedata.normalize('NFKD', data)#.encode('utf-8','ignore')
+
         if self.is_end(tag):
             self.postprocess_entry()
 
@@ -195,7 +193,7 @@ class FTParser(IterParser):
             msg = f.read()
         result = chardet.detect(msg)
 
-        self.buffer = codecs.open(self.path, "rb", result['encoding'])
+        self.buffer = codecs.open(self.path, "rb", encoding=result['encoding'])
 
         self.at_eof = False
 
@@ -223,8 +221,6 @@ class FTParser(IterParser):
         else:
             self.current_tag = self.last_tag
             data = line.strip()
-        data=unidecode(data)
-
         return self.current_tag, _cast(data)
 
     def __del__(self):

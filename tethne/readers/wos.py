@@ -138,15 +138,6 @@ class WoSParser(FTParser):
         """
         return int(value)
 
-    def handle_SO(self, value):
-        return unicode(value)
-
-    def handle_AB(self, value):
-        return unicode(value)
-
-    def handle_DI(self, value):
-        return unicode(value)
-
     def handle_AU(self, value):
         aulast, auinit = self.parse_author(value)
         auinit = _space_sep(auinit)   # Separate author initials with spaces.
@@ -160,13 +151,7 @@ class WoSParser(FTParser):
 
     def handle_VL(self, value):
         """
-        Cast volume to a unicode string.
-        """
-        return unicode(value)
-
-    def handle_IS(self, value):
-        """
-        Cast issue to a unicode string.
+        Volume should be a unicode string, even if it looks like an integer.
         """
         return unicode(value)
 
@@ -262,7 +247,7 @@ class WoSParser(FTParser):
         Keyword Plus keywords are usually semicolon-delimited.
         """
 
-        if type(entry.keywordsPlus) is str:
+        if type(entry.keywordsPlus) in [str, unicode]:
             entry.keywordsPlus = [k.strip().upper() for k
                                   in entry.keywordsPlus.split(';')]
 
