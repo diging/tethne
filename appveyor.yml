@@ -103,7 +103,7 @@ install:
 
 
 build_script:
-  - "%CMD_IN_ENV% python setup.py bdist 
+  - cd .
 
 test_script:
   # Run the project tests
