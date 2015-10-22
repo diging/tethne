@@ -13,6 +13,10 @@ import logging
 # rdflib complains a lot.
 logging.getLogger("rdflib").setLevel(logging.ERROR)
 
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
 
 
 class dobject(object):

@@ -14,7 +14,8 @@ PYTHON_3 = sys.version_info[0] == 3
 if PYTHON_3:
     unicode = str
     xrange = range
-    
+    str = byte
+
 
 class GraphCollection(dict):
     """
@@ -335,7 +336,10 @@ class GraphCollection(dict):
 
         """
         if hasattr(method_name, '__iter__'):
-            mpath = _iterable(method_name)
+            mpath = method_name
+            if type(mpath) in [str, unicode]:
+                mpath = [mpath]
+
             root = nx
             while len(mpath) > 0:
                 head = getattr(root, mpath.pop(0))
