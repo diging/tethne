@@ -38,10 +38,10 @@ def write_documents(corpus, target, featureset_name, metadata_fields=[]):
     # Generate metadata.
     with codecs.open(metapath, 'w', encoding='utf-8') as f:
         writer = csv.writer(f)
-        writer.writerow([corpus.index_by] + metadata_fields)
+        writer.writerow([corpus.index_by] + list(metadata_fields))
         for i, p in corpus.indexed_papers.items():
             getter = lambda m: getattr(p, m) if hasattr(p, m) else None
-            writer.writerow([i] + map(getter, metadata_fields))
+            writer.writerow([i] + list(map(getter, metadata_fields)))
 
     # Write documents content.
     with codecs.open(docpath, 'w', encoding='utf-8') as f:
@@ -121,12 +121,12 @@ def write_documents_dtm(corpus, target, featureset_name, slice_kwargs={},
     #
     with codecs.open(metapath, 'w', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter='\t')
-        writer.writerow(['id'] + metadata_fields)
+        writer.writerow(['id'] + list(metadata_fields))
         for date, subcorpus in corpus.slice(**slice_kwargs):
             for p in subcorpus.papers:
                 getter = lambda m: getattr(p, m) if hasattr(p, m) else None
                 fieldData = map(getter, metadata_fields)
-                writer.writerow([getattr(p, corpus.index_by)] + fieldData)
+                writer.writerow([getattr(p, corpus.index_by)] + list(fieldData))
 
     # Generate -seq.dat file (number of papers per year).
     #   From the DTM example:
