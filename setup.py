@@ -18,7 +18,7 @@ PACKAGES = ['tethne',
             'tethne.readers',
             'tethne.writers']
 
-
+import sys
 if sys.version_info[0] == 2:
     pdfminer = 'pdfminer==20110515'
 elif sys.version_info[0] == 3:
