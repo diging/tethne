@@ -110,7 +110,7 @@ class GraphCollection(dict):
         method_kwargs : dict
             Keyword arguments to pass to ``method`` along with ``corpus``.
         """
-        if type(method) is str:
+        if not hasattr(method, '__call__'):
             if not hasattr(networks, method):
                 raise NameError('No such method')
             method = getattr(networks, method)
