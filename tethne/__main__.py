@@ -5,6 +5,12 @@ See :ref:`quickstart_cl` and :ref:`commandline_options` for an introduction to
 the CLI.
 """
 
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
+
+
 def _isFloat(x):
     try:
         a = float(x)
@@ -572,7 +578,7 @@ if __name__ == "__main__":
 
         if options.write_format == 'graphml':
             for k,g in C.graphs.items():
-                wr.graph.to_graphml(g, basepath+str(k))
+                wr.graph.to_graphml(g, basepath+unicode(k))
         elif options.write_format == 'xgmml':
             wr.collection.to_dxgmml(C, basepath+"dynamic.xgmml")
         sys.stdout.write("done.\n")

@@ -10,8 +10,11 @@ from tethne import networks
 from tethne.utilities import _iterable
 
 import sys
-if sys.version_info[0] > 2:
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
     xrange = range
+    
 
 class GraphCollection(dict):
     """
@@ -132,7 +135,7 @@ class GraphCollection(dict):
         """
         if name in self:
             raise ValueError("{0} exists in this GraphCollection".format(name))
-        elif hasattr(self, str(name)):
+        elif hasattr(self, unicode(name)):
             raise ValueError("Name conflicts with an existing attribute")
 
         indexed_graph = self.index(name, graph)

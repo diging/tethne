@@ -11,7 +11,8 @@ except ImportError:
 
 import sys
 PYTHON_3 = sys.version_info[0] == 3
-
+if PYTHON_3:
+    unicode = str
 
 
 def is_number(value):
@@ -48,7 +49,7 @@ class MLStripper(HTMLParser):
     def handle_data(self, d):
         self.fed.append(d)
     def feed(self, data):
-        self.rawdata = self.rawdata + str(data)
+        self.rawdata = self.rawdata + unicode(data)
         self.goahead(0)
     def get_data(self):
         return ''.join(self.fed)
@@ -196,7 +197,7 @@ def attribs_to_string(attrib_dict, keys):
     for key, value in attrib_dict.items():
         if (isinstance(value, list) or isinstance(value, dict) or
             isinstance(value, tuple)):
-            attrib_dict[key] = str(value)
+            attrib_dict[key] = unicode(value)
 
     return attrib_dict
 

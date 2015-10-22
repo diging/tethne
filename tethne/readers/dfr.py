@@ -425,7 +425,7 @@ def _handle_pagerange(pagerange):
     except IndexError:
         start = end = 0
 
-    return str(start), str(end)
+    return unicode(start), unicode(end)
 
 def _handle_pubdate(pubdate):
     """
@@ -570,7 +570,7 @@ def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     if jtitle is None:
         jtitle = ''
 
-    ayj = aulast + ' ' + auinit + ' ' + str(date) + ' ' + jtitle
+    ayj = aulast + ' ' + auinit + ' ' + unicode(date) + ' ' + jtitle
 
     if ayj == '   ':
         ayj = 'Unknown paper'

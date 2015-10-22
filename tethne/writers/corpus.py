@@ -111,7 +111,7 @@ def write_documents_dtm(corpus, target, featureset_name, slice_kwargs={},
                 N[date] += 1
                 docLine = [u':'.join([unicode(lookup[e]), unicode(c)])
                            for e,c in features[i]]
-                unique = str(len(features[i]))
+                unique = unicode(len(features[i]))
                 f.write(u' '.join([unique] + docLine) + '\n')
 
     # And -meta.dat file (with DOIs).
@@ -140,7 +140,7 @@ def write_documents_dtm(corpus, target, featureset_name, slice_kwargs={},
     #
     with open(seqpath, 'w') as f:
         for date in sorted(N.keys()):
-            f.write(u'{date}\n'.format(N[date]))
+            f.write(u'{date}\n'.format(date=N[date]))
 
     #       a file with all of the words in the vocabulary, arranged in
     #       the same order as the word indices

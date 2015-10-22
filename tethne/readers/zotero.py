@@ -231,7 +231,7 @@ class ZoteroParser(RDFParser):
 
         """
 
-        identifier = str(self.graph.value(subject=value, predicate=VALUE_ELEM))
+        identifier = unicode(self.graph.value(subject=value, predicate=VALUE_ELEM))
         ident_type = self.graph.value(subject=value, predicate=TYPE_ELEM)
         if ident_type == URI_ELEM:
             self.set_value('uri', identifier)
@@ -250,12 +250,12 @@ class ZoteroParser(RDFParser):
         Attempt to coerced date to ISO8601.
         """
         try:
-            return iso8601.parse_date(str(value)).year
+            return iso8601.parse_date(unicode(value)).year
         except iso8601.ParseError:
             for datefmt in ("%B %d, %Y", "%Y-%m", "%Y-%m-%d", "%m/%d/%Y"):
                 try:
                     # TODO: remove str coercion.
-                    return datetime.strptime(str(value), datefmt).date().year
+                    return datetime.strptime(unicode(value), datefmt).date().year
                 except ValueError:
         	       pass
 
@@ -292,9 +292,9 @@ class ZoteroParser(RDFParser):
         for s, p, o in self.graph.triples((value, None, None)):
 
             if p == VOL:        # Volume number
-                self.set_value('volume', str(o))
+                self.set_value('volume', unicode(o))
             elif p == TITLE:
-                journal = str(o)    # Journal title.
+                journal = unicode(o)    # Journal title.
         return journal
 
     def handle_pages(self, value):

@@ -16,6 +16,12 @@ from itertools import repeat
 
 from xml.etree.cElementTree import Element, ElementTree, tostring
 
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
+
+
 def write_csv(graph, prefix):
     """
     Write ``graph`` as tables of nodes (``prefix-nodes.csv``) and edges
@@ -51,14 +57,14 @@ def to_sif(graph, output_path):
     """
     Generates Simple Interaction Format output file from provided graph.
 
-    The SIF specification is described 
+    The SIF specification is described
     `here <http://wiki.cytoscape.org/Cytoscape_User_Manual/Network_Formats>`_.
 
     :func:`.to_sif` will generate a .sif file describing the network, and a few
     .eda and .noa files containing edge and node attributes, respectively. These
     are equivalent to tab-delimited tables, and can be imported as such in
     Cytoscape 3.0.
-    
+
     Parameters
     ----------
     graph : networkx.Graph
@@ -71,9 +77,9 @@ def to_sif(graph, output_path):
     """
 
     warnings.warn("Removed in 0.8. Use write_csv instead.", DeprecationWarning)
-    
+
     graph = _strip_list_attributes(graph)
-    
+
     if output_path[-4:] == ".sif":
         output_path = output_path[:-4]
 
@@ -95,15 +101,15 @@ def to_sif(graph, output_path):
                     # first node, overwrite file
                     with open(output_path + "_" + key + ".noa",
                               "w") as f:
-                        f.write(str(key) + '\n')
-                        f.write(str(node_name).replace(" ","_") + " = " +
-                                str(value) + "\n")
+                        f.write(unicode(key) + '\n')
+                        f.write(unicode(node_name).replace(" ","_") + " = " +
+                                unicode(value) + "\n")
                 else:
                     # not first, append file
                     with open(output_path + "_" + key + ".noa",
                               "a") as f:
-                        f.write(str(node_name).replace(" ","_") + " = " +
-                                str(value) + "\n")
+                        f.write(unicode(node_name).replace(" ","_") + " = " +
+                                unicode(value) + "\n")
 
         if nx.number_of_edges(graph) == 0:
             # write an empty graph to a .sif file (just its nodes)
@@ -112,11 +118,11 @@ def to_sif(graph, output_path):
                 if node == nodes[0]:
                     # first node, overwrite file
                     with open(output_path + ".sif","w") as f:
-                        f.write(str(node_name).replace(" ","_") + "\n")
+                        f.write(unicode(node_name).replace(" ","_") + "\n")
                 else:
                     # not first, append file
                     with open(output_path + ".sif","a") as f:
-                        f.write(str(node_name).replace(" ","_") + "\n")
+                        f.write(unicode(node_name).replace(" ","_") + "\n")
 
         else:
             # write the graph to a .sif file as well as other edge
@@ -133,23 +139,23 @@ def to_sif(graph, output_path):
 
                 # create edge attribute files
                 for attrib in edge_attribs:
-                    str_attrib = str(attrib)
+                    str_attrib = unicode(attrib)
                     with open(output_path + '_' + str_attrib + ".eda","w") as f:
-                        f.write(str(attrib) + "\n")
+                        f.write(unicode(attrib) + "\n")
 
                 # add data to eda files and write sif file
                 with open(output_path + '.sif', 'w') as f:
                     for edge in edges:
-                        node1 = str(edge[0]).replace(" ", "_")
-                        node2 = str(edge[1]).replace(" ", "_")
-                        intr_type = str(edge[2]).replace(" ", "_")
+                        node1 = unicode(edge[0]).replace(" ", "_")
+                        node2 = unicode(edge[1]).replace(" ", "_")
+                        intr_type = unicode(edge[2]).replace(" ", "_")
                         sif_line = node1 + ' ' + intr_type + ' ' + node2 + '\n'
                         f.write(sif_line)
 
                         for attrib, value in edge[3].items():
                             eda_line = (node1 + ' (' + intr_type + ') ' +
-                                        node2 + ' = ' + str(value) + '\n')
-                            with open(output_path + '_' + str(attrib) + '.eda',
+                                        node2 + ' = ' + unicode(value) + '\n')
+                            with open(output_path + '_' + unicode(attrib) + '.eda',
                                       'a') as g:
                                 g.write(eda_line)
 
@@ -163,33 +169,33 @@ def to_sif(graph, output_path):
 
                 # create edge attribute files
                 for attrib in edge_attribs:
-                    str_attrib = str(attrib)
+                    str_attrib = unicode(attrib)
                     with open(output_path + '_' + str_attrib + ".eda","w") as f:
-                        f.write(str(attrib) + "\n")
+                        f.write(unicode(attrib) + "\n")
 
                 # add data to eda files and write sif file
                 with open(output_path + '.sif', 'w') as f:
                     for edge in edges:
-                        node1 = str(edge[0]).replace(" ", "_")
-                        node2 = str(edge[1]).replace(" ", "_")
+                        node1 = unicode(edge[0]).replace(" ", "_")
+                        node2 = unicode(edge[1]).replace(" ", "_")
                         intr_type = 'rel'
                         sif_line = node1 + ' ' + intr_type + ' ' + node2 + '\n'
                         f.write(sif_line)
 
                         for attrib, value in edge[2].items():
                             eda_line = (node1 + ' (' + intr_type + ') ' +
-                                        node2 + ' = ' + str(value) + '\n')
-                            with open(output_path + '_' + str(attrib) +
+                                        node2 + ' = ' + unicode(value) + '\n')
+                            with open(output_path + '_' + unicode(attrib) +
                                       '.eda', 'a') as g:
                                 g.write(eda_line)
 
 
 def to_gexf(graph, output_path):
     """Writes graph to `GEXF <http://gexf.net>`_.
-    
+
     Uses the NetworkX method
     `write_gexf <http://networkx.lanl.gov/reference/generated/networkx.readwrite.gexf.write_gexf.html>`_.
-    
+
     Parameters
     ----------
     graph : networkx.Graph
@@ -202,14 +208,14 @@ def to_gexf(graph, output_path):
     warnings.warn("Removed in 0.8.", DeprecationWarning)
 
     graph = _strip_list_attributes(graph)
-    
+
     nx.write_gexf(graph, output_path + ".gexf")
 
 
 def write_graphml(graph, path, encoding='utf-8', prettyprint=True):
     """Writes graph to `GraphML <http://graphml.graphdrawing.org/>`_.
-    
-    Uses the NetworkX method 
+
+    Uses the NetworkX method
     `write_graphml <http://networkx.lanl.gov/reference/generated/networkx.readwrite.graphml.write_graphml.html>`_.
 
     Parameters
@@ -222,7 +228,7 @@ def write_graphml(graph, path, encoding='utf-8', prettyprint=True):
         ./graphFolder/graphFile.graphml.
     """
     graph = _strip_list_attributes(graph)
-    
+
     writer = TethneGraphMLWriter(encoding=encoding, prettyprint=prettyprint)
     writer.add_graph_element(graph)
     writer.dump(open(path, 'wb'))
@@ -273,7 +279,7 @@ class TethneGraphMLWriter(GraphMLWriter):
             self.add_attributes("node", node_element, data, default)
             graph_element.append(node_element)
 
-    def add_edges(self, G, graph_element):        
+    def add_edges(self, G, graph_element):
         if G.is_multigraph():
             for u,v,key,data in G.edges_iter(data=True, keys=True):
                 edge_element = Element("edge",source=_recast_value(u),
@@ -282,7 +288,7 @@ class TethneGraphMLWriter(GraphMLWriter):
                 self.add_attributes("edge", edge_element, data, default)
                 self.add_attributes("edge", edge_element, {'key': key},
                                     default)
-                graph_element.append(edge_element)                
+                graph_element.append(edge_element)
         else:
             for u,v,data in G.edges_iter(data=True):
                 edge_element = Element("edge", source=_recast_value(u),
@@ -302,22 +308,22 @@ def to_table(graph, path):
     with open(path + "_edges.csv", "wb") as f:
         edges = graph.edges(data=True)
         writer = csv.writer(f, delimiter='\t')
-        
+
         # Header.
         writer.writerow(['source','target'] + [ k for k in edges[0][2].keys()])
-        
+
         # Values.
         for e in edges:
             writer.writerow([ e[0], e[1]] + [ v for v in e[2].values() ] )
-            
+
     # Node attributes.
     with open(path + "_nodes.csv", "wb") as f:
         nodes = graph.nodes(data=True)
         writer = csv.writer(f, delimiter='\t')
-        
+
         # Header.
         writer.writerow(['node'] + [ k for k in nodes[0][1].keys() ])
-        
+
         # Values.
         for n in nodes:
             writer.writerow([ n[0] ] + [ v for v in n[1].values() ])
@@ -327,17 +333,17 @@ def _strip_list_attributes(G):
     for n in G.nodes(data=True):
         for k,v in n[1].items():
             if type(v) is list:
-                G.node[n[0]][k] = str(v)
+                G.node[n[0]][k] = unicode(v)
     for e in G.edges(data=True):
         for k,v in e[2].items():
             if type(v) is list:
-                G.edge[e[0]][e[1]][k] = str(v)
+                G.edge[e[0]][e[1]][k] = unicode(v)
 
     return G
 
 
 def _recast_value(value):
     if type(value) in [str, int, unicode, float]:
-        return str(value)
+        return unicode(value)
     if hasattr(value, '__iter__'):
         return ', '.join(list(value))

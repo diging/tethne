@@ -154,7 +154,7 @@ class Corpus(object):
         """
         A list of all :class:`.Paper`\s in the :class:`.Corpus`\.
         """
-        return self.indexed_papers.values()
+        return list(self.indexed_papers.values())
 
     index_by = None
     """

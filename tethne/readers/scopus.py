@@ -10,7 +10,9 @@ import uuid
 from unidecode import unidecode
 
 import sys
-if sys.version_info[0] > 2:
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
     xrange = range
 
 from ..classes import Paper, Corpus
@@ -110,7 +112,7 @@ def read(datapath, **kwargs):
 
     """
 
-    accession = str(uuid.uuid4())   # Accession ID.
+    accession = unicode(uuid.uuid4())   # Accession ID.
 
     papers = kwargs.get('papers', [])   # Can provide an alternate container.
 
@@ -289,7 +291,7 @@ def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     if jtitle is None:
         jtitle = ''
 
-    ayj = aulast + ' ' + auinit + ' ' + str(date) + ' ' + jtitle
+    ayj = aulast + ' ' + auinit + ' ' + unicode(date) + ' ' + jtitle
 
     if ayj == '   ':
         ayj = 'Unknown paper'

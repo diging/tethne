@@ -13,6 +13,11 @@ from collections import defaultdict
 
 from networkx import Graph
 
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
+
 import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -205,8 +210,8 @@ class LDAModel(Model):
                     self.mallet_bin,
                     'train-topics',
                     '--input', self.input_path,
-                    '--num-topics', str(self.Z),
-                    '--num-iterations', str(self.max_iter),
+                    '--num-topics', unicode(self.Z),
+                    '--num-iterations', unicode(self.max_iter),
                     '--output-doc-topics', self.dt,
                     '--word-topic-counts-file', self.wt,
                     '--output-model', self.om],
@@ -263,7 +268,7 @@ class LDAModel(Model):
                 if i == 0:
                     continue     # Avoid header row.
 
-                d, id, t = int(line[0]), str(line[1]), line[2:]
+                d, id, t = int(line[0]), unicode(line[1]), line[2:]
                 feature = Feature([(int(t[i]), float(t[i + 1]))
                                    for i in xrange(0, len(t) - 1, 2)])
                 self.theta.add(id, feature)
@@ -290,7 +295,7 @@ class LDAModel(Model):
             reader = csv.reader(f, delimiter=' ')
             topics = defaultdict(list)
             for line in reader:
-                w, term = int(line[0]), str(line[1])
+                w, term = int(line[0]), unicode(line[1])
                 self.vocabulary[w] = term
 
                 for l in line[2:]:
@@ -337,7 +342,7 @@ class LDAModel(Model):
         """
         print('Topic\tTop %i words' % 10)
         for k, words in self.list_topics(Nwords):
-            print(str(k).ljust(3) + '\t' + ' '.join(list(zip(*words))[0]))
+            print(unicode(k).ljust(3) + '\t' + ' '.join(list(zip(*words))[0]))
 
 
     def topic_over_time(self, k, mode='counts', slice_kwargs={}):
