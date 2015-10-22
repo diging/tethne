@@ -42,7 +42,6 @@ setup(
         "iso8601",
         "rdflib",
         "chardet",
-        "cchardet",
         "html5lib",
         "isodate",
         "pdfdocument",

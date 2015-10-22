@@ -5,7 +5,7 @@ import rdflib
 
 import codecs
 from unidecode import unidecode
-import cchardet as chardet
+import chardet
 import unicodedata
 
 import logging
