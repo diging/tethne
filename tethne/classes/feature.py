@@ -8,8 +8,10 @@ from collections import Counter, defaultdict
 from tethne.utilities import _iterable, argsort
 
 import sys
-if sys.version_info[0] > 2:
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
     xrange = range
+    unicode = str
 
 
 class StructuredFeature(list):

@@ -7,6 +7,7 @@ import networkx as nx
 from collections import defaultdict
 import warnings
 from tethne import networks
+from tethne.utilities import _iterable
 
 import sys
 if sys.version_info[0] > 2:
@@ -331,7 +332,7 @@ class GraphCollection(dict):
 
         """
         if hasattr(method_name, '__iter__'):
-            mpath = list(method_name)
+            mpath = _iterable(method_name)
             root = nx
             while len(mpath) > 0:
                 head = getattr(root, mpath.pop(0))
@@ -357,8 +358,8 @@ class GraphCollection(dict):
                 for n, val in result.items():
                     inverse[n].update({gname: val})
 
-        if type(by_graph.values()[0]) is dict:
-            if type(by_graph.values()[0].keys()[0]) is tuple:
+        if type(list(by_graph.values())[0]) is dict:
+            if type(list(list(by_graph.values())[0].keys())[0]) is tuple:
                 # Results correspond to edges.
                 by_edge = dict(inverse)
 
