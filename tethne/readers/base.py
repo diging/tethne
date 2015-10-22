@@ -187,14 +187,11 @@ class FTParser(IterParser):
             raise IOError("No such path: {0}".format(self.path))
 
 
-        with open(self.path, "r") as f:
+        with open(self.path, "rb") as f:
             msg = f.read()
         result = chardet.detect(msg)
 
-        self.buffer = codecs.open(self.path, "r", result['encoding'].encode("utf-8"))
-
-
-        self.buffer = open(self.path, 'r')
+        self.buffer = codecs.open(self.path, "rb", result['encoding'])
 
         self.at_eof = False
 
