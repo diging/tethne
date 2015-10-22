@@ -253,7 +253,10 @@ def read(path, corpus=True, index_by='doi', **kwargs):
         for sname in os.listdir(path):
             fpath = os.path.join(path, sname)   # Full path.
             if os.path.isdir(fpath) and not sname.startswith('.'):
-                corpus.features[sname] = ngrams(path, sname)
+                datafiles = [f for f in os.listdir(fpath)
+                             if f.lower().endswith('xml')]
+                if len(datafiles) > 0:
+                    corpus.features[sname] = ngrams(path, sname)
         return corpus
     return papers
 
