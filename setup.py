@@ -42,6 +42,7 @@ setup(
         "iso8601",
         "rdflib",
         "chardet",
+        "cchardet",
         "html5lib",
         "isodate",
         "pdfdocument",
@@ -49,6 +50,6 @@ setup(
         "python-magic==0.4.6",
         "slate==0.3",
         "Unidecode==0.4.17",
-        "nltk"
+        "nltk",
     ],
 )
