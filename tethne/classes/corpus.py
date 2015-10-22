@@ -9,6 +9,11 @@ from tethne.classes.feature import FeatureSet, Feature, \
                                    StructuredFeatureSet, StructuredFeature
 from tethne.utilities import _iterable, argsort
 
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
+
 
 def _tfidf(f, c, C, DC, N):
     tf = float(c)

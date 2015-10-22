@@ -10,6 +10,12 @@ from tethne import Corpus, Paper
 datapath = './tethne/tests/data/wos2.txt'
 datapath_v = './tethne/tests/data/valentin.txt'
 
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
+
+
 def is_number(value):
     try:
         int(value)

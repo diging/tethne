@@ -17,6 +17,11 @@ import iso8601
 
 from unidecode import unidecode
 
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
+
 
 class DfRParser(XMLParser):
     entry_class = Paper

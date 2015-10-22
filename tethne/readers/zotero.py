@@ -18,6 +18,12 @@ from tethne import Paper, Corpus, StructuredFeature, StructuredFeatureSet
 from tethne.readers.base import RDFParser
 from tethne.utilities import _strip_punctuation, mean
 
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
+
+
 # RDF terms.
 RDF = u'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
 DC = u'http://purl.org/dc/elements/1.1/'

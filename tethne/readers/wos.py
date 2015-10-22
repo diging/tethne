@@ -23,6 +23,11 @@ from tethne.readers.base import FTParser
 from tethne import Corpus, Paper
 from tethne.utilities import _strip_punctuation, _space_sep, strip_tags, is_number
 
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
+
 
 class WoSParser(FTParser):
     """
