@@ -9,6 +9,11 @@ import csv
 
 from tethne import FeatureSet, StructuredFeatureSet
 
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
+
 
 def write_documents(corpus, target, featureset_name, metadata_fields=[]):
     """
@@ -42,12 +47,12 @@ def write_documents(corpus, target, featureset_name, metadata_fields=[]):
     with codecs.open(docpath, 'w', encoding='utf-8') as f:
         for i, p in corpus.indexed_papers.items():
             if i in features:
-                row = [i, 'en']
+                row = [i, u'en']
                 if ftype is FeatureSet:
-                    row += [' '.join(repeat(e, c)) for e, c in features[i]]
+                    row += [u' '.join(repeat(e, c)) for e, c in features[i]]
                 elif ftype is StructuredFeatureSet:
                     row += features[i]
-                f.write('\t'.join(row) + '\n')
+                f.write(u'\t'.join(row) + u'\n')
 
     return docpath, metapath
 
@@ -104,10 +109,10 @@ def write_documents_dtm(corpus, target, featureset_name, slice_kwargs={},
             for p in subcorpus.papers:
                 i = getattr(p, subcorpus.index_by)
                 N[date] += 1
-                docLine = [':'.join([str(lookup[e]), str(c)])
+                docLine = [u':'.join([unicode(lookup[e]), unicode(c)])
                            for e,c in features[i]]
                 unique = str(len(features[i]))
-                f.write(' '.join([unique] + docLine) + '\n')
+                f.write(u' '.join([unique] + docLine) + '\n')
 
     # And -meta.dat file (with DOIs).
     #
@@ -135,9 +140,9 @@ def write_documents_dtm(corpus, target, featureset_name, slice_kwargs={},
     #
     with open(seqpath, 'w') as f:
         for date in sorted(N.keys()):
-            f.write(str(N[date]) + '\n')
+            f.write(u'{date}\n'.format(N[date]))
 
     #       a file with all of the words in the vocabulary, arranged in
     #       the same order as the word indices
     with codecs.open(vpath, 'w', encoding='utf-8') as f:
-        f.write('\n'.join([index[i] for i in sorted(index.keys())]))
+        f.write(u'\n'.join([index[i] for i in sorted(index.keys())]))
