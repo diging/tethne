@@ -44,7 +44,7 @@ setup(
         "chardet",
         "html5lib",
         "isodate",
-        "pdfdocument
+        "pdfdocument",
         pdfminer,
         "python-magic==0.4.6",
         "slate==0.3",
