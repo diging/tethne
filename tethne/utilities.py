@@ -57,10 +57,12 @@ def strip_tags(html):
 
 
 def argsort(seq):
+    seq = list(seq)
     return sorted(range(len(seq)), key=seq.__getitem__)
 
 
 def argmin(iterable):
+    iterable = list(iterable)
     i_min = -1
     v_min = max(iterable)
     for i, v in enumerate(iterable):
@@ -81,7 +83,7 @@ def argmax(iterable):
 
 
 def nonzero(iterable):
-    return [i for i,v in enumerate(iterable) if abs(v) > 0.0]
+    return list([i for i, v in enumerate(iterable) if abs(v) > 0.0])
 
 
 def mean(iterable):

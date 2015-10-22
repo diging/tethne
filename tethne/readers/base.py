@@ -36,7 +36,7 @@ class BaseParser(object):
         self.data = []
         self.fields = set([])
 
-        for k, v in kwargs.iteritems():
+        for k, v in kwargs.items():
             setattr(self, k, v)
 
         self.open()
