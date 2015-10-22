@@ -48,6 +48,7 @@ setup(
         pdfminer,
         "python-magic==0.4.6",
         "slate==0.3",
-        "Unidecode==0.4.17"
+        "Unidecode==0.4.17",
+        "nltk"
     ],
 )
