@@ -434,7 +434,7 @@ class StructuredFeatureSet(BaseFeatureSet):
 
     def transform(self, func):
         features = {}
-        for i, feature in self.features.iteritems():
+        for i, feature in self.features.items():
             feature_ = []
             for f in feature:
                 t = self.lookup[f]
@@ -485,7 +485,7 @@ class FeatureSet(BaseFeatureSet):
 
     def transform(self, func):
         features = {}
-        for i, feature in self.features.iteritems():
+        for i, feature in self.features.items():
             feature_ = []
             for f, v in feature:
                 t = self.lookup[f]

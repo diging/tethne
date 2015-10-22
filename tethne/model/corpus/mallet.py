@@ -297,7 +297,7 @@ class LDAModel(Model):
                     k, c = l.split(':')    # Topic and assignment count.
                     topics[int(k)].append((w, int(c)))
 
-        for k, data in topics.iteritems():
+        for k, data in topics.items():
             self.phi.add(k, Feature(data).norm)
 
     def topics_in(self, d, topn=5):

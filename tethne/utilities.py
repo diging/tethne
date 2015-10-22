@@ -193,7 +193,7 @@ def attribs_to_string(attrib_dict, keys):
     gexf (which does not allow attributes to have a list type) by making
     them writable in those formats
     """
-    for key, value in attrib_dict.iteritems():
+    for key, value in attrib_dict.items():
         if (isinstance(value, list) or isinstance(value, dict) or
             isinstance(value, tuple)):
             attrib_dict[key] = str(value)

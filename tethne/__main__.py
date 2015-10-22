@@ -1,7 +1,7 @@
 """
 Provides the Tethne command-line interface.
 
-See :ref:`quickstart_cl` and :ref:`commandline_options` for an introduction to 
+See :ref:`quickstart_cl` and :ref:`commandline_options` for an introduction to
 the CLI.
 """
 
@@ -23,7 +23,7 @@ def _isInt(x):
         return a == b
 
 if __name__ == "__main__":
-    
+
     import csv
     import sys
     import os
@@ -31,10 +31,10 @@ if __name__ == "__main__":
     import math
     import pickle
     from optparse import OptionParser, OptionGroup
-    
+
     parser = OptionParser()
 
-    # Only one of the following workflow steps will be carried out per 
+    # Only one of the following workflow steps will be carried out per
     #  script execution.
     workflowGroup = OptionGroup(parser, "Workflow Steps",
                             "Choose one workflow step per script execution."  +\
@@ -74,7 +74,7 @@ if __name__ == "__main__":
                              action="store_true", dest="write", default=False,
                             help="Write a graph (or collection of graphs) to" +\
                                  " a structured format, in [OUTPATH].")
-    
+
     parser.add_option("-I", "--dataset-id", dest="dataset_id",
                       help="Unique ID (required).")
     parser.add_option("-t", "--temp-dir", dest="temp_dir", default="/tmp",
@@ -88,37 +88,37 @@ if __name__ == "__main__":
 
     # Options for read workflow step.
     readGroup = OptionGroup(parser, "Options for read workflow step")
-    
+
     readGroup.add_option("-P", "--data-path", dest="datapath",
                       help="Full path to dataset.")
-                      
+
     readGroup.add_option("-F", "--data-format", dest="dataformat",
                       help="Format of input dataset (WOS, DFR).")
 
     # Options for slice workflow step.
     sliceGroup = OptionGroup(parser, "Options for slice workflow step")
-    
+
     sliceGroup.add_option("-S", "--slice-axis", dest="slice_axis",
                       help="Key along which to slice the dataset. This can be"+\
                            " one of any of the fields listed in the API " + \
                            " documentation: " + \
                            "./doc/api/tethne.html#tethne.data.Paper .")
-                           
+
     sliceGroup.add_option("-M", "--slice-method", dest="slice_method",
                default="time_period",
                help="Method used to slice Corpus. Available methods:" +\
                     " time_window, time_period. For details, see"             +\
                     " ./doc/api/tethne.html#tethne.data.Corpus.slice."+\
                     " Default is time_period.")
-                    
+
     sliceGroup.add_option("--slice-window-size", dest="window_size", default=1,
                         help="Size of slice time-window or period, in years." +\
                              " Default is 1.")
-                             
+
     sliceGroup.add_option("--slice-step-size", dest="step_size",
                           help="Amount to advance time-window in each step" +\
                                " (ignored for time-period).")
-    
+
     sliceGroup.add_option("--cumulative",
                           action="store_true", dest="cumulative", default=False,
                           help="If True, the data from each successive slice" +\
@@ -127,10 +127,10 @@ if __name__ == "__main__":
     # Required arguments for network-building.
     graphReqGroup = OptionGroup(parser, "Required options for graph workflow" +\
                                         " step.")
-                                    
+
     graphReqGroup.add_option("-N", "--node-type", dest="node_type",
                       help="Must be one of: author, paper, term.")
-                      
+
     graphReqGroup.add_option("-T", "--graph-type", dest="graph_type",
                       help="Name of a network-builing method. Can be one of " +\
                            "any of the methods listed in the API " + \
@@ -144,7 +144,7 @@ if __name__ == "__main__":
                                   " for each node in the network. Currently"  +\
                                   " available for coauthors and institutions" +\
                                   " graphs.")
-                             
+
 
     # Optional arguments for network-building, for setting keyword arguments of
     #  methods in tethne.networks.
@@ -161,38 +161,38 @@ if __name__ == "__main__":
                           action="store_true", dest="merged", default=False,
                           help="Ignore Corpus slicing, and build" +\
                                " a single graph from all Papers.")
-                             
+
     graphGroup.add_option("--threshold", dest="threshold",
                           help="Set the 'threshold' argument.")
-                          
+
     graphGroup.add_option("--topn", dest="topn",
                           help="Set the 'topn' argument.")
-                          
+
     graphGroup.add_option("--node-attr", dest="node_attr",
                           help="List of attributes to include for each node." +\
                                " e.g. --node-attr=date,atitle,jtitle")
-                               
+
     graphGroup.add_option("--edge-attr", dest="edge_attr",
                           help="List of attributes to include for each edge." +\
                                " e.g. --edge-attr=ayjid,atitle,date")
-                               
+
     graphGroup.add_option("--node-id", dest="node_id",
                           help="Field to use as node id (for papers graphs)." +\
                                " e.g. --node-id=ayjid")
-                               
+
     graphGroup.add_option("--weighted", dest="weighted", action="store_true",
                           default=False,
                           help="Trigger the 'weighted' argument.")
-    
+
     # Required arguments for graph analysis.
     analyzeGroup = OptionGroup(parser, "Required options for analyze workflow"+\
                                        " step.")
-    
+
     analyzeGroup.add_option("-A", "--algorithm", dest="algorithm",
                             help="Name of a NetworkX graph analysis"          +\
                                  " algorithm, or an algorithm in"             +\
                                  " tethne.analyze.collection.")
-                            
+
     # Required arguments for graph writing.
     writeGroup = OptionGroup(parser, "Required options for write workflow " +\
                                      "step.")
@@ -202,7 +202,7 @@ if __name__ == "__main__":
                                " in the GraphCollection will result in a"     +\
                                " separate file. Supported writers: (static)"  +\
                                " graphml, gexf; (dynamic) xgmml")
-                               
+
 
     parser.add_option_group(workflowGroup)
     parser.add_option_group(readGroup)
@@ -211,9 +211,9 @@ if __name__ == "__main__":
     parser.add_option_group(graphGroup)
     parser.add_option_group(analyzeGroup)
     parser.add_option_group(writeGroup)
-    
+
     (options, args) = parser.parse_args()
-    
+
     if options.local:
         lpath = os.path.dirname(os.path.abspath(__file__))
         sys.path.append(lpath + "/..")
@@ -226,31 +226,31 @@ if __name__ == "__main__":
     import tethne.writers as wr
     from tethne.data import Corpus, GraphCollection
     from tethne.builders import authorCollectionBuilder, paperCollectionBuilder
-    
+
     if options.dataset_id is None:
         sys.exit('Must specify --dataset-id')
-    
+
     #############################
     #   Workflow step: Read     #
     #############################
     if options.read_f or options.read_d:
-    
+
         sys.stdout.write("-"*40 + "\n")
         sys.stdout.write("\tWorkflow step: Read\n")
         sys.stdout.write("-"*40 + "\n")
-        
+
         # Must specify path.
-        if options.datapath is None:    
+        if options.datapath is None:
             sys.exit('Specify path to data with --data-path')
-            
+
         # Must specify format.
-        if options.dataformat is None:      
+        if options.dataformat is None:
             sys.exit('Specify data format with --format argument.')
-        
+
         # Must select a supported format.
         if options.dataformat not in ['WOS', 'DFR']:
             sys.exit('Data format must be one of: WOS, DFR.')
-        
+
         sys.stdout.write("Reading {0} data from file {1}..."
                                   .format(options.dataformat, options.datapath))
 
@@ -290,35 +290,35 @@ if __name__ == "__main__":
         sys.stdout.write("Saving Corpus to {0}...".format(savepath))
         pickle.dump(D, open(savepath, 'wb'))
         sys.stdout.write("done.\n")
-        
+
     #############################
     #   Workflow step: Slice    #
     #############################
     elif options.slice:
-    
+
         sys.stdout.write("-"*40 + "\n")
         sys.stdout.write("\tWorkflow step: Slice\n")
         sys.stdout.write("-"*40 + "\n")
-        
+
         # Must specify a slice axis.
         if options.slice_axis is None:
             sys.exit('Must specifify a slice axis with --slice-axis.')
-        
+
         # Load Corpus.
         loadpath = options.temp_dir + "/" + \
                    options.dataset_id + "_Corpus.pickle"
         sys.stdout.write("Loading Corpus from {0}...".format(loadpath))
         sys.stdout.flush()
-                
+
         D = pickle.load(open(loadpath, 'rb'))
         sys.stdout.write("done.\n")
-        
+
         # Slice Corpus
         axes = options.slice_axis.split(',')
         for a in axes:
             sys.stdout.write("Slicing Corpus by {0}...".format(a))
             sys.stdout.flush()
-            
+
             if a == 'date':
                 if options.step_size is not None:
                     step_size = int(options.step_size)
@@ -330,15 +330,15 @@ if __name__ == "__main__":
                 else:
                     window_size = 1
 
-                    
-                D.slice(a, method=options.slice_method, 
+
+                D.slice(a, method=options.slice_method,
                            window_size=window_size,
                            step_size=step_size,
                            cumulative=options.cumulative )
             else:
                 D.slice(a)
             sys.stdout.write("done.\n")
-        
+
         # Generate binned data. For now, only uses first two axes.
         if options.outpath is not None:
             summarypath = options.outpath + "/" + \
@@ -346,7 +346,7 @@ if __name__ == "__main__":
             sys.stdout.write("Saving slice distribution to {0}..."
                                                            .format(summarypath))
             sys.stdout.flush()
-                                                                       
+
             with open(summarypath, 'wb') as f:
                 writer = csv.writer(f, delimiter=',')
                 if len(axes) == 2:  # 2-dimensional slice binning.
@@ -362,33 +362,33 @@ if __name__ == "__main__":
                     for i in xrange(dist.shape[0]):
                         writer.writerow([A_indices[i], dist[i]])
             sys.stdout.write("done.\n")
-        
+
         # Save sliced Corpus for next workflow step.
         savepath = options.temp_dir + "/" + \
                    options.dataset_id + "_Corpus_sliced.pickle"
         sys.stdout.write("Saving sliced Corpus to {0}..."
                                                               .format(savepath))
-        sys.stdout.flush()                                                              
+        sys.stdout.flush()
         pickle.dump(D, open(savepath, 'wb'))
         sys.stdout.write("done.\n")
-        
+
     #############################
     #   Workflow step: Graph    #
     #############################
     elif options.graph:
-    
+
         sys.stdout.write("-"*40 + "\n")
         sys.stdout.write("\tWorkflow step: Graph\n")
-        sys.stdout.write("-"*40 + "\n")    
-    
+        sys.stdout.write("-"*40 + "\n")
+
         # Must specifiy node type.
         if options.node_type is None:
             sys.exit('Must specify node type with --node-type.')
-        
+
         # Must specify graph type.
         if options.graph_type is None:
             sys.exit('Must specifiy a graph type with --graph-type.')
-        
+
         if options.merged:
             loadpath = options.temp_dir + "/" + \
                        options.dataset_id + "_Corpus.pickle"
@@ -397,11 +397,11 @@ if __name__ == "__main__":
             loadpath = options.temp_dir + "/" + \
                        options.dataset_id + "_Corpus_sliced.pickle"
             qualifier = "with"
-            
+
         sys.stdout.write("Loading Corpus {0} slices from {1}..."
                                                    .format(qualifier, loadpath))
-        sys.stdout.flush()                                                    
-        
+        sys.stdout.flush()
+
         D = pickle.load(open(loadpath, 'rb'))
         sys.stdout.write("done.\n")
 
@@ -410,7 +410,7 @@ if __name__ == "__main__":
             a = D.get_axes()[0]
             sys.stdout.write("Using first slice in Corpus: {0}.\n"
                                                                      .format(a))
-                                                                 
+
         # Build kwargs.
         kwargs = {}
         if options.threshold is not None:
@@ -427,104 +427,104 @@ if __name__ == "__main__":
             kwargs['node_id'] = options.node_id
         kwargs['weighted'] = options.weighted
         kwargs['geocode'] = options.geocode
-        
+
         # Build the graph(s).
         sys.stdout.write("Building {0} graph using {1} method..."
                                  .format(options.node_type, options.graph_type))
         sys.stdout.flush()
 
-        start_time = time.time()        
-        
+        start_time = time.time()
+
         if not options.merged:  # Generate GraphCollection from Corpus.
             if options.node_type == 'paper':
                 builder = paperCollectionBuilder(D)
-                
+
             elif options.node_type == 'author':
                 builder = authorCollectionBuilder(D)
 
             C = builder.build(a, options.graph_type, **kwargs)
 
-        else:   # Generate a single Graph from all of the papers in 
+        else:   # Generate a single Graph from all of the papers in
                 #  Corpus, D.
             method = nt.__dict__[options.node_type+'s'] \
                        .__dict__[options.graph_type]
-            
+
             G = method(D.papers(), **kwargs)
             C = GraphCollection()
             C.graphs['all'] = G
-            
+
         sys.stdout.write("done in {0} seconds.\n"
                                                 .format(time.time()-start_time))
         if options.node_type == 'term':
             sys.exit('Term graphs not yet implemented. Coming soon!\n')
-            
+
         savepath = options.temp_dir + "/" + \
                    options.dataset_id + "_GraphCollection.pickle"
         sys.stdout.write("Saving GraphCollection to {0}...".format(savepath))
         sys.stdout.flush()
         pickle.dump(C, open(savepath, "wb"))
         sys.stdout.write("done.\n")
-        
+
         if options.outpath is not None:
             resultspath = options.outpath + "/" + \
                           options.dataset_id + "_graphs.csv"
             sys.stdout.write("Writing graph summaries to {0}..."
                                                            .format(resultspath))
             sys.stdout.flush()
-            
+
             with open(resultspath, 'wb') as f:
                 writer = csv.writer(f, delimiter=',')
                 writer.writerow(['index', 'nodes', 'edges'])
-                for key,g in C.graphs.iteritems():
+                for key,g in C.graphs.items():
                     writer.writerow([key,len(g.nodes()), len(g.edges())])
             sys.stdout.write("done.\n")
-        
+
     #############################
     #   Workflow step: Analyze  #
-    #############################            
+    #############################
 
     elif options.analyze:   # Only supports collection.algorithm, for now.
-    
+
         sys.stdout.write("-"*40 + "\n")
         sys.stdout.write("\tWorkflow step: Analyze\n")
-        sys.stdout.write("-"*40 + "\n")    
-        
+        sys.stdout.write("-"*40 + "\n")
+
         if options.algorithm is None:
             sys.exit('Must specify algorithm with --algorithm.')
-        
+
         loadpath = options.temp_dir + "/" + \
                    options.dataset_id + "_GraphCollection.pickle"
         sys.stdout.write("Loading GraphCollection from {0}...".format(loadpath))
         sys.stdout.flush()
         C = pickle.load(open(loadpath, 'rb'))
         sys.stdout.write("done.\n")
-        
+
         sys.stdout.write("Analyzing GraphCollection with {0}..."
                                                      .format(options.algorithm))
         sys.stdout.flush()
-        
+
         if options.algorithm in az.collection.__dict__.keys():
             r = az.collection.__dict__[options.algorithm](C)
         else:
             r = az.collection.algorithm(C, options.algorithm)
         sys.stdout.write("done.\n")
-        
+
         if options.outpath is not None:
             resultspath = options.outpath + "/" + options.dataset_id + "_" + \
                           options.algorithm + "_analysis.csv"
             sys.stdout.write("Writing graph analysis results to {0}..."
                                                            .format(resultspath))
             sys.stdout.flush()
-            
+
             with open(resultspath, 'wb') as f:
                 writer = csv.writer(f, delimiter=',')
                 writer.writerow(['index', 'mean', 'variance'])
-                for key,g in C.graphs.iteritems():
+                for key,g in C.graphs.items():
                     m = np.mean([ n[1][options.algorithm] \
                                                   for n in g.nodes(data=True) ])
                     v = np.var([ n[1][options.algorithm] \
                                                   for n in g.nodes(data=True) ])
-                    
+
                     writer.writerow([key,m,v])
             sys.stdout.write("done.\n")
 
@@ -534,14 +534,14 @@ if __name__ == "__main__":
         sys.stdout.write("Saving GraphCollection to {0}...".format(savepath))
         sys.stdout.flush()
         pickle.dump(C, open(savepath, "wb"))
-        sys.stdout.write("done.\n")            
-            
+        sys.stdout.write("done.\n")
+
     #############################
     #   Workflow step: Write    #
-    #############################            
+    #############################
 
     elif options.write:   # Only supports collection.algorithm, for now.
-    
+
         sys.stdout.write("-"*40 + "\n")
         sys.stdout.write("\tWorkflow step: Write\n")
         sys.stdout.write("-"*40 + "\n")
@@ -553,25 +553,25 @@ if __name__ == "__main__":
         sys.stdout.flush()
         C = pickle.load(open(loadpath, 'rb'))
         sys.stdout.write("done.\n")
-                
+
         # --write-format is required.
         if options.write_format is None:
             sys.exit('Must specify graph output format with --write-format.')
-        
+
         # --outpath is required.
         if options.outpath is None:
             sys.exit('Must specify output path with --outpath.')
-        
-        
+
+
         # Write the graphs!
         sys.stdout.write("Writing graphs to {0} with format {1}..."
                                  .format(options.outpath, options.write_format))
         sys.stdout.flush()
-        
+
         basepath = options.outpath + "/" + options.dataset_id + "_graph_"
-                           
+
         if options.write_format == 'graphml':
-            for k,g in C.graphs.iteritems():
+            for k,g in C.graphs.items():
                 wr.graph.to_graphml(g, basepath+str(k))
         elif options.write_format == 'xgmml':
             wr.collection.to_dxgmml(C, basepath+"dynamic.xgmml")

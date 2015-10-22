@@ -85,7 +85,7 @@ class GramGenerator(object):
     Yields N-gram data from on-disk dataset, to make loading big datasets a bit
     more memory-friendly.
 
-    Reusable, in the sense that :func:`.items`\, :func:`.iteritems`\,
+    Reusable, in the sense that :func:`.items`\, :func:`.items`\,
     :func:`.keys`\, and :func:`.values` all return new :class:`.GramGenerator`
     instances with the same path. This allows a :class:`.GramGenerator` to
     sneakily pass as an ngrams dict in most practical situations.
@@ -152,7 +152,7 @@ class GramGenerator(object):
         return GramGenerator(self.path, self.elem,
                              ignore_hash=self.ignore_hash)
 
-    def iteritems(self):
+    def items(self):
         """
         Returns a :class:`GramGenerator` that produces key,value tuples.
         """
@@ -329,7 +329,7 @@ def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
         stoplist = stopwords.words()
 
     # Now tokenize.
-    for doi, grams in ngrams.iteritems():
+    for doi, grams in ngrams.items():
         t_ngrams[doi] = []
         for g,c in grams:
             ignore = False
@@ -380,7 +380,7 @@ def _handle_paper(article):
     paper = Paper()
     pdata = dict_from_node(article)
 
-    for key, value in pdata.iteritems():
+    for key, value in pdata.items():
 
         datum = pdata[key]
         if type(datum) is str:

@@ -203,9 +203,9 @@ def feature_burstness(corpus, featureset_name, feature, k=5, normalize=True,
 
     # Normalize.
     if normalize:
-        A = {key: mean(values)/k for key, values in A.iteritems()}
+        A = {key: mean(values)/k for key, values in A.items()}
     else:
-        A = {key: mean(values) for key, values in A.iteritems()}
+        A = {key: mean(values) for key, values in A.items()}
 
     D = sorted(A.keys())
     return D[1:], [A[d] for d in D[1:]]
@@ -275,10 +275,10 @@ def sigma(G, corpus, featureset_name, **kwargs):
 
     B = burstness(corpus, featureset_name, features=G.nodes(), **kwargs)
 
-    B_ = {key:dict(zip(*values)) for key, values in B.iteritems()}
+    B_ = {key:dict(zip(*values)) for key, values in B.items()}
 
     Sigma = {}
-    for key, graph in G.iteritems():
+    for key, graph in G.items():
         centrality = nx.betweenness_centrality(graph)
         sigma = {}
         for n in graph.nodes():
@@ -291,11 +291,11 @@ def sigma(G, corpus, featureset_name, **kwargs):
 
     # Invert results.
     inverse = defaultdict(dict)
-    for gname, result in Sigma.iteritems():
+    for gname, result in Sigma.items():
         if hasattr(result, '__iter__'):
-            for n, val in result.iteritems():
+            for n, val in result.items():
                 inverse[n].update({gname: val})
     nx.set_node_attributes(G.master_graph, 'sigma', inverse)
 
     return {G.node_index[n]:tuple(zip(*[(k, v[k]) for k in sorted(v.keys())]))
-            for n, v in inverse.iteritems()}
+            for n, v in inverse.items()}

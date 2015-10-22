@@ -398,7 +398,7 @@ def read(path, corpus=True, index_by='uri', follow_links=True, **kwargs):
 
     if corpus:
         c = Corpus(papers, index_by=index_by, **kwargs)
-        for fset_name, fset_values in parser.full_text.iteritems():
+        for fset_name, fset_values in parser.full_text.items():
             c.features[fset_name] = StructuredFeatureSet(fset_values)
         return c
     return papers

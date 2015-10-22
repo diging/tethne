@@ -88,7 +88,7 @@ def to_dxgmml(graphcollection, path): # [#61510094]
             current.append(n[0])
 
             nodes[n[0]][k] = {}
-            for attr, value in n[1].iteritems():
+            for attr, value in n[1].items():
                 if type(value) is str:
                     value = value.replace("&", "&amp;").replace('"', '')
                 nodes[n[0]][k][attr] = value
@@ -113,7 +113,7 @@ def to_dxgmml(graphcollection, path): # [#61510094]
             current.append(e_key)
 
             edges[e_key][k] = {}
-            for attr, value in e[2].iteritems():
+            for attr, value in e[2].items():
                 if type(value) is str:
                     value = value.replace("&", "&amp;").replace('"', '')
                 edges[e_key][k][attr] = value
@@ -144,7 +144,7 @@ def to_dxgmml(graphcollection, path): # [#61510094]
 
                 for i in sorted(nodes[n].keys()):
                     if period['start'] <= i <= period['end']:
-                        for attr, value in nodes[n][i].iteritems():
+                        for attr, value in nodes[n][i].items():
                             # Type names are slightly different in XGMML.
                             dtype = _safe_type(value)
                             attr = str(attr).replace("&", "&amp;")
@@ -166,7 +166,7 @@ def to_dxgmml(graphcollection, path): # [#61510094]
 
                 for i in sorted(edges[e].keys()):
                     if period['start'] <= i <= period['end']:
-                        for attr, value in edges[e][i].iteritems():
+                        for attr, value in edges[e][i].items():
                             # Type names are slightly different in XGMML.
                             dtype = _safe_type(value)
                             
@@ -180,11 +180,11 @@ def to_dxgmml(graphcollection, path): # [#61510094]
 def _strip_list_attributes(graph_):
     """Converts lists attributes to strings for all nodes and edges in G."""
     for n_ in graph_.nodes(data=True):
-        for k,v in n_[1].iteritems():
+        for k,v in n_[1].items():
             if type(v) is list:
                 graph_.node[n_[0]][k] = str(v)
     for e_ in graph_.edges(data=True):
-        for k,v in e_[2].iteritems():
+        for k,v in e_[2].items():
             if type(v) is list:
                 graph_.edge[e_[0]][e_[1]][k] = str(v)
 

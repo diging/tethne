@@ -134,7 +134,7 @@ def top_cited(papers, topn=20, verbose=False):
         n = topn
     elif type(topn) is float:
         n = int(np.around(topn*len(counts), decimals=-1))
-    top = dict(sorted(counts.iteritems(),
+    top = dict(sorted(counts.items(),
                        key=operator.itemgetter(1),
                        reverse=True)[:n]).keys()
 

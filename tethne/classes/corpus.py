@@ -308,7 +308,7 @@ class Corpus(object):
         """
 
         self.indices[attr] = {}
-        for i, paper in self.indexed_papers.iteritems():
+        for i, paper in self.indexed_papers.items():
             if hasattr(paper, attr):
                 value = getattr(paper, attr)
                 for v in _iterable(value):
@@ -590,7 +590,7 @@ class Corpus(object):
                            index_features=self.features.keys())
 
         # Transfer FeatureSets.
-        for featureset_name, featureset in self.features.iteritems():
+        for featureset_name, featureset in self.features.items():
             if featureset_name not in subcorpus:
                 new_featureset = FeatureSet()
                 for k, f in featureset.items():

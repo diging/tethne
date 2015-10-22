@@ -89,7 +89,7 @@ def to_sif(graph, output_path):
         for node in nodes:
             node_name = node[0]
             node_attribs = node[1]
-            for key, value in node_attribs.iteritems():
+            for key, value in node_attribs.items():
                 # generate a node attribute file for each node attribute
                 if node == nodes[0]:
                     # first node, overwrite file
@@ -146,7 +146,7 @@ def to_sif(graph, output_path):
                         sif_line = node1 + ' ' + intr_type + ' ' + node2 + '\n'
                         f.write(sif_line)
 
-                        for attrib, value in edge[3].iteritems():
+                        for attrib, value in edge[3].items():
                             eda_line = (node1 + ' (' + intr_type + ') ' +
                                         node2 + ' = ' + str(value) + '\n')
                             with open(output_path + '_' + str(attrib) + '.eda',
@@ -176,7 +176,7 @@ def to_sif(graph, output_path):
                         sif_line = node1 + ' ' + intr_type + ' ' + node2 + '\n'
                         f.write(sif_line)
 
-                        for attrib, value in edge[2].iteritems():
+                        for attrib, value in edge[2].items():
                             eda_line = (node1 + ' (' + intr_type + ') ' +
                                         node2 + ' = ' + str(value) + '\n')
                             with open(output_path + '_' + str(attrib) +
@@ -325,11 +325,11 @@ def to_table(graph, path):
 
 def _strip_list_attributes(G):
     for n in G.nodes(data=True):
-        for k,v in n[1].iteritems():
+        for k,v in n[1].items():
             if type(v) is list:
                 G.node[n[0]][k] = str(v)
     for e in G.edges(data=True):
-        for k,v in e[2].iteritems():
+        for k,v in e[2].items():
             if type(v) is list:
                 G.edge[e[0]][e[1]][k] = str(v)
 
