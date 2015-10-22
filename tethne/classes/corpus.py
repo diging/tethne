@@ -270,9 +270,9 @@ class Corpus(object):
                     hashable = paper.title
                 else:
                     authors = list(zip(*paper.authors))[0]
-                    hashable = ' '.join(list([paper.title] + [l + f for l, f in authors]))
+                    hashable = u' '.join(list([paper.title] + [l + f for l, f in authors]))
 
-                m.update(hashable)
+                m.update(hashable.encode('utf-8'))
                 setattr(paper, 'hashIndex', m.hexdigest())
             return getattr(paper, 'hashIndex')
         return getattr(paper, self.index_by)    # Identifier is already available.

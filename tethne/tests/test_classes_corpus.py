@@ -83,7 +83,7 @@ class TestCorpus(unittest.TestCase):
         self.assertIsInstance(corpus[[0, 2, 3]][0], Paper)
         self.assertEqual(len(corpus['authors', ('ZENG', 'EDDY Y')]), 1)
         self.assertIsInstance(corpus['authors', ('ZENG', 'EDDY Y')][0], Paper)
-        ikeys = corpus.indexed_papers.keys()[0:2]
+        ikeys = list(corpus.indexed_papers.keys())[0:2]
         self.assertEqual(len(corpus[ikeys]), len(ikeys))
         self.assertIsInstance(corpus[ikeys][0], Paper)
 
@@ -100,7 +100,7 @@ class TestCorpus(unittest.TestCase):
         top_sliced = corpus.top_features('authors', topn=N, perslice=True)
         self.assertIsInstance(top, list)
         self.assertEqual(len(top), len(corpus.indices['date']))
-        
+
     def test_featureselector(self):
         corpus = Corpus(self.papers, index_by='wosid')
         corpus.index('journal')
