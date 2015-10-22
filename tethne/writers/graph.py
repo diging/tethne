@@ -43,14 +43,14 @@ def write_csv(graph, prefix):
         writer.writerow(['node'] + node_headers)
         for n, attrs in graph.nodes(data=True):
             values = map(value, repeat(attrs, len(node_headers)), node_headers)
-            writer.writerow([_recast_value(n)] + values)
+            writer.writerow([_recast_value(n)] + list(values))
 
     with open(prefix + '_edges.csv', 'w') as f:
         writer = csv.writer(f)
         writer.writerow(['source', 'target'] + edge_headers)
         for s, t, attrs in graph.edges(data=True):
             values = map(value, repeat(attrs, len(edge_headers)), edge_headers)
-            writer.writerow([_recast_value(s), _recast_value(t)] + values)
+            writer.writerow([_recast_value(s), _recast_value(t)] + list(values))
 
 
 def to_sif(graph, output_path):

@@ -137,7 +137,7 @@ def multipartite(corpus, featureset_names, min_weight=1, filters={}):
                     continue
             if len(feature) < 1:
                 continue
-            for f in zip(*feature)[0]:
+            for f in list(zip(*feature))[0]:
                 ftypes[f] = {'type': featureset_name}
                 pairs[(paper, f)] += 1
         node_type.update(ftypes)

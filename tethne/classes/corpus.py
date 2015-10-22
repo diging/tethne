@@ -269,7 +269,7 @@ class Corpus(object):
                 elif len(paper.authors) == 0:
                     hashable = paper.title
                 else:
-                    authors = zip(*paper.authors)[0]
+                    authors = list(zip(*paper.authors))[0]
                     hashable = ' '.join(list([paper.title] + [l + f for l, f in authors]))
 
                 m.update(hashable)

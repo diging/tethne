@@ -204,7 +204,7 @@ class LDAModel(Model):
         self.ll = []
         self.num_iters = 0
 
-        prog = re.compile('\<([^\)]+)\>')
+        prog = re.compile(u'\<([^\)]+)\>')
         ll_prog = re.compile(r'(\d+)')
         p = subprocess.Popen([
                     self.mallet_bin,
@@ -224,7 +224,7 @@ class LDAModel(Model):
 
             # Keep track of LL/topic.
             try:
-                this_ll = float(re.findall('([-+]\d+\.\d+)', l)[0])
+                this_ll = float(re.findall(u'([-+]\d+\.\d+)', l)[0])
                 self.ll.append(this_ll)
             except IndexError:  # Not every line will match.
                 pass

@@ -159,13 +159,13 @@ class TestFeatureSet(unittest.TestCase):
         self.assertIsInstance(top, list)
         self.assertIsInstance(top[0], tuple)
         self.assertEqual(len(top), N)
-        self.assertSetEqual(set(zip(*top)[0]), set(['blob', 'bob', 'joe']))
+        self.assertSetEqual(set(list(zip(*top))[0]), set(['blob', 'bob', 'joe']))
 
         top = featureset.top(N, by='documentCounts')
         self.assertIsInstance(top, list)
         self.assertIsInstance(top[0], tuple)
         self.assertEqual(len(top), N)
-        self.assertSetEqual(set(zip(*top)[0]), set(['blob', 'brobert', 'joe']))
+        self.assertSetEqual(set(list(zip(*top))[0]), set(['blob', 'brobert', 'joe']))
 
     def test_as_matrix(self):
         featureset = FeatureSet()
