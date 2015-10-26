@@ -82,10 +82,10 @@ def mean(iterable):
 
 
 def _iterable(o):
-	if hasattr(o, '__iter__'):
-		return o
-	else:
-		return [o]
+    if hasattr(o, '__iter__'):
+        return o
+    else:
+        return [o]
 
 
 def _strip_punctuation(s):
@@ -125,9 +125,9 @@ def tokenize(passage):
 
 
 def _space_sep(s):
-	if len(s) > 3:
-		return s
-	return ' '.join(list(s))
+    if len(s) > 3:
+        return s
+    return ' '.join(list(s))
 
 
 def swap(u,v):
