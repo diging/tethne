@@ -251,7 +251,7 @@ class ZoteroParser(RDFParser):
                     # TODO: remove str coercion.
                     return datetime.strptime(str(value), datefmt).date().year
                 except ValueError:
-        	       pass
+                    pass
 
     def handle_documentType(self, value):
         return value

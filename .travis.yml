@@ -2,7 +2,8 @@ language: python
 os:
   - linux
 python:
-  - "2.7"
+  - "2.7.9"
+  - "2.7.10"
   - "3.5"
 jdk:
   - oraclejdk8
