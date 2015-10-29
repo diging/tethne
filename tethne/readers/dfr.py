@@ -11,11 +11,16 @@ import xml.etree.ElementTree as ET
 import re
 from collections import Counter
 from tethne import Paper, Corpus, Feature, FeatureSet
-from tethne.utilities import dict_from_node, strip_non_ascii
+from tethne.utilities import dict_from_node, strip_non_ascii, number
 from tethne.readers.base import XMLParser
 import iso8601
 
 from unidecode import unidecode
+
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
 
 
 class DfRParser(XMLParser):
@@ -80,7 +85,7 @@ class GramGenerator(object):
     Yields N-gram data from on-disk dataset, to make loading big datasets a bit
     more memory-friendly.
 
-    Reusable, in the sense that :func:`.items`\, :func:`.iteritems`\,
+    Reusable, in the sense that :func:`.items`\, :func:`.items`\,
     :func:`.keys`\, and :func:`.values` all return new :class:`.GramGenerator`
     instances with the same path. This allows a :class:`.GramGenerator` to
     sneakily pass as an ngrams dict in most practical situations.
@@ -147,7 +152,7 @@ class GramGenerator(object):
         return GramGenerator(self.path, self.elem,
                              ignore_hash=self.ignore_hash)
 
-    def iteritems(self):
+    def items(self):
         """
         Returns a :class:`GramGenerator` that produces key,value tuples.
         """
@@ -188,7 +193,7 @@ class GramGenerator(object):
         for gram in root.findall(self.elem_xml):
             text = unidecode(unicode(gram.text.strip()))
             if ( not self.ignore_hash or '#' not in list(text) ):
-                c = ( text, int(gram.attrib['weight']) )
+                c = ( text, number(gram.attrib['weight']) )
                 grams.append(c)
 
         if self.V:  # Values only.
@@ -253,10 +258,12 @@ def read(path, corpus=True, index_by='doi', **kwargs):
         for sname in os.listdir(path):
             fpath = os.path.join(path, sname)   # Full path.
             if os.path.isdir(fpath) and not sname.startswith('.'):
-                corpus.features[sname] = ngrams(path, sname)
+                datafiles = [f for f in os.listdir(fpath)
+                             if f.lower().endswith('xml')]
+                if len(datafiles) > 0:
+                    corpus.features[sname] = ngrams(path, sname)
         return corpus
     return papers
-
 
 def ngrams(path, elem, ignore_hash=True):
     """
@@ -321,7 +328,7 @@ def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
         stoplist = stopwords.words()
 
     # Now tokenize.
-    for doi, grams in ngrams.iteritems():
+    for doi, grams in ngrams.items():
         t_ngrams[doi] = []
         for g,c in grams:
             ignore = False
@@ -372,7 +379,7 @@ def _handle_paper(article):
     paper = Paper()
     pdata = dict_from_node(article)
 
-    for key, value in pdata.iteritems():
+    for key, value in pdata.items():
 
         datum = pdata[key]
         if type(datum) is str:
@@ -417,7 +424,7 @@ def _handle_pagerange(pagerange):
     except IndexError:
         start = end = 0
 
-    return str(start), str(end)
+    return unicode(start), unicode(end)
 
 def _handle_pubdate(pubdate):
     """
@@ -562,7 +569,7 @@ def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     if jtitle is None:
         jtitle = ''
 
-    ayj = aulast + ' ' + auinit + ' ' + str(date) + ' ' + jtitle
+    ayj = aulast + ' ' + auinit + ' ' + unicode(date) + ' ' + jtitle
 
     if ayj == '   ':
         ayj = 'Unknown paper'

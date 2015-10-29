@@ -3,11 +3,15 @@ Helper functions.
 """
 import string
 import copy
-try:
-    from HTMLParser import HTMLParser   # Python 2.x
-except ImportError:
+
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
     from html.parser import HTMLParser  # Python 3.x
     xrange = range
+else:
+    from HTMLParser import HTMLParser   # Python 2.x
 
 
 def is_number(value):
@@ -19,6 +23,16 @@ def is_number(value):
         except ValueError:
             return False
     return True
+
+
+def number(value):
+    try:
+        return int(value)
+    except ValueError:
+        try:
+            return float(value)
+        except ValueError:
+            return value
 
 
 def tokenize(s):
@@ -34,10 +48,10 @@ class MLStripper(HTMLParser):
     def handle_data(self, d):
         self.fed.append(d)
     def feed(self, data):
-        self.rawdata = self.rawdata + str(data)
+        self.rawdata = self.rawdata + data
         self.goahead(0)
     def get_data(self):
-        return ''.join(self.fed)
+        return u''.join(self.fed)
 
 
 def strip_tags(html):
@@ -47,10 +61,12 @@ def strip_tags(html):
 
 
 def argsort(seq):
+    seq = list(seq)
     return sorted(range(len(seq)), key=seq.__getitem__)
 
 
 def argmin(iterable):
+    iterable = list(iterable)
     i_min = -1
     v_min = max(iterable)
     for i, v in enumerate(iterable):
@@ -71,7 +87,7 @@ def argmax(iterable):
 
 
 def nonzero(iterable):
-    return [i for i,v in enumerate(iterable) if abs(v) > 0.0]
+    return list([i for i, v in enumerate(iterable) if abs(v) > 0.0])
 
 
 def mean(iterable):
@@ -92,7 +108,7 @@ def _strip_punctuation(s):
     """
     Removes all punctuation characters from a string.
     """
-    if type(s) is str:    # Bytestring (default in Python 2.x).
+    if type(s) is str and not PYTHON_3:    # Bytestring (default in Python 2.x).
         return s.translate(string.maketrans("",""), string.punctuation)
     else:                 # Unicode string (default in Python 3.x).
         translate_table = dict((ord(char), u'') for char in u'!"#%\'()*+,-./:;<=>?@[\]^_`{|}~')
@@ -102,7 +118,7 @@ def _strip_numbers(s):
     """
     Removes all numbers from a string.
     """
-    return ''.join([c for c in s if not is_number(c)])
+    return u''.join([c for c in s if not is_number(c)])
 
 
 def normalize(s):
@@ -177,10 +193,10 @@ def attribs_to_string(attrib_dict, keys):
     gexf (which does not allow attributes to have a list type) by making
     them writable in those formats
     """
-    for key, value in attrib_dict.iteritems():
+    for key, value in attrib_dict.items():
         if (isinstance(value, list) or isinstance(value, dict) or
             isinstance(value, tuple)):
-            attrib_dict[key] = str(value)
+            attrib_dict[key] = value
 
     return attrib_dict
 
@@ -220,12 +236,12 @@ def strip_non_ascii(s):
 
     """
     stripped = (c for c in s if 0 < ord(c) < 127)
-    clean_string = ''.join(stripped)
+    clean_string = u''.join(stripped)
     return clean_string
 
 def strip_punctuation(s):
     exclude = set(string.punctuation)
-    return ''.join(ch for ch in s if ch not in exclude)
+    return u''.join(ch for ch in s if ch not in exclude)
 
 
 def dict_from_node(node, recursive=False):
@@ -257,7 +273,7 @@ def dict_from_node(node, recursive=False):
         elif snode.text is not None:
             value = snode.text
         else:
-            value = ''
+            value = u''
 
         if snode.tag in dict.keys():    # If there are multiple subelements
                                         #  with the same tag, then the value

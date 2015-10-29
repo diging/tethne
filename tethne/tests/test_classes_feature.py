@@ -44,46 +44,46 @@ class TestFeature(unittest.TestCase):
 
     def test_norm(self):
         feature = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
-        T = sum(zip(*feature)[1])
-        for n, r in zip(zip(*feature.norm)[1], zip(*feature)[1]):
+        T = sum(list(zip(*feature))[1])
+        for n, r in zip(list(zip(*feature.norm))[1], list(zip(*feature))[1]):
             self.assertEqual(n, float(r)/T)
-            
+
     def test_extend(self):
         feature = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
-     
+
         feature.extend([('bob', 1)])
         self.assertEqual(feature.value('bob'), 4)
-        
+
         feature.extend(['bob'])
-        self.assertEqual(feature.value('bob'), 5)        
-        
+        self.assertEqual(feature.value('bob'), 5)
+
         feature.extend('bob')
-        self.assertEqual(feature.value('bob'), 6)        
-        
-        
+        self.assertEqual(feature.value('bob'), 6)
+
+
     def test_iadd(self):
         feature = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
-   
+
         feature += [('bob', 1)]
         self.assertEqual(feature.value('bob'), 4)
-        
+
         feature += ['bob']
         self.assertEqual(feature.value('bob'), 5)
-        
+
         feature += 'bob'
-        self.assertEqual(feature.value('bob'), 6)        
-        
+        self.assertEqual(feature.value('bob'), 6)
+
     def test_isub(self):
         feature = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
-   
+
         feature -= [('bob', 1)]
         self.assertEqual(feature.value('bob'), 2)
-        
+
         feature -= ['bob']
         self.assertEqual(feature.value('bob'), 1)
-        
+
         feature -= 'bob'
-        self.assertEqual(feature.value('bob'), 0)           
+        self.assertEqual(feature.value('bob'), 0)
 
 
 class TestFeatureSet(unittest.TestCase):
@@ -159,13 +159,13 @@ class TestFeatureSet(unittest.TestCase):
         self.assertIsInstance(top, list)
         self.assertIsInstance(top[0], tuple)
         self.assertEqual(len(top), N)
-        self.assertSetEqual(set(zip(*top)[0]), set(['blob', 'bob', 'joe']))
+        self.assertSetEqual(set(list(zip(*top))[0]), set(['blob', 'bob', 'joe']))
 
         top = featureset.top(N, by='documentCounts')
         self.assertIsInstance(top, list)
         self.assertIsInstance(top[0], tuple)
         self.assertEqual(len(top), N)
-        self.assertSetEqual(set(zip(*top)[0]), set(['blob', 'brobert', 'joe']))
+        self.assertSetEqual(set(list(zip(*top))[0]), set(['blob', 'brobert', 'joe']))
 
     def test_as_matrix(self):
         featureset = FeatureSet()

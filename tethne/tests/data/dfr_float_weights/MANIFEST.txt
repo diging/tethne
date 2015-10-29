@@ -1,0 +1,9 @@
+Job Title: smj9504
+Job ID: 2015.10.18.QK7EfH7k
+Requester: snerur
+Query: http://dfr.jstor.org/fsearch/submitrequest?cs=jcode%3Astramanaj%5E1.0%7Cyear%3A%5B1995+TO+2009%5D%5E1.0&fs=yrm1%3Asnm2&view=text&cc=year%3a[1995+TO+2004]^1.0
+View(s): citations|wordcounts|bigrams|trigrams|keyterms
+Format: XML
+Documents Requested: 934
+Date Processed: 2015-10-18 23:06:02.091632
+

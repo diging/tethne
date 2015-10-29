@@ -7,7 +7,7 @@ MAINTAINER_EMAIL = 'erick [dot] peirson [at] asu [dot] edu'
 DESCRIPTION = ('Bibliographic network and corpus analysis for historians')
 LICENSE = 'GNU GPL 3'
 URL = 'http://diging.github.io/tethne/'
-VERSION = '0.7.12'
+VERSION = '0.7.12.2'
 
 PACKAGES = ['tethne',
             'tethne.analyze',
@@ -17,6 +17,13 @@ PACKAGES = ['tethne',
             'tethne.networks',
             'tethne.readers',
             'tethne.writers']
+
+import sys
+if sys.version_info[0] == 2:
+    pdfminer = 'pdfminer==20110515'
+elif sys.version_info[0] == 3:
+    pdfminer = "pdfminer3k"
+
 
 setup(
     name=DISTNAME,
@@ -33,6 +40,15 @@ setup(
         "networkx >= 1.8.1",
         "Unidecode >= 0.04.16",
         "iso8601",
-        "rdflib"
+        "rdflib",
+        "chardet",
+        "html5lib",
+        "isodate",
+        "pdfdocument",
+        pdfminer,
+        "python-magic==0.4.6",
+        "slate==0.3",
+        "Unidecode==0.4.17",
+        "nltk",
     ],
 )

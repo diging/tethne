@@ -9,8 +9,8 @@ from tethne.classes.feature import StructuredFeature, StructuredFeatureSet
 
 class TestStructuredFeatureSet(unittest.TestCase):
     def setUp(self):
-        self.tokens1 = range(0, 205)
-        self.tokens2 = range(0, 42)
+        self.tokens1 = list(range(0, 205))
+        self.tokens2 = list(range(0, 42))
         contexts1 = [('sentence', [0, 25, 57, 89, 124, 156, 172, 191]),
                      ('paragraph', [0, 89, 172])]
         contexts2 = [('paragraph', [0, 29])]

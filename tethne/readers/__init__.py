@@ -109,10 +109,10 @@ def merge(P1, P2, fields=['ayjid']):
 
             if match:   # Add values first from P2 paper, then from P1 paper.
                 new_p = Paper()
-                for key, value in p_2.iteritems():
+                for key, value in p_2.items():
                     if value != '' and value != None:
                         new_p[key] = value
-                for key, value in p_1.iteritems():
+                for key, value in p_1.items():
                     if value != '' and value != None:
                         new_p[key] = value
 

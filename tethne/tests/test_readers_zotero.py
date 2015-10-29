@@ -7,6 +7,11 @@ import unittest
 from tethne.readers.zotero import read, ZoteroParser, _infer_spaces
 from tethne import Corpus, Paper, StructuredFeatureSet
 
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
+
 datapath = './tethne/tests/data/zotero'
 datapath2 = './tethne/tests/data/zotero2'
 datapath3 = './tethne/tests/data/zotero_withfiles'
@@ -105,12 +110,12 @@ class TestZoteroParser(unittest.TestCase):
                     self.assertTrue(a[0].isupper(), uppererr)
                     self.assertTrue(a[1].isupper(), uppererr)
             if hasattr(e, 'journal'):
-                self.assertIsInstance(e.journal, str,
-                                      derror.format('journal', 'str',
+                self.assertIsInstance(e.journal, unicode,
+                                      derror.format('journal', 'unicode',
                                                     type(e.journal)))
             if hasattr(e, 'abstract'):
-                self.assertIsInstance(e.abstract, str,
-                                      derror.format('abstract', 'str',
+                self.assertIsInstance(e.abstract, unicode,
+                                      derror.format('abstract', 'unicode',
                                                     type(e.abstract)))
 
             if hasattr(e, 'authorKeywords'):
@@ -122,21 +127,21 @@ class TestZoteroParser(unittest.TestCase):
                                       derror.format('keywordsPlus', 'list',
                                                     type(e.keywordsPlus)))
             if hasattr(e, 'doi'):
-                self.assertIsInstance(e.doi, str,
-                                      derror.format('doi', 'str',
+                self.assertIsInstance(e.doi, unicode,
+                                      derror.format('doi', 'unicode',
                                                     type(e.doi)))
             if hasattr(e, 'volume'):
-                self.assertIsInstance(e.volume, str,
-                                      derror.format('volume', 'str',
+                self.assertIsInstance(e.volume, unicode,
+                                      derror.format('volume', 'unicode',
                                                     type(e.volume)))
 
             if hasattr(e, 'title'):
-                self.assertIsInstance(e.title, str,
-                                      derror.format('title', 'str',
+                self.assertIsInstance(e.title, unicode,
+                                      derror.format('title', 'unicode',
                                                     type(e.title)))
 
         # Check integrity of tag-to-field mapping.
-        for tag, attr in parser.tags.iteritems():
+        for tag, attr in parser.tags.items():
             self.assertFalse(hasattr(e, tag),
                              ' '.join(['{0} should map to'.format(tag),
                                        '{0}, but does not.'.format(attr)]))

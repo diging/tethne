@@ -31,10 +31,6 @@ class WriteDocumentsTest(unittest.TestCase):
         self.assertGreater(os.path.getsize(self.dpath), 0)
         self.assertGreater(os.path.getsize(self.mpath), 0)
 
-    def tearDown(self):
-        os.remove(self.dpath)
-        os.remove(self.mpath)
-        os.rmdir(self.temp)
 
 
 class WriteDocumentsDTMTest(unittest.TestCase):
@@ -60,13 +56,6 @@ class WriteDocumentsDTMTest(unittest.TestCase):
         self.assertGreater(os.path.getsize(self.seqpath), 0)
         self.assertGreater(os.path.getsize(self.vpath), 0)
 
-
-    def tearDown(self):
-        os.remove(self.multpath)
-        os.remove(self.metapath)
-        os.remove(self.seqpath)
-        os.remove(self.vpath)
-        os.rmdir(self.temp)
 
 
 if __name__ == '__main__':

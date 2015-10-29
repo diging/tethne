@@ -8,8 +8,10 @@ from collections import Counter, defaultdict
 from tethne.utilities import _iterable, argsort
 
 import sys
-if sys.version_info[0] > 2:
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
     xrange = range
+    unicode = str
 
 
 class StructuredFeature(list):
@@ -242,14 +244,14 @@ class Feature(list):
 
     def __sub__(self, data):
         if len(data) > 0:
-            if type(data[0]) is tuple and type(data[0][-1]) in [float, int]:
+            if type(list(data)[0]) is tuple and type(list(data)[0][-1]) in [float, int]:
                 combined_data = defaultdict(type(data[0][-1]))
                 combined_data.update(dict(self))
                 for k, v in data:
                     combined_data[k] -= v
-                return combined_data.items()
+                return list(combined_data.items())
             else:   # Recurses.
-                return self.__sub__(Counter(_iterable(data)).items())
+                return self.__sub__(list(Counter(_iterable(data)).items()))
         return self
 
     def __iadd__(self, data):
@@ -420,7 +422,7 @@ class BaseFeatureSet(object):
             raise NameError('kwarg `by` must be "counts" or "documentCounts"')
 
         cvalues = getattr(self, by)
-        top = [cvalues.keys()[i] for i in argsort(cvalues.values())][::-1]
+        top = [list(cvalues.keys())[i] for i in argsort(list(cvalues.values()))][::-1]
         return [(self.index[x], cvalues[x]) for x in top][:topn]
 
 
@@ -432,7 +434,7 @@ class StructuredFeatureSet(BaseFeatureSet):
 
     def transform(self, func):
         features = {}
-        for i, feature in self.features.iteritems():
+        for i, feature in self.features.items():
             feature_ = []
             for f in feature:
                 t = self.lookup[f]
@@ -483,7 +485,7 @@ class FeatureSet(BaseFeatureSet):
 
     def transform(self, func):
         features = {}
-        for i, feature in self.features.iteritems():
+        for i, feature in self.features.items():
             feature_ = []
             for f, v in feature:
                 t = self.lookup[f]

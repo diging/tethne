@@ -10,6 +10,12 @@ from tethne import Corpus, Paper
 datapath = './tethne/tests/data/wos2.txt'
 datapath_v = './tethne/tests/data/valentin.txt'
 
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
+
+
 def is_number(value):
     try:
         int(value)
@@ -87,7 +93,7 @@ class TestWoSParser(unittest.TestCase):
                                                     type(e.title)))
 
         # Check integrity of tag-to-field mapping.
-        for tag, attr in parser.tags.iteritems():
+        for tag, attr in parser.tags.items():
             self.assertFalse(hasattr(e, tag),
                              ' '.join(['{0} should map to'.format(tag),
                                        '{0}, but does not.'.format(attr)]))

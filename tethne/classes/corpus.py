@@ -9,6 +9,11 @@ from tethne.classes.feature import FeatureSet, Feature, \
                                    StructuredFeatureSet, StructuredFeature
 from tethne.utilities import _iterable, argsort
 
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
+
 
 def _tfidf(f, c, C, DC, N):
     tf = float(c)
@@ -149,7 +154,7 @@ class Corpus(object):
         """
         A list of all :class:`.Paper`\s in the :class:`.Corpus`\.
         """
-        return self.indexed_papers.values()
+        return list(self.indexed_papers.values())
 
     index_by = None
     """
@@ -253,13 +258,21 @@ class Corpus(object):
         If the ``index_by`` field is not set or not available, generate a unique
         identifier using the :class:`.Paper`\'s title and author names.
         """
-
         if self.index_by is None or not hasattr(paper, self.index_by):
             if not hasattr(paper, 'hashIndex'): # Generate a new index for this paper.
-                authors = zip(*paper.authors)[0]
                 m = hashlib.md5()
-                hashable = ' '.join(list([paper.title] + [unicode(l) + unicode(f) for l, f in authors])).encode('utf-8')
-                m.update(hashable)
+
+                # If we dont have author name then we just use the title of the paper
+                # to generate unique identifier.
+                if paper.authors is None:
+                    hashable = paper.title
+                elif len(paper.authors) == 0:
+                    hashable = paper.title
+                else:
+                    authors = list(zip(*paper.authors))[0]
+                    hashable = u' '.join(list([paper.title] + [l + f for l, f in authors]))
+
+                m.update(hashable.encode('utf-8'))
                 setattr(paper, 'hashIndex', m.hexdigest())
             return getattr(paper, 'hashIndex')
         return getattr(paper, self.index_by)    # Identifier is already available.
@@ -303,7 +316,7 @@ class Corpus(object):
         """
 
         self.indices[attr] = {}
-        for i, paper in self.indexed_papers.iteritems():
+        for i, paper in self.indexed_papers.items():
             if hasattr(paper, attr):
                 value = getattr(paper, attr)
                 for v in _iterable(value):
@@ -585,7 +598,7 @@ class Corpus(object):
                            index_features=self.features.keys())
 
         # Transfer FeatureSets.
-        for featureset_name, featureset in self.features.iteritems():
+        for featureset_name, featureset in self.features.items():
             if featureset_name not in subcorpus:
                 new_featureset = FeatureSet()
                 for k, f in featureset.items():
