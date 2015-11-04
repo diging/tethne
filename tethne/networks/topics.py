@@ -27,7 +27,7 @@ def terms(model, threshold=0.01):
     graph = cooccurrence(model.phi, filter=select)
 
     # Only include labels for terms that are actually in the graph.
-    label_map = {k: v for k, v in model.vocabulary.iteritems()
+    label_map = {k: v for k, v in model.vocabulary.items()
                  if k in graph.nodes()}
     # print label_map
 
@@ -159,12 +159,12 @@ def distance(model, method='cosine', percentile=90, bidirectional=False,
             edges[(i,j)] = sim
 
     pct = numpy.percentile(edges.values(), percentile)
-    for edge, sim in edges.iteritems():
+    for edge, sim in edges.items():
         if sim >= pct:
             thegraph.add_edge(edge[0], edge[1], weight=float(sim))
 
     for key in model.metadata[0].keys():
-        values = { k:v[key] for k,v in model.metadata.iteritems()
+        values = { k:v[key] for k,v in model.metadata.items()
                                 if k in thegraph.nodes()    }
         networkx.set_node_attributes(thegraph, key, values)
 
@@ -190,7 +190,7 @@ def distance(model, method='cosine', percentile=90, bidirectional=False,
 #
 #    pc = nx.Graph()
 #
-#    for e, papers in edges.iteritems():
+#    for e, papers in edges.items():
 #        weight = sum( [p[1] for p in papers] ) / D
 #        pc.add_edge(e[0], e[1], weight=weight, \
 #                    papers=[model.metadata[p[0]] for p in papers])
@@ -229,7 +229,7 @@ def distance(model, method='cosine', percentile=90, bidirectional=False,
 #
 #    #print edges
 #
-#    for e, words in edges.iteritems():
+#    for e, words in edges.items():
 #        weight = sum( [ w[1] for w in words ] ) / W
 #        word_list = [model.vocabulary[w[0]] for w in words]
 #        tc.add_edge(e[0], e[1], weight=weight, words=word_list)

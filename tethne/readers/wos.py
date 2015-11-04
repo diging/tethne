@@ -23,6 +23,11 @@ from tethne.readers.base import FTParser
 from tethne import Corpus, Paper
 from tethne.utilities import _strip_punctuation, _space_sep, strip_tags, is_number
 
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
+
 
 class WoSParser(FTParser):
     """
@@ -133,15 +138,6 @@ class WoSParser(FTParser):
         """
         return int(value)
 
-    def handle_SO(self, value):
-        return unicode(value)
-
-    def handle_AB(self, value):
-        return unicode(value)
-
-    def handle_DI(self, value):
-        return unicode(value)
-
     def handle_AU(self, value):
         aulast, auinit = self.parse_author(value)
         auinit = _space_sep(auinit)   # Separate author initials with spaces.
@@ -155,13 +151,7 @@ class WoSParser(FTParser):
 
     def handle_VL(self, value):
         """
-        Cast volume to a unicode string.
-        """
-        return unicode(value)
-
-    def handle_IS(self, value):
-        """
-        Cast issue to a unicode string.
+        Volume should be a unicode string, even if it looks like an integer.
         """
         return unicode(value)
 
@@ -175,9 +165,9 @@ class WoSParser(FTParser):
 
         # First-author name and publication date.
         ptn = '([\w\s\W]+),\s([0-9]{4}),\s([\w\s]+)'
-        ny_match = re.match(ptn, value.decode('utf-8'), flags=re.U)
+        ny_match = re.match(ptn, value, flags=re.U)
         nj_match = re.match('([\w\s\W]+),\s([\w\s]+)',
-                            value.decode('utf-8'), flags=re.U)
+                            value, flags=re.U)
         if ny_match is not None:
             name_raw, date, journal = ny_match.groups()
         elif nj_match is not None:
@@ -257,7 +247,7 @@ class WoSParser(FTParser):
         Keyword Plus keywords are usually semicolon-delimited.
         """
 
-        if type(entry.keywordsPlus) is str:
+        if type(entry.keywordsPlus) in [str, unicode]:
             entry.keywordsPlus = [k.strip().upper() for k
                                   in entry.keywordsPlus.split(';')]
 

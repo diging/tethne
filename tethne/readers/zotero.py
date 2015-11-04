@@ -11,12 +11,17 @@ from math import log
 logging.basicConfig(level=40)
 logging.getLogger('iso8601').setLevel(40)
 
-from unidecode import unidecode
 from datetime import datetime
 
 from tethne import Paper, Corpus, StructuredFeature, StructuredFeatureSet
 from tethne.readers.base import RDFParser
 from tethne.utilities import _strip_punctuation, mean
+
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
+
 
 # RDF terms.
 RDF = u'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
@@ -208,24 +213,12 @@ class ZoteroParser(RDFParser):
 
         super(ZoteroParser, self).open()
 
-    def handle_title(self, value):
-        """
-        TODO: consider removing the unidecode step.
-        """
-        return unidecode(value)
-
-    def handle_abstract(self, value):
-        """
-        TODO: consider removing the unidecode step.
-        """
-        return unidecode(value)
-
     def handle_identifier(self, value):
         """
 
         """
 
-        identifier = str(self.graph.value(subject=value, predicate=VALUE_ELEM))
+        identifier = unicode(self.graph.value(subject=value, predicate=VALUE_ELEM))
         ident_type = self.graph.value(subject=value, predicate=TYPE_ELEM)
         if ident_type == URI_ELEM:
             self.set_value('uri', identifier)
@@ -244,14 +237,14 @@ class ZoteroParser(RDFParser):
         Attempt to coerced date to ISO8601.
         """
         try:
-            return iso8601.parse_date(str(value)).year
+            return iso8601.parse_date(unicode(value)).year
         except iso8601.ParseError:
             for datefmt in ("%B %d, %Y", "%Y-%m", "%Y-%m-%d", "%m/%d/%Y"):
                 try:
                     # TODO: remove str coercion.
-                    return datetime.strptime(str(value), datefmt).date().year
+                    return datetime.strptime(unicode(value), datefmt).date().year
                 except ValueError:
-        	       pass
+                    pass
 
     def handle_documentType(self, value):
         return value
@@ -286,14 +279,13 @@ class ZoteroParser(RDFParser):
         for s, p, o in self.graph.triples((value, None, None)):
 
             if p == VOL:        # Volume number
-                self.set_value('volume', str(o))
+                self.set_value('volume', unicode(o))
             elif p == TITLE:
-                journal = str(o)    # Journal title.
+                journal = unicode(o)    # Journal title.
         return journal
 
     def handle_pages(self, value):
-        # TODO: consider removing unidecode step.
-        return tuple(unidecode(value).split('-'))
+        return tuple(value.split('-'))
 
     def postprocess_pages(self, entry):
         if len(entry.pages) == 1:
@@ -392,7 +384,7 @@ def read(path, corpus=True, index_by='uri', follow_links=True, **kwargs):
 
     if corpus:
         c = Corpus(papers, index_by=index_by, **kwargs)
-        for fset_name, fset_values in parser.full_text.iteritems():
+        for fset_name, fset_values in parser.full_text.items():
             c.features[fset_name] = StructuredFeatureSet(fset_values)
         return c
     return papers

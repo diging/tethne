@@ -4,14 +4,20 @@ A :class:`.Paper` represents a single bibliographic record.
 
 from tethne.classes.feature import Feature, feature
 
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
+    
+
 class Paper(object):
     """
     Tethne's representation of a bibliographic record.
-    
+
     Fields can be set using dict-like assignment, and accessed as attributes.
-    
+
     .. code-block:: python
-    
+
        >>> myPaper = Paper()
        >>> myPaper['date'] = 1965
        >>> myPaper.date
@@ -33,18 +39,18 @@ class Paper(object):
         """
         Fuzzy WoS-style identifier, comprised of first author's name (LAST I),
         pubdate, and journal.
-        
+
         Returns
         -------
         ayjid : str
         """
-    
+
         if hasattr(self, 'authors_init'):
                 al, ai = self.authors_init[0]
         else:
             al, ai = '', ''
         if hasattr(self, 'date'):
-            date = str(self.date)
+            date = unicode(self.date)
         else:
             date = ''
         if hasattr(self, 'journal'):
@@ -84,12 +90,12 @@ class Paper(object):
     def citations(self):
         """
         Cited references as a :class:`.Feature`\.
-        
+
         Returns
         -------
         citations : :class:`.Feature`
         """
-        
+
         if hasattr(self, 'citedReferences'):
             return [cr.ayjid for cr in self.citedReferences if cr is not None]
         return []

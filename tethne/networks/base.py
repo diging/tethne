@@ -9,7 +9,7 @@ from tethne import Corpus, FeatureSet, StructuredFeatureSet
 def _generate_graph(graph_class, pairs, node_attrs={}, edge_attrs={},
                     min_weight=1):
     graph = graph_class()
-    for combo, count in pairs.iteritems():
+    for combo, count in pairs.items():
         if count >= min_weight:
             if combo in edge_attrs:
                 attrs = edge_attrs[combo]
@@ -17,7 +17,7 @@ def _generate_graph(graph_class, pairs, node_attrs={}, edge_attrs={},
                 attrs = {}
             graph.add_edge(combo[0], combo[1], weight=count, **attrs)
 
-    for k, attrs in node_attrs.iteritems():
+    for k, attrs in node_attrs.items():
         if k in graph.node:
             graph.node[k].update(attrs)
     return graph
@@ -105,14 +105,14 @@ def coupling(corpus_or_featureset, featureset_name=None,
     select = lambda p, elem: filter(f(elem), v(p, f(elem)), c(f(elem)), dc(f(elem)))
 
     pairs = defaultdict(list)
-    for elem, papers in featureset.with_feature.iteritems():
+    for elem, papers in featureset.with_feature.items():
         selected = [p for p in papers if select(p, elem)]
         for combo in combinations(selected, 2):
             combo = tuple(sorted(combo))
             pairs[combo].append(featureset.index[elem])
 
     graph = nx.Graph()
-    for combo, features in pairs.iteritems():
+    for combo, features in pairs.items():
         count = len(features)
         if count >= min_weight:
             graph.add_edge(combo[0], combo[1], features=features, weight=count)
@@ -137,7 +137,7 @@ def multipartite(corpus, featureset_names, min_weight=1, filters={}):
                     continue
             if len(feature) < 1:
                 continue
-            for f in zip(*feature)[0]:
+            for f in list(zip(*feature))[0]:
                 ftypes[f] = {'type': featureset_name}
                 pairs[(paper, f)] += 1
         node_type.update(ftypes)

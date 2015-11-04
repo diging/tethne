@@ -4,26 +4,32 @@ Write :class:`.GraphCollection` to a structured data format.
 .. autosummary::
 
    to_dxgmml
-   
+
 """
+
+import sys
+PYTHON_3 = sys.version_info[0] == 3
+if PYTHON_3:
+    unicode = str
 
 import networkx as nx
 import pickle as pk
 
+
 def to_dxgmml(graphcollection, path): # [#61510094]
     """
-    Writes a :class:`.GraphCollection` to 
+    Writes a :class:`.GraphCollection` to
     `dynamic XGMML. <https://code.google.com/p/dynnetwork/wiki/DynamicXGMML>`_.
-    
+
     Dynamic XGMML is a schema for describing dynamic networks in Cytoscape 3.0.
-    This method assumes that `Graph` indices are orderable points in time 
-    (e.g. years). The "start" and "end" of each node and edge are determined by 
-    periods of consecutive appearance in the :class:`.GraphCollection` . Node 
-    and edge attributes are defined for each `Graph`. in the 
+    This method assumes that `Graph` indices are orderable points in time
+    (e.g. years). The "start" and "end" of each node and edge are determined by
+    periods of consecutive appearance in the :class:`.GraphCollection` . Node
+    and edge attributes are defined for each `Graph`. in the
     :class:`.GraphCollection`.
-    
+
     For example, to build and visualize an evolving co-citation network:
-    
+
     .. code-block:: python
 
        >>> # Load some data.
@@ -44,14 +50,14 @@ def to_dxgmml(graphcollection, path): # [#61510094]
        >>> # Write the GraphCollection as a dynamic network.
        >>> import tethne.writers as wr
        >>> wr.collection.to_dxgmml(C, "/path/to/network.xgmml")
-    
+
     Parameters
     ----------
     graphcollection : :class:`.GraphCollection`
         The :class:`.GraphCollection` to be written to XGMML.
     path : str
         Path to file to be written. Will be created/overwritten.
-        
+
     Raises
     ------
     AttributeError
@@ -88,7 +94,7 @@ def to_dxgmml(graphcollection, path): # [#61510094]
             current.append(n[0])
 
             nodes[n[0]][k] = {}
-            for attr, value in n[1].iteritems():
+            for attr, value in n[1].items():
                 if type(value) is str:
                     value = value.replace("&", "&amp;").replace('"', '')
                 nodes[n[0]][k][attr] = value
@@ -113,80 +119,80 @@ def to_dxgmml(graphcollection, path): # [#61510094]
             current.append(e_key)
 
             edges[e_key][k] = {}
-            for attr, value in e[2].iteritems():
+            for attr, value in e[2].items():
                 if type(value) is str:
                     value = value.replace("&", "&amp;").replace('"', '')
                 edges[e_key][k][attr] = value
 
     # Write graph to XGMML.
     xst = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
-    
+
     sg = '<graph>\n'
     eg = '</graph>'
-    
+
     nst = '\t<node label="{0}" id="{0}" start="{1}" end="{2}">\n'
     ast = '\t\t<att name="{0}" type="{1}" value="{2}" start="{3}" end="{4}"/>\n'
     enn = '\t</node>\n'
-    
+
     est = '\t<edge source="{0}" target="{1}" start="{2}" end="{3}">\n'
     eas = '\t\t<att name="{0}" type="{1}" value="{2}" start="{3}" end="{4}"/>\n'
     ene = '\t</edge>\n'
-    
+
     with open(path, "w") as f:
         f.write(xst)    # xml element.
         f.write(sg)     # Graph element.
         for n in nodes.keys():
             for period in nodes[n]['periods']:
-                label = str(n).replace("&", "&amp;").replace('"', '')
-                
+                label = unicode(n).replace("&", "&amp;").replace('"', '')
+
                 # Node element.
                 f.write(nst.format(label, period['start'], period['end']+1))
 
                 for i in sorted(nodes[n].keys()):
                     if period['start'] <= i <= period['end']:
-                        for attr, value in nodes[n][i].iteritems():
+                        for attr, value in nodes[n][i].items():
                             # Type names are slightly different in XGMML.
                             dtype = _safe_type(value)
-                            attr = str(attr).replace("&", "&amp;")
+                            attr = unicode(attr).replace("&", "&amp;")
 
                             # Node attribute element.
                             f.write(ast.format(attr, dtype, value, i, i+1))
-            
+
                 f.write(enn)    # End node element.
 
         for e in edges.keys():
             for period in edges[e]['periods']:
-                src = str(e[0]).replace("&", "&amp;").replace('"', '')
-                tgt = str(e[1]).replace("&", "&amp;").replace('"', '')
+                src = unicode(e[0]).replace("&", "&amp;").replace('"', '')
+                tgt = unicode(e[1]).replace("&", "&amp;").replace('"', '')
                 start = period['start']
                 end = period['end'] + 1
-                
+
                 # Edge element.
                 f.write(est.format(src, tgt, start, end))
 
                 for i in sorted(edges[e].keys()):
                     if period['start'] <= i <= period['end']:
-                        for attr, value in edges[e][i].iteritems():
+                        for attr, value in edges[e][i].items():
                             # Type names are slightly different in XGMML.
                             dtype = _safe_type(value)
-                            
+
                             # Edge attribute element.
                             f.write(eas.format(attr, dtype, value, i, i+1)
                                        .replace("&", "&amp;"))
-            
+
                 f.write(ene)    # End edge element.
         f.write(eg) # End graph element.
-        
+
 def _strip_list_attributes(graph_):
     """Converts lists attributes to strings for all nodes and edges in G."""
     for n_ in graph_.nodes(data=True):
-        for k,v in n_[1].iteritems():
+        for k,v in n_[1].items():
             if type(v) is list:
-                graph_.node[n_[0]][k] = str(v)
+                graph_.node[n_[0]][k] = unicode(v)
     for e_ in graph_.edges(data=True):
-        for k,v in e_[2].iteritems():
+        for k,v in e_[2].items():
             if type(v) is list:
-                graph_.edge[e_[0]][e_[1]][k] = str(v)
+                graph_.edge[e_[0]][e_[1]][k] = unicode(v)
 
     return graph_
 
