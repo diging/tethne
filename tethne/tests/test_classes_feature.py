@@ -5,6 +5,10 @@ import unittest
 
 from tethne.classes.feature import Feature, FeatureSet
 
+import logging
+logger = logging.getLogger('feature')
+logger.setLevel('DEBUG')
+
 
 class TestFeature(unittest.TestCase):
     def test_init_datum(self):
@@ -92,16 +96,27 @@ class TestFeatureSet(unittest.TestCase):
         Initialize with no Features.
         """
 
+        logger.debug('FeatureSet should have 0 Features')
         try:
             featureset = FeatureSet()
             featureset.__init__()
         except:
             self.fail()
 
+    def test_empty_feature(self):
+        feature1 = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
+        feature2 = Feature([])
+        try:
+            featureset = FeatureSet({'p1': feature1, 'p2': feature2})
+        except Exception as E:
+            self.fail(E.message)       
+
     def test_init_features(self):
         """
         Initialize with multiple features.
         """
+
+        logger.debug('FeatureSet should have 2 Features')
         feature1 = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
         feature2 = Feature([('bob', 3), ('jane', 1), ('fido', 1)])
         featureset = FeatureSet({'p1': feature1, 'p2': feature2})
@@ -117,6 +132,7 @@ class TestFeatureSet(unittest.TestCase):
         self.assertEqual(len(featureset.unique), expected)
 
         self.assertEqual(featureset.documentCount('bob'), 2)
+
         self.assertEqual(featureset.count('bob'), 6)
 
         self.assertIn('p1', featureset.papers_containing('bob'))
@@ -126,6 +142,7 @@ class TestFeatureSet(unittest.TestCase):
         """
         Initialize empty, then add a feature.
         """
+
         featureset = FeatureSet()
         feature = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
         featureset.add('p1', feature)

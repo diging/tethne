@@ -16,7 +16,8 @@ PACKAGES = ['tethne',
             'tethne.model.corpus',
             'tethne.networks',
             'tethne.readers',
-            'tethne.writers']
+            'tethne.writers',
+            'tethne.plot']
 
 import sys
 if sys.version_info[0] == 2:
@@ -47,7 +48,7 @@ setup(
         "pdfdocument",
         pdfminer,
         "python-magic==0.4.6",
-        "slate==0.3",
+        "slate",
         "Unidecode==0.4.17",
         "nltk",
     ],

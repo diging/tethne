@@ -67,7 +67,8 @@ class TestCorpus(unittest.TestCase):
     def test_distribution(self):
         corpus = Corpus(self.papers, index_by='wosid')
         values = corpus.distribution()
-        self.assertListEqual(values, [5, 5])
+        self.assertListEqual(values[0], [2012, 2013])
+        self.assertListEqual(values[1], [5, 5])
 
     def test_feature_distribution(self):
         corpus = Corpus(self.papers, index_by='wosid')

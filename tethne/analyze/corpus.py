@@ -244,10 +244,6 @@ def sigma(G, corpus, featureset_name, **kwargs):
     feature : str
         Name of a featureset in `corpus`.
 
-    Returns
-    -------
-    G : :class:`.GraphCollection`
-        A graph collection updated with ``sigma`` node attributes.
 
     Examples
     --------
@@ -280,6 +276,8 @@ def sigma(G, corpus, featureset_name, **kwargs):
        :align: center
 
     """
+    if 'date' not in corpus.indices:
+        corpus.index('date')
 
     B = burstness(corpus, featureset_name, features=G.nodes(), **kwargs)
 

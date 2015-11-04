@@ -8,7 +8,7 @@ import sys
 PYTHON_3 = sys.version_info[0] == 3
 if PYTHON_3:
     unicode = str
-    
+
 
 class Paper(object):
     """
@@ -45,6 +45,11 @@ class Paper(object):
         ayjid : str
         """
 
+        try:
+            return self._ayjid
+        except:
+            pass
+
         if hasattr(self, 'authors_init'):
                 al, ai = self.authors_init[0]
         else:
@@ -59,6 +64,7 @@ class Paper(object):
             journal = ''
 
         ayjid = ' '.join([al, ai.replace(' ',''), date, journal]).strip()
+        self._ayjid = ayjid
         return ayjid
 
 

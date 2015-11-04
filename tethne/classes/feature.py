@@ -5,7 +5,20 @@ Classes in this module provide structures for additional data about
 
 from collections import Counter, defaultdict
 
-from tethne.utilities import _iterable, argsort
+from tethne.utilities import _iterable
+try:    # Might as well use numpy if it is available.
+    import numpy as np
+    argsort = lambda l: list(np.argsort(l))
+except ImportError:
+    from tethne.utilities import argsort
+
+import logging
+logger = logging.getLogger('feature')
+logger.setLevel('WARNING')
+
+
+from itertools import chain
+from collections import Counter, defaultdict
 
 import sys
 PYTHON_3 = sys.version_info[0] == 3
@@ -314,15 +327,18 @@ class Feature(list):
 
 class BaseFeatureSet(object):
     def __init__(self, features={}):
+        self._setUp()
+
+        for paper, feature in features.items():
+            self.add(paper, feature)
+
+    def _setUp(self):
         self.index = {}
         self.lookup = {}
         self.counts = {}
         self.documentCounts = {}
         self.features = {}
         self.with_feature = {}
-
-        for paper, feature in features.items():
-            self.add(paper, feature)
 
     def __getitem__(self, key):
         try:
@@ -354,8 +370,12 @@ class BaseFeatureSet(object):
         return len(self.features)
 
     def count(self, elem):
+        logger.debug(u'Get count for {0}'.format(elem))
         if elem in self.lookup:
-            return self.counts[self.lookup[elem]]
+            i = self.lookup[elem]
+            count = self.counts[i]
+            logger.debug(u'Found elem %s with index %i and count %f' % (elem, i, count))
+            return count
         else:
             return 0.
 
@@ -482,6 +502,39 @@ class FeatureSet(BaseFeatureSet):
     """
     A :class:`.FeatureSet` organizes multiple :class:`.Feature` instances.
     """
+
+    def __init__(self, features={}):
+        self._setUp()
+
+        logger.debug(u'Initialize FeatureSet with %i features' % len(features))
+        self.features = features
+        allfeatures = [v for v in chain(*features.values())]
+        logger.debug('features: {0}; allfeatures: {1}'.format(len(features), len(allfeatures)))
+        if len(features) > 0 and len(allfeatures) > 0:
+            allfeatures_keys = zip(*allfeatures)[0]
+
+            for i, elem in enumerate(set(allfeatures_keys)):
+                self.index[i] = elem
+                self.lookup[elem] = i
+                logger.debug(u'Add feature {0} with index {1}'.format(elem, i))
+
+            self.counts = defaultdict(float)
+            for elem, v in allfeatures:
+                i = self.lookup[elem]
+                self.counts[i] += v
+            self.documentCounts = Counter([self.lookup[elem]
+                                           for elem
+                                           in allfeatures_keys])
+
+            self.with_feature = defaultdict(list)
+            for paper_id, counts in features.items():
+                try:
+                    for elem in zip(*counts)[0]:
+                        i = self.lookup[elem]
+                        self.with_feature[i].append(paper_id)
+                except IndexError:    # A Paper may not have any features.
+                    pass
+
 
     def transform(self, func):
         features = {}

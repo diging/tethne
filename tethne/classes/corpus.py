@@ -3,6 +3,7 @@ This module provides :class:`.Corpus`\.
 """
 
 from collections import Counter
+from itertools import chain
 import hashlib
 
 from tethne.classes.feature import FeatureSet, Feature, \
@@ -239,7 +240,8 @@ class Corpus(object):
         self.indices = {}
         self.features = {}
 
-        self.indexed_papers = {self._generate_index(paper): paper for paper in papers}
+        self.indexed_papers = {self._generate_index(paper): paper
+                               for paper in papers}
 
         if index_features:
             for feature_name in index_features:
@@ -420,7 +422,7 @@ class Corpus(object):
                 papers = self.indexed_papers[selector]
         return papers
 
-    def slice(self, window_size=1, step_size=1, cumulative=False):
+    def slice(self, window_size=1, step_size=1, cumulative=False, count_only=False, subcorpus=True):
         """
         Returns a generator that yields ``(key, subcorpus)`` tuples for
         sequential time windows.
@@ -481,7 +483,12 @@ class Corpus(object):
 
         while start <= end - (window_size - 1):
             selector = ('date', range(start, start + window_size, 1))
-            yield start, self.subcorpus(selector)
+            if count_only:
+                yield start, len(self.select(selector))
+            elif subcorpus:
+                yield start, self.subcorpus(selector)
+            else:
+                yield start, self.select(selector)
             if cumulative:
                 window_size += step_size
             else:
@@ -511,8 +518,8 @@ class Corpus(object):
         values = []
         keys = []
 
-        for key, subcorpus in self.slice(**slice_kwargs):
-            values.append(len(subcorpus))
+        for key, size in self.slice(count_only=True, **slice_kwargs):
+            values.append(size)
             keys.append(key)
         return keys, values
 
@@ -553,9 +560,24 @@ class Corpus(object):
 
         values = []
         keys = []
+        fset = self.features[featureset_name]
 
-        for key, subcorpus in self.slice(**slice_kwargs):
-            values.append(subcorpus.features[featureset_name].count(feature))
+        for key, papers in self.slice(subcorpus=False, **slice_kwargs):
+
+            allfeatures = [v for v in chain(*[fset.features[self._generate_index(p)] for p in papers])]
+
+            if len(allfeatures) < 1:
+
+                values.append(0)
+                continue
+
+            count = 0.
+            for elem, v in allfeatures:
+                if elem != feature:
+                    continue
+                i = fset.lookup[elem]
+                count += v
+            values.append(count)
             keys.append(key)
         return keys, values
 
@@ -610,10 +632,10 @@ class Corpus(object):
         # Transfer FeatureSets.
         for featureset_name, featureset in self.features.items():
             if featureset_name not in subcorpus:
-                new_featureset = FeatureSet()
-                for k, f in featureset.items():
-                    if k in subcorpus.indexed_papers:
-                        new_featureset.add(k, f)
-                subcorpus.features[featureset_name] = new_featureset
+                shared_papers = list(set(featureset.features.keys()) & \
+                                     set(subcorpus.indexed_papers.keys()))
+                fset = FeatureSet({k: featureset.features[k]
+                                   for k in shared_papers})
+                subcorpus.features[featureset_name] = fset
 
         return subcorpus
