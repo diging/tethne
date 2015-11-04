@@ -407,7 +407,7 @@ class Corpus(object):
                 papers = self.indexed_papers[selector]
         return papers
 
-    def slice(self, window_size=1, step_size=1):
+    def slice(self, window_size=1, step_size=1, cumulative=False):
         """
         Returns a generator that yields ``(key, subcorpus)`` tuples for
         sequential time windows.
@@ -465,10 +465,14 @@ class Corpus(object):
 
         start = min(self.indices['date'].keys())
         end = max(self.indices['date'].keys())
+
         while start <= end - (window_size - 1):
             selector = ('date', range(start, start + window_size, 1))
             yield start, self.subcorpus(selector)
-            start += step_size
+            if cumulative:
+                window_size += step_size
+            else:
+                start += step_size
 
     def distribution(self, **slice_kwargs):
         """
@@ -491,7 +495,13 @@ class Corpus(object):
         -------
         list
         """
-        return [len(papers[1]) for papers in self.slice(**slice_kwargs)]
+        values = []
+        keys = []
+
+        for key, subcorpus in self.slice(**slice_kwargs):
+            values.append(len(subcorpus))
+            keys.append(key)
+        return keys, values
 
     def feature_distribution(self, featureset_name, feature, mode='counts',
                              **slice_kwargs):
