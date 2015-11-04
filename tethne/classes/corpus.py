@@ -4,7 +4,7 @@ This module provides :class:`.Corpus`\.
 
 from collections import Counter
 import hashlib
-
+import sys
 from tethne.classes.feature import FeatureSet, Feature, \
                                    StructuredFeatureSet, StructuredFeature
 from tethne.utilities import _iterable, argsort
@@ -233,8 +233,12 @@ class Corpus(object):
         self.slices = []
         self.indices = {}
         self.features = {}
-
-        self.indexed_papers = {self._generate_index(paper): paper for paper in papers}
+        print "-------------------"
+        try:
+            self.indexed_papers = {self._generate_index(paper): paper for paper in papers}
+        except:
+            print "-----"
+            sys.exit(0)
 
         if index_features:
             for feature_name in index_features:
@@ -269,6 +273,7 @@ class Corpus(object):
 
                 m.update(hashable)
                 setattr(paper, 'hashIndex', m.hexdigest())
+
             return getattr(paper, 'hashIndex')
         return getattr(paper, self.index_by)    # Identifier is already available.
 
