@@ -575,8 +575,10 @@ class Corpus(object):
             for elem, v in allfeatures:
                 if elem != feature:
                     continue
-                i = fset.lookup[elem]
-                count += v
+                if mode == 'counts':
+                    count += v
+                else:
+                    count += 1.
             values.append(count)
             keys.append(key)
         return keys, values
