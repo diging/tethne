@@ -207,11 +207,10 @@ class FTParser(IterParser):
         tag : str
         data :
         """
-        #line = self.buffer.readline()
-        line = self.buffer.read().rstrip()
+        line = self.buffer.readline()
+
         while line == '\n':       # Skip forward to the next line with content.
-            #line = self.buffer.readline()
-            line = self.buffer.read().rstrip()
+            line = self.buffer.readline()
 
         if line == '':            # End of file.
             self.at_eof = True

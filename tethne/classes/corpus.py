@@ -234,7 +234,6 @@ class Corpus(object):
         self.indices = {}
         self.features = {}
         print "-------------------"
-
         self.indexed_papers = {self._generate_index(paper): paper for paper in papers}
 
 
@@ -273,6 +272,10 @@ class Corpus(object):
                 setattr(paper, 'hashIndex', m.hexdigest())
 
             return getattr(paper, 'hashIndex')
+        identifier = getattr(paper,self.index_by)
+        if isinstance(identifier,list):
+          identifier = getattr(paper,self.index_by)[0]
+        print type(getattr(paper, self.index_by))
         return getattr(paper, self.index_by)    # Identifier is already available.
 
     def index_feature(self, feature_name, tokenize=lambda x: x, structured=False):
