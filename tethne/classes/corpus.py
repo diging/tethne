@@ -234,11 +234,9 @@ class Corpus(object):
         self.indices = {}
         self.features = {}
         print "-------------------"
-        try:
-            self.indexed_papers = {self._generate_index(paper): paper for paper in papers}
-        except:
-            print "-----"
-            sys.exit(0)
+
+        self.indexed_papers = {self._generate_index(paper): paper for paper in papers}
+
 
         if index_features:
             for feature_name in index_features:
