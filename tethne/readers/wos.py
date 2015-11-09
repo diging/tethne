@@ -362,4 +362,5 @@ def read(path, corpus=True, index_by='wosid', **kwargs):
 
     if corpus:
         return Corpus(papers, index_by=index_by,  **kwargs)
+        #return Corpus(papers,  **kwargs)
     return papers
