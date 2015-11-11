@@ -85,8 +85,10 @@ def cooccurrence(corpus_or_featureset, featureset_name=None, min_weight=1,
         nattrs[n]['count'] = featureset.count(n)
         nattrs[n]['documentCount'] = featureset.documentCount(n)
 
-    return _generate_graph(nx.Graph, pairs, edge_attrs=eattrs,
-                           node_attrs=nattrs, min_weight=min_weight)
+    graph = _generate_graph(nx.Graph, pairs, edge_attrs=eattrs,
+                            node_attrs=nattrs, min_weight=min_weight)
+
+    return graph
 
 
 def coupling(corpus_or_featureset, featureset_name=None,

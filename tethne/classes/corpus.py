@@ -563,8 +563,11 @@ class Corpus(object):
         fset = self.features[featureset_name]
 
         for key, papers in self.slice(subcorpus=False, **slice_kwargs):
-
-            allfeatures = [v for v in chain(*[fset.features[self._generate_index(p)] for p in papers])]
+            allfeatures = [v for v
+                           in chain(*[fset.features[self._generate_index(p)]
+                                      for p in papers
+                                      if self._generate_index(p)
+                                      in fset.features])]
 
             if len(allfeatures) < 1:
 

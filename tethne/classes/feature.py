@@ -322,6 +322,7 @@ class Feature(list):
         return [self[i] for i in argsort(list(zip(*self))[1])[::-1][:topn]]
 
     def value(self, element):
+
         return dict(self)[element]
 
 
@@ -503,7 +504,9 @@ class FeatureSet(BaseFeatureSet):
     A :class:`.FeatureSet` organizes multiple :class:`.Feature` instances.
     """
 
-    def __init__(self, features={}):
+    def __init__(self, features=None):
+        if not features:
+            features = dict()
         self._setUp()
 
         logger.debug(u'Initialize FeatureSet with %i features' % len(features))

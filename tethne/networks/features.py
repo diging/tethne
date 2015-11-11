@@ -19,7 +19,11 @@ import warnings
 from tethne.networks.base import cooccurrence, coupling, multipartite
 
 def _nPMI(p_ij, p_i, p_j):
-    return (log(p_ij/(p_i*p_j)))/(-1.*log(p_ij))
+    lower = (-1.*log(p_ij))
+    joint = (p_i*p_j)
+    if lower == 0. or joint == 0.:
+        return 0.
+    return (log(p_ij/joint))/(-1.*log(p_ij))
 
 
 def feature_cooccurrence(corpus, featureset_name, min_weight=1,
@@ -52,8 +56,8 @@ def mutual_information(corpus, featureset_name, min_weight=0.9,
     fset = corpus.features[featureset_name]
     for s, t, attrs in graph.edges(data=True):
         p_ij = float(attrs['weight'])/len(corpus.papers)
-        p_i = fset.documentCounts[fset.lookup[s]]/len(corpus.papers)
-        p_j = fset.documentCounts[fset.lookup[t]]/len(corpus.papers)
+        p_i = float(fset.documentCounts[fset.lookup[s]])/len(corpus.papers)
+        p_j = float(fset.documentCounts[fset.lookup[t]])/len(corpus.papers)
         MI = _nPMI(p_ij, p_i, p_j)
         if MI >= min_weight:
             mgraph.add_edge(s, t, nPMI=MI, **attrs)

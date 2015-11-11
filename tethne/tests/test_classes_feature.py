@@ -7,7 +7,7 @@ from tethne.classes.feature import Feature, FeatureSet
 
 import logging
 logger = logging.getLogger('feature')
-logger.setLevel('DEBUG')
+logger.setLevel('ERROR')
 
 
 class TestFeature(unittest.TestCase):
@@ -109,7 +109,7 @@ class TestFeatureSet(unittest.TestCase):
         try:
             featureset = FeatureSet({'p1': feature1, 'p2': feature2})
         except Exception as E:
-            self.fail(E.message)       
+            self.fail(E.message)
 
     def test_init_features(self):
         """
@@ -143,6 +143,26 @@ class TestFeatureSet(unittest.TestCase):
         Initialize empty, then add a feature.
         """
 
+        featureset = FeatureSet()
+        feature = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
+        featureset.add('p1', feature)
+
+        self.assertEqual(len(featureset.features), 1)
+
+        expected = len(feature.unique)
+
+        self.assertEqual(len(featureset.index), expected)
+        self.assertEqual(len(featureset.lookup), expected)
+        self.assertEqual(len(featureset.counts), expected)
+        self.assertEqual(len(featureset.documentCounts), expected)
+        self.assertEqual(len(featureset.unique), expected)
+
+        self.assertIn('p1', featureset.papers_containing('bob'))
+
+        self.assertEqual(featureset.documentCount('bob'), 1)
+        self.assertEqual(featureset.count('bob'), 3)
+
+        # Do it again! There was some weirdness with the FeatureSet constructor.
         featureset = FeatureSet()
         feature = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
         featureset.add('p1', feature)
