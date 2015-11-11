@@ -81,37 +81,40 @@ def to_dxgmml(graphcollection, path): # [#61510094]
 
     # Build node list.
     current = []
-    for k in sorted(graphcollection.graphs.keys()):
+    for k in sorted(graphcollection.keys()):
         graph = _strip_list_attributes(graphcollection[k])
         preceding = [ c for c in current ]
         current = []
         for n in graph.nodes(data=True):
-            if n[0] not in preceding:   # Looking for gaps in presence of node.
-                nodes[n[0]]['periods'].append( { 'start': k, 'end': k } )
+            n_ = graphcollection.node_index[n[0]]
+            if n_ not in preceding:   # Looking for gaps in presence of node.
+                nodes[n_]['periods'].append({'start': k, 'end': k})
             else:
-                if k > nodes[n[0]]['periods'][-1]['end']:
-                    nodes[n[0]]['periods'][-1]['end'] = k
-            current.append(n[0])
+                if k > nodes[n_]['periods'][-1]['end']:
+                    nodes[n_]['periods'][-1]['end'] = k
+            current.append(n_)
 
-            nodes[n[0]][k] = {}
+            nodes[n_][k] = {}
             for attr, value in n[1].items():
                 if type(value) is str:
                     value = value.replace("&", "&amp;").replace('"', '')
-                nodes[n[0]][k][attr] = value
+                nodes[n_][k][attr] = value
 
     # Build edge list.
     current = []
-    for k in sorted(graphcollection.graphs.keys()):
+    for k in sorted(graphcollection.keys()):
         graph = _strip_list_attributes(graphcollection[k])
         preceding = [ c for c in current ]
         current = []
         for e in graph.edges(data=True):
-            e_key = (e[0], e[1])
+            e_key = (graphcollection.node_index[e[0]],
+                     graphcollection.node_index[e[1]])
             if e_key not in preceding:   # Looking for gaps in presence of edge.
                 try:
                     edges[e_key]['periods'].append( { 'start': k, 'end': k } )
                 except KeyError:
-                    e_key = (e[1], e[0])
+                    e_key = (graphcollection.node_index[e[1]],
+                             graphcollection.node_index[e[0]])
                     edges[e_key]['periods'].append( { 'start': k, 'end': k } )
             else:
                 if k > edges[e_key]['periods'][-1]['end']:

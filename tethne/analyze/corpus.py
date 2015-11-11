@@ -15,6 +15,7 @@ import warnings
 
 from math import exp, log
 from collections import defaultdict
+from itertools import izip
 
 from tethne.utilities import argmin, mean
 
@@ -182,7 +183,8 @@ def feature_burstness(corpus, featureset_name, feature, k=5, normalize=True,
     dates = [min(corpus.indices['date'].keys()) - 1]    # Pad start.
     X_ = [1.]
 
-    for year, N in list(zip(*corpus.feature_distribution(featureset_name, feature))):
+    years, values = corpus.feature_distribution(featureset_name, feature)
+    for year, N in izip(years, values):
         if N == 0:
             continue
 
@@ -301,8 +303,6 @@ def sigma(G, corpus, featureset_name, B=None, **kwargs):
             if n in graph.nodes() and key in burst:
                 sigma[n] = ((centrality[n] + 1.) ** burst[key]) - 1.
                 attrs[n] = sigma[n]
-            else:
-                sigma[n] = 0.
 
         # Update graph with sigma values.
         nx.set_node_attributes(graph, 'sigma', attrs)
@@ -320,4 +320,4 @@ def sigma(G, corpus, featureset_name, B=None, **kwargs):
     # We want to return results in the same format as burstness(); with node
     #  labels as keys; values are tuples ([years...], [sigma...]).
     return {n: list(zip(*G.node_history(G.node_lookup[n], 'sigma').items()))
-            for n in G.nodes()}
+            for n in B.keys()}

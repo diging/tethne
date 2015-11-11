@@ -47,9 +47,14 @@ class TestBurstness(unittest.TestCase):
         self.corpus = read(datapath, index_by='wosid')
         self.corpus.index('date')
 
-    def test_feature_burstness(self):
+    def test_feature_burstness_(self):
+        B = feature_burstness(self.corpus, 'citations', 'BOSSDORF O 2005 OECOLOGIA')
+
+
+    def test_burstness(self):
 
         B = burstness(self.corpus, 'citations')
+
         self.assertEqual(len(B), 20)
 
         for k, B_ in B.items():
@@ -67,7 +72,6 @@ class TestSigma(unittest.TestCase):
 
     def test_sigma(self):
         Sigma = sigma(self.G, self.corpus, 'citations')
-        print Sigma
 
         # Updates to the GraphCollection.
         for node, attrs in self.G.nodes(data=True):

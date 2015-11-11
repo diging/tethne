@@ -570,8 +570,8 @@ class Corpus(object):
                                       in fset.features])]
 
             if len(allfeatures) < 1:
-
-                values.append(0)
+                keys.append(key)
+                values.append(0.)
                 continue
 
             count = 0.
