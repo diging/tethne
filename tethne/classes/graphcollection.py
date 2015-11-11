@@ -336,6 +336,8 @@ class GraphCollection(dict):
         dict
 
         """
+
+        # Find the analysis method, if possible.
         if hasattr(method_name, '__iter__'):
             mpath = method_name
             if type(mpath) in [str, unicode]:
@@ -354,9 +356,13 @@ class GraphCollection(dict):
         else:
             raise AttributeError('No such method in NetworkX')
 
+        # Farm out the analysis using ``mapper``. This allows us to use
+        #  multiprocessing in the future, or to add pre- or post-processing
+        #  routines.
         keys, graphs = zip(*self.items())
         results = mapper(method, graphs, **kwargs)
 
+        # Group the results by graph.
         by_graph = dict(zip(keys, results))
 
         # Invert results.
@@ -367,7 +373,15 @@ class GraphCollection(dict):
                     inverse[n].update({gname: val})
 
         if type(list(by_graph.values())[0]) is dict:
-            if type(list(list(by_graph.values())[0].keys())[0]) is tuple:
+            # Look for a result set that we can inspect.
+            i = 0
+            while True:
+                if len(by_graph.values()[i]) > 0:
+                    inspect = by_graph.values()[i]
+                    break
+                i += 1
+
+            if type(list(inspect.keys())[0]) is tuple:
                 # Results correspond to edges.
                 by_edge = dict(inverse)
 

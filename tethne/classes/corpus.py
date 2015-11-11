@@ -483,12 +483,16 @@ class Corpus(object):
 
         while start <= end - (window_size - 1):
             selector = ('date', range(start, start + window_size, 1))
-            if count_only:
-                yield start, len(self.select(selector))
-            elif subcorpus:
-                yield start, self.subcorpus(selector)
+            if cumulative:
+                year = start + window_size
             else:
-                yield start, self.select(selector)
+                year = start
+            if count_only:
+                yield year, len(self.select(selector))
+            elif subcorpus:
+                yield year, self.subcorpus(selector)
+            else:
+                yield year, self.select(selector)
             if cumulative:
                 window_size += step_size
             else:
