@@ -1,5 +1,3 @@
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 import networkx as nx
 import warnings
 
@@ -41,6 +39,7 @@ def plot_burstness(corpus, B, **kwargs):
     """
     try:
         import matplotlib.pyplot as plt
+        import matplotlib.patches as mpatches
     except ImportError:
         raise RuntimeError('This method requires the package matplotlib.')
 
@@ -151,6 +150,12 @@ def plot_sigma(corpus, sigma, nodes=None, **kwargs):
        :width: 600
        :align: center
     """
+
+    try:
+        import matplotlib.pyplot as plt
+        import matplotlib.patches as mpatches
+    except ImportError:
+        raise RuntimeError('This method requires the package matplotlib.')
 
     if nodes == 'all':
         nodes = sigma.keys()
