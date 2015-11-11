@@ -155,6 +155,7 @@ class GraphCollection(dict):
 
         dict.__setitem__(self, name, indexed_graph)
 
+
     def index(self, name, graph):
         """
         Index any new nodes in `graph`, and relabel the nodes in `graph` using
