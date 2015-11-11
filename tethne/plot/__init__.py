@@ -40,8 +40,7 @@ def plot_burstness(corpus, B, **kwargs):
     width = years[1] - years[0]
     height = 1.0
 
-    if fig is None:
-        fig = plt.figure(figsize=(10,len(B)/4.))
+    fig = plt.figure(figsize=(10,len(B)/4.))
 
     f = 1
     axes = {}
@@ -56,8 +55,8 @@ def plot_burstness(corpus, B, **kwargs):
             ax.set_xticklabels([])
 
         # Block out years until first occurrence of feature.
-        rect = mpatches.Rectangle( (min(years),0), sorted(x)[1]-min(years),
-                                        height, fill=True, linewidth=0.0    )
+        rect = mpatches.Rectangle((min(years), 0), sorted(x)[1]-min(years),
+                                   height, fill=True, linewidth=0.0)
         rect.set_facecolor('black')
         rect.set_alpha(0.3)
         ax.add_patch(rect)
@@ -72,8 +71,8 @@ def plot_burstness(corpus, B, **kwargs):
             xy = (d, 0.)
 
             state = y[i]
-            rect = mpatches.Rectangle(  xy, width, height, fill=True,
-                                                           linewidth=0.0    )
+            rect = mpatches.Rectangle(xy, width, height,
+                                      fill=True, linewidth=0.0)
             rect.set_facecolor(color)
             rect.set_alpha(state)
             ax.add_patch(rect)
@@ -84,10 +83,10 @@ def plot_burstness(corpus, B, **kwargs):
     plt.subplots_adjust(left=0.5)
     fig.tight_layout(h_pad=0.25)
 
-    return fig
+    plt.show()
 
 
-def plot_sigma(corpus, sigma, **kwargs):
+def plot_sigma(corpus, sigma, nodes=None, **kwargs):
     """
     Plot sigma values for the ``topn`` most influential nodes.
 
@@ -141,26 +140,20 @@ def plot_sigma(corpus, sigma, **kwargs):
        :align: center
     """
 
-    nodes = sigma.keys()
-    histories = nodes
+    if nodes == 'all':
+        nodes = sigma.keys()
 
+    # Display parameters.
     color = kwargs.get('color', 'red')
-
     years = sorted(corpus.indices['date'].keys())
     width = years[1] - years[0] # Get width based on slices.
     height = 1.0
 
-    # Get node histories for sigma.
-    histories = {}
-    if flist is not None:
-        nodes = flist
+    sort_by = kwargs.get('sort_by', 'max')
+    perslice = kwargs.get('perslice', False)
+    topn = kwargs.get('topn', 20)
 
-    # for node in nodes:
-    #     histories[node] = G[node]
-
-    if flist is not None:
-        these_nodes = flist     # Use provided list of nodes.
-    else:
+    if not nodes:
         # Get only the topn most significant papers.
         include = []
         if sort_by == 'max':
@@ -169,59 +162,60 @@ def plot_sigma(corpus, sigma, **kwargs):
                 norm_by = 0.
 
                 # Organize values in a way that makes selection easier.
-                for node in nodes:
-                    if max(histories[node].values()) == 0.:
+                for node, history in sigma.iteritems():
+                    years, values = history
+                    if max(values) == 0.:
                         continue
-                    for year,val in histories[node].iteritems():
-                        try:
-                            vals[year][node] = val
-                        except KeyError:
-                            vals[year] = { node:val }
+                    for year, val in zip(years, values):
+                        if year not in vals:
+                            vals[year] = {}
+                        vals[year][node] = val
 
                 # Get the maximum values for each slice.
-                for year in vals.keys():
-                    vals_ = numpy.array(vals[year].values())
-                    indices = vals_.argsort()[-topn:][::-1]
-                    include += [ vals[year].keys()[i] for i in indices ]
-                    if numpy.max(vals_) > norm_by:
-                        norm_by = numpy.max(vals_)
+                for year, node_values in vals.iteritems():
+                    indices = argsort(node_values.values())[-topn:][::-1]
+                    include += [node_values.keys()[i] for i in indices]
+                    max_value = max(node_values.values())
+                    if max_value > norm_by:
+                        norm_by = max_value
 
             else:   # Get topn overall.
-                maxes = numpy.array([ max(v.values()) for v
-                                        in histories.values() ])
-                indices = maxes.argsort()[-topn:][::-1]
-                include = [ histories.keys()[i] for i in indices ]
-                norm_by = numpy.max(maxes)
+                maxes = [max(v[1]) for v in sigma.values() ]
+                indices = argsort(maxes)[-topn:][::-1]
+                include = [sigma.keys()[i] for i in indices]
+                norm_by = max(maxes)
 
         # Nodes to include.
-        these_nodes = [ node for node in nodes
-                            if max(histories[node].values()) > 0
-                                and node in include ]
+        nodes = [node for node, values in sigma.iteritems()
+                 if max(values[1]) > 0 and node in include]
 
-    if fig is None: # Create a new Figure instance.
-        fig = plt.figure(figsize=(10,len(these_nodes)/4.))
+#     if fig is None: # Create a new Figure instance.
+    fig = plt.figure(figsize=(10, len(nodes)/4.))
 
     # Plot!
     f = 1   # Current subplot.
     axes = {}
-    x_min = min([min(v.keys()) for v in histories.values()])
 
-    for node in these_nodes:
-        x = sorted(histories[node].keys())
-        y = numpy.array([ histories[node][i] for i in x ])/norm_by
+    # Earliest year for which we have values.
+    x_min = min([min(years) for years, values in sigma.values()])
 
-        ax = fig.add_subplot(len(these_nodes),1,f)
+    for node in nodes:
+        x_order = argsort(sigma[node][0])
+        x = sorted(sigma[node][0])
+        y = [sigma[node][1][i]/norm_by for i in x_order]
+
+        ax = fig.add_subplot(len(nodes), 1, f)
         f+=1
         ax.set_yticks([])
         ax.set_xbound(x_min, max(years)+1)
 
         # Only show xticks on the bottom subplot.
-        if not f == len(these_nodes) + 1:
+        if not f == len(nodes) + 1:
             ax.set_xticklabels([])
 
         # Block out years until first occurrence of feature.
-        rect = mpatches.Rectangle( (min(years),0), sorted(x)[0]-min(years),
-                                        height, fill=True, linewidth=0.0    )
+        rect = mpatches.Rectangle((x_min, 0), x[0] - x_min,
+                                  height, fill=True, linewidth=0.0)
         rect.set_facecolor('black')
         rect.set_alpha(0.1)
         ax.add_patch(rect)
@@ -236,16 +230,16 @@ def plot_sigma(corpus, sigma, **kwargs):
             xy = (d, 0.)
 
             state = y[i]
-            rect = mpatches.Rectangle(  xy, width, height, fill=True,
-                                                           linewidth=0.0    )
+            rect = mpatches.Rectangle(xy, width, height,
+                                      fill=True, linewidth=0.0)
             rect.set_facecolor(color)
             rect.set_alpha(state + 0.1)
             ax.add_patch(rect)
 
-        ax.set_ylabel(  G.node_index[node], rotation=0,
-                             horizontalalignment='right',
-                             verticalalignment='center'   )
+        ax.set_ylabel(node, rotation=0,
+                      horizontalalignment='right',
+                      verticalalignment='center')
 
     plt.subplots_adjust(left=0.5)
     fig.tight_layout(h_pad=0.25)
-    return fig, G
+    plt.show()
