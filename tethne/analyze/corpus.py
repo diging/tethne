@@ -219,7 +219,7 @@ def feature_burstness(corpus, featureset_name, feature, k=5, normalize=True,
     return D[1:], [A[d] for d in D[1:]]
 
 
-def sigma(G, corpus, featureset_name, **kwargs):
+def sigma(G, corpus, featureset_name, B=None, **kwargs):
     """
     Calculate sigma (from `Chen 2009 <http://arxiv.org/pdf/0904.1439.pdf>`_)
     for all of the nodes in a :class:`.GraphCollection`\.
@@ -279,23 +279,37 @@ def sigma(G, corpus, featureset_name, **kwargs):
     if 'date' not in corpus.indices:
         corpus.index('date')
 
-    B = burstness(corpus, featureset_name, features=G.nodes(), **kwargs)
+    # Calculate burstness if not provided.
+    if not B:
+        B = burstness(corpus, featureset_name, features=G.nodes(), **kwargs)
 
-    B_ = {key:dict(list(zip(*values))) for key, values in B.items()}
-
-    Sigma = {}
+    Sigma = {}      # Keys are dates (from GraphCollection), values are
+                    #  node:sigma dicts.
     for key, graph in G.items():
         centrality = nx.betweenness_centrality(graph)
-        sigma = {}
-        for n in graph.nodes():
-            n_ = G.node_index[n]
-            sigma[n] = ( ( centrality[n] + 1 ) ** B_[n_][key] ) - 1.
+        sigma = {}  # Sigma values for all features in this year.
+        attrs = {}  # Sigma values for only those features in this graph.
+        for n_, burst in B.iteritems():
+            burst = dict(list(zip(*burst)))     # Reorganize for easier lookup.
 
-        # Update graph.
-        nx.set_node_attributes(graph, 'sigma', sigma)
+            # Nodes are indexed as integers in the GraphCollection.
+            n = G.node_lookup[n_]
+
+            # We have burstness values for years in which the feature ``n``
+            #  occurs, and we have centrality values for years in which ``n``
+            #  made it into the graph.
+            if n in graph.nodes() and key in burst:
+                sigma[n] = ((centrality[n] + 1.) ** burst[key]) - 1.
+                attrs[n] = sigma[n]
+            else:
+                sigma[n] = 0.
+
+        # Update graph with sigma values.
+        nx.set_node_attributes(graph, 'sigma', attrs)
         Sigma[key] = sigma
 
-    # Invert results.
+    # Invert results and update the GraphCollection.master_graph.
+    # TODO: is there a more efficient way to do this?
     inverse = defaultdict(dict)
     for gname, result in Sigma.items():
         if hasattr(result, '__iter__'):
@@ -303,5 +317,7 @@ def sigma(G, corpus, featureset_name, **kwargs):
                 inverse[n].update({gname: val})
     nx.set_node_attributes(G.master_graph, 'sigma', inverse)
 
-    return {G.node_index[n]:tuple(zip(*[(k, v[k]) for k in sorted(v.keys())]))
-            for n, v in inverse.items()}
+    # We want to return results in the same format as burstness(); with node
+    #  labels as keys; values are tuples ([years...], [sigma...]).
+    return {n: list(zip(*G.node_history(G.node_lookup[n], 'sigma').items()))
+            for n in G.nodes()}

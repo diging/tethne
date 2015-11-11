@@ -67,6 +67,7 @@ class TestSigma(unittest.TestCase):
 
     def test_sigma(self):
         Sigma = sigma(self.G, self.corpus, 'citations')
+        print Sigma
 
         # Updates to the GraphCollection.
         for node, attrs in self.G.nodes(data=True):
@@ -75,6 +76,8 @@ class TestSigma(unittest.TestCase):
                 self.assertIsInstance(value, float)
 
             self.assertIn(node, Sigma)
+
+
 
 
 if __name__ == '__main__':

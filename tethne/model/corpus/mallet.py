@@ -20,7 +20,7 @@ if PYTHON_3:
 
 import logging
 logging.basicConfig()
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('mallet')
 logger.setLevel('ERROR')
 
 from tethne import write_documents, Feature, FeatureSet
@@ -34,6 +34,7 @@ MALLET_PATH = os.path.join(TETHNE_PATH, 'bin', 'mallet-2.0.7')
 import sys
 if sys.version_info[0] > 2:
     xrange = range
+
 
 class LDAModel(Model):
     """
@@ -130,9 +131,7 @@ class LDAModel(Model):
 
     """
 
-    # mallet_path = os.path.join(os.getcwd(), 'tethne', 'bin', 'mallet-2.0.7')
     mallet_path = MALLET_PATH
-
 
     def __init__(self, *args, **kwargs):
         self.mallet_bin = os.path.join(self.mallet_path, "bin", "mallet")
@@ -203,6 +202,7 @@ class LDAModel(Model):
 
         self.ll = []
         self.num_iters = 0
+        logger.debug('run() with k={0} for {1} iterations'.format(self.Z, self.max_iter))
 
         prog = re.compile(u'\<([^\)]+)\>')
         ll_prog = re.compile(r'(\d+)')
@@ -231,10 +231,9 @@ class LDAModel(Model):
 
             # Keep track of modeling progress.
             try:
-                this_iter = float(prog.match(l).group(1))
-                self.ll_iters.append(this_iter)
-                progress = int(100. * this_iter/max_iter)
-                logger.debug('Modeling progress: {0}%.\r'.format( progress ),)
+                this_iter = float(prog.match(l).groups()[0])
+                progress = int(100. * this_iter/self.max_iter)
+                print 'Modeling progress: {0}%.\r'.format(progress),
             except AttributeError:  # Not every line will match.
                 pass
 
@@ -242,10 +241,8 @@ class LDAModel(Model):
         self.load()
 
     def load(self, **kwargs):
-        dt = kwargs.get('dt', self.dt)
-        wt = kwargs.get('dt', self.wt)
-        self._read_theta(dt)
-        self._read_phi(wt)
+        self._read_theta(kwargs.get('dt', self.dt))
+        self._read_phi(kwargs.get('wt', self.wt))
 
     def _read_theta(self, dt):
         """
@@ -287,8 +284,7 @@ class LDAModel(Model):
         """
 
         self.vocabulary = {}
-
-        self.phi = FeatureSet()
+        phi_features = {}
 
         # TODO: make this encoding-safe.
         with open(wt, "r") as f:
@@ -303,7 +299,10 @@ class LDAModel(Model):
                     topics[int(k)].append((w, int(c)))
 
         for k, data in topics.items():
-            self.phi.add(k, Feature(data).norm)
+            nfeature = Feature(data).norm
+
+            phi_features[k] = nfeature
+        self.phi = FeatureSet(phi_features)
 
     def topics_in(self, d, topn=5):
         """
