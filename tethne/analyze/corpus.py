@@ -144,7 +144,10 @@ def burstness(corpus, featureset_name, features=[], k=5, topn=20,
     #  top `topn` features.
     if len(features) == 0:
         T = corpus.top_features(featureset_name, topn=topn, perslice=perslice)
-        features = list(zip(*T))[0]
+        if perslice:
+            features = list(set([f[0] for flist in zip(*T)[1] for f in flist]))
+        else:
+            features = list(zip(*T))[0]
 
     B = {feature: feature_burstness(corpus, featureset_name, feature, k=k,
                                     normalize=normalize, **kwargs)

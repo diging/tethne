@@ -1,3 +1,14 @@
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+import networkx as nx
+import warnings
+
+from math import exp, log
+from collections import defaultdict
+from itertools import izip
+
+from tethne.utilities import argmin, mean, argsort
+
 
 def plot_burstness(corpus, B, **kwargs):
     """
@@ -55,7 +66,8 @@ def plot_burstness(corpus, B, **kwargs):
             ax.set_xticklabels([])
 
         # Block out years until first occurrence of feature.
-        rect = mpatches.Rectangle((min(years), 0), sorted(x)[1]-min(years),
+
+        rect = mpatches.Rectangle((min(years), 0), sorted(x)[0]-min(years),
                                    height, fill=True, linewidth=0.0)
         rect.set_facecolor('black')
         rect.set_alpha(0.3)
@@ -77,9 +89,9 @@ def plot_burstness(corpus, B, **kwargs):
             rect.set_alpha(state)
             ax.add_patch(rect)
 
-        ax.set_ylabel(  key, rotation=0,
-                             horizontalalignment='right',
-                             verticalalignment='center'   )
+        ax.set_ylabel(key, rotation=0,
+                      horizontalalignment='right',
+                      verticalalignment='center')
     plt.subplots_adjust(left=0.5)
     fig.tight_layout(h_pad=0.25)
 
