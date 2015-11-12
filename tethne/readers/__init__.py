@@ -51,16 +51,14 @@ Missing data here also results in the above keys being set to None.
 
 """
 
-# import wos
-# import dfr
-
-# from ..classes import Paper
+from tethne.classes.paper import Paper
 
 class DataError(Exception):
     def __init__(self, value):
         self.value = value
     def __str__(self):
         return repr(self.value)
+
 
 def merge(P1, P2, fields=['ayjid']):
     """
@@ -103,17 +101,18 @@ def merge(P1, P2, fields=['ayjid']):
             p_2 = P2[y]
             match = True
             for field in fields:
-                if p_1[field] != p_2[field]:
-                    match = False
-                    break
+                if hasattr(p_1, field) and hasattr(p_2, field):
+                    if getattr(p_1, field) != getattr(p_2, field):
+                        match = False
+                        break
 
             if match:   # Add values first from P2 paper, then from P1 paper.
                 new_p = Paper()
-                for key, value in p_2.items():
-                    if value != '' and value != None:
+                for key, value in p_2.__dict__.items():
+                    if value != '' and value is not None:
                         new_p[key] = value
-                for key, value in p_1.items():
-                    if value != '' and value != None:
+                for key, value in p_1.__dict__.items():
+                    if value != '' and value is not None:
                         new_p[key] = value
 
                 del_P1.append(x)    # Flag for deletion.

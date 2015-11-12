@@ -269,11 +269,16 @@ class Corpus(object):
                 # to generate unique identifier.
                 if paper.authors is None:
                     hashable = paper.title
-                elif len(paper.authors) == 0:
-                    hashable = paper.title
                 else:
-                    authors = list(zip(*paper.authors))[0]
-                    hashable = u' '.join(list([paper.title] + [l + f for l, f in authors]))
+                    if hasattr(paper, 'title'):
+                        title = paper.title
+                    else:
+                        title = ''
+                    if len(paper.authors) == 0:
+                        hashable = title
+                    else:
+                        authors = list(zip(*paper.authors))[0]
+                        hashable = u' '.join(list([title] + [l + f for l, f in authors]))
 
                 m.update(hashable.encode('utf-8'))
                 setattr(paper, 'hashIndex', m.hexdigest())
