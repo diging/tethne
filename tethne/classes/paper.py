@@ -52,20 +52,23 @@ class Paper(object):
 
         if hasattr(self, 'authors_init'):
                 al, ai = self.authors_init[0]
+        elif hasattr(self, 'authors_full'):
+                al, af = self.authors_init[0]
+                ai = u''.join([i[0] for i in af.split(' ')])
         else:
-            al, ai = '', ''
+            al, ai = u'', u''
         if hasattr(self, 'date'):
             date = unicode(self.date)
         else:
-            date = ''
+            date = u''
         if hasattr(self, 'journal'):
             journal = self.journal
         else:
-            journal = ''
+            journal = u''
 
-        ayjid = ' '.join([al, ai.replace(' ',''), date, journal]).strip()
+        ayjid = u' '.join([al, ai.replace(' ', ''), date, journal]).strip()
         self._ayjid = ayjid
-        return ayjid
+        return ayjid.upper()
 
 
     @property

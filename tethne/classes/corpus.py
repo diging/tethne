@@ -5,6 +5,7 @@ This module provides :class:`.Corpus`\.
 from collections import Counter
 from itertools import chain
 import hashlib
+from math import log
 
 from tethne.classes.feature import FeatureSet, Feature, \
                                    StructuredFeatureSet, StructuredFeature
@@ -18,7 +19,7 @@ if PYTHON_3:
 
 def _tfidf(f, c, C, DC, N):
     tf = float(c)
-    idf = np.log(float(N)/float(DC))
+    idf = log(float(N)/float(DC))
     return tf*idf
 
 

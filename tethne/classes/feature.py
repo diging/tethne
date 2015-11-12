@@ -540,6 +540,37 @@ class FeatureSet(BaseFeatureSet):
 
 
     def transform(self, func):
+        """
+        Apply a transformation to tokens in this :class:`.FeatureSet`\.
+
+        Parameters
+        ----------
+        func : callable
+            Should take four parameters: token, value in document (e.g. count),
+            value in :class:`.FeatureSet` (e.g. overall count), and document
+            count (i.e. number of documents in which the token occurs). Should
+            return a new numeric (int or float) value, or None. If value is 0
+            or None, the token will be excluded.
+
+        Returns
+        -------
+        :class:`.FeatureSet`
+
+        Examples
+        --------
+
+        Apply a tf*idf transformation.
+
+        .. code-block:: python
+
+           >>> words = corpus.features['words']
+           >>> def tfidf(f, c, C, DC):
+           ... tf = float(c)
+           ... idf = log(float(len(words.features))/float(DC))
+           ... return tf*idf
+           >>> corpus.features['words_tfidf'] = words.transform(tfidf)
+
+        """
         features = {}
         for i, feature in self.features.items():
             feature_ = []
@@ -551,6 +582,19 @@ class FeatureSet(BaseFeatureSet):
             features[i] = Feature(feature_)
 
         return FeatureSet(features)
+
+    def translate(self, func):
+        features = {}
+        for i, feature in self.features.items():
+            features_ = []
+            for f, v in feature:
+                t = self.lookup[f]
+                f_ = func(f, v, self.counts[t], self.documentCounts[t])
+                if f_:
+                    feature_.append((f_, v))
+            features[i] = Feature(feature_)
+        return FeatureSet(features)
+
 
     def as_matrix(self):
         """
