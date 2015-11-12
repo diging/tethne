@@ -252,7 +252,7 @@ def read(path, corpus=True, index_by='doi', **kwargs):
         raise ValueError('No DfR datasets found at %s' % path)
 
     if corpus:
-        corpus = Corpus(parser.data, index_by=index_by, **kwargs)
+        corpus = Corpus(papers, index_by=index_by, **kwargs)
 
         # Find and read N-gram data.
         for sname in os.listdir(path):
