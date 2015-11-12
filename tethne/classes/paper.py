@@ -67,7 +67,7 @@ class Paper(object):
             journal = u''
 
         ayjid = u' '.join([al, ai.replace(' ', ''), date, journal]).strip()
-        self._ayjid = ayjid
+        self._ayjid = ayjid.upper()
         return ayjid.upper()
 
 
