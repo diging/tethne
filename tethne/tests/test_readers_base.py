@@ -7,6 +7,7 @@ from tethne.readers.base import FTParser, XMLParser
 datapath = './tethne/tests/data/test.ft'
 xmldatapath = './tethne/tests/data/dfr/citations.XML'
 
+
 class TestXMLParser(unittest.TestCase):
     def test_start(self):
         parser = XMLParser(xmldatapath, autostart=False)

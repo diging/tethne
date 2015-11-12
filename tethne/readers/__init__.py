@@ -3,55 +3,18 @@ Methods for parsing bibliographic datasets.
 
 .. autosummary::
 
+   merge
    dfr
    wos
+   zotero
    scopus
 
-Each file reader provides methods to parse bibliographic data from a
-scholarly database (e.g. Web of Science or PubMed), resulting in a
-list of :class:`.Paper` instances containing as many as possible of
-the following keys (missing values are set to None):
-
-===========    =====    ===================================================
-Field          Type     Description
-===========    =====    ===================================================
-aulast         list     Authors' surnames, as a list.
-auinit         list     Authors' initials, as a list.
-institution    dict     Institutions with which the authors are affiliated.
-atitle         str      Article title.
-jtitle         str      Journal title or abbreviated title.
-volume         str      Journal volume number.
-issue          str      Journal issue number.
-spage          str      Starting page of article in journal.
-epage          str      Ending page of article in journal.
-date           int      Date of publication.
-abstract       str
-===========    =====    ===================================================
-
-These keys are associated with the meta data entries in the databases of
-organizations such as the International DOI Foundation and its Registration
-Agencies such as CrossRef and DataCite.
-
-In addition, :class:`.Paper` instances will contain keys with information
-relevant to the networks of interest for Tethne including:
-
-===========    =====    ======================================================
-Field          Type     Description
-===========    =====    ======================================================
-citations      list     List of minimum :class:`.Paper` instances for cited
-                        references.
-ayjid          str      First author's name (last, fi), publication year, and
-                        journal.
-doi            str      Digital Object Identifier.
-pmid           str      PubMed ID.
-wosid          str      Web of Science UT fieldtag.
-===========    =====    ======================================================
-
-Missing data here also results in the above keys being set to None.
+Each module in :mod:`tethne.readers` provides a ``read`` function that yields
+a :class:`.Corpus` instance.
 
 """
 
-from tethne.classes.paper import Paper
+from tethne import Paper, Corpus
 
 class DataError(Exception):
     def __init__(self, value):
@@ -59,72 +22,156 @@ class DataError(Exception):
     def __str__(self):
         return repr(self.value)
 
-
-def merge(P1, P2, fields=['ayjid']):
+# TODO: merge FeatureSets.
+def merge(corpus_1, corpus_2, match_by=['ayjid'], match_threshold=1.,
+          index_by='ayjid'):
     """
-    Combines two lists (P1 and P2) of :class:`.Paper` instances into a single
-    list, and attempts to merge papers with matching fields. Where there are
-    conflicts, values from :class:`.Paper` in P1 will be preferred.
+    Combines two :class:`.Corpus` instances.
+
+    The default behavior is to match :class:`.Paper`\s using the fields in
+    ``match_by``\. If several fields are specified, ``match_threshold`` can be
+    used to control how well two :class:`.Paper`\s must match to be combined.
+
+    Alternatively, ``match_by`` can be a callable object that accepts two
+    :class:`.Paper` instances, and returns bool. This allows for more complex
+    evaluations.
+
+    Where two matched :class:`.Paper`\s have values for the same field, values
+    from the :class:`.Paper` instance in ``corpus_1`` will always be  preferred.
 
     Parameters
     ----------
-    P1 : list
-        A list of :class:`.Paper` instances.
-    P2 : list
-        A list of :class:`.Paper` instances.
-    fields : list
-        Fields used to identify matching :class:`.Paper`
+    corpus_1 : :class:`.Corpus`
+        Values from this :class:`.Corpus` will always be preferred in cases of
+        conflict.
+    corpus_2 : :class:`.Corpus`
+    match_by : list or callable
+        Either a list of fields used to evaluate whether or not two
+        :class:`.Paper`\s should be combined, **OR** a callable that accepts
+        two :class:`.Paper` instances and returns bool.
+    match_threshold : float
+        if ``match_by`` is a list containing more than one field, specifies the
+        proportion of fields that must match for two :class:`.Paper` instances
+        to be combined.
+    index_by : str
+        The field to use as the primary indexing field in the new
+        :class:`.Corpus`\. Default is `ayjid`, since this is virtually always
+        available.
 
     Returns
     -------
-    combined : list
-        A list of :class:`.Paper` instances.
+    combined : :class:`.Corpus`
 
     Examples
     --------
 
     .. code-block:: python
 
-       >>> import tethne.readers as rd
-       >>> P1 = rd.wos.read("/Path/to/data1.txt")
-       >>> P2 = rd.dfr.read("/Path/to/DfR")
-       >>> papers = rd.merge(P1, P2, ['ayjid'])
+       >>> from tethne.readers import wos, dfr, merge
+       >>> wos_corpus = wos.read("/Path/to/data1.txt")
+       >>> dfr_corpus = dfr.read("/Path/to/DfR")
+       >>> corpus = merge(wos_corpus, dfr_corpus)
+
     """
 
+    def norm(value):
+        if type(value) in [str, unicode]:
+            return value.strip().lower()
+        return value
+
+
     combined = []
-    del_P1 = []
-    del_P2 = []
+    exclude_1 = []
+    exclude_2 = []
 
-    for x in xrange(len(P1)):
-        p_1 = P1[x]
-        for y in xrange(len(P2)):
-            p_2 = P2[y]
-            match = True
-            for field in fields:
-                if hasattr(p_1, field) and hasattr(p_2, field):
-                    if getattr(p_1, field) != getattr(p_2, field):
-                        match = False
-                        break
+    # Attempt to match Papers
+    for paper_1 in corpus_1:
+        for paper_2 in corpus_2:
+            # The user can provide their own matching logic. In this case,
+            #  match_threshold is ignored.
+            if callable(match_by):
+                match = match_by(paper_1, paper_2)
 
-            if match:   # Add values first from P2 paper, then from P1 paper.
-                new_p = Paper()
-                for key, value in p_2.__dict__.items():
-                    if value != '' and value is not None:
-                        new_p[key] = value
-                for key, value in p_1.__dict__.items():
-                    if value != '' and value is not None:
-                        new_p[key] = value
+            # Otherwise we match using the fields in ``match_by``.
+            else:
+                matches = 0.
+                for field in match_by:
+                    if hasattr(paper_1, field) and hasattr(paper_2, field):
+                        value_1 = norm(getattr(paper_1, field))
+                        value_2 = norm(getattr(paper_2, field))
+                        if value_1 == value_2:
+                            matches += 1.
+                match = matches/len(match_by) >= match_threshold
 
-                del_P1.append(x)    # Flag for deletion.
-                del_P2.append(y)
+            # Not every field needs to match precisely;
+            if match:
+                paper_new = Paper()
+                # We add values from paper_2 first, so that...
+                for key, value in paper_2.__dict__.items():
+                    if value not in ['', [], None]:
+                        paper_new[key] = value
 
-                combined.append(new_p)
+                # ...values from paper_1 will override values from paper_2.
+                for key, value in paper_1.__dict__.items():
+                    if value not in ['', [], None]:
+                        paper_new[key] = value
 
-    for x in xrange(len(P1)):
-        if x not in del_P1:
-            combined.append(P1[x])
-    for x in xrange(len(P2)):
-        if x not in del_P2:
-            combined.append(P2[x])
+                # We assemble all papers before creating a new Corpus, so that
+                #  indexing happens all in one shot.
+                combined.append(paper_new)
 
-    return combined
+                # Flag matched papers for exclusion.
+                exclude_1.append(corpus_1._generate_index(paper_1))
+                exclude_2.append(corpus_2._generate_index(paper_2))
+
+
+    # Include papers that were not matched.
+    combined += [paper for paper in corpus_1
+                 if corpus_1._generate_index(paper) not in exclude_1]
+    combined += [paper for paper in corpus_2
+                 if corpus_2._generate_index(paper) not in exclude_2]
+
+    # Here indexing happens all at once, with the new ``index_by`` field.
+    corpus = Corpus(combined, index_by=index_by)
+
+    featuresets = {}
+    for featureset_name, featureset_1 in corpus_1.features.iteritems():
+        # We avoid FeatureSets that were generated during the indexing process
+        #  (e.g. 'citations', 'authors').
+        if featureset_name in featuresets or featureset_name in corpus.features:
+            continue
+
+        features = {}
+
+        # Can be FeatureSet or StructuredFeatureSet.
+        fclass = type(featureset_1)
+        if featureset_name in corpus_2.features:
+            featureset_2 = corpus_2.features[featureset_name]
+            for index, feature in featureset_2.items():
+                features[getattr(corpus_2[index], index_by)] = feature
+
+        # Features from corpus_1 will be preferred over those from corpus_2.
+        for index, feature in featureset_1.items():
+            features[getattr(corpus_1[index], index_by)] = feature
+
+        featuresets[featureset_name] = fclass(features)
+
+    # FeatureSets unique to corpus_2.
+    for featureset_name, featureset_2 in corpus_2.features.iteritems():
+        # We avoid FeatureSets that were generated during the indexing process
+        #  (e.g. 'citations', 'authors').
+        if featureset_name in featuresets or featureset_name in corpus.features:
+            continue
+
+        features = {}
+
+        # Can be FeatureSet or StructuredFeatureSet.
+        fclass = type(featureset_2)
+        for index, feature in featureset_2.items():
+            features[getattr(corpus_2[index], index_by)] = feature
+
+        featuresets[featureset_name] = fclass(features)
+
+    corpus.features.update(featuresets)
+
+    return corpus
