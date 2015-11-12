@@ -53,7 +53,7 @@ class Paper(object):
         if hasattr(self, 'authors_init'):
                 al, ai = self.authors_init[0]
         elif hasattr(self, 'authors_full'):
-                al, af = self.authors_init[0]
+                al, af = self.authors_full[0]
                 ai = u''.join([i[0] for i in af.split(' ')])
         else:
             al, ai = u'', u''
