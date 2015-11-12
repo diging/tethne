@@ -207,7 +207,7 @@ def _get_citation_filename(basepath):
             return fname
 
 
-def read(path, corpus=True, index_by='doi', **kwargs):
+def read(path, corpus=True, index_by='doi', load_ngrams=True, **kwargs):
     """
     Yields :class:`.Paper` s from JSTOR DfR package.
 
@@ -234,6 +234,8 @@ def read(path, corpus=True, index_by='doi', **kwargs):
     """
 
     citationfname = _get_citation_filename(path)
+    features = {}
+    featureset_types = {}
 
     papers = []
     if citationfname:   # Valid DfR dataset.
@@ -242,11 +244,19 @@ def read(path, corpus=True, index_by='doi', **kwargs):
 
     else:   # Possibly a directory containing several DfR datasets?
         papers = []
+
         # Search for DfR datasets in subdirectories.
         for dirpath, dirnames, filenames in os.walk(path):
             citationfname = _get_citation_filename(dirpath)
             if citationfname:
-                papers += read(dirpath, corpus=False)
+                subcorpus = read(dirpath, index_by=index_by)
+                papers += subcorpus.papers
+                for featureset_name, featureset in subcorpus.features.items():
+                    if featureset_name not in features:
+                        features[featureset_name] = {}
+                    features[featureset_name].update(featureset.items())
+                    featureset_types[featureset_name] = type(featureset)
+        load_ngrams = False
 
     if len(papers) == 0:
         raise ValueError('No DfR datasets found at %s' % path)
@@ -254,14 +264,21 @@ def read(path, corpus=True, index_by='doi', **kwargs):
     if corpus:
         corpus = Corpus(papers, index_by=index_by, **kwargs)
 
-        # Find and read N-gram data.
-        for sname in os.listdir(path):
-            fpath = os.path.join(path, sname)   # Full path.
-            if os.path.isdir(fpath) and not sname.startswith('.'):
-                datafiles = [f for f in os.listdir(fpath)
-                             if f.lower().endswith('xml')]
-                if len(datafiles) > 0:
-                    corpus.features[sname] = ngrams(path, sname)
+        if load_ngrams:     # Find and read N-gram data.
+            for sname in os.listdir(path):
+                fpath = os.path.join(path, sname)   # Full path.
+                if os.path.isdir(fpath) and not sname.startswith('.'):
+                    datafiles = [f for f in os.listdir(fpath)
+                                 if f.lower().endswith('xml')]
+                    if len(datafiles) > 0:
+                        features[sname] = ngrams(path, sname)
+
+        for featureset_name, featureset_values in features.items():
+            if type(featureset_values) is dict:
+                fclass = featureset_types[featureset_name]
+                featureset_values = fclass(featureset_values)
+            corpus.features[featureset_name] = featureset_values
+
         return corpus
     return papers
 
