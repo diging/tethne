@@ -2,7 +2,7 @@ import sys
 sys.path.append('../tethne')
 
 import unittest
-from tethne.readers.dfr import read, ngrams
+from tethne.readers.dfr import read, ngrams, _handle_author,_dfr2paper_map
 from tethne import Corpus, Paper, FeatureSet
 
 datapath = './tethne/tests/data/dfr'
@@ -21,6 +21,7 @@ class TestDFRReader(unittest.TestCase):
             if hasattr(e, 'authors_init'):
                 self.assertIsInstance(e.authors_init, list)
                 for a in e.authors_init:
+
                     self.assertTrue(a[0].isupper(), uppererr)
                     self.assertTrue(a[1].isupper(), uppererr)
 
@@ -84,6 +85,21 @@ class TestCitationFile(unittest.TestCase):
     def test_citations_file(self):
         datapath2 = './tethne/tests/data/dfr2'
         self.assertIsInstance(read(datapath2), Corpus)
+
+
+class TestHandleAuthor(unittest.TestCase):
+
+    def test_handle_author_NOJR(self):
+        self.assertEqual(('TERRELL', 'E'),_handle_author("Edward E. Terrell"))
+
+    def test_handle_author_JR(self):
+        self.assertEqual(('STEBBINS, JR', 'G'),_handle_author("G. Ledyard Stebbins, Jr."))
+
+class TestDfr2PaperMap(unittest.TestCase):
+
+    def test_dfr2paper(self):
+        local_dict = { 'doi': 'doi','title': 'atitle','journaltitle': 'jtitle','volume': 'volume','issue': 'issue'    }
+        self.assertEqual(local_dict, _dfr2paper_map())
 
 
 if __name__ == '__main__':
