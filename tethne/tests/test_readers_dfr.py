@@ -2,7 +2,7 @@ import sys
 sys.path.append('../tethne')
 
 import unittest
-from tethne.readers.dfr import read, ngrams, _handle_author,_dfr2paper_map
+from tethne.readers.dfr import read, ngrams, _handle_author,_dfr2paper_map,_create_ayjid
 from tethne import Corpus, Paper, FeatureSet
 
 datapath = './tethne/tests/data/dfr'
@@ -101,6 +101,14 @@ class TestDfr2PaperMap(unittest.TestCase):
         local_dict = { 'doi': 'doi','title': 'atitle','journaltitle': 'jtitle','volume': 'volume','issue': 'issue'    }
         self.assertEqual(local_dict, _dfr2paper_map())
 
+class TestCreateAyijid(unittest.TestCase):
+
+    def test_no_aulast(self):
+        self.assertEqual(' R  ',_create_ayjid(None,['R'],None,None))
+    def test_no_auinit(self):
+        self.assertEqual('NIXON   ',_create_ayjid(['NIXON'],None,None,None))
+    def test_all_None_args(self):
+        self.assertEqual('UNKNOWN PAPER',_create_ayjid(None,None,None,None))
 
 if __name__ == '__main__':
     unittest.main()
