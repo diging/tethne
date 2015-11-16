@@ -275,8 +275,7 @@ class Corpus(object):
         identifier = getattr(paper,self.index_by)
         if isinstance(identifier,list):
           identifier = getattr(paper,self.index_by)[0]
-        print type(getattr(paper, self.index_by))
-        return getattr(paper, self.index_by)    # Identifier is already available.
+        return identifier    # Identifier is already available.
 
     def index_feature(self, feature_name, tokenize=lambda x: x, structured=False):
         """
