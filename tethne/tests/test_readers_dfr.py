@@ -2,7 +2,7 @@ import sys
 sys.path.append('../tethne')
 
 import unittest
-from tethne.readers.dfr import read, ngrams, _handle_author,_dfr2paper_map,_create_ayjid
+from tethne.readers.dfr import read, ngrams, _handle_author,_dfr2paper_map,_create_ayjid,_handle_pagerange
 from tethne import Corpus, Paper, FeatureSet
 
 datapath = './tethne/tests/data/dfr'
@@ -109,6 +109,20 @@ class TestCreateAyijid(unittest.TestCase):
         self.assertEqual('NIXON   ',_create_ayjid(['NIXON'],None,None,None))
     def test_all_None_args(self):
         self.assertEqual('UNKNOWN PAPER',_create_ayjid(None,None,None,None))
+
+class TestHandlePageRange(unittest.TestCase):
+
+    def test_handle_pagerange_noNumbers(self):
+        input_pagerange = 'pp.efcadd'
+        req_pagerange = (u'0',u'0')
+        self.assertEqual(req_pagerange,_handle_pagerange(input_pagerange))
+
+    def test_handle_pagerange(self):
+        input_pagerange = 'pp. 111-999'
+        req_pagerange = (u'111',u'999')
+        self.assertEqual(req_pagerange,_handle_pagerange(input_pagerange))
+
+
 
 if __name__ == '__main__':
     unittest.main()
