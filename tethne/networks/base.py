@@ -92,7 +92,8 @@ def cooccurrence(corpus_or_featureset, featureset_name=None, min_weight=1,
 
 
 def coupling(corpus_or_featureset, featureset_name=None,
-             min_weight=1, filter=lambda f, v, c, dc: True):
+             min_weight=1, filter=lambda f, v, c, dc: True,
+             node_attrs=[]):
     """
     A network of papers linked by their joint posession of features.
     """
@@ -118,6 +119,21 @@ def coupling(corpus_or_featureset, featureset_name=None,
         count = len(features)
         if count >= min_weight:
             graph.add_edge(combo[0], combo[1], features=features, weight=count)
+
+    # Add node attributes.
+    for attr in node_attrs:
+        for node in graph.nodes():
+            value = ''
+            if node in corpus_or_featureset:
+                paper = corpus_or_featureset[node]
+                if hasattr(paper, attr):
+                    value = getattr(paper, attr)
+                    if value is None:
+                        value = ''
+                    elif callable(value):
+                        value = value()
+            graph.node[node][attr] = value
+
     return graph
 
 

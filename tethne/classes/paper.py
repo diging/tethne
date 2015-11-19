@@ -45,7 +45,7 @@ class Paper(object):
         ayjid : str
         """
 
-        try:
+        try:    # TODO: make this less terrible.
             return self._ayjid
         except:
             pass
@@ -66,9 +66,8 @@ class Paper(object):
         else:
             journal = u''
 
-        ayjid = u' '.join([al, ai.replace(' ', ''), date, journal]).strip()
-        self._ayjid = ayjid.upper()
-        return ayjid.upper()
+        self._ayjid = u' '.join([al, ai.replace(' ', ''), date, journal]).strip().replace(' ', '_').upper()
+        return self._ayjid
 
 
     @property
