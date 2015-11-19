@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Quickstart &mdash; tethne 1.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
+    <link rel="stylesheet" href="_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
+    <link rel="top" title="tethne 1.0 documentation" href="index.html" >
+    <link rel="next" title="Tutorials" href="tutorials.html" >
+    <link rel="prev" title="Requirements" href="installation.html" > 
+  </head>
+  <body>
+
+<div class="container">
+  <div class="top-scipy-org-logo-header">
+    <a href="index.html">
+      <img style="border: 0; height: 60px;" alt="SciPy" src="_static/img/logo_long_devo.png"></a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
+	
+        <li class="active"><a href="index.html">tethne 1.0 documentation</a></li>
+	 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="tutorials.html" title="Tutorials"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="installation.html" title="Requirements"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="quickstart">
+<h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="load-some-data">
+<h2>Load some data<a class="headerlink" href="#load-some-data" title="Permalink to this headline">¶</a></h2>
+<p>Assuming that you have a JSTOR DfR dataset (in XML format) containing some wordcount
+data unzipped at <code class="docutils literal"><span class="pre">/path/to/my/dataset</span></code>, create a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> with:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">dfr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfr_corpus</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&#39;/path/to/my/dataset&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or if you&#8217;re working with data from the Web of Science, try:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">wos</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wos_corpus</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&#39;/path/to/my/wosdata.txt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Your corpus is automatically indexed by author, publication date, and (if
+available) citations.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[&#39;date&#39;, &#39;citations&#39;, &#39;authors&#39;]</span>
+</pre></div>
+</div>
+<p>You can select all of the <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s published in 1980 with:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="p">[(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="mi">1980</span><span class="p">)]</span>
+<span class="go">[&lt;tethne.classes.paper.Paper at 0x1072191d0&gt;,</span>
+<span class="go"> &lt;tethne.classes.paper.Paper at 0x1069ae0d0&gt;,</span>
+<span class="go"> &lt;tethne.classes.paper.Paper at 0x1073345d0&gt;,</span>
+<span class="go"> &lt;tethne.classes.paper.Paper at 0x107282210&gt;,</span>
+<span class="go"> &lt;tethne.classes.paper.Paper at 0x106c7b050&gt;,</span>
+<span class="go"> ...</span>
+<span class="go"> &lt;tethne.classes.paper.Paper at 0x106ad6150&gt;,</span>
+<span class="go"> &lt;tethne.classes.paper.Paper at 0x10718b490&gt;,</span>
+<span class="go"> &lt;tethne.classes.paper.Paper at 0x10695b850&gt;,</span>
+<span class="go"> &lt;tethne.classes.paper.Paper at 0x1068c4310&gt;]</span>
+</pre></div>
+</div>
+<p>Create a new index using the <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.index" title="tethne.classes.corpus.Corpus.index"><code class="xref py py-meth docutils literal"><span class="pre">Corpus.index()</span></code></a> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&#39;journal&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[&#39;date&#39;, &#39;journal&#39;, &#39;citations&#39;, &#39;authors&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="p">[(</span><span class="s">&#39;journal&#39;</span><span class="p">,</span> <span class="s">&#39;Journal of the History of Biology&#39;</span><span class="p">)]</span>
+<span class="go">[&lt;tethne.classes.paper.Paper at 0x1072191d0&gt;,</span>
+<span class="go"> &lt;tethne.classes.paper.Paper at 0x1069ae0d0&gt;,</span>
+<span class="go"> &lt;tethne.classes.paper.Paper at 0x1073345d0&gt;,</span>
+<span class="go"> &lt;tethne.classes.paper.Paper at 0x107282210&gt;,</span>
+<span class="go"> &lt;tethne.classes.paper.Paper at 0x106c7b050&gt;,</span>
+<span class="go"> ...</span>
+<span class="go"> &lt;tethne.classes.paper.Paper at 0x106ad6150&gt;,</span>
+<span class="go"> &lt;tethne.classes.paper.Paper at 0x10718b490&gt;,</span>
+<span class="go"> &lt;tethne.classes.paper.Paper at 0x10695b850&gt;,</span>
+<span class="go"> &lt;tethne.classes.paper.Paper at 0x1068c4310&gt;]</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus.distribution" title="tethne.classes.corpus.Corpus.distribution"><code class="xref py py-meth docutils literal"><span class="pre">Corpus.distribution()</span></code></a> will show you how the <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s in your
+<a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> are distributed over time.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">distribution</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/corpus_plot_distribution.png"><img alt="_images/corpus_plot_distribution.png" src="_images/corpus_plot_distribution.png" style="width: 400px;" /></a>
+</div>
+<p>A <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> is a bibliographic record. Depending on the data source, the
+fields contained by a <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> may vary.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">corpus</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">__dict__</span><span class="p">)</span>
+<span class="go">{&#39;abstract&#39;: &quot;PPB, MBO and ZBB have each been implemented in the U S. Federal government, ostensibly as means for facilitating planning and control in agencies and programmes. The purpose of this paper is to evaluate the use of these techniques as management tools, political strategies and ritualistic symbols using concepts discussed in the organizational theory, planning and control, and policy science literatures Two basic conclusions emerge from the evaluation First, PPB, MBO and ZBB may inappropriately encourage the use of an analytical, computational decision strategy, and a cost/benefit method of performance assessment at a level within the organization and in environmental settings which call for an inspirational decision strategy and social test performance assessment As a result, environmental variety may not be matched by an organizational response which is equally variable Secondly, PPB, MBO and ZBB may have been used more as political strategies and ritualistic symbols for controlling and directing controversy by both the executive and legislative branches of the U.S Federal government and less as management tools for improving decision making within the U S Federal bureaucracy These management tools give the appearance of rationality in the formulation of public policy which is consistent with man&#39;s need for confidence building and conflict avoidance in running the affairs of state.&quot;,</span>
+<span class="go"> &#39;authors_full&#39;: [(&#39;DIRSMITH&#39;, &#39;MARK W&#39;),</span>
+<span class="go">                  (&#39;JABLONSKY&#39;, &#39;STEPHEN F&#39;),</span>
+<span class="go">                  (&#39;LUZI&#39;, &#39;ANDREW D&#39;)],</span>
+<span class="go"> &#39;date&#39;: 1980,</span>
+<span class="go"> &#39;documentType&#39;: &#39;fla&#39;,</span>
+<span class="go"> &#39;doi&#39;: &#39;10.2307/2486258&#39;,</span>
+<span class="go"> &#39;issue&#39;: &#39;4&#39;,</span>
+<span class="go"> &#39;journal&#39;: &#39;Strategic Management Journal&#39;,</span>
+<span class="go"> &#39;pagerange&#39;: &#39;pp. 303-329&#39;,</span>
+<span class="go"> &#39;publisher&#39;: &#39;Wiley&#39;,</span>
+<span class="go"> &#39;title&#39;: &#39;Planning and Control in the U.S. Federal Government: A Critical Analysis of PPB, MBO and ZBB&#39;,</span>
+<span class="go"> &#39;volume&#39;: &#39;1&#39;}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="simple-networks-simply">
+<h2>Simple networks simply<a class="headerlink" href="#simple-networks-simply" title="Permalink to this headline">¶</a></h2>
+<p>Network-building methods are available in <a class="reference internal" href="tethne.networks.html#module-tethne.networks" title="tethne.networks"><code class="xref py py-mod docutils literal"><span class="pre">tethne.networks</span></code></a>. You can
+create a <a class="reference internal" href="tethne.networks.authors.html#tethne.networks.authors.coauthors" title="tethne.networks.authors.coauthors"><code class="xref py py-func docutils literal"><span class="pre">coauthors()</span></code></a> network like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.networks</span> <span class="kn">import</span> <span class="n">coauthors</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coauthor_graph</span> <span class="o">=</span> <span class="n">coauthors</span><span class="p">(</span><span class="n">wos_corpus</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>All of Tethne&#8217;s network-building methods return <code class="xref py py-class docutils literal"><span class="pre">networkx.Graph</span></code> objects.
+For more information, see the <a class="reference external" href="https://networkx.github.io/">NetworkX documentation</a>.</p>
+<p>To create a time-variant coauthor network, use a <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne</span> <span class="kn">import</span> <span class="n">GraphCollection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coauthor_collection</span> <span class="o">=</span> <span class="n">GraphCollection</span><span class="p">(</span><span class="n">wos_corpus</span><span class="p">,</span> <span class="n">coauthors</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coauthor_collection</span><span class="o">.</span><span class="n">node_distribution</span><span class="p">()</span>
+<span class="go">{1980: 32,</span>
+<span class="go"> 1981: 26,</span>
+<span class="go"> 1982: 24,</span>
+<span class="go"> 1983: 26,</span>
+<span class="go"> 1984: 20,</span>
+<span class="go"> 1985: 30,</span>
+<span class="go"> 1986: 35,</span>
+<span class="go"> 1987: 49,</span>
+<span class="go"> 1988: 60,</span>
+<span class="go"> 1989: 66,</span>
+<span class="go"> 1990: 69,</span>
+<span class="go"> 1991: 85,</span>
+<span class="go"> 1992: 82,</span>
+<span class="go"> 1993: 91,</span>
+<span class="go"> 1994: 110}</span>
+</pre></div>
+</div>
+<p>You access the network for 1992 like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">coauthor_collection</span><span class="p">[</span><span class="mi">1992</span><span class="p">]</span>
+<span class="go">&lt;networkx.classes.graph.Graph at 0x15f3016d0&gt;</span>
+</pre></div>
+</div>
+<p>You can control how the <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a> is assembled by passing
+<code class="docutils literal"><span class="pre">slice_kwargs</span></code> to the constructor. To create a series of coauthor graphs using
+a 4-year sliding time-window, for example, you could do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne</span> <span class="kn">import</span> <span class="n">GraphCollection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coauthor_collection</span> <span class="o">=</span> <span class="n">GraphCollection</span><span class="p">(</span><span class="n">wos_corpus</span><span class="p">,</span> <span class="n">coauthors</span><span class="p">,</span>            \
+<span class="go">                                          slice_kwargs={&#39;window_size&#39;: 4,   \</span>
+<span class="go">                                                        &#39;step_size&#39;: 1})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coauthor_collection</span><span class="o">.</span><span class="n">node_distribution</span><span class="p">()</span>
+<span class="go">{1980: 99,</span>
+<span class="go"> 1981: 90,</span>
+<span class="go"> 1982: 92,</span>
+<span class="go"> 1983: 100,</span>
+<span class="go"> 1984: 117,</span>
+<span class="go"> 1985: 151,</span>
+<span class="go"> 1986: 180,</span>
+<span class="go"> 1987: 209,</span>
+<span class="go"> 1988: 241,</span>
+<span class="go"> 1989: 261,</span>
+<span class="go"> 1990: 287,</span>
+<span class="go"> 1991: 321}</span>
+</pre></div>
+</div>
+<p>If you&#8217;re using WoS data (with citations), you can also build citation-based
+graphs (see <a class="reference internal" href="tethne.networks.papers.html#module-tethne.networks.papers" title="tethne.networks.papers"><code class="xref py py-mod docutils literal"><span class="pre">networks.papers</span></code></a>). Here&#8217;s a static co-citation graph from a
+<a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">&gt;&gt;</span> <span class="kn">from</span> <span class="nn">tethne.networks</span> <span class="kn">import</span> <span class="n">cocitation</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cocitation_graph</span> <span class="o">=</span> <span class="n">cocitation</span><span class="p">(</span><span class="n">wos_corpus</span><span class="p">,</span> <span class="n">min_weight</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">min_weight=3</span></code> means that a pair of papers must be co-cited three times to be
+included in the network.</p>
+</div>
+<div class="section" id="visualize-your-networks">
+<h2>Visualize your networks<a class="headerlink" href="#visualize-your-networks" title="Permalink to this headline">¶</a></h2>
+<p>You can export a graph for visualization in <a class="reference external" href="http://cytoscape.org">Cytoscape</a>
+or <a class="reference external" href="http://gephi.org">Gephi</a> using <a class="reference internal" href="tethne.writers.html#module-tethne.writers" title="tethne.writers"><code class="xref py py-mod docutils literal"><span class="pre">tethne.writers</span></code></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.writers.graph</span> <span class="kn">import</span> <span class="n">to_graphml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">to_graphml</span><span class="p">(</span><span class="n">coauthor_graph</span><span class="p">,</span> <span class="s">&#39;/path/to/my/graph.graphml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To visualize a <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a> as a dynamic graph in Cytoscape, export
+it using <a class="reference internal" href="tethne.writers.collection.html#tethne.writers.collection.to_dxgmml" title="tethne.writers.collection.to_dxgmml"><code class="xref py py-func docutils literal"><span class="pre">writers.collection.to_dxgmml()</span></code></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.writers.collection</span> <span class="kn">import</span> <span class="n">to_dxgmml</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">to_dxgmml</span><span class="p">(</span><span class="n">coauthor_collection</span><span class="p">,</span> <span class="s">&#39;/path/to/my/dynamicNetwork.xgmml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="working-with-words">
+<h2>Working with Words<a class="headerlink" href="#working-with-words" title="Permalink to this headline">¶</a></h2>
+<p>Suppose you loaded up a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> from some DfR datasets, using:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">dfr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfr_corpus</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&#39;/path/to/my/dataset&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now you have some <code class="docutils literal"><span class="pre">'wordcounts'</span></code> in <code class="docutils literal"><span class="pre">dfr_corpus.features</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">dfr_corpus</span><span class="o">.</span><span class="n">features</span>
+<span class="go">{&#39;authors&#39;: &lt;tethne.classes.feature.FeatureSet at 0x100534e90&gt;,</span>
+<span class="go"> &#39;bigrams&#39;: &lt;tethne.classes.feature.FeatureSet at 0x11e599810&gt;,</span>
+<span class="go"> &#39;citations&#39;: &lt;tethne.classes.feature.FeatureSet at 0x10051b990&gt;,</span>
+<span class="go"> &#39;keyterms&#39;: &lt;tethne.classes.feature.FeatureSet at 0x107355ad0&gt;,</span>
+<span class="go"> &#39;trigrams&#39;: &lt;tethne.classes.feature.FeatureSet at 0x14c126050&gt;,</span>
+<span class="go"> &#39;wordcounts&#39;: &lt;tethne.classes.feature.FeatureSet at 0x1931c7290&gt;}</span>
+</pre></div>
+</div>
+<p>You can retrieve the wordcounts for an individual paper using it&#8217;s DOI:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">dfr_corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;wordcounts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;10.2307/2486258&#39;</span><span class="p">]</span>
+<span class="go">[(&#39;secondly&#39;, 4),</span>
+<span class="go"> (&#39;ainalysis&#39;, 2),</span>
+<span class="go"> (&#39;limited&#39;, 2),</span>
+<span class="go"> (&#39;dynamic&#39;, 16),</span>
+<span class="go"> (&#39;externally&#39;, 1),</span>
+<span class="go"> (&#39;foul&#39;, 1),</span>
+<span class="go"> (&#39;four&#39;, 3),</span>
+<span class="go"> (&#39;demanded&#39;, 1),</span>
+<span class="go"> (&#39;relationships&#39;, 9),</span>
+<span class="go"> (&#39;whose&#39;, 2),</span>
+<span class="go"> (&#39;capolitical&#39;, 1),</span>
+<span class="go"> (&#39;coalignmnent&#39;, 1),</span>
+<span class="go"> (&#39;presents&#39;, 3),</span>
+<span class="go"> (&#39;investigation&#39;, 1),</span>
+<span class="go"> (&#39;systemns&#39;, 1),</span>
+<span class="go"> (&#39;admninistration&#39;, 1),</span>
+<span class="go"> (&#39;conjecture&#39;, 1),</span>
+<span class="go"> ... ]</span>
+</pre></div>
+</div>
+<p>You can apply a stoplist using <a class="reference internal" href="tethne.classes.feature.html#tethne.classes.feature.FeatureSet.transform" title="tethne.classes.feature.FeatureSet.transform"><code class="xref py py-meth docutils literal"><span class="pre">FeatureSet.transform()</span></code></a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stoplist</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">apply_stoplist</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">DC</span><span class="p">:</span> <span class="bp">None</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">stoplist</span> <span class="k">else</span> <span class="n">v</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts</span> <span class="o">=</span> <span class="n">dfr_corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;wordcounts&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfr_corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;filtered&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wordcounts</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">apply_stoplist</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you have some recent WoS data with abstracts, you can get a
+<a class="reference internal" href="tethne.classes.feature.html#tethne.classes.feature.FeatureSet" title="tethne.classes.feature.FeatureSet"><code class="xref py py-class docutils literal"><span class="pre">FeatureSet</span></code></a> from abstract terms, too:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">wos</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wos_corpus</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&#39;/path/to/my/wosdata.txt&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne</span> <span class="kn">import</span> <span class="n">tokenize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wos_corpus</span><span class="o">.</span><span class="n">index_feature</span><span class="p">(</span><span class="s">&#39;abstract&#39;</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="n">tokenize</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">wos_corpus</span><span class="o">.</span><span class="n">features</span>
+<span class="go">[&#39;abstract&#39;, &#39;authors&#39;, &#39;citations&#39;, &#39;date&#39;]</span>
+</pre></div>
+</div>
+<p>You can see how the word <code class="docutils literal"><span class="pre">empirical</span></code> is distributed across your
+<a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> using :func:<a href="#id1"><span class="problematic" id="id2">`</span></a>.Corpus.distribution:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">wos_corpus</span><span class="o">.</span><span class="n">feature_distribution</span><span class="p">(</span><span class="s">&#39;wordcounts&#39;</span><span class="p">,</span> <span class="s">&#39;empirical&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Frequency of the word `empirical`&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/testdist.png"><img alt="_images/testdist.png" src="_images/testdist.png" style="width: 400px;" /></a>
+</div>
+</div>
+<div class="section" id="models-based-on-words">
+<h2>Models Based on Words<a class="headerlink" href="#models-based-on-words" title="Permalink to this headline">¶</a></h2>
+<p>Topic models are pretty popular. You can create a LDA topic model using
+<a class="reference external" href="http://mallet.cs.umass.edu/">MALLET</a> right from Tethne, using
+<a class="reference internal" href="tethne.model.corpus.mallet.html#tethne.model.corpus.mallet.LDAModel" title="tethne.model.corpus.mallet.LDAModel"><code class="xref py py-class docutils literal"><span class="pre">tethne.model.corpus.mallet.LDAModel</span></code></a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne</span> <span class="kn">import</span> <span class="n">LDAModel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">LDAModel</span><span class="p">(</span><span class="n">wos_corpus</span><span class="p">,</span> <span class="s">&#39;abstract&#39;</span><span class="p">)</span>     <span class="c"># Use words from &#39;abstract&#39;.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Z</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>    <span class="c"># 20 topics, 500 iterations of sampling.</span>
+</pre></div>
+</div>
+<p>You can inspect the inferred topics using <a class="reference internal" href="tethne.model.corpus.mallet.html#tethne.model.corpus.mallet.LDAModel.print_topics" title="tethne.model.corpus.mallet.LDAModel.print_topics"><code class="xref py py-meth docutils literal"><span class="pre">LDAModel.print_topics()</span></code></a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">print_topics</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">Topic        Top 5 words</span>
+<span class="go">0    strategy strategic strategies firms industry</span>
+<span class="go">1    costs pp firm economic cost</span>
+<span class="go">2    performance research study variables pp</span>
+<span class="go">3    acquisition acquisitions mergers market firms</span>
+<span class="go">4    planning strategic system corporate management</span>
+<span class="go">5    strategic strategy research management process</span>
+<span class="go">6    university john strategic france school</span>
+<span class="go">7    performance change organizational ceo board</span>
+<span class="go">8    japanese firms industry companies international</span>
+<span class="go">9    model market firm industry share</span>
+<span class="go">10   decision strategic group decisions problem</span>
+<span class="go">11   firms firm corporate compensation ownership</span>
+<span class="go">12   business time work part problems</span>
+<span class="go">13   firm technology innovation resources firms</span>
+<span class="go">14   anid al aind theory strategy</span>
+<span class="go">15   firms diversification firm performance related</span>
+<span class="go">16   managers management strategic control organizational</span>
+<span class="go">17   market product products entry industry</span>
+<span class="go">18   global structure international foreign business</span>
+<span class="go">19   journal management author paper strategic</span>
+</pre></div>
+</div>
+<p>We can also look at the representation of a topic over time using
+<a class="reference internal" href="tethne.model.corpus.mallet.html#tethne.model.corpus.mallet.LDAModel.topic_over_time" title="tethne.model.corpus.mallet.LDAModel.topic_over_time"><code class="xref py py-meth docutils literal"><span class="pre">LDAModel.topic_over_time()</span></code></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">topic_over_time</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;topic {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/topic_over_time.png"><img alt="_images/topic_over_time.png" src="_images/topic_over_time.png" style="width: 400px;" /></a>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_round.png" alt="Logo">
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Quickstart</a><ul>
+<li><a class="reference internal" href="#load-some-data">Load some data</a></li>
+<li><a class="reference internal" href="#simple-networks-simply">Simple networks simply</a></li>
+<li><a class="reference internal" href="#visualize-your-networks">Visualize your networks</a></li>
+<li><a class="reference internal" href="#working-with-words">Working with Words</a></li>
+<li><a class="reference internal" href="#models-based-on-words">Models Based on Words</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="previous chapter">Requirements</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tutorials.html"
+                        title="next chapter">Tutorials</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="_sources/quickstart.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div class="this-page-menu">
+  <a href="/scipy/docs/scipy-docs/quickstart.rst">Edit page</a>
+</div>
+
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, ASU Digital Innovation Group.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

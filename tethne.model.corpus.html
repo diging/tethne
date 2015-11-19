@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>tethne.model.corpus package &mdash; tethne 1.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
+    <link rel="stylesheet" href="_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
+    <link rel="top" title="tethne 1.0 documentation" href="index.html" >
+    <link rel="up" title="tethne.model package" href="tethne.model.html" >
+    <link rel="next" title="tethne.networks package" href="tethne.networks.html" >
+    <link rel="prev" title="tethne.model package" href="tethne.model.html" > 
+  </head>
+  <body>
+
+<div class="container">
+  <div class="top-scipy-org-logo-header">
+    <a href="index.html">
+      <img style="border: 0; height: 60px;" alt="SciPy" src="_static/img/logo_long_devo.png"></a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
+	
+        <li class="active"><a href="index.html">tethne 1.0 documentation</a></li>
+	
+          <li class="active"><a href="tethne.html" >tethne package</a></li>
+          <li class="active"><a href="tethne.model.html" accesskey="U">tethne.model package</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+      <li class="active">
+        <a href="tethne.networks.html" title="tethne.networks package"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="tethne.model.html" title="tethne.model package"
+           accesskey="P">previous</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="tethne-model-corpus-package">
+<h1>tethne.model.corpus package<a class="headerlink" href="#tethne-model-corpus-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-tethne.model.corpus.mallet">
+<span id="tethne-model-corpus-mallet-module"></span><h2>tethne.model.corpus.mallet module<a class="headerlink" href="#module-tethne.model.corpus.mallet" title="Permalink to this headline">¶</a></h2>
+<p>Classes and methods related to the <code class="xref py py-class docutils literal"><span class="pre">MALLETModelManager</span></code>.</p>
+<dl class="class">
+<dt id="tethne.model.corpus.mallet.LDAModel">
+<em class="property">class </em><code class="descclassname">tethne.model.corpus.mallet.</code><code class="descname">LDAModel</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/model/corpus/mallet.html#LDAModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.mallet.LDAModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="tethne.model.html#tethne.model.Model" title="tethne.model.Model"><code class="xref py py-class docutils literal"><span class="pre">tethne.model.Model</span></code></a></p>
+<p>Generates a <a class="reference internal" href="tethne.model.corpus.mallet.html#tethne.model.corpus.mallet.LDAModel" title="tethne.model.corpus.mallet.LDAModel"><code class="xref py py-class docutils literal"><span class="pre">LDAModel</span></code></a> from a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> using
+<a class="reference external" href="http://mallet.cs.umass.edu/">MALLET</a>.</p>
+<p>The <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> should already contain at least one featurset,
+indicated by the <cite>feature</cite> parameter, such as wordcounts. You may
+specify two working directories: <cite>temppath</cite> should be a working
+directory that will contain intermediate files (e.g. documents, data
+files, metadata), while <cite>outpath</cite> will contain the final model and any
+plots generated during the modeling process. If <cite>temppath</cite> is not
+provided, generates and uses a system temporary directory.</p>
+<p>Tethne comes bundled with a recent version of MALLET. If you would
+rather use your own install, you can do so by providing the
+<cite>mallet_path</cite> parameter. This should point to the directory containing
+<code class="docutils literal"><span class="pre">/bin/mallet</span></code>.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="tethne.model.corpus.mallet.html#tethne.model.corpus.mallet.LDAModel.topic_over_time" title="tethne.model.corpus.mallet.LDAModel.topic_over_time"><code class="xref py py-obj docutils literal"><span class="pre">topic_over_time</span></code></a></td>
+<td>Calculate the representation of topic <code class="docutils literal"><span class="pre">k</span></code> in the corpus over time.</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>D</strong> : <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a></p>
+<p><strong>feature</strong> : str</p>
+<blockquote>
+<div><p>Key from D.features containing wordcounts (or whatever
+you want to model with).</p>
+</div></blockquote>
+<p><strong>outpath</strong> : str</p>
+<blockquote>
+<div><p>Path to output directory.</p>
+</div></blockquote>
+<p><strong>temppath</strong> : str</p>
+<blockquote>
+<div><p>Path to temporary directory.</p>
+</div></blockquote>
+<p><strong>mallet_path</strong> : str</p>
+<blockquote class="last">
+<div><p>Path to MALLET install directory (contains bin/mallet).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Starting with some JSTOR DfR data (with wordcounts), a typical workflow
+might look something like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>                 <span class="c">#  1. Get stoplist.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stoplist</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">dfr</span>                    <span class="c">#  2. Build Corpus.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">corpus_from_dir</span><span class="p">(</span><span class="s">&#39;/path/to/DfR/datasets&#39;</span><span class="p">,</span> <span class="s">&#39;uni&#39;</span><span class="p">,</span> <span class="n">stoplist</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">filt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">DC</span><span class="p">):</span>                           <span class="c"># 3. Filter wordcounts.</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">C</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">DC</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="bp">True</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="bp">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">filter_features</span><span class="p">(</span><span class="s">&#39;wordcounts&#39;</span><span class="p">,</span> <span class="s">&#39;wc_filtered&#39;</span><span class="p">,</span> <span class="n">filt</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.model</span> <span class="kn">import</span> <span class="n">MALLETModelManager</span>       <span class="c">#   4. Get Manager.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outpath</span> <span class="o">=</span> <span class="s">&#39;/path/to/my/working/directory&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mallet</span> <span class="o">=</span> <span class="s">&#39;/Applications/mallet-2.0.7&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">MALLETModelManager</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="s">&#39;wc_filtered&#39;</span><span class="p">,</span> <span class="n">outpath</span><span class="p">,</span> <span class="n">mallet_path</span><span class="o">=</span><span class="n">mallet</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span><span class="o">.</span><span class="n">prep</span><span class="p">()</span>                                          <span class="c">#    5. Prep model.</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">Z</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>               <span class="c">#   6. Build model.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span>                                             <span class="c"># (may take awhile)</span>
+<span class="go">&lt;tethne.model.corpus.ldamodel.LDAModel at 0x10bfac710&gt;</span>
+</pre></div>
+</div>
+<p>A plot showing the log-likelihood/topic over modeling iterations should be
+generated in your <cite>outpath</cite>. For example:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/ldamodel_LL.png"><img alt="_images/ldamodel_LL.png" src="_images/ldamodel_LL.png" style="width: 400px;" /></a>
+</div>
+<p>Behind the scenes, the <code class="xref py py-func docutils literal"><span class="pre">prep()</span></code> procedure generates a plain-text corpus
+file at <cite>temppath</cite>, along with a metadata file. MALLET&#8217;s <code class="docutils literal"><span class="pre">import-file</span></code>
+procedure is then called, which translates the corpus into MALLET&#8217;s internal
+format (also stored at the <cite>temppath</cite>).</p>
+<p>The <code class="xref py py-func docutils literal"><span class="pre">build()</span></code> procedure then invokes MALLET&#8217;s <code class="docutils literal"><span class="pre">train-topics</span></code>
+procedure. This step may take a considerable amount of time, anywhere from
+a few minutes (small corpus, few topics) to a few hours (large corpus, many
+topics).</p>
+<p>For a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> with a few thousand <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s, 300 - 500
+iterations is often sufficient to achieve convergence for 20-100 topics.</p>
+<p>Once the <a class="reference internal" href="tethne.model.corpus.mallet.html#tethne.model.corpus.mallet.LDAModel" title="tethne.model.corpus.mallet.LDAModel"><code class="xref py py-class docutils literal"><span class="pre">LDAModel</span></code></a> is built, you can access its methods directly.
+See full method descriptions in <a class="reference internal" href="tethne.model.corpus.mallet.html#tethne.model.corpus.mallet.LDAModel" title="tethne.model.corpus.mallet.LDAModel"><code class="xref py py-class docutils literal"><span class="pre">LDAModel</span></code></a>.</p>
+<p>For more information about topic modeling with MALLET see
+<a class="reference external" href="http://programminghistorian.org/lessons/topic-modeling-and-mallet">this tutorial</a>.</p>
+<dl class="method">
+<dt id="tethne.model.corpus.mallet.LDAModel.list_topic">
+<code class="descname">list_topic</code><span class="sig-paren">(</span><em>k</em>, <em>Nwords=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/model/corpus/mallet.html#LDAModel.list_topic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.mallet.LDAModel.list_topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>List the top <code class="docutils literal"><span class="pre">topn</span></code> words for topic <code class="docutils literal"><span class="pre">k</span></code>.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">list_topic</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Nwords</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">[ &#39;opposed&#39;, &#39;terminates&#39;, &#39;trichinosis&#39;, &#39;cistus&#39;, &#39;acaule&#39; ]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.model.corpus.mallet.LDAModel.list_topics">
+<code class="descname">list_topics</code><span class="sig-paren">(</span><em>Nwords=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/model/corpus/mallet.html#LDAModel.list_topics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.mallet.LDAModel.list_topics" title="Permalink to this definition">¶</a></dt>
+<dd><p>List the top <code class="docutils literal"><span class="pre">Nwords</span></code> words for each topic.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.model.corpus.mallet.LDAModel.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/model/corpus/mallet.html#LDAModel.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.mallet.LDAModel.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="tethne.model.corpus.mallet.LDAModel.mallet_path">
+<code class="descname">mallet_path</code><em class="property"> = '/Users/erickpeirson/anaconda/lib/python2.7/site-packages/tethne/bin/mallet-2.0.7'</em><a class="headerlink" href="#tethne.model.corpus.mallet.LDAModel.mallet_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="tethne.model.corpus.mallet.LDAModel.prep">
+<code class="descname">prep</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/model/corpus/mallet.html#LDAModel.prep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.mallet.LDAModel.prep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="tethne.model.corpus.mallet.LDAModel.print_topics">
+<code class="descname">print_topics</code><span class="sig-paren">(</span><em>Nwords=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/model/corpus/mallet.html#LDAModel.print_topics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.mallet.LDAModel.print_topics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the top <code class="docutils literal"><span class="pre">Nwords</span></code> words for each topic.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.model.corpus.mallet.LDAModel.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/model/corpus/mallet.html#LDAModel.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.mallet.LDAModel.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls MALLET&#8217;s <cite>train-topic</cite> method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.model.corpus.mallet.LDAModel.topic_over_time">
+<code class="descname">topic_over_time</code><span class="sig-paren">(</span><em>k</em>, <em>mode='counts'</em>, <em>slice_kwargs={}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/model/corpus/mallet.html#LDAModel.topic_over_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.mallet.LDAModel.topic_over_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the representation of topic <code class="docutils literal"><span class="pre">k</span></code> in the corpus over time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.model.corpus.mallet.LDAModel.topics_in">
+<code class="descname">topics_in</code><span class="sig-paren">(</span><em>d</em>, <em>topn=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/model/corpus/mallet.html#LDAModel.topics_in"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.model.corpus.mallet.LDAModel.topics_in" title="Permalink to this definition">¶</a></dt>
+<dd><p>List the top <code class="docutils literal"><span class="pre">topn</span></code> topics in document <code class="docutils literal"><span class="pre">d</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-tethne.model.corpus">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tethne.model.corpus" title="Permalink to this headline">¶</a></h2>
+<p>Corpus models describe latent topics (dimensions) that explain the
+distribution of features (eg words) among documents in a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a>.</p>
+<p>Tethne presently represents two corpus models:</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">ldamodel.LDAModel</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">dtmmodel.DTMModel</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Most model classes are subclasses of <code class="xref py py-class docutils literal"><span class="pre">BaseModel</span></code>. It is assumed that
+each model describes a set of items (eg <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s or authors), a set 
+of dimensions that describe those items (eg topics), and a set of features 
+that comprise those dimensions (eg words).</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_round.png" alt="Logo">
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">tethne.model.corpus package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-tethne.model.corpus.mallet">tethne.model.corpus.mallet module</a></li>
+<li><a class="reference internal" href="#module-tethne.model.corpus">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tethne.model.html"
+                        title="previous chapter">tethne.model package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tethne.networks.html"
+                        title="next chapter">tethne.networks package</a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="_sources/tethne.model.corpus.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div class="this-page-menu">
+  <a href="/scipy/docs/scipy-docs/tethne.model.corpus.rst">Edit page</a>
+</div>
+
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, ASU Digital Innovation Group.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

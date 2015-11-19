@@ -1,0 +1,13 @@
+networkx >= 1.8.1
+Unidecode >= 0.04.16
+iso8601
+rdflib
+chardet
+html5lib
+isodate
+pdfdocument
+pdfminer==20110515
+python-magic==0.4.6
+slate
+Unidecode==0.4.17
+nltk

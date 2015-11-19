@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>tethne.networks.topics module &mdash; tethne 1.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
+    <link rel="stylesheet" href="_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
+    <link rel="top" title="tethne 1.0 documentation" href="index.html" > 
+  </head>
+  <body>
+
+<div class="container">
+  <div class="top-scipy-org-logo-header">
+    <a href="index.html">
+      <img style="border: 0; height: 60px;" alt="SciPy" src="_static/img/logo_long_devo.png"></a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
+	
+        <li class="active"><a href="index.html">tethne 1.0 documentation</a></li>
+	 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="module-tethne.networks.topics">
+<span id="tethne-networks-topics-module"></span><h1>tethne.networks.topics module<a class="headerlink" href="#module-tethne.networks.topics" title="Permalink to this headline">¶</a></h1>
+<p>Build networks from topics in a topic model.</p>
+<dl class="function">
+<dt id="tethne.networks.topics.cotopics">
+<code class="descclassname">tethne.networks.topics.</code><code class="descname">cotopics</code><span class="sig-paren">(</span><em>model</em>, <em>threshold=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/networks/topics.html#cotopics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.topics.cotopics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Two topics are coupled if they occur in the same documents.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.networks.topics.distance">
+<code class="descclassname">tethne.networks.topics.</code><code class="descname">distance</code><span class="sig-paren">(</span><em>model</em>, <em>method='cosine'</em>, <em>percentile=90</em>, <em>bidirectional=False</em>, <em>normalize=True</em>, <em>smooth=False</em>, <em>transform='log'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/networks/topics.html#distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.topics.distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a network of <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s based on a distance metric from
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/spatial.distance.html">scipy.spatial.distance</a>
+using <a class="reference internal" href="corpora.html#sparse-feature-vector"><span>Sparse feature vector</span></a>s over the dimensions in <code class="docutils literal"><span class="pre">model</span></code>.</p>
+<p>Refer to the documentation for <code class="xref py py-func docutils literal"><span class="pre">analyze.features.distance()</span></code> for
+a list of distance statistics. The only two methods that will not work
+in this context are <code class="docutils literal"><span class="pre">hamming</span></code> and <code class="docutils literal"><span class="pre">jaccard</span></code>.</p>
+<p>Distances are inverted to a similarity metric, which is log-transformed by
+default (see <code class="docutils literal"><span class="pre">transform</span></code> parameter, below). Edges are included if they are
+at or above the <a href="#id1"><span class="problematic" id="id2">``</span></a>percentile``th percentile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>model</strong> : <a class="reference internal" href="tethne.model.corpus.mallet.html#tethne.model.corpus.mallet.LDAModel" title="tethne.model.corpus.mallet.LDAModel"><code class="xref py py-class docutils literal"><span class="pre">LDAModel</span></code></a> or <code class="xref py py-class docutils literal"><span class="pre">DTMModel</span></code></p>
+<blockquote>
+<div><p><a class="reference internal" href="#tethne.networks.topics.distance" title="tethne.networks.topics.distance"><code class="xref py py-func docutils literal"><span class="pre">distance()</span></code></a> uses <code class="docutils literal"><span class="pre">model.item</span></code> and <code class="docutils literal"><span class="pre">model.metadata</span></code>.</p>
+</div></blockquote>
+<p><strong>method</strong> : str</p>
+<blockquote>
+<div><p>Name of a distance method from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/spatial.distance.html">scipy.spatial.distance</a>.
+See <code class="xref py py-func docutils literal"><span class="pre">analyze.features.distance()</span></code> for a list of distance
+statistics. <code class="docutils literal"><span class="pre">hamming</span></code> or <code class="docutils literal"><span class="pre">jaccard</span></code> will raise a RuntimeError.
+<a class="reference internal" href="tethne.analyze.features.html#tethne.analyze.features.kl_divergence" title="tethne.analyze.features.kl_divergence"><code class="xref py py-func docutils literal"><span class="pre">analyze.features.kl_divergence()</span></code></a> is also available as
+&#8216;kl_divergence&#8217;.</p>
+</div></blockquote>
+<p><strong>percentile</strong> : int</p>
+<blockquote>
+<div><p>(default: 90) Edges are included if they are at or above the
+<code class="docutils literal"><span class="pre">percentile</span></code> for all distances in the <code class="docutils literal"><span class="pre">model</span></code>.</p>
+</div></blockquote>
+<p><strong>bidirectional</strong> : bool</p>
+<blockquote>
+<div><p>(default: False) If True, <code class="docutils literal"><span class="pre">method</span></code> is calculated twice for each pair
+of <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s ( <code class="docutils literal"><span class="pre">(i,j)</span></code> and <code class="docutils literal"><span class="pre">(j,i)</span></code> ), and the mean is used.</p>
+</div></blockquote>
+<p><strong>normalize</strong> : bool</p>
+<blockquote>
+<div><p>(default: True) If True, vectors over topics are normalized so that they
+sum to 1.0 for each <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>.</p>
+</div></blockquote>
+<p><strong>smooth</strong> : bool</p>
+<blockquote>
+<div><p>(default: False) If True, vectors over topics are smoothed according to
+<a class="reference external" href="http://lvk.cs.msu.su/~bruzz/articles/classification/Using%20Kullback-Leibler%20Distance%20for%20Text%20Categorization.pdf">Bigi 2003</a>.
+This may be useful if vectors over topics are very sparse.</p>
+</div></blockquote>
+<p><strong>transform</strong> : str</p>
+<blockquote>
+<div><p>(default: &#8216;log&#8217;) Transformation to apply to similarity values before
+building the graph. So far only &#8216;log&#8217; and None are supported.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>thegraph</strong> : networkx.Graph</p>
+<blockquote class="last">
+<div><p>Similarity values are included as edge weights. Node attributes are set
+using the fields in <code class="docutils literal"><span class="pre">model.metadata</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.networks</span> <span class="kn">import</span> <span class="n">topics</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thegraph</span> <span class="o">=</span> <span class="n">topics</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">MyLDAModel</span><span class="p">,</span> <span class="s">&#39;cosine&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.writers</span> <span class="kn">import</span> <span class="n">graph</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">to_graphml</span><span class="p">(</span><span class="n">thegraph</span><span class="p">,</span> <span class="s">&#39;~./thegraph.graphml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure" id="id4">
+<a class="reference internal image-reference" href="_images/lda_cosine_network.png"><img alt="_images/lda_cosine_network.png" src="_images/lda_cosine_network.png" style="width: 80%;" /></a>
+<p class="caption"><span class="caption-text">Edge weight and opacity indicate similarity. Node color indicates the
+journal in which each <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> was published. In this graph,
+papers published in the same journal tend to cluster together.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.networks.topics.terms">
+<code class="descclassname">tethne.networks.topics.</code><code class="descname">terms</code><span class="sig-paren">(</span><em>model</em>, <em>threshold=0.01</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/networks/topics.html#terms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.topics.terms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Two terms are coupled if they belong to the same topic with phi &gt; threshold.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tethne.networks.topics.topic_coupling">
+<code class="descclassname">tethne.networks.topics.</code><code class="descname">topic_coupling</code><span class="sig-paren">(</span><em>model</em>, <em>threshold=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/networks/topics.html#topic_coupling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.topics.topic_coupling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Two papers are coupled if they both contain a shared topic above threshold.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_round.png" alt="Logo">
+            </a></p>
+  <h3>This Page</h3>
+  <div>
+    <a href="_sources/tethne.networks.topics.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div class="this-page-menu">
+  <a href="/scipy/docs/scipy-docs/tethne.networks.topics.rst">Edit page</a>
+</div>
+
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, ASU Digital Innovation Group.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

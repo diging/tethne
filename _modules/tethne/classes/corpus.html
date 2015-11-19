@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>tethne.classes.corpus &mdash; tethne 1.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <link rel="top" title="tethne 1.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Module code" href="../../index.html" > 
+  </head>
+  <body>
+
+<div class="container">
+  <div class="top-scipy-org-logo-header">
+    <a href="../../../index.html">
+      <img style="border: 0; height: 60px;" alt="SciPy" src="../../../_static/img/logo_long_devo.png"></a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
+	
+        <li class="active"><a href="../../../index.html">tethne 1.0 documentation</a></li>
+	
+          <li class="active"><a href="../../index.html" accesskey="U">Module code</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <h1>Source code for tethne.classes.corpus</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides :class:`.Corpus`\.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span>
+
+<span class="kn">from</span> <span class="nn">tethne.classes.feature</span> <span class="kn">import</span> <span class="n">FeatureSet</span><span class="p">,</span> <span class="n">Feature</span><span class="p">,</span> \
+                                   <span class="n">StructuredFeatureSet</span><span class="p">,</span> <span class="n">StructuredFeature</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">_iterable</span><span class="p">,</span> <span class="n">argsort</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">PYTHON_3</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
+<span class="k">if</span> <span class="n">PYTHON_3</span><span class="p">:</span>
+    <span class="nb">unicode</span> <span class="o">=</span> <span class="nb">str</span>
+
+
+<span class="k">def</span> <span class="nf">_tfidf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">DC</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+    <span class="n">tf</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">idf</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">DC</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">*</span><span class="n">idf</span>
+
+
+<span class="k">def</span> <span class="nf">_filter</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">DC</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">C</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">DC</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="bp">False</span>
+
+
+<div class="viewcode-block" id="Corpus"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus">[docs]</a><span class="k">class</span> <span class="nc">Corpus</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A :class:`.Corpus` represents a collection of :class:`.Paper` instances.</span>
+
+<span class="sd">    .. autosummary::</span>
+<span class="sd">       :toctree:</span>
+<span class="sd">       :nosignatures:</span>
+
+<span class="sd">       distribution</span>
+<span class="sd">       feature_distribution</span>
+<span class="sd">       features</span>
+<span class="sd">       index</span>
+<span class="sd">       index_by</span>
+<span class="sd">       index_feature</span>
+<span class="sd">       indexed_papers</span>
+<span class="sd">       indices</span>
+<span class="sd">       papers</span>
+<span class="sd">       select</span>
+<span class="sd">       slice</span>
+<span class="sd">       structuredfeatures</span>
+<span class="sd">       subcorpus</span>
+<span class="sd">       top_features</span>
+
+<span class="sd">    :class:`.Corpus` objects are generated by the bibliographic readers in the</span>
+<span class="sd">    :mod:`tethne.readers` module.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; from tethne.readers.wos import read</span>
+<span class="sd">       &gt;&gt;&gt; read(&#39;/path/to/data&#39;)</span>
+<span class="sd">       &lt;tethne.classes.corpus.Corpus object at 0x10278ea10&gt;</span>
+
+<span class="sd">    You can also build a :class:`.Corpus` from a list of :class:`.Paper`\s.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; papers = however_you_generate_papers()   # &lt;- list of Papers.</span>
+<span class="sd">       &gt;&gt;&gt; corpus = Corpus(papers)</span>
+
+<span class="sd">    All of the :class:`.Paper`\s in the :class:`.Corpus` will be indexed. You</span>
+<span class="sd">    can control which field is used for indexing by passing the ``index_by``</span>
+<span class="sd">    keyword argument to one of the ``read`` methods or to the :class:`.Corpus`</span>
+<span class="sd">    constructor.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; corpus = Corpus(papers, index_by=&#39;doi&#39;)</span>
+<span class="sd">       &gt;&gt;&gt; corpus.indexed_papers.keys()</span>
+<span class="sd">       [&#39;doi/123&#39;, &#39;doi/456&#39;, ..., &#39;doi/789&#39;]</span>
+
+<span class="sd">    The WoS ``read`` method uses the ``wosid`` field by default, and the DfR</span>
+<span class="sd">    ``read`` method uses ``doi``. The Zotero ``read`` method tries to use</span>
+<span class="sd">    whatever it can find. If the selected ``index_by`` field is not set or not</span>
+<span class="sd">    available, a unique key will be generated using the title and author names.</span>
+
+<span class="sd">    By default, :class:`.Corpus` will also index the ``authors`` and</span>
+<span class="sd">    ``citations`` fields. To control which fields are indexed, pass the</span>
+<span class="sd">    ``index_fields`` argument, or call :meth:`.Corpus.index` directly.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; corpus = Corpus(papers, index_fields=[&#39;authors&#39;, &#39;date&#39;])</span>
+<span class="sd">       &gt;&gt;&gt; corpus.indices.keys()</span>
+<span class="sd">       [&#39;authors&#39;, &#39;date&#39;]</span>
+
+<span class="sd">    Similarly, :class:`.Corpus` will index features. By default, ``authors``</span>
+<span class="sd">    and ``citations`` will be indexed as features (i.e. available for</span>
+<span class="sd">    network-building methods). To control which fields are indexed as features,</span>
+<span class="sd">    pass the ``index_features`` argument, or call</span>
+<span class="sd">    :meth:`.Corpus.index_features`\.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; corpus = Corpus(papers, index_features=[&#39;unigrams&#39;])</span>
+<span class="sd">       &gt;&gt;&gt; corpus.features.keys()</span>
+<span class="sd">       [&#39;unigrams&#39;]</span>
+
+<span class="sd">    There are a variety of ways to select :class:`.Paper`\s from the corpus.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; corpus = Corpus(papers)</span>
+<span class="sd">       &gt;&gt;&gt; corpus[0]    # Integer indices yield a single Paper.</span>
+<span class="sd">       &lt;tethne.classes.paper.Paper object at 0x103037c10&gt;</span>
+
+<span class="sd">       &gt;&gt;&gt; corpus[range(0,5)]  # A list of indices will yield a list of Papers.</span>
+<span class="sd">       [&lt;tethne.classes.paper.Paper object at 0x103037c10&gt;,</span>
+<span class="sd">        &lt;tethne.classes.paper.Paper object at 0x10301c890&gt;,</span>
+<span class="sd">        ...</span>
+<span class="sd">        &lt;tethne.classes.paper.Paper object at 0x10302f5d0&gt;]</span>
+
+<span class="sd">       &gt;&gt;&gt; corpus[(&#39;date&#39;, 1995)]  # You can select based on indexed fields.</span>
+<span class="sd">       [&lt;tethne.classes.paper.Paper object at 0x103037c10&gt;,</span>
+<span class="sd">        &lt;tethne.classes.paper.Paper object at 0x10301c890&gt;,</span>
+<span class="sd">        ...</span>
+<span class="sd">        &lt;tethne.classes.paper.Paper object at 0x10302f5d0&gt;]</span>
+
+<span class="sd">       &gt;&gt;&gt; corpus[&#39;citations&#39;, (&#39;DOLE RJ 1952 CELL&#39;)]   # All papers with this citation!</span>
+<span class="sd">       [&lt;tethne.classes.paper.Paper object at 0x103037c10&gt;,</span>
+<span class="sd">        &lt;tethne.classes.paper.Paper object at 0x10301c890&gt;,</span>
+<span class="sd">        ...</span>
+<span class="sd">        &lt;tethne.classes.paper.Paper object at 0x10302f5d0&gt;]</span>
+
+<span class="sd">       &gt;&gt;&gt; corpus[(&#39;date&#39;, range(1993, 1995))]  # Multiple values are supported, too.</span>
+<span class="sd">       [&lt;tethne.classes.paper.Paper object at 0x103037c10&gt;,</span>
+<span class="sd">        &lt;tethne.classes.paper.Paper object at 0x10301c890&gt;,</span>
+<span class="sd">        ...</span>
+<span class="sd">        &lt;tethne.classes.paper.Paper object at 0x10302f5d0&gt;]</span>
+
+<span class="sd">    If you prefer to retrieve a :class:`.Corpus` rather than simply a list of</span>
+<span class="sd">    :class:`.Paper` instances (e.g. to build networks), use</span>
+<span class="sd">    :meth:`.Corpus.subcorpus`\. ``subcorpus`` accepts selector arguments</span>
+<span class="sd">    just like :meth:`.Corpus.__getitem__`\.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; corpus = Corpus(papers)</span>
+<span class="sd">       &gt;&gt;&gt; subcorpus = corpus.subcorpus((&#39;date&#39;, 1995))</span>
+<span class="sd">       &gt;&gt;&gt; subcorpus</span>
+<span class="sd">       &lt;tethne.classes.corpus.Corpus object at 0x10278ea10&gt;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">papers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A list of all :class:`.Paper`\s in the :class:`.Corpus`\.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indexed_papers</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+    <span class="n">index_by</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Specifies the field in :class:`.Paper`\s that should be used as the</span>
+<span class="sd">    primary indexing field for a :class:`.Corpus` instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">indexed_papers</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The primary index for :class:`.Paper`\s in a :class:`.Corpus` instance.</span>
+<span class="sd">    Keys are based on :attr:`.index_by`\, and values are :class:`.Paper`</span>
+<span class="sd">    instances.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">features</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Contains :class:`.FeatureSet`\s for a :class:`.Corpus` instance.</span>
+
+<span class="sd">    New :class:`.FeatureSet`\s can be created from attributes of :class:`.Paper`</span>
+<span class="sd">    using :meth:`.index_feature`\.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">indices</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Contains field indices for the :class:`Paper`\s in a :class:`.Corpus`</span>
+<span class="sd">    instance.</span>
+
+<span class="sd">    The ``&#39;citations&#39;`` index, for example, allows us to look up all of the</span>
+<span class="sd">    Papers that contain a particular bibliographic reference:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       &gt;&gt;&gt; for citation, papers in corpus.indices[&#39;citations&#39;].items()[7:10]:</span>
+<span class="sd">       ...     print &#39;The following Papers cite {0} \\n\\n\\t{1} \\n&#39;.format(citation, &#39;\\n\\t&#39;.join(papers))</span>
+<span class="sd">       The following Papers cite WHITFIELD J 2006 NATURE:</span>
+<span class="sd">            WOS:000252758800011</span>
+<span class="sd">            WOS:000253464000004</span>
+<span class="sd">       The following Papers cite WANG T 2006 GLOBAL CHANGE BIOL:</span>
+<span class="sd">            WOS:000282225000019</span>
+<span class="sd">            WOS:000281546800001</span>
+<span class="sd">            WOS:000251903200006</span>
+<span class="sd">            WOS:000292901400010</span>
+<span class="sd">            WOS:000288656800015</span>
+<span class="sd">            WOS:000318353300001</span>
+<span class="sd">            WOS:000296710600017</span>
+<span class="sd">            WOS:000255552100006</span>
+<span class="sd">            WOS:000272153800012</span>
+<span class="sd">       The following Papers cite LINKOSALO T 2009 AGR FOREST METEOROL:</span>
+<span class="sd">            WOS:000298398700003</span>
+
+<span class="sd">    Notice that the values above are not Papers themselves, but identifiers.</span>
+<span class="sd">    These are the same identifiers used in the primary index, so we can use them</span>
+<span class="sd">    to look up :class:`Paper`\s:</span>
+
+<span class="sd">       &gt;&gt;&gt; papers = corpus.indices[&#39;citations&#39;][&#39;CARLSON SM 2004 EVOL ECOL RES&#39;]  # Who cited Carlson 2004?</span>
+<span class="sd">       &gt;&gt;&gt; print papers</span>
+<span class="sd">       &gt;&gt;&gt; for paper in papers:</span>
+<span class="sd">       ...     print corpus.indexed_papers[paper]</span>
+<span class="sd">       [&#39;WOS:000311994600006&#39;, &#39;WOS:000304903100014&#39;, &#39;WOS:000248812000005&#39;]</span>
+<span class="sd">       &lt;tethne.classes.paper.Paper object at 0x112d1fe10&gt;</span>
+<span class="sd">       &lt;tethne.classes.paper.Paper object at 0x1121e8310&gt;</span>
+<span class="sd">       &lt;tethne.classes.paper.Paper object at 0x1144ad390&gt;</span>
+
+<span class="sd">    You can create new indices using :meth:`.index`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">papers</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">index_fields</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;authors&#39;</span><span class="p">,</span> <span class="s">&#39;citations&#39;</span><span class="p">],</span>
+                 <span class="n">index_features</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;authors&#39;</span><span class="p">,</span> <span class="s">&#39;citations&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        paper : list</span>
+<span class="sd">        index_by : str</span>
+<span class="sd">        index_fields : str or iterable of strs</span>
+<span class="sd">        kwargs : kwargs</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_by</span> <span class="o">=</span> <span class="n">index_by</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">indexed_papers</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_generate_index</span><span class="p">(</span><span class="n">paper</span><span class="p">):</span> <span class="n">paper</span>
+                               <span class="k">for</span> <span class="n">paper</span> <span class="ow">in</span> <span class="n">papers</span><span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">index_features</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">feature_name</span> <span class="ow">in</span> <span class="n">index_features</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">index_feature</span><span class="p">(</span><span class="n">feature_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">index_fields</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">_iterable</span><span class="p">(</span><span class="n">index_fields</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indexed_papers</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_generate_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paper</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If the ``index_by`` field is not set or not available, generate a unique</span>
+<span class="sd">        identifier using the :class:`.Paper`\&#39;s title and author names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_by</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_by</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="s">&#39;hashIndex&#39;</span><span class="p">):</span> <span class="c"># Generate a new index for this paper.</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">()</span>
+
+                <span class="c"># If we dont have author name then we just use the title of the paper</span>
+                <span class="c"># to generate unique identifier.</span>
+                <span class="k">if</span> <span class="n">paper</span><span class="o">.</span><span class="n">authors</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">hashable</span> <span class="o">=</span> <span class="n">paper</span><span class="o">.</span><span class="n">title</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="s">&#39;title&#39;</span><span class="p">):</span>
+                        <span class="n">title</span> <span class="o">=</span> <span class="n">paper</span><span class="o">.</span><span class="n">title</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">paper</span><span class="o">.</span><span class="n">authors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">hashable</span> <span class="o">=</span> <span class="n">title</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">authors</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">paper</span><span class="o">.</span><span class="n">authors</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">hashable</span> <span class="o">=</span> <span class="s">u&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">([</span><span class="n">title</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">l</span> <span class="o">+</span> <span class="n">f</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">authors</span><span class="p">]))</span>
+
+                <span class="n">m</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">hashable</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">))</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="s">&#39;hashIndex&#39;</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">())</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="s">&#39;hashIndex&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_by</span><span class="p">)</span>    <span class="c"># Identifier is already available.</span>
+
+<div class="viewcode-block" id="Corpus.index_feature"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.index_feature">[docs]</a>    <span class="k">def</span> <span class="nf">index_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature_name</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">structured</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a new :class:`.FeatureSet` from the attribute ``feature_name``</span>
+<span class="sd">        in each :class:`.Paper`\.</span>
+
+<span class="sd">        New :class:`.FeatureSet`\s are added to :attr:`.features`\.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        feature_name : str</span>
+<span class="sd">            The name of a :class:`.Paper` attribute.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">structured</span><span class="p">:</span>
+            <span class="n">fclass</span> <span class="o">=</span> <span class="n">StructuredFeature</span>
+            <span class="n">fsclass</span> <span class="o">=</span> <span class="n">StructuredFeatureSet</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fclass</span> <span class="o">=</span> <span class="n">Feature</span>
+            <span class="n">fsclass</span> <span class="o">=</span> <span class="n">FeatureSet</span>
+
+        <span class="n">feats</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_generate_index</span><span class="p">(</span><span class="n">p</span><span class="p">):</span> <span class="n">fclass</span><span class="p">(</span><span class="n">tokenize</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">feature_name</span><span class="p">)))</span>
+                 <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">papers</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">feature_name</span><span class="p">)}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">feature_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">fsclass</span><span class="p">(</span><span class="n">feats</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Corpus.index"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.index">[docs]</a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Indexes the :class:`.Paper`\s in this :class:`.Corpus` instance</span>
+<span class="sd">        by the attribute ``attr``.</span>
+
+<span class="sd">        New indices are added to :attr:`.indices`\.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        attr : str</span>
+<span class="sd">            The name of a :class:`.Paper` attribute.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">paper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">indexed_papers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">_iterable</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Feature</span><span class="p">:</span>
+                        <span class="n">v_</span> <span class="o">=</span> <span class="n">v</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">v_</span> <span class="o">=</span> <span class="n">v</span>
+
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">v_</span><span class="p">,</span> <span class="s">&#39;__iter__&#39;</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v_</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">t</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">v_</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                            <span class="n">v_</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">v_</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+                    <span class="k">if</span> <span class="n">v_</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">attr</span><span class="p">]:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">attr</span><span class="p">][</span><span class="n">v_</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">attr</span><span class="p">][</span><span class="n">v_</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+</div>
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&quot;Corpus has no such attribute&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Corpus.select"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves a subset of :class:`.Paper`\s based on selection criteria.</span>
+
+<span class="sd">        There are a variety of ways to select :class:`.Paper`\s.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; corpus = Corpus(papers)</span>
+<span class="sd">           &gt;&gt;&gt; corpus[0]    # Integer indices yield a single Paper.</span>
+<span class="sd">           &lt;tethne.classes.paper.Paper object at 0x103037c10&gt;</span>
+
+<span class="sd">           &gt;&gt;&gt; corpus[range(0,5)]  # A list of indices yields a list of Papers.</span>
+<span class="sd">           [&lt;tethne.classes.paper.Paper object at 0x103037c10&gt;,</span>
+<span class="sd">            &lt;tethne.classes.paper.Paper object at 0x10301c890&gt;,</span>
+<span class="sd">            ...</span>
+<span class="sd">            &lt;tethne.classes.paper.Paper object at 0x10302f5d0&gt;]</span>
+
+<span class="sd">           &gt;&gt;&gt; corpus[(&#39;date&#39;, 1995)]  # Select based on indexed fields.</span>
+<span class="sd">           [&lt;tethne.classes.paper.Paper object at 0x103037c10&gt;,</span>
+<span class="sd">            &lt;tethne.classes.paper.Paper object at 0x10301c890&gt;,</span>
+<span class="sd">            ...</span>
+<span class="sd">            &lt;tethne.classes.paper.Paper object at 0x10302f5d0&gt;]</span>
+
+<span class="sd">           &gt;&gt;&gt; corpus[&#39;citations&#39;, (&#39;DOLE RJ 1952 CELL&#39;)]   # Citing papers!</span>
+<span class="sd">           [&lt;tethne.classes.paper.Paper object at 0x103037c10&gt;,</span>
+<span class="sd">            &lt;tethne.classes.paper.Paper object at 0x10301c890&gt;,</span>
+<span class="sd">            ...</span>
+<span class="sd">            &lt;tethne.classes.paper.Paper object at 0x10302f5d0&gt;]</span>
+
+<span class="sd">           &gt;&gt;&gt; corpus[(&#39;date&#39;, range(1993, 1995))] # Multiple values are OK.</span>
+<span class="sd">           [&lt;tethne.classes.paper.Paper object at 0x103037c10&gt;,</span>
+<span class="sd">            &lt;tethne.classes.paper.Paper object at 0x10301c890&gt;,</span>
+<span class="sd">            ...</span>
+<span class="sd">            &lt;tethne.classes.paper.Paper object at 0x10302f5d0&gt;]</span>
+
+<span class="sd">        If you prefer to retrieve a :class:`.Corpus` rather than simply a</span>
+<span class="sd">        list of :class:`.Paper` instances (e.g. to build networks), use</span>
+<span class="sd">        :meth:`.Corpus.subcorpus`\.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        selector : object</span>
+<span class="sd">            See method description.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            A list of :class:`.Paper`\s.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">papers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">tuple</span><span class="p">:</span> <span class="c"># Select papers by index.</span>
+            <span class="n">index</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">selector</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>  <span class="c"># Set of index values.</span>
+                <span class="n">papers</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="n">v</span><span class="p">]]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">index</span><span class="p">]:</span>
+                    <span class="n">papers</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">indexed_papers</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span>  <span class="c"># Single index value.</span>
+                              <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="n">value</span><span class="p">]]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">papers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">selector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">indexed_papers</span><span class="p">:</span>
+                <span class="c"># Selector is a list of primary indices.</span>
+                <span class="n">papers</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">indexed_papers</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">selector</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">selector</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+                <span class="n">papers</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">papers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selector</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="n">papers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">papers</span><span class="p">[</span><span class="n">selector</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">selector</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">indexed_papers</span><span class="p">:</span>
+                <span class="n">papers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indexed_papers</span><span class="p">[</span><span class="n">selector</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">papers</span>
+</div>
+<div class="viewcode-block" id="Corpus.slice"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.slice">[docs]</a>    <span class="k">def</span> <span class="nf">slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cumulative</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">count_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">subcorpus</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a generator that yields ``(key, subcorpus)`` tuples for</span>
+<span class="sd">        sequential time windows.</span>
+
+<span class="sd">        Two common slicing patterns are the &quot;sliding time-window&quot; and the</span>
+<span class="sd">        &quot;time-period&quot; patterns. Whereas time-period slicing divides the corpus</span>
+<span class="sd">        into subcorpora by sequential non-overlapping time periods, subcorpora</span>
+<span class="sd">        generated by time-window slicing can overlap.</span>
+
+<span class="sd">        .. figure:: _static/images/bibliocoupling/timeline.timeslice.png</span>
+<span class="sd">           :width: 400</span>
+<span class="sd">           :align: center</span>
+
+<span class="sd">           **Time-period** slicing, with a window-size of 4 years.</span>
+
+<span class="sd">        .. figure:: _static/images/bibliocoupling/timeline.timewindow.png</span>
+<span class="sd">           :width: 400</span>
+<span class="sd">           :align: center</span>
+
+<span class="sd">           **Time-window** slicing, with a window-size of 4 years and a</span>
+<span class="sd">           step-size of 1 year.</span>
+
+<span class="sd">        *Sliding time-window* -- Set ``step_size=1``, and ``window_size`` to</span>
+<span class="sd">        the desired value.</span>
+<span class="sd">        *Time-period* -- ``step_size`` and ``window_size`` should have the same</span>
+<span class="sd">        value.</span>
+
+<span class="sd">        The value of ``key`` is always the first year in the slice.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; from tethne.readers.wos import read</span>
+<span class="sd">           &gt;&gt;&gt; corpus = read(&#39;/path/to/data&#39;)</span>
+<span class="sd">           &gt;&gt;&gt; for key, subcorpus in corpus.slice():</span>
+<span class="sd">           ...     print key, len(subcorpus)</span>
+<span class="sd">           2005, 5</span>
+<span class="sd">           2006, 5</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        window_size : int</span>
+<span class="sd">            (default: 1) Size of the time window, in years.</span>
+<span class="sd">        step_size : int</span>
+<span class="sd">            (default: 1) Number of years to advance window at each step.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        generator</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="s">&#39;date&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">)</span>
+
+        <span class="n">start</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="k">while</span> <span class="n">start</span> <span class="o">&lt;=</span> <span class="n">end</span> <span class="o">-</span> <span class="p">(</span><span class="n">window_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">selector</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="n">window_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">cumulative</span><span class="p">:</span>
+                <span class="n">year</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">window_size</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">year</span> <span class="o">=</span> <span class="n">start</span>
+            <span class="k">if</span> <span class="n">count_only</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">year</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">selector</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">subcorpus</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">year</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subcorpus</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">year</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cumulative</span><span class="p">:</span>
+                <span class="n">window_size</span> <span class="o">+=</span> <span class="n">step_size</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">start</span> <span class="o">+=</span> <span class="n">step_size</span>
+</div>
+<div class="viewcode-block" id="Corpus.distribution"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.distribution">[docs]</a>    <span class="k">def</span> <span class="nf">distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">slice_kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the number of papers in each slice, as defined by</span>
+<span class="sd">        ``slice_kwargs``.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; corpus.distribution(step_size=1, window_size=1)</span>
+<span class="sd">           [5, 5]</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        slice_kwargs : kwargs</span>
+<span class="sd">            Keyword arguments to be passed to :method:`.Corpus.slice`\.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="n">count_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">slice_kwargs</span><span class="p">):</span>
+            <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+            <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">keys</span><span class="p">,</span> <span class="n">values</span>
+</div>
+<div class="viewcode-block" id="Corpus.feature_distribution"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.feature_distribution">[docs]</a>    <span class="k">def</span> <span class="nf">feature_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">featureset_name</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;counts&#39;</span><span class="p">,</span>
+                             <span class="o">**</span><span class="n">slice_kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the distribution of a feature across slices of the corpus.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; corpus.feature_distribution(featureset_name=&#39;citations&#39;, \</span>
+<span class="sd">           ...                             feature=&#39;DOLE RJ 1965 CELL&#39;, \</span>
+<span class="sd">           ...                             step_size=1, window_size=1)</span>
+<span class="sd">           [2, 15, 25, 1]</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        featureset_name : str</span>
+<span class="sd">            Name of a :class:`.FeatureSet` in the :class:`.Corpus`\.</span>
+<span class="sd">        feature : str</span>
+<span class="sd">            Name of the specific feature of interest. E.g. if</span>
+<span class="sd">            ``featureset_name=&#39;citations&#39;``, then ``feature`` could be</span>
+<span class="sd">            something like ``&#39;DOLE RJ 1965 CELL&#39;``.</span>
+<span class="sd">        mode : str</span>
+<span class="sd">            (default: ``&#39;counts&#39;``) If set to ``&#39;counts&#39;``, values will be the</span>
+<span class="sd">            sum of all count values for the feature in each slice. If set to</span>
+<span class="sd">            ``&#39;documentCounts&#39;``, values will be the number of papers in which</span>
+<span class="sd">            the feature occurs in each slice.</span>
+<span class="sd">        slice_kwargs : kwargs</span>
+<span class="sd">            Keyword arguments to be passed to :method:`.Corpus.slice`\.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">fset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset_name</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">papers</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="n">subcorpus</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">slice_kwargs</span><span class="p">):</span>
+            <span class="n">allfeatures</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span>
+                           <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">fset</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_generate_index</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span>
+                                      <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">papers</span>
+                                      <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_index</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                                      <span class="ow">in</span> <span class="n">fset</span><span class="o">.</span><span class="n">features</span><span class="p">])]</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">allfeatures</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">count</span> <span class="o">=</span> <span class="mf">0.</span>
+            <span class="k">for</span> <span class="n">elem</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">allfeatures</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">elem</span> <span class="o">!=</span> <span class="n">feature</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&#39;counts&#39;</span><span class="p">:</span>
+                    <span class="n">count</span> <span class="o">+=</span> <span class="n">v</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">count</span> <span class="o">+=</span> <span class="mf">1.</span>
+            <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+            <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">keys</span><span class="p">,</span> <span class="n">values</span>
+</div>
+<div class="viewcode-block" id="Corpus.top_features"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.top_features">[docs]</a>    <span class="k">def</span> <span class="nf">top_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">featureset_name</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s">&#39;counts&#39;</span><span class="p">,</span>
+                     <span class="n">perslice</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">slice_kwargs</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the top ``topn`` most numerous features in the corpus.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        featureset_name : str</span>
+<span class="sd">            Name of a :class:`.FeatureSet` in the :class:`.Corpus`\.</span>
+<span class="sd">        topn : int</span>
+<span class="sd">            (default: ``20``) Number of features to return.</span>
+<span class="sd">        by : str</span>
+<span class="sd">            (default: ``&#39;counts&#39;``) If ``&#39;counts&#39;``, uses the sum of feature</span>
+<span class="sd">            count values to rank features. If ``&#39;documentCounts&#39;``, uses the</span>
+<span class="sd">            number of papers in which features occur.</span>
+<span class="sd">        perslice : bool</span>
+<span class="sd">            (default: False) If True, retrieves the top ``topn`` features in</span>
+<span class="sd">            each slice.</span>
+<span class="sd">        slice_kwargs : kwargs</span>
+<span class="sd">            If ``perslice=True``, these keyword arguments are passed to</span>
+<span class="sd">            :meth:`.Corpus.slice`\.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">perslice</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[(</span><span class="n">k</span><span class="p">,</span> <span class="n">subcorpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset_name</span><span class="p">]</span><span class="o">.</span><span class="n">top</span><span class="p">(</span><span class="n">topn</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="n">by</span><span class="p">))</span>
+                    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">subcorpus</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="o">**</span><span class="n">slice_kwargs</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset_name</span><span class="p">]</span><span class="o">.</span><span class="n">top</span><span class="p">(</span><span class="n">topn</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="n">by</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Corpus.subcorpus"><a class="viewcode-back" href="../../../tethne.classes.corpus.html#tethne.classes.corpus.Corpus.subcorpus">[docs]</a>    <span class="k">def</span> <span class="nf">subcorpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a new :class:`.Corpus` using the criteria in ``selector``.</span>
+
+<span class="sd">        Accepts selector arguments just like  :meth:`.Corpus.select`\.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; corpus = Corpus(papers)</span>
+<span class="sd">           &gt;&gt;&gt; subcorpus = corpus.subcorpus((&#39;date&#39;, 1995))</span>
+<span class="sd">           &gt;&gt;&gt; subcorpus</span>
+<span class="sd">           &lt;tethne.classes.corpus.Corpus object at 0x10278ea10&gt;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">subcorpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">selector</span><span class="p">],</span>
+                           <span class="n">index_by</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">index_by</span><span class="p">,</span>
+                           <span class="n">index_fields</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
+                           <span class="n">index_features</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="c"># Transfer FeatureSets.</span>
+        <span class="k">for</span> <span class="n">featureset_name</span><span class="p">,</span> <span class="n">featureset</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">featureset_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">subcorpus</span><span class="p">:</span>
+                <span class="n">shared_papers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">featureset</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">&amp;</span> \
+                                     <span class="nb">set</span><span class="p">(</span><span class="n">subcorpus</span><span class="o">.</span><span class="n">indexed_papers</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+                <span class="n">fset</span> <span class="o">=</span> <span class="n">FeatureSet</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">featureset</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                                   <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">shared_papers</span><span class="p">})</span>
+                <span class="n">subcorpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">fset</span>
+
+        <span class="k">return</span> <span class="n">subcorpus</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/logo_round.png" alt="Logo">
+            </a></p>
+
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, ASU Digital Innovation Group.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
