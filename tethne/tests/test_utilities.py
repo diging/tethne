@@ -10,6 +10,9 @@ from tethne.utilities import overlap
 from tethne.utilities import _strip_punctuation
 from tethne.utilities import strip_punctuation
 from tethne.utilities import Dictionary
+from tethne.utilities import attribs_to_string
+from tethne.utilities import argmax
+from tethne.utilities import contains
 
 from tethne.utilities import strip_non_ascii
 
@@ -99,6 +102,38 @@ class TestGetItem(unittest.TestCase):
 
         Dictionary.__setitem__(dict_obj,'str',8)
         self.assertEqual(8,Dictionary.__getitem__(dict_obj,'str'))
+
+#method not changing anything much
+class TestAttribsToString(unittest.TestCase):
+
+    def test_attribs(self):
+        present_dict = { 1:[2,4,6,8], 2:(7,14), 3:{10:20}, 4:100, 5:300, 6:400}
+
+        self.assertEqual(present_dict,attribs_to_string(present_dict,None))
+
+class TestArgMax(unittest.TestCase):
+
+    def test_arg_max_str(self):
+        iterable = ['efgh','abcd','jklm','poqr']
+        self.assertEqual(3,argmax(iterable))
+
+    def test_arg_max_num(self):
+        iterable = [30,10,40,20]
+        self.assertEqual(2,argmax(iterable))
+
+class TestContains(unittest.TestCase):
+
+    def test_contains_true(self):
+        l = [2,4,1,6]
+        f = lambda x: x %2 == 1
+
+        self.assertEqual(True,contains(l,f))
+
+    def test_contains_false(self):
+        l = [0,2,4,8]
+        f = lambda x: x%2 == 1
+
+        self.assertEqual(False,contains(l,f))
 
 if __name__ == '__main__':
     unittest.main()
