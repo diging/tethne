@@ -2,7 +2,8 @@ import sys
 sys.path.append('../tethne')
 
 import unittest
-from tethne.readers.dfr import read, ngrams
+from tethne.readers import merge
+from tethne.readers.dfr import read, ngrams, _handle_author,_dfr2paper_map,_create_ayjid,_handle_pagerange,tokenize
 from tethne import Corpus, Paper, FeatureSet
 
 datapath = './tethne/tests/data/dfr'
@@ -21,6 +22,7 @@ class TestDFRReader(unittest.TestCase):
             if hasattr(e, 'authors_init'):
                 self.assertIsInstance(e.authors_init, list)
                 for a in e.authors_init:
+
                     self.assertTrue(a[0].isupper(), uppererr)
                     self.assertTrue(a[1].isupper(), uppererr)
 
@@ -79,11 +81,106 @@ class TestNGrams(unittest.TestCase):
         self.assertEqual(len(grams), 2)
         self.assertEqual(len(grams.index), 43)
 
-
 class TestCitationFile(unittest.TestCase):
     def test_citations_file(self):
         datapath2 = './tethne/tests/data/dfr2'
         self.assertIsInstance(read(datapath2), Corpus)
+
+
+class TestHandleAuthor(unittest.TestCase):
+
+    def test_handle_author_NOJR(self):
+        self.assertEqual(('TERRELL', 'E'),_handle_author("Edward E. Terrell"))
+
+    def test_handle_author_JR(self):
+        self.assertEqual(('STEBBINS, JR', 'G'),_handle_author("G. Ledyard Stebbins, Jr."))
+
+class TestDfr2PaperMap(unittest.TestCase):
+
+    def test_dfr2paper(self):
+        local_dict = { 'doi': 'doi','title': 'atitle','journaltitle': 'jtitle','volume': 'volume','issue': 'issue'    }
+        self.assertEqual(local_dict, _dfr2paper_map())
+
+class TestCreateAyijid(unittest.TestCase):
+
+    def test_no_aulast(self):
+        self.assertEqual(' R  ',_create_ayjid(None,['R'],None,None))
+    def test_no_auinit(self):
+        self.assertEqual('NIXON   ',_create_ayjid(['NIXON'],None,None,None))
+    def test_all_None_args(self):
+        self.assertEqual('UNKNOWN PAPER',_create_ayjid(None,None,None,None))
+
+class TestHandlePageRange(unittest.TestCase):
+
+    def test_handle_pagerange_noNumbers(self):
+        input_pagerange = 'pp.efcadd'
+        req_pagerange = (u'0',u'0')
+        self.assertEqual(req_pagerange,_handle_pagerange(input_pagerange))
+
+    def test_handle_pagerange(self):
+        input_pagerange = 'pp. 111-999'
+        req_pagerange = (u'111',u'999')
+        self.assertEqual(req_pagerange,_handle_pagerange(input_pagerange))
+
+class TestHandleReadersMerge(unittest.TestCase):
+
+    def test_merge_both_empty(self):
+        wos_papers = []
+        wos_corpus = Corpus(wos_papers)
+        dfr_papers = []
+        dfr_corpus = Corpus(dfr_papers)
+        expected_len = 0
+
+        self.assertEqual(expected_len,len(merge(wos_corpus,dfr_corpus)))
+
+    def test_merge_one_empty(self):
+        wos_papers = []
+        wos_corpus = Corpus(wos_papers)
+        dfr_papers = []
+        dfr_paper = Paper()
+        dfr_paper['date'] = 1965
+        dfr_papers.append(dfr_paper)
+        dfr_corpus = Corpus(dfr_papers)
+        dfr_papers.append(dfr_paper)
+        expected_len = 1
+
+        self.assertEqual(expected_len,len(merge(dfr_corpus,wos_corpus)))
+        self.assertEqual(expected_len,len(merge(wos_corpus,dfr_corpus)))
+
+    #two lists with 1 field and field's values in both are not equal
+    def test_merge_not_equal(self):
+        wos_papers = []
+        wos_paper = Paper()
+        wos_paper['date'] = 1999
+        wos_papers.append(wos_paper)
+        wos_corpus = Corpus(wos_papers)
+        dfr_papers = []
+        dfr_paper = Paper()
+        dfr_paper['date'] = 1965
+        dfr_papers.append(dfr_paper)
+        dfr_corpus = Corpus(dfr_papers)
+        result = merge(dfr_corpus,wos_corpus,['date'])
+        expected_len = 2
+
+        self.assertEqual(expected_len,len(result))
+
+     #two lists with 1 field and field's values in both are equal
+    def test_merge_equal(self):
+        wos_papers = []
+        wos_paper = Paper()
+        wos_paper['date'] = 1999
+
+        wos_papers.append(wos_paper)
+        wos_corpus = Corpus(wos_papers)
+        dfr_papers = []
+        dfr_paper = Paper()
+        dfr_paper['date'] = 1999
+        dfr_papers.append(dfr_paper)
+        dfr_corpus = Corpus(dfr_papers)
+        result = merge(dfr_corpus,wos_corpus,['date'])
+        expected_len = 1
+
+        self.assertEqual(1999,result[0].__getitem__('date'))
 
 
 if __name__ == '__main__':
