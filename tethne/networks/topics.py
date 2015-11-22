@@ -29,7 +29,7 @@ def terms(model, threshold=0.01, **kwargs):
     # Only include labels for terms that are actually in the graph.
     label_map = {k: v for k, v in model.vocabulary.items()
                  if k in graph.nodes()}
-
+    graph.name = ''
     return networkx.relabel_nodes(graph, label_map)
 
 
@@ -41,7 +41,9 @@ def topic_coupling(model, threshold=None, **kwargs):
         threshold = 3./model.Z
     select = lambda f, v, c, dc: v > threshold
 
-    return coupling(model.corpus, 'topics', filter=select, **kwargs)
+    graph = coupling(model.corpus, 'topics', filter=select, **kwargs)
+    graph.name = ''
+    return graph
 
 
 def cotopics(model, threshold=None, **kwargs):
