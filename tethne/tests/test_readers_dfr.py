@@ -3,7 +3,7 @@ sys.path.append('../tethne')
 
 import unittest
 from tethne.readers import merge
-from tethne.readers.dfr import read, ngrams, _handle_author,_dfr2paper_map,_create_ayjid,_handle_pagerange,tokenize
+from tethne.readers.dfr import read, ngrams, _handle_author,_dfr2paper_map,_create_ayjid,_handle_pagerange,tokenize,_handle_authors
 from tethne import Corpus, Paper, FeatureSet
 
 datapath = './tethne/tests/data/dfr'
@@ -121,6 +121,32 @@ class TestHandlePageRange(unittest.TestCase):
         input_pagerange = 'pp. 111-999'
         req_pagerange = (u'111',u'999')
         self.assertEqual(req_pagerange,_handle_pagerange(input_pagerange))
+
+class TestHandleAuthors(unittest.TestCase):
+
+    """testing the functionality when the input parameter is list"""
+    def test_handle_authors_list(self):
+
+        exp_aulast = ['STROMNAES', 'GARBER']
+        exp_auinit = ['C', 'E']
+
+        self.assertEqual(exp_aulast,_handle_authors(['Cistein Stromnaes', 'E. D. Garber'])[0])
+        self.assertEqual(exp_auinit,_handle_authors(['Cistein Stromnaes', 'E. D. Garber'])[1])
+
+    """testing the functionality when the input parameter is String"""
+    def test_handle_authors_String(self):
+
+        exp_aulast = ['YARNELL']
+        exp_auinit = ['S']
+
+        self.assertEqual(exp_aulast,_handle_authors('S. H. Yarnell')[0])
+        self.assertEqual(exp_auinit,_handle_authors('S. H. Yarnell')[1])
+
+class TestHandlePaper(unittest.TestCase):
+
+
+    def test_handle_paper(self):
+
 
 
 
