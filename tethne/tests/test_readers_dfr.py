@@ -122,65 +122,6 @@ class TestHandlePageRange(unittest.TestCase):
         req_pagerange = (u'111',u'999')
         self.assertEqual(req_pagerange,_handle_pagerange(input_pagerange))
 
-class TestHandleReadersMerge(unittest.TestCase):
-
-    def test_merge_both_empty(self):
-        wos_papers = []
-        wos_corpus = Corpus(wos_papers)
-        dfr_papers = []
-        dfr_corpus = Corpus(dfr_papers)
-        expected_len = 0
-
-        self.assertEqual(expected_len,len(merge(wos_corpus,dfr_corpus)))
-
-    def test_merge_one_empty(self):
-        wos_papers = []
-        wos_corpus = Corpus(wos_papers)
-        dfr_papers = []
-        dfr_paper = Paper()
-        dfr_paper['date'] = 1965
-        dfr_papers.append(dfr_paper)
-        dfr_corpus = Corpus(dfr_papers)
-        dfr_papers.append(dfr_paper)
-        expected_len = 1
-
-        self.assertEqual(expected_len,len(merge(dfr_corpus,wos_corpus)))
-        self.assertEqual(expected_len,len(merge(wos_corpus,dfr_corpus)))
-
-    #two lists with 1 field and field's values in both are not equal
-    def test_merge_not_equal(self):
-        wos_papers = []
-        wos_paper = Paper()
-        wos_paper['date'] = 1999
-        wos_papers.append(wos_paper)
-        wos_corpus = Corpus(wos_papers)
-        dfr_papers = []
-        dfr_paper = Paper()
-        dfr_paper['date'] = 1965
-        dfr_papers.append(dfr_paper)
-        dfr_corpus = Corpus(dfr_papers)
-        result = merge(dfr_corpus,wos_corpus,['date'])
-        expected_len = 2
-
-        self.assertEqual(expected_len,len(result))
-
-     #two lists with 1 field and field's values in both are equal
-    def test_merge_equal(self):
-        wos_papers = []
-        wos_paper = Paper()
-        wos_paper['date'] = 1999
-
-        wos_papers.append(wos_paper)
-        wos_corpus = Corpus(wos_papers)
-        dfr_papers = []
-        dfr_paper = Paper()
-        dfr_paper['date'] = 1999
-        dfr_papers.append(dfr_paper)
-        dfr_corpus = Corpus(dfr_papers)
-        result = merge(dfr_corpus,wos_corpus,['date'])
-        expected_len = 1
-
-        self.assertEqual(1999,result[0].__getitem__('date'))
 
 
 if __name__ == '__main__':
