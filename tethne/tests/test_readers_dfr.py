@@ -3,7 +3,7 @@ sys.path.append('../tethne')
 
 import unittest
 from tethne.readers import merge
-from tethne.readers.dfr import read, ngrams, _handle_author,_dfr2paper_map,_create_ayjid,_handle_pagerange,tokenize
+from tethne.readers.dfr import read, ngrams, _handle_author,_dfr2paper_map,_create_ayjid,_handle_pagerange,tokenize,_handle_authors
 from tethne import Corpus, Paper, FeatureSet
 
 datapath = './tethne/tests/data/dfr'
@@ -122,65 +122,33 @@ class TestHandlePageRange(unittest.TestCase):
         req_pagerange = (u'111',u'999')
         self.assertEqual(req_pagerange,_handle_pagerange(input_pagerange))
 
-class TestHandleReadersMerge(unittest.TestCase):
+class TestHandleAuthors(unittest.TestCase):
 
-    def test_merge_both_empty(self):
-        wos_papers = []
-        wos_corpus = Corpus(wos_papers)
-        dfr_papers = []
-        dfr_corpus = Corpus(dfr_papers)
-        expected_len = 0
+    """testing the functionality when the input parameter is list"""
+    def test_handle_authors_list(self):
 
-        self.assertEqual(expected_len,len(merge(wos_corpus,dfr_corpus)))
+        exp_aulast = ['STROMNAES', 'GARBER']
+        exp_auinit = ['C', 'E']
 
-    def test_merge_one_empty(self):
-        wos_papers = []
-        wos_corpus = Corpus(wos_papers)
-        dfr_papers = []
-        dfr_paper = Paper()
-        dfr_paper['date'] = 1965
-        dfr_papers.append(dfr_paper)
-        dfr_corpus = Corpus(dfr_papers)
-        dfr_papers.append(dfr_paper)
-        expected_len = 1
+        self.assertEqual(exp_aulast,_handle_authors(['Cistein Stromnaes', 'E. D. Garber'])[0])
+        self.assertEqual(exp_auinit,_handle_authors(['Cistein Stromnaes', 'E. D. Garber'])[1])
 
-        self.assertEqual(expected_len,len(merge(dfr_corpus,wos_corpus)))
-        self.assertEqual(expected_len,len(merge(wos_corpus,dfr_corpus)))
+    """testing the functionality when the input parameter is String"""
+    def test_handle_authors_String(self):
 
-    #two lists with 1 field and field's values in both are not equal
-    def test_merge_not_equal(self):
-        wos_papers = []
-        wos_paper = Paper()
-        wos_paper['date'] = 1999
-        wos_papers.append(wos_paper)
-        wos_corpus = Corpus(wos_papers)
-        dfr_papers = []
-        dfr_paper = Paper()
-        dfr_paper['date'] = 1965
-        dfr_papers.append(dfr_paper)
-        dfr_corpus = Corpus(dfr_papers)
-        result = merge(dfr_corpus,wos_corpus,['date'])
-        expected_len = 2
+        exp_aulast = ['YARNELL']
+        exp_auinit = ['S']
 
-        self.assertEqual(expected_len,len(result))
+        self.assertEqual(exp_aulast,_handle_authors('S. H. Yarnell')[0])
+        self.assertEqual(exp_auinit,_handle_authors('S. H. Yarnell')[1])
 
-     #two lists with 1 field and field's values in both are equal
-    def test_merge_equal(self):
-        wos_papers = []
-        wos_paper = Paper()
-        wos_paper['date'] = 1999
+"""
+class TestHandlePaper(unittest.TestCase):
 
-        wos_papers.append(wos_paper)
-        wos_corpus = Corpus(wos_papers)
-        dfr_papers = []
-        dfr_paper = Paper()
-        dfr_paper['date'] = 1999
-        dfr_papers.append(dfr_paper)
-        dfr_corpus = Corpus(dfr_papers)
-        result = merge(dfr_corpus,wos_corpus,['date'])
-        expected_len = 1
 
-        self.assertEqual(1999,result[0].__getitem__('date'))
+    def test_handle_paper(self):
+"""
+
 
 
 if __name__ == '__main__':

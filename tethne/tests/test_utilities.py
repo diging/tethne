@@ -1,6 +1,6 @@
 import sys
-sys.path.append('./')
-
+sys.path.append('../tethne')
+datapath = './tethne/tests/data/test_citations_sample.xml'
 
 import unittest
 
@@ -13,7 +13,8 @@ from tethne.utilities import Dictionary
 from tethne.utilities import attribs_to_string
 from tethne.utilities import argmax
 from tethne.utilities import contains
-
+from tethne.utilities import dict_from_node
+import xml.etree.ElementTree as ET
 from tethne.utilities import strip_non_ascii
 
 #testing method "_strip_punctuation"
@@ -134,6 +135,55 @@ class TestContains(unittest.TestCase):
         f = lambda x: x%2 == 1
 
         self.assertEqual(False,contains(l,f))
+
+class TestDictFromNode(unittest.TestCase):
+
+    """
+    Testing the functionality when there are more than one node of the same type and the resultants values are in propertly obtained in the list
+    and also when there is only node of a type, the resultant is a String
+    """
+    def test_dict_from_node(self):
+        with open(datapath, 'r') as f:
+            root = ET.fromstring(f.read())
+            pattern = './/{elem}'.format(elem='article')
+            elements = root.findall(pattern)
+            present_dict = dict_from_node(elements[0])
+
+        expectedList = ['Askell Dove','Doris Love']
+        expectedString = 'American Midland Naturalist'
+        self.assertEqual(11,len(present_dict))
+        self.assertEqual(expectedList,present_dict.get('author'))
+        self.assertEqual(expectedString,present_dict.get('journaltitle'))
+
+    """
+    Testing the functionality when one of the nodes have children and recursive value is false
+    """
+    def test_dict_from_node_rec_false(self):
+
+        with open(datapath, 'r') as f:
+            root = ET.fromstring(f.read())
+            pattern = './/{elem}'.format(elem='article')
+            elements = root.findall(pattern)
+            present_dict = dict_from_node(elements[1])
+
+        expectedListSize = 2
+
+        self.assertEqual(expectedListSize,present_dict.get('authors'))
+
+    """
+    Testing the functionality when one of the nodes have children and recursive value is true
+    """
+    def test_dict_from_node_rec_True(self):
+        with open(datapath, 'r') as f:
+            root = ET.fromstring(f.read())
+            pattern = './/{elem}'.format(elem='article')
+            elements = root.findall(pattern)
+            present_dict = dict_from_node(elements[1],True)
+
+        expectedDict = {'author': ['Askell Dove', 'Doris Love']}
+        self.assertEqual(expectedDict,present_dict.get('authors'))
+
+
 
 if __name__ == '__main__':
     unittest.main()
