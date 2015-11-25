@@ -142,11 +142,12 @@ class TestHandleAuthors(unittest.TestCase):
         self.assertEqual(exp_aulast,_handle_authors('S. H. Yarnell')[0])
         self.assertEqual(exp_auinit,_handle_authors('S. H. Yarnell')[1])
 
+"""
 class TestHandlePaper(unittest.TestCase):
 
 
     def test_handle_paper(self):
-
+"""
 
 
 
