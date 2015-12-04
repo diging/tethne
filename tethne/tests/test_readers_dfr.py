@@ -3,11 +3,14 @@ sys.path.append('../tethne')
 
 import unittest
 from tethne.readers import merge
-from tethne.readers.dfr import read, ngrams, _handle_author,_dfr2paper_map,_create_ayjid,_handle_pagerange,tokenize,_handle_authors
+from tethne.readers.dfr import read, ngrams, _handle_author,_dfr2paper_map,_create_ayjid,_handle_pagerange,tokenize,_handle_authors,_handle_paper
 from tethne import Corpus, Paper, FeatureSet
+import xml.etree.ElementTree as ET
 
 datapath = './tethne/tests/data/dfr'
 datapath_float_weights = './tethne/tests/data/dfr_float_weights'
+sample_datapath = './tethne/tests/data/test_citations_sample.xml'
+
 
 class TestDFRReader(unittest.TestCase):
     def test_read(self):
@@ -141,6 +144,21 @@ class TestHandleAuthors(unittest.TestCase):
 
         self.assertEqual(exp_aulast,_handle_authors('S. H. Yarnell')[0])
         self.assertEqual(exp_auinit,_handle_authors('S. H. Yarnell')[1])
+
+class TestHandlePaper(unittest.TestCase):
+
+    def test_handle_Paper(self):
+       with open(sample_datapath, 'r') as f:
+            root = ET.fromstring(f.read())
+            pattern = './/{elem}'.format(elem='article')
+            elements = root.findall(pattern)
+            presentPaper = _handle_paper(elements[0])
+
+            self.assertIsInstance(presentPaper,Paper)
+            self.assertEqual(1954,presentPaper.__getitem__('date'))
+
+
+
 
 """
 class TestHandlePaper(unittest.TestCase):
