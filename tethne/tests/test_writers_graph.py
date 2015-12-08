@@ -14,7 +14,7 @@ from tethne.readers.wos import read
 from tethne.networks.authors import coauthors
 
 datapath = './tethne/tests/data/wos2.txt'
-testdatapath = '/Users/diging_yogi/tethne/tethne/tests/data/wos2.txt'
+
 
 
 class GraphMLTest(unittest.TestCase):
