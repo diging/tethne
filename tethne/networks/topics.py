@@ -162,7 +162,7 @@ def distance(model, method='cosine', percentile=90, bidirectional=False,
 
     # pct = numpy.percentile(edges.values(), percentile)
     pct = int(round(len(edges)*(percentile/100.)))
-    for i in argsort(edge.values())[::-1][:pct]:
+    for i in argsort(edges.values())[::-1][:pct]:
         edge, sim = edges.keys()[i], edges.values()[i]
         thegraph.add_edge(edge[0], edge[1], weight=float(sim))
 
