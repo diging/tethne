@@ -14,6 +14,7 @@ from tethne.readers.wos import read
 from tethne.networks.authors import coauthors
 
 datapath = './tethne/tests/data/wos2.txt'
+testdatapath = '/Users/diging_yogi/tethne/tethne/tests/data/wos2.txt'
 
 
 
@@ -95,6 +96,24 @@ class TestToSif(unittest.TestCase):
         to_sif(self.graph,self.temp)
 
         self.assertEqual(os.path.getsize(self.temp), 0)
+
+    #testing the functionality when the graph is multigraph
+    def testMultiGraph(self):
+        testGraphMulti = nx.MultiGraph()
+        testGraphMulti.add_edges_from([(1,2),(2,1),(1,3),(2,4,{'color':'blue'}),(3,5)])
+        f, self.temp = tempfile.mkstemp(suffix='.toSif')
+
+        to_sif(testGraphMulti,self.temp)
+        self.assertEqual(os.path.getsize(self.temp),0)
+
+    def testGraphZeroEdges(self):
+        testGraphNoEdges = nx.Graph()
+        testGraphNoEdges.add_nodes_from([1,3,5,7])
+        f, self.temp = tempfile.mkstemp(suffix='.toSif')
+
+        to_sif(testGraphNoEdges,self.temp)
+        self.assertEqual(os.path.getsize(self.temp),0)
+
 
 
 
