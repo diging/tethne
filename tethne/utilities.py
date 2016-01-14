@@ -48,7 +48,9 @@ class MLStripper(HTMLParser):
     def handle_data(self, d):
         self.fed.append(d)
     def feed(self, data):
-
+        """
+        added this check as sometimes we are getting the data in integer format instead of string
+        """
         if(type(data) == int):
             data = unicode(data)
 
