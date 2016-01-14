@@ -48,6 +48,10 @@ class MLStripper(HTMLParser):
     def handle_data(self, d):
         self.fed.append(d)
     def feed(self, data):
+
+        if(type(data) == int):
+            data = unicode(data)
+
         self.rawdata = self.rawdata + data
         self.goahead(0)
     def get_data(self):
