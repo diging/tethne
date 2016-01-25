@@ -152,13 +152,6 @@ class GramGenerator(object):
         return GramGenerator(self.path, self.elem,
                              ignore_hash=self.ignore_hash)
 
-    def items(self):
-        """
-        Returns a :class:`GramGenerator` that produces key,value tuples.
-        """
-        return GramGenerator(self.path, self.elem,
-                             ignore_hash=self.ignore_hash)
-
     def values(self):
         """
         Returns a :class:`GramGenerator` that produces only values.
