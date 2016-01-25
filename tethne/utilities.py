@@ -51,10 +51,12 @@ class MLStripper(HTMLParser):
         """
         added this check as sometimes we are getting the data in integer format instead of string
         """
-        if(type(data) == int):
+        try:
+            self.rawdata = self.rawdata + data
+        except TypeError:
             data = unicode(data)
+            self.rawdata = self.rawdata + data
 
-        self.rawdata = self.rawdata + data
         self.goahead(0)
     def get_data(self):
         return u''.join(self.fed)
