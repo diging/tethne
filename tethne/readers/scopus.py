@@ -15,7 +15,7 @@ if PYTHON_3:
     unicode = str
     xrange = range
 
-from ..classes import Paper, Corpus
+from tethne import Paper, Corpus
 
 def read_corpus(path):
     """
