@@ -68,6 +68,34 @@ class TestZoteroParser(unittest.TestCase):
         self.assertIsInstance(papers, list)
         self.assertIsInstance(papers[0], Paper)
 
+    def test_authors(self):
+        """
+        Tests for empty author names for each paper in a ZOTERO Corpus
+
+        Returns
+        -------
+        Fails : When the author-name is empty, it fails
+
+        """
+        papers = read(datapath)
+        for paper in papers:
+            self.assertNotEqual(len(paper.authors), 0, "Author list cannot be empty")
+
+
+    def test_authors_full(self):
+        """
+        Tests for empty author_full names for each paper in a ZOTERO Corpus
+
+        Returns
+        -------
+        Fails : When the author_full names is empty, it fails.
+
+        """
+        papers = read(datapath)
+        for paper in papers:
+            self.assertNotEqual(len(paper.authors_full), 0, "Author_full list cannot be empty")
+
+
     def test_handle_date(self):
         parser = ZoteroParser(datapath)
         parser.parse()
