@@ -247,12 +247,53 @@ class ZoteroParser(RDFParser):
                     pass
 
     def handle_documentType(self, value):
-        return value
+        """
+
+        Parameters
+        ----------
+        value
+
+        Returns
+        -------
+        value.toPython()
+        Basically, RDF literals are casted to their corresponding Python data types.
+        """
+        return value.toPython()
 
     def handle_authors_full(self, value):
         authors = [self.handle_author(o) for s, p, o
                    in self.graph.triples((value, None, None))]
         return [a for a in authors if a is not None]
+
+    def handle_abstract(self, value):
+        """
+        Abstract handler.
+
+        Parameters
+        ----------
+        value
+
+        Returns
+        -------
+        abstract.toPython()
+        Basically, RDF literals are casted to their corresponding Python data types.
+        """
+        return value.toPython()
+
+    def handle_title(self, value):
+        """
+        Title handler
+        Parameters
+        ----------
+        value
+
+        Returns
+        -------
+        title.toPython()
+
+        """
+        return value.toPython()
+
 
     def handle_author(self, value):
         forename_iter = self.graph.triples((value, FORENAME_ELEM, None))
