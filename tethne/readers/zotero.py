@@ -109,7 +109,7 @@ def extract_text(fpath):
             tokens.append(word)
             i += 1
 
-    contexts = [('page', pages), ('sentence', sentences)]
+    contexts = [('sentence', sentences)]
     return StructuredFeature(tokens, contexts)
 
 
