@@ -241,8 +241,40 @@ class Corpus(object):
         self.indices = {}
         self.features = {}
 
-        self.indexed_papers = {self._generate_index(paper): paper
-                               for paper in papers}
+        # -------------START------------ #
+        # Fix of Story Tethne/TETHNE-122
+        self.duplicate_papers = {}
+
+
+
+
+        #self.indexed_papers = {self._generate_index(paper): paper
+                    #   for paper in papers}
+
+        self.indexed_papers = {}
+
+
+        for paper in papers:
+            key = self._generate_index(paper)
+            if not self.indexed_papers:
+                self.indexed_papers = {key:paper}
+            else:
+                if key not in self.indexed_papers.keys():
+                    self.indexed_papers.update({key:paper})
+                else:
+                    if not self.duplicate_papers:
+                        self.duplicate_papers = {key:2}
+                    else:
+                        if key not in self.duplicate_papers.keys():
+                            count = 1
+                        else :
+                            count = self.duplicate_papers[key]
+                        self.duplicate_papers.update({self._generate_index(paper): count+1})
+
+        # Fix of Story Tethne/TETHNE-122
+        # -------------END------------- #
+
+
 
         if index_features:
             for feature_name in index_features:
