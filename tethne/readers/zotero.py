@@ -201,7 +201,7 @@ class ZoteroParser(RDFParser):
         super(ZoteroParser, self).__init__(path, **kwargs)
 
         self.full_text = {}     # Collect StructuredFeatures until finished.
-        self.follow_links = True # Boolean switch to follow links associated with a paper
+        self.follow_links = kwargs.get('follow_links', True) # Boolean switch to follow links associated with a paper
 
     def open(self):
         """
