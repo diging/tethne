@@ -144,5 +144,5 @@ def multipartite(corpus, featureset_names, min_weight=1, filters={}):
                 pairs[(paper, f)] += 1
         node_type.update(ftypes)
 
-    return _generate_graph(nx.Graph, pairs, node_attrs=node_type,
+    return _generate_graph(nx.DiGraph, pairs, node_attrs=node_type,
                            min_weight=min_weight)

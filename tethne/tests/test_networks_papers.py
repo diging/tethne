@@ -18,7 +18,7 @@ class TestAuthorPapers(unittest.TestCase):
     def test_direct_citation(self):
         g = direct_citation(self.corpus)
 
-        self.assertIsInstance(g, nx.Graph)
+        self.assertIsInstance(g, nx.DiGraph)
         self.assertGreater(g.order(), 0)
         self.assertGreater(g.size(), 0)
 
