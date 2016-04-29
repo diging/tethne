@@ -51,6 +51,5 @@ setup(
         "slate",
         "Unidecode==0.4.17",
         "nltk",
-        "psycopg2",
     ],
 )
