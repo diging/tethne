@@ -7,6 +7,10 @@ import codecs
 import magic    # To detect file mime-type.
 import slate    # PDF processing.
 import chardet  # Detect character encodings.
+
+import warnings
+warnings.simplefilter('always', UserWarning)
+
 from math import log
 logging.basicConfig(level=40)
 logging.getLogger('iso8601').setLevel(40)
@@ -197,6 +201,7 @@ class ZoteroParser(RDFParser):
         super(ZoteroParser, self).__init__(path, **kwargs)
 
         self.full_text = {}     # Collect StructuredFeatures until finished.
+        self.follow_links = kwargs.get('follow_links', True) # Boolean switch to follow links associated with a paper
 
     def open(self):
         """
@@ -425,6 +430,9 @@ def read(path, corpus=True, index_by='uri', follow_links=True, **kwargs):
 
     if corpus:
         c = Corpus(papers, index_by=index_by, **kwargs)
+        if c.duplicate_papers:
+            warnings.warn("Duplicate papers detected. Use the 'duplicate_papers' attribute of the corpus to get the list", UserWarning)
+
         for fset_name, fset_values in parser.full_text.items():
             c.features[fset_name] = StructuredFeatureSet(fset_values)
         return c

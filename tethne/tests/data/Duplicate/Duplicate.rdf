@@ -1,0 +1,113 @@
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:z="http://www.zotero.org/namespaces/export#"
+ xmlns:dcterms="http://purl.org/dc/terms/"
+ xmlns:bib="http://purl.org/net/biblio#"
+ xmlns:foaf="http://xmlns.com/foaf/0.1/"
+ xmlns:link="http://purl.org/rss/1.0/modules/link/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/">
+    <bib:Article rdf:about="http://www.jstor.org/stable/2460126">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:0003-0147"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Vitt</foaf:surname>
+                        <foaf:givenname>Laurie J.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Congdon</foaf:surname>
+                        <foaf:givenname>Justin D.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_216"/>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://www.jstor.org/stable/2460126</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <bib:pages>595-608</bib:pages>
+        <dc:date>1978</dc:date>
+        <dcterms:dateSubmitted>2016-02-26 16:38:21</dcterms:dateSubmitted>
+        <z:libraryCatalog>JSTOR</z:libraryCatalog>
+        <dcterms:abstract>Lizard body shapes, selected for in the context of predator escape and foraging, serve well to predict the ratios of clutch to body (termed &quot;relative clutch mass&quot;) whether in weights or calories. Species cryptic in behavior that employ the sit-and-wait foraging strategy exhibit high relative clutch mass (RCM) whereas species using flight for escape and the wide-foraging strategy exhibit low RCM. The RCM values for other species with more complex predator escape strategies are predictable once unique aspects of their ecologies are considered. It is concluded that RCM in lizards need not be correlated to reproductive effort, and, if it is, then reproductive effort coevolved with predator escape and foraging strategies and ecologically analogous species should not only exhibit similar RCM values, but also similar reproductive efforts.</dcterms:abstract>
+        <dc:title>Body Shape, Reproductive Effort, and Relative Clutch Mass in Lizards: Resolution of a Paradox</dc:title>
+        <z:shortTitle>Body Shape, Reproductive Effort, and Relative Clutch Mass in Lizards</z:shortTitle>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:0003-0147">
+        <prism:volume>112</prism:volume>
+        <prism:number>985</prism:number>
+        <dc:title>The American Naturalist</dc:title>
+        <dc:identifier>ISSN 0003-0147</dc:identifier>
+        <dcterms:alternative>The American Naturalist</dcterms:alternative>
+    </bib:Journal>
+    <z:Attachment rdf:about="#item_216">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/216/Vitt and Congdon - 1978 - Body Shape, Reproductive Effort, and Relative Clut.pdf"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.jstor.org/stable/pdfplus/10.2307/2460126.pdf?acceptTC=true</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2016-02-26 16:38:21</dcterms:dateSubmitted>
+        <dc:title>JSTOR Full Text PDF</dc:title>
+    </z:Attachment>
+    <bib:Article rdf:about="#item_217">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <prism:volume>112</prism:volume>
+                <prism:number>985</prism:number>
+                <dc:title>The American Naturalist</dc:title>
+                <dc:identifier>ISSN 0003-0147</dc:identifier>
+                <dcterms:alternative>The American Naturalist</dcterms:alternative>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Vitt</foaf:surname>
+                        <foaf:givenname>Laurie J.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Congdon</foaf:surname>
+                        <foaf:givenname>Justin D.</foaf:givenname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_218"/>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://www.jstor.org/stable/2460126</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <bib:pages>595-608</bib:pages>
+        <dc:date>1978</dc:date>
+        <dcterms:dateSubmitted>2016-02-26 16:38:27</dcterms:dateSubmitted>
+        <z:libraryCatalog>JSTOR</z:libraryCatalog>
+        <dcterms:abstract>Lizard body shapes, selected for in the context of predator escape and foraging, serve well to predict the ratios of clutch to body (termed &quot;relative clutch mass&quot;) whether in weights or calories. Species cryptic in behavior that employ the sit-and-wait foraging strategy exhibit high relative clutch mass (RCM) whereas species using flight for escape and the wide-foraging strategy exhibit low RCM. The RCM values for other species with more complex predator escape strategies are predictable once unique aspects of their ecologies are considered. It is concluded that RCM in lizards need not be correlated to reproductive effort, and, if it is, then reproductive effort coevolved with predator escape and foraging strategies and ecologically analogous species should not only exhibit similar RCM values, but also similar reproductive efforts.</dcterms:abstract>
+        <dc:title>Body Shape, Reproductive Effort, and Relative Clutch Mass in Lizards: Resolution of a Paradox</dc:title>
+        <z:shortTitle>Body Shape, Reproductive Effort, and Relative Clutch Mass in Lizards</z:shortTitle>
+    </bib:Article>
+    <z:Attachment rdf:about="#item_218">
+        <z:itemType>attachment</z:itemType>
+        <link:link rdf:resource="files/218/Vitt and Congdon - 1978 - Body Shape, Reproductive Effort, and Relative Clut.pdf"/>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://www.jstor.org/stable/pdfplus/10.2307/2460126.pdf?acceptTC=true</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2016-02-26 16:38:27</dcterms:dateSubmitted>
+        <dc:title>JSTOR Full Text PDF</dc:title>
+    </z:Attachment>
+</rdf:RDF>
