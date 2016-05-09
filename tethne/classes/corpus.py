@@ -12,6 +12,7 @@ from tethne.classes.feature import FeatureSet, Feature, \
 from tethne.utilities import _iterable, argsort
 
 import sys
+import os
 PYTHON_3 = sys.version_info[0] == 3
 if PYTHON_3:
     unicode = str
@@ -315,9 +316,11 @@ class Corpus(object):
                 m.update(hashable.encode('utf-8'))
                 setattr(paper, 'hashIndex', m.hexdigest())
             return getattr(paper, 'hashIndex')
-        identifier = getattr(paper,self.index_by)
-        if isinstance(identifier,list):
-          identifier = getattr(paper,self.index_by)[0]
+        identifier = getattr(paper, self.index_by)
+        if type(identifier) is list:
+            identifier = identifier[0]
+        if self.index_by == 'link':
+            _, identifier = os.path.split(identifier)
         return identifier    # Identifier is already available.
 
     def index_feature(self, feature_name, tokenize=lambda x: x, structured=False):

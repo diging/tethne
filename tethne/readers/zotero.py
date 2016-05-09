@@ -375,6 +375,8 @@ class ZoteroParser(RDFParser):
 
             if hasattr(self, 'index_by'):
                 ident = getattr(entry, self.index_by)
+                if type(ident) is list:
+                    ident = ident[0]
             else:   # If `index_by` is not set, use `uri` by default.
                 ident = entry.uri
 
