@@ -12,6 +12,7 @@ from tethne.classes.feature import FeatureSet, Feature, \
 from tethne.utilities import _iterable, argsort
 
 import sys
+import os
 PYTHON_3 = sys.version_info[0] == 3
 if PYTHON_3:
     unicode = str
@@ -241,8 +242,40 @@ class Corpus(object):
         self.indices = {}
         self.features = {}
 
-        self.indexed_papers = {self._generate_index(paper): paper
-                               for paper in papers}
+        # -------------START------------ #
+        # Fix of Story Tethne/TETHNE-122
+        self.duplicate_papers = {}
+
+
+
+
+        #self.indexed_papers = {self._generate_index(paper): paper
+                    #   for paper in papers}
+
+        self.indexed_papers = {}
+
+
+        for paper in papers:
+            key = self._generate_index(paper)
+            if not self.indexed_papers:
+                self.indexed_papers = {key:paper}
+            else:
+                if key not in self.indexed_papers.keys():
+                    self.indexed_papers.update({key:paper})
+                else:
+                    if not self.duplicate_papers:
+                        self.duplicate_papers = {key:2}
+                    else:
+                        if key not in self.duplicate_papers.keys():
+                            count = 1
+                        else :
+                            count = self.duplicate_papers[key]
+                        self.duplicate_papers.update({self._generate_index(paper): count+1})
+
+        # Fix of Story Tethne/TETHNE-122
+        # -------------END------------- #
+
+
 
         if index_features:
             for feature_name in index_features:
@@ -283,9 +316,11 @@ class Corpus(object):
                 m.update(hashable.encode('utf-8'))
                 setattr(paper, 'hashIndex', m.hexdigest())
             return getattr(paper, 'hashIndex')
-        identifier = getattr(paper,self.index_by)
-        if isinstance(identifier,list):
-          identifier = getattr(paper,self.index_by)[0]
+        identifier = getattr(paper, self.index_by)
+        if type(identifier) is list:
+            identifier = identifier[0]
+        if self.index_by == 'link':
+            _, identifier = os.path.split(identifier)
         return identifier    # Identifier is already available.
 
     def index_feature(self, feature_name, tokenize=lambda x: x, structured=False):

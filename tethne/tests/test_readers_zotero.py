@@ -15,6 +15,7 @@ if PYTHON_3:
 datapath = './tethne/tests/data/zotero'
 datapath2 = './tethne/tests/data/zotero2'
 datapath3 = './tethne/tests/data/zotero_withfiles'
+duplicatePath = './tethne/tests/data/Duplicate'
 
 
 class TestInferSpaces(unittest.TestCase):
@@ -53,6 +54,31 @@ class TestZoteroParserWithFiles(unittest.TestCase):
         """)
 
 
+class TestZoteroDuplicates(unittest.TestCase):
+    def test_duplicate_Papers_length(self):
+        """
+        Tests for user-warning raised in case of duplicate papers in a Corpus.
+        Definition of duplicate papers is : Papers which have the same index_by field value.
+        Example :
+
+        Two papers in a Zotero collection, with the same URI, are duplicates
+        Two papers from World of Science with the same WOSID are duplicates
+
+        Returns
+        -------
+        Fails when the attribute duplicate_papers(Dictionary) is not populated.
+
+        duplicate_papers['http://www.jstor.org/stable/2460126'] = 2
+        This means there are 2 papers with the URI 'http://www.jstor.org/stable/2460126'
+
+        """
+        corpus = read(duplicatePath, corpus=True)
+        self.assertGreater(len(corpus.duplicate_papers), 0)
+        self.assertEqual(corpus.duplicate_papers['http://www.jstor.org/stable/2460126'], 2)
+
+
+
+
 class TestZoteroParser(unittest.TestCase):
     def test_read(self):
         corpus = read(datapath)
@@ -67,6 +93,36 @@ class TestZoteroParser(unittest.TestCase):
         papers = read(datapath, corpus=False)
         self.assertIsInstance(papers, list)
         self.assertIsInstance(papers[0], Paper)
+
+
+
+    def test_authors(self):
+        """
+        Tests for empty author names for each paper in a ZOTERO Corpus
+
+        Returns
+        -------
+        Fails : When the author-name is empty, it fails
+
+        """
+        papers = read(datapath)
+        for paper in papers:
+            self.assertNotEqual(len(paper.authors), 0, "Author list cannot be empty")
+
+
+    def test_authors_full(self):
+        """
+        Tests for empty author_full names for each paper in a ZOTERO Corpus
+
+        Returns
+        -------
+        Fails : When the author_full names is empty, it fails.
+
+        """
+        papers = read(datapath)
+        for paper in papers:
+            self.assertNotEqual(len(paper.authors_full), 0, "Author_full list cannot be empty")
+
 
     def test_handle_date(self):
         parser = ZoteroParser(datapath)

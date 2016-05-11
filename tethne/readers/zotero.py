@@ -7,6 +7,10 @@ import codecs
 import magic    # To detect file mime-type.
 import slate    # PDF processing.
 import chardet  # Detect character encodings.
+
+import warnings
+warnings.simplefilter('always', UserWarning)
+
 from math import log
 logging.basicConfig(level=40)
 logging.getLogger('iso8601').setLevel(40)
@@ -109,7 +113,7 @@ def extract_text(fpath):
             tokens.append(word)
             i += 1
 
-    contexts = [('page', pages), ('sentence', sentences)]
+    contexts = [('sentence', sentences)]
     return StructuredFeature(tokens, contexts)
 
 
@@ -197,6 +201,7 @@ class ZoteroParser(RDFParser):
         super(ZoteroParser, self).__init__(path, **kwargs)
 
         self.full_text = {}     # Collect StructuredFeatures until finished.
+        self.follow_links = kwargs.get('follow_links', True) # Boolean switch to follow links associated with a paper
 
     def open(self):
         """
@@ -247,12 +252,53 @@ class ZoteroParser(RDFParser):
                     pass
 
     def handle_documentType(self, value):
-        return value
+        """
+
+        Parameters
+        ----------
+        value
+
+        Returns
+        -------
+        value.toPython()
+        Basically, RDF literals are casted to their corresponding Python data types.
+        """
+        return value.toPython()
 
     def handle_authors_full(self, value):
         authors = [self.handle_author(o) for s, p, o
                    in self.graph.triples((value, None, None))]
         return [a for a in authors if a is not None]
+
+    def handle_abstract(self, value):
+        """
+        Abstract handler.
+
+        Parameters
+        ----------
+        value
+
+        Returns
+        -------
+        abstract.toPython()
+        Basically, RDF literals are casted to their corresponding Python data types.
+        """
+        return value.toPython()
+
+    def handle_title(self, value):
+        """
+        Title handler
+        Parameters
+        ----------
+        value
+
+        Returns
+        -------
+        title.toPython()
+
+        """
+        return value.toPython()
+
 
     def handle_author(self, value):
         forename_iter = self.graph.triples((value, FORENAME_ELEM, None))
@@ -329,6 +375,8 @@ class ZoteroParser(RDFParser):
 
             if hasattr(self, 'index_by'):
                 ident = getattr(entry, self.index_by)
+                if type(ident) is list:
+                    ident = ident[0]
             else:   # If `index_by` is not set, use `uri` by default.
                 ident = entry.uri
 
@@ -384,6 +432,9 @@ def read(path, corpus=True, index_by='uri', follow_links=True, **kwargs):
 
     if corpus:
         c = Corpus(papers, index_by=index_by, **kwargs)
+        if c.duplicate_papers:
+            warnings.warn("Duplicate papers detected. Use the 'duplicate_papers' attribute of the corpus to get the list", UserWarning)
+
         for fset_name, fset_values in parser.full_text.items():
             c.features[fset_name] = StructuredFeatureSet(fset_values)
         return c
