@@ -152,7 +152,7 @@ class IterParser(BaseParser):
         if hasattr(self.data[-1], tag):
             value = getattr(self.data[-1], tag)
             if tag in self.concat_fields:
-                value = ' '.join([value, data])
+                value = ' '.join([value, unicode(data)])
             elif type(value) is list:
                 value.append(data)
             elif value not in [None, '']:

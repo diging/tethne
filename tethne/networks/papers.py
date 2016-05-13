@@ -15,7 +15,7 @@ Methods for generating networks in which papers are vertices.
 from tethne.networks.base import multipartite, coupling, cooccurrence
 
 
-def direct_citation(corpus, min_weight=1):
+def direct_citation(corpus, min_weight=1, **kwargs):
     """
     A directed paper-citation network.
 
@@ -27,20 +27,20 @@ def direct_citation(corpus, min_weight=1):
     among papers in the original dataset.
     """
 
-    return multipartite(corpus, ['citations'], min_weight=min_weight)
+    return multipartite(corpus, ['citations'], min_weight=min_weight, **kwargs)
 
 
-def bibliographic_coupling(corpus, min_weight=1):
+def bibliographic_coupling(corpus, min_weight=1, **kwargs):
     """
     Generate a bibliographic coupling network.
 
     Two papers are **bibliographically coupled** when they both cite the same,
     third, paper.
     """
-    return coupling(corpus, 'citations', min_weight=min_weight)
+    return coupling(corpus, 'citations', min_weight=min_weight, **kwargs)
 
 
-def cocitation(corpus, min_weight=1, edge_attrs=['ayjid', 'date']):
+def cocitation(corpus, min_weight=1, edge_attrs=['ayjid', 'date'], **kwargs):
     """
     Generate a cocitation network.
 
@@ -53,8 +53,8 @@ def cocitation(corpus, min_weight=1, edge_attrs=['ayjid', 'date']):
     `here <http://cluster.cis.drexel.edu/~cchen/citespace/>`_.
     """
     return cooccurrence(corpus, 'citations', min_weight=min_weight,
-                        edge_attrs=edge_attrs)
+                        edge_attrs=edge_attrs, **kwargs)
 
 
-def author_coupling(corpus, min_weight=1):
-    return coupling(corpus, 'authors', min_weight=min_weight)
+def author_coupling(corpus, min_weight=1, **kwargs):
+    return coupling(corpus, 'authors', min_weight=min_weight, **kwargs)

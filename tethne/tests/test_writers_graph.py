@@ -9,10 +9,14 @@ import networkx as nx
 import csv
 
 from tethne import write_graphml, write_csv
+from tethne.writers.graph import to_sif
 from tethne.readers.wos import read
 from tethne.networks.authors import coauthors
 
 datapath = './tethne/tests/data/wos2.txt'
+
+
+
 
 class GraphMLTest(unittest.TestCase):
     def setUp(self):
@@ -76,6 +80,43 @@ class CSVTest(unittest.TestCase):
             os.rmdir(self.temp)
         except WindowsError:
             pass
+
+
+class TestToSif(unittest.TestCase):
+
+    #testing the functionality of to_sif method
+    def testBasic(self):
+        self.corpus = read(datapath)
+        self.graph = coauthors(self.corpus)
+        #self.temp = tempfile.mkstemp()
+        #self.prefix = os.path.join(self.temp,'.toSif')
+        f, self.temp = tempfile.mkstemp(suffix='.toSif')
+
+
+        to_sif(self.graph,self.temp)
+
+        self.assertEqual(os.path.getsize(self.temp), 0)
+
+    #testing the functionality when the graph is multigraph
+    def testMultiGraph(self):
+        testGraphMulti = nx.MultiGraph()
+        testGraphMulti.add_edges_from([(1,2),(2,1),(1,3),(2,4,{'color':'blue'}),(3,5)])
+        f, self.temp = tempfile.mkstemp(suffix='.toSif')
+
+        to_sif(testGraphMulti,self.temp)
+        self.assertEqual(os.path.getsize(self.temp),0)
+
+    def testGraphZeroEdges(self):
+        testGraphNoEdges = nx.Graph()
+        testGraphNoEdges.add_nodes_from([1,3,5,7])
+        f, self.temp = tempfile.mkstemp(suffix='.toSif')
+
+        to_sif(testGraphNoEdges,self.temp)
+        self.assertEqual(os.path.getsize(self.temp),0)
+
+
+
+
 
 
 

@@ -1,0 +1,51 @@
+<!-- Sample File created to test dict_from_node function in utilities -->
+
+<citations>
+    <article id="10.2307/2422045">
+        <doi>10.2307/2422045</doi>
+        <title>Cytotaxonomical Studies on the Northern Bedstraw</title>
+        <author>Askell Dove</author>
+        <author>Doris Love</author>
+        <journaltitle>American Midland Naturalist</journaltitle>
+        <volume>52</volume>
+        <issue>1</issue>
+        <pubdate>1954-07-01T00:00:00Z</pubdate>
+        <pagerange>pp. 88-105</pagerange>
+        <publisher>The University of Notre Dame</publisher>
+        <type>fla</type>
+        <reviewed-work></reviewed-work>
+    </article>
+    <article id="10.2307/2422045">
+        <doi>10.2307/2422045</doi>
+        <title>Cytotaxonomical Studies on the Northern Bedstraw</title>
+        <authors>
+                <author>Askell Dove</author>
+                <author>Doris Love</author>
+        </authors>
+        <journaltitle>American Midland Naturalist</journaltitle>
+        <volume>52</volume>
+        <issue>1</issue>
+        <pubdate>1954-07-01T00:00:00Z</pubdate>
+        <pagerange>pp. 88-105</pagerange>
+        <publisher>The University of Notre Dame</publisher>
+        <type>fla</type>
+        <reviewed-work></reviewed-work>
+    </article>
+    <article>
+      <doi>10.2307/2256640</doi>
+        <title></title>
+        <author>H. Godwin</author>
+        <journaltitle>Journal of Ecology</journaltitle>
+        <volume>39</volume>
+        <issue>1</issue>
+        <pubdate>1951-03-01T00:00:00Z</pubdate>
+        <pagerange>pp. 196-197</pagerange>
+        <publisher>British Ecological Society</publisher>
+        <type>brv</type>
+        <reviewed-work>Wild Flowers of Chalk and Limestone.|J. E. Lousley</reviewed-work>
+    </article>
+    <article>
+    </article>
+
+
+</citations>
