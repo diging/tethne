@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 import re
 import xml.etree.ElementTree as ET
@@ -12,7 +10,6 @@ import unicodedata
 import logging
 
 # rdflib complains a lot.
-# -*- coding: utf-8 -*-
 logging.getLogger("rdflib").setLevel(logging.ERROR)
 
 import sys
@@ -291,11 +288,7 @@ class RDFParser(BaseParser):
 
         for element in self.entry_elements:
             query = 'SELECT * WHERE { ?p a ' + element + ' }'
-            #print "Query is ", query
             self.entries += [r[0] for r in self.graph.query(query)]
-            #print "Query is", query
-            #print len(self.entries)
-            #print self.entries
 
     def next(self):
         if len(self.entries) > 0:
@@ -305,7 +298,6 @@ class RDFParser(BaseParser):
         meta_fields, meta_refs = zip(*self.meta_elements)
 
         while True:        # Main loop.
-            #print "PARSER ENTRY", self.entries
             entry = self.next()
             if entry is None:
                 break
@@ -328,7 +320,6 @@ class RDFParser(BaseParser):
 
         if tag in self.tags:    # Rename the field.
             tag = self.tags[tag]
-            #print tag
 
         if data is not None:
             # Multiline fields are represented as lists of values.
@@ -343,7 +334,5 @@ class RDFParser(BaseParser):
             else:
                 value = data
 
-            #print value
             setattr(self.data[-1], tag, value)
             self.fields.add(tag)
-            #print self.fields
