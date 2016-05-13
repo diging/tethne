@@ -9,5 +9,6 @@ jdk:
 script:
   - pip install coverage
   - pip install nose
+  - python -m nltk.downloader punkt
   - python -m nltk.downloader stopwords
   - nosetests --with-coverage --cover-package=tethne
