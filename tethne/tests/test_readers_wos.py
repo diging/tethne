@@ -7,7 +7,7 @@ import unittest
 from tethne.readers.wos import WoSParser, read
 from tethne import Corpus, Paper
 
-datapath = '/Users/aosingh/Downloads/wostest.txt'
+datapath = './tethne/tests/data/wos2.txt'
 datapath_v = './tethne/tests/data/valentin.txt'
 
 import sys
