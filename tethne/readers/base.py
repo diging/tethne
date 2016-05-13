@@ -306,7 +306,7 @@ class RDFParser(BaseParser):
 
             for s, p, o in self.graph.triples((entry, None, None)):
                 if p in meta_refs:  # Look for metadata fields.
-                    tag = meta_fields[meta_refs .index(p)]
+                    tag = meta_fields[meta_refs.index(p)]
                     self.handle(tag, o)
             self.postprocess_entry()
 

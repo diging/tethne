@@ -7,7 +7,7 @@ import unittest
 from tethne.readers.wos import WoSParser, read
 from tethne import Corpus, Paper
 
-datapath = './tethne/tests/data/wos2.txt'
+datapath = '/Users/aosingh/Downloads/wostest.txt'
 datapath_v = './tethne/tests/data/valentin.txt'
 
 import sys
@@ -42,6 +42,7 @@ class TestWoSParser(unittest.TestCase):
 
         # Check data types for the most common fields.
         derror = "{0} should be {1}, but is {2}"
+        dauthorAddressError = "{0} should be {1} or {2}, but is {3}"
         for e in parser.data:
             if hasattr(e, 'date'):
                 self.assertIsInstance(e.date, int,
@@ -91,6 +92,11 @@ class TestWoSParser(unittest.TestCase):
                 self.assertIsInstance(e.title, unicode,
                                       derror.format('title', 'unicode',
                                                     type(e.title)))
+
+            if hasattr(e, 'authorAddress'):
+                self.assertTrue((type(e.authorAddress) is list or type(e.authorAddress) is unicode),
+                                dauthorAddressError.format('authorAddress', 'unicode',
+                                                           'list', type(e.authorAddress)))
 
         # Check integrity of tag-to-field mapping.
         for tag, attr in parser.tags.items():
