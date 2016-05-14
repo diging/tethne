@@ -215,7 +215,7 @@ class FTParser(IterParser):
             self.at_eof = True
             return None, None
 
-        match = re.match('([A-Z]{2})\W+(.*)', line)
+        match = re.match('([A-Z]{2}|[C][1])\W(.*)', line)
         if match is not None:
             self.current_tag, data = match.groups()
         else:
