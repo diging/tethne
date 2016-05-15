@@ -49,8 +49,16 @@ class TestGraphCollectionCreation(unittest.TestCase):
         """
         Should build `graphs` if passed a corpus and method.
         """
-        corpus = read(datapath)
+        corpus = read(datapath, index_fields=['ayjid', 'date'])
         G = GraphCollection(corpus, coauthors)
+        self.assertEqual(len(G), len(corpus.indices['date']))
+
+    def test_init_build_streaming(self):
+        """
+        Should build `graphs` if passed a corpus and method.
+        """
+        corpus = read(datapath, streaming=True)
+        G = GraphCollection(corpus, coauthors, slice_kwargs={'feature_name': 'authors'})
         self.assertEqual(len(G), len(corpus.indices['date']))
 
     def test_build(self):
@@ -59,6 +67,14 @@ class TestGraphCollectionCreation(unittest.TestCase):
         corpus = read(datapath)
         G = GraphCollection()
         G.build(corpus, coauthors)
+        self.assertEqual(len(G), len(corpus.indices['date']))
+
+    def test_build_streaming(self):
+        """
+        """
+        corpus = read(datapath, streaming=True)
+        G = GraphCollection()
+        G.build(corpus, coauthors, slice_kwargs={'feature_name': 'authors'})
         self.assertEqual(len(G), len(corpus.indices['date']))
 
     def test_index(self):

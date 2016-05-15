@@ -20,6 +20,7 @@ class StreamingIndex(object):
 
         self.base_path = base_path
         self.index_path = os.path.join(base_path, name)
+
         if not os.path.exists(self.index_path):
             os.mkdir(self.index_path)
 
@@ -74,9 +75,6 @@ class StreamingIndex(object):
         with open(fpath, 'r') as f:
             paper = self.serializer.load(f)
         return paper
-
-
-
 
 
 class StreamingCorpus(Corpus):

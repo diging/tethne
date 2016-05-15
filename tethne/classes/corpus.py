@@ -247,10 +247,15 @@ class Corpus(object):
         self.duplicate_papers = {}
         self.indices = defaultdict(dict)
         self.indices_lookup = defaultdict(dict)
+        if index_by not in index_fields:
+            index_fields.append(index_by)
         self.index_fields = index_fields
         self.index_features = index_features
 
-        self.indexed_papers = self.index_class(**self.index_kwargs)
+        if self.index_class is dict:
+            self.indexed_papers = {}
+        else:
+            self.indexed_papers = self.index_class(**self.index_kwargs)
         for field in self.index_features:
             if field not in self.features:
                 self._init_featureset(field)
@@ -410,7 +415,7 @@ class Corpus(object):
             return self.indices[key]
         raise AttributeError("Corpus has no such attribute")
 
-    def select(self, selector):
+    def select(self, selector, index_only=False):
         """
         Retrieves a subset of :class:`.Paper`\s based on selection criteria.
 
@@ -465,27 +470,44 @@ class Corpus(object):
         if type(selector) is tuple: # Select papers by index.
             index, value = selector
             if type(value) is list:  # Set of index values.
-                papers = [p for v in value for p in self[index, v]]
+                papers = [p for v in value for p in self.select((index, v), index_only=index_only)]
             else:
                 if value in self.indices[index]:
-                    papers = [self.indexed_papers[p] for p  # Single index value.
-                              in self.indices[index][value]]
+                    if index_only:
+                        papers = self.indices[index][value]
+                    else:
+                        papers = [self.indexed_papers[p] for p  # Single index value.
+                                  in self.indices[index][value]]
                 else:
                     papers = []
         elif type(selector) is list:
             if selector[0] in self.indexed_papers:
                 # Selector is a list of primary indices.
-                papers = [self.indexed_papers[s] for s in selector]
+                if index_only:
+                    papers = selector
+                else:
+                    papers = [self.indexed_papers[s] for s in selector]
             elif type(selector[0]) is int:
-                papers = [self.papers[i] for i in selector]
+                if index_only:
+                    papers = [self.indexed_papers.keys()[i] for i in selector]
+                else:
+                    papers = [self.papers[i] for i in selector]
         elif type(selector) is int:
-            papers = self.papers[selector]
+            if index_only:
+                papers = self.indexed_papers.keys()[selector]
+            else:
+                papers = self.papers[selector]
+
         elif type(selector) in [str, unicode]:
             if selector in self.indexed_papers:
-                papers = self.indexed_papers[selector]
+                if index_only:
+                    papers = selector
+                else:
+                    papers = self.indexed_papers[selector]
         return papers
 
-    def slice(self, window_size=1, step_size=1, cumulative=False, count_only=False, subcorpus=True):
+    def slice(self, window_size=1, step_size=1, cumulative=False,
+              count_only=False, subcorpus=True, feature_name=None):
         """
         Returns a generator that yields ``(key, subcorpus)`` tuples for
         sequential time windows.
@@ -552,6 +574,8 @@ class Corpus(object):
                 year = start
             if count_only:
                 yield year, len(self.select(selector))
+            elif feature_name:
+                yield year, self.subfeatures(selector, feature_name)
             elif subcorpus:
                 yield year, self.subcorpus(selector)
             else:
@@ -681,6 +705,14 @@ class Corpus(object):
                     for k, subcorpus in self.slice(**slice_kwargs)]
         return self.features[featureset_name].top(topn, by=by)
 
+    def subfeatures(self, selector, featureset_name):
+        indices = self.select(selector, index_only=True)
+        fclass = self.features[featureset_name].__class__
+        
+        return fclass({k:f for k,f in self.features[featureset_name].iteritems()
+                           if k in indices})
+
+
     def subcorpus(self, selector):
         """
         Generates a new :class:`.Corpus` using the criteria in ``selector``.
@@ -695,19 +727,9 @@ class Corpus(object):
            <tethne.classes.corpus.Corpus object at 0x10278ea10>
 
         """
-
         subcorpus = self.__class__(self[selector],
                            index_by=self.index_by,
                            index_fields=self.indices.keys(),
                            index_features=self.features.keys())
-
-        # Transfer FeatureSets.
-        for featureset_name, featureset in self.features.iteritems():
-            if featureset_name not in subcorpus:
-                shared_papers = list(set(featureset.features.keys()) & \
-                                     set(subcorpus.indexed_papers.keys()))
-                fset = FeatureSet({k: featureset.features[k]
-                                   for k in shared_papers})
-                subcorpus.features[featureset_name] = fset
 
         return subcorpus
