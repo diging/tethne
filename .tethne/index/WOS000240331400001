@@ -1,0 +1,155 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'WC'
+p8
+VPlant Sciences
+p9
+sS'pageEnd'
+p10
+I4
+sS'publisherAddress'
+p11
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p12
+sS'documentType'
+p13
+VBiographical-Item
+p14
+sS'subject'
+p15
+VPlant Sciences
+p16
+sS'isoSource'
+p17
+VPlant Physiol.
+p18
+sS'timesCited'
+p19
+(lp20
+I0
+aVZ9 0
+p21
+asS'PT'
+p22
+VJ
+sS'title'
+p23
+VMarty Gibbs'S 30 Years At The Helm Of Plant Physiology
+p24
+sS'ISSN'
+p25
+(lp26
+V0032-0889
+p27
+aVJ9 PLANT PHYSIOL
+p28
+asS'authors_full'
+p29
+(lp30
+(VCHRISPEELS
+VMAARTEN J
+tp31
+a(VRAIKHEL
+VNATASHA V
+tp32
+a(VORT
+VDONALD R
+tp33
+asS'PG'
+p34
+I2
+sS'PD'
+p35
+VSEP
+p36
+sS'pageStart'
+p37
+I3
+sS'issue'
+p38
+I1
+sS'journal'
+p39
+VPLANT PHYSIOLOGY
+p40
+sS'volume'
+p41
+V142
+p42
+sS'GA'
+p43
+V081QF
+p44
+sS'date'
+p45
+I2006
+sS'ER'
+p46
+V
+sS'publisher'
+p47
+VAMER SOC PLANT BIOLOGISTS
+p48
+sS'doi'
+p49
+V10.1104/pp.104.900203
+p50
+sS'language'
+p51
+VEnglish
+p52
+sS'wosid'
+p53
+VWOS:000240331400001
+p54
+sS'citationCount'
+p55
+I1
+sS'authors_init'
+p56
+(lp57
+(VCHRISPEELS
+VM J
+tp58
+a(VRAIKHEL
+VN V
+tp59
+a(VORT
+VD R
+tp60
+asS'citedReferences'
+p61
+(lp62
+g1
+(g2
+g3
+NtRp63
+(dp64
+g49
+Nsg39
+VPUBLICATION LIST
+p65
+sg41
+Nsg56
+(lp66
+(VGIBBS
+VM
+tp67
+asg45
+Nsg37
+VUBLICATION
+p68
+sbasb.

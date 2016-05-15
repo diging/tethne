@@ -1,0 +1,160 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'WC'
+p8
+VPlant Sciences
+p9
+sS'pageEnd'
+p10
+I364
+sS'publisherAddress'
+p11
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p12
+sS'documentType'
+p13
+VCorrection
+p14
+sS'subject'
+p15
+VPlant Sciences
+p16
+sS'isoSource'
+p17
+VPlant Physiol.
+p18
+sS'timesCited'
+p19
+(lp20
+I1
+aVZ9 1
+p21
+asS'PT'
+p22
+VJ
+sS'title'
+p23
+VGigantea Acts In Blue Light Signaling And Has Biochemically Separable Roles In Circadian Clock And Flowering Time Regulation. (Vol 143, Pg 473, 2007)
+p24
+sS'ISSN'
+p25
+(lp26
+V0032-0889
+p27
+aVJ9 PLANT PHYSIOL
+p28
+asS'authors_full'
+p29
+(lp30
+(VMARTINTRYON
+VE L
+tp31
+a(VKREPS
+VJ A
+tp32
+a(VHARMER
+VS L
+tp33
+asS'PG'
+p34
+I1
+sS'PD'
+p35
+VMAY
+p36
+sS'pageStart'
+p37
+I364
+sS'issue'
+p38
+I1
+sS'journal'
+p39
+VPLANT PHYSIOLOGY
+p40
+sS'volume'
+p41
+V153
+p42
+sS'GA'
+p43
+V590PS
+p44
+sS'date'
+p45
+I2010
+sS'ER'
+p46
+V
+sS'publisher'
+p47
+VAMER SOC PLANT BIOLOGISTS
+p48
+sS'doi'
+p49
+V10.1104/pp.110.900322
+p50
+sS'language'
+p51
+VEnglish
+p52
+sS'wosid'
+p53
+VWOS:000277239900029
+p54
+sS'citationCount'
+p55
+I1
+sS'authors_init'
+p56
+(lp57
+(VMARTINTRYON
+VE L
+tp58
+a(VKREPS
+VJ A
+tp59
+a(VHARMER
+VS L
+tp60
+asS'citedReferences'
+p61
+(lp62
+g1
+(g2
+g3
+NtRp63
+(dp64
+g49
+V10.1104/pp.106.088757
+p65
+sg39
+VPLANT PHYSIOL
+p66
+sg41
+V143
+p67
+sg56
+(lp68
+(VMARTIN-TRYON
+VE L
+tp69
+asg45
+I2007
+sg37
+VLANT
+p70
+sbasb.

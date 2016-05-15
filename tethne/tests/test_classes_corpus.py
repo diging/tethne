@@ -72,7 +72,7 @@ class TestCorpus(unittest.TestCase):
 
     def test_feature_distribution(self):
         corpus = Corpus(self.papers, index_by='wosid')
-        values = corpus.feature_distribution('authors', ('ZENG', 'EDDY Y'))
+        values = corpus.feature_distribution('authors', (u'SOTO', u'MANU'))
         # values = corpus.feature_distribution('citations', 'BOSSDORF O 2005 OECOLOGIA')
         self.assertEqual(len(values[0]), len(values[1]))
         self.assertListEqual(values[1], [0, 1])

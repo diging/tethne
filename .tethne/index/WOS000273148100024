@@ -1,0 +1,1210 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'reprintAddress'
+p8
+VMeharg, AA (reprint author), Univ Aberdeen, Inst Biol & Environm Sci, Aberdeen AB24 3UU, Scotland.
+p9
+sS'WC'
+p10
+VPlant Sciences
+p11
+sS'GA'
+p12
+V537XQ
+p13
+sS'FX'
+p14
+(lp15
+VThis work was supported by a Biotechnology and Biological Sciences
+p16
+aVResearch Council Doctoral Training Grant. Portions of this work were
+p17
+aVperformed at GeoSoilEnviroCARS (sector 13) and PNC/XOR (sector 20), at
+p18
+aVthe Advanced Photon Source, Argonne National Laboratory. GeoSoilEnviro
+p19
+aVConsortium for Advanced Radiation Sources is supported by the National
+p20
+aVScience Foundation-Earth Sciences (grant no. EAR-0622171) and Department
+p21
+aVof Energy-Geosciences (grant no. DE-FG02-94ER14466). Pacific Northwest
+p22
+aVConsortium Collaborative Access Team Advanced Photon Source, Sector 20
+p23
+aVfacilities at the Advanced Photon Source, and research at these
+p24
+aVfacilities, are supported by the U.S. Department of Energy-Basic Energy
+p25
+aVSciences, a major facilities access grant from the Natural Sciences and
+p26
+aVEngineering Research Council, the University of Washington, Simon Fraser
+p27
+aVUniversity, and the Advanced Photon Source. Use of the Advanced Photon
+p28
+aVSource was supported by the U.S. Department of Energy, Office of
+p29
+aVScience, Office of Basic Energy Sciences (under contract no.
+p30
+aVDE-AC02-06CH11357). The U.S. Environmental Protection Agency, through
+p31
+aVits Office of Research and Development, funded and managed a portion of
+p32
+aVthe research; it has not been subject to Agency review and, therefore,
+p33
+aVdoes not necessarily reflect the views of the Agency, no official
+p34
+aVproduct endorsement should be inferred.
+p35
+asS'abstract'
+p36
+VRice (Oryza sativa) is the staple food for over half the world's population yet may represent a significant dietary source of inorganic arsenic (As), a nonthreshold, class 1 human carcinogen. Rice grain As is dominated by the inorganic species, and the organic species dimethylarsinic acid (DMA). To investigate how As species are unloaded into grain rice, panicles were excised during grain filling and hydroponically pulsed with arsenite, arsenate, glutathione-complexed As, or DMA. Total As concentrations in flag leaf, grain, and husk, were quantified by inductively coupled plasma mass spectroscopy and As speciation in the fresh grain was determined by x-ray absorption near-edge spectroscopy. The roles of phloem and xylem transport were investigated by applying a +/- stem-girdling treatment to a second set of panicles, limiting phloem transport to the grain in panicles pulsed with arsenite or DMA. The results demonstrate that DMA is translocated to the rice grain with over an order magnitude greater efficiency than inorganic species and is more mobile than arsenite in both the phloem and the xylem. Phloem transport accounted for 90% of arsenite, and 55% of DMA, transport to the grain. Synchrotron x-ray fluorescence mapping and fluorescence microtomography revealed marked differences in the pattern of As unloading into the grain between DMA and arsenite-challenged grain. Arsenite was retained in the ovular vascular trace and DMA dispersed throughout the external grain parts and into the endosperm. This study also demonstrates that DMA speciation is altered in planta, potentially through complexation with thiols.
+p37
+sS'pageEnd'
+p38
+I319
+sS'date'
+p39
+I2010
+sS'documentType'
+p40
+VArticle
+p41
+sS'subject'
+p42
+VPlant Sciences
+p43
+sS'isoSource'
+p44
+VPlant Physiol.
+p45
+sS'timesCited'
+p46
+(lp47
+I46
+aVZ9 47
+p48
+asS'funding'
+p49
+(lp50
+(VBiotechnology and Biological Sciences Research Council
+Ntp51
+a(VNational Science Foundation-Earth Sciences
+VEAR-0622171
+tp52
+a(VDepartment of Energy-Geosciences
+VDE-FG02-94ER14466
+tp53
+a(VU.S. Department of Energy-Basic Energy Sciences
+Ntp54
+a(VNatural Sciences and Engineering Research Council
+Ntp55
+a(VUniversity of Washington
+Ntp56
+a(VSimon Fraser University
+Ntp57
+a(VAdvanced Photon Source
+Ntp58
+a(VU.S. Department of Energy, Office of Science, Office of Basic Energy Sciences
+VDE-AC02-06CH11357
+tp59
+a(VU.S. Environmental Protection Agency, through its Office of Research and Development
+Ntp60
+asS'PT'
+p61
+VJ
+sS'title'
+p62
+VGrain Unloading Of Arsenic Species In Rice
+p63
+sS'ISSN'
+p64
+(lp65
+V0032-0889
+p66
+aVJ9 PLANT PHYSIOL
+p67
+asS'authors_full'
+p68
+(lp69
+(VCAREY
+VANNEMARIE
+tp70
+a(VSCHECKEL
+VKIRK G
+tp71
+a(VLOMBI
+VENZO
+tp72
+a(VNEWVILLE
+VMATT
+tp73
+a(VCHOI
+VYONGSEONG
+tp74
+a(VNORTON
+VGARETH J
+tp75
+a(VCHARNOCK
+VJOHN M
+tp76
+a(VFELDMANN
+VJOERG
+tp77
+a(VPRICE
+VADAM H
+tp78
+a(VMEHARG
+VANDREW A
+tp79
+asS'PG'
+p80
+I11
+sS'PD'
+p81
+VJAN
+p82
+sS'pageStart'
+p83
+I309
+sS'issue'
+p84
+I1
+sS'RI'
+p85
+(lp86
+VFeldmann, Jorg/B-8079-2011; Price, Adam/A-2465-2010; Norton,
+p87
+aVGareth/D-7512-2012; Scheckel, Kirk/C-3082-2009
+p88
+asS'journal'
+p89
+VPLANT PHYSIOLOGY
+p90
+sS'volume'
+p91
+V152
+p92
+sS'doi'
+p93
+V10.1104/pp.109.146126
+p94
+sS'emailAddress'
+p95
+Va.meharg@abdn.ac.uk
+p96
+sS'authorAddress'
+p97
+(lp98
+V[Carey, Anne-Marie; Norton, Gareth J.; Price, Adam H.; Meharg, Andrew A.] Univ Aberdeen, Inst Biol & Environm Sci, Aberdeen AB24 3UU, Scotland.
+p99
+aV[Scheckel, Kirk G.] US EPA, Natl Risk Management Res Lab, Cincinnati, OH 45224 USA.
+p100
+aV[Lombi, Enzo] Univ S Australia, Ctr Environm Risk Assessment & Remediat, SA-5095 Mawson Lakes, SA, Australia.
+p101
+aV[Lombi, Enzo] Cooperat Res Ctr Contaminat Assessment & Remediat, Salisbury, SA 5106, Australia.
+p102
+aV[Newville, Matt; Choi, Yongseong] Argonne Natl Lab, GSECARS Adv Photon Source, Argonne, IL 60439 USA.
+p103
+aV[Charnock, John M.] Univ Manchester, Ctr Mol Environm Sci, Manchester M13 9PL, Lancs, England.
+p104
+aV[Charnock, John M.] Res Councils Daresbury Lab, Council Cent Lab, Warrington WA4 4AD, Cheshire, England.
+p105
+aV[Feldmann, Joerg] Univ Aberdeen, Dept Chem, Aberdeen AB24 3TU, Scotland.
+p106
+asS'publisherAddress'
+p107
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p108
+sS'ER'
+p109
+V
+sS'publisher'
+p110
+VAMER SOC PLANT BIOLOGISTS
+p111
+sS'authorKeywords'
+p112
+(lp113
+VORYZA-SATIVA L.
+p114
+aVHELIANTHUS-ANNUUS
+p115
+aVDIETARY EXPOSURE
+p116
+aVPADDY RICE
+p117
+aVACCUMULATION
+p118
+aVPLANTS
+p119
+aVTRANSLOCATION
+p120
+aVSPECIATION
+p121
+aVWHEAT
+p122
+aVCONTAMINATION
+p123
+asS'OI'
+p124
+VScheckel, Kirk/0000-0001-9326-9241
+p125
+sS'language'
+p126
+VEnglish
+p127
+sS'wosid'
+p128
+VWOS:000273148100024
+p129
+sS'citationCount'
+p130
+I38
+sS'authors_init'
+p131
+(lp132
+(VCAREY
+VA M
+tp133
+a(VSCHECKEL
+VK G
+tp134
+a(VLOMBI
+VE
+tp135
+a(VNEWVILLE
+VM
+tp136
+a(VCHOI
+VY
+tp137
+a(VNORTON
+VG J
+tp138
+a(VCHARNOCK
+VJ M
+tp139
+a(VFELDMANN
+VJ
+tp140
+a(VPRICE
+VA H
+tp141
+a(VMEHARG
+VA A
+tp142
+asS'citedReferences'
+p143
+(lp144
+g1
+(g2
+g3
+NtRp145
+(dp146
+g93
+V10.1007/s11104-008-9549-9
+p147
+sg89
+VPLANT SOIL
+p148
+sg91
+V304
+p149
+sg131
+(lp150
+(VABBAS
+VM H H
+tp151
+asg39
+I2008
+sg83
+VLANT
+p152
+sbag1
+(g2
+g3
+NtRp153
+(dp154
+g93
+Nsg89
+VENVIRON SCI TECHNOL
+p155
+sg91
+V36
+p156
+sg131
+(lp157
+(VABEDIN
+VJ
+tp158
+asg39
+I2002
+sg83
+V962
+p159
+sbag1
+(g2
+g3
+NtRp160
+(dp161
+g93
+V10.1104/pp.010733
+p162
+sg89
+VPLANT PHYSIOL
+p163
+sg91
+V128
+p164
+sg131
+(lp165
+(VABEDIN
+VM J
+tp166
+asg39
+I2002
+sg83
+VLANT
+p167
+sbag1
+(g2
+g3
+NtRp168
+(dp169
+g93
+Nsg89
+VSOIL SCI SOC AM J
+p170
+sg91
+V66
+p171
+sg131
+(lp172
+(VBEAUCHEMIN
+VS
+tp173
+asg39
+I2002
+sg83
+V83
+p174
+sbag1
+(g2
+g3
+NtRp175
+(dp176
+g93
+V10.1111/j.1355-313X.2005.02651.x
+p177
+sg89
+VPLANT J
+p178
+sg91
+V45
+p179
+sg131
+(lp180
+(VBLEEKER
+VP M
+tp181
+asg39
+I2006
+sg83
+VLANT
+p182
+sbag1
+(g2
+g3
+NtRp183
+(dp184
+g93
+V10.1007/s00425-007-0610-3
+p185
+sg89
+VPLANTA
+p186
+sg91
+V227
+p187
+sg131
+(lp188
+(VCHEN
+VF
+tp189
+asg39
+I2007
+sg83
+VLANTA
+p190
+sbag1
+(g2
+g3
+NtRp191
+(dp192
+g93
+V10.1080/15226510701374831
+p193
+sg89
+VJ PLANT NUTR
+p194
+sg91
+V30
+p195
+sg131
+(lp196
+(VFAGERIA
+VN K
+tp197
+asg39
+I2007
+sg83
+V843
+p198
+sbag1
+(g2
+g3
+NtRp199
+(dp200
+g93
+V10.1007/BF02705120
+p201
+sg89
+VJ BIOSCIENCES
+p202
+sg91
+V28
+p203
+sg131
+(lp204
+(VKRISHNAN
+VS
+tp205
+asg39
+I2003
+sg83
+V455
+p206
+sbag1
+(g2
+g3
+NtRp207
+(dp208
+g93
+Nsg89
+VPLANT SOIL
+p209
+sg91
+V132
+p210
+sg131
+(lp211
+(VKUPPELWIESER
+VH
+tp212
+asg39
+I1991
+sg83
+VLANT
+p213
+sbag1
+(g2
+g3
+NtRp214
+(dp215
+g93
+V10.1104/pp.109.140350
+p216
+sg89
+VPLANT PHYSIOL
+p217
+sg91
+V150
+p218
+sg131
+(lp219
+(VLI
+VR Y
+tp220
+asg39
+I2009
+sg83
+VLANT
+p221
+sbag1
+(g2
+g3
+NtRp222
+(dp223
+g93
+V10.1016/j.envint.2005.05.030
+p224
+sg89
+VENVIRON INT
+p225
+sg91
+V31
+p226
+sg131
+(lp227
+(VLIAO
+VX Y
+tp228
+asg39
+I2005
+sg83
+V791
+p229
+sbag1
+(g2
+g3
+NtRp230
+(dp231
+g93
+V10.1111/j.1469-8137.2009.02912.x
+p232
+sg89
+VNEW PHYTOL
+p233
+sg91
+V184
+p234
+sg131
+(lp235
+(VLOMBI
+VE
+tp236
+asg39
+I2009
+sg83
+V193
+p237
+sbag1
+(g2
+g3
+NtRp238
+(dp239
+g93
+V10.1007/s11104-008-9876-x
+p240
+sg89
+VPLANT SOIL
+p241
+sg91
+V320
+p242
+sg131
+(lp243
+(VLOMBI
+VE
+tp244
+asg39
+I2009
+sg83
+VLANT
+p245
+sbag1
+(g2
+g3
+NtRp246
+(dp247
+g93
+V10.1021/es802794w
+p248
+sg89
+VENVIRON SCI TECHNOL
+p249
+sg91
+V43
+p250
+sg131
+(lp251
+(VLU
+VY
+tp252
+asg39
+I2009
+sg83
+V1724
+p253
+sbag1
+(g2
+g3
+NtRp254
+(dp255
+g93
+V10.1073/pnas.0802361105
+p256
+sg89
+VP NATL ACAD SCI USA
+p257
+sg91
+V105
+p258
+sg131
+(lp259
+(VMA
+VJ F
+tp260
+asg39
+I2008
+sg83
+V9931
+p261
+sbag1
+(g2
+g3
+NtRp262
+(dp263
+g93
+Nsg89
+VAUST J PLANT PHYSIOL
+p264
+sg91
+V9
+sg131
+(lp265
+(VMARTIN
+VP
+tp266
+asg39
+I1982
+sg83
+V197
+p267
+sbag1
+(g2
+g3
+NtRp268
+(dp269
+g93
+V10.1021/es0492034
+p270
+sg89
+VENVIRON SCI TECHNOL
+p271
+sg91
+V39
+p272
+sg131
+(lp273
+(VMCNEAR
+VD H
+tp274
+asg39
+I2005
+sg83
+V2210
+p275
+sbag1
+(g2
+g3
+NtRp276
+(dp277
+g93
+V10.1021/es802612a
+p278
+sg89
+VENVIRON SCI TECHNOL
+p279
+sg91
+V43
+p280
+sg131
+(lp281
+(VMEHARG
+VA A
+tp282
+asg39
+I2009
+sg83
+V1612
+p283
+sbag1
+(g2
+g3
+NtRp284
+(dp285
+g93
+V10.1021/es702212p
+p286
+sg89
+VENVIRON SCI TECHNOL
+p287
+sg91
+V42
+p288
+sg131
+(lp289
+(VMEHARG
+VA A
+tp290
+asg39
+I2008
+sg83
+V1051
+p291
+sbag1
+(g2
+g3
+NtRp292
+(dp293
+g93
+V10.1021/es0259842
+p294
+sg89
+VENVIRON SCI TECHNOL
+p295
+sg91
+V37
+p296
+sg131
+(lp297
+(VMEHARG
+VA A
+tp298
+asg39
+I2003
+sg83
+V229
+p299
+sbag1
+(g2
+g3
+NtRp300
+(dp301
+g93
+Nsg89
+VENVIRON SCI TECHNOL
+p302
+sg91
+V43
+p303
+sg131
+(lp304
+(VNORTON
+VG J
+tp305
+asg39
+I2009
+sg83
+V6024
+p306
+sbag1
+(g2
+g3
+NtRp307
+(dp308
+g93
+V10.1093/jxb/erl300
+p309
+sg89
+VJ EXP BOT
+p310
+sg91
+V58
+p311
+sg131
+(lp312
+(VRAAB
+VA
+tp313
+asg39
+I2007
+sg83
+V1333
+p314
+sbag1
+(g2
+g3
+NtRp315
+(dp316
+g93
+V10.1111/j.1469-8137.2005.01519.x
+p317
+sg89
+VNEW PHYTOL
+p318
+sg91
+V168
+p319
+sg131
+(lp320
+(VRAAB
+VA
+tp321
+asg39
+I2005
+sg83
+V551
+p322
+sbag1
+(g2
+g3
+NtRp323
+(dp324
+g93
+V10.1071/EN06079
+p325
+sg89
+VENVIRON CHEM
+p326
+sg91
+V4
+sg131
+(lp327
+(VRAAB
+VA
+tp328
+asg39
+I2007
+sg83
+V197
+p329
+sbag1
+(g2
+g3
+NtRp330
+(dp331
+g93
+V10.1002/anie.200604805
+p332
+sg89
+VANGEW CHEM INT EDIT
+p333
+sg91
+V46
+p334
+sg131
+(lp335
+(VRAAB
+VA
+tp336
+asg39
+I2007
+sg83
+V2594
+p337
+sbag1
+(g2
+g3
+NtRp338
+(dp339
+g93
+V10.1016/j.chemosphere.2007.05.044
+p340
+sg89
+VCHEMOSPHERE
+p341
+sg91
+V69
+p342
+sg131
+(lp343
+(VRAHMAN
+VM A
+tp344
+asg39
+I2007
+sg83
+V942
+p345
+sbag1
+(g2
+g3
+NtRp346
+(dp347
+g93
+Nsg89
+VRice Science
+p348
+sg91
+V13
+p349
+sg131
+(lp350
+(VREN
+VXUELIANG
+tp351
+asg39
+I2006
+sg83
+V170
+p352
+sbag1
+(g2
+g3
+NtRp353
+(dp354
+g93
+V10.1021/es049358b
+p355
+sg89
+VENVIRON SCI TECHNOL
+p356
+sg91
+V39
+p357
+sg131
+(lp358
+(VSMITH
+VP G
+tp359
+asg39
+I2005
+sg83
+V248
+p360
+sbag1
+(g2
+g3
+NtRp361
+(dp362
+g93
+V10.1021/es801238p
+p363
+sg89
+VENVIRON SCI TECHNOL
+p364
+sg91
+V42
+p365
+sg131
+(lp366
+(VSUN
+VG X
+tp367
+asg39
+I2008
+sg83
+V7542
+p368
+sbag1
+(g2
+g3
+NtRp369
+(dp370
+g93
+V10.1111/j.1747-0765.2007.00116.x
+p371
+sg89
+VSOIL SCI PLANT NUTR
+p372
+sg91
+V53
+p373
+sg131
+(lp374
+(VTANAKA
+VK
+tp375
+asg39
+I2007
+sg83
+V72
+p376
+sbag1
+(g2
+g3
+NtRp377
+(dp378
+g93
+V10.1021/es900671m
+p379
+sg89
+VENVIRON SCI TECHNOL
+p380
+sg91
+V43
+p381
+sg131
+(lp382
+(VWILLIAMS
+VP N
+tp383
+asg39
+I2009
+sg83
+V6024
+p384
+sbag1
+(g2
+g3
+NtRp385
+(dp386
+g93
+V10.1021/es060222i
+p387
+sg89
+VENVIRON SCI TECHNOL
+p388
+sg91
+V40
+p389
+sg131
+(lp390
+(VWILLIAMS
+VP N
+tp391
+asg39
+I2006
+sg83
+V4903
+p392
+sbag1
+(g2
+g3
+NtRp393
+(dp394
+g93
+V10.1021/es0502324
+p395
+sg89
+VENVIRON SCI TECHNOL
+p396
+sg91
+V39
+p397
+sg131
+(lp398
+(VWILLIAMS
+VP N
+tp399
+asg39
+I2005
+sg83
+V5531
+p400
+sbag1
+(g2
+g3
+NtRp401
+(dp402
+g93
+V10.1021/es061489k
+p403
+sg89
+VENVIRON SCI TECHNOL
+p404
+sg91
+V41
+p405
+sg131
+(lp406
+(VWILLIAMS
+VP N
+tp407
+asg39
+I2007
+sg83
+V2178
+p408
+sbag1
+(g2
+g3
+NtRp409
+(dp410
+g93
+V10.1021/es070627i
+p411
+sg89
+VENVIRON SCI TECHNOL
+p412
+sg91
+V41
+p413
+sg131
+(lp414
+(VWILLIAMS
+VP N
+tp415
+asg39
+I2007
+sg83
+V6854
+p416
+sbag1
+(g2
+g3
+NtRp417
+(dp418
+g93
+V10.1021/es800324u
+p419
+sg89
+VENVIRON SCI TECHNOL
+p420
+sg91
+V42
+p421
+sg131
+(lp422
+(VXU
+VX Y
+tp423
+asg39
+I2008
+sg83
+V5574
+p424
+sbag1
+(g2
+g3
+NtRp425
+(dp426
+g93
+V10.1111/j.1469-8137.2008.02716.x
+p427
+sg89
+VNEW PHYTOL
+p428
+sg91
+V181
+p429
+sg131
+(lp430
+(VZHAO
+VF J
+tp431
+asg39
+I2009
+sg83
+V777
+p432
+sbag1
+(g2
+g3
+NtRp433
+(dp434
+g93
+V10.1021/es8001103
+p435
+sg89
+VENVIRON SCI TECHNOL
+p436
+sg91
+V42
+p437
+sg131
+(lp438
+(VZHU
+VY G
+tp439
+asg39
+I2008
+sg83
+V5008
+p440
+sbasb.

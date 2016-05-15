@@ -1,0 +1,163 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'WC'
+p8
+VPlant Sciences
+p9
+sS'pageEnd'
+p10
+I1930
+sS'publisherAddress'
+p11
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p12
+sS'documentType'
+p13
+VCorrection
+p14
+sS'subject'
+p15
+VPlant Sciences
+p16
+sS'isoSource'
+p17
+VPlant Physiol.
+p18
+sS'timesCited'
+p19
+(lp20
+I0
+aVZ9 0
+p21
+asS'PT'
+p22
+VJ
+sS'title'
+p23
+VSteroleosin, A Sterol-Binding Dehydrogenase In Seed Oil Bodies (Vol 128, Pg 1200, 2002)
+p24
+sS'ISSN'
+p25
+(lp26
+V0032-0889
+p27
+aVJ9 PLANT PHYSIOL
+p28
+asS'authors_full'
+p29
+(lp30
+(VLIN
+VLJ
+tp31
+a(VTAI
+VSSK
+tp32
+a(VPENG
+VCC
+tp33
+a(VTZEN
+VJTC
+tp34
+asS'PG'
+p35
+I1
+sS'PD'
+p36
+VAUG
+p37
+sS'pageStart'
+p38
+I1930
+sS'issue'
+p39
+I4
+sS'journal'
+p40
+VPLANT PHYSIOLOGY
+p41
+sS'volume'
+p42
+V129
+p43
+sS'GA'
+p44
+V585AZ
+p45
+sS'date'
+p46
+I2002
+sS'ER'
+p47
+V
+sS'publisher'
+p48
+VAMER SOC PLANT BIOLOGISTS
+p49
+sS'language'
+p50
+VEnglish
+p51
+sS'wosid'
+p52
+VWOS:000177502100055
+p53
+sS'citationCount'
+p54
+I1
+sS'authors_init'
+p55
+(lp56
+(VLIN
+VL J
+tp57
+a(VTAI
+VS S K
+tp58
+a(VPENG
+VC C
+tp59
+a(VTZEN
+VJ T C
+tp60
+asS'citedReferences'
+p61
+(lp62
+g1
+(g2
+g3
+NtRp63
+(dp64
+S'doi'
+p65
+V10.1104/pp.010928
+p66
+sg40
+VPLANT PHYSIOL
+p67
+sg42
+V128
+p68
+sg55
+(lp69
+(VLIN
+VL J
+tp70
+asg46
+I2002
+sg38
+VLANT
+p71
+sbasb.

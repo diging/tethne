@@ -1,0 +1,184 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'WC'
+p8
+VPlant Sciences
+p9
+sS'pageEnd'
+p10
+I986
+sS'publisherAddress'
+p11
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p12
+sS'documentType'
+p13
+VCorrection
+p14
+sS'subject'
+p15
+VPlant Sciences
+p16
+sS'isoSource'
+p17
+VPlant Physiol.
+p18
+sS'timesCited'
+p19
+(lp20
+I0
+aVZ9 0
+p21
+asS'PT'
+p22
+VJ
+sS'title'
+p23
+VMechanical Properties Of Plant Cell Walls Probed By Relaxation Spectra (Vol 155, Pg 246, 2011)
+p24
+sS'ISSN'
+p25
+(lp26
+V0032-0889
+p27
+aVJ9 PLANT PHYSIOL
+p28
+asS'authors_full'
+p29
+(lp30
+(VHANSEN
+VS L
+tp31
+a(VRAY
+VP M
+tp32
+a(VKARLSSON
+VA O
+tp33
+a(VJORGENSEN
+VB
+tp34
+a(VBORKHARDT
+VB
+tp35
+a(VPETERSEN
+VB L
+tp36
+a(VULVSKOV
+VP
+tp37
+asS'PG'
+p38
+I2
+sS'PD'
+p39
+VJUN
+p40
+sS'pageStart'
+p41
+I985
+sS'issue'
+p42
+I2
+sS'journal'
+p43
+VPLANT PHYSIOLOGY
+p44
+sS'volume'
+p45
+V156
+p46
+sS'GA'
+p47
+V771HC
+p48
+sS'date'
+p49
+I2011
+sS'ER'
+p50
+V
+sS'publisher'
+p51
+VAMER SOC PLANT BIOLOGISTS
+p52
+sS'doi'
+p53
+V10.1104/pp.111.900414
+p54
+sS'language'
+p55
+VEnglish
+p56
+sS'wosid'
+p57
+VWOS:000291146800045
+p58
+sS'citationCount'
+p59
+I1
+sS'authors_init'
+p60
+(lp61
+(VHANSEN
+VS L
+tp62
+a(VRAY
+VP M
+tp63
+a(VKARLSSON
+VA O
+tp64
+a(VJORGENSEN
+VB
+tp65
+a(VBORKHARDT
+VB
+tp66
+a(VPETERSEN
+VB L
+tp67
+a(VULVSKOV
+VP
+tp68
+asS'citedReferences'
+p69
+(lp70
+g1
+(g2
+g3
+NtRp71
+(dp72
+g53
+V10.1104/pp.110.166629
+p73
+sg43
+VPLANT PHYSIOL
+p74
+sg45
+V155
+p75
+sg60
+(lp76
+(VHANSEN
+VS L
+tp77
+asg49
+I2011
+sg41
+VLANT
+p78
+sbasb.

@@ -1,0 +1,188 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'WC'
+p8
+VPlant Sciences
+p9
+sS'pageEnd'
+p10
+I871
+sS'publisherAddress'
+p11
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p12
+sS'documentType'
+p13
+VCorrection
+p14
+sS'subject'
+p15
+VPlant Sciences
+p16
+sS'isoSource'
+p17
+VPlant Physiol.
+p18
+sS'timesCited'
+p19
+(lp20
+I0
+aVZ9 0
+p21
+asS'PT'
+p22
+VJ
+sS'title'
+p23
+VDisruption Of Signaling In A Fungal-Grass Symbiosis Leads To Pathogenesis (Vol 153, Pg 1780, 2010)
+p24
+sS'ISSN'
+p25
+(lp26
+V0032-0889
+p27
+aVJ9 PLANT PHYSIOL
+p28
+asS'authors_full'
+p29
+(lp30
+(VEATON
+VC J
+tp31
+a(VCOX
+VM P
+tp32
+a(VAMBROSE
+VB
+tp33
+a(VBECKER
+VM
+tp34
+a(VHESSE
+VU
+tp35
+a(VSCHARDL
+VC L
+tp36
+a(VSCOTT
+VB
+tp37
+asS'PG'
+p38
+I1
+sS'PD'
+p39
+VJUN
+p40
+sS'pageStart'
+p41
+I871
+sS'issue'
+p42
+I2
+sS'RI'
+p43
+VEaton, Carla/J-3108-2013
+p44
+sS'journal'
+p45
+VPLANT PHYSIOLOGY
+p46
+sS'volume'
+p47
+V159
+p48
+sS'GA'
+p49
+V952ZI
+p50
+sS'date'
+p51
+I2012
+sS'ER'
+p52
+V
+sS'publisher'
+p53
+VAMER SOC PLANT BIOLOGISTS
+p54
+sS'doi'
+p55
+V10.1104/pp.112.900435
+p56
+sS'language'
+p57
+VEnglish
+p58
+sS'wosid'
+p59
+VWOS:000304834800027
+p60
+sS'citationCount'
+p61
+I1
+sS'authors_init'
+p62
+(lp63
+(VEATON
+VC J
+tp64
+a(VCOX
+VM P
+tp65
+a(VAMBROSE
+VB
+tp66
+a(VBECKER
+VM
+tp67
+a(VHESSE
+VU
+tp68
+a(VSCHARDL
+VC L
+tp69
+a(VSCOTT
+VB
+tp70
+asS'citedReferences'
+p71
+(lp72
+g1
+(g2
+g3
+NtRp73
+(dp74
+g55
+V10.1104/pp.110.158451
+p75
+sg45
+VPLANT PHYSIOL
+p76
+sg47
+V153
+p77
+sg62
+(lp78
+(VEATON
+VC J
+tp79
+asg51
+I2010
+sg41
+VLANT
+p80
+sbasb.

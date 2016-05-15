@@ -1,0 +1,157 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'WC'
+p8
+VPlant Sciences
+p9
+sS'pageEnd'
+p10
+I1982
+sS'publisherAddress'
+p11
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p12
+sS'documentType'
+p13
+VCorrection
+p14
+sS'subject'
+p15
+VPlant Sciences
+p16
+sS'isoSource'
+p17
+VPlant Physiol.
+p18
+sS'timesCited'
+p19
+(lp20
+I0
+aVZ9 0
+p21
+asS'PT'
+p22
+VJ
+sS'title'
+p23
+VTranscriptional Profiling Of The Arabidopsis Embryo (Vol 143, Pg 924, 2007)
+p24
+sS'ISSN'
+p25
+(lp26
+V0032-0889
+p27
+aVJ9 PLANT PHYSIOL
+p28
+asS'authors_full'
+p29
+(lp30
+(VSPENCER
+VM W B
+tp31
+a(VCASSON
+VS A
+tp32
+a(VLINDSEY
+VK
+tp33
+asS'PG'
+p34
+I1
+sS'PD'
+p35
+VAPR
+p36
+sS'pageStart'
+p37
+I1982
+sS'issue'
+p38
+I4
+sS'journal'
+p39
+VPLANT PHYSIOLOGY
+p40
+sS'volume'
+p41
+V143
+p42
+sS'GA'
+p43
+V158GY
+p44
+sS'date'
+p45
+I2007
+sS'ER'
+p46
+V
+sS'publisher'
+p47
+VAMER SOC PLANT BIOLOGISTS
+p48
+sS'language'
+p49
+VEnglish
+p50
+sS'wosid'
+p51
+VWOS:000245781000046
+p52
+sS'citationCount'
+p53
+I1
+sS'authors_init'
+p54
+(lp55
+(VSPENCER
+VM W B
+tp56
+a(VCASSON
+VS A
+tp57
+a(VLINDSEY
+VK
+tp58
+asS'citedReferences'
+p59
+(lp60
+g1
+(g2
+g3
+NtRp61
+(dp62
+S'doi'
+p63
+V10.1104/pp.106.087668
+p64
+sg39
+VPLANT PHYSIOL
+p65
+sg41
+V143
+p66
+sg54
+(lp67
+(VSPENCER
+VM W B
+tp68
+asg45
+I2007
+sg37
+VLANT
+p69
+sbasb.

@@ -2,9 +2,10 @@
 This module provides :class:`.Corpus`\.
 """
 
-from collections import Counter
+from collections import Counter, defaultdict
 from itertools import chain
 import hashlib
+import copy
 from math import log
 
 from tethne.classes.feature import FeatureSet, Feature, \
@@ -165,6 +166,8 @@ class Corpus(object):
     primary indexing field for a :class:`.Corpus` instance.
     """
 
+    index_class = dict
+    index_kwargs = {}
     indexed_papers = {}
     """
     The primary index for :class:`.Paper`\s in a :class:`.Corpus` instance.
@@ -224,8 +227,8 @@ class Corpus(object):
     You can create new indices using :meth:`.index`.
     """
 
-    def __init__(self, papers=None, index_by=None,
-                 index_fields=['authors', 'citations'],
+    def __init__(self, papers=[], index_by=None,
+                 index_fields=['authors', 'citations', 'ayjid', 'date'],
                  index_features=['authors', 'citations'], **kwargs):
         """
         Parameters
@@ -241,53 +244,45 @@ class Corpus(object):
         self.slices = []
         self.indices = {}
         self.features = {}
-
-        # -------------START------------ #
-        # Fix of Story Tethne/TETHNE-122
         self.duplicate_papers = {}
+        self.indices = defaultdict(dict)
+        self.indices_lookup = defaultdict(dict)
+        self.index_fields = index_fields
+        self.index_features = index_features
 
-
-
-
-        #self.indexed_papers = {self._generate_index(paper): paper
-                    #   for paper in papers}
-
-        self.indexed_papers = {}
-
+        self.indexed_papers = self.index_class(**self.index_kwargs)
+        for field in self.index_features:
+            if field not in self.features:
+                self._init_featureset(field)
 
         for paper in papers:
-            key = self._generate_index(paper)
-            if not self.indexed_papers:
-                self.indexed_papers = {key:paper}
-            else:
-                if key not in self.indexed_papers.keys():
-                    self.indexed_papers.update({key:paper})
-                else:
-                    if not self.duplicate_papers:
-                        self.duplicate_papers = {key:2}
-                    else:
-                        if key not in self.duplicate_papers.keys():
-                            count = 1
-                        else :
-                            count = self.duplicate_papers[key]
-                        self.duplicate_papers.update({self._generate_index(paper): count+1})
+            self._index_paper(paper)
 
-        # Fix of Story Tethne/TETHNE-122
-        # -------------END------------- #
-
-
-
-        if index_features:
-            for feature_name in index_features:
-                self.index_feature(feature_name)
-
-        if index_fields:
-            for attr in _iterable(index_fields):
-                self.index(attr)
-
+    def add_papers(self, papers):
+        for paper in papers:
+            self._index_paper(paper)
 
     def __len__(self):
         return len(self.indexed_papers)
+
+    def _index_paper(self, paper):
+        key = self._generate_index(paper)
+
+        # if key not in self.indexed_papers.keys():
+        self.indexed_papers[key] = paper
+        for field in self.index_fields:
+            self.index_paper_by_attr(paper, field)
+        for field in self.index_features:
+            self.index_paper_by_feature(paper, field)
+        # else:
+        #     if not self.duplicate_papers:
+        #         self.duplicate_papers = {key:2}
+        #     else:
+        #         if key not in self.duplicate_papers.keys():
+        #             count = 1
+        #         else:
+        #             count = self.duplicate_papers[key]
+        #         self.duplicate_papers.update({self._generate_index(paper): count+1})
 
     def _generate_index(self, paper):
         """
@@ -323,6 +318,27 @@ class Corpus(object):
             _, identifier = os.path.split(identifier)
         return identifier    # Identifier is already available.
 
+    def _init_featureset(self, feature_name, structured=False):
+        if structured:
+            fsclass = StructuredFeatureSet
+        else:
+            fsclass = FeatureSet
+
+        self.features[feature_name] = fsclass()
+
+    def index_paper_by_feature(self, paper, feature_name, tokenize=lambda x: x,
+                               structured=False):
+        if structured:
+            fclass = StructuredFeature
+        else:
+            fclass = Feature
+
+        if hasattr(paper, feature_name):
+            i = self._generate_index(paper)
+            feature = fclass(tokenize(copy.deepcopy(getattr(paper, feature_name))))
+
+            self.features[feature_name].add(i, feature)
+
     def index_feature(self, feature_name, tokenize=lambda x: x, structured=False):
         """
         Creates a new :class:`.FeatureSet` from the attribute ``feature_name``
@@ -336,16 +352,35 @@ class Corpus(object):
             The name of a :class:`.Paper` attribute.
 
         """
-        if structured:
-            fclass = StructuredFeature
-            fsclass = StructuredFeatureSet
-        else:
-            fclass = Feature
-            fsclass = FeatureSet
+        self._init_featureset(feature_name, structured=structured)
 
-        feats = {self._generate_index(p): fclass(tokenize(getattr(p, feature_name)))
-                 for p in self.papers if hasattr(p, feature_name)}
-        self.features[feature_name] = fsclass(feats)
+        for paper in self.papers:
+            self.index_paper_by_feature(paper, feature_name, tokenize, structured)
+
+    def index_paper_by_attr(self, paper, attr):
+        i = self._generate_index(paper)
+
+        if hasattr(paper, attr):
+            value = copy.deepcopy(getattr(paper, attr))
+            for v in _iterable(value):
+                if type(value) is Feature:
+                    v_ = v[:-1]
+                else:
+                    v_ = v
+
+                if hasattr(v_, '__iter__'):
+                    if len(v_) == 1:
+                        t = type(v_[0])
+                        v_ = t(v_[0])
+
+                if v_ not in self.indices[attr]:
+                    self.indices[attr][v_] = []
+                self.indices[attr][v_].append(i)
+
+                # For more efficient lookup later.
+                if attr not in self.indices_lookup[i]:
+                    self.indices_lookup[i][attr] = []
+                self.indices_lookup[i][attr].append(v_)
 
     def index(self, attr):
         """
@@ -361,24 +396,8 @@ class Corpus(object):
 
         """
 
-        self.indices[attr] = {}
         for i, paper in self.indexed_papers.items():
-            if hasattr(paper, attr):
-                value = getattr(paper, attr)
-                for v in _iterable(value):
-                    if type(value) is Feature:
-                        v_ = v[:-1]
-                    else:
-                        v_ = v
-
-                    if hasattr(v_, '__iter__'):
-                        if len(v_) == 1:
-                            t = type(v_[0])
-                            v_ = t(v_[0])
-
-                    if v_ not in self.indices[attr]:
-                        self.indices[attr][v_] = []
-                    self.indices[attr][v_].append(i)
+            self.index_paper_by_attr(paper, attr)
 
 
     def __getitem__(self, selector):
@@ -677,7 +696,7 @@ class Corpus(object):
 
         """
 
-        subcorpus = Corpus(self[selector],
+        subcorpus = self.__class__(self[selector],
                            index_by=self.index_by,
                            index_fields=self.indices.keys(),
                            index_features=self.features.keys())

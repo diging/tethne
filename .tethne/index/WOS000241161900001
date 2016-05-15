@@ -1,0 +1,148 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'WC'
+p8
+VPlant Sciences
+p9
+sS'pageEnd'
+p10
+I379
+sS'publisherAddress'
+p11
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p12
+sS'documentType'
+p13
+VEditorial Material
+p14
+sS'subject'
+p15
+VPlant Sciences
+p16
+sS'isoSource'
+p17
+VPlant Physiol.
+p18
+sS'timesCited'
+p19
+(lp20
+I1
+aVZ9 1
+p21
+asS'PT'
+p22
+VJ
+sS'title'
+p23
+VAnnouncing Focus Collections In Plant Physiology
+p24
+sS'ISSN'
+p25
+(lp26
+V0032-0889
+p27
+aVJ9 PLANT PHYSIOL
+p28
+asS'authors_full'
+p29
+(lp30
+(VORT
+VDONALD R
+tp31
+asS'PG'
+p32
+I1
+sS'PD'
+p33
+VOCT
+p34
+sS'pageStart'
+p35
+I379
+sS'issue'
+p36
+I2
+sS'journal'
+p37
+VPLANT PHYSIOLOGY
+p38
+sS'volume'
+p39
+V142
+p40
+sS'GA'
+p41
+V093IL
+p42
+sS'date'
+p43
+I2006
+sS'ER'
+p44
+V
+sS'publisher'
+p45
+VAMER SOC PLANT BIOLOGISTS
+p46
+sS'doi'
+p47
+V10.1104/pp.104.900205
+p48
+sS'language'
+p49
+VEnglish
+p50
+sS'wosid'
+p51
+VWOS:000241161900001
+p52
+sS'citationCount'
+p53
+I1
+sS'authors_init'
+p54
+(lp55
+(VORT
+VD R
+tp56
+asS'citedReferences'
+p57
+(lp58
+g1
+(g2
+g3
+NtRp59
+(dp60
+g47
+V10.1104/pp.104.900204
+p61
+sg37
+VPLANT PHYSIOL
+p62
+sg39
+V142
+p63
+sg54
+(lp64
+(VORT
+VD R
+tp65
+asg43
+I2006
+sg35
+VLANT
+p66
+sbasb.

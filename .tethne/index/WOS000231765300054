@@ -1,0 +1,169 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'WC'
+p8
+VPlant Sciences
+p9
+sS'pageEnd'
+p10
+I559
+sS'publisherAddress'
+p11
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p12
+sS'documentType'
+p13
+VCorrection
+p14
+sS'subject'
+p15
+VPlant Sciences
+p16
+sS'isoSource'
+p17
+VPlant Physiol.
+p18
+sS'timesCited'
+p19
+(lp20
+I0
+aVZ9 0
+p21
+asS'PT'
+p22
+VJ
+sS'title'
+p23
+VBasipetal Auxin Transport Is Required For Gravitropism In Roots Of Arabidopsis (Vol 122, Pg 481, 2005)
+p24
+sS'ISSN'
+p25
+(lp26
+V0032-0889
+p27
+aVJ9 PLANT PHYSIOL
+p28
+asS'authors_full'
+p29
+(lp30
+(VRASHOTTE
+VAM
+tp31
+a(VBRADY
+VSR
+tp32
+a(VREED
+VRC
+tp33
+a(VANTE
+VSJ
+tp34
+a(VMUDAY
+VGK
+tp35
+asS'PG'
+p36
+I1
+sS'PD'
+p37
+VSEP
+p38
+sS'pageStart'
+p39
+I559
+sS'issue'
+p40
+I1
+sS'journal'
+p41
+VPLANT PHYSIOLOGY
+p42
+sS'volume'
+p43
+V139
+p44
+sS'GA'
+p45
+V962WZ
+p46
+sS'date'
+p47
+I2005
+sS'ER'
+p48
+V
+sS'publisher'
+p49
+VAMER SOC PLANT BIOLOGISTS
+p50
+sS'language'
+p51
+VEnglish
+p52
+sS'wosid'
+p53
+VWOS:000231765300054
+p54
+sS'citationCount'
+p55
+I1
+sS'authors_init'
+p56
+(lp57
+(VRASHOTTE
+VA M
+tp58
+a(VBRADY
+VS R
+tp59
+a(VREED
+VR C
+tp60
+a(VANTE
+VS J
+tp61
+a(VMUDAY
+VG K
+tp62
+asS'citedReferences'
+p63
+(lp64
+g1
+(g2
+g3
+NtRp65
+(dp66
+S'doi'
+p67
+V10.1104/pp.122.2.481
+p68
+sg41
+VPLANT PHYSIOL
+p69
+sg43
+V122
+p70
+sg56
+(lp71
+(VRASHOTTE
+VA M
+tp72
+asg47
+I2000
+sg39
+VLANT
+p73
+sbasb.

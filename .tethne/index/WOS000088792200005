@@ -1,0 +1,125 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'reprintAddress'
+p8
+VMinorsky, PV (reprint author), Vassar Coll, Dept Biol, Poughkeepsie, NY 12601 USA.
+p9
+sS'WC'
+p10
+VPlant Sciences
+p11
+sS'GA'
+p12
+V345AA
+p13
+sS'pageEnd'
+p14
+I1200
+sS'publisherAddress'
+p15
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p16
+sS'documentType'
+p17
+VEditorial Material
+p18
+sS'subject'
+p19
+VPlant Sciences
+p20
+sS'isoSource'
+p21
+VPlant Physiol.
+p22
+sS'timesCited'
+p23
+(lp24
+I0
+aVZ9 0
+p25
+asS'PT'
+p26
+VJ
+sS'title'
+p27
+VPhosphatidic Acid May Be A New Lipid Signal
+p28
+sS'ISSN'
+p29
+(lp30
+V0032-0889
+p31
+aVJ9 PLANT PHYSIOL
+p32
+asS'authors_full'
+p33
+(lp34
+(VMINORSKY
+VPV
+tp35
+asS'PG'
+p36
+I1
+sS'PD'
+p37
+VAUG
+p38
+sS'pageStart'
+p39
+I1200
+sS'issue'
+p40
+I4
+sS'journal'
+p41
+VPLANT PHYSIOLOGY
+p42
+sS'volume'
+p43
+V123
+p44
+sS'authorAddress'
+p45
+VVassar Coll, Dept Biol, Poughkeepsie, NY 12601 USA.
+p46
+sS'date'
+p47
+I2000
+sS'ER'
+p48
+V
+sS'publisher'
+p49
+VAMER SOC PLANT PHYSIOLOGISTS
+p50
+sS'language'
+p51
+VEnglish
+p52
+sS'wosid'
+p53
+VWOS:000088792200005
+p54
+sS'citationCount'
+p55
+I0
+sS'authors_init'
+p56
+(lp57
+(VMINORSKY
+VP V
+tp58
+asb.

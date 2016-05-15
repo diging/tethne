@@ -17,7 +17,7 @@ logger = logging.getLogger('feature')
 logger.setLevel('WARNING')
 
 
-from itertools import chain
+from itertools import chain, izip
 from collections import Counter, defaultdict
 
 import sys
@@ -322,7 +322,6 @@ class Feature(list):
         return [self[i] for i in argsort(list(zip(*self))[1])[::-1][:topn]]
 
     def value(self, element):
-
         return dict(self)[element]
 
 
@@ -336,10 +335,10 @@ class BaseFeatureSet(object):
     def _setUp(self):
         self.index = {}
         self.lookup = {}
-        self.counts = {}
-        self.documentCounts = {}
+        self.counts = Counter()
+        self.documentCounts = Counter()
         self.features = {}
-        self.with_feature = {}
+        self.with_feature = defaultdict(list)
 
     def __getitem__(self, key):
         try:
@@ -354,6 +353,9 @@ class BaseFeatureSet(object):
 
     def items(self):
         return self.features.items()
+
+    def iteritems(self):
+        return self.features.iteritems()
 
     @property
     def unique(self):
@@ -396,30 +398,22 @@ class BaseFeatureSet(object):
 
         self.features[paper_id] = feature
 
-        self.extend_index(feature.unique)
-        for item in feature:
-            if type(item) is tuple:
-                elem, count = item
-            else:
-                elem = item
-                count = 1.
+        if len(feature) < 1:
+            return
 
-            self.counts[self.lookup[elem]] += count
-            self.documentCounts[self.lookup[elem]] += 1.
-            self.with_feature[self.lookup[elem]].append(paper_id)
+        if type(feature[0]) is not tuple:
+            feature = Counter(elements).items()
 
-    def extend_index(self, elements):
-        """
+        for elem, value in feature:
+            i = self.lookup.get(elem, len(self.lookup))
 
-        """
-        new_elements = list(set(elements) - self.unique)
-        for i in xrange(len(new_elements)):
-            x = len(self.index)
-            self.index[x] = new_elements[i]
-            self.lookup[new_elements[i]] = x
-            self.counts[x] = 0.
-            self.documentCounts[x] = 0.
-            self.with_feature[x] = []
+            self.lookup[elem] = i
+            self.index[i] = elem
+
+            self.counts[i] += value
+            self.documentCounts[i] += 1.
+            self.with_feature[i].append(paper_id)
+
 
     def top(self, topn, by='counts'):
         """
@@ -539,6 +533,7 @@ class FeatureSet(BaseFeatureSet):
                     pass
 
 
+
     def transform(self, func):
         """
         Apply a transformation to tokens in this :class:`.FeatureSet`\.
@@ -600,13 +595,13 @@ class FeatureSet(BaseFeatureSet):
         """
 
         """
-
         matrix = [[0. for e in xrange(self.N_features)]
                   for i in xrange(self.N_documents)]
         for i, p in enumerate(self.features.keys()):
             f = self.features[p]
             for e, c in f:
                 j = self.lookup[e]
+                print i, j
                 matrix[i][j] = c
 
         return matrix

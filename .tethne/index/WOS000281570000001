@@ -1,0 +1,944 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'reprintAddress'
+p8
+VStupar, RM (reprint author), Univ Minnesota, Dept Agron & Plant Genet, St Paul, MN 55108 USA.
+p9
+sS'WC'
+p10
+VPlant Sciences
+p11
+sS'GA'
+p12
+V646VA
+p13
+sS'FX'
+p14
+(lp15
+VThis work was supported by the United Soybean Board, the North Central
+p16
+aVSoybean Association, U.S. Department of Agriculture-Agricultural
+p17
+aVResearch Service, and the Minnesota Soybean Research and Promotion
+p18
+aVCouncil.
+p19
+asS'abstract'
+p20
+VNear-isogenic lines (NILs) are valuable genetic resources for many crop species, including soybean (Glycine max). The development of new molecular platforms promises to accelerate the mapping of genetic introgressions in these materials. Here, we compare some existing and emerging methodologies for genetic introgression mapping: single-feature polymorphism analysis, Illumina GoldenGate single nucleotide polymorphism (SNP) genotyping, and de novo SNP discovery via RNA-Seq analysis of next-generation sequence data. We used these methods to map the introgressed regions in an iron-inefficient soybean NIL and found that the three mapping approaches are complementary when utilized in combination. The comparative RNA-Seq approach offers several additional advantages, including the greatest mapping resolution, marker depth, and de novo marker utility for downstream fine-mapping analysis. We applied the comparative RNA-Seq method to map genetic introgressions in an additional pair of NILs exhibiting differential seed protein content. Furthermore, we attempted to optimize the comparative RNA-Seq approach by assessing the impact of sequence depth, SNP identification methodology, and post hoc analyses on SNP discovery rates. We conclude that the comparative RNA-Seq approach can be optimized with sufficient sampling and by utilizing a post hoc correction accounting for gene density variation that controls for false discoveries.
+p21
+sS'pageEnd'
+p22
+I12
+sS'date'
+p23
+I2010
+sS'documentType'
+p24
+VArticle
+p25
+sS'subject'
+p26
+VPlant Sciences
+p27
+sS'isoSource'
+p28
+VPlant Physiol.
+p29
+sS'timesCited'
+p30
+(lp31
+I12
+aVZ9 12
+p32
+asS'funding'
+p33
+(lp34
+(VUnited Soybean Board
+Ntp35
+a(VNorth Central Soybean Association
+Ntp36
+a(VU.S. Department of Agriculture-Agricultural Research Service
+Ntp37
+a(VMinnesota Soybean Research and Promotion Council
+Ntp38
+asS'PT'
+p39
+VJ
+sS'title'
+p40
+VAn Integrative Approach To Genomic Introgression Mapping
+p41
+sS'ISSN'
+p42
+(lp43
+V0032-0889
+p44
+aVJ9 PLANT PHYSIOL
+p45
+asS'authors_full'
+p46
+(lp47
+(VSEVERIN
+VANDREW J
+tp48
+a(VPEIFFER
+VGREGORY A
+tp49
+a(VXU
+VWAYNE W
+tp50
+a(VHYTEN
+VDAVID L
+tp51
+a(VBUCCIARELLI
+VBRUNA
+tp52
+a(VOROURKE
+VJAMIE A
+tp53
+a(VBOLON
+VYUNGTSI
+tp54
+a(VGRANT
+VDAVID
+tp55
+a(VFARMER
+VANDREW D
+tp56
+a(VMAY
+VGREGORY D
+tp57
+a(VVANCE
+VCARROLL P
+tp58
+a(VSHOEMAKER
+VRANDY C
+tp59
+a(VSTUPAR
+VROBERT M
+tp60
+asS'PG'
+p61
+I10
+sS'PD'
+p62
+VSEP
+p63
+sS'pageStart'
+p64
+I3
+sS'issue'
+p65
+I1
+sS'journal'
+p66
+VPLANT PHYSIOLOGY
+p67
+sS'volume'
+p68
+V154
+p69
+sS'doi'
+p70
+V10.1104/pp.110.158949
+p71
+sS'emailAddress'
+p72
+Vrstupar@umn.edu
+p73
+sS'authorAddress'
+p74
+(lp75
+V[Vance, Carroll P.; Stupar, Robert M.] Univ Minnesota, Dept Agron & Plant Genet, St Paul, MN 55108 USA.
+p76
+aV[Severin, Andrew J.; Peiffer, Gregory A.; Shoemaker, Randy C.] Iowa State Univ, Dept Agron, Ames, IA 50011 USA.
+p77
+aV[Xu, Wayne W.] Univ Minnesota, Minnesota Supercomp Inst, Minneapolis, MN 55455 USA.
+p78
+aV[Hyten, David L.] USDA ARS, Soybean Genom & Improvement Lab, Beltsville, MD 20705 USA.
+p79
+aV[Bucciarelli, Bruna; O'Rourke, Jamie A.; Bolon, Yung-Tsi; Vance, Carroll P.] USDA ARS, Plant Res Unit, St Paul, MN 55108 USA.
+p80
+aV[Grant, David; Shoemaker, Randy C.] USDA ARS, Corn Insects & Crop Genet Res Unit, Ames, IA 50011 USA.
+p81
+aV[Farmer, Andrew D.; May, Gregory D.] Natl Ctr Genome Res, Santa Fe, NM 87505 USA.
+p82
+asS'publisherAddress'
+p83
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p84
+sS'ER'
+p85
+V
+sS'publisher'
+p86
+VAMER SOC PLANT BIOLOGISTS
+p87
+sS'authorKeywords'
+p88
+(lp89
+VIRON-DEFICIENCY CHLOROSIS
+p90
+aVGENETIC-LINKAGE MAP
+p91
+aVSEED PROTEIN QTL
+p92
+aVMICROARRAY ANALYSIS
+p93
+aVCOMPLEX GENOME
+p94
+aVSNP DISCOVERY
+p95
+aVGLYCINE-MAX
+p96
+aVGROUP-I
+p97
+aVSEQUENCE
+p98
+aVMARKERS
+p99
+asS'language'
+p100
+VEnglish
+p101
+sS'wosid'
+p102
+VWOS:000281570000001
+p103
+sS'citationCount'
+p104
+I29
+sS'authors_init'
+p105
+(lp106
+(VSEVERIN
+VA J
+tp107
+a(VPEIFFER
+VG A
+tp108
+a(VXU
+VW W
+tp109
+a(VHYTEN
+VD L
+tp110
+a(VBUCCIARELLI
+VB
+tp111
+a(VOROURKE
+VJ A
+tp112
+a(VBOLON
+VY T
+tp113
+a(VGRANT
+VD
+tp114
+a(VFARMER
+VA D
+tp115
+a(VMAY
+VG D
+tp116
+a(VVANCE
+VC P
+tp117
+a(VSHOEMAKER
+VR C
+tp118
+a(VSTUPAR
+VR M
+tp119
+asS'citedReferences'
+p120
+(lp121
+g1
+(g2
+g3
+NtRp122
+(dp123
+g70
+Nsg66
+VSoybean Genetics Newsletter
+p124
+sg68
+V18
+p125
+sg105
+(lp126
+(VBERNARD
+VR L
+tp127
+asg23
+I1991
+sg64
+V27
+p128
+sbag1
+(g2
+g3
+NtRp129
+(dp130
+g70
+V10.1186/1471-2229-10-41
+p131
+sg66
+VBMC PLANT BIOL
+p132
+sg68
+V10
+p133
+sg105
+(lp134
+(VBOLON
+VY T
+tp135
+asg23
+I2010
+sg64
+Nsbag1
+(g2
+g3
+NtRp136
+(dp137
+g70
+V10.1007/978-1-60327-411-1_16
+p138
+sg66
+VMETHODS MOL BIOL
+p139
+sg68
+V578
+p140
+sg105
+(lp141
+(VDING
+VC M
+tp142
+asg23
+I2009
+sg64
+V245
+p143
+sbag1
+(g2
+g3
+NtRp144
+(dp145
+g70
+V10.1126/science.1162986
+p146
+sg66
+VSCIENCE
+p147
+sg68
+V323
+p148
+sg105
+(lp149
+(VEID
+VJ
+tp150
+asg23
+I2009
+sg64
+V133
+p151
+sbag1
+(g2
+g3
+NtRp152
+(dp153
+g70
+V10.1111/j.1365-313X.2010.04196.x
+p154
+sg66
+VPLANT J
+p155
+sg68
+V62
+p156
+sg105
+(lp157
+(VFU
+VY
+tp158
+asg23
+I2010
+sg64
+VLANT
+p159
+sbag1
+(g2
+g3
+NtRp160
+(dp161
+g70
+Nsg66
+VAGRON J
+p162
+sg68
+V95
+p163
+sg105
+(lp164
+(VHANSEN
+VN C
+tp165
+asg23
+I2003
+sg64
+V1595
+p166
+sbag1
+(g2
+g3
+NtRp167
+(dp168
+g70
+V10.2135/cropsci2009.06.0360
+p169
+sg66
+VCROP SCI
+p170
+sg68
+V50
+p171
+sg105
+(lp172
+(VHYTEN
+VD L
+tp173
+asg23
+I2010
+sg64
+V960
+p174
+sbag1
+(g2
+g3
+NtRp175
+(dp176
+g70
+V10.1007/s00122-008-0726-2
+p177
+sg66
+VTHEOR APPL GENET
+p178
+sg68
+V116
+p179
+sg105
+(lp180
+(VHYTEN
+VD L
+tp181
+asg23
+I2008
+sg64
+V945
+p182
+sbag1
+(g2
+g3
+NtRp183
+(dp184
+g70
+V10.1186/1471-2164-11-38
+p185
+sg66
+VBMC GENOMICS
+p186
+sg68
+V11
+p187
+sg105
+(lp188
+(VHYTEN
+VD L
+tp189
+asg23
+I2010
+sg64
+Nsbag1
+(g2
+g3
+NtRp190
+(dp191
+g70
+V10.3835/plantgenome2008.04.0207
+p192
+sg66
+VPLANT GENOME
+p193
+sg68
+V1
+sg105
+(lp194
+(VKACZOROWSKI
+VK A
+tp195
+asg23
+I2008
+sg64
+VLANT
+p196
+sbag1
+(g2
+g3
+NtRp197
+(dp198
+g70
+V10.1101/gr.088013.108
+p199
+sg66
+VGENOME RES
+p200
+sg68
+V19
+p201
+sg105
+(lp202
+(VLI
+VR Q
+tp203
+asg23
+I2009
+sg64
+V1124
+p204
+sbag1
+(g2
+g3
+NtRp205
+(dp206
+g70
+V10.1093/bioinformatics/btp336
+p207
+sg66
+VBIOINFORMATICS
+p208
+sg68
+V25
+p209
+sg105
+(lp210
+(VLI
+VR Q
+tp211
+asg23
+I2009
+sg64
+V1966
+p212
+sbag1
+(g2
+g3
+NtRp213
+(dp214
+g70
+V10.1111/j.1365-313X.2010.04222.x
+p215
+sg66
+VPLANT J
+p216
+sg68
+V63
+p217
+sg105
+(lp218
+(VLIBAULT
+VM
+tp219
+asg23
+I2010
+sg64
+VLANT
+p220
+sbag1
+(g2
+g3
+NtRp221
+(dp222
+g70
+V10.1139/G03-079
+p223
+sg66
+VGENOME
+p224
+sg68
+V46
+p225
+sg105
+(lp226
+(VMOLNAR
+VS J
+tp227
+asg23
+I2003
+sg64
+V1024
+p228
+sbag1
+(g2
+g3
+NtRp229
+(dp230
+g70
+Nsg66
+VCROP SCI
+p231
+sg68
+V29
+p232
+sg105
+(lp233
+(VMUEHLBAUER
+VG J
+tp234
+asg23
+I1989
+sg64
+V1548
+p235
+sbag1
+(g2
+g3
+NtRp236
+(dp237
+g70
+V10.1007/BF00215722
+p238
+sg66
+VTHEOR APPL GENET
+p239
+sg68
+V81
+p240
+sg105
+(lp241
+(VMUEHLBAUER
+VG J
+tp242
+asg23
+I1991
+sg64
+V189
+p243
+sbag1
+(g2
+g3
+NtRp244
+(dp245
+g70
+V10.2135/cropsci205.05-0168
+p246
+sg66
+VCROP SCI
+p247
+sg68
+V46
+p248
+sg105
+(lp249
+(VNICHOLS
+VD M
+tp250
+asg23
+I2006
+sg64
+V834
+p251
+sbag1
+(g2
+g3
+NtRp252
+(dp253
+g70
+V10.1186/1471-2164-8-476
+p254
+sg66
+VBMC GENOMICS
+p255
+sg68
+V8
+sg105
+(lp256
+(VO'ROURKE
+VJ A
+tp257
+asg23
+I2007
+sg64
+Nsbag1
+(g2
+g3
+NtRp258
+(dp259
+g70
+V10.1186/1471-2164-10-376
+p260
+sg66
+VBMC GENOMICS
+p261
+sg68
+V10
+p262
+sg105
+(lp263
+(VO'ROURKE
+VJ A
+tp264
+asg23
+I2009
+sg64
+Nsbag1
+(g2
+g3
+NtRp265
+(dp266
+g70
+V10.1016/j.plaphy.2007.03.008
+p267
+sg66
+VPLANT PHYSIOL BIOCH
+p268
+sg68
+V45
+p269
+sg105
+(lp270
+(VO'ROURKE
+VJ A
+tp271
+asg23
+I2007
+sg64
+VLANT
+p272
+sbag1
+(g2
+g3
+NtRp273
+(dp274
+g70
+V10.1016/S0168-9525(00)02024-2
+p275
+sg66
+VTRENDS GENET
+p276
+sg68
+V16
+p277
+sg105
+(lp278
+(VRICE
+VP
+tp279
+asg23
+I2000
+sg64
+V276
+p280
+sbag1
+(g2
+g3
+NtRp281
+(dp282
+g70
+V10.1038/nmeth0409-244a
+p283
+sg66
+VNAT METHODS
+p284
+sg68
+V6
+sg105
+(lp285
+(VRUSK
+VN
+tp286
+asg23
+I2009
+sg64
+V244
+p287
+sbag1
+(g2
+g3
+NtRp288
+(dp289
+g70
+V10.1038/nature08670
+p290
+sg66
+VNATURE
+p291
+sg68
+V463
+p292
+sg105
+(lp293
+(VSCHMUTZ
+VJ
+tp294
+asg23
+I2010
+sg64
+V178
+p295
+sbag1
+(g2
+g3
+NtRp296
+(dp297
+g70
+V10.1186/1471-2229-10-160
+p298
+sg66
+VBMC PLANT BIOL
+p299
+sg68
+V10
+p300
+sg105
+(lp301
+(VSEVERIN
+VA J
+tp302
+asg23
+I2010
+sg64
+Nsbag1
+(g2
+g3
+NtRp303
+(dp304
+g70
+V10.1007/s00122-004-1602-3
+p305
+sg66
+VTHEOR APPL GENET
+p306
+sg68
+V109
+p307
+sg105
+(lp308
+(VSONG
+VQ J
+tp309
+asg23
+I2004
+sg64
+V122
+p310
+sbag1
+(g2
+g3
+NtRp311
+(dp312
+g70
+V10.2135/cropsci2009.10.0607
+p313
+sg66
+VCROP SCI
+p314
+sg68
+V50
+p315
+sg105
+(lp316
+(VSONG
+VQ J
+tp317
+asg23
+I2010
+sg64
+V1950
+p318
+sbag1
+(g2
+g3
+NtRp319
+(dp320
+g70
+V[10.1038/nmeth.1185, 10.1038/NMETH.1185]
+p321
+sg66
+VNAT METHODS
+p322
+sg68
+V5
+sg105
+(lp323
+(VVAN
+VTASSELL C P
+tp324
+asg23
+I2008
+sg64
+V247
+p325
+sbag1
+(g2
+g3
+NtRp326
+(dp327
+g70
+V10.1093/bioinformatics/btq057
+p328
+sg66
+VBIOINFORMATICS
+p329
+sg68
+V26
+p330
+sg105
+(lp331
+(VWU
+VT D
+tp332
+asg23
+I2010
+sg64
+V873
+p333
+sbag1
+(g2
+g3
+NtRp334
+(dp335
+g70
+V10.1186/1471-2156-10-48
+p336
+sg66
+VBMC GENET
+p337
+sg68
+V10
+p338
+sg105
+(lp339
+(VXU
+VW W
+tp340
+asg23
+I2009
+sg64
+Nsbasb.
