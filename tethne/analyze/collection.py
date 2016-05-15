@@ -127,7 +127,7 @@ def attachment_probability(G):
     probs = {}
     G_ = None
     k_ = None
-    for k,g in G.graphs.items():
+    for k,g in G.graphs.iteritems():
         new_edges = {}
         if G_ is not None: 
             for n in g.nodes():

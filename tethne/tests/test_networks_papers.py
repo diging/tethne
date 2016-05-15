@@ -69,7 +69,6 @@ class TestAuthorPapersWithStreaming(unittest.TestCase):
         self.corpus = read(datapath, streaming=True)
 
     def test_direct_citation(self):
-        print 'dc'
         g = direct_citation(self.corpus)
 
         self.assertIsInstance(g, nx.DiGraph)
@@ -82,7 +81,6 @@ class TestAuthorPapersWithStreaming(unittest.TestCase):
                             "Containing papers and their citations.")
 
     def test_bibliographic_coupling(self):
-        print 'bc'
         g = bibliographic_coupling(self.corpus)
 
         self.assertIsInstance(g, nx.Graph)
@@ -96,7 +94,6 @@ class TestAuthorPapersWithStreaming(unittest.TestCase):
                 self.assertIn(f, self.corpus.indices['citations'])
 
     def test_cocitation(self):
-        print 'coc'
         g = cocitation(self.corpus, min_weight=2)
 
         self.assertIsInstance(g, nx.Graph)
@@ -107,7 +104,6 @@ class TestAuthorPapersWithStreaming(unittest.TestCase):
             self.assertIn('weight', attrs)
 
     def test_author_coupling(self):
-        print 'ac'
         g = author_coupling(self.corpus)
 
         self.assertIsInstance(g, nx.Graph)

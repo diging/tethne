@@ -396,7 +396,7 @@ class Corpus(object):
 
         """
 
-        for i, paper in self.indexed_papers.items():
+        for i, paper in self.indexed_papers.iteritems():
             self.index_paper_by_attr(paper, attr)
 
 
@@ -702,7 +702,7 @@ class Corpus(object):
                            index_features=self.features.keys())
 
         # Transfer FeatureSets.
-        for featureset_name, featureset in self.features.items():
+        for featureset_name, featureset in self.features.iteritems():
             if featureset_name not in subcorpus:
                 shared_papers = list(set(featureset.features.keys()) & \
                                      set(subcorpus.indexed_papers.keys()))

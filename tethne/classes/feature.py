@@ -329,7 +329,7 @@ class BaseFeatureSet(object):
     def __init__(self, features={}):
         self._setUp()
 
-        for paper, feature in features.items():
+        for paper, feature in features.iteritems():
             self.add(paper, feature)
 
     def _setUp(self):
@@ -449,7 +449,7 @@ class StructuredFeatureSet(BaseFeatureSet):
 
     def transform(self, func):
         features = {}
-        for i, feature in self.features.items():
+        for i, feature in self.features.iteritems():
             feature_ = []
             for f in feature:
                 t = self.lookup[f]
@@ -482,7 +482,7 @@ class StructuredFeatureSet(BaseFeatureSet):
 
         chunks = []
         papers = []
-        for paper, feature in self.features.items():
+        for paper, feature in self.features.iteritems():
             if context in feature.contexts:
                 new_chunks = feature.context_chunks(context)
             else:
@@ -524,7 +524,7 @@ class FeatureSet(BaseFeatureSet):
                                            in allfeatures_keys])
 
             self.with_feature = defaultdict(list)
-            for paper_id, counts in features.items():
+            for paper_id, counts in features.iteritems():
                 try:
                     for elem in zip(*counts)[0]:
                         i = self.lookup[elem]
@@ -567,7 +567,7 @@ class FeatureSet(BaseFeatureSet):
 
         """
         features = {}
-        for i, feature in self.features.items():
+        for i, feature in self.features.iteritems():
             feature_ = []
             for f, v in feature:
                 t = self.lookup[f]
@@ -580,7 +580,7 @@ class FeatureSet(BaseFeatureSet):
 
     def translate(self, func):
         features = {}
-        for i, feature in self.features.items():
+        for i, feature in self.features.iteritems():
             features_ = []
             for f, v in feature:
                 t = self.lookup[f]
