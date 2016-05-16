@@ -1,0 +1,187 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'reprintAddress'
+p8
+VChandler, VL (reprint author), Univ Arizona, Dept Plant Sci, 303 Forbes Bldg 36, Tucson, AZ 85721 USA.
+p9
+sS'WC'
+p10
+VPlant Sciences
+p11
+sS'GA'
+p12
+V423MJ
+p13
+sS'pageEnd'
+p14
+I1156
+sS'publisherAddress'
+p15
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p16
+sS'documentType'
+p17
+VEditorial Material
+p18
+sS'subject'
+p19
+VPlant Sciences
+p20
+sS'isoSource'
+p21
+VPlant Physiol.
+p22
+sS'timesCited'
+p23
+(lp24
+I5
+aVZ9 7
+p25
+asS'PT'
+p26
+VJ
+sS'title'
+p27
+VGrasses. A Collective Model Genetic System
+p28
+sS'ISSN'
+p29
+(lp30
+V0032-0889
+p31
+aVJ9 PLANT PHYSIOL
+p32
+asS'authors_full'
+p33
+(lp34
+(VCHANDLER
+VVL
+tp35
+a(VWESSLER
+VS
+tp36
+asS'PG'
+p37
+I2
+sS'PD'
+p38
+VMAR
+p39
+sS'pageStart'
+p40
+I1155
+sS'issue'
+p41
+I3
+sS'journal'
+p42
+VPLANT PHYSIOLOGY
+p43
+sS'volume'
+p44
+V125
+p45
+sS'authorAddress'
+p46
+(lp47
+VUniv Arizona, Dept Plant Sci, Tucson, AZ 85721 USA.
+p48
+aVUniv Georgia, Dept Bot, Athens, GA 30602 USA.
+p49
+asS'date'
+p50
+I2001
+sS'ER'
+p51
+V
+sS'publisher'
+p52
+VAMER SOC PLANT PHYSIOLOGISTS
+p53
+sS'doi'
+p54
+V10.1104/pp.125.3.1155
+p55
+sS'language'
+p56
+VEnglish
+p57
+sS'wosid'
+p58
+VWOS:000168179800001
+p59
+sS'citationCount'
+p60
+I2
+sS'authors_init'
+p61
+(lp62
+(VCHANDLER
+VV L
+tp63
+a(VWESSLER
+VS
+tp64
+asS'citedReferences'
+p65
+(lp66
+g1
+(g2
+g3
+NtRp67
+(dp68
+g54
+V10.1016/0168-9525(93)90001-X
+p69
+sg42
+VTRENDS GENET
+p70
+sg44
+V9
+sg61
+(lp71
+(VBENNETZEN
+VJ L
+tp72
+asg50
+I1993
+sg40
+V259
+p73
+sbag1
+(g2
+g3
+NtRp74
+(dp75
+g54
+V10.1105/tpc.7.1.75
+p76
+sg42
+VPLANT CELL
+p77
+sg44
+V7
+sg61
+(lp78
+(VBENSEN
+VR J
+tp79
+asg50
+I1995
+sg40
+VLANT
+p80
+sbasb.

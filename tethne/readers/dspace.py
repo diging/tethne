@@ -107,7 +107,7 @@ def add_bitstreams(corpus, bitstreampath):
     with open(bitstreampath, 'r') as f:
         bitstreams = pickle.load(f)
         
-    for uri, bpath in bitstreams.items():
+    for uri, bpath in bitstreams.iteritems():
         with codecs.open(bpath, 'r', encoding='utf-8') as f:
             contents = unidecode(f.read())
 

@@ -1,0 +1,174 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'WC'
+p8
+VPlant Sciences
+p9
+sS'pageEnd'
+p10
+I479
+sS'publisherAddress'
+p11
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p12
+sS'documentType'
+p13
+VCorrection
+p14
+sS'subject'
+p15
+VPlant Sciences
+p16
+sS'isoSource'
+p17
+VPlant Physiol.
+p18
+sS'timesCited'
+p19
+(lp20
+I0
+aVZ9 0
+p21
+asS'PT'
+p22
+VJ
+sS'title'
+p23
+VA Transcriptome-Based Characterization Of Habituation In Plant Tissue Culture. (Vol 140, Pg 1255, 2006)
+p24
+sS'ISSN'
+p25
+(lp26
+V0032-0889
+p27
+aVJ9 PLANT PHYSIOL
+p28
+asS'authors_full'
+p29
+(lp30
+(VPISCHKE
+VM S
+tp31
+a(VHUTTLIN
+VE L
+tp32
+a(VHEGEMAN
+VA D
+tp33
+a(VSUSSMAN
+VM R
+tp34
+asS'PG'
+p35
+I1
+sS'PD'
+p36
+VSEP
+p37
+sS'pageStart'
+p38
+I479
+sS'issue'
+p39
+I1
+sS'RI'
+p40
+VHegeman, Adrian/D-5984-2013
+p41
+sS'journal'
+p42
+VPLANT PHYSIOLOGY
+p43
+sS'volume'
+p44
+V151
+p45
+sS'GA'
+p46
+V490RS
+p47
+sS'date'
+p48
+I2009
+sS'ER'
+p49
+V
+sS'publisher'
+p50
+VAMER SOC PLANT BIOLOGISTS
+p51
+sS'doi'
+p52
+V10.1104/pp.109.900300
+p53
+sS'OI'
+p54
+VHegeman, Adrian/0000-0003-1008-6066
+p55
+sS'language'
+p56
+VEnglish
+p57
+sS'wosid'
+p58
+VWOS:000269522200039
+p59
+sS'citationCount'
+p60
+I1
+sS'authors_init'
+p61
+(lp62
+(VPISCHKE
+VM S
+tp63
+a(VHUTTLIN
+VE L
+tp64
+a(VHEGEMAN
+VA D
+tp65
+a(VSUSSMAN
+VM R
+tp66
+asS'citedReferences'
+p67
+(lp68
+g1
+(g2
+g3
+NtRp69
+(dp70
+g52
+V10.1104/pp.105.076059
+p71
+sg42
+VPLANT PHYSIOL
+p72
+sg44
+V140
+p73
+sg61
+(lp74
+(VPISCHKE
+VM S
+tp75
+asg48
+I2006
+sg38
+VLANT
+p76
+sbasb.

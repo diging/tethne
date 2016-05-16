@@ -1,0 +1,182 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'WC'
+p8
+VPlant Sciences
+p9
+sS'pageEnd'
+p10
+I450
+sS'publisherAddress'
+p11
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p12
+sS'documentType'
+p13
+VCorrection
+p14
+sS'subject'
+p15
+VPlant Sciences
+p16
+sS'isoSource'
+p17
+VPlant Physiol.
+p18
+sS'timesCited'
+p19
+(lp20
+I0
+aVZ9 0
+p21
+asS'PT'
+p22
+VJ
+sS'title'
+p23
+VEncodes An Oligosaccharide Transporter And Facilitates Rhizosphere Competency In Metarhizium Robertsii (Vol 154, Pg 1549, 2010)
+p24
+sS'ISSN'
+p25
+(lp26
+V0032-0889
+p27
+aVJ9 PLANT PHYSIOL
+p28
+asS'authors_full'
+p29
+(lp30
+(VFANG
+VW
+tp31
+a(VST LEGER
+VR J
+tp32
+asS'PG'
+p33
+I3
+sS'PD'
+p34
+VMAY
+p35
+sS'pageStart'
+p36
+I448
+sS'issue'
+p37
+I1
+sS'RI'
+p38
+VFang, Weiguo/G-6680-2012
+p39
+sS'journal'
+p40
+VPLANT PHYSIOLOGY
+p41
+sS'volume'
+p42
+V156
+p43
+sS'GA'
+p44
+V758ZG
+p45
+sS'date'
+p46
+I2011
+sS'ER'
+p47
+V
+sS'publisher'
+p48
+VAMER SOC PLANT BIOLOGISTS
+p49
+sS'doi'
+p50
+V10.1104/pp.111.900411
+p51
+sS'language'
+p52
+VEnglish
+p53
+sS'wosid'
+p54
+VWOS:000290207100036
+p55
+sS'citationCount'
+p56
+I2
+sS'authors_init'
+p57
+(lp58
+(VFANG
+VW
+tp59
+a(VST LEGER
+VR J
+tp60
+asS'citedReferences'
+p61
+(lp62
+g1
+(g2
+g3
+NtRp63
+(dp64
+g50
+V10.1104/pp.110.163014
+p65
+sg40
+VPLANT PHYSIOL
+p66
+sg42
+V154
+p67
+sg57
+(lp68
+(VFANG
+VW G
+tp69
+asg46
+I2010
+sg36
+VLANT
+p70
+sbag1
+(g2
+g3
+NtRp71
+(dp72
+g50
+V10.1021/jf00079a008
+p73
+sg40
+VJ AGR FOOD CHEM
+p74
+sg42
+V36
+p75
+sg57
+(lp76
+(VKUO
+VT M
+tp77
+asg46
+I1988
+sg36
+V32
+p78
+sbasb.

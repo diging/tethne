@@ -21,7 +21,7 @@ PACKAGES = ['tethne',
 
 import sys
 if sys.version_info[0] == 2:
-    pdfminer = 'pdfminer==20110515'
+    pdfminer = 'pdfminer==20140328'
 elif sys.version_info[0] == 3:
     pdfminer = "pdfminer3k"
 

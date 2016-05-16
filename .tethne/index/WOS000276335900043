@@ -1,0 +1,208 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'WC'
+p8
+VPlant Sciences
+p9
+sS'pageEnd'
+p10
+I2269
+sS'publisherAddress'
+p11
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p12
+sS'documentType'
+p13
+VCorrection
+p14
+sS'subject'
+p15
+VPlant Sciences
+p16
+sS'isoSource'
+p17
+VPlant Physiol.
+p18
+sS'timesCited'
+p19
+(lp20
+I0
+aVZ9 0
+p21
+asS'PT'
+p22
+VJ
+sS'title'
+p23
+VThe Beta-Glucosidases Responsible For Bioactivation Of Hydroxynitrile Glucosides In Lotus Japonicus (Vol 147, Pg 1072, 2008)
+p24
+sS'ISSN'
+p25
+(lp26
+V0032-0889
+p27
+aVJ9 PLANT PHYSIOL
+p28
+asS'authors_full'
+p29
+(lp30
+(VMORANT
+VA V
+tp31
+a(VBJARNHOLT
+VN
+tp32
+a(VKRAGH
+VM E
+tp33
+a(VKJAERGAARD
+VC H
+tp34
+a(VJORGENSEN
+VK
+tp35
+a(VPAQUETTE
+VS M
+tp36
+a(VPIOTROWSKI
+VM
+tp37
+a(VIMBERTY
+VA
+tp38
+a(VOLSEN
+VC E
+tp39
+a(VMOLLER
+VB L
+tp40
+a(VBAK
+VS
+tp41
+asS'PG'
+p42
+I1
+sS'PD'
+p43
+VAPR
+p44
+sS'pageStart'
+p45
+I2269
+sS'issue'
+p46
+I4
+sS'journal'
+p47
+VPLANT PHYSIOLOGY
+p48
+sS'volume'
+p49
+V152
+p50
+sS'GA'
+p51
+V578ZO
+p52
+sS'date'
+p53
+I2010
+sS'ER'
+p54
+V
+sS'publisher'
+p55
+VAMER SOC PLANT BIOLOGISTS
+p56
+sS'doi'
+p57
+V10.1104/pp.110.900320
+p58
+sS'language'
+p59
+VEnglish
+p60
+sS'wosid'
+p61
+VWOS:000276335900043
+p62
+sS'citationCount'
+p63
+I1
+sS'authors_init'
+p64
+(lp65
+(VMORANT
+VA V
+tp66
+a(VBJARNHOLT
+VN
+tp67
+a(VKRAGH
+VM E
+tp68
+a(VKJAERGAARD
+VC H
+tp69
+a(VJORGENSEN
+VK
+tp70
+a(VPAQUETTE
+VS M
+tp71
+a(VPIOTROWSKI
+VM
+tp72
+a(VIMBERTY
+VA
+tp73
+a(VOLSEN
+VC E
+tp74
+a(VMOLLER
+VB L
+tp75
+a(VBAK
+VS
+tp76
+asS'citedReferences'
+p77
+(lp78
+g1
+(g2
+g3
+NtRp79
+(dp80
+g57
+V10.1104/pp.107.109512
+p81
+sg47
+VPLANT PHYSIOL
+p82
+sg49
+V147
+p83
+sg64
+(lp84
+(VMORANT
+VA V
+tp85
+asg53
+I2008
+sg45
+VLANT
+p86
+sbasb.

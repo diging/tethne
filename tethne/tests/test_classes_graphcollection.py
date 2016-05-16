@@ -49,8 +49,16 @@ class TestGraphCollectionCreation(unittest.TestCase):
         """
         Should build `graphs` if passed a corpus and method.
         """
-        corpus = read(datapath)
+        corpus = read(datapath, index_fields=['ayjid', 'date'])
         G = GraphCollection(corpus, coauthors)
+        self.assertEqual(len(G), len(corpus.indices['date']))
+
+    def test_init_build_streaming(self):
+        """
+        Should build `graphs` if passed a corpus and method.
+        """
+        corpus = read(datapath, streaming=True)
+        G = GraphCollection(corpus, coauthors, slice_kwargs={'feature_name': 'authors'})
         self.assertEqual(len(G), len(corpus.indices['date']))
 
     def test_build(self):
@@ -59,6 +67,14 @@ class TestGraphCollectionCreation(unittest.TestCase):
         corpus = read(datapath)
         G = GraphCollection()
         G.build(corpus, coauthors)
+        self.assertEqual(len(G), len(corpus.indices['date']))
+
+    def test_build_streaming(self):
+        """
+        """
+        corpus = read(datapath, streaming=True)
+        G = GraphCollection()
+        G.build(corpus, coauthors, slice_kwargs={'feature_name': 'authors'})
         self.assertEqual(len(G), len(corpus.indices['date']))
 
     def test_index(self):
@@ -121,7 +137,7 @@ class TestGraphCollectionCreation(unittest.TestCase):
             self.assertIn(graph_name, G.graphs_containing[n])
 
             i = G.node_lookup[n]
-            for k, v in attrs.items():
+            for k, v in attrs.iteritems():
                 self.assertIn(k, G.master_graph.node[i])
                 self.assertIn(graph_name, G.master_graph.node[i][k])
                 self.assertEqual(v, G.master_graph.node[i][k][graph_name])
@@ -247,7 +263,7 @@ class TestGraphCollectionMethods(unittest.TestCase):
         # Edge attributes should be retained, keyed on the graph associated
         #  with the edge from which each value was obtained.
         for s, t, attrs in cgraph.edges(data=True):
-            for k, v in attrs.items():
+            for k, v in attrs.iteritems():
                 if k != 'weight':
                     for v_ in v.keys():
                         self.assertIn(v_, ['test', 'test2'])
@@ -276,7 +292,7 @@ class TestGraphCollectionMethods(unittest.TestCase):
             return [{k: v+5. for k, v in values.items()} for values in r]
 
         results_m = self.G.analyze('betweenness_centrality', mapper=mymapper)
-        for key, value in results.items():
+        for key, value in results.iteritems():
             for k in value.keys():
                 self.assertEqual(results[key][k] + 5., results_m[key][k])
 
@@ -318,12 +334,12 @@ class TestGraphCollectionMethods(unittest.TestCase):
 
         # Node attributes present.
         for u, a in self.G.master_graph.nodes(data=True):
-            for key, value in a.items():
+            for key, value in a.iteritems():
                 self.assertIn(key, graph.node[u])
 
         # Edge attributes present.
         for u, v, a in self.G.master_graph.edges(data=True):
-            for key, value in a.items():
+            for key, value in a.iteritems():
                 self.assertIn(key, graph[u][v])
                 if key == weight_attr:
                     self.assertIsInstance(value, float)

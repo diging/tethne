@@ -1,0 +1,172 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'WC'
+p8
+VPlant Sciences
+p9
+sS'pageEnd'
+p10
+I438
+sS'publisherAddress'
+p11
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p12
+sS'documentType'
+p13
+VCorrection
+p14
+sS'subject'
+p15
+VPlant Sciences
+p16
+sS'isoSource'
+p17
+VPlant Physiol.
+p18
+sS'timesCited'
+p19
+(lp20
+I1
+aVZ9 1
+p21
+asS'PT'
+p22
+VJ
+sS'title'
+p23
+VOsmads51 Is A Short-Day Flowering Promoter That Functions Upstream Of Ehd1, Osmads14, And Hd3A (Vol 145, Pg 1484, 2007)
+p24
+sS'ISSN'
+p25
+(lp26
+V0032-0889
+p27
+aVJ9 PLANT PHYSIOL
+p28
+asS'authors_full'
+p29
+(lp30
+(VKIM
+VS L
+tp31
+a(VLEE
+VS
+tp32
+a(VKIM
+VH J
+tp33
+a(VNAM
+VH G
+tp34
+a(VAN
+VG
+tp35
+asS'PG'
+p36
+I1
+sS'PD'
+p37
+VMAY
+p38
+sS'pageStart'
+p39
+I438
+sS'issue'
+p40
+I1
+sS'journal'
+p41
+VPLANT PHYSIOLOGY
+p42
+sS'volume'
+p43
+V147
+p44
+sS'GA'
+p45
+V308VV
+p46
+sS'date'
+p47
+I2008
+sS'ER'
+p48
+V
+sS'publisher'
+p49
+VAMER SOC PLANT BIOLOGISTS
+p50
+sS'doi'
+p51
+V10.1104/pp.104.900258
+p52
+sS'language'
+p53
+VEnglish
+p54
+sS'wosid'
+p55
+VWOS:000256419400039
+p56
+sS'citationCount'
+p57
+I1
+sS'authors_init'
+p58
+(lp59
+(VKIM
+VS L
+tp60
+a(VLEE
+VS
+tp61
+a(VKIM
+VH J
+tp62
+a(VNAM
+VH G
+tp63
+a(VAN
+VG
+tp64
+asS'citedReferences'
+p65
+(lp66
+g1
+(g2
+g3
+NtRp67
+(dp68
+g51
+V10.1104/pp.107.103291
+p69
+sg41
+VPLANT PHYSIOL
+p70
+sg43
+V145
+p71
+sg58
+(lp72
+(VKIM
+VS L
+tp73
+asg47
+I2007
+sg39
+VLANT
+p74
+sbasb.

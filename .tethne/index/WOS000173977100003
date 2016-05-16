@@ -1,0 +1,129 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'reprintAddress'
+p8
+VJones, JDG (reprint author), Sainsbury Lab, John Innes Ctr, Norwich, Norfolk, England.
+p9
+sS'WC'
+p10
+VPlant Sciences
+p11
+sS'GA'
+p12
+V523VC
+p13
+sS'pageEnd'
+p14
+I333
+sS'publisherAddress'
+p15
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p16
+sS'documentType'
+p17
+VEditorial Material
+p18
+sS'subject'
+p19
+VPlant Sciences
+p20
+sS'isoSource'
+p21
+VPlant Physiol.
+p22
+sS'timesCited'
+p23
+(lp24
+I0
+aVZ9 0
+p25
+asS'PT'
+p26
+VJ
+sS'title'
+p27
+VFrom Physics And Chemistry To Plant Biology
+p28
+sS'ISSN'
+p29
+(lp30
+V0032-0889
+p31
+aVJ9 PLANT PHYSIOL
+p32
+asS'authors_full'
+p33
+(lp34
+(VJONES
+VJDG
+tp35
+asS'PG'
+p36
+I2
+sS'PD'
+p37
+VFEB
+p38
+sS'pageStart'
+p39
+I332
+sS'issue'
+p40
+I2
+sS'journal'
+p41
+VPLANT PHYSIOLOGY
+p42
+sS'volume'
+p43
+V128
+p44
+sS'emailAddress'
+p45
+Vjonathan.jones@bbsrc.ac.uk
+p46
+sS'authorAddress'
+p47
+VSainsbury Lab, John Innes Ctr, Norwich, Norfolk, England.
+p48
+sS'date'
+p49
+I2002
+sS'ER'
+p50
+V
+sS'publisher'
+p51
+VAMER SOC PLANT BIOLOGISTS
+p52
+sS'language'
+p53
+VEnglish
+p54
+sS'wosid'
+p55
+VWOS:000173977100003
+p56
+sS'citationCount'
+p57
+I0
+sS'authors_init'
+p58
+(lp59
+(VJONES
+VJ D G
+tp60
+asb.

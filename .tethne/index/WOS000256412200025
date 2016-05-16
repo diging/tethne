@@ -1,0 +1,154 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'WC'
+p8
+VPlant Sciences
+p9
+sS'pageEnd'
+p10
+I1023
+sS'publisherAddress'
+p11
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p12
+sS'documentType'
+p13
+VEditorial Material
+p14
+sS'subject'
+p15
+VPlant Sciences
+p16
+sS'isoSource'
+p17
+VPlant Physiol.
+p18
+sS'timesCited'
+p19
+(lp20
+I12
+aVZ9 13
+p21
+asS'PT'
+p22
+VJ
+sS'title'
+p23
+VPlant Physiology And Tair Partnership
+p24
+sS'ISSN'
+p25
+(lp26
+V0032-0889
+p27
+aVJ9 PLANT PHYSIOL
+p28
+asS'authors_full'
+p29
+(lp30
+(VORT
+VDONALD R
+tp31
+a(VGRENNAN
+VALEEL K
+tp32
+asS'PG'
+p33
+I2
+sS'PD'
+p34
+VMAR
+p35
+sS'pageStart'
+p36
+I1022
+sS'issue'
+p37
+I3
+sS'journal'
+p38
+VPLANT PHYSIOLOGY
+p39
+sS'volume'
+p40
+V146
+p41
+sS'GA'
+p42
+V308TF
+p43
+sS'date'
+p44
+I2008
+sS'ER'
+p45
+V
+sS'publisher'
+p46
+VAMER SOC PLANT BIOLOGISTS
+p47
+sS'doi'
+p48
+V10.1104/pp.104.900252
+p49
+sS'language'
+p50
+VEnglish
+p51
+sS'wosid'
+p52
+VWOS:000256412200025
+p53
+sS'citationCount'
+p54
+I1
+sS'authors_init'
+p55
+(lp56
+(VORT
+VD R
+tp57
+a(VGRENNAN
+VA K
+tp58
+asS'citedReferences'
+p59
+(lp60
+g1
+(g2
+g3
+NtRp61
+(dp62
+g48
+V10.1093/nar/gkg076
+p63
+sg38
+VNUCLEIC ACIDS RES
+p64
+sg40
+V31
+p65
+sg55
+(lp66
+(VRHEE
+VS Y
+tp67
+asg44
+I2003
+sg36
+V224
+p68
+sbasb.

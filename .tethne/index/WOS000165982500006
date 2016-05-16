@@ -1,0 +1,233 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'reprintAddress'
+p8
+VSussman, MR (reprint author), Univ Wisconsin, Ctr Biotechnol, Madison, WI 53706 USA.
+p9
+sS'WC'
+p10
+VPlant Sciences
+p11
+sS'GA'
+p12
+V385BV
+p13
+sS'pageEnd'
+p14
+I1467
+sS'publisherAddress'
+p15
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p16
+sS'documentType'
+p17
+VArticle
+p18
+sS'subject'
+p19
+VPlant Sciences
+p20
+sS'isoSource'
+p21
+VPlant Physiol.
+p22
+sS'timesCited'
+p23
+(lp24
+I143
+aVZ9 148
+p25
+asS'PT'
+p26
+VJ
+sS'title'
+p27
+VThe Arabidopsis Knockout Facility At The University Of Wisconsin-Madison
+p28
+sS'ISSN'
+p29
+(lp30
+V0032-0889
+p31
+aVJ9 PLANT PHYSIOL
+p32
+asS'authors_full'
+p33
+(lp34
+(VSUSSMAN
+VMR
+tp35
+a(VAMASINO
+VRM
+tp36
+a(VYOUNG
+VJC
+tp37
+a(VKRYSAN
+VPJ
+tp38
+a(VAUSTINPHILLIPS
+VS
+tp39
+asS'PG'
+p40
+I3
+sS'PD'
+p41
+VDEC
+p42
+sS'pageStart'
+p43
+I1465
+sS'issue'
+p44
+I4
+sS'journal'
+p45
+VPLANT PHYSIOLOGY
+p46
+sS'volume'
+p47
+V124
+p48
+sS'authorAddress'
+p49
+(lp50
+VUniv Wisconsin, Ctr Biotechnol, Madison, WI 53706 USA.
+p51
+aVUniv Wisconsin, Dept Biochem, Madison, WI 53706 USA.
+p52
+aVWestern Washington State Univ, Dept Biol, Bellingham, WA 98225 USA.
+p53
+asS'date'
+p54
+I2000
+sS'ER'
+p55
+V
+sS'publisher'
+p56
+VAMER SOC PLANT PHYSIOLOGISTS
+p57
+sS'doi'
+p58
+V10.1104/pp.124.4.1465
+p59
+sS'language'
+p60
+VEnglish
+p61
+sS'wosid'
+p62
+VWOS:000165982500006
+p63
+sS'citationCount'
+p64
+I3
+sS'authors_init'
+p65
+(lp66
+(VSUSSMAN
+VM R
+tp67
+a(VAMASINO
+VR M
+tp68
+a(VYOUNG
+VJ C
+tp69
+a(VKRYSAN
+VP J
+tp70
+a(VAUSTINPHILLIPS
+VS
+tp71
+asS'citedReferences'
+p72
+(lp73
+g1
+(g2
+g3
+NtRp74
+(dp75
+g58
+V10.1105/tpc.11.12.2283
+p76
+sg45
+VPLANT CELL
+p77
+sg47
+V11
+p78
+sg65
+(lp79
+(VKRYSAN
+VP J
+tp80
+asg54
+I1999
+sg43
+VLANT
+p81
+sbag1
+(g2
+g3
+NtRp82
+(dp83
+g58
+V10.1073/pnas.93.15.8145
+p84
+sg45
+VP NATL ACAD SCI USA
+p85
+sg47
+V93
+p86
+sg65
+(lp87
+(VKRYSAN
+VP J
+tp88
+asg54
+I1996
+sg43
+V8145
+p89
+sbag1
+(g2
+g3
+NtRp90
+(dp91
+g58
+V10.1104/pp.122.4.1003
+p92
+sg45
+VPLANT PHYSIOL
+p93
+sg47
+V122
+p94
+sg65
+(lp95
+(VWEIGEL
+VD
+tp96
+asg54
+I2000
+sg43
+VLANT
+p97
+sbasb.

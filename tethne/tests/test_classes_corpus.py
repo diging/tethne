@@ -3,7 +3,7 @@ sys.path.append('./')
 
 import unittest
 from tethne.readers.wos import read
-from tethne import Corpus, Paper
+from tethne import Corpus, Paper, FeatureSet, Feature
 from tethne.utilities import _iterable
 
 datapath = './tethne/tests/data/wos.txt'
@@ -64,6 +64,25 @@ class TestCorpus(unittest.TestCase):
 
         self.assertEqual(len(allpapers[0][1]), 10)
 
+    def test_slice_index_only(self):
+        corpus = Corpus(self.papers, index_by='wosid', index_features=['authors'])
+        for key, papers in corpus.slice(feature_name='authors'):
+            self.assertIsInstance(papers, FeatureSet)
+            self.assertIsInstance(papers[0], Feature)
+
+    def test_slice_sliding_index_only(self):
+        corpus = Corpus(self.papers, index_by='wosid')
+        allpapers = [papers for papers in corpus.slice(window_size=2, feature_name='authors')]
+
+        self.assertEqual(len(allpapers[0][1]), 10)
+
+    def test_slice_larger_index_only(self):
+        corpus = Corpus(self.papers, index_by='wosid')
+        allpapers = [papers for papers
+                     in corpus.slice(window_size=2, step_size=2, feature_name='authors')]
+
+        self.assertEqual(len(allpapers[0][1]), 10)
+
     def test_distribution(self):
         corpus = Corpus(self.papers, index_by='wosid')
         values = corpus.distribution()
@@ -72,7 +91,7 @@ class TestCorpus(unittest.TestCase):
 
     def test_feature_distribution(self):
         corpus = Corpus(self.papers, index_by='wosid')
-        values = corpus.feature_distribution('authors', ('ZENG', 'EDDY Y'))
+        values = corpus.feature_distribution('authors', (u'SOTO', u'MANU'))
         # values = corpus.feature_distribution('citations', 'BOSSDORF O 2005 OECOLOGIA')
         self.assertEqual(len(values[0]), len(values[1]))
         self.assertListEqual(values[1], [0, 1])

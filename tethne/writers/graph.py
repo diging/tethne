@@ -95,7 +95,7 @@ def to_sif(graph, output_path):
         for node in nodes:
             node_name = node[0]
             node_attribs = node[1]
-            for key, value in node_attribs.items():
+            for key, value in node_attribs.iteritems():
                 # generate a node attribute file for each node attribute
                 if node == nodes[0]:
                     # first node, overwrite file
@@ -152,7 +152,7 @@ def to_sif(graph, output_path):
                         sif_line = node1 + ' ' + intr_type + ' ' + node2 + '\n'
                         f.write(sif_line)
 
-                        for attrib, value in edge[3].items():
+                        for attrib, value in edge[3].iteritems():
                             eda_line = (node1 + ' (' + intr_type + ') ' +
                                         node2 + ' = ' + unicode(value) + '\n')
                             with open(output_path + '_' + unicode(attrib) + '.eda',
@@ -182,7 +182,7 @@ def to_sif(graph, output_path):
                         sif_line = node1 + ' ' + intr_type + ' ' + node2 + '\n'
                         f.write(sif_line)
 
-                        for attrib, value in edge[2].items():
+                        for attrib, value in edge[2].iteritems():
                             eda_line = (node1 + ' (' + intr_type + ') ' +
                                         node2 + ' = ' + unicode(value) + '\n')
                             with open(output_path + '_' + unicode(attrib) +
@@ -331,11 +331,11 @@ def to_table(graph, path):
 
 def _strip_list_attributes(G):
     for n in G.nodes(data=True):
-        for k,v in n[1].items():
+        for k,v in n[1].iteritems():
             if type(v) is list:
                 G.node[n[0]][k] = unicode(v)
     for e in G.edges(data=True):
-        for k,v in e[2].items():
+        for k,v in e[2].iteritems():
             if type(v) is list:
                 G.edge[e[0]][e[1]][k] = unicode(v)
 

@@ -1,0 +1,190 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'WC'
+p8
+VPlant Sciences
+p9
+sS'pageEnd'
+p10
+I892
+sS'publisherAddress'
+p11
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p12
+sS'documentType'
+p13
+VCorrection
+p14
+sS'subject'
+p15
+VPlant Sciences
+p16
+sS'isoSource'
+p17
+VPlant Physiol.
+p18
+sS'timesCited'
+p19
+(lp20
+I0
+aVZ9 0
+p21
+asS'PT'
+p22
+VJ
+sS'title'
+p23
+VDevelopmental And Wound-, Cold-, Desiccation-, Ultraviolet-B-Stress-Induced Modulations In The Expression Of The Petunia Zinc Finger Transcription Factor Gene Zpt2-2 (Vol 121, Pg 1153, 1999)
+p24
+sS'ISSN'
+p25
+(lp26
+V0032-0889
+p27
+aVJ9 PLANT PHYSIOL
+p28
+asS'authors_full'
+p29
+(lp30
+(VVAN DER KROL
+VA R
+tp31
+a(VVAN POECKE
+VR M P
+tp32
+a(VVORST
+VO F J
+tp33
+a(VVOOGD
+VC
+tp34
+a(VVAN LEEUWEN
+VW
+tp35
+a(VBORSTVRENSEN
+VT W M
+tp36
+a(VTAKATSUJI
+VH
+tp37
+a(VVAN DER PLAS
+VL H W
+tp38
+asS'PG'
+p39
+I1
+sS'PD'
+p40
+VJUN
+p41
+sS'pageStart'
+p42
+I892
+sS'issue'
+p43
+I2
+sS'journal'
+p44
+VPLANT PHYSIOLOGY
+p45
+sS'volume'
+p46
+V153
+p47
+sS'GA'
+p48
+V605IC
+p49
+sS'date'
+p50
+I2010
+sS'ER'
+p51
+V
+sS'publisher'
+p52
+VAMER SOC PLANT BIOLOGISTS
+p53
+sS'doi'
+p54
+V10.1104/pp.110.900323
+p55
+sS'language'
+p56
+VEnglish
+p57
+sS'wosid'
+p58
+VWOS:000278340200049
+p59
+sS'citationCount'
+p60
+I1
+sS'authors_init'
+p61
+(lp62
+(VVAN DER KROL
+VA R
+tp63
+a(VVAN POECKE
+VR M P
+tp64
+a(VVORST
+VO F J
+tp65
+a(VVOOGD
+VC
+tp66
+a(VVAN LEEUWEN
+VW
+tp67
+a(VBORSTVRENSEN
+VT W M
+tp68
+a(VTAKATSUJI
+VH
+tp69
+a(VVAN DER PLAS
+VL H W
+tp70
+asS'citedReferences'
+p71
+(lp72
+g1
+(g2
+g3
+NtRp73
+(dp74
+g54
+V10.1104/pp.121.4.1153
+p75
+sg44
+VPLANT PHYSIOL
+p76
+sg46
+V121
+p77
+sg61
+(lp78
+(VVAN
+VD E R KROL A R
+tp79
+asg50
+I1999
+sg42
+VLANT
+p80
+sbasb.

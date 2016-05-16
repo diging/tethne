@@ -3,13 +3,13 @@ from itertools import combinations
 from collections import Counter, defaultdict
 
 from tethne.utilities import _iterable
-from tethne import Corpus, FeatureSet, StructuredFeatureSet
+from tethne import Corpus, FeatureSet, StructuredFeatureSet, StreamingCorpus
 
 
 def _generate_graph(graph_class, pairs, node_attrs={}, edge_attrs={},
                     min_weight=1):
     graph = graph_class()
-    for combo, count in pairs.items():
+    for combo, count in pairs.iteritems():
         if count >= min_weight:
             if combo in edge_attrs:
                 attrs = edge_attrs[combo]
@@ -17,14 +17,14 @@ def _generate_graph(graph_class, pairs, node_attrs={}, edge_attrs={},
                 attrs = {}
             graph.add_edge(combo[0], combo[1], weight=count, **attrs)
 
-    for k, attrs in node_attrs.items():
+    for k, attrs in node_attrs.iteritems():
         if k in graph.node:
             graph.node[k].update(attrs)
     return graph
 
 
 def _get_featureset(corpus_or_featureset, featureset_name):
-    if type(corpus_or_featureset) is Corpus:  # Retrieve FeatureSet from Corpus.
+    if type(corpus_or_featureset) in [Corpus, StreamingCorpus]:  # Retrieve FeatureSet from Corpus.
         if not featureset_name:
             raise ValueError('featureset_name must be provided for Corpus')
         if featureset_name not in corpus_or_featureset.features:
@@ -38,16 +38,19 @@ def _get_featureset(corpus_or_featureset, featureset_name):
 
 def cooccurrence(corpus_or_featureset, featureset_name=None, min_weight=1,
                  edge_attrs=['ayjid', 'date'],
-                 filter=lambda f, v, c, dc: True):
+                 filter=None):
     """
     A network of feature elements linked by their joint occurrence in papers.
     """
 
+    if not filter:
+        filter = lambda f, v, c, dc: dc >= min_weight
+
     featureset = _get_featureset(corpus_or_featureset, featureset_name)
 
-    if type(corpus_or_featureset) is Corpus:
-        attributes = {i: {a: p[a] for a in edge_attrs}
-                      for i, p in corpus_or_featureset.indexed_papers.items()}
+    if type(corpus_or_featureset) in [Corpus, StreamingCorpus]:
+        attributes = {i: {a: corpus_or_featureset.indices_lookup[i][a] for a in edge_attrs}
+                      for i in corpus_or_featureset.indexed_papers.keys()}
 
     c = lambda f: featureset.count(f)           # Overall count.
     dc = lambda f: featureset.documentCount(f)  # Document count.
@@ -67,7 +70,8 @@ def cooccurrence(corpus_or_featureset, featureset_name=None, min_weight=1,
     eattrs = defaultdict(dict)
     nattrs = defaultdict(dict)
     nset = set()
-    for paper, feature in featureset.items():
+
+    for paper, feature in featureset.iteritems():
         if len(feature) == 0:
             continue
 
@@ -85,10 +89,9 @@ def cooccurrence(corpus_or_featureset, featureset_name=None, min_weight=1,
         nattrs[n]['count'] = featureset.count(n)
         nattrs[n]['documentCount'] = featureset.documentCount(n)
 
-    graph = _generate_graph(nx.Graph, pairs, edge_attrs=eattrs,
+    return _generate_graph(nx.Graph, pairs, edge_attrs=eattrs,
                             node_attrs=nattrs, min_weight=min_weight)
 
-    return graph
 
 
 def coupling(corpus_or_featureset, featureset_name=None,
@@ -108,14 +111,14 @@ def coupling(corpus_or_featureset, featureset_name=None,
     select = lambda p, elem: filter(f(elem), v(p, f(elem)), c(f(elem)), dc(f(elem)))
 
     pairs = defaultdict(list)
-    for elem, papers in featureset.with_feature.items():
+    for elem, papers in featureset.with_feature.iteritems():
         selected = [p for p in papers if select(p, elem)]
         for combo in combinations(selected, 2):
             combo = tuple(sorted(combo))
             pairs[combo].append(featureset.index[elem])
 
     graph = nx.Graph()
-    for combo, features in pairs.items():
+    for combo, features in pairs.iteritems():
         count = len(features)
         if count >= min_weight:
             graph.add_edge(combo[0], combo[1], features=features, weight=count)
@@ -149,7 +152,7 @@ def multipartite(corpus, featureset_names, min_weight=1, filters={}):
         ftypes = {}
 
         featureset = _get_featureset(corpus, featureset_name)
-        for paper, feature in featureset.items():
+        for paper, feature in featureset.iteritems():
             if featureset_name in filters:
                 if not filters[featureset_name](featureset, feature):
                     continue

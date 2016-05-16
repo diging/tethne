@@ -244,7 +244,7 @@ def read(path, corpus=True, index_by='doi', load_ngrams=True, **kwargs):
             if citationfname:
                 subcorpus = read(dirpath, index_by=index_by)
                 papers += subcorpus.papers
-                for featureset_name, featureset in subcorpus.features.items():
+                for featureset_name, featureset in subcorpus.features.iteritems():
                     if featureset_name not in features:
                         features[featureset_name] = {}
                     features[featureset_name].update(featureset.items())
@@ -266,7 +266,7 @@ def read(path, corpus=True, index_by='doi', load_ngrams=True, **kwargs):
                     if len(datafiles) > 0:
                         features[sname] = ngrams(path, sname)
 
-        for featureset_name, featureset_values in features.items():
+        for featureset_name, featureset_values in features.iteritems():
             if type(featureset_values) is dict:
                 fclass = featureset_types[featureset_name]
                 featureset_values = fclass(featureset_values)
@@ -338,7 +338,7 @@ def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
         stoplist = stopwords.words()
 
     # Now tokenize.
-    for doi, grams in ngrams.items():
+    for doi, grams in ngrams.iteritems():
         t_ngrams[doi] = []
         for g,c in grams:
             ignore = False
@@ -389,7 +389,7 @@ def _handle_paper(article):
     paper = Paper()
     pdata = dict_from_node(article)
 
-    for key, value in pdata.items():
+    for key, value in pdata.iteritems():
 
         datum = pdata[key]
         if type(datum) is str:

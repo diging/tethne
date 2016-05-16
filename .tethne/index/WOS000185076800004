@@ -1,0 +1,156 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'reprintAddress'
+p8
+VHoward, EA (reprint author), Orrick Herrington & Sutcliffe LLP, 1000 Marsh Rd, Menlo Pk, CA 94025 USA.
+p9
+sS'WC'
+p10
+VPlant Sciences
+p11
+sS'GA'
+p12
+V717FU
+p13
+sS'pageEnd'
+p14
+I1134
+sS'publisherAddress'
+p15
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p16
+sS'documentType'
+p17
+VEditorial Material
+p18
+sS'subject'
+p19
+VPlant Sciences
+p20
+sS'isoSource'
+p21
+VPlant Physiol.
+p22
+sS'timesCited'
+p23
+(lp24
+I0
+aVZ9 0
+p25
+asS'PT'
+p26
+VJ
+sS'title'
+p27
+VDatabases In The Biological Sciences. A User'S Guide To The Current Copyright Landscape
+p28
+sS'ISSN'
+p29
+(lp30
+V0032-0889
+p31
+aVJ9 PLANT PHYSIOL
+p32
+asS'authors_full'
+p33
+(lp34
+(VRAMSEY
+VGM
+tp35
+a(VHOWARD
+VEA
+tp36
+asS'PG'
+p37
+I4
+sS'PD'
+p38
+VJUL
+p39
+sS'pageStart'
+p40
+I1131
+sS'issue'
+p41
+I3
+sS'journal'
+p42
+VPLANT PHYSIOLOGY
+p43
+sS'volume'
+p44
+V132
+p45
+sS'authorAddress'
+p46
+VOrrick Herrington & Sutcliffe LLP, Menlo Pk, CA 94025 USA.
+p47
+sS'date'
+p48
+I2003
+sS'ER'
+p49
+V
+sS'publisher'
+p50
+VAMER SOC PLANT BIOLOGISTS
+p51
+sS'doi'
+p52
+V10.1104/pp.103.022541
+p53
+sS'language'
+p54
+VEnglish
+p55
+sS'wosid'
+p56
+VWOS:000185076800004
+p57
+sS'citationCount'
+p58
+I1
+sS'authors_init'
+p59
+(lp60
+(VRAMSEY
+VG M
+tp61
+a(VHOWARD
+VE A
+tp62
+asS'citedReferences'
+p63
+(lp64
+g1
+(g2
+g3
+NtRp65
+(dp66
+g52
+Nsg42
+V9 ANN C INT IP LAW P
+p67
+sg44
+Nsg59
+(lp68
+(VHUGENHOLTZ
+VP B
+tp69
+asg48
+I2001
+sg40
+Nsbasb.

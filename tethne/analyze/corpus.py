@@ -290,7 +290,7 @@ def sigma(G, corpus, featureset_name, B=None, **kwargs):
 
     Sigma = {}      # Keys are dates (from GraphCollection), values are
                     #  node:sigma dicts.
-    for key, graph in G.items():
+    for key, graph in G.iteritems():
         centrality = nx.betweenness_centrality(graph)
         sigma = {}  # Sigma values for all features in this year.
         attrs = {}  # Sigma values for only those features in this graph.
@@ -314,9 +314,9 @@ def sigma(G, corpus, featureset_name, B=None, **kwargs):
     # Invert results and update the GraphCollection.master_graph.
     # TODO: is there a more efficient way to do this?
     inverse = defaultdict(dict)
-    for gname, result in Sigma.items():
+    for gname, result in Sigma.iteritems():
         if hasattr(result, '__iter__'):
-            for n, val in result.items():
+            for n, val in result.iteritems():
                 inverse[n].update({gname: val})
     nx.set_node_attributes(G.master_graph, 'sigma', inverse)
 

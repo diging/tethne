@@ -1,0 +1,161 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VROCKVILLE
+p7
+sS'WC'
+p8
+VPlant Sciences
+p9
+sS'pageEnd'
+p10
+I1487
+sS'publisherAddress'
+p11
+V15501 MONONA DRIVE, ROCKVILLE, MD 20855 USA
+p12
+sS'documentType'
+p13
+VCorrection
+p14
+sS'subject'
+p15
+VPlant Sciences
+p16
+sS'isoSource'
+p17
+VPlant Physiol.
+p18
+sS'timesCited'
+p19
+(lp20
+I3
+aVZ9 3
+p21
+asS'PT'
+p22
+VJ
+sS'title'
+p23
+VInhibition Of Plant Asparagine Synthetase By Monoterpene Cineoles (Retraction Of Vol 123, Pg 725, 2000)
+p24
+sS'ISSN'
+p25
+(lp26
+V0032-0889
+p27
+aVJ9 PLANT PHYSIOL
+p28
+asS'authors_full'
+p29
+(lp30
+(VROMAGNI
+VJG
+tp31
+a(VDUKE
+VSO
+tp32
+a(VDAYAN
+VFE
+tp33
+asS'PG'
+p34
+I1
+sS'PD'
+p35
+VAPR
+p36
+sS'pageStart'
+p37
+I1487
+sS'issue'
+p38
+I4
+sS'RI'
+p39
+VDayan, Franck/A-7592-2009
+p40
+sS'journal'
+p41
+VPLANT PHYSIOLOGY
+p42
+sS'volume'
+p43
+V137
+p44
+sS'GA'
+p45
+V918XO
+p46
+sS'date'
+p47
+I2005
+sS'ER'
+p48
+V
+sS'publisher'
+p49
+VAMER SOC PLANT BIOLOGISTS
+p50
+sS'language'
+p51
+VEnglish
+p52
+sS'wosid'
+p53
+VWOS:000228583100031
+p54
+sS'citationCount'
+p55
+I1
+sS'authors_init'
+p56
+(lp57
+(VROMAGNI
+VJ G
+tp58
+a(VDUKE
+VS O
+tp59
+a(VDAYAN
+VF E
+tp60
+asS'citedReferences'
+p61
+(lp62
+g1
+(g2
+g3
+NtRp63
+(dp64
+S'doi'
+p65
+V10.1104/pp.123.2.725
+p66
+sg41
+VPLANT PHYSIOL
+p67
+sg43
+V123
+p68
+sg56
+(lp69
+(VROMAGNI
+VJ G
+tp70
+asg47
+I2000
+sg37
+VLANT
+p71
+sbasb.
