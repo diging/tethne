@@ -402,7 +402,7 @@ class BaseFeatureSet(object):
             return
 
         if type(feature[0]) is not tuple:
-            feature = Counter(elements).items()
+            feature = Counter(feature).items()
 
         for elem, value in feature:
             i = self.lookup.get(elem, len(self.lookup))
