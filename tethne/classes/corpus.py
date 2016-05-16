@@ -274,11 +274,14 @@ class Corpus(object):
         key = self._generate_index(paper)
 
         # if key not in self.indexed_papers.keys():
+
         self.indexed_papers[key] = paper
         for field in self.index_fields:
-            self.index_paper_by_attr(paper, field)
+            if field:
+                self.index_paper_by_attr(paper, field)
         for field in self.index_features:
-            self.index_paper_by_feature(paper, field)
+            if field:
+                self.index_paper_by_feature(paper, field)
         # else:
         #     if not self.duplicate_papers:
         #         self.duplicate_papers = {key:2}
@@ -333,6 +336,9 @@ class Corpus(object):
 
     def index_paper_by_feature(self, paper, feature_name, tokenize=lambda x: x,
                                structured=False):
+        if not feature_name:
+            return
+
         if structured:
             fclass = StructuredFeature
         else:
@@ -364,6 +370,8 @@ class Corpus(object):
 
     def index_paper_by_attr(self, paper, attr):
         i = self._generate_index(paper)
+        if not attr:
+            return
 
         if hasattr(paper, attr):
             value = copy.deepcopy(getattr(paper, attr))
@@ -708,7 +716,7 @@ class Corpus(object):
     def subfeatures(self, selector, featureset_name):
         indices = self.select(selector, index_only=True)
         fclass = self.features[featureset_name].__class__
-        
+
         return fclass({k:f for k,f in self.features[featureset_name].iteritems()
                            if k in indices})
 
