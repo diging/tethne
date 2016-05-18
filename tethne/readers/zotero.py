@@ -334,11 +334,14 @@ class ZoteroParser(RDFParser):
         return tuple(value.split('-'))
 
     def postprocess_pages(self, entry):
-        if len(entry.pages) == 1:
-            start = entry.pages
-            end = None
+        if len(entry.pages) < 2:
+            start, end = entry.pages, None
         else:
-            start, end = entry.pages
+            try:
+                start, end = entry.pages
+            except ValueError:
+                start, end = entry.pages, None
+
         setattr(entry, 'pageStart', start)
         setattr(entry, 'pageEnd', end)
         del entry.pages
