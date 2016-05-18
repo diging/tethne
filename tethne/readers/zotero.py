@@ -386,7 +386,7 @@ class ZoteroParser(RDFParser):
             self.full_text[fset_name][ident] = structuredfeature
 
 
-def read(path, corpus=True, index_by='uri', follow_links=True, **kwargs):
+def read(path, corpus=True, index_by='uri', follow_links=False, **kwargs):
     """
     Read bibliographic data from Zotero RDF.
 
@@ -420,7 +420,7 @@ def read(path, corpus=True, index_by='uri', follow_links=True, **kwargs):
         title and author names.
     follow_links : bool
         If ``True``, attempts to load full-text content from attached files
-        (e.g. PDFs with embedded text).
+        (e.g. PDFs with embedded text). Default: False.
     kwargs : kwargs
         Passed to the :class:`.Corpus` constructor.
 
