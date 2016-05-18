@@ -31,7 +31,7 @@ class TestZoteroParserWithFiles(unittest.TestCase):
     """
 
     def test_read_pdf(self):
-        corpus = read(datapath3)
+        corpus = read(datapath3, follow_links=True)
 
         self.assertIsInstance(corpus, Corpus)
 
@@ -79,7 +79,7 @@ class TestZoteroDuplicates(unittest.TestCase):
 
 class TestZoteroParser(unittest.TestCase):
     def test_read(self):
-        corpus = read(datapath)
+        corpus = read(datapath, follow_links=True)
         self.assertIsInstance(corpus, Corpus)
 
     def test_read_files(self):
