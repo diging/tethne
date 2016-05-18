@@ -1,8 +1,7 @@
 try:
-    import psycopg2
+    import mysql.connector
 except Exception:
-    raise RuntimeError("Import error while importing package psycopg2"
-                       "Please ensure that the package psycopg2 is correctly installed")
+    raise RuntimeError("mysql.connector for Python not found. Please install the same")
 
 
 class DBConnection:
@@ -15,20 +14,14 @@ class DBConnection:
     AS-IS ->
     The connection details are for a LOCAL database.
 
-    TO-DO ->
-    To make the connection-string details configurable in a properties file.
-    The user should only update the properties file to reflect the DB he wants to connect to
-
-        OR
-
-    We can keep one central DB and the connection details can be fixed.
-    ElephantSQL is an option.
-    It gives an option for free DB hosting and data limit upto 20 MB.
-    It also gives an option to take backups.
-    So migrating to any other Postgres DB will be very easy.
-
 
     """
+    config = {
+        'user': 'root',
+        'host': 'localhost',
+        'database': 'tethne',
+    }
+
     def __init__(self):
         """
         Initializes the connection string details
@@ -42,19 +35,12 @@ class DBConnection:
 
 
         EXCEPTIONS ->
-        if the psycopg2 package is not present in the user's Project structure, RuntimeError
+        if the mysql Connector package is not present in the user's Project structure, RuntimeError
         will be raised.
 
         """
-        self.dbname = 'tethne'
-        self.user = 'tethneuser'
-        self.password ='password'
-        self.host='localhost'
         try:
-            self.conn=psycopg2.connect(database=self.dbname,
-                                     user=self.user,
-                                     host=self.host,
-                                     password=self.password)
+            self.conn=mysql.connector.connect(**DBConnection.config)
         except Exception:
             raise RuntimeError("Please ensure the following"
                                "1. DB server is up and running"
@@ -75,7 +61,7 @@ def getMaxAuthorID():
 
     """
     dbconnectionhanlder = DBConnection()
-    dbconnectionhanlder.cursor.execute(""" SELECT max(id) from "django-tethne_author" """ )
+    dbconnectionhanlder.cursor.execute(" SELECT max(id) from `django-tethne_author` ")
     rows = dbconnectionhanlder.cursor.fetchall()
     dbconnectionhanlder.conn.close()
     if rows[0][0] is None:
@@ -97,7 +83,7 @@ def getMaxPaperID():
 
     """
     dbconnectionhanlder = DBConnection()
-    dbconnectionhanlder.cursor.execute(""" SELECT max(id) from "django-tethne_paper" """ )
+    dbconnectionhanlder.cursor.execute("SELECT max(id) from `django-tethne_paper` ")
     rows = dbconnectionhanlder.cursor.fetchall()
     dbconnectionhanlder.conn.close()
     if rows[0][0] is None:
@@ -117,7 +103,7 @@ def getMaxCorpusID():
 
     """
     dbconnectionhanlder = DBConnection()
-    dbconnectionhanlder.cursor.execute(""" SELECT max(id) from "django-tethne_corpus" """ )
+    dbconnectionhanlder.cursor.execute(" SELECT max(id) from `django-tethne_corpus` ")
     rows = dbconnectionhanlder.cursor.fetchall()
     dbconnectionhanlder.conn.close()
     if rows[0][0] is None:
@@ -137,13 +123,142 @@ def getMaxAuthorInstanceID():
 
     """
     dbconnectionhanlder = DBConnection()
-    dbconnectionhanlder.cursor.execute(""" SELECT max(id) from "django-tethne_author_instance" """ )
+    dbconnectionhanlder.cursor.execute("SELECT max(id) from `django-tethne_author_instance`")
     rows = dbconnectionhanlder.cursor.fetchall()
     dbconnectionhanlder.conn.close()
     if rows[0][0] is None:
         return 0
     else:
         return rows[0][0]
+
+
+def getMaxCitationID():
+    """
+
+    Returns
+    -------
+    maximum value of the Primary key from the table "django-tethne_citation"
+    This is used to calculate the next id for primary key.
+
+    if the table is empty, 0 is returned
+
+    """
+    dbconnectionhanlder = DBConnection()
+    dbconnectionhanlder.cursor.execute("SELECT max(id) from `django-tethne_citation`")
+    rows = dbconnectionhanlder.cursor.fetchall()
+    dbconnectionhanlder.conn.close()
+    if rows[0][0] is None:
+        return 0
+    else:
+        return rows[0][0]
+
+def getMaxCitationInstanceID():
+    """
+
+    Returns
+    -------
+    maximum value of the Primary key from the table "django-tethne_citation_instance"
+    This is used to calculate the next id for primary key.
+
+    if the table is empty, 0 is returned
+
+    """
+    dbconnectionhanlder = DBConnection()
+    dbconnectionhanlder.cursor.execute("SELECT max(id) from `django-tethne_citation_instance`")
+    rows = dbconnectionhanlder.cursor.fetchall()
+    dbconnectionhanlder.conn.close()
+    if rows[0][0] is None:
+        return 0
+    else:
+        return rows[0][0]
+
+
+def getMaxInstitutionID():
+    """
+
+    Returns
+    -------
+    maximum value of the Primary key from the table "django-tethne_author_instance"
+    This is used to calculate the next id for primary key.
+
+    if the table is empty, 0 is returned
+
+    """
+    dbconnectionhanlder = DBConnection()
+    dbconnectionhanlder.cursor.execute("SELECT max(id) from `django-tethne_institution`")
+    rows = dbconnectionhanlder.cursor.fetchall()
+    dbconnectionhanlder.conn.close()
+    if rows[0][0] is None:
+        return 0
+    else:
+        return rows[0][0]
+
+
+def getMaxInstitutionInstanceID():
+    """
+
+    Returns
+    -------
+    maximum value of the Primary key from the table "django-tethne_institution_instance"
+    This is used to calculate the next id for primary key.
+
+    if the table is empty, 0 is returned
+
+    """
+    dbconnectionhanlder = DBConnection()
+    dbconnectionhanlder.cursor.execute("SELECT max(id) from `django-tethne_institution_instance`")
+    rows = dbconnectionhanlder.cursor.fetchall()
+    dbconnectionhanlder.conn.close()
+    if rows[0][0] is None:
+        return 0
+    else:
+        return rows[0][0]
+
+
+def getMaxAffiliationID():
+    """
+
+    Returns
+    -------
+    maximum value of the Primary key from the table "django-tethne_affiliation"
+    This is used to calculate the next id for primary key.
+
+    if the table is empty, 0 is returned
+
+    """
+    dbconnectionhanlder = DBConnection()
+    dbconnectionhanlder.cursor.execute("SELECT max(id) from `django-tethne_affiliation`")
+    rows = dbconnectionhanlder.cursor.fetchall()
+    dbconnectionhanlder.conn.close()
+    if rows[0][0] is None:
+        return 0
+    else:
+        return rows[0][0]
+
+
+
+def getMaxAffiliationInstanceID():
+    """
+
+    Returns
+    -------
+    maximum value of the Primary key from the table "django-tethne_affiliation_instance"
+    This is used to calculate the next id for primary key.
+
+    if the table is empty, 0 is returned
+
+    """
+    dbconnectionhanlder = DBConnection()
+    dbconnectionhanlder.cursor.execute("SELECT max(id) from `django-tethne_affiliation_instance`")
+    rows = dbconnectionhanlder.cursor.fetchall()
+    dbconnectionhanlder.conn.close()
+    if rows[0][0] is None:
+        return 0
+    else:
+        return rows[0][0]
+
+
+
 
 
 
