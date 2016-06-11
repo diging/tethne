@@ -71,6 +71,10 @@ class TestWoSParser(unittest.TestCase):
                 self.assertIsInstance(e.abstract, unicode,
                                       derror.format('abstract', 'unicode',
                                                     type(e.abstract)))
+            if hasattr(e, 'subject'):
+                self.assertIsInstance(e.subject, list,
+                                      derror.format('subject', 'list',
+                                                    type(e.subject)))
             if hasattr(e, 'authorKeywords'):
                 self.assertIsInstance(e.authorKeywords, list,
                                       derror.format('authorKeywords', 'list',
