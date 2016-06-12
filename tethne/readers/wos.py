@@ -227,6 +227,19 @@ class WoSParser(FTParser):
         setattr(citation, 'doi', doi)
         return citation
 
+    def postprocess_subject(self, entry):
+        """
+        Parse subject keywords.
+
+        Subject keywords are usually semicolon-delimited.
+        """
+
+        if type(entry.subject) not in [str, unicode]:
+            subject = u' '.join([unicode(k) for k in entry.subject])
+        else:
+            subject = entry.subject
+        entry.subject = [k.strip().upper() for k in subject.split(';')]
+
     def postprocess_authorKeywords(self, entry):
         """
         Parse author keywords.
