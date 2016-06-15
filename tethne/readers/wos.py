@@ -85,7 +85,6 @@ class WoSParser(FTParser):
         'SE': 'bookSeriesTitle',
         'BS': 'bookSeriesSubtitle',
         'LA': 'language',
-        'DT': 'documentType',
         'CT': 'conferenceTitle',
         'CY': 'conferenceDate',
         'HO': 'conferenceHost',
