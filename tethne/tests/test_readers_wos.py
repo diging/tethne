@@ -5,7 +5,7 @@ import re
 
 import unittest
 from tethne.readers.wos import WoSParser, read
-from tethne import Corpus, Paper
+from tethne import Corpus, Paper, StreamingCorpus
 
 datapath = './tethne/tests/data/wos2.txt'
 datapath_v = './tethne/tests/data/valentin.txt'
@@ -25,6 +25,77 @@ def is_number(value):
         except ValueError:
             return False
     return True
+
+
+class TestWoSParserStreaming(unittest.TestCase):
+    def test_read(self):
+        corpus = read(datapath, streaming=True)
+        self.assertIsInstance(corpus, StreamingCorpus)
+
+        derror = "{0} should be {1}, but is {2}"
+        dauthorAddressError = "{0} should be {1} or {2}, but is {3}"
+        for e in corpus:
+            if hasattr(e, 'date'):
+                self.assertIsInstance(e.date, int,
+                                      derror.format('date', 'int',
+                                                    type(e.date)))
+            uppererr = "Author names should be uppercase"
+            if hasattr(e, 'authors_full'):
+                self.assertIsInstance(e.authors_full, list,
+                                      derror.format('authors_full', 'list',
+                                                    type(e.authors_full)))
+                for a in e.authors_full:
+                    self.assertTrue(a[0].isupper(), uppererr)
+                    self.assertTrue(a[1].isupper(), uppererr)
+            if hasattr(e, 'authors_init'):
+                self.assertIsInstance(e.authors_init, list,
+                                      derror.format('authors_init', 'list',
+                                                    type(e.authors_init)))
+                for a in e.authors_init:
+                    self.assertTrue(a[0].isupper(), uppererr)
+                    self.assertTrue(a[1].isupper(), uppererr)
+            if hasattr(e, 'journal'):
+                self.assertIsInstance(e.journal, unicode,
+                                      derror.format('journal', 'unicode',
+                                                    type(e.journal)))
+            if hasattr(e, 'abstract'):
+                self.assertIsInstance(e.abstract, unicode,
+                                      derror.format('abstract', 'unicode',
+                                                    type(e.abstract)))
+            if hasattr(e, 'WC'):
+                self.assertIsInstance(e.WC, list,
+                                      derror.format('WC', 'list',
+                                                    type(e.WC)))
+            if hasattr(e, 'subject'):
+                self.assertIsInstance(e.subject, list,
+                                      derror.format('subject', 'list',
+                                                    type(e.subject)))
+            if hasattr(e, 'authorKeywords'):
+                self.assertIsInstance(e.authorKeywords, list,
+                                      derror.format('authorKeywords', 'list',
+                                                    type(e.authorKeywords)))
+            if hasattr(e, 'keywordsPlus'):
+                self.assertIsInstance(e.keywordsPlus, list,
+                                      derror.format('keywordsPlus', 'list',
+                                                    type(e.keywordsPlus)))
+            if hasattr(e, 'doi'):
+                self.assertIsInstance(e.doi, unicode,
+                                      derror.format('doi', 'unicode',
+                                                    type(e.doi)))
+            if hasattr(e, 'volume'):
+                self.assertIsInstance(e.volume, unicode,
+                                      derror.format('volume', 'unicode',
+                                                    type(e.volume)))
+
+            if hasattr(e, 'title'):
+                self.assertIsInstance(e.title, unicode,
+                                      derror.format('title', 'unicode',
+                                                    type(e.title)))
+
+            if hasattr(e, 'authorAddress'):
+                self.assertTrue((type(e.authorAddress) is list or type(e.authorAddress) is unicode),
+                                dauthorAddressError.format('authorAddress', 'unicode',
+                                                           'list', type(e.authorAddress)))
 
 class TestWoSParser(unittest.TestCase):
     def test_read(self):

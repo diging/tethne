@@ -5,9 +5,12 @@ import rdflib
 
 import codecs
 import chardet
+import copy
 import unicodedata
 
 import logging
+
+from io import BytesIO
 
 # rdflib complains a lot.
 logging.getLogger("rdflib").setLevel(logging.ERROR)
@@ -16,6 +19,13 @@ import sys
 PYTHON_3 = sys.version_info[0] == 3
 if PYTHON_3:
     unicode = str
+
+
+def _fast_iter(context, func):
+    for event, elem in context:
+        func(elem)
+        elem.clear()
+    del context
 
 
 class dobject(object):
@@ -91,13 +101,20 @@ class IterParser(BaseParser):
         self.current_tag = None
         self.last_tag = None
 
-        if kwargs.get('autostart', True):
+        if kwargs.get('autostart', True) and getattr(self, 'autostart', True):
             self.start()
 
-    def parse(self):
+    def parse(self, parse_only=None):
         """
 
         """
+        # The user should be able to limit parsing to specific fields.
+        if parse_only:
+            tag_lookup = {v: k for k, v in self.tags.iteritems()}
+            self.parse_only = set([tag_lookup.get(field)
+                                   for field in parse_only
+                                   if field in tag_lookup])
+
         while True:        # Main loop.
             tag, data = self.next()
             if self.is_eof(tag):
@@ -126,8 +143,6 @@ class IterParser(BaseParser):
         tag : str
         data :
         """
-        if isinstance(data,unicode):
-            data = unicodedata.normalize('NFKD', data)#.encode('utf-8','ignore')
 
         if self.is_end(tag):
             self.postprocess_entry()
@@ -135,8 +150,15 @@ class IterParser(BaseParser):
         if self.is_start(tag):
             self.new_entry()
 
-        if data is None or tag is None:
+        if not data or not tag:
             return
+
+        if getattr(self, 'parse_only', None) and tag not in self.parse_only:
+            return
+
+        # TODO: revisit encoding here.
+        if isinstance(data, unicode):
+            data = unicodedata.normalize('NFKD', data)#.encode('utf-8','ignore')
 
         handler = self._get_handler(tag)
         if handler is not None:
@@ -233,47 +255,66 @@ class XMLParser(IterParser):
     entry_class = dobject
 
     def open(self):
-        with open(self.path, 'r') as f:
-            self.root = ET.fromstring(f.read())
-        pattern = './/{elem}'.format(elem=self.entry_element)
-        self.elements = self.root.findall(pattern)
+        # with open(self.path, 'r') as f:
+        #     self.root = ET.fromstring(f.read())
+        # pattern = './/{elem}'.format(elem=self.entry_element)
+        # self.elements = self.root.findall(pattern)
+        self.f = open(self.path, 'r')
+        self.iterator = ET.iterparse(self.f)
 
         self.at_start = False
         self.at_end = False
         self.children = []
 
+
+    def new_entry(self):
+        """
+        Prepare a new data entry.
+        """
+        self.postprocess_entry()
+        super(XMLParser, self).new_entry()
+
     def is_start(self, tag):
-        return self.at_start
+        return tag == self.entry_element
 
     def is_end(self, tag):
-        return self.at_end
+        return tag == self.entry_element
 
     def is_eof(self, tag):
         return len(self.elements) == 0 and len(self.children) == 0
 
-    def next(self):
-        if len(self.children) > 0:
-            child = self.children.pop(0)
-            tag, text = child.tag, child.text
+    def start(self):
+        self.new_entry()
 
-        else:
-            tag, text = None, None
-            if self.at_end:
-                self.at_end = False
-                self.at_start = True
+    def next(self, child):
+        child = copy.deepcopy(child)
+        tag, data = child.tag, child.text
+        if data:
+            data = data.strip()
 
-            elif self.at_start:
-                element = self.elements.pop(0)
-                self.children = element.getchildren()
-                self.at_start = False
-                tag, text = self.next()
+        self.handle(tag, data)
+        self.last_tag = tag
 
-            elif len(self.data) == 0 and len(self.elements) > 0:
-                self.at_start = True
-            else:
-                self.at_end = True
+    def parse(self, parse_only=None):
+        """
 
-        return tag, text
+        """
+        # The user should be able to limit parsing to specific fields.
+        if parse_only:
+            tag_lookup = {v: k for k, v in self.tags.iteritems()}
+            self.parse_only = set([tag_lookup.get(field)
+                                   for field in parse_only
+                                   if field in tag_lookup]) | set(parse_only)
+
+        _fast_iter(self.iterator, self.next)
+
+        if len(self.data[-1].__dict__) == 0:
+            del self.data[-1]
+        return self.data
+
+    def __del__(self):
+        if hasattr(self, 'f'):
+            self.f.close()
 
 
 class RDFParser(BaseParser):

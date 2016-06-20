@@ -347,7 +347,8 @@ def read_corpus(path, **kwargs):
     return read(path, corpus=True, **kwargs)
 
 
-def read(path, corpus=True, index_by='wosid', streaming=False, **kwargs):
+def read(path, corpus=True, index_by='wosid', streaming=False, parse_only=None,
+         corpus_class=Corpus, **kwargs):
     """
     Parse one or more WoS field-tagged data files.
 
@@ -378,31 +379,39 @@ def read(path, corpus=True, index_by='wosid', streaming=False, **kwargs):
         raise ValueError('No such file or directory')
 
     if streaming:
-        return streaming_read(path, corpus=corpus, index_by=index_by, **kwargs)
+        return streaming_read(path, corpus=corpus, index_by=index_by,
+                              parse_only=parse_only, **kwargs)
 
     if os.path.isdir(path):    # Directory containing 1+ WoS data files.
         papers = []
         for sname in os.listdir(path):
             if sname.endswith('txt') and not sname.startswith('.'):
-                papers += read(os.path.join(path, sname), corpus=False)
+                papers += read(os.path.join(path, sname),
+                               corpus=False,
+                               parse_only=parse_only)
     else:   # A single data file.
-        papers = WoSParser(path).parse()
+        papers = WoSParser(path).parse(parse_only=parse_only)
 
     if corpus:
-        return Corpus(papers, index_by=index_by,  **kwargs)
+        return corpus_class(papers, index_by=index_by, **kwargs)
     return papers
 
 
-def streaming_read(path, corpus=True, index_by='wosid', **kwargs):
+def streaming_read(path, corpus=True, index_by='wosid', parse_only=None,
+                   **kwargs):
 
-    corpus = StreamingCorpus(index_by=index_by, **kwargs)
+    return read(path, corpus=corpus, index_by=index_by, parse_only=parse_only,
+                corpus_class=StreamingCorpus, **kwargs)
+    # corpus = StreamingCorpus(index_by=index_by, **kwargs)
 
-    if os.path.isdir(path):    # Directory containing 1+ WoS data files.
-        papers = []
-        for sname in os.listdir(path):
-            if sname.endswith('txt') and not sname.startswith('.'):
-                corpus.add_papers(read(os.path.join(path, sname), corpus=False))
-    else:   # A single data file.
-        corpus.add_papers(WoSParser(path).parse())
-
-    return corpus
+    # if os.path.isdir(path):    # Directory containing 1+ WoS data files.
+    #     papers = []
+    #     for sname in os.listdir(path):
+    #         if sname.endswith('txt') and not sname.startswith('.'):
+    #             corpus.add_papers(read(os.path.join(path, sname),
+    #                                    corpus=False,
+    #                                    parse_only=parse_only))
+    # else:   # A single data file.
+    #     corpus.add_papers(WoSParser(path).parse(parse_only=parse_only))
+    #
+    # return corpus
