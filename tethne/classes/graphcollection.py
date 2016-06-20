@@ -148,7 +148,7 @@ class GraphCollection(dict):
 
         # Add all node attributes to the `master_graph`.
         for n, attrs in indexed_graph.nodes(data=True):
-            for k,v in attrs.items():
+            for k,v in attrs.iteritems():
                 if k not in self.master_graph.node[n]:
                     self.master_graph.node[n][k] = {}
                 self.master_graph.node[n][k][name] = v
@@ -288,7 +288,7 @@ class GraphCollection(dict):
                 graph[s][t]['weight'] += 1.
 
             gname = attrs['graph']
-            for k, v in attrs.items():
+            for k, v in attrs.iteritems():
                 if k in [weight_attr, 'graph']:
                     continue
                 if k not in graph[s][t]:
@@ -301,8 +301,8 @@ class GraphCollection(dict):
         Apply a method from NetworkX to each of the graphs in the
         :class:`.GraphCollection`\.
 
-        Example
-        -------
+        Examples
+        --------
         .. code-block:: python
 
            >>> G.analyze('betweenness_centrality')
@@ -367,9 +367,9 @@ class GraphCollection(dict):
 
         # Invert results.
         inverse = defaultdict(dict)
-        for gname, result in by_graph.items():
+        for gname, result in by_graph.iteritems():
             if hasattr(result, '__iter__'):
-                for n, val in result.items():
+                for n, val in result.iteritems():
                     inverse[n].update({gname: val})
 
         if type(list(by_graph.values())[0]) is dict:
@@ -386,12 +386,12 @@ class GraphCollection(dict):
                 by_edge = dict(inverse)
 
                 # Set edge attributes in each graph.
-                for graph, attrs in by_graph.items():
+                for graph, attrs in by_graph.iteritems():
                     nx.set_edge_attributes(self[graph], method_name, attrs)
 
                 # Set edge attributes in the master graph.
-                for (s, t), v in by_edge.items():
-                    for i, attrs in self.master_graph.edge[s][t].items():
+                for (s, t), v in by_edge.iteritems():
+                    for i, attrs in self.master_graph.edge[s][t].iteritems():
                         val = v[attrs['graph']]
                         self.master_graph.edge[s][t][i][method_name] = val
 
@@ -402,7 +402,7 @@ class GraphCollection(dict):
                 by_node = dict(inverse)
 
                 # Set node attributes for each graph.
-                for graph, attrs in by_graph.items():
+                for graph, attrs in by_graph.iteritems():
                     nx.set_node_attributes(self[graph], method_name, attrs)
 
                 # Store node attributes in the master graph.
@@ -483,7 +483,7 @@ class GraphCollection(dict):
                 graph[u][v]['graphs'] = []
                 graph[u][v][weight_attr] = 0.
 
-            for key, value in a.items():
+            for key, value in a.iteritems():
                 if key not in graph[u][v]:
                     graph[u][v][key] = []
                 graph[u][v][key].append(value)
@@ -491,7 +491,7 @@ class GraphCollection(dict):
             graph[u][v][weight_attr] += 1.
 
         for u, a in self.master_graph.nodes(data=True):
-            for key, value in a.items():
+            for key, value in a.iteritems():
                 graph.node[u][key] = value
 
         return graph

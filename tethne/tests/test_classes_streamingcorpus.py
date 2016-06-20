@@ -3,13 +3,13 @@ sys.path.append('./')
 
 import unittest
 from tethne.readers.wos import read
-from tethne import Corpus, Paper, FeatureSet, Feature
+from tethne import StreamingCorpus, Paper
 from tethne.utilities import _iterable
 
 datapath = './tethne/tests/data/wos.txt'
 
 
-class TestCorpus(unittest.TestCase):
+class TestStreamingCorpus(unittest.TestCase):
     def setUp(self):
         self.papers = read(datapath, corpus=False)
 
@@ -19,7 +19,7 @@ class TestCorpus(unittest.TestCase):
         """
 
         try:
-            corpus = Corpus(self.papers, index_by='wosid')
+            corpus = StreamingCorpus(self.papers, index_by='wosid')
             corpus.__init__(self.papers, index_by='wosid')
         except Exception as E:
             failure_msg = ' '.join(['Initialization failed with exception',
@@ -33,7 +33,7 @@ class TestCorpus(unittest.TestCase):
         """
 
         index_fields = ['date', 'journal', 'authors']
-        corpus = Corpus(self.papers, index_by='wosid')
+        corpus = StreamingCorpus(self.papers, index_by='wosid')
 
         for field in index_fields:
             corpus.index(field)
@@ -46,58 +46,39 @@ class TestCorpus(unittest.TestCase):
                              'Index for {0} is the wrong size.'.format(field))
 
     def test_slice(self):
-        corpus = Corpus(self.papers, index_by='wosid')
+        corpus = StreamingCorpus(self.papers, index_by='wosid')
         for key, papers in corpus.slice():
-            self.assertIsInstance(papers, Corpus)
+            self.assertIsInstance(papers, StreamingCorpus)
             self.assertIsInstance(papers[0], Paper)
 
     def test_slice_sliding(self):
-        corpus = Corpus(self.papers, index_by='wosid')
+        corpus = StreamingCorpus(self.papers, index_by='wosid')
         allpapers = [papers for papers in corpus.slice(window_size=2)]
 
         self.assertEqual(len(allpapers[0][1]), 10)
 
     def test_slice_larger(self):
-        corpus = Corpus(self.papers, index_by='wosid')
+        corpus = StreamingCorpus(self.papers, index_by='wosid')
         allpapers = [papers for papers
                      in corpus.slice(window_size=2, step_size=2)]
 
         self.assertEqual(len(allpapers[0][1]), 10)
 
-    def test_slice_index_only(self):
-        corpus = Corpus(self.papers, index_by='wosid', index_features=['authors'])
-        for key, papers in corpus.slice(feature_name='authors'):
-            self.assertIsInstance(papers, FeatureSet)
-            self.assertIsInstance(papers[0], Feature)
-
-    def test_slice_sliding_index_only(self):
-        corpus = Corpus(self.papers, index_by='wosid')
-        allpapers = [papers for papers in corpus.slice(window_size=2, feature_name='authors')]
-
-        self.assertEqual(len(allpapers[0][1]), 10)
-
-    def test_slice_larger_index_only(self):
-        corpus = Corpus(self.papers, index_by='wosid')
-        allpapers = [papers for papers
-                     in corpus.slice(window_size=2, step_size=2, feature_name='authors')]
-
-        self.assertEqual(len(allpapers[0][1]), 10)
-
     def test_distribution(self):
-        corpus = Corpus(self.papers, index_by='wosid')
+        corpus = StreamingCorpus(self.papers, index_by='wosid')
         values = corpus.distribution()
         self.assertListEqual(values[0], [2012, 2013])
         self.assertListEqual(values[1], [5, 5])
 
     def test_feature_distribution(self):
-        corpus = Corpus(self.papers, index_by='wosid')
-        values = corpus.feature_distribution('authors', (u'SOTO', u'MANU'))
+        corpus = StreamingCorpus(self.papers, index_by='wosid')
+        values = corpus.feature_distribution('authors', ('ZENG', 'EDDY Y'))
         # values = corpus.feature_distribution('citations', 'BOSSDORF O 2005 OECOLOGIA')
         self.assertEqual(len(values[0]), len(values[1]))
         self.assertListEqual(values[1], [0, 1])
 
     def test_getitem(self):
-        corpus = Corpus(self.papers, index_by='wosid')
+        corpus = StreamingCorpus(self.papers, index_by='wosid')
 
         self.assertIsInstance(corpus[0], Paper)
         self.assertEqual(len(corpus[[0, 2, 3]]), 3)
@@ -109,7 +90,7 @@ class TestCorpus(unittest.TestCase):
         self.assertIsInstance(corpus[ikeys][0], Paper)
 
     def test_top_features(self):
-        corpus = Corpus(self.papers, index_by='wosid')
+        corpus = StreamingCorpus(self.papers, index_by='wosid')
 
         N = 2
         top = corpus.top_features('authors', topn=N)
@@ -123,7 +104,7 @@ class TestCorpus(unittest.TestCase):
         self.assertEqual(len(top), len(corpus.indices['date']))
 
     def test_featureselector(self):
-        corpus = Corpus(self.papers, index_by='wosid')
+        corpus = StreamingCorpus(self.papers, index_by='wosid')
         corpus.index('journal')
         subcorpus = corpus['journal', 'ENVIRONMENTAL MONITORING AND ASSESSMENT']
 

@@ -20,7 +20,7 @@ import re
 import os
 
 from tethne.readers.base import FTParser
-from tethne import Corpus, Paper
+from tethne import Corpus, Paper, StreamingCorpus
 from tethne.utilities import _strip_punctuation, _space_sep, strip_tags, is_number
 
 import sys
@@ -335,12 +335,12 @@ def read_corpus(path, **kwargs):
     return read(path, corpus=True, **kwargs)
 
 
-def read(path, corpus=True, index_by='wosid', **kwargs):
+def read(path, corpus=True, index_by='wosid', streaming=False, **kwargs):
     """
     Parse one or more WoS field-tagged data files.
 
-    Example
-    -------
+    Examples
+    --------
     .. code-block:: python
 
        >>> from tethne.readers import wos
@@ -365,6 +365,9 @@ def read(path, corpus=True, index_by='wosid', **kwargs):
     if not os.path.exists(path):
         raise ValueError('No such file or directory')
 
+    if streaming:
+        return streaming_read(path, corpus=corpus, index_by=index_by, **kwargs)
+
     if os.path.isdir(path):    # Directory containing 1+ WoS data files.
         papers = []
         for sname in os.listdir(path):
@@ -376,3 +379,18 @@ def read(path, corpus=True, index_by='wosid', **kwargs):
     if corpus:
         return Corpus(papers, index_by=index_by,  **kwargs)
     return papers
+
+
+def streaming_read(path, corpus=True, index_by='wosid', **kwargs):
+
+    corpus = StreamingCorpus(index_by=index_by, **kwargs)
+
+    if os.path.isdir(path):    # Directory containing 1+ WoS data files.
+        papers = []
+        for sname in os.listdir(path):
+            if sname.endswith('txt') and not sname.startswith('.'):
+                corpus.add_papers(read(os.path.join(path, sname), corpus=False))
+    else:   # A single data file.
+        corpus.add_papers(WoSParser(path).parse())
+
+    return corpus

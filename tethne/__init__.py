@@ -19,6 +19,7 @@ models, and social influence models.
 
 from tethne.classes.paper import Paper
 from tethne.classes.corpus import Corpus
+from tethne.classes.streaming import StreamingCorpus
 from tethne.classes.feature import Feature, FeatureSet, \
                                    StructuredFeature, StructuredFeatureSet
 from tethne.classes.graphcollection import GraphCollection

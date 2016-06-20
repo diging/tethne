@@ -298,7 +298,7 @@ class LDAModel(Model):
                     k, c = l.split(':')    # Topic and assignment count.
                     topics[int(k)].append((w, int(c)))
 
-        for k, data in topics.items():
+        for k, data in topics.iteritems():
             nfeature = Feature(data).norm
 
             phi_features[k] = nfeature

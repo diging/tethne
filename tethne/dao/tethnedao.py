@@ -1,7 +1,9 @@
+import warnings
+
 try:
     import mysql.connector
 except Exception:
-    raise RuntimeError("mysql.connector for Python not found. Please install the same")
+    warnings.warn("Could not import psycopg2. Classes and functions in the tethne.dao module will not be available.", ImportWarning)
 
 
 class DBConnection:
@@ -192,6 +194,7 @@ def getMaxInstitutionID():
         return 0
     else:
         return rows[0][0]
+<<<<<<< HEAD
 
 
 def getMaxInstitutionInstanceID():
@@ -265,3 +268,5 @@ def getMaxAffiliationInstanceID():
 
 
 
+=======
+>>>>>>> python

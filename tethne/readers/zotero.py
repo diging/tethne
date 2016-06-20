@@ -334,11 +334,14 @@ class ZoteroParser(RDFParser):
         return tuple(value.split('-'))
 
     def postprocess_pages(self, entry):
-        if len(entry.pages) == 1:
-            start = entry.pages
-            end = None
+        if len(entry.pages) < 2:
+            start, end = entry.pages, None
         else:
-            start, end = entry.pages
+            try:
+                start, end = entry.pages
+            except ValueError:
+                start, end = entry.pages, None
+
         setattr(entry, 'pageStart', start)
         setattr(entry, 'pageEnd', end)
         del entry.pages
@@ -383,12 +386,12 @@ class ZoteroParser(RDFParser):
             self.full_text[fset_name][ident] = structuredfeature
 
 
-def read(path, corpus=True, index_by='uri', follow_links=True, **kwargs):
+def read(path, corpus=True, index_by='uri', follow_links=False, **kwargs):
     """
     Read bibliographic data from Zotero RDF.
 
-    Example
-    -------
+    Examples
+    --------
     Assuming that the Zotero collection was exported to the directory
     ``/my/working/dir`` with the name ``myCollection``, a subdirectory should
     have been created at ``/my/working/dir/myCollection``, and an RDF file
@@ -417,7 +420,7 @@ def read(path, corpus=True, index_by='uri', follow_links=True, **kwargs):
         title and author names.
     follow_links : bool
         If ``True``, attempts to load full-text content from attached files
-        (e.g. PDFs with embedded text).
+        (e.g. PDFs with embedded text). Default: False.
     kwargs : kwargs
         Passed to the :class:`.Corpus` constructor.
 
@@ -435,7 +438,7 @@ def read(path, corpus=True, index_by='uri', follow_links=True, **kwargs):
         if c.duplicate_papers:
             warnings.warn("Duplicate papers detected. Use the 'duplicate_papers' attribute of the corpus to get the list", UserWarning)
 
-        for fset_name, fset_values in parser.full_text.items():
+        for fset_name, fset_values in parser.full_text.iteritems():
             c.features[fset_name] = StructuredFeatureSet(fset_values)
         return c
     return papers
