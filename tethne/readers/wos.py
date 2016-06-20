@@ -85,7 +85,6 @@ class WoSParser(FTParser):
         'SE': 'bookSeriesTitle',
         'BS': 'bookSeriesSubtitle',
         'LA': 'language',
-        'DT': 'documentType',
         'CT': 'conferenceTitle',
         'CY': 'conferenceDate',
         'HO': 'conferenceHost',
@@ -226,6 +225,19 @@ class WoSParser(FTParser):
             doi = None
         setattr(citation, 'doi', doi)
         return citation
+
+    def postprocess_WC(self, entry):
+        """
+        Parse WC keywords.
+
+        Subject keywords are usually semicolon-delimited.
+        """
+
+        if type(entry.WC) not in [str, unicode]:
+            WC= u' '.join([unicode(k) for k in entry.WC])
+        else:
+            WC= entry.WC
+        entry.WC= [k.strip().upper() for k in WC.split(';')]
 
     def postprocess_subject(self, entry):
         """
