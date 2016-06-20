@@ -545,8 +545,8 @@ class Corpus(object):
 
         The value of ``key`` is always the first year in the slice.
 
-        Example
-        -------
+        Examples
+        --------
         .. code-block:: python
 
            >>> from tethne.readers.wos import read
@@ -598,8 +598,8 @@ class Corpus(object):
         Calculates the number of papers in each slice, as defined by
         ``slice_kwargs``.
 
-        Example
-        -------
+        Examples
+        --------
         .. code-block:: python
 
            >>> corpus.distribution(step_size=1, window_size=1)
@@ -627,8 +627,8 @@ class Corpus(object):
         """
         Calculates the distribution of a feature across slices of the corpus.
 
-        Example
-        -------
+        Examples
+        --------
         .. code-block:: python
 
            >>> corpus.feature_distribution(featureset_name='citations', \

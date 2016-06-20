@@ -390,8 +390,8 @@ def read(path, corpus=True, index_by='uri', follow_links=False, **kwargs):
     """
     Read bibliographic data from Zotero RDF.
 
-    Example
-    -------
+    Examples
+    --------
     Assuming that the Zotero collection was exported to the directory
     ``/my/working/dir`` with the name ``myCollection``, a subdirectory should
     have been created at ``/my/working/dir/myCollection``, and an RDF file

@@ -301,8 +301,8 @@ class GraphCollection(dict):
         Apply a method from NetworkX to each of the graphs in the
         :class:`.GraphCollection`\.
 
-        Example
-        -------
+        Examples
+        --------
         .. code-block:: python
 
            >>> G.analyze('betweenness_centrality')

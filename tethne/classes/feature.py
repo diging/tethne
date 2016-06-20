@@ -302,8 +302,8 @@ class Feature(list):
         """
         Get a list of the top ``topn`` features in this :class:`.Feature`\.
 
-        Example
-        -------
+        Examples
+        --------
 
         .. code-block:: python
 

@@ -326,8 +326,8 @@ def read(path, corpus=True, index_by='wosid', streaming=False, **kwargs):
     """
     Parse one or more WoS field-tagged data files.
 
-    Example
-    -------
+    Examples
+    --------
     .. code-block:: python
 
        >>> from tethne.readers import wos

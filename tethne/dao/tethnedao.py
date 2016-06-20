@@ -1,8 +1,9 @@
+import warnings
+
 try:
     import psycopg2
 except Exception:
-    raise RuntimeError("Import error while importing package psycopg2"
-                       "Please ensure that the package psycopg2 is correctly installed")
+    warnings.warn("Could not import psycopg2. Classes and functions in the tethne.dao module will not be available.", ImportWarning)
 
 
 class DBConnection:
@@ -144,9 +145,3 @@ def getMaxAuthorInstanceID():
         return 0
     else:
         return rows[0][0]
-
-
-
-
-
-
