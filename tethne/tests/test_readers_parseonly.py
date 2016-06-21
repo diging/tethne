@@ -41,6 +41,7 @@ class TestWoSParserParseOnly(unittest.TestCase):
             self.assertFalse(hasattr(e, 'authors_full'))
             self.assertFalse(hasattr(e, 'volume'))
             self.assertTrue(hasattr(e, 'title'))
+            self.assertTrue(hasattr(e, 'wosid'))
 
     def test_parse(self):
         """
@@ -90,11 +91,11 @@ class TestDFRReaderParseOnly(unittest.TestCase):
         self.assertIsInstance(corpus, Corpus)
 
         for e in corpus:
-            print e.__dict__
             self.assertFalse(hasattr(e, 'journal'))
             self.assertTrue(hasattr(e, 'date'))
             self.assertFalse(hasattr(e, 'authors_full'))
             self.assertFalse(hasattr(e, 'volume'))
+            self.assertTrue(hasattr(e, 'doi'))
 
 
 if __name__ == '__main__':

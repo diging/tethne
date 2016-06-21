@@ -206,7 +206,8 @@ def _get_citation_filename(basepath):
 def streaming_read(path, corpus=True, index_by='doi', parse_only=None,
                    **kwargs):
 
-    return read(path, corpus=corpus, index_by=index_by, parse_only=parse_only, corpus_class=StreamingCorpus)
+    return read(path, corpus=corpus, index_by=index_by, parse_only=parse_only,
+                corpus_class=StreamingCorpus)
 
 
 def read(path, corpus=True, index_by='doi', load_ngrams=True, parse_only=None,
@@ -239,6 +240,10 @@ def read(path, corpus=True, index_by='doi', load_ngrams=True, parse_only=None,
     citationfname = _get_citation_filename(path)
     features = {}
     featureset_types = {}
+
+    # We need the primary index field in the parse results.
+    if parse_only:
+        parse_only.append(index_by)
 
     papers = []
     if citationfname:   # Valid DfR dataset.

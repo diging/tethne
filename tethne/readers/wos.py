@@ -378,6 +378,10 @@ def read(path, corpus=True, index_by='wosid', streaming=False, parse_only=None,
     if not os.path.exists(path):
         raise ValueError('No such file or directory')
 
+    # We need the primary index field in the parse results.
+    if parse_only:
+        parse_only.append(index_by)
+
     if streaming:
         return streaming_read(path, corpus=corpus, index_by=index_by,
                               parse_only=parse_only, **kwargs)

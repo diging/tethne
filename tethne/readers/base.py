@@ -21,10 +21,11 @@ if PYTHON_3:
     unicode = str
 
 
-def _fast_iter(context, func):
+def _fast_iter(context, func, tag):
     for event, elem in context:
         func(elem)
-        elem.clear()
+        if elem.tag == tag:
+            elem.clear()
     del context
 
 
@@ -306,7 +307,7 @@ class XMLParser(IterParser):
                                    for field in parse_only
                                    if field in tag_lookup]) | set(parse_only)
 
-        _fast_iter(self.iterator, self.next)
+        _fast_iter(self.iterator, self.next, self.entry_element)
 
         if len(self.data[-1].__dict__) == 0:
             del self.data[-1]
