@@ -12,9 +12,9 @@ PYTHON_3 = sys.version_info[0] == 3
 if PYTHON_3:
     unicode = str
 
-datapath = './tethne/tests/data/zotero'
-datapath2 = './tethne/tests/data/zotero2'
-datapath3 = './tethne/tests/data/zotero_withfiles'
+datapath = './tethne/tests/data/zotero/zotero.rdf'
+datapath2 = './tethne/tests/data/zotero2/zotero2.rdf'
+datapath3 = './tethne/tests/data/zotero_withfiles/zotero_withfiles.rdf'
 duplicatePath = './tethne/tests/data/Duplicate'
 
 

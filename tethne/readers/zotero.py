@@ -196,12 +196,14 @@ class ZoteroParser(RDFParser):
          rdflib.URIRef("http://www.zotero.org/namespaces/export#itemType"))]
 
     def __init__(self, path, **kwargs):
-        name = os.path.split(path)[1]
-        path = os.path.join(path, '{0}.rdf'.format(name))
+        if os.path.isdir(path):    # Preserve the old behavior.
+            name = os.path.split(path)[1]
+            path = os.path.join(path, '{0}.rdf'.format(name))
+
         super(ZoteroParser, self).__init__(path, **kwargs)
 
         self.full_text = {}     # Collect StructuredFeatures until finished.
-        self.follow_links = kwargs.get('follow_links', True) # Boolean switch to follow links associated with a paper
+        self.follow_links = kwargs.get('follow_links', False) # Boolean switch to follow links associated with a paper
 
     def open(self):
         """

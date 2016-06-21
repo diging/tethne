@@ -1,5 +1,5 @@
 """
-This module provides :class:`.Corpus`\.
+A :class:`.Corpus` is a container for :class:`.Paper`\s.
 """
 
 from collections import Counter, defaultdict
@@ -50,7 +50,6 @@ class Corpus(object):
        papers
        select
        slice
-       structuredfeatures
        subcorpus
        top_features
 
@@ -608,7 +607,7 @@ class Corpus(object):
         Parameters
         ----------
         slice_kwargs : kwargs
-            Keyword arguments to be passed to :method:`.Corpus.slice`\.
+            Keyword arguments to be passed to :meth:`.Corpus.slice`\.
 
         Returns
         -------
@@ -650,7 +649,7 @@ class Corpus(object):
             ``'documentCounts'``, values will be the number of papers in which
             the feature occurs in each slice.
         slice_kwargs : kwargs
-            Keyword arguments to be passed to :method:`.Corpus.slice`\.
+            Keyword arguments to be passed to :meth:`.Corpus.slice`\.
 
         Returns
         -------

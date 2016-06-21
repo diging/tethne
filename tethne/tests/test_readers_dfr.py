@@ -12,6 +12,45 @@ datapath_float_weights = './tethne/tests/data/dfr_float_weights'
 sample_datapath = './tethne/tests/data/test_citations_sample.xml'
 
 
+class TestDFRReaderStreaming(unittest.TestCase):
+    def test_read(self):
+        corpus = read(datapath, streaming=True)
+
+        self.assertIsInstance(corpus, Corpus)
+
+        for e in corpus:
+            if hasattr(e, 'date'):
+                self.assertIsInstance(e.date, int)
+
+            if hasattr(e, 'authors_init'):
+                self.assertIsInstance(e.authors_init, list)
+                for a in e.authors_init:
+
+                    self.assertTrue(a[0].isupper(), uppererr)
+                    self.assertTrue(a[1].isupper(), uppererr)
+
+            if hasattr(e, 'journal'):
+                self.assertIsInstance(e.journal, str)
+
+            if hasattr(e, 'abstract'):
+                self.assertIsInstance(e.abstract, str)
+
+            if hasattr(e, 'authorKeywords'):
+                self.assertIsInstance(e.authorKeywords, list)
+
+            if hasattr(e, 'keywordsPlus'):
+                self.assertIsInstance(e.keywordsPlus, list)
+            if hasattr(e, 'doi'):
+                self.assertIsInstance(e.doi, str)
+            if hasattr(e, 'volume'):
+                self.assertIsInstance(e.volume, str)
+
+            if hasattr(e, 'title'):
+                self.assertIsInstance(e.title, str)
+
+
+
+
 class TestDFRReader(unittest.TestCase):
     def test_read(self):
         corpus = read(datapath)
@@ -156,17 +195,6 @@ class TestHandlePaper(unittest.TestCase):
 
             self.assertIsInstance(presentPaper,Paper)
             self.assertEqual(1954,presentPaper.__getitem__('date'))
-
-
-
-
-"""
-class TestHandlePaper(unittest.TestCase):
-
-
-    def test_handle_paper(self):
-"""
-
 
 
 if __name__ == '__main__':

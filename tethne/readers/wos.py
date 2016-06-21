@@ -85,7 +85,6 @@ class WoSParser(FTParser):
         'SE': 'bookSeriesTitle',
         'BS': 'bookSeriesSubtitle',
         'LA': 'language',
-        'DT': 'documentType',
         'CT': 'conferenceTitle',
         'CY': 'conferenceDate',
         'HO': 'conferenceHost',
@@ -227,6 +226,32 @@ class WoSParser(FTParser):
         setattr(citation, 'doi', doi)
         return citation
 
+    def postprocess_WC(self, entry):
+        """
+        Parse WC keywords.
+
+        Subject keywords are usually semicolon-delimited.
+        """
+
+        if type(entry.WC) not in [str, unicode]:
+            WC= u' '.join([unicode(k) for k in entry.WC])
+        else:
+            WC= entry.WC
+        entry.WC= [k.strip().upper() for k in WC.split(';')]
+
+    def postprocess_subject(self, entry):
+        """
+        Parse subject keywords.
+
+        Subject keywords are usually semicolon-delimited.
+        """
+
+        if type(entry.subject) not in [str, unicode]:
+            subject = u' '.join([unicode(k) for k in entry.subject])
+        else:
+            subject = entry.subject
+        entry.subject = [k.strip().upper() for k in subject.split(';')]
+
     def postprocess_authorKeywords(self, entry):
         """
         Parse author keywords.
@@ -322,7 +347,8 @@ def read_corpus(path, **kwargs):
     return read(path, corpus=True, **kwargs)
 
 
-def read(path, corpus=True, index_by='wosid', streaming=False, **kwargs):
+def read(path, corpus=True, index_by='wosid', streaming=False, parse_only=None,
+         corpus_class=Corpus, **kwargs):
     """
     Parse one or more WoS field-tagged data files.
 
@@ -352,32 +378,44 @@ def read(path, corpus=True, index_by='wosid', streaming=False, **kwargs):
     if not os.path.exists(path):
         raise ValueError('No such file or directory')
 
+    # We need the primary index field in the parse results.
+    if parse_only:
+        parse_only.append(index_by)
+
     if streaming:
-        return streaming_read(path, corpus=corpus, index_by=index_by, **kwargs)
+        return streaming_read(path, corpus=corpus, index_by=index_by,
+                              parse_only=parse_only, **kwargs)
 
     if os.path.isdir(path):    # Directory containing 1+ WoS data files.
         papers = []
         for sname in os.listdir(path):
             if sname.endswith('txt') and not sname.startswith('.'):
-                papers += read(os.path.join(path, sname), corpus=False)
+                papers += read(os.path.join(path, sname),
+                               corpus=False,
+                               parse_only=parse_only)
     else:   # A single data file.
-        papers = WoSParser(path).parse()
+        papers = WoSParser(path).parse(parse_only=parse_only)
 
     if corpus:
-        return Corpus(papers, index_by=index_by,  **kwargs)
+        return corpus_class(papers, index_by=index_by, **kwargs)
     return papers
 
 
-def streaming_read(path, corpus=True, index_by='wosid', **kwargs):
+def streaming_read(path, corpus=True, index_by='wosid', parse_only=None,
+                   **kwargs):
 
-    corpus = StreamingCorpus(index_by=index_by, **kwargs)
+    return read(path, corpus=corpus, index_by=index_by, parse_only=parse_only,
+                corpus_class=StreamingCorpus, **kwargs)
+    # corpus = StreamingCorpus(index_by=index_by, **kwargs)
 
-    if os.path.isdir(path):    # Directory containing 1+ WoS data files.
-        papers = []
-        for sname in os.listdir(path):
-            if sname.endswith('txt') and not sname.startswith('.'):
-                corpus.add_papers(read(os.path.join(path, sname), corpus=False))
-    else:   # A single data file.
-        corpus.add_papers(WoSParser(path).parse())
-
-    return corpus
+    # if os.path.isdir(path):    # Directory containing 1+ WoS data files.
+    #     papers = []
+    #     for sname in os.listdir(path):
+    #         if sname.endswith('txt') and not sname.startswith('.'):
+    #             corpus.add_papers(read(os.path.join(path, sname),
+    #                                    corpus=False,
+    #                                    parse_only=parse_only))
+    # else:   # A single data file.
+    #     corpus.add_papers(WoSParser(path).parse(parse_only=parse_only))
+    #
+    # return corpus

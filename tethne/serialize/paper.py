@@ -8,9 +8,23 @@ This class has functionalities to serialize a TETHNE corpus object  to persist i
 
 import os
 import json
+import re
 
 from tethne.dao import tethnedao
 from time import gmtime, strftime
+from tethne.utilities import _strip_punctuation
+
+
+class SerializeUtility:
+
+    @staticmethod
+    def get_auth_inst(address):
+        if ']' not in address:
+            return address, None
+        institute_literal = address.rsplit(']', 1)[1].lstrip()
+        author_literal = address.rsplit(']', 1)[0].replace('[', '')
+        authors = author_literal.split(';')
+        return institute_literal, authors
 
 
 class Serialize:
@@ -67,6 +81,10 @@ class Serialize:
         self.paperIdMap = {}
         self.authorIdMap = {}
         self.authorInstanceIdMap = {}
+        self.citationIdMap = {}
+        self.citationInstanceMap = {}
+        self.instituteIdMap = {}
+        self.instituteIdInstanceMap = {}
 
     def serializeCorpus(self):
         """
@@ -161,12 +179,12 @@ class Serialize:
             for author in paper.authors:
                 au_instanceid = au_instanceid + 1
                 author_key = author[0][1] + author[0][0]
-                author_instance_key = paper.wosid + author_key
+                author_instance_key = paper_key + author_key
                 self.authorInstanceIdMap[author_instance_key] = au_instanceid
                 instance_data = {
                         "model": "django-tethne.author_instance",
                         "pk": au_instanceid,
-                        "fields":{
+                        "fields": {
                             "paper": self.paperIdMap[paper_key],
                             "author": self.authorIdMap[author_key],
                             "first_name": author[0][1],
@@ -188,6 +206,262 @@ class Serialize:
                     author_identity.append(identity_data)
                 """
         return author_instance_details
+
+    def serializeCitation(self):
+        """
+        This method creates a fixture for the "django-tethne_citation" model.
+
+        Returns
+        -------
+        citation details which can be written to a file
+
+        """
+        citation_details = []
+        citation_id = tethnedao.getMaxCitationID()
+        for citation in self.corpus.features['citations'].index.values():
+
+            date_match = re.search(r'(\d+)', citation)
+            if date_match is not None:
+                date = date_match.group(1)
+            if date_match is None:
+                date_match = re.search(r"NONE", citation)
+                date = date_match.group()
+            first_author = citation.replace('_', ' ').split(date)[0].rstrip()
+            journal = citation.replace('_', ' ').split(date)[1].lstrip()
+            citation_key = citation
+            if citation_key not in self.citationIdMap:
+                citation_id += 1
+                self.citationIdMap[citation_key] = citation_id
+                citation_data = {
+                        "model": "django-tethne.citation",
+                        "pk": citation_id,
+                        "fields": {
+                            "literal": citation,
+                            "journal": journal,
+                            "first_author": first_author,
+                            "date": date
+                        }
+                    }
+                citation_details.append(citation_data)
+        return citation_details
+
+    def serializeCitationInstance(self):
+        """
+
+        This method creates a fixture for the "django-tethne_citation_instance" model.
+
+        Returns
+        -------
+        citation Instance details which can be written to a file
+
+        """
+        citation_instance_data = []
+        citation_instance_id = tethnedao.getMaxCitationInstanceID()
+        for paper in self.corpus:
+            paper_key = getattr(paper, Serialize.paper_source_map[self.source])
+            for citation_list in paper.citations:
+                citation = citation_list[0]
+                citation_key = citation
+                citation_instance_id += 1
+                date_match = re.search(r'(\d+)', citation)
+                if date_match is not None:
+                    date = date_match.group(1)
+                if date_match is None:
+                    date_match = re.search(r"NONE", citation)
+                    date = date_match.group()
+                first_author = citation.replace('_', ' ').split(date)[0].rstrip()
+                journal = citation.replace('_', ' ').split(date)[1].lstrip()
+                citation_instance_details = {
+                    "model": "django-tethne.citation_instance",
+                    "pk": citation_instance_id,
+                    "fields": {
+                        "literal": citation,
+                        "citation": self.citationIdMap[citation_key],
+                        "paper": self.paperIdMap[paper_key],
+                        "journal": journal,
+                        "first_author": first_author,
+                        "date": date
+                    }
+                }
+                citation_instance_data.append(citation_instance_details)
+        return citation_instance_data
+
+    def serializeInstitution(self):
+        """
+        This method creates a fixture for the "django-tethne_citation_institution" model.
+
+        Returns
+        -------
+        institution details which can be written to a file
+
+        """
+        institution_data = []
+        institution_instance_data = []
+        affiliation_data = []
+        affiliation_id = tethnedao.getMaxAffiliationID()
+        institution_id = tethnedao.getMaxInstitutionID()
+        institution_instance_id = tethnedao.getMaxInstitutionInstanceID()
+
+        for paper in self.corpus:
+            if hasattr(paper, 'authorAddress'):
+                paper_key = getattr(paper, Serialize.paper_source_map[self.source])
+                if type(paper.authorAddress) is unicode:
+                    institution_id += 1
+                    institution_instance_id += 1
+                    institute_literal, authors = SerializeUtility.get_auth_inst(paper.authorAddress)
+                    institute_row, institute_instance_row = self.get_details_from_inst_literal(institute_literal,
+                                                                                               institution_id,
+                                                                                               institution_instance_id,
+                                                                                               paper_key)
+                    if institute_row:
+                        institution_data.append(institute_row)
+                    institution_instance_data.append(institute_instance_row)
+                    if authors:
+                        for author in authors:
+                            affiliation_id += 1
+                            affiliation_row = self.get_affiliation_details(author, affiliation_id, institute_literal)
+                            affiliation_data.append(affiliation_row)
+
+                elif type(paper.authorAddress) is list:
+                    for address in paper.authorAddress:
+                        institution_id += 1
+                        institution_instance_id += 1
+                        institute_literal, authors = SerializeUtility.get_auth_inst(address)
+                        institute_row, institute_instance_row = self.get_details_from_inst_literal(institute_literal,
+                                                                                                   institution_id,
+                                                                                                   institution_instance_id,
+                                                                                                   paper_key)
+                        if institute_row:
+                            institution_data.append(institute_row)
+                        institution_instance_data.append(institute_instance_row)
+                        if authors is None:
+                            authors = prevAuthors
+                        for author in authors:
+                            affiliation_id += 1
+                            affiliation_row = self.get_affiliation_details(author, affiliation_id, institute_literal)
+                            affiliation_data.append(affiliation_row)
+                        prevAuthors = authors
+        return institution_data, institution_instance_data, affiliation_data
+
+    def get_details_from_inst_literal(self, institute_literal, institution_id, institution_instance_id, paper_key):
+        """
+        This method parses the institute literal to get the following
+        1. Department naame
+        2. Country
+        3. University name
+        4. ZIP, STATE AND CITY (Only if the country is USA. For other countries the standard may vary. So parsing these
+        values becomes very difficult. However, the complete address can be found in the column "AddressLine1"
+
+        Parameters
+        ----------
+        institute_literal -> The literal value of the institute
+        institution_id  -> the Primary key value which is to be added in the fixture
+        institution_instance_id -> Primary key value which is to be added in the fixture
+        paper_key -> The Paper key which is used for the Institution Instance
+
+        Returns
+        -------
+
+        """
+        institute_details = institute_literal.split(',')
+        institute_name = institute_details[0]
+        country = institute_details[len(institute_details)-1].lstrip().replace('.', '')
+        institute_row = None
+        zipcode = ""
+        state = ""
+        city = ""
+        if 'USA' in country:
+            temp = country
+            if(len(temp.split())) == 3:
+                country = temp.split()[2]
+                zipcode = temp.split()[1]
+                state = temp.split()[0]
+            elif(len(temp.split())) == 2:
+                country = temp.split()[1]
+                state = temp.split()[0]
+            city = institute_details[len(institute_details)-2].lstrip()
+
+        addressline1 = ""
+        for i in range(1, len(institute_details)-1, 1):
+            if i != len(institute_details)-2:
+                addressline1 = addressline1 + institute_details[i]+','
+            else:
+                addressline1 = addressline1 + institute_details[i]
+        if institute_literal not in self.instituteIdMap:
+                self.instituteIdMap[institute_literal] = institution_id
+                institute_row = {
+                    "model": "django-tethne.institution",
+                    "pk": institution_id,
+                    "fields": {
+                        "institute_name": institute_name,
+                        "addressLine1": addressline1,
+                        "country": country,
+                        "zip": zipcode,
+                        "state": state,
+                        "city": city
+                    }
+                }
+        department = ""
+        if re.search('Dept([^,]*),', institute_literal) is not None:
+            department = re.search('Dept([^,]*),', institute_literal).group().replace(',', '')
+        institute_instance_row = {
+            "model": "django-tethne.institution_instance",
+            "pk": institution_instance_id,
+            "fields": {
+                "institution": self.instituteIdMap[institute_literal],
+                "literal": institute_literal,
+                "institute_name": institute_name,
+                "addressLine1": addressline1,
+                "country": country,
+                "paper": self.paperIdMap[paper_key],
+                "department": department,
+                "zip": zipcode,
+                "state": state,
+                "city": city
+
+            }
+        }
+        return institute_row, institute_instance_row
+
+    def get_affiliation_details(self, value, affiliation_id, institute_literal):
+        """
+        This method is used to map the Affiliation between an author and Institution.
+
+        Parameters
+        ----------
+        value - The author name
+        affiliation_id - Primary key of the affiliation table
+        institute_literal
+
+        Returns
+        -------
+        Affiliation details(JSON fixture) which can be written to a file
+
+        """
+        tokens = tuple([t.upper().strip() for t in value.split(',')])
+        if len(tokens) == 1:
+            tokens = value.split()
+        if len(tokens) > 0:
+            if len(tokens) > 1:
+                aulast, auinit = tokens[0:2]
+            else:
+                aulast = tokens[0]
+                auinit = ''
+        else:
+            aulast, auinit = tokens[0], ''
+        aulast = _strip_punctuation(aulast).upper()
+        auinit = _strip_punctuation(auinit).upper()
+
+        author_key = auinit+aulast
+        affiliation_row = {
+            "model": "django-tethne.affiliation",
+            "pk": affiliation_id,
+            "fields": {
+                "author": self.authorIdMap[author_key],
+                "institution": self.instituteIdMap[institute_literal]
+            }
+        }
+        return affiliation_row
 
 
 def serialize(dirPath, corpus, source):
@@ -241,6 +515,11 @@ def serialize(dirPath, corpus, source):
     paperFilePath = os.path.join(dirPath, "paper.json")
     authorFilePath = os.path.join(dirPath, "authors.json")
     authorInstanceFilePath = os.path.join(dirPath, "authorInstance.json")
+    citationsFilePath = os.path.join(dirPath, "citations.json")
+    citationInstanceFilePath = os.path.join(dirPath, "citationInstance.json")
+    institutionsFilePath = os.path.join(dirPath, "institutions.json")
+    institutionInstanceFilePath = os.path.join(dirPath, "institutionInstance.json")
+    affiliationsFilePath = os.path.join(dirPath, "affiliations.json")
 
     serializehandler = Serialize(corpus, source)
 
@@ -248,18 +527,36 @@ def serialize(dirPath, corpus, source):
     papersDetails = serializehandler.serializePaper()
     authorDetails = serializehandler.serializeAuthors()
     authorInstanceDetails = serializehandler.serializeAuthorInstances()
+    citationDetails = serializehandler.serializeCitation()
+    citationInstanceDetails = serializehandler.serializeCitationInstance()
+    institutions, institutionsInstance, affilations = serializehandler.serializeInstitution()
 
-    with open(corpusfilePath, 'w') as f:
+    with open(corpusfilePath, mode='w+') as f:
         json.dump(corpusDetails, f)
 
-    with open(paperFilePath, 'w') as f:
+    with open(paperFilePath, mode='w+') as f:
         json.dump(papersDetails, f)
 
-    with open(authorFilePath, 'w') as f:
+    with open(authorFilePath, mode='w+') as f:
         json.dump(authorDetails, f)
 
-    with open(authorInstanceFilePath, 'w') as f:
+    with open(authorInstanceFilePath, mode='w+') as f:
         json.dump(authorInstanceDetails, f)
+
+    with open(citationsFilePath, mode='w+') as f:
+        json.dump(citationDetails, f)
+
+    with open(citationInstanceFilePath, mode='w+') as f:
+        json.dump(citationInstanceDetails, f)
+
+    with open(institutionsFilePath, mode='w+') as f:
+        json.dump(institutions, f)
+
+    with open(institutionInstanceFilePath, mode='w+') as f:
+        json.dump(institutionsInstance, f)
+
+    with open(affiliationsFilePath, mode='w+') as f:
+        json.dump(affilations, f)
 
 
 

@@ -424,8 +424,8 @@ class BaseFeatureSet(object):
         topn : int
             Number of features to return.
         by : str
-            (default: 'counts') How features should be sorted. Must be 'counts' or
-            'documentcounts'.
+            (default: 'counts') How features should be sorted. Must be 'counts'
+            or 'documentcounts'.
 
         Returns
         -------
@@ -437,8 +437,9 @@ class BaseFeatureSet(object):
             raise NameError('kwarg `by` must be "counts" or "documentCounts"')
 
         cvalues = getattr(self, by)
-        top = [list(cvalues.keys())[i] for i in argsort(list(cvalues.values()))][::-1]
-        return [(self.index[x], cvalues[x]) for x in top][:topn]
+        order = argsort(list(cvalues.values()))[::-1][:topn]
+        keys = list(cvalues.keys())
+        return [(self.index[keys[i]], cvalues[keys[i]]) for i in order]
 
 
 class StructuredFeatureSet(BaseFeatureSet):
@@ -572,7 +573,7 @@ class FeatureSet(BaseFeatureSet):
             for f, v in feature:
                 t = self.lookup[f]
                 v_ = func(f, v, self.counts[t], self.documentCounts[t])
-                if v_ > 0 and v_ is not None:
+                if v_:
                     feature_.append((f, v_))
             features[i] = Feature(feature_)
 
@@ -601,7 +602,6 @@ class FeatureSet(BaseFeatureSet):
             f = self.features[p]
             for e, c in f:
                 j = self.lookup[e]
-                print i, j
                 matrix[i][j] = c
 
         return matrix

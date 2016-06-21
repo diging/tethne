@@ -10,12 +10,14 @@ import os
 import xml.etree.ElementTree as ET
 import re
 from collections import Counter
-from tethne import Paper, Corpus, Feature, FeatureSet
+from tethne import Paper, Corpus, Feature, FeatureSet, StreamingCorpus
 from tethne.utilities import dict_from_node, strip_non_ascii, number
 from tethne.readers.base import XMLParser
 import iso8601
+from io import BytesIO
 
 from unidecode import unidecode
+import codecs
 
 import sys
 PYTHON_3 = sys.version_info[0] == 3
@@ -34,12 +36,13 @@ class DfRParser(XMLParser):
     }
 
     def open(self):
-        with open(self.path, 'r') as f:
+        with codecs.open(self.path, 'r', encoding="utf-8") as f:
             # JSTOR hasn't always represented ampersands correctly.
             contents = re.sub('(&)(?!amp;)', lambda match: '&amp;', f.read())
-            self.root = ET.fromstring(contents)
-        pattern = './/{elem}'.format(elem=self.entry_element)
-        self.elements = self.root.findall(pattern)
+            # self.root = ET.fromstring(contents)
+        # pattern = './/{elem}'.format(elem=self.entry_element)
+        # self.elements = self.root.findall(pattern)
+        self.iterator = ET.iterparse(BytesIO(contents.encode('utf-8')))
 
         self.at_start = False
         self.at_end = False
@@ -200,7 +203,15 @@ def _get_citation_filename(basepath):
             return fname
 
 
-def read(path, corpus=True, index_by='doi', load_ngrams=True, **kwargs):
+def streaming_read(path, corpus=True, index_by='doi', parse_only=None,
+                   **kwargs):
+
+    return read(path, corpus=corpus, index_by=index_by, parse_only=parse_only,
+                corpus_class=StreamingCorpus)
+
+
+def read(path, corpus=True, index_by='doi', load_ngrams=True, parse_only=None,
+         corpus_class=Corpus, **kwargs):
     """
     Yields :class:`.Paper` s from JSTOR DfR package.
 
@@ -230,10 +241,14 @@ def read(path, corpus=True, index_by='doi', load_ngrams=True, **kwargs):
     features = {}
     featureset_types = {}
 
+    # We need the primary index field in the parse results.
+    if parse_only:
+        parse_only.append(index_by)
+
     papers = []
     if citationfname:   # Valid DfR dataset.
         parser = DfRParser(os.path.join(path, citationfname))
-        papers += parser.parse()
+        papers += parser.parse(parse_only=parse_only)
 
     else:   # Possibly a directory containing several DfR datasets?
         papers = []
@@ -242,7 +257,8 @@ def read(path, corpus=True, index_by='doi', load_ngrams=True, **kwargs):
         for dirpath, dirnames, filenames in os.walk(path):
             citationfname = _get_citation_filename(dirpath)
             if citationfname:
-                subcorpus = read(dirpath, index_by=index_by)
+                subcorpus = read(dirpath, index_by=index_by,
+                                 parse_only=parse_only)
                 papers += subcorpus.papers
                 for featureset_name, featureset in subcorpus.features.iteritems():
                     if featureset_name not in features:
@@ -255,7 +271,7 @@ def read(path, corpus=True, index_by='doi', load_ngrams=True, **kwargs):
         raise ValueError('No DfR datasets found at %s' % path)
 
     if corpus:
-        corpus = Corpus(papers, index_by=index_by, **kwargs)
+        corpus = corpus_class(papers, index_by=index_by, **kwargs)
 
         if load_ngrams:     # Find and read N-gram data.
             for sname in os.listdir(path):
