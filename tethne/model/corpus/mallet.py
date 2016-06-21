@@ -339,7 +339,7 @@ class LDAModel(Model):
         """
         Print the top ``Nwords`` words for each topic.
         """
-        print('Topic\tTop %i words' % 10)
+        print('Topic\tTop %i words' % Nwords)
         for k, words in self.list_topics(Nwords):
             print(unicode(k).ljust(3) + '\t' + ' '.join(list(zip(*words))[0]))
 

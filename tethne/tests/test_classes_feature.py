@@ -138,6 +138,34 @@ class TestFeatureSet(unittest.TestCase):
         self.assertIn('p1', featureset.papers_containing('bob'))
         self.assertIn('p2', featureset.papers_containing('bob'))
 
+    def test_transform(self):
+        """
+
+        """
+
+        feature1 = Feature([('bob', 3), ('joe', 1), ('bobert', 1)])
+        feature2 = Feature([('bob', 3), ('jane', 1), ('fido', 1)])
+        featureset = FeatureSet({'p1': feature1, 'p2': feature2})
+
+        featureset_transformed = featureset.transform(lambda f, c, C, DC: c*3)
+
+        self.assertEqual(len(featureset_transformed.features), 2)
+
+        expected = len(featureset_transformed.unique | feature2.unique)
+
+        self.assertEqual(len(featureset_transformed.index), expected)
+        self.assertEqual(len(featureset_transformed.lookup), expected)
+        self.assertEqual(len(featureset_transformed.counts), expected)
+        self.assertEqual(len(featureset_transformed.documentCounts), expected)
+        self.assertEqual(len(featureset_transformed.unique), expected)
+
+        self.assertEqual(featureset_transformed.documentCount('bob'), 2)
+
+        self.assertEqual(featureset_transformed.count('bob'), 18)
+
+        self.assertIn('p1', featureset_transformed.papers_containing('bob'))
+        self.assertIn('p2', featureset_transformed.papers_containing('bob'))
+
     def test_add_feature(self):
         """
         Initialize empty, then add a feature.

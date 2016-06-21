@@ -1,5 +1,7 @@
 """
 Build networks from topics in a topic model.
+
+The current implementation assumes that you are using a :class:`.LDAModel`\.
 """
 
 import logging
@@ -21,8 +23,23 @@ from tethne.utilities import argsort
 
 def terms(model, threshold=0.01, **kwargs):
     """
-    Two terms are coupled if they belong to the same topic with phi > threshold.
+    Two terms are coupled if the posterior probability for both terms is
+    greather than ``threshold`` for the same topic.
+
+    Parameters
+    ----------
+    model : :class:`.LDAModel`
+    threshold : float
+        Default: 0.01
+    kwargs : kwargs
+        Passed on to :func:`.cooccurrence`\.
+
+    Returns
+    -------
+    :ref:`networkx.Graph <networkx:graph>`
+
     """
+
     select = lambda f, v, c, dc: v > threshold
     graph = cooccurrence(model.phi, filter=select, **kwargs)
 
@@ -35,7 +52,21 @@ def terms(model, threshold=0.01, **kwargs):
 
 def topic_coupling(model, threshold=None, **kwargs):
     """
-    Two papers are coupled if they both contain a shared topic above threshold.
+    Two papers are coupled if they both contain a shared topic above a
+    ``threshold``.
+
+    Parameters
+    ----------
+    model : :class:`.LDAModel`
+    threshold : float
+        Default: ``3./model.Z``
+    kwargs : kwargs
+        Passed on to :func:`.coupling`\.
+
+    Returns
+    -------
+    :ref:`networkx.Graph <networkx:graph>`
+
     """
     if not threshold:
         threshold = 3./model.Z
@@ -48,7 +79,21 @@ def topic_coupling(model, threshold=None, **kwargs):
 
 def cotopics(model, threshold=None, **kwargs):
     """
-    Two topics are coupled if they occur in the same documents.
+    Two topics are coupled if they occur (above some ``threshold``) in the same
+    document (s).
+
+    Parameters
+    ----------
+    model : :class:`.LDAModel`
+    threshold : float
+        Default: ``2./model.Z``
+    kwargs : kwargs
+        Passed on to :func:`.cooccurrence`\.
+
+    Returns
+    -------
+    :ref:`networkx.Graph <networkx:graph>`
+
     """
     if not threshold:
         threshold = 2./model.Z
@@ -65,9 +110,8 @@ def distance(model, method='cosine', percentile=90, bidirectional=False,
     <http://docs.scipy.org/doc/scipy/reference/spatial.distance.html>`_
     using :ref:`sparse-feature-vector`\s over the dimensions in ``model``.
 
-    Refer to the documentation for :func:`.analyze.features.distance` for
-    a list of distance statistics. The only two methods that will not work
-    in this context are ``hamming`` and ``jaccard``.
+    The only two methods that will not work in this context are ``hamming`` and
+    ``jaccard``.
 
     Distances are inverted to a similarity metric, which is log-transformed by
     default (see ``transform`` parameter, below). Edges are included if they are
@@ -104,9 +148,10 @@ def distance(model, method='cosine', percentile=90, bidirectional=False,
 
     Returns
     -------
-    thegraph : networkx.Graph
+    :ref:`networkx.Graph <networkx:graph>`
         Similarity values are included as edge weights. Node attributes are set
-        using the fields in ``model.metadata``.
+        using the fields in ``model.metadata``. See
+        :meth:`networkx.Graph.__init__`
 
     Examples
     --------
@@ -114,10 +159,10 @@ def distance(model, method='cosine', percentile=90, bidirectional=False,
     .. code-block:: python
 
        >>> from tethne.networks import topics
-       >>> thegraph = topics.distance(MyLDAModel, 'cosine')
+       >>> thegraph = topics.distance(myLDAModel, 'cosine')
 
-       >>> from tethne.writers import graph
-       >>> graph.to_graphml(thegraph, '~./thegraph.graphml')
+       >>> import tethne.writers as wr
+       >>> wr.to_graphml(thegraph, '~./thegraph.graphml')
 
     .. figure:: _static/images/lda_cosine_network.png
        :width: 80%

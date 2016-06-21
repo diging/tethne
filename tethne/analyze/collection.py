@@ -18,7 +18,7 @@ import warnings
 
 def algorithm(G, method_name, **kwargs):
     """
-    Apply a ``method`` from NetworkX to all ``networkx.Graph`` objects in the
+    Apply a ``method`` from NetworkX to all :ref:`networkx.Graph <networkx:graph>` objects in the
     :class:`.GraphCollection` ``G``.
     
     For options, see the `list of algorithms

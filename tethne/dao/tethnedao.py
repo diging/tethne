@@ -194,7 +194,6 @@ def getMaxInstitutionID():
         return 0
     else:
         return rows[0][0]
-<<<<<<< HEAD
 
 
 def getMaxInstitutionInstanceID():
@@ -259,14 +258,3 @@ def getMaxAffiliationInstanceID():
         return 0
     else:
         return rows[0][0]
-
-
-
-
-
-
-
-
-
-=======
->>>>>>> python

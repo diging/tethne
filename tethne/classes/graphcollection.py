@@ -20,10 +20,10 @@ if PYTHON_3:
 class GraphCollection(dict):
     """
     A :class:`.GraphCollection` is an indexed set of
-    :class:`.networkx.Graph`\s.
+    :ref:`networkx.Graph <networkx:graph>`\s.
 
-    When you add a :class:`networx.Graph`\, the nodes are indexed and
-    relabeled.
+    When you add a :ref:`networkx.Graph <networkx:graph>`, the nodes are indexed
+    and relabeled.
 
     .. code-block:: python
 
@@ -97,8 +97,8 @@ class GraphCollection(dict):
 
     def build(self, corpus, method, slice_kwargs={}, method_kwargs={}):
         """
-        Generate a set of :class:`networkx.Graph`\s using ``method`` on the
-        slices in ``corpus``\.
+        Generate a set of :ref:`networkx.Graph <networkx:graph>`\s using
+        ``method`` on the slices in ``corpus``\.
 
         Parameters
         ----------
@@ -120,14 +120,14 @@ class GraphCollection(dict):
 
     def add(self, name, graph):
         """
-        Index and add a :class:`networkx.Graph` to the
+        Index and add a :ref:`networkx.Graph <networkx:graph>` to the
         :class:`.GraphCollection`.
 
         Parameters
         ----------
         name : hashable
             Unique name used to identify the `graph`.
-        graph : networkx.Graph
+        graph : :ref:`networkx.Graph <networkx:graph>`
 
         Raises
         ------
@@ -262,7 +262,7 @@ class GraphCollection(dict):
 
     def collapse(self, weight_attr='weight'):
         """
-        Returns a :class:`networkx.Graph` or :class:`networkx.DiGraph` in which
+        Returns a :ref:`networkx.Graph <networkx:graph>` or :class:`networkx.DiGraph` in which
         the edges between each pair of nodes are collapsed into a single
         weighted edge.
         """
@@ -414,7 +414,7 @@ class GraphCollection(dict):
 
     def node_history(self, node, attribute):
         """
-        Returns a dictionary of attribute values for each ``networkx.Graph`` in
+        Returns a dictionary of attribute values for each :ref:`networkx.Graph <networkx:graph>` in
         the :class:`.GraphCollection` for a single node.
 
         Parameters
@@ -467,7 +467,7 @@ class GraphCollection(dict):
 
         Returns
         -------
-        graph : :class:`networkx.Graph`
+        graph : :ref:`networkx.Graph <networkx:graph>`
         """
 
         if type(self.master_graph) is nx.MultiDiGraph:

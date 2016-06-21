@@ -1,6 +1,6 @@
 """
 Methods for analyzing :class:`.Corpus`\, :class:`.GraphCollection`\, and 
-``networkx.Graph`` objects.
+:ref:`networkx.Graph <networkx:graph>` objects.
 
 .. autosummary::
 

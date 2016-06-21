@@ -79,7 +79,7 @@ class TestGraphCollectionCreation(unittest.TestCase):
 
     def test_index(self):
         """
-        Index a :class:`networkx.Graph`\, but don't add it to the
+        Index a :ref:`networkx.Graph <networkx:graph>`\, but don't add it to the
         :class:`.GraphCollection`\.
         """
         G = GraphCollection()
@@ -104,7 +104,7 @@ class TestGraphCollectionCreation(unittest.TestCase):
 
     def test_add(self):
         """
-        Add a :class:`networkx.Graph` to the :class:`.GraphCollection`\.
+        Add a :ref:`networkx.Graph <networkx:graph>` to the :class:`.GraphCollection`\.
         """
         G = GraphCollection()
         graph = nx.Graph()
@@ -169,7 +169,7 @@ class TestGraphCollectionMethods(unittest.TestCase):
         """
         :meth:`.GraphCollection.nodes` should behave like
         :meth:`networkx.Graph.nodes`\, but return values for all of the
-        :class:`networkx.Graph`\s in the :class:`.GraphCollection`\.
+        :ref:`networkx.Graph <networkx:graph>`\s in the :class:`.GraphCollection`\.
         """
 
         joint_nodes = set(self.graph.nodes()) | set(self.graph2.nodes())
@@ -186,7 +186,7 @@ class TestGraphCollectionMethods(unittest.TestCase):
         """
         :meth:`.GraphCollection.edges` should behave like
         :meth:`networkx.Graph.edges`\, but return values for all of the
-        :class:`networkx.Graph`\s in the :class:`.GraphCollection`\.
+        :ref:`networkx.Graph <networkx:graph>`\s in the :class:`.GraphCollection`\.
         """
 
         self.assertIsInstance(self.G.edges()[0], tuple,
@@ -203,7 +203,7 @@ class TestGraphCollectionMethods(unittest.TestCase):
         """
         :meth:`.GraphCollection.order` should return the number of nodes in
         the :class:`.GraphCollection`\. If `piecewise` is True, should return a
-        dict containing the order of each :class:`networkx.Graph` in the
+        dict containing the order of each :ref:`networkx.Graph <networkx:graph>` in the
         :class:`.GraphCollection`\.
         """
 
@@ -223,7 +223,7 @@ class TestGraphCollectionMethods(unittest.TestCase):
         """
         :meth:`.GraphCollection.size` should return the number of nodes in the
         :class:`.GraphCollection`\. If `piecewise` is True, should return a
-        dict containing the size of each :class:`networkx.Graph` in the
+        dict containing the size of each :ref:`networkx.Graph <networkx:graph>` in the
         :class:`.GraphCollection`\.
         """
 

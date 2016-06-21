@@ -29,7 +29,7 @@ def write_csv(graph, prefix):
 
     Parameters
     ----------
-    graph : :class:`networkx.Graph`
+    graph : :ref:`networkx.Graph <networkx:graph>`
     prefix : str
     """
     node_headers = list(set([a for n, attrs in graph.nodes(data=True)

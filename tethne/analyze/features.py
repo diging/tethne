@@ -46,6 +46,7 @@ def kl_divergence(V_a, V_b):
 
     return sum(map(lambda a, b: (a-b)*log(a/b), aprob, bprob))
 
+
 def cosine_similarity(F_a, F_b):
     """
     Calculate `cosine similarity
@@ -71,6 +72,7 @@ def cosine_similarity(F_a, F_b):
     mag_B = sqrt(sum(map(lambda a: a**2, B)))
 
     return dot / (mag_A + mag_B)
+
 
 def angular_similarity(F_a, F_b):
     """
@@ -108,6 +110,7 @@ def _shared_features(adense, bdense):
 
     return Ndiff
 
+
 def _smoothing_parameters(aprob, bprob, Ndiff):
     min_a = min(list([list(aprob)[i] for i in nonzero(aprob)]))
     sum_a = sum(aprob)
@@ -118,6 +121,7 @@ def _smoothing_parameters(aprob, bprob, Ndiff):
     gamma = 1 - Ndiff * epsilon
 
     return gamma, epsilon
+
 
 def _smooth(aprob, bprob, Ndiff):
     """
