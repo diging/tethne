@@ -3,18 +3,18 @@
 <html>
   <head>
     <meta charset="utf-8">
-
-    <title>Tethne: Corpus Analysis for Historians &mdash; tethne 1.0 documentation</title>
-
+    
+    <title>Tethne 0.8 Documentation &mdash; tethne 0.8 documentation</title>
+    
     <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
     <link rel="stylesheet" href="_static/scipy.css" type="text/css" >
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" >
-
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.0',
+        VERSION:     '0.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,13 +24,14 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/js/copybutton.js"></script>
-    <link rel="top" title="tethne 1.0 documentation" href="index.html" >
+    <link rel="top" title="tethne 0.8 documentation" href="#" >
+    <link rel="next" title="Overview" href="overview.html" > 
   </head>
   <body>
 
 <div class="container">
   <div class="top-scipy-org-logo-header">
-    <a href="index.html">
+    <a href="#">
       <img style="border: 0; height: 60px;" alt="SciPy" src="_static/img/logo_long_devo.png"></a>
     </div>
   </div>
@@ -39,19 +40,17 @@
 
     <div class="container">
       <div class="main">
-
+        
 	<div class="row-fluid">
 	  <div class="span12">
 	    <div class="spc-navbar">
-
+              
     <ul class="nav nav-pills pull-left">
         <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
-
-        <li class="active"><a href="index.html">tethne 1.0 documentation</a></li>
-
+	 
     </ul>
-
-
+              
+              
     <ul class="nav nav-pills pull-right">
       <li class="active">
         <a href="genindex.html" title="General Index"
@@ -61,86 +60,69 @@
         <a href="py-modindex.html" title="Python Module Index"
            >modules</a>
       </li>
+      <li class="active">
+        <a href="overview.html" title="Overview"
+           accesskey="N">next</a>
+      </li>
     </ul>
-
+              
 	    </div>
 	  </div>
 	</div>
-
+        
 
 	<div class="row-fluid">
           <div class="span9">
-
+            
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
-
-  <div class="section" id="tethne-corpus-analysis-for-historians">
-<h1>Tethne: Corpus Analysis for Historians<a class="headerlink" href="#tethne-corpus-analysis-for-historians" title="Permalink to this headline">¶</a></h1>
-<p>Tethne is a Python package that draws together tools and techniques from bibliometrics and
-computational linguistics into a single easy-to-use corpus
-analysis framework. Scholars can use Tethne to parse and organize data from the ISI Web of
-Science, JSTOR Data-for-Research, and Zotero collections, and generate time-variant
-citation-based networks and corpus models (including topic models). Tethne also provides
-writers that make it easy to visualize those models
-using mainstream network visualization software (eg <a class="reference external" href="http://cytoscape.org">Cyotoscape</a>
-and <a class="reference external" href="http://gephi.org">Gephi</a>) and the <a class="reference external" href="http://matplotlib.org/">MatPlotLib Python library</a>.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This documentation is under extensive revision in advance of v1.0. Some of the
-content is out-of-date or incorrect. Please report questions or bugs on
-<a class="reference external" href="https://github.com/diging/tethne/issues">GitHub</a>.</p>
-</div>
-<div class="section" id="download">
-<h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Latest stable version: v0.7.23</li>
-<li>Development branch:</li>
-</ul>
-</div>
+            
+  <div class="section" id="tethne-0-8-documentation">
+<h1>Tethne 0.8 Documentation<a class="headerlink" href="#tethne-0-8-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#who-uses-tethne">Who uses Tethne?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#python">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#license">License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#contributors">Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#how-to-contribute">How to contribute</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html#windows">Windows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_data.html">Getting Bibliographic Metadata</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_data.html#web-of-science">Web of Science</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_data.html#jstor-data-for-research">JSTOR Data-for-Research</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_data.html#scopus">Scopus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_data.html#zotero">Zotero</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tethne.html">tethne package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.mallet.html">Generating and Visualizing Topic Models with Tethne and MALLET</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.mallet.html#before-you-start">Before You Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.mallet.html#loading-jstor-dfr">Loading JSTOR DfR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.mallet.html#filtering-words">Filtering words</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.mallet.html#topic-modeling-in-mallet">Topic Modeling in MALLET</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.mallet.html#inspecting-the-model">Inspecting the Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.mallet.html#semantic-graph">Semantic Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.mallet.html#wrapping-up-looking-forward">Wrapping up, Looking forward</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tethne.html">tethne package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tethne.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.html#module-tethne.utilities">tethne.utilities module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.html#module-tethne">Module contents</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
-<div class="section" id="getting-help">
-<h2>Getting Help<a class="headerlink" href="#getting-help" title="Permalink to this headline">¶</a></h2>
-<p>The best way to get help is to create a new issue, <a class="reference external" href="https://github.com/diging/tethne/issues">here</a>. When reporting bugs, be sure to include as
-much detail as possible. Feel free to suggest new features or improvements!</p>
-</div>
-<div class="section" id="full-disclosure">
-<h2>Full Disclosure<a class="headerlink" href="#full-disclosure" title="Permalink to this headline">¶</a></h2>
-<p>Tethne is developed by the <a class="reference external" href="http://devo-evo.lab.asu.edu/diging">Digital Innovation Group (DigInG)</a>, part of the <a class="reference external" href="http://devo-evo.lab.asu.edu">Laubichler Lab</a> in the <a class="reference external" href="http://cbs.asu.edu">Center for Biology &amp; Society</a> at ASU.</p>
-<p>This material is based upon work supported by the National Science Foundation Graduate
-Research Fellowship Program under Grant No. 2011131209, and NSF Doctoral Dissertation
-Research Improvement Grant No. 1256752.</p>
-</div>
-<div class="section" id="license">
-<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
-<p>Tethne is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.</p>
-<p>Tethne is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-<a class="reference external" href="http://www.gnu.org/licenses/">GNU General Public License</a> for more details.</p>
-<img alt="http://www.gnu.org/graphics/gplv3-127x51.png" src="http://www.gnu.org/graphics/gplv3-127x51.png" />
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
-</ul>
 </div>
 
 
@@ -149,29 +131,27 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
           </div>
       <div class="spc-rightsidebar span3">
         <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="index.html">
+            <p class="logo"><a href="#">
               <img class="logo" src="_static/logo_round.png" alt="Logo">
             </a></p>
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Tethne: Corpus Analysis for Historians</a><ul>
-<li><a class="reference internal" href="#download">Download</a></li>
+<li><a class="reference internal" href="#">Tethne 0.8 Documentation</a><ul>
 <li><a class="reference internal" href="#documentation">Documentation</a></li>
-<li><a class="reference internal" href="#getting-help">Getting Help</a></li>
-<li><a class="reference internal" href="#full-disclosure">Full Disclosure</a></li>
-<li><a class="reference internal" href="#license">License</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
+  <h4>Next topic</h4>
+  <p class="topless"><a href="overview.html"
+                        title="next chapter">Overview</a></p>
   <h3>This Page</h3>
   <div>
-    <a href="_sources/root_index.txt"
+    <a href="_sources/index.txt"
        rel="nofollow">Show Source</a>
   </div>
 <div class="this-page-menu">
-  <a href="/scipy/docs/scipy-docs/root_index.rst">Edit page</a>
+  <a href="/scipy/docs/scipy-docs/index.rst">Edit page</a>
 </div>
 
         </div>
@@ -182,7 +162,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 
     <div class="container container-navbar-bottom">
       <div class="spc-navbar">
-
+        
       </div>
     </div>
     <div class="container">

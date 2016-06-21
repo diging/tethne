@@ -1,43 +1,62 @@
-readers Package
-===============
+tethne.readers package
+======================
 
-:mod:`readers` Package
-----------------------
+Submodules
+----------
 
-.. automodule:: tethne.readers
+tethne.readers.base module
+--------------------------
+
+.. automodule:: tethne.readers.base
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`dfr` Module
------------------
+tethne.readers.dfr module
+-------------------------
 
 .. automodule:: tethne.readers.dfr
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`mallet` Module
---------------------
+tethne.readers.dspace module
+----------------------------
 
-.. automodule:: tethne.readers.mallet
+.. automodule:: tethne.readers.dspace
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`pubmed` Module
---------------------
+tethne.readers.scopus module
+----------------------------
 
-.. automodule:: tethne.readers.pubmed
+.. automodule:: tethne.readers.scopus
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`wos` Module
------------------
+tethne.readers.wos module
+-------------------------
 
 .. automodule:: tethne.readers.wos
     :members:
     :undoc-members:
     :show-inheritance:
 
+tethne.readers.zotero module
+----------------------------
+
+.. automodule:: tethne.readers.zotero
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: tethne.readers
+    :members:
+    :undoc-members:
+    :show-inheritance:

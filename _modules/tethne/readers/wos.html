@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>tethne.readers.wos &mdash; tethne 1.0 documentation</title>
+    <title>tethne.readers.wos &mdash; tethne 0.8 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.0',
+        VERSION:     '0.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
-    <link rel="top" title="tethne 1.0 documentation" href="../../../index.html" >
+    <link rel="top" title="tethne 0.8 documentation" href="../../../index.html" >
     <link rel="up" title="tethne.readers" href="../readers.html" > 
   </head>
   <body>
@@ -48,7 +48,7 @@
     <ul class="nav nav-pills pull-left">
         <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
 	
-        <li class="active"><a href="../../../index.html">tethne 1.0 documentation</a></li>
+        <li class="active"><a href="../../../index.html">tethne 0.8 documentation</a></li>
 	
           <li class="active"><a href="../../index.html" >Module code</a></li>
           <li class="active"><a href="../readers.html" accesskey="U">tethne.readers</a></li> 
@@ -100,7 +100,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">tethne.readers.base</span> <span class="kn">import</span> <span class="n">FTParser</span>
-<span class="kn">from</span> <span class="nn">tethne</span> <span class="kn">import</span> <span class="n">Corpus</span><span class="p">,</span> <span class="n">Paper</span>
+<span class="kn">from</span> <span class="nn">tethne</span> <span class="kn">import</span> <span class="n">Corpus</span><span class="p">,</span> <span class="n">Paper</span><span class="p">,</span> <span class="n">StreamingCorpus</span>
 <span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">_strip_punctuation</span><span class="p">,</span> <span class="n">_space_sep</span><span class="p">,</span> <span class="n">strip_tags</span><span class="p">,</span> <span class="n">is_number</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -109,7 +109,7 @@
     <span class="nb">unicode</span> <span class="o">=</span> <span class="nb">str</span>
 
 
-<div class="viewcode-block" id="WoSParser"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.WoSParser">[docs]</a><span class="k">class</span> <span class="nc">WoSParser</span><span class="p">(</span><span class="n">FTParser</span><span class="p">):</span>
+<div class="viewcode-block" id="WoSParser"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.WoSParser">[docs]</a><span class="k">class</span> <span class="nc">WoSParser</span><span class="p">(</span><span class="n">FTParser</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parser for Web of Science field-tagged data.</span>
 
@@ -165,7 +165,6 @@
         <span class="s">&#39;SE&#39;</span><span class="p">:</span> <span class="s">&#39;bookSeriesTitle&#39;</span><span class="p">,</span>
         <span class="s">&#39;BS&#39;</span><span class="p">:</span> <span class="s">&#39;bookSeriesSubtitle&#39;</span><span class="p">,</span>
         <span class="s">&#39;LA&#39;</span><span class="p">:</span> <span class="s">&#39;language&#39;</span><span class="p">,</span>
-        <span class="s">&#39;DT&#39;</span><span class="p">:</span> <span class="s">&#39;documentType&#39;</span><span class="p">,</span>
         <span class="s">&#39;CT&#39;</span><span class="p">:</span> <span class="s">&#39;conferenceTitle&#39;</span><span class="p">,</span>
         <span class="s">&#39;CY&#39;</span><span class="p">:</span> <span class="s">&#39;conferenceDate&#39;</span><span class="p">,</span>
         <span class="s">&#39;HO&#39;</span><span class="p">:</span> <span class="s">&#39;conferenceHost&#39;</span><span class="p">,</span>
@@ -190,7 +189,7 @@
 <span class="sd">    Maps field-tags onto field names.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="WoSParser.parse_author"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.WoSParser.parse_author">[docs]</a>    <span class="k">def</span> <span class="nf">parse_author</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="WoSParser.parse_author"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.WoSParser.parse_author">[docs]</a>    <span class="k">def</span> <span class="nf">parse_author</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Attempts to split an author name into last and first parts.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -209,33 +208,33 @@
         <span class="n">auinit</span> <span class="o">=</span> <span class="n">_strip_punctuation</span><span class="p">(</span><span class="n">auinit</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">aulast</span><span class="p">,</span> <span class="n">auinit</span>
 </div>
-<div class="viewcode-block" id="WoSParser.handle_AF"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.WoSParser.handle_AF">[docs]</a>    <span class="k">def</span> <span class="nf">handle_AF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="WoSParser.handle_AF"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.WoSParser.handle_AF">[docs]</a>    <span class="k">def</span> <span class="nf">handle_AF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_author</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="WoSParser.handle_PY"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.WoSParser.handle_PY">[docs]</a>    <span class="k">def</span> <span class="nf">handle_PY</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="WoSParser.handle_PY"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.WoSParser.handle_PY">[docs]</a>    <span class="k">def</span> <span class="nf">handle_PY</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        WoS publication years are cast to integers.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="WoSParser.handle_AU"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.WoSParser.handle_AU">[docs]</a>    <span class="k">def</span> <span class="nf">handle_AU</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="WoSParser.handle_AU"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.WoSParser.handle_AU">[docs]</a>    <span class="k">def</span> <span class="nf">handle_AU</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">aulast</span><span class="p">,</span> <span class="n">auinit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_author</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="n">auinit</span> <span class="o">=</span> <span class="n">_space_sep</span><span class="p">(</span><span class="n">auinit</span><span class="p">)</span>   <span class="c"># Separate author initials with spaces.</span>
         <span class="k">return</span> <span class="n">aulast</span><span class="p">,</span> <span class="n">auinit</span>
 </div>
-<div class="viewcode-block" id="WoSParser.handle_TI"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.WoSParser.handle_TI">[docs]</a>    <span class="k">def</span> <span class="nf">handle_TI</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="WoSParser.handle_TI"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.WoSParser.handle_TI">[docs]</a>    <span class="k">def</span> <span class="nf">handle_TI</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert article titles to Title Case.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="WoSParser.handle_VL"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.WoSParser.handle_VL">[docs]</a>    <span class="k">def</span> <span class="nf">handle_VL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="WoSParser.handle_VL"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.WoSParser.handle_VL">[docs]</a>    <span class="k">def</span> <span class="nf">handle_VL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Volume should be a unicode string, even if it looks like an integer.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="WoSParser.handle_CR"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.WoSParser.handle_CR">[docs]</a>    <span class="k">def</span> <span class="nf">handle_CR</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="WoSParser.handle_CR"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.WoSParser.handle_CR">[docs]</a>    <span class="k">def</span> <span class="nf">handle_CR</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parses cited references.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -307,7 +306,33 @@
         <span class="nb">setattr</span><span class="p">(</span><span class="n">citation</span><span class="p">,</span> <span class="s">&#39;doi&#39;</span><span class="p">,</span> <span class="n">doi</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">citation</span>
 </div>
-<div class="viewcode-block" id="WoSParser.postprocess_authorKeywords"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.WoSParser.postprocess_authorKeywords">[docs]</a>    <span class="k">def</span> <span class="nf">postprocess_authorKeywords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+<div class="viewcode-block" id="WoSParser.postprocess_WC"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.WoSParser.postprocess_WC">[docs]</a>    <span class="k">def</span> <span class="nf">postprocess_WC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse WC keywords.</span>
+
+<span class="sd">        Subject keywords are usually semicolon-delimited.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">WC</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">]:</span>
+            <span class="n">WC</span><span class="o">=</span> <span class="s">u&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">unicode</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">WC</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">WC</span><span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">WC</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">WC</span><span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">WC</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;;&#39;</span><span class="p">)]</span>
+</div>
+<div class="viewcode-block" id="WoSParser.postprocess_subject"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.WoSParser.postprocess_subject">[docs]</a>    <span class="k">def</span> <span class="nf">postprocess_subject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse subject keywords.</span>
+
+<span class="sd">        Subject keywords are usually semicolon-delimited.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">subject</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">]:</span>
+            <span class="n">subject</span> <span class="o">=</span> <span class="s">u&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">unicode</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">subject</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">subject</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">subject</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">subject</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">subject</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;;&#39;</span><span class="p">)]</span>
+</div>
+<div class="viewcode-block" id="WoSParser.postprocess_authorKeywords"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.WoSParser.postprocess_authorKeywords">[docs]</a>    <span class="k">def</span> <span class="nf">postprocess_authorKeywords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parse author keywords.</span>
 
@@ -320,7 +345,7 @@
             <span class="n">aK</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">authorKeywords</span>
         <span class="n">entry</span><span class="o">.</span><span class="n">authorKeywords</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">aK</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;;&#39;</span><span class="p">)]</span>
 </div>
-<div class="viewcode-block" id="WoSParser.postprocess_keywordsPlus"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.WoSParser.postprocess_keywordsPlus">[docs]</a>    <span class="k">def</span> <span class="nf">postprocess_keywordsPlus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+<div class="viewcode-block" id="WoSParser.postprocess_keywordsPlus"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.WoSParser.postprocess_keywordsPlus">[docs]</a>    <span class="k">def</span> <span class="nf">postprocess_keywordsPlus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parse WoS &quot;Keyword Plus&quot; keywords.</span>
 
@@ -331,7 +356,7 @@
             <span class="n">entry</span><span class="o">.</span><span class="n">keywordsPlus</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span>
                                   <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">keywordsPlus</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;;&#39;</span><span class="p">)]</span>
 </div>
-<div class="viewcode-block" id="WoSParser.postprocess_funding"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.WoSParser.postprocess_funding">[docs]</a>    <span class="k">def</span> <span class="nf">postprocess_funding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+<div class="viewcode-block" id="WoSParser.postprocess_funding"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.WoSParser.postprocess_funding">[docs]</a>    <span class="k">def</span> <span class="nf">postprocess_funding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Separates funding agency from grant numbers.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -350,7 +375,7 @@
             <span class="n">sources_processed</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">agency</span><span class="p">,</span> <span class="n">grant</span><span class="p">))</span>
         <span class="n">entry</span><span class="o">.</span><span class="n">funding</span> <span class="o">=</span> <span class="n">sources_processed</span>
 </div>
-<div class="viewcode-block" id="WoSParser.postprocess_authors_full"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.WoSParser.postprocess_authors_full">[docs]</a>    <span class="k">def</span> <span class="nf">postprocess_authors_full</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+<div class="viewcode-block" id="WoSParser.postprocess_authors_full"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.WoSParser.postprocess_authors_full">[docs]</a>    <span class="k">def</span> <span class="nf">postprocess_authors_full</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        If only a single author was found, ensure that ``authors_full`` is</span>
 <span class="sd">        nonetheless a list.</span>
@@ -358,7 +383,7 @@
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">authors_full</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">:</span>
             <span class="n">entry</span><span class="o">.</span><span class="n">authors_full</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span><span class="o">.</span><span class="n">authors_full</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="WoSParser.postprocess_authors_init"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.WoSParser.postprocess_authors_init">[docs]</a>    <span class="k">def</span> <span class="nf">postprocess_authors_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+<div class="viewcode-block" id="WoSParser.postprocess_authors_init"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.WoSParser.postprocess_authors_init">[docs]</a>    <span class="k">def</span> <span class="nf">postprocess_authors_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        If only a single author was found, ensure that ``authors_init`` is</span>
 <span class="sd">        nonetheless a list.</span>
@@ -366,7 +391,7 @@
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">authors_init</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">:</span>
             <span class="n">entry</span><span class="o">.</span><span class="n">authors_init</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span><span class="o">.</span><span class="n">authors_init</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="WoSParser.postprocess_citedReferences"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.WoSParser.postprocess_citedReferences">[docs]</a>    <span class="k">def</span> <span class="nf">postprocess_citedReferences</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+<div class="viewcode-block" id="WoSParser.postprocess_citedReferences"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.WoSParser.postprocess_citedReferences">[docs]</a>    <span class="k">def</span> <span class="nf">postprocess_citedReferences</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        If only a single cited reference was found, ensure that</span>
 <span class="sd">        ``citedReferences`` is nonetheless a list.</span>
@@ -375,7 +400,7 @@
             <span class="n">entry</span><span class="o">.</span><span class="n">citedReferences</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span><span class="o">.</span><span class="n">citedReferences</span><span class="p">]</span>
 
 </div></div>
-<div class="viewcode-block" id="from_dir"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.from_dir">[docs]</a><span class="k">def</span> <span class="nf">from_dir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="from_dir"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.from_dir">[docs]</a><span class="k">def</span> <span class="nf">from_dir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="k">raise</span> <span class="ne">DeprecationWarning</span><span class="p">(</span><span class="s">&quot;from_dir() is deprecated. Use read() instead.&quot;</span><span class="p">)</span>
     <span class="n">papers</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">sname</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
@@ -386,13 +411,13 @@
     <span class="k">return</span> <span class="n">papers</span>
 
 </div>
-<div class="viewcode-block" id="corpus_from_dir"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.corpus_from_dir">[docs]</a><span class="k">def</span> <span class="nf">corpus_from_dir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="corpus_from_dir"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.corpus_from_dir">[docs]</a><span class="k">def</span> <span class="nf">corpus_from_dir</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="k">raise</span> <span class="ne">DeprecationWarning</span><span class="p">(</span><span class="s">&quot;corpus_from_dir is deprecated in v0.8, use&quot;</span> <span class="o">+</span>
                              <span class="s">&quot; read directly, instead.&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="read_corpus"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.read_corpus">[docs]</a><span class="k">def</span> <span class="nf">read_corpus</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="read_corpus"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.read_corpus">[docs]</a><span class="k">def</span> <span class="nf">read_corpus</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    .. DANGER::</span>
 <span class="sd">       read_corpus is deprecated in v0.8, use :func:`.read` instead.</span>
@@ -402,12 +427,13 @@
     <span class="k">return</span> <span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="read"><a class="viewcode-back" href="../../../tethne.readers.wos.html#tethne.readers.wos.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="s">&#39;wosid&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="read"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="s">&#39;wosid&#39;</span><span class="p">,</span> <span class="n">streaming</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">parse_only</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+         <span class="n">corpus_class</span><span class="o">=</span><span class="n">Corpus</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse one or more WoS field-tagged data files.</span>
 
-<span class="sd">    Example</span>
-<span class="sd">    -------</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    .. code-block:: python</span>
 
 <span class="sd">       &gt;&gt;&gt; from tethne.readers import wos</span>
@@ -432,17 +458,47 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;No such file or directory&#39;</span><span class="p">)</span>
 
+    <span class="c"># We need the primary index field in the parse results.</span>
+    <span class="k">if</span> <span class="n">parse_only</span><span class="p">:</span>
+        <span class="n">parse_only</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index_by</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">streaming</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">streaming_read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="n">corpus</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="n">index_by</span><span class="p">,</span>
+                              <span class="n">parse_only</span><span class="o">=</span><span class="n">parse_only</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>    <span class="c"># Directory containing 1+ WoS data files.</span>
         <span class="n">papers</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">sname</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">sname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;txt&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">sname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">):</span>
-                <span class="n">papers</span> <span class="o">+=</span> <span class="n">read</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">sname</span><span class="p">),</span> <span class="n">corpus</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+                <span class="n">papers</span> <span class="o">+=</span> <span class="n">read</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">sname</span><span class="p">),</span>
+                               <span class="n">corpus</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                               <span class="n">parse_only</span><span class="o">=</span><span class="n">parse_only</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>   <span class="c"># A single data file.</span>
-        <span class="n">papers</span> <span class="o">=</span> <span class="n">WoSParser</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
+        <span class="n">papers</span> <span class="o">=</span> <span class="n">WoSParser</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">parse_only</span><span class="o">=</span><span class="n">parse_only</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">corpus</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="n">index_by</span><span class="p">,</span>  <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">papers</span></div>
+        <span class="k">return</span> <span class="n">corpus_class</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="n">index_by</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">papers</span>
+
+</div>
+<div class="viewcode-block" id="streaming_read"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.wos.streaming_read">[docs]</a><span class="k">def</span> <span class="nf">streaming_read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="s">&#39;wosid&#39;</span><span class="p">,</span> <span class="n">parse_only</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                   <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+    <span class="k">return</span> <span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="n">corpus</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="n">index_by</span><span class="p">,</span> <span class="n">parse_only</span><span class="o">=</span><span class="n">parse_only</span><span class="p">,</span>
+                <span class="n">corpus_class</span><span class="o">=</span><span class="n">StreamingCorpus</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="c"># corpus = StreamingCorpus(index_by=index_by, **kwargs)</span>
+
+    <span class="c"># if os.path.isdir(path):    # Directory containing 1+ WoS data files.</span>
+    <span class="c">#     papers = []</span>
+    <span class="c">#     for sname in os.listdir(path):</span>
+    <span class="c">#         if sname.endswith(&#39;txt&#39;) and not sname.startswith(&#39;.&#39;):</span>
+    <span class="c">#             corpus.add_papers(read(os.path.join(path, sname),</span>
+    <span class="c">#                                    corpus=False,</span>
+    <span class="c">#                                    parse_only=parse_only))</span>
+    <span class="c"># else:   # A single data file.</span>
+    <span class="c">#     corpus.add_papers(WoSParser(path).parse(parse_only=parse_only))</span>
+    <span class="c">#</span>
+    <span class="c"># return corpus</span></div>
 </pre></div>
 
           </div>

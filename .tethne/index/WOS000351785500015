@@ -1,0 +1,754 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VOXFORD
+p7
+sS'reprintAddress'
+p8
+VLowe, SR (reprint author), Columbia Univ, Mailman Sch Publ Hlth, Dept Epidemiol, 722 West 168th St,Room 720-F, New York, NY 10032 USA.
+p9
+sS'WC'
+p10
+(lp11
+VPUBLIC, ENVIRONMENTAL & OCCUPATIONAL HEALTH
+p12
+aVSOCIAL SCIENCES, BIOMEDICAL
+p13
+asS'GA'
+p14
+VCE4FC
+p15
+sS'FX'
+p16
+(lp17
+VThis research was funded by the Intramural Research Program of the NIH,
+p18
+aVthe National Institute of Environmental Health Sciences (Z01 ES 102945),
+p19
+aVand the NIH Common Fund, and the National Institute for Mental Health
+p20
+aV(T32-MH-13043).
+p21
+asS'abstract'
+p22
+VHigh rates of mental health (MH) problems have been documented among disaster relief workers. However, few workers utilize MH services, and predictors of service use among this group remain unexplored. The purpose of this study was to explore associations between predisposing, illness-related, and enabling factors from Andersen's behavioral model of treatment-seeking and patterns of service use among participants who completed at least one full day of cleanup work after the Deepwater Horizon oil spill and participated in home visits for the NIEHS GuLF STUDY (N = 8931). Workers reported on MH symptoms and whether they had used counseling or medication for MH problems since the oil spill. Hierarchical logistic regression models explored associations between predictors and counseling and medication use in the full sample, and type of use (counseling only, medication only, both) among participants who used either service. Analyses were replicated for subsamples of participants with and without symptom inventory scores suggestive of probable post-disaster mental illness. Having a pre-spill MH diagnosis, pre-spill service use, more severe post-spill MH symptoms, and healthcare coverage were positively associated with counseling and medication use in the full sample. Among participants who used either service, non-Hispanic Black race, pre-spill counseling, lower depression, and not identifying a personal doctor or healthcare provider were predictive of counseling only, whereas older age, female gender and pre-spill medication were predictive of medication only. The results were generally consistent among participants with and without probable post-disaster mental illness. The results suggest variability in which factors within Andersen's behavioral model are predictive of different patterns of service use among disaster relief workers. (C) 2015 Elsevier Ltd. All rights reserved.
+p23
+sS'keywordsPlus'
+p24
+(lp25
+VMental health service use; Disasters; Deepwater Horizon oil spill;
+p26
+aVDisaster relief workers
+p27
+asS'pageEnd'
+p28
+I134
+sS'date'
+p29
+I2015
+sS'documentType'
+p30
+VArticle
+p31
+sS'subject'
+p32
+(lp33
+VPUBLIC, ENVIRONMENTAL & OCCUPATIONAL HEALTH
+p34
+aVBIOMEDICAL SOCIAL SCIENCES
+p35
+asS'isoSource'
+p36
+VSoc. Sci. Med.
+p37
+sS'timesCited'
+p38
+VZ9 0
+p39
+sS'funding'
+p40
+(lp41
+(VIntramural Research Program of the NIH
+Ntp42
+a(VNational Institute of Environmental Health Sciences
+VZ01 ES 102945
+tp43
+a(VNIH Common Fund
+Ntp44
+a(VNational Institute for Mental Health
+VT32-MH-13043
+tp45
+asS'PT'
+p46
+VJ
+sS'title'
+p47
+VMental Health Service Use By Cleanup Workers In The Aftermath Of The Deepwater Horizon Oil Spill
+p48
+sS'ISSN'
+p49
+(lp50
+V0277-9536
+p51
+aVJ9 SOC SCI MED
+p52
+asS'authors_full'
+p53
+(lp54
+(VLOWE
+VSARAH R
+tp55
+a(VKWOK
+VRICHARD K
+tp56
+a(VPAYNE
+VJULIANNE
+tp57
+a(VENGEL
+VLAWRENCE S
+tp58
+a(VGALEA
+VSANDRO
+tp59
+a(VSANDLER
+VDALE P
+tp60
+asS'PG'
+p61
+I10
+sS'PD'
+p62
+VAPR
+p63
+sS'pageStart'
+p64
+I125
+sS'PM'
+p65
+I25697635
+sS'journal'
+p66
+VSOCIAL SCIENCE & MEDICINE
+p67
+sS'volume'
+p68
+V130
+p69
+sS'doi'
+p70
+V10.1016/j.socscimed.2015.02.009
+p71
+sS'emailAddress'
+p72
+Vsr12143@columbia.edu
+p73
+sS'authorAddress'
+p74
+(lp75
+V[Lowe, Sarah R.] Columbia Univ, Mailman Sch Publ Hlth, Dept Epidemiol, New York, NY 10032 USA.
+p76
+aV[Kwok, Richard K.; Engel, Lawrence S.; Sandler, Dale P.] NIEHS, Epidemiol Branch, Res Triangle Pk, NC USA.
+p77
+aV[Payne, Julianne] Social & Sci Syst Inc, Epidemiol & Publ Hlth Studies, Res Triangle Pk, NC USA.
+p78
+aV[Engel, Lawrence S.] Univ N Carolina, Gillings Sch Global Publ Hlth, Dept Epidemiol, Chapel Hill, NC 27515 USA.
+p79
+aV[Galea, Sandro] Boston Univ, Sch Publ Hlth, Dept Epidemiol, Boston, MA 02215 USA.
+p80
+asS'publisherAddress'
+p81
+VTHE BOULEVARD, LANGFORD LANE, KIDLINGTON, OXFORD OX5 1GB, ENGLAND
+p82
+sS'publisher'
+p83
+VPERGAMON-ELSEVIER SCIENCE LTD
+p84
+sS'authorKeywords'
+p85
+(lp86
+VACUTE STRESS DISORDER
+p87
+aVDEPRESSION
+p88
+aVDISASTER
+p89
+aVPTSD
+p90
+aVPSYCHOTHERAPY
+p91
+aVPREDICTORS
+p92
+aVCARE
+p93
+asS'language'
+p94
+VEnglish
+p95
+sS'wosid'
+p96
+VWOS:000351785500015
+p97
+sS'citationCount'
+p98
+I24
+sS'authors_init'
+p99
+(lp100
+(VLOWE
+VS R
+tp101
+a(VKWOK
+VR K
+tp102
+a(VPAYNE
+VJ
+tp103
+a(VENGEL
+VL S
+tp104
+a(VGALEA
+VS
+tp105
+a(VSANDLER
+VD P
+tp106
+asS'citedReferences'
+p107
+(lp108
+g1
+(g2
+g3
+NtRp109
+(dp110
+g70
+V10.1080/01612840701651454
+p111
+sg66
+VIssues Ment Health Nurs
+p112
+sg68
+V28
+p113
+sg99
+(lp114
+(VAYALON
+VLIAT
+tp115
+asg29
+I2007
+sg64
+V1323
+p116
+sbag1
+(g2
+g3
+NtRp117
+(dp118
+g70
+V10.2307/2137284
+p119
+sg66
+VJ HEALTH SOC BEHAV
+p120
+sg68
+V36
+p121
+sg99
+(lp122
+(VANDERSEN
+VR M
+tp123
+asg29
+I1995
+sg64
+V1
+sbag1
+(g2
+g3
+NtRp124
+(dp125
+g70
+V10.1111/j.1939-0025.2010.01063.x
+p126
+sg66
+VAM J ORTHOPSYCHIAT
+p127
+sg68
+V80
+p128
+sg99
+(lp129
+(VBIGGS
+VQ M
+tp130
+asg29
+I2010
+sg64
+V586
+p131
+sbag1
+(g2
+g3
+NtRp132
+(dp133
+g70
+V10.1146/annurev.psych.121208.131653
+p134
+sg66
+VANNU REV PSYCHOL
+p135
+sg68
+V65
+p136
+sg99
+(lp137
+(VCRAIGHEAD
+VW E
+tp138
+asg29
+I2014
+sg64
+V267
+p139
+sbag1
+(g2
+g3
+NtRp140
+(dp141
+g70
+VDOI 10.1037/1541-1559.2.1.3
+p142
+sg66
+VPSYCHOL SERV
+p143
+sg68
+V1
+sg99
+(lp144
+(VELHAI
+VJ
+tp145
+asg29
+I2005
+sg64
+VSYCHOL
+p146
+sbag1
+(g2
+g3
+NtRp147
+(dp148
+g70
+V10.1016/j.psychres.2005.10.004
+p149
+sg66
+VPSYCHIAT RES
+p150
+sg68
+V143
+p151
+sg99
+(lp152
+(VELHAI
+VJ D
+tp153
+asg29
+I2006
+sg64
+VSYCHIAT
+p154
+sbag1
+(g2
+g3
+NtRp155
+(dp156
+g70
+Nsg66
+VEPIDEMIOLOGY STANDAR
+p157
+sg68
+Nsg99
+(lp158
+(VFERRIS
+VB G
+tp159
+asg29
+I1978
+sg64
+Nsbag1
+(g2
+g3
+NtRp160
+(dp161
+g70
+V10.1176/appi.ajp.161.8.1370
+p162
+sg66
+VAM J PSYCHIAT
+p163
+sg68
+V161
+p164
+sg99
+(lp165
+(VFULLERTON
+VC S
+tp166
+asg29
+I2004
+sg64
+V1370
+p167
+sbag1
+(g2
+g3
+NtRp168
+(dp169
+g70
+Nsg66
+VAMELIA 2 PROGRAM MIS
+p170
+sg68
+Nsg99
+(lp171
+(VHONAKER
+VJ
+tp172
+asg29
+I2008
+sg64
+Nsbag1
+(g2
+g3
+NtRp173
+(dp174
+g70
+V10.1186/1471-2458-6-84
+p175
+sg66
+VBMC PUBLIC HEALTH
+p176
+sg68
+V6
+sg99
+(lp177
+(VJANJUA
+VN Z
+tp178
+asg29
+I2006
+sg64
+Nsbag1
+(g2
+g3
+NtRp179
+(dp180
+g70
+Nsg66
+VInt J Emerg Ment Health
+p181
+sg68
+V7
+sg99
+(lp182
+(VJAYASINGHE
+VNIMALI
+tp183
+asg29
+I2005
+sg64
+V91
+p184
+sbag1
+(g2
+g3
+NtRp185
+(dp186
+g70
+V10.1046/j.1525-1497.2001.016009606.x
+p187
+sg66
+VJ GEN INTERN MED
+p188
+sg68
+V16
+p189
+sg99
+(lp190
+(VKROENKE
+VK
+tp191
+asg29
+I2001
+sg64
+V606
+p192
+sbag1
+(g2
+g3
+NtRp193
+(dp194
+g70
+V10.1016/j.jad.2008.06.026
+p195
+sg66
+VJ AFFECT DISORDERS
+p196
+sg68
+V114
+p197
+sg99
+(lp198
+(VKROENKE
+VK
+tp199
+asg29
+I2009
+sg64
+V163
+p200
+sbag1
+(g2
+g3
+NtRp201
+(dp202
+g70
+Nsg66
+VPSYCHIAT NEWS
+p203
+sg68
+Nsg99
+(lp204
+(VLEWIN
+VA
+tp205
+asg29
+I2012
+sg64
+VSYCHIAT
+p206
+sbag1
+(g2
+g3
+NtRp207
+(dp208
+g70
+V10.1037/0735-7028.36.3.246
+p209
+sg66
+VPROF PSYCHOL
+p210
+sg68
+V36
+p211
+sg99
+(lp212
+(VMCCASLIN
+VS E
+tp213
+asg29
+I2005
+sg64
+VROF
+p214
+sbag1
+(g2
+g3
+NtRp215
+(dp216
+g70
+V10.1007/s11414-013-9352-0
+p217
+sg66
+VJ BEHAV HEALTH SER R
+p218
+sg68
+V41
+p219
+sg99
+(lp220
+(VMOTT
+VJ M
+tp221
+asg29
+I2014
+sg64
+V99
+p222
+sbag1
+(g2
+g3
+NtRp223
+(dp224
+g70
+Nsg66
+VMPLUS USERS GUIDE
+p225
+sg68
+Nsg99
+(lp226
+(VMUTHEN
+VL
+tp227
+asg29
+I1998
+sg64
+Nsbag1
+(g2
+g3
+NtRp228
+(dp229
+g70
+Nsg66
+VPRIMARY CARE PSYCHIA
+p230
+sg68
+V9
+sg99
+(lp231
+(VPRINS
+VA
+tp232
+asg29
+I2003
+sg64
+VRIMARY
+p233
+sbag1
+(g2
+g3
+NtRp234
+(dp235
+g70
+Nsg66
+VDEEPWATER HORIZON OI
+p236
+sg68
+Nsg99
+(lp237
+(VRAMSEUR
+VJ L
+tp238
+asg29
+I2010
+sg64
+Nsbag1
+(g2
+g3
+NtRp239
+(dp240
+g70
+Nsg66
+VMULTIPLE IMPUTATION
+p241
+sg68
+Nsg99
+(lp242
+(VRUBIN
+VD B
+tp243
+asg29
+I1987
+sg64
+Nsbag1
+(g2
+g3
+NtRp244
+(dp245
+g70
+V10.1176/appi.ajp.2011.11020321
+p246
+sg66
+VAM J PSYCHIAT
+p247
+sg68
+V169
+p248
+sg99
+(lp249
+(VSCHNEIER
+VF R
+tp250
+asg29
+I2012
+sg64
+V80
+p251
+sbag1
+(g2
+g3
+NtRp252
+(dp253
+g70
+V10.1001/archinte.166.10.1092
+p254
+sg66
+VARCH INTERN MED
+p255
+sg68
+V166
+p256
+sg99
+(lp257
+(VSPITZER
+VR L
+tp258
+asg29
+I2006
+sg64
+V1092
+p259
+sbag1
+(g2
+g3
+NtRp260
+(dp261
+g70
+Nsg66
+VJ BEHAV HEALTH SER R
+p262
+sg68
+Nsg99
+(lp263
+(VWILSON
+VF E
+tp264
+asg29
+I2014
+sg64
+V1
+sbag1
+(g2
+g3
+NtRp265
+(dp266
+g70
+V10.1016/j.genhosppsych.2013.12.009
+p267
+sg66
+VGEN HOSP PSYCHIAT
+p268
+sg68
+V36
+p269
+sg99
+(lp270
+(VWITTAYANUKORN
+VS
+tp271
+asg29
+I2014
+sg64
+V330
+p272
+sbasb.

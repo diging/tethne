@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>tethne.writers package &mdash; tethne 1.0 documentation</title>
+    <title>tethne.writers package &mdash; tethne 0.8 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.0',
+        VERSION:     '0.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/js/copybutton.js"></script>
-    <link rel="top" title="tethne 1.0 documentation" href="index.html" >
+    <link rel="top" title="tethne 0.8 documentation" href="index.html" >
     <link rel="up" title="tethne package" href="tethne.html" >
     <link rel="prev" title="tethne.tests package" href="tethne.tests.html" > 
   </head>
@@ -49,7 +49,7 @@
     <ul class="nav nav-pills pull-left">
         <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
 	
-        <li class="active"><a href="index.html">tethne 1.0 documentation</a></li>
+        <li class="active"><a href="index.html">tethne 0.8 documentation</a></li>
 	
           <li class="active"><a href="tethne.html" accesskey="U">tethne package</a></li> 
     </ul>
@@ -88,29 +88,29 @@
 </div>
 <div class="section" id="module-tethne.writers.collection">
 <span id="tethne-writers-collection-module"></span><h2>tethne.writers.collection module<a class="headerlink" href="#module-tethne.writers.collection" title="Permalink to this headline">¶</a></h2>
-<p>Write <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a> to a structured data format.</p>
+<p>Write <a class="reference internal" href="tethne.classes.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a> to a structured data format.</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="tethne.writers.collection.html#tethne.writers.collection.to_dxgmml" title="tethne.writers.collection.to_dxgmml"><code class="xref py py-obj docutils literal"><span class="pre">to_dxgmml</span></code></a>(graphcollection,&nbsp;path)</td>
-<td>Writes a <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a> to <a href="#id1"><span class="problematic" id="id2">`</span></a>dynamic XGMML.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.writers.collection.to_dxgmml" title="tethne.writers.collection.to_dxgmml"><code class="xref py py-obj docutils literal"><span class="pre">to_dxgmml</span></code></a>(graphcollection,&nbsp;path)</td>
+<td>Writes a <a class="reference internal" href="tethne.classes.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a> to <a href="#id1"><span class="problematic" id="id2">`</span></a>dynamic XGMML.</td>
 </tr>
 </tbody>
 </table>
 <dl class="function">
 <dt id="tethne.writers.collection.to_dxgmml">
 <code class="descclassname">tethne.writers.collection.</code><code class="descname">to_dxgmml</code><span class="sig-paren">(</span><em>graphcollection</em>, <em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/writers/collection.html#to_dxgmml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.writers.collection.to_dxgmml" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes a <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a> to
+<dd><p>Writes a <a class="reference internal" href="tethne.classes.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a> to
 <a class="reference external" href="https://code.google.com/p/dynnetwork/wiki/DynamicXGMML">dynamic XGMML.</a>.</p>
 <p>Dynamic XGMML is a schema for describing dynamic networks in Cytoscape 3.0.
 This method assumes that <cite>Graph</cite> indices are orderable points in time
 (e.g. years). The &#8220;start&#8221; and &#8220;end&#8221; of each node and edge are determined by
-periods of consecutive appearance in the <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a> . Node
+periods of consecutive appearance in the <a class="reference internal" href="tethne.classes.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a> . Node
 and edge attributes are defined for each <cite>Graph</cite>. in the
-<a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a>.</p>
+<a class="reference internal" href="tethne.classes.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a>.</p>
 <p>For example, to build and visualize an evolving co-citation network:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Load some data.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
@@ -136,9 +136,9 @@ and edge attributes are defined for each <cite>Graph</cite>. in the
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graphcollection</strong> : <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graphcollection</strong> : <a class="reference internal" href="tethne.classes.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a></p>
 <blockquote>
-<div><p>The <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a> to be written to XGMML.</p>
+<div><p>The <a class="reference internal" href="tethne.classes.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a> to be written to XGMML.</p>
 </div></blockquote>
 <p><strong>path</strong> : str</p>
 <blockquote>
@@ -180,19 +180,19 @@ dates are exclusive. Hence +1 is added to all end dates when writing XGMML.</p>
 &#8216;./mycorpus-mult.dat&#8217;, &#8216;./mycorpus-seq.dat&#8217;, &#8216;mycorpus-vocab.dat&#8217;, and
 &#8216;./mycorpus-meta.dat&#8217;.</p>
 </div></blockquote>
-<p><strong>D</strong> : <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a></p>
+<p><strong>D</strong> : <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a></p>
 <blockquote>
-<div><p>Contains <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> objects generated from the same DfR dataset
+<div><p>Contains <a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> objects generated from the same DfR dataset
 as t_ngrams, indexed by doi and sliced by date.</p>
 </div></blockquote>
 <p><strong>feature</strong> : str</p>
 <blockquote>
-<div><p>(default: &#8216;unigrams&#8217;) Features in <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> to use for
+<div><p>(default: &#8216;unigrams&#8217;) Features in <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> to use for
 modeling.</p>
 </div></blockquote>
 <p><strong>fields</strong> : list</p>
 <blockquote>
-<div><p>(optional) Fields in <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> to include in the metadata file.</p>
+<div><p>(optional) Fields in <a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> to include in the metadata file.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -216,10 +216,10 @@ modeling.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="tethne.writers.graph.html#tethne.writers.graph.write_csv" title="tethne.writers.graph.write_csv"><code class="xref py py-obj docutils literal"><span class="pre">write_csv</span></code></a>(graph,&nbsp;prefix)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.writers.graph.write_csv" title="tethne.writers.graph.write_csv"><code class="xref py py-obj docutils literal"><span class="pre">write_csv</span></code></a>(graph,&nbsp;prefix)</td>
 <td>Write <code class="docutils literal"><span class="pre">graph</span></code> as tables of nodes (<code class="docutils literal"><span class="pre">prefix-nodes.csv</span></code>) and edges (<code class="docutils literal"><span class="pre">prefix-edges.csv</span></code>).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.writers.graph.html#tethne.writers.graph.write_graphml" title="tethne.writers.graph.write_graphml"><code class="xref py py-obj docutils literal"><span class="pre">write_graphml</span></code></a>(graph,&nbsp;path[,&nbsp;encoding,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.writers.graph.write_graphml" title="tethne.writers.graph.write_graphml"><code class="xref py py-obj docutils literal"><span class="pre">write_graphml</span></code></a>(graph,&nbsp;path[,&nbsp;encoding,&nbsp;...])</td>
 <td>Writes graph to <a class="reference external" href="http://graphml.graphdrawing.org/">GraphML</a>.</td>
 </tr>
 </tbody>
@@ -287,7 +287,7 @@ e.g. using &#8221;./graphFolder/graphFile&#8221; will result in a GEXF file at
 <dd><p>Generates Simple Interaction Format output file from provided graph.</p>
 <p>The SIF specification is described
 <a class="reference external" href="http://wiki.cytoscape.org/Cytoscape_User_Manual/Network_Formats">here</a>.</p>
-<p><a class="reference internal" href="tethne.writers.graph.html#tethne.writers.graph.to_sif" title="tethne.writers.graph.to_sif"><code class="xref py py-func docutils literal"><span class="pre">to_sif()</span></code></a> will generate a .sif file describing the network, and a few
+<p><a class="reference internal" href="#tethne.writers.graph.to_sif" title="tethne.writers.graph.to_sif"><code class="xref py py-func docutils literal"><span class="pre">to_sif()</span></code></a> will generate a .sif file describing the network, and a few
 .eda and .noa files containing edge and node attributes, respectively. These
 are equivalent to tab-delimited tables, and can be imported as such in
 Cytoscape 3.0.</p>
@@ -325,7 +325,7 @@ e.g. using &#8221;./graphFolder/graphFile&#8221; will result in a SIF file at
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graph</strong> : <code class="xref py py-class docutils literal"><span class="pre">networkx.Graph</span></code></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graph</strong> : <a class="reference external" href="http://networkx.github.io/documentation/networkx-1.8/reference/classes.graph.html#graph" title="(in NetworkX v1.8)"><span class="xref std std-ref">networkx.Graph</span></a></p>
 <p class="last"><strong>prefix</strong> : str</p>
 </td>
 </tr>
@@ -374,16 +374,16 @@ visualization and analysis. Not yet implemented.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="tethne.writers.collection.html#module-tethne.writers.collection" title="tethne.writers.collection"><code class="xref py py-obj docutils literal"><span class="pre">collection</span></code></a></td>
-<td>Write <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a> to a structured data format.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#module-tethne.writers.collection" title="tethne.writers.collection"><code class="xref py py-obj docutils literal"><span class="pre">collection</span></code></a></td>
+<td>Write <a class="reference internal" href="tethne.classes.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a> to a structured data format.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.writers.graph.html#module-tethne.writers.graph" title="tethne.writers.graph"><code class="xref py py-obj docutils literal"><span class="pre">graph</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#module-tethne.writers.graph" title="tethne.writers.graph"><code class="xref py py-obj docutils literal"><span class="pre">graph</span></code></a></td>
 <td>Write NetworkX graphs to structured and unstructured network file formats.</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">corpora</span></code></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.writers.matrix.html#module-tethne.writers.matrix" title="tethne.writers.matrix"><code class="xref py py-obj docutils literal"><span class="pre">matrix</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#module-tethne.writers.matrix" title="tethne.writers.matrix"><code class="xref py py-obj docutils literal"><span class="pre">matrix</span></code></a></td>
 <td>Methods for writing matrices to commonly-used file formats, for external visualization and analysis.</td>
 </tr>
 </tbody>

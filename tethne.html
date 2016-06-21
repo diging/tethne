@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>tethne package &mdash; tethne 1.0 documentation</title>
+    <title>tethne package &mdash; tethne 0.8 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.0',
+        VERSION:     '0.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/js/copybutton.js"></script>
-    <link rel="top" title="tethne 1.0 documentation" href="index.html" >
+    <link rel="top" title="tethne 0.8 documentation" href="index.html" >
     <link rel="next" title="tethne.analyze package" href="tethne.analyze.html" >
-    <link rel="prev" title="A Closer Look at Corpora" href="tutorial.corpora.html" > 
+    <link rel="prev" title="Generating and Visualizing Topic Models with Tethne and MALLET" href="tutorial.mallet.html" > 
   </head>
   <body>
 
@@ -49,7 +49,7 @@
     <ul class="nav nav-pills pull-left">
         <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
 	
-        <li class="active"><a href="index.html">tethne 1.0 documentation</a></li>
+        <li class="active"><a href="index.html">tethne 0.8 documentation</a></li>
 	 
     </ul>
               
@@ -68,7 +68,7 @@
            accesskey="N">next</a>
       </li>
       <li class="active">
-        <a href="tutorial.corpora.html" title="A Closer Look at Corpora"
+        <a href="tutorial.mallet.html" title="Generating and Visualizing Topic Models with Tethne and MALLET"
            accesskey="P">previous</a>
       </li>
     </ul>
@@ -111,7 +111,14 @@
 <li class="toctree-l2"><a class="reference internal" href="tethne.classes.html#module-tethne.classes.feature">tethne.classes.feature module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.classes.html#module-tethne.classes.graphcollection">tethne.classes.graphcollection module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.classes.html#module-tethne.classes.paper">tethne.classes.paper module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.classes.html#module-tethne.classes.streaming">tethne.classes.streaming module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.classes.html#module-tethne.classes">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tethne.dao.html">tethne.dao package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tethne.dao.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.dao.html#module-tethne.dao.tethnedao">tethne.dao.tethnedao module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.dao.html#module-tethne.dao">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tethne.model.html">tethne.model package</a><ul>
@@ -149,38 +156,47 @@
 <li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#module-tethne.readers.base">tethne.readers.base module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#module-tethne.readers.dfr">tethne.readers.dfr module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#tethne-readers-dspace-module">tethne.readers.dspace module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#tethne-readers-scopus-module">tethne.readers.scopus module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#module-tethne.readers.dspace">tethne.readers.dspace module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#module-tethne.readers.scopus">tethne.readers.scopus module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#module-tethne.readers.wos">tethne.readers.wos module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#module-tethne.readers.zotero">tethne.readers.zotero module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tethne.readers.html#module-tethne.readers">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="tethne.serialize.html">tethne.serialize package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tethne.serialize.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.serialize.html#module-tethne.serialize.paper">tethne.serialize.paper module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.serialize.html#module-tethne.serialize">Module contents</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="tethne.tests.html">tethne.tests package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-analyze-corpus-module">tethne.tests.test_analyze_corpus module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-analyze-features-module">tethne.tests.test_analyze_features module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-analyze-graph-module">tethne.tests.test_analyze_graph module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-classes-corpus-module">tethne.tests.test_classes_corpus module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-classes-feature-module">tethne.tests.test_classes_feature module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-classes-graphcollection-module">tethne.tests.test_classes_graphcollection module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-classes-structuredfeature-module">tethne.tests.test_classes_structuredfeature module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-model-social-tapmodel-module">tethne.tests.test_model_social_tapmodel module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-models-lda-module">tethne.tests.test_models_lda module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-networks-authors-module">tethne.tests.test_networks_authors module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-networks-base-module">tethne.tests.test_networks_base module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-networks-features-module">tethne.tests.test_networks_features module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-networks-papers-module">tethne.tests.test_networks_papers module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-readers-base-module">tethne.tests.test_readers_base module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-readers-dfr-module">tethne.tests.test_readers_dfr module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-readers-merge-module">tethne.tests.test_readers_merge module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-readers-wos-module">tethne.tests.test_readers_wos module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-readers-zotero-module">tethne.tests.test_readers_zotero module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-utilities-module">tethne.tests.test_utilities module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-writers-collection-module">tethne.tests.test_writers_collection module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-writers-corpus-module">tethne.tests.test_writers_corpus module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#tethne-tests-test-writers-graph-module">tethne.tests.test_writers_graph module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_analyze_corpus">tethne.tests.test_analyze_corpus module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_analyze_features">tethne.tests.test_analyze_features module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_analyze_graph">tethne.tests.test_analyze_graph module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_classes_corpus">tethne.tests.test_classes_corpus module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_classes_feature">tethne.tests.test_classes_feature module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_classes_graphcollection">tethne.tests.test_classes_graphcollection module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_classes_streamingcorpus">tethne.tests.test_classes_streamingcorpus module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_classes_structuredfeature">tethne.tests.test_classes_structuredfeature module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_model_social_tapmodel">tethne.tests.test_model_social_tapmodel module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_models_lda">tethne.tests.test_models_lda module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_networks_authors">tethne.tests.test_networks_authors module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_networks_base">tethne.tests.test_networks_base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_networks_features">tethne.tests.test_networks_features module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_networks_helpers">tethne.tests.test_networks_helpers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_networks_papers">tethne.tests.test_networks_papers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_readers_base">tethne.tests.test_readers_base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_readers_dfr">tethne.tests.test_readers_dfr module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_readers_merge">tethne.tests.test_readers_merge module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_readers_scopus">tethne.tests.test_readers_scopus module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_readers_wos">tethne.tests.test_readers_wos module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_readers_zotero">tethne.tests.test_readers_zotero module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_utilities">tethne.tests.test_utilities module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_writers_collection">tethne.tests.test_writers_collection module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_writers_corpus">tethne.tests.test_writers_corpus module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests.test_writers_graph">tethne.tests.test_writers_graph module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tethne.tests.html#module-tethne.tests">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tethne.writers.html">tethne.writers package</a><ul>
@@ -214,7 +230,8 @@
 <dl class="method">
 <dt id="tethne.utilities.MLStripper.feed">
 <code class="descname">feed</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/utilities.html#MLStripper.feed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.utilities.MLStripper.feed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>added this check as sometimes we are getting the data in integer format instead of string</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="tethne.utilities.MLStripper.get_data">
@@ -398,7 +415,7 @@ models, and social influence models.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="tethne.analyze.html#module-tethne.analyze" title="tethne.analyze"><code class="xref py py-obj docutils literal"><span class="pre">analyze</span></code></a></td>
-<td>Methods for analyzing <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a>, <a class="reference internal" href="tethne.classes.graphcollection.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a>, and  <code class="docutils literal"><span class="pre">networkx.Graph</span></code> objects.</td>
+<td>Methods for analyzing <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a>, <a class="reference internal" href="tethne.classes.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a>, and  <code class="docutils literal"><span class="pre">networkx.Graph</span></code> objects.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="tethne.classes.html#module-tethne.classes" title="tethne.classes"><code class="xref py py-obj docutils literal"><span class="pre">classes</span></code></a></td>
 <td>The <a class="reference internal" href="tethne.classes.html#module-tethne.classes" title="tethne.classes"><code class="xref py py-mod docutils literal"><span class="pre">classes</span></code></a> package provides the fundamental classes for working with bibliographic data in Tethne.</td>
@@ -441,8 +458,8 @@ models, and social influence models.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="tutorial.corpora.html"
-                        title="previous chapter">A Closer Look at Corpora</a></p>
+  <p class="topless"><a href="tutorial.mallet.html"
+                        title="previous chapter">Generating and Visualizing Topic Models with Tethne and MALLET</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="tethne.analyze.html"
                         title="next chapter">tethne.analyze package</a></p>

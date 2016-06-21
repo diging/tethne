@@ -1,0 +1,4 @@
+.. _graphs:
+
+Building Graphs
+===============

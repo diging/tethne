@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>tethne.readers package &mdash; tethne 1.0 documentation</title>
+    <title>tethne.readers package &mdash; tethne 0.8 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.0',
+        VERSION:     '0.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/js/copybutton.js"></script>
-    <link rel="top" title="tethne 1.0 documentation" href="index.html" >
+    <link rel="top" title="tethne 0.8 documentation" href="index.html" >
     <link rel="up" title="tethne package" href="tethne.html" >
-    <link rel="next" title="tethne.tests package" href="tethne.tests.html" >
+    <link rel="next" title="tethne.serialize package" href="tethne.serialize.html" >
     <link rel="prev" title="tethne.plot package" href="tethne.plot.html" > 
   </head>
   <body>
@@ -50,7 +50,7 @@
     <ul class="nav nav-pills pull-left">
         <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
 	
-        <li class="active"><a href="index.html">tethne 1.0 documentation</a></li>
+        <li class="active"><a href="index.html">tethne 0.8 documentation</a></li>
 	
           <li class="active"><a href="tethne.html" accesskey="U">tethne package</a></li> 
     </ul>
@@ -66,7 +66,7 @@
            >modules</a>
       </li>
       <li class="active">
-        <a href="tethne.tests.html" title="tethne.tests package"
+        <a href="tethne.serialize.html" title="tethne.serialize package"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -119,7 +119,7 @@
 <dl class="class">
 <dt id="tethne.readers.base.FTParser">
 <em class="property">class </em><code class="descclassname">tethne.readers.base.</code><code class="descname">FTParser</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/base.html#FTParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.base.FTParser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="tethne.readers.base.html#tethne.readers.base.IterParser" title="tethne.readers.base.IterParser"><code class="xref py py-class docutils literal"><span class="pre">tethne.readers.base.IterParser</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#tethne.readers.base.IterParser" title="tethne.readers.base.IterParser"><code class="xref py py-class docutils literal"><span class="pre">tethne.readers.base.IterParser</span></code></a></p>
 <p>Base parser for field-tagged data files.</p>
 <dl class="attribute">
 <dt id="tethne.readers.base.FTParser.end_tag">
@@ -175,7 +175,7 @@
 <dl class="class">
 <dt id="tethne.readers.base.IterParser">
 <em class="property">class </em><code class="descclassname">tethne.readers.base.</code><code class="descname">IterParser</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/base.html#IterParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.base.IterParser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="tethne.readers.base.html#tethne.readers.base.BaseParser" title="tethne.readers.base.BaseParser"><code class="xref py py-class docutils literal"><span class="pre">tethne.readers.base.BaseParser</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#tethne.readers.base.BaseParser" title="tethne.readers.base.BaseParser"><code class="xref py py-class docutils literal"><span class="pre">tethne.readers.base.BaseParser</span></code></a></p>
 <dl class="attribute">
 <dt id="tethne.readers.base.IterParser.concat_fields">
 <code class="descname">concat_fields</code><em class="property"> = []</em><a class="headerlink" href="#tethne.readers.base.IterParser.concat_fields" title="Permalink to this definition">¶</a></dt>
@@ -187,7 +187,7 @@ as lists.</p>
 <dt id="tethne.readers.base.IterParser.entry_class">
 <code class="descname">entry_class</code><a class="headerlink" href="#tethne.readers.base.IterParser.entry_class" title="Permalink to this definition">¶</a></dt>
 <dd><p>Model for data entry.</p>
-<p>alias of <a class="reference internal" href="tethne.readers.base.html#tethne.readers.base.dobject" title="tethne.readers.base.dobject"><code class="xref py py-class docutils literal"><span class="pre">dobject</span></code></a></p>
+<p>alias of <a class="reference internal" href="#tethne.readers.base.dobject" title="tethne.readers.base.dobject"><code class="xref py py-class docutils literal"><span class="pre">dobject</span></code></a></p>
 </dd></dl>
 
 <dl class="method">
@@ -208,7 +208,7 @@ as lists.</p>
 
 <dl class="method">
 <dt id="tethne.readers.base.IterParser.parse">
-<code class="descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/base.html#IterParser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.base.IterParser.parse" title="Permalink to this definition">¶</a></dt>
+<code class="descname">parse</code><span class="sig-paren">(</span><em>parse_only=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/base.html#IterParser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.base.IterParser.parse" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -227,7 +227,7 @@ as lists.</p>
 <dl class="class">
 <dt id="tethne.readers.base.RDFParser">
 <em class="property">class </em><code class="descclassname">tethne.readers.base.</code><code class="descname">RDFParser</code><span class="sig-paren">(</span><em>path</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/base.html#RDFParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.base.RDFParser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="tethne.readers.base.html#tethne.readers.base.BaseParser" title="tethne.readers.base.BaseParser"><code class="xref py py-class docutils literal"><span class="pre">tethne.readers.base.BaseParser</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#tethne.readers.base.BaseParser" title="tethne.readers.base.BaseParser"><code class="xref py py-class docutils literal"><span class="pre">tethne.readers.base.BaseParser</span></code></a></p>
 <dl class="attribute">
 <dt id="tethne.readers.base.RDFParser.concat_fields">
 <code class="descname">concat_fields</code><em class="property"> = []</em><a class="headerlink" href="#tethne.readers.base.RDFParser.concat_fields" title="Permalink to this definition">¶</a></dt>
@@ -268,11 +268,11 @@ as lists.</p>
 <dl class="class">
 <dt id="tethne.readers.base.XMLParser">
 <em class="property">class </em><code class="descclassname">tethne.readers.base.</code><code class="descname">XMLParser</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/base.html#XMLParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.base.XMLParser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="tethne.readers.base.html#tethne.readers.base.IterParser" title="tethne.readers.base.IterParser"><code class="xref py py-class docutils literal"><span class="pre">tethne.readers.base.IterParser</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#tethne.readers.base.IterParser" title="tethne.readers.base.IterParser"><code class="xref py py-class docutils literal"><span class="pre">tethne.readers.base.IterParser</span></code></a></p>
 <dl class="attribute">
 <dt id="tethne.readers.base.XMLParser.entry_class">
 <code class="descname">entry_class</code><a class="headerlink" href="#tethne.readers.base.XMLParser.entry_class" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="tethne.readers.base.html#tethne.readers.base.dobject" title="tethne.readers.base.dobject"><code class="xref py py-class docutils literal"><span class="pre">dobject</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="#tethne.readers.base.dobject" title="tethne.readers.base.dobject"><code class="xref py py-class docutils literal"><span class="pre">dobject</span></code></a></p>
 </dd></dl>
 
 <dl class="attribute">
@@ -296,13 +296,29 @@ as lists.</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="tethne.readers.base.XMLParser.new_entry">
+<code class="descname">new_entry</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/base.html#XMLParser.new_entry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.base.XMLParser.new_entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare a new data entry.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="tethne.readers.base.XMLParser.next">
-<code class="descname">next</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/base.html#XMLParser.next"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.base.XMLParser.next" title="Permalink to this definition">¶</a></dt>
+<code class="descname">next</code><span class="sig-paren">(</span><em>child</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/base.html#XMLParser.next"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.base.XMLParser.next" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="tethne.readers.base.XMLParser.open">
 <code class="descname">open</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/base.html#XMLParser.open"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.base.XMLParser.open" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="tethne.readers.base.XMLParser.parse">
+<code class="descname">parse</code><span class="sig-paren">(</span><em>parse_only=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/base.html#XMLParser.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.base.XMLParser.parse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="tethne.readers.base.XMLParser.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/base.html#XMLParser.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.base.XMLParser.start" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -328,7 +344,7 @@ as lists.</p>
 <dl class="class">
 <dt id="tethne.readers.dfr.DfRParser">
 <em class="property">class </em><code class="descclassname">tethne.readers.dfr.</code><code class="descname">DfRParser</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/dfr.html#DfRParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.dfr.DfRParser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="tethne.readers.base.html#tethne.readers.base.XMLParser" title="tethne.readers.base.XMLParser"><code class="xref py py-class docutils literal"><span class="pre">tethne.readers.base.XMLParser</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#tethne.readers.base.XMLParser" title="tethne.readers.base.XMLParser"><code class="xref py py-class docutils literal"><span class="pre">tethne.readers.base.XMLParser</span></code></a></p>
 <dl class="attribute">
 <dt id="tethne.readers.dfr.DfRParser.entry_class">
 <code class="descname">entry_class</code><a class="headerlink" href="#tethne.readers.dfr.DfRParser.entry_class" title="Permalink to this definition">¶</a></dt>
@@ -384,19 +400,19 @@ as lists.</p>
 <p>Yields N-gram data from on-disk dataset, to make loading big datasets a bit
 more memory-friendly.</p>
 <p>Reusable, in the sense that <code class="xref py py-func docutils literal"><span class="pre">items()</span></code>, <code class="xref py py-func docutils literal"><span class="pre">items()</span></code>,
-<code class="xref py py-func docutils literal"><span class="pre">keys()</span></code>, and <code class="xref py py-func docutils literal"><span class="pre">values()</span></code> all return new <a class="reference internal" href="tethne.readers.dfr.html#tethne.readers.dfr.GramGenerator" title="tethne.readers.dfr.GramGenerator"><code class="xref py py-class docutils literal"><span class="pre">GramGenerator</span></code></a>
-instances with the same path. This allows a <a class="reference internal" href="tethne.readers.dfr.html#tethne.readers.dfr.GramGenerator" title="tethne.readers.dfr.GramGenerator"><code class="xref py py-class docutils literal"><span class="pre">GramGenerator</span></code></a> to
+<code class="xref py py-func docutils literal"><span class="pre">keys()</span></code>, and <code class="xref py py-func docutils literal"><span class="pre">values()</span></code> all return new <a class="reference internal" href="#tethne.readers.dfr.GramGenerator" title="tethne.readers.dfr.GramGenerator"><code class="xref py py-class docutils literal"><span class="pre">GramGenerator</span></code></a>
+instances with the same path. This allows a <a class="reference internal" href="#tethne.readers.dfr.GramGenerator" title="tethne.readers.dfr.GramGenerator"><code class="xref py py-class docutils literal"><span class="pre">GramGenerator</span></code></a> to
 sneakily pass as an ngrams dict in most practical situations.</p>
 <dl class="method">
 <dt id="tethne.readers.dfr.GramGenerator.items">
 <code class="descname">items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/dfr.html#GramGenerator.items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.dfr.GramGenerator.items" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <a class="reference internal" href="tethne.readers.dfr.html#tethne.readers.dfr.GramGenerator" title="tethne.readers.dfr.GramGenerator"><code class="xref py py-class docutils literal"><span class="pre">GramGenerator</span></code></a> that produces key,value tuples.</p>
+<dd><p>Returns a <a class="reference internal" href="#tethne.readers.dfr.GramGenerator" title="tethne.readers.dfr.GramGenerator"><code class="xref py py-class docutils literal"><span class="pre">GramGenerator</span></code></a> that produces key,value tuples.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="tethne.readers.dfr.GramGenerator.keys">
 <code class="descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/dfr.html#GramGenerator.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.dfr.GramGenerator.keys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <a class="reference internal" href="tethne.readers.dfr.html#tethne.readers.dfr.GramGenerator" title="tethne.readers.dfr.GramGenerator"><code class="xref py py-class docutils literal"><span class="pre">GramGenerator</span></code></a> that produces only keys.</p>
+<dd><p>Returns a <a class="reference internal" href="#tethne.readers.dfr.GramGenerator" title="tethne.readers.dfr.GramGenerator"><code class="xref py py-class docutils literal"><span class="pre">GramGenerator</span></code></a> that produces only keys.</p>
 </dd></dl>
 
 <dl class="method">
@@ -407,7 +423,7 @@ sneakily pass as an ngrams dict in most practical situations.</p>
 <dl class="method">
 <dt id="tethne.readers.dfr.GramGenerator.values">
 <code class="descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/dfr.html#GramGenerator.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.dfr.GramGenerator.values" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <a class="reference internal" href="tethne.readers.dfr.html#tethne.readers.dfr.GramGenerator" title="tethne.readers.dfr.GramGenerator"><code class="xref py py-class docutils literal"><span class="pre">GramGenerator</span></code></a> that produces only values.</p>
+<dd><p>Returns a <a class="reference internal" href="#tethne.readers.dfr.GramGenerator" title="tethne.readers.dfr.GramGenerator"><code class="xref py py-class docutils literal"><span class="pre">GramGenerator</span></code></a> that produces only values.</p>
 </dd></dl>
 
 </dd></dl>
@@ -434,7 +450,7 @@ sneakily pass as an ngrams dict in most practical situations.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ngrams</strong> : <a class="reference internal" href="tethne.classes.feature.html#tethne.classes.feature.FeatureSet" title="tethne.classes.feature.FeatureSet"><code class="xref py py-class docutils literal"><span class="pre">FeatureSet</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>ngrams</strong> : <a class="reference internal" href="tethne.classes.html#tethne.classes.feature.FeatureSet" title="tethne.classes.feature.FeatureSet"><code class="xref py py-class docutils literal"><span class="pre">FeatureSet</span></code></a></p>
 </td>
 </tr>
 </tbody>
@@ -443,9 +459,9 @@ sneakily pass as an ngrams dict in most practical situations.</p>
 
 <dl class="function">
 <dt id="tethne.readers.dfr.read">
-<code class="descclassname">tethne.readers.dfr.</code><code class="descname">read</code><span class="sig-paren">(</span><em>path</em>, <em>corpus=True</em>, <em>index_by='doi'</em>, <em>load_ngrams=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/dfr.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.dfr.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Yields <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> s from JSTOR DfR package.</p>
-<p>Each <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> is tagged with an accession id for this
+<code class="descclassname">tethne.readers.dfr.</code><code class="descname">read</code><span class="sig-paren">(</span><em>path</em>, <em>corpus=True</em>, <em>index_by='doi'</em>, <em>load_ngrams=True</em>, <em>parse_only=None</em>, <em>corpus_class=&lt;class 'tethne.classes.corpus.Corpus'&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/dfr.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.dfr.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yields <a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> s from JSTOR DfR package.</p>
+<p>Each <a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> is tagged with an accession id for this
 read/conversion.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -459,7 +475,7 @@ read/conversion.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>papers</strong> : list</p>
 <blockquote class="last">
-<div><p>A list of <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> objects.</p>
+<div><p>A list of <a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> objects.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -471,6 +487,11 @@ read/conversion.</p>
 </pre></div>
 </div>
 </dd></dl>
+
+<dl class="function">
+<dt id="tethne.readers.dfr.streaming_read">
+<code class="descclassname">tethne.readers.dfr.</code><code class="descname">streaming_read</code><span class="sig-paren">(</span><em>path</em>, <em>corpus=True</em>, <em>index_by='doi'</em>, <em>parse_only=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/dfr.html#streaming_read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.dfr.streaming_read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="tethne.readers.dfr.tokenize">
@@ -510,19 +531,29 @@ stoplist.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="tethne-readers-dspace-module">
-<h2>tethne.readers.dspace module<a class="headerlink" href="#tethne-readers-dspace-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-tethne.readers.dspace">
+<span id="tethne-readers-dspace-module"></span><h2>tethne.readers.dspace module<a class="headerlink" href="#module-tethne.readers.dspace" title="Permalink to this headline">¶</a></h2>
+<p>Reader for the DuraSpace API.</p>
+<p>This module is not yet implemented. Earlier versions of Tethne had a crude
+method for reading data from an old REST API. The current version of DuraSpace
+has a very different API, and we ought to write a much better client.</p>
+<p>Stay tuned!</p>
 </div>
-<div class="section" id="tethne-readers-scopus-module">
-<h2>tethne.readers.scopus module<a class="headerlink" href="#tethne-readers-scopus-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-tethne.readers.scopus">
+<span id="tethne-readers-scopus-module"></span><h2>tethne.readers.scopus module<a class="headerlink" href="#module-tethne.readers.scopus" title="Permalink to this headline">¶</a></h2>
+<p>Reader for Scopus bibliographic database.</p>
+<p>Earlier versions of Tethne had limited support for Scopus. As of 0.8, we&#8217;ve
+moved away from Scopus due to (a) lack of access, and (b) lack of time. If
+you&#8217;re interested in using Scopus data in Tethne, please consider contributing
+to the project.</p>
 </div>
 <div class="section" id="module-tethne.readers.wos">
 <span id="tethne-readers-wos-module"></span><h2>tethne.readers.wos module<a class="headerlink" href="#module-tethne.readers.wos" title="Permalink to this headline">¶</a></h2>
 <p>Parser for Web of Science field-tagged bibliographic data.</p>
 <p>Tethne parsers Web of Science field-tagged data into a set of
-<a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s, which are then encapsulated in a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a>. The
-<a class="reference internal" href="tethne.readers.wos.html#tethne.readers.wos.WoSParser" title="tethne.readers.wos.WoSParser"><code class="xref py py-class docutils literal"><span class="pre">WoSParser</span></code></a> can be instantiated directly, or you can simply use
-<a class="reference internal" href="tethne.readers.wos.html#tethne.readers.wos.read" title="tethne.readers.wos.read"><code class="xref py py-func docutils literal"><span class="pre">read()</span></code></a> to parse a single file or a directory containing several data
+<a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s, which are then encapsulated in a <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a>. The
+<a class="reference internal" href="#tethne.readers.wos.WoSParser" title="tethne.readers.wos.WoSParser"><code class="xref py py-class docutils literal"><span class="pre">WoSParser</span></code></a> can be instantiated directly, or you can simply use
+<a class="reference internal" href="#tethne.readers.wos.read" title="tethne.readers.wos.read"><code class="xref py py-func docutils literal"><span class="pre">read()</span></code></a> to parse a single file or a directory containing several data
 files.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">wos</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span> <span class="o">=</span> <span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/path/to/some/wos/data&quot;</span><span class="p">)</span>
@@ -533,7 +564,7 @@ files.</p>
 <dl class="class">
 <dt id="tethne.readers.wos.WoSParser">
 <em class="property">class </em><code class="descclassname">tethne.readers.wos.</code><code class="descname">WoSParser</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/wos.html#WoSParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.WoSParser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="tethne.readers.base.html#tethne.readers.base.FTParser" title="tethne.readers.base.FTParser"><code class="xref py py-class docutils literal"><span class="pre">tethne.readers.base.FTParser</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#tethne.readers.base.FTParser" title="tethne.readers.base.FTParser"><code class="xref py py-class docutils literal"><span class="pre">tethne.readers.base.FTParser</span></code></a></p>
 <p>Parser for Web of Science field-tagged data.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers.wos</span> <span class="kn">import</span> <span class="n">WoSParser</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span> <span class="o">=</span> <span class="n">WoSParser</span><span class="p">(</span><span class="s">&quot;/path/to/download.txt&quot;</span><span class="p">)</span>
@@ -602,6 +633,13 @@ This can be changed to support more sophisticated data models.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="tethne.readers.wos.WoSParser.postprocess_WC">
+<code class="descname">postprocess_WC</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/wos.html#WoSParser.postprocess_WC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.WoSParser.postprocess_WC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse WC keywords.</p>
+<p>Subject keywords are usually semicolon-delimited.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="tethne.readers.wos.WoSParser.postprocess_authorKeywords">
 <code class="descname">postprocess_authorKeywords</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/wos.html#WoSParser.postprocess_authorKeywords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.WoSParser.postprocess_authorKeywords" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse author keywords.</p>
@@ -642,6 +680,13 @@ nonetheless a list.</p>
 <p>Keyword Plus keywords are usually semicolon-delimited.</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="tethne.readers.wos.WoSParser.postprocess_subject">
+<code class="descname">postprocess_subject</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/wos.html#WoSParser.postprocess_subject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.WoSParser.postprocess_subject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse subject keywords.</p>
+<p>Subject keywords are usually semicolon-delimited.</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="tethne.readers.wos.WoSParser.start_tag">
 <code class="descname">start_tag</code><em class="property"> = 'PT'</em><a class="headerlink" href="#tethne.readers.wos.WoSParser.start_tag" title="Permalink to this definition">¶</a></dt>
@@ -668,7 +713,7 @@ nonetheless a list.</p>
 
 <dl class="function">
 <dt id="tethne.readers.wos.read">
-<code class="descclassname">tethne.readers.wos.</code><code class="descname">read</code><span class="sig-paren">(</span><em>path</em>, <em>corpus=True</em>, <em>index_by='wosid'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/wos.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.read" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">tethne.readers.wos.</code><code class="descname">read</code><span class="sig-paren">(</span><em>path</em>, <em>corpus=True</em>, <em>index_by='wosid'</em>, <em>streaming=False</em>, <em>parse_only=None</em>, <em>corpus_class=&lt;class 'tethne.classes.corpus.Corpus'&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/wos.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse one or more WoS field-tagged data files.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -681,16 +726,23 @@ file, or to a directory containing several data files.</p>
 </div></blockquote>
 <p><strong>corpus</strong> : bool</p>
 <blockquote>
-<div><p>If True (default), returns a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a>. If False, will return
-only a list of <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s.</p>
+<div><p>If True (default), returns a <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a>. If False, will return
+only a list of <a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> or <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> or <a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a></p>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">wos</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span> <span class="o">=</span> <span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/path/to/some/wos/data&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span>
+<span class="go">&lt;tethne.classes.corpus.Corpus object at 0x10057c2d0&gt;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -698,9 +750,14 @@ only a list of <a class="reference internal" href="tethne.classes.paper.html#tet
 <code class="descclassname">tethne.readers.wos.</code><code class="descname">read_corpus</code><span class="sig-paren">(</span><em>path</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/wos.html#read_corpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.read_corpus" title="Permalink to this definition">¶</a></dt>
 <dd><div class="admonition danger">
 <p class="first admonition-title">Danger</p>
-<p class="last">read_corpus is deprecated in v0.8, use <a class="reference internal" href="tethne.readers.wos.html#tethne.readers.wos.read" title="tethne.readers.wos.read"><code class="xref py py-func docutils literal"><span class="pre">read()</span></code></a> instead.</p>
+<p class="last">read_corpus is deprecated in v0.8, use <a class="reference internal" href="#tethne.readers.wos.read" title="tethne.readers.wos.read"><code class="xref py py-func docutils literal"><span class="pre">read()</span></code></a> instead.</p>
 </div>
 </dd></dl>
+
+<dl class="function">
+<dt id="tethne.readers.wos.streaming_read">
+<code class="descclassname">tethne.readers.wos.</code><code class="descname">streaming_read</code><span class="sig-paren">(</span><em>path</em>, <em>corpus=True</em>, <em>index_by='wosid'</em>, <em>parse_only=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/wos.html#streaming_read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.streaming_read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-tethne.readers.zotero">
@@ -708,7 +765,7 @@ only a list of <a class="reference internal" href="tethne.classes.paper.html#tet
 <dl class="class">
 <dt id="tethne.readers.zotero.ZoteroParser">
 <em class="property">class </em><code class="descclassname">tethne.readers.zotero.</code><code class="descname">ZoteroParser</code><span class="sig-paren">(</span><em>path</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/zotero.html#ZoteroParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.zotero.ZoteroParser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="tethne.readers.base.html#tethne.readers.base.RDFParser" title="tethne.readers.base.RDFParser"><code class="xref py py-class docutils literal"><span class="pre">tethne.readers.base.RDFParser</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#tethne.readers.base.RDFParser" title="tethne.readers.base.RDFParser"><code class="xref py py-class docutils literal"><span class="pre">tethne.readers.base.RDFParser</span></code></a></p>
 <p>Reads Zotero RDF files.</p>
 <dl class="attribute">
 <dt id="tethne.readers.zotero.ZoteroParser.entry_class">
@@ -720,6 +777,25 @@ only a list of <a class="reference internal" href="tethne.classes.paper.html#tet
 <dt id="tethne.readers.zotero.ZoteroParser.entry_elements">
 <code class="descname">entry_elements</code><em class="property"> = ['bib:Illustration', 'bib:Recording', 'bib:Legislation', 'bib:Document', 'bib:BookSection', 'bib:Book', 'bib:Data', 'bib:Letter', 'bib:Report', 'bib:Article', 'bib:Manuscript', 'bib:Image', 'bib:ConferenceProceedings', 'bib:Thesis']</em><a class="headerlink" href="#tethne.readers.zotero.ZoteroParser.entry_elements" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="tethne.readers.zotero.ZoteroParser.handle_abstract">
+<code class="descname">handle_abstract</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/zotero.html#ZoteroParser.handle_abstract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.zotero.ZoteroParser.handle_abstract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract handler.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">abstract.toPython()</p>
+<p class="last">Basically, RDF literals are casted to their corresponding Python data types.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="tethne.readers.zotero.ZoteroParser.handle_author">
@@ -740,7 +816,20 @@ only a list of <a class="reference internal" href="tethne.classes.paper.html#tet
 <dl class="method">
 <dt id="tethne.readers.zotero.ZoteroParser.handle_documentType">
 <code class="descname">handle_documentType</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/zotero.html#ZoteroParser.handle_documentType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.zotero.ZoteroParser.handle_documentType" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">value.toPython()</p>
+<p class="last">Basically, RDF literals are casted to their corresponding Python data types.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="tethne.readers.zotero.ZoteroParser.handle_identifier">
@@ -762,6 +851,23 @@ only a list of <a class="reference internal" href="tethne.classes.paper.html#tet
 <dt id="tethne.readers.zotero.ZoteroParser.handle_pages">
 <code class="descname">handle_pages</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/zotero.html#ZoteroParser.handle_pages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.zotero.ZoteroParser.handle_pages" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="tethne.readers.zotero.ZoteroParser.handle_title">
+<code class="descname">handle_title</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/zotero.html#ZoteroParser.handle_title"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.zotero.ZoteroParser.handle_title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Title handler
+Parameters
+&#8212;&#8212;&#8212;-
+value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">title.toPython()</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="tethne.readers.zotero.ZoteroParser.meta_elements">
@@ -808,9 +914,9 @@ as an attribute of <code class="docutils literal"><span class="pre">link:link</s
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><a class="reference internal" href="tethne.classes.feature.html#tethne.classes.feature.StructuredFeature" title="tethne.classes.feature.StructuredFeature"><code class="xref py py-class docutils literal"><span class="pre">StructuredFeature</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><a class="reference internal" href="tethne.classes.html#tethne.classes.feature.StructuredFeature" title="tethne.classes.feature.StructuredFeature"><code class="xref py py-class docutils literal"><span class="pre">StructuredFeature</span></code></a></p>
 <blockquote class="last">
-<div><p>A <a class="reference internal" href="tethne.classes.feature.html#tethne.classes.feature.StructuredFeature" title="tethne.classes.feature.StructuredFeature"><code class="xref py py-class docutils literal"><span class="pre">StructuredFeature</span></code></a> that contains page and sentence contexts.</p>
+<div><p>A <a class="reference internal" href="tethne.classes.html#tethne.classes.feature.StructuredFeature" title="tethne.classes.feature.StructuredFeature"><code class="xref py py-class docutils literal"><span class="pre">StructuredFeature</span></code></a> that contains page and sentence contexts.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -832,9 +938,9 @@ as an attribute of <code class="docutils literal"><span class="pre">link:link</s
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><a class="reference internal" href="tethne.classes.feature.html#tethne.classes.feature.StructuredFeature" title="tethne.classes.feature.StructuredFeature"><code class="xref py py-class docutils literal"><span class="pre">StructuredFeature</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><a class="reference internal" href="tethne.classes.html#tethne.classes.feature.StructuredFeature" title="tethne.classes.feature.StructuredFeature"><code class="xref py py-class docutils literal"><span class="pre">StructuredFeature</span></code></a></p>
 <blockquote class="last">
-<div><p>A <a class="reference internal" href="tethne.classes.feature.html#tethne.classes.feature.StructuredFeature" title="tethne.classes.feature.StructuredFeature"><code class="xref py py-class docutils literal"><span class="pre">StructuredFeature</span></code></a> that contains sentence context.</p>
+<div><p>A <a class="reference internal" href="tethne.classes.html#tethne.classes.feature.StructuredFeature" title="tethne.classes.feature.StructuredFeature"><code class="xref py py-class docutils literal"><span class="pre">StructuredFeature</span></code></a> that contains sentence context.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -844,7 +950,7 @@ as an attribute of <code class="docutils literal"><span class="pre">link:link</s
 
 <dl class="function">
 <dt id="tethne.readers.zotero.read">
-<code class="descclassname">tethne.readers.zotero.</code><code class="descname">read</code><span class="sig-paren">(</span><em>path</em>, <em>corpus=True</em>, <em>index_by='uri'</em>, <em>follow_links=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/zotero.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.zotero.read" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">tethne.readers.zotero.</code><code class="descname">read</code><span class="sig-paren">(</span><em>path</em>, <em>corpus=True</em>, <em>index_by='uri'</em>, <em>follow_links=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/zotero.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.zotero.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read bibliographic data from Zotero RDF.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -857,32 +963,43 @@ file called <code class="docutils literal"><span class="pre">[directory_name].rd
 </div></blockquote>
 <p><strong>corpus</strong> : bool</p>
 <blockquote>
-<div><p>(default: True) If True, returns a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a>. Otherwise,
-returns a list of <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s.</p>
+<div><p>(default: True) If True, returns a <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a>. Otherwise,
+returns a list of <a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s.</p>
 </div></blockquote>
 <p><strong>index_by</strong> : str</p>
 <blockquote>
-<div><p>(default: <code class="docutils literal"><span class="pre">'identifier'</span></code>) <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> attribute name to use as
+<div><p>(default: <code class="docutils literal"><span class="pre">'identifier'</span></code>) <a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> attribute name to use as
 the primary indexing field. If the field is missing on a
-<a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>, a unique identifier will be generated based on the
+<a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>, a unique identifier will be generated based on the
 title and author names.</p>
 </div></blockquote>
 <p><strong>follow_links</strong> : bool</p>
 <blockquote>
 <div><p>If <code class="docutils literal"><span class="pre">True</span></code>, attempts to load full-text content from attached files
-(e.g. PDFs with embedded text).</p>
+(e.g. PDFs with embedded text). Default: False.</p>
 </div></blockquote>
 <p><strong>kwargs</strong> : kwargs</p>
 <blockquote>
-<div><p>Passed to the <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> constructor.</p>
+<div><p>Passed to the <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> constructor.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>corpus</strong> : <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>corpus</strong> : <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a></p>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<p>Assuming that the Zotero collection was exported to the directory
+<code class="docutils literal"><span class="pre">/my/working/dir</span></code> with the name <code class="docutils literal"><span class="pre">myCollection</span></code>, a subdirectory should
+have been created at <code class="docutils literal"><span class="pre">/my/working/dir/myCollection</span></code>, and an RDF file
+should exist at <code class="docutils literal"><span class="pre">/my/working/dir/myCollection/myCollection.rdf</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers.zotero</span> <span class="kn">import</span> <span class="n">read</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myCorpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s">&#39;/my/working/dir/myCollection&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myCorpus</span>
+<span class="go">&lt;tethne.classes.corpus.Corpus object at 0x10047e350&gt;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -896,24 +1013,24 @@ title and author names.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#tethne.readers.merge" title="tethne.readers.merge"><code class="xref py py-obj docutils literal"><span class="pre">merge</span></code></a>(corpus_1,&nbsp;corpus_2[,&nbsp;match_by,&nbsp;...])</td>
-<td>Combines two <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> instances.</td>
+<td>Combines two <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> instances.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.readers.dfr.html#module-tethne.readers.dfr" title="tethne.readers.dfr"><code class="xref py py-obj docutils literal"><span class="pre">dfr</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#module-tethne.readers.dfr" title="tethne.readers.dfr"><code class="xref py py-obj docutils literal"><span class="pre">dfr</span></code></a></td>
 <td>Methods for parsing JSTOR Data-for-Research datasets.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="tethne.readers.wos.html#module-tethne.readers.wos" title="tethne.readers.wos"><code class="xref py py-obj docutils literal"><span class="pre">wos</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#module-tethne.readers.wos" title="tethne.readers.wos"><code class="xref py py-obj docutils literal"><span class="pre">wos</span></code></a></td>
 <td>Parser for Web of Science field-tagged bibliographic data.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tethne.readers.zotero.html#module-tethne.readers.zotero" title="tethne.readers.zotero"><code class="xref py py-obj docutils literal"><span class="pre">zotero</span></code></a></td>
+<tr class="row-even"><td><a class="reference internal" href="#module-tethne.readers.zotero" title="tethne.readers.zotero"><code class="xref py py-obj docutils literal"><span class="pre">zotero</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">scopus</span></code></td>
-<td></td>
+<tr class="row-odd"><td><a class="reference internal" href="#module-tethne.readers.scopus" title="tethne.readers.scopus"><code class="xref py py-obj docutils literal"><span class="pre">scopus</span></code></a></td>
+<td>Reader for Scopus bibliographic database.</td>
 </tr>
 </tbody>
 </table>
 <p>Each module in <a class="reference internal" href="#module-tethne.readers" title="tethne.readers"><code class="xref py py-mod docutils literal"><span class="pre">tethne.readers</span></code></a> provides a <code class="docutils literal"><span class="pre">read</span></code> function that yields
-a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> instance.</p>
+a <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> instance.</p>
 <dl class="exception">
 <dt id="tethne.readers.DataError">
 <em class="property">exception </em><code class="descclassname">tethne.readers.</code><code class="descname">DataError</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers.html#DataError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.DataError" title="Permalink to this definition">¶</a></dt>
@@ -923,46 +1040,46 @@ a <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.
 <dl class="function">
 <dt id="tethne.readers.merge">
 <code class="descclassname">tethne.readers.</code><code class="descname">merge</code><span class="sig-paren">(</span><em>corpus_1, corpus_2, match_by=['ayjid'], match_threshold=1.0, index_by='ayjid'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers.html#merge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.merge" title="Permalink to this definition">¶</a></dt>
-<dd><p>Combines two <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> instances.</p>
-<p>The default behavior is to match <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s using the fields in
+<dd><p>Combines two <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> instances.</p>
+<p>The default behavior is to match <a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s using the fields in
 <code class="docutils literal"><span class="pre">match_by</span></code>. If several fields are specified, <code class="docutils literal"><span class="pre">match_threshold</span></code> can be
-used to control how well two <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s must match to be combined.</p>
+used to control how well two <a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s must match to be combined.</p>
 <p>Alternatively, <code class="docutils literal"><span class="pre">match_by</span></code> can be a callable object that accepts two
-<a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> instances, and returns bool. This allows for more complex
+<a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> instances, and returns bool. This allows for more complex
 evaluations.</p>
-<p>Where two matched <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s have values for the same field, values
-from the <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> instance in <code class="docutils literal"><span class="pre">corpus_1</span></code> will always be  preferred.</p>
+<p>Where two matched <a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s have values for the same field, values
+from the <a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> instance in <code class="docutils literal"><span class="pre">corpus_1</span></code> will always be  preferred.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>corpus_1</strong> : <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>corpus_1</strong> : <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a></p>
 <blockquote>
-<div><p>Values from this <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> will always be preferred in cases of
+<div><p>Values from this <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> will always be preferred in cases of
 conflict.</p>
 </div></blockquote>
-<p><strong>corpus_2</strong> : <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a></p>
+<p><strong>corpus_2</strong> : <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a></p>
 <p><strong>match_by</strong> : list or callable</p>
 <blockquote>
 <div><p>Either a list of fields used to evaluate whether or not two
-<a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s should be combined, <strong>OR</strong> a callable that accepts
-two <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> instances and returns bool.</p>
+<a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s should be combined, <strong>OR</strong> a callable that accepts
+two <a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> instances and returns bool.</p>
 </div></blockquote>
 <p><strong>match_threshold</strong> : float</p>
 <blockquote>
 <div><p>if <code class="docutils literal"><span class="pre">match_by</span></code> is a list containing more than one field, specifies the
-proportion of fields that must match for two <a class="reference internal" href="tethne.classes.paper.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> instances
+proportion of fields that must match for two <a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a> instances
 to be combined.</p>
 </div></blockquote>
 <p><strong>index_by</strong> : str</p>
 <blockquote>
 <div><p>The field to use as the primary indexing field in the new
-<a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a>. Default is <cite>ayjid</cite>, since this is virtually always
+<a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a>. Default is <cite>ayjid</cite>, since this is virtually always
 available.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>combined</strong> : <a class="reference internal" href="tethne.classes.corpus.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>combined</strong> : <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a></p>
 </td>
 </tr>
 </tbody>
@@ -994,8 +1111,8 @@ available.</p>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-tethne.readers.base">tethne.readers.base module</a></li>
 <li><a class="reference internal" href="#module-tethne.readers.dfr">tethne.readers.dfr module</a></li>
-<li><a class="reference internal" href="#tethne-readers-dspace-module">tethne.readers.dspace module</a></li>
-<li><a class="reference internal" href="#tethne-readers-scopus-module">tethne.readers.scopus module</a></li>
+<li><a class="reference internal" href="#module-tethne.readers.dspace">tethne.readers.dspace module</a></li>
+<li><a class="reference internal" href="#module-tethne.readers.scopus">tethne.readers.scopus module</a></li>
 <li><a class="reference internal" href="#module-tethne.readers.wos">tethne.readers.wos module</a></li>
 <li><a class="reference internal" href="#module-tethne.readers.zotero">tethne.readers.zotero module</a></li>
 <li><a class="reference internal" href="#module-tethne.readers">Module contents</a></li>
@@ -1007,8 +1124,8 @@ available.</p>
   <p class="topless"><a href="tethne.plot.html"
                         title="previous chapter">tethne.plot package</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="tethne.tests.html"
-                        title="next chapter">tethne.tests package</a></p>
+  <p class="topless"><a href="tethne.serialize.html"
+                        title="next chapter">tethne.serialize package</a></p>
   <h3>This Page</h3>
   <div>
     <a href="_sources/tethne.readers.txt"

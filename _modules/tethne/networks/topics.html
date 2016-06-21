@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>tethne.networks.topics &mdash; tethne 1.0 documentation</title>
+    <title>tethne.networks.topics &mdash; tethne 0.8 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '1.0',
+        VERSION:     '0.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
-    <link rel="top" title="tethne 1.0 documentation" href="../../../index.html" >
+    <link rel="top" title="tethne 0.8 documentation" href="../../../index.html" >
     <link rel="up" title="Module code" href="../../index.html" > 
   </head>
   <body>
@@ -48,7 +48,7 @@
     <ul class="nav nav-pills pull-left">
         <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
 	
-        <li class="active"><a href="../../../index.html">tethne 1.0 documentation</a></li>
+        <li class="active"><a href="../../../index.html">tethne 0.8 documentation</a></li>
 	
           <li class="active"><a href="../../index.html" accesskey="U">Module code</a></li> 
     </ul>
@@ -79,6 +79,8 @@
   <h1>Source code for tethne.networks.topics</h1><div class="highlight"><pre>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Build networks from topics in a topic model.</span>
+
+<span class="sd">The current implementation assumes that you are using a :class:`.LDAModel`\.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -98,34 +100,79 @@
 <span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">argsort</span>
 
 
-<div class="viewcode-block" id="terms"><a class="viewcode-back" href="../../../tethne.networks.topics.html#tethne.networks.topics.terms">[docs]</a><span class="k">def</span> <span class="nf">terms</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="terms"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.topics.terms">[docs]</a><span class="k">def</span> <span class="nf">terms</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Two terms are coupled if they belong to the same topic with phi &gt; threshold.</span>
+<span class="sd">    Two terms are coupled if the posterior probability for both terms is</span>
+<span class="sd">    greather than ``threshold`` for the same topic.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : :class:`.LDAModel`</span>
+<span class="sd">    threshold : float</span>
+<span class="sd">        Default: 0.01</span>
+<span class="sd">    kwargs : kwargs</span>
+<span class="sd">        Passed on to :func:`.cooccurrence`\.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :ref:`networkx.Graph &lt;networkx:graph&gt;`</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">select</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">dc</span><span class="p">:</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="n">threshold</span>
     <span class="n">graph</span> <span class="o">=</span> <span class="n">cooccurrence</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">select</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c"># Only include labels for terms that are actually in the graph.</span>
     <span class="n">label_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">vocabulary</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
                  <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()}</span>
-
+    <span class="n">graph</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
     <span class="k">return</span> <span class="n">networkx</span><span class="o">.</span><span class="n">relabel_nodes</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">label_map</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="topic_coupling"><a class="viewcode-back" href="../../../tethne.networks.topics.html#tethne.networks.topics.topic_coupling">[docs]</a><span class="k">def</span> <span class="nf">topic_coupling</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="topic_coupling"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.topics.topic_coupling">[docs]</a><span class="k">def</span> <span class="nf">topic_coupling</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Two papers are coupled if they both contain a shared topic above threshold.</span>
+<span class="sd">    Two papers are coupled if they both contain a shared topic above a</span>
+<span class="sd">    ``threshold``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : :class:`.LDAModel`</span>
+<span class="sd">    threshold : float</span>
+<span class="sd">        Default: ``3./model.Z``</span>
+<span class="sd">    kwargs : kwargs</span>
+<span class="sd">        Passed on to :func:`.coupling`\.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :ref:`networkx.Graph &lt;networkx:graph&gt;`</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">threshold</span><span class="p">:</span>
         <span class="n">threshold</span> <span class="o">=</span> <span class="mf">3.</span><span class="o">/</span><span class="n">model</span><span class="o">.</span><span class="n">Z</span>
     <span class="n">select</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">dc</span><span class="p">:</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="n">threshold</span>
 
-    <span class="k">return</span> <span class="n">coupling</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="s">&#39;topics&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">select</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">coupling</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="s">&#39;topics&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">select</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">graph</span>
 
 </div>
-<div class="viewcode-block" id="cotopics"><a class="viewcode-back" href="../../../tethne.networks.topics.html#tethne.networks.topics.cotopics">[docs]</a><span class="k">def</span> <span class="nf">cotopics</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="cotopics"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.topics.cotopics">[docs]</a><span class="k">def</span> <span class="nf">cotopics</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Two topics are coupled if they occur in the same documents.</span>
+<span class="sd">    Two topics are coupled if they occur (above some ``threshold``) in the same</span>
+<span class="sd">    document (s).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : :class:`.LDAModel`</span>
+<span class="sd">    threshold : float</span>
+<span class="sd">        Default: ``2./model.Z``</span>
+<span class="sd">    kwargs : kwargs</span>
+<span class="sd">        Passed on to :func:`.cooccurrence`\.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :ref:`networkx.Graph &lt;networkx:graph&gt;`</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">threshold</span><span class="p">:</span>
         <span class="n">threshold</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">/</span><span class="n">model</span><span class="o">.</span><span class="n">Z</span>
@@ -134,7 +181,7 @@
     <span class="k">return</span> <span class="n">cooccurrence</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="s">&#39;topics&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">select</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="distance"><a class="viewcode-back" href="../../../tethne.networks.topics.html#tethne.networks.topics.distance">[docs]</a><span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;cosine&#39;</span><span class="p">,</span> <span class="n">percentile</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<div class="viewcode-block" id="distance"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.topics.distance">[docs]</a><span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;cosine&#39;</span><span class="p">,</span> <span class="n">percentile</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">bidirectional</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
              <span class="n">normalize</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s">&#39;log&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a network of :class:`.Paper`\s based on a distance metric from</span>
@@ -142,9 +189,8 @@
 <span class="sd">    &lt;http://docs.scipy.org/doc/scipy/reference/spatial.distance.html&gt;`_</span>
 <span class="sd">    using :ref:`sparse-feature-vector`\s over the dimensions in ``model``.</span>
 
-<span class="sd">    Refer to the documentation for :func:`.analyze.features.distance` for</span>
-<span class="sd">    a list of distance statistics. The only two methods that will not work</span>
-<span class="sd">    in this context are ``hamming`` and ``jaccard``.</span>
+<span class="sd">    The only two methods that will not work in this context are ``hamming`` and</span>
+<span class="sd">    ``jaccard``.</span>
 
 <span class="sd">    Distances are inverted to a similarity metric, which is log-transformed by</span>
 <span class="sd">    default (see ``transform`` parameter, below). Edges are included if they are</span>
@@ -181,9 +227,10 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    thegraph : networkx.Graph</span>
+<span class="sd">    :ref:`networkx.Graph &lt;networkx:graph&gt;`</span>
 <span class="sd">        Similarity values are included as edge weights. Node attributes are set</span>
-<span class="sd">        using the fields in ``model.metadata``.</span>
+<span class="sd">        using the fields in ``model.metadata``. See</span>
+<span class="sd">        :meth:`networkx.Graph.__init__`</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -191,10 +238,10 @@
 <span class="sd">    .. code-block:: python</span>
 
 <span class="sd">       &gt;&gt;&gt; from tethne.networks import topics</span>
-<span class="sd">       &gt;&gt;&gt; thegraph = topics.distance(MyLDAModel, &#39;cosine&#39;)</span>
+<span class="sd">       &gt;&gt;&gt; thegraph = topics.distance(myLDAModel, &#39;cosine&#39;)</span>
 
-<span class="sd">       &gt;&gt;&gt; from tethne.writers import graph</span>
-<span class="sd">       &gt;&gt;&gt; graph.to_graphml(thegraph, &#39;~./thegraph.graphml&#39;)</span>
+<span class="sd">       &gt;&gt;&gt; import tethne.writers as wr</span>
+<span class="sd">       &gt;&gt;&gt; wr.to_graphml(thegraph, &#39;~./thegraph.graphml&#39;)</span>
 
 <span class="sd">    .. figure:: _static/images/lda_cosine_network.png</span>
 <span class="sd">       :width: 80%</span>
@@ -239,7 +286,7 @@
 
     <span class="c"># pct = numpy.percentile(edges.values(), percentile)</span>
     <span class="n">pct</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">percentile</span><span class="o">/</span><span class="mf">100.</span><span class="p">)))</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">argsort</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">values</span><span class="p">())[::</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="n">pct</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">argsort</span><span class="p">(</span><span class="n">edges</span><span class="o">.</span><span class="n">values</span><span class="p">())[::</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="n">pct</span><span class="p">]:</span>
         <span class="n">edge</span><span class="p">,</span> <span class="n">sim</span> <span class="o">=</span> <span class="n">edges</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">i</span><span class="p">],</span> <span class="n">edges</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="n">i</span><span class="p">]</span>
         <span class="n">thegraph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">weight</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">sim</span><span class="p">))</span>
 

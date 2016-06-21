@@ -1,0 +1,705 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VPHILADELPHIA
+p7
+sS'reprintAddress'
+p8
+VStarbird, K (reprint author), Univ Washington, Coll Engn, Box 352315, Seattle, WA 98195 USA.
+p9
+sS'WC'
+p10
+(lp11
+VBIODIVERSITY CONSERVATION
+p12
+aVENVIRONMENTAL SCIENCES
+p13
+asS'GA'
+p14
+VAT4NH
+p15
+sS'FX'
+p16
+(lp17
+VFunding for this project was provided by the University of New
+p18
+aVHampshire's Coastal Response Research Center (NOAA Grant Number:
+p19
+aVNA07NOS4630143, Contract: 13-003).
+p20
+asS'abstract'
+p21
+VThis research examines how information about an oil spill, its impacts, and the use of dispersants to treat the oil, moved through social media and the surrounding Internet during the 2010 BP Deepwater Horizon oil spill. Using a collection of tweets captured during the spill, we employ a mixed-method approach including an in-depth qualitative analysis to examine the content of Twitter posts, the connections that Twitter users made with each other, and the links between Twitter content and the surrounding Internet. This article offers a range of findings to help practitioners and others understand how social media is used by a variety of different actors during a slow-moving, long-term, environmental disaster. We enumerate some of the most salient themes in the Twitter data, noting that concerns about health impacts were more likely to be communicated in tweets about dispersant use, than in the larger conversation. We describe the accounts and behaviors of highly retweeted Twitter users, noting how locals helped to shape the network and the conversation. Importantly, our results show the online crowd wanting to participate in and contribute to response efforts, a finding with implications for future oil spill response.
+p22
+sS'keywordsPlus'
+p23
+(lp24
+Voil spill response; digital volunteerism; crowdsourcing; citizen
+p25
+aVscience; social media; emergent organization; emergency response
+p26
+asS'pageEnd'
+p27
+I630
+sS'date'
+p28
+I2015
+sS'documentType'
+p29
+VArticle
+p30
+sS'subject'
+p31
+(lp32
+VBIODIVERSITY & CONSERVATION
+p33
+aVENVIRONMENTAL SCIENCES & ECOLOGY
+p34
+asS'isoSource'
+p35
+VHum. Ecol. Risk Assess.
+p36
+sS'timesCited'
+p37
+VZ9 0
+p38
+sS'funding'
+p39
+(lp40
+(VUniversity of New Hampshire's Coastal Response Research Center (NOAA)
+VNA07NOS4630143, 13-003
+tp41
+asS'PT'
+p42
+VJ
+sS'title'
+p43
+VSocial Media, Public Participation, And The 2010 Bp Deepwater Horizon Oil Spill
+p44
+sS'ISSN'
+p45
+V1080-7039
+p46
+sS'authors_full'
+p47
+(lp48
+(VSTARBIRD
+VKATE
+tp49
+a(VDAILEY
+VDHARMA
+tp50
+a(VWALKER
+VANN HAYWARD
+tp51
+a(VLESCHINE
+VTHOMAS M
+tp52
+a(VPAVIA
+VROBERT
+tp53
+a(VBOSTROM
+VANN
+tp54
+asS'PG'
+p55
+I26
+sS'PD'
+p56
+VAPR 3
+p57
+sS'pageStart'
+p58
+I605
+sS'issue'
+p59
+I3
+sS'RI'
+p60
+VDama, Sridhar/A-8658-2008; wang, huawei/G-3663-2012
+p61
+sS'EI'
+p62
+(lp63
+V1549-7860
+p64
+aVJ9 HUM ECOL RISK ASSESS
+p65
+asS'journal'
+p66
+VHUMAN AND ECOLOGICAL RISK ASSESSMENT
+p67
+sS'volume'
+p68
+V21
+p69
+sS'emailAddress'
+p70
+Vkstarbi@uw.edu
+p71
+sS'authorAddress'
+p72
+(lp73
+V[Starbird, Kate; Dailey, Dharma; Leschine, Thomas M.] Univ Washington, Seattle, WA 98195 USA.
+p74
+aV[Walker, Ann Hayward] SEA Consulting Grp, Cape Charles, VA USA.
+p75
+aV[Leschine, Thomas M.; Pavia, Robert] Univ Washington, Sch Marine & Environm Affairs, Seattle, WA 98195 USA.
+p76
+aV[Bostrom, Ann] Univ Washington, Daniel J Evans Sch Publ Affairs, Seattle, WA 98195 USA.
+p77
+asS'publisherAddress'
+p78
+V530 WALNUT STREET, STE 850, PHILADELPHIA, PA 19106 USA
+p79
+sS'publisher'
+p80
+VTAYLOR & FRANCIS INC
+p81
+sS'doi'
+p82
+V10.1080/10807039.2014.947866
+p83
+sS'language'
+p84
+VEnglish
+p85
+sS'wosid'
+p86
+VWOS:000344915500003
+p87
+sS'citationCount'
+p88
+I25
+sS'authors_init'
+p89
+(lp90
+(VSTARBIRD
+VK
+tp91
+a(VDAILEY
+VD
+tp92
+a(VWALKER
+VA H
+tp93
+a(VLESCHINE
+VT M
+tp94
+a(VPAVIA
+VR
+tp95
+a(VBOSTROM
+VA
+tp96
+asS'citedReferences'
+p97
+(lp98
+g1
+(g2
+g3
+NtRp99
+(dp100
+g82
+Nsg66
+VCOMMUNICATION   0426
+p101
+sg68
+Nsg89
+(lp102
+(VALLEN
+VT
+tp103
+asg28
+I2011
+sg58
+Nsbag1
+(g2
+g3
+NtRp104
+(dp105
+g82
+V10.1088/1742-5468/2008/10/P10008
+p106
+sg66
+VJ STAT MECH
+p107
+sg68
+Nsg89
+(lp108
+(VBLONDEL
+VV D
+tp109
+asg28
+I2008
+sg58
+Nsbag1
+(g2
+g3
+NtRp110
+(dp111
+g82
+V10.1080/1369118X.2012.678878
+p112
+sg66
+VINFORM COMMUN SOC
+p113
+sg68
+V15
+p114
+sg89
+(lp115
+(VBOYD
+VD
+tp116
+asg28
+I2012
+sg58
+V662
+p117
+sbag1
+(g2
+g3
+NtRp118
+(dp119
+g82
+Nsg66
+VMEANINGFUL GROWTH
+p120
+sg68
+Nsg89
+(lp121
+(VCOSTOLO
+VD
+tp122
+asg28
+I2010
+sg58
+Nsbag1
+(g2
+g3
+NtRp123
+(dp124
+g82
+Nsg66
+VORG BEHAV DISASTER
+p125
+sg68
+Nsg89
+(lp126
+(VDYNES
+VRUSSEL ROWE
+tp127
+asg28
+I1970
+sg58
+Nsbag1
+(g2
+g3
+NtRp128
+(dp129
+g82
+Nsg66
+VCONVERGENCE BEHAV DI
+p130
+sg68
+Nsg89
+(lp131
+(VFRITZ
+VCHARLES E
+tp132
+asg28
+I1957
+sg58
+Nsbag1
+(g2
+g3
+NtRp133
+(dp134
+g82
+VDOI 10.1145/1858948.1858955
+p135
+sg66
+VACM T INTEL SYST TEC
+p136
+sg68
+V1
+sg89
+(lp137
+(VGOOLSBY
+VR
+tp138
+asg28
+I2010
+sg58
+V1
+sbag1
+(g2
+g3
+NtRp139
+(dp140
+g82
+Nsg66
+VDIS REL 2 0 FUT INF
+p141
+sg68
+Nsg89
+(lp142
+(VHHI
+VHARVARD HUMANITARIAN INITIATIVE
+tp143
+asg28
+I2011
+sg58
+Nsbag1
+(g2
+g3
+NtRp144
+(dp145
+g82
+VDOI 10.1515/1547-7355.1976
+p146
+sg66
+VJ HOMEL SECUR EMERG
+p147
+sg68
+V9
+sg89
+(lp148
+(VHUGHES
+VA L
+tp149
+asg28
+I2012
+sg58
+V1
+sbag1
+(g2
+g3
+NtRp150
+(dp151
+g82
+VDOI 10.4018/JISCRM.2011100101
+p152
+sg66
+VINT J INFORM SYSTEMS
+p153
+sg68
+V3
+sg89
+(lp154
+(VLATONERO
+VM
+tp155
+asg28
+I2011
+sg58
+V1
+sbag1
+(g2
+g3
+NtRp156
+(dp157
+g82
+Nsg66
+VCARTOGR GEOGR INF SC
+p158
+sg68
+V37
+p159
+sg89
+(lp160
+(VLIU
+VS B
+tp161
+asg28
+I2010
+sg58
+V69
+p162
+sbag1
+(g2
+g3
+NtRp163
+(dp164
+g82
+Nsg66
+VJ EPIDEMIOL COMMUN H
+p165
+sg68
+V53
+p166
+sg89
+(lp167
+(VLYONS
+VR A
+tp168
+asg28
+I1999
+sg58
+V306
+p169
+sbag1
+(g2
+g3
+NtRp170
+(dp171
+g82
+V10.1056/NEJMp1103591
+p172
+sg66
+VNEW ENGL J MED
+p173
+sg68
+V365
+p174
+sg89
+(lp175
+(VMERCHANT
+VR M
+tp176
+asg28
+I2011
+sg58
+V289
+p177
+sbag1
+(g2
+g3
+NtRp178
+(dp179
+g82
+Nsg66
+VCBS NEWS
+p180
+sg68
+Nsg89
+(lp181
+(VNGAK
+VC
+tp182
+asg28
+I2012
+sg58
+Nsbag1
+(g2
+g3
+NtRp183
+(dp184
+g82
+Nsg66
+VAM J PSYCHIAT
+p185
+sg68
+V150
+p186
+sg89
+(lp187
+(VPALINKAS
+VL A
+tp188
+asg28
+I1993
+sg58
+V1517
+p189
+sbag1
+(g2
+g3
+NtRp190
+(dp191
+g82
+Nsg66
+VGULF DIS CONT DOM CO
+p192
+sg68
+Nsg89
+(lp193
+(VPEW
+S''
+tp194
+asg28
+I2010
+sg58
+Nsbag1
+(g2
+g3
+NtRp195
+(dp196
+g82
+Nsg66
+V100 DAYS GUSH OIL ME
+p197
+sg68
+Nsg89
+(lp198
+(VPEW
+S''
+tp199
+asg28
+I2010
+sg58
+Nsbag1
+(g2
+g3
+NtRp200
+(dp201
+g82
+Nsg66
+VTECHCRUNCH     0914
+p202
+sg68
+Nsg89
+(lp203
+(VRAO
+VL
+tp204
+asg28
+I2010
+sg58
+Nsbag1
+(g2
+g3
+NtRp205
+(dp206
+g82
+Nsg66
+VNY TIMES
+p207
+sg68
+Nsg89
+(lp208
+(VROBERTSON
+VC
+tp209
+asg28
+I2010
+sg58
+Nsbag1
+(g2
+g3
+NtRp210
+(dp211
+g82
+Nsg66
+VENV INDICATORS TYPOL
+p212
+sg68
+Nsg89
+(lp213
+(VSMEETS
+VE
+tp214
+asg28
+I1999
+sg58
+Nsbag1
+(g2
+g3
+NtRp215
+(dp216
+g82
+V[10.4018/jiscrm.2013010104, DOI 10.4018/JISCRM.2013010104]
+p217
+sg66
+VINT J INF SYST CRISI
+p218
+sg68
+V5
+sg89
+(lp219
+(VSUTTON
+VJ
+tp220
+asg28
+I2013
+sg58
+V58
+p221
+sbag1
+(g2
+g3
+NtRp222
+(dp223
+g82
+Nsg66
+VFACING UNEXPECTED DI
+p224
+sg68
+Nsg89
+(lp225
+(VTIERNEY
+VK J
+tp226
+asg28
+I2001
+sg58
+Nsbag1
+(g2
+g3
+NtRp227
+(dp228
+g82
+Nsg66
+VQUEST ANSW DISP
+p229
+sg68
+Nsg89
+(lp230
+(VUSEPA U S ENVIRONMENTAL PROTECTION AGENCY
+S''
+tp231
+asg28
+I2013
+sg58
+Nsbag1
+(g2
+g3
+NtRp232
+(dp233
+g82
+Nsg66
+VSOCIAL MEDIAS CRUCIA
+p234
+sg68
+Nsg89
+(lp235
+(VYEOMANS
+VM
+tp236
+asg28
+I2012
+sg58
+Nsbag1
+(g2
+g3
+NtRp237
+(dp238
+g82
+V10.2202/1948-4682.1069
+p239
+sg66
+VWorld Medical and Health Policy
+p240
+sg68
+V2
+sg89
+(lp241
+(VZOOK
+VM
+tp242
+asg28
+I2010
+sg58
+V7
+sbasb.

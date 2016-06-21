@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>tethne.readers &mdash; tethne 1.0 documentation</title>
+    <title>tethne.readers &mdash; tethne 0.8 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0',
+        VERSION:     '0.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
-    <link rel="top" title="tethne 1.0 documentation" href="../../index.html" >
+    <link rel="top" title="tethne 0.8 documentation" href="../../index.html" >
     <link rel="up" title="Module code" href="../index.html" > 
   </head>
   <body>
@@ -48,7 +48,7 @@
     <ul class="nav nav-pills pull-left">
         <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
 	
-        <li class="active"><a href="../../index.html">tethne 1.0 documentation</a></li>
+        <li class="active"><a href="../../index.html">tethne 0.8 documentation</a></li>
 	
           <li class="active"><a href="../index.html" accesskey="U">Module code</a></li> 
     </ul>
@@ -186,12 +186,12 @@
             <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
                 <span class="n">paper_new</span> <span class="o">=</span> <span class="n">Paper</span><span class="p">()</span>
                 <span class="c"># We add values from paper_2 first, so that...</span>
-                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">paper_2</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">paper_2</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
                     <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="bp">None</span><span class="p">]:</span>
                         <span class="n">paper_new</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
                 <span class="c"># ...values from paper_1 will override values from paper_2.</span>
-                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">paper_1</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">paper_1</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
                     <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="bp">None</span><span class="p">]:</span>
                         <span class="n">paper_new</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
@@ -226,11 +226,11 @@
         <span class="n">fclass</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">featureset_1</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">featureset_name</span> <span class="ow">in</span> <span class="n">corpus_2</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
             <span class="n">featureset_2</span> <span class="o">=</span> <span class="n">corpus_2</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset_name</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">featureset_2</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">featureset_2</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
                 <span class="n">features</span><span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">corpus_2</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">index_by</span><span class="p">)]</span> <span class="o">=</span> <span class="n">feature</span>
 
         <span class="c"># Features from corpus_1 will be preferred over those from corpus_2.</span>
-        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">featureset_1</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">featureset_1</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
             <span class="n">features</span><span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">corpus_1</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">index_by</span><span class="p">)]</span> <span class="o">=</span> <span class="n">feature</span>
 
         <span class="n">featuresets</span><span class="p">[</span><span class="n">featureset_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">fclass</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
@@ -246,7 +246,7 @@
 
         <span class="c"># Can be FeatureSet or StructuredFeatureSet.</span>
         <span class="n">fclass</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">featureset_2</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">featureset_2</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">featureset_2</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
             <span class="n">features</span><span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">corpus_2</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">index_by</span><span class="p">)]</span> <span class="o">=</span> <span class="n">feature</span>
 
         <span class="n">featuresets</span><span class="p">[</span><span class="n">featureset_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">fclass</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>

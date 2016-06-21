@@ -1,13 +1,15 @@
-Tethne: Documentation v0.6.0-beta
-=================================
+Tethne 0.8 Documentation
+========================
 
 Documentation
 -------------
 
 .. toctree::
    :maxdepth: 2
-   
+
+   overview
    installation
+   getting_data
    quickstart
-   tutorials
+   tutorial.mallet
    tethne

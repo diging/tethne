@@ -1,0 +1,170 @@
+ccopy_reg
+_reconstructor
+p1
+(ctethne.classes.paper
+Paper
+p2
+c__builtin__
+object
+p3
+NtRp4
+(dp5
+S'publisherCity'
+p6
+VSAN FRANCISCO
+p7
+sS'reprintAddress'
+p8
+VYin, F (reprint author), Auburn Univ, Samuel Ginn Coll Engn, Auburn, AL 36849 USA.
+p9
+sS'WC'
+p10
+(lp11
+VMULTIDISCIPLINARY SCIENCES
+p12
+asS'GA'
+p13
+VCF3WA
+p14
+sS'publisherAddress'
+p15
+V1160 BATTERY STREET, STE 100, SAN FRANCISCO, CA 94111 USA
+p16
+sS'documentType'
+p17
+VCorrection
+p18
+sS'subject'
+p19
+(lp20
+VSCIENCE & TECHNOLOGY - OTHER TOPICS
+p21
+asS'isoSource'
+p22
+VPLoS One
+p23
+sS'timesCited'
+p24
+VZ9 0
+p25
+sS'PT'
+p26
+VJ
+sS'title'
+p27
+VA Tale Of Two Recent Spills-Comparison Of 2014 Galveston Bay And 2010 Deepwater Horizon Oil Spill Residues (Vol 10, E0118098, 2015)
+p28
+sS'ISSN'
+p29
+(lp30
+V1932-6203
+p31
+aVJ9 PLOS ONE
+p32
+asS'authors_full'
+p33
+(lp34
+(VYIN
+VFANG
+tp35
+a(VHAYWORTH
+VJOEL S
+tp36
+a(VCLEMENT
+VT PRABHAKAR
+tp37
+asS'PG'
+p38
+I1
+sS'PD'
+p39
+VAPR 8
+p40
+sS'issue'
+p41
+I4
+sS'PM'
+p42
+I25853425
+sS'journal'
+p43
+VPLOS ONE
+p44
+sS'volume'
+p45
+V10
+p46
+sS'AR'
+p47
+Ve0124645
+p48
+sS'authorAddress'
+p49
+(lp50
+V[Yin, Fang] Auburn Univ, Samuel Ginn Coll Engn, Auburn, AL 36849 USA.
+p51
+aVMESC, Tyngsboro, MA USA.
+p52
+asS'date'
+p53
+I2015
+sS'publisher'
+p54
+VPUBLIC LIBRARY SCIENCE
+p55
+sS'doi'
+p56
+V10.1371/journal.pone.0124645
+p57
+sS'language'
+p58
+VEnglish
+p59
+sS'wosid'
+p60
+VWOS:000352478400140
+p61
+sS'citationCount'
+p62
+I1
+sS'authors_init'
+p63
+(lp64
+(VYIN
+VF
+tp65
+a(VHAYWORTH
+VJ S
+tp66
+a(VCLEMENT
+VT P
+tp67
+asS'citedReferences'
+p68
+(lp69
+g1
+(g2
+g3
+NtRp70
+(dp71
+g56
+V10.1371/journal.pone.0118098
+p72
+sg43
+VPLOS ONE
+p73
+sg45
+V10
+p74
+sg63
+(lp75
+(VYIN
+VF
+tp76
+asg53
+I2015
+sS'pageStart'
+p77
+VLOS
+p78
+sbasb.

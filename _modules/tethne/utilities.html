@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>tethne.utilities &mdash; tethne 1.0 documentation</title>
+    <title>tethne.utilities &mdash; tethne 0.8 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../_static/css/spc-extend.css">
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0',
+        VERSION:     '0.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
-    <link rel="top" title="tethne 1.0 documentation" href="../../index.html" >
+    <link rel="top" title="tethne 0.8 documentation" href="../../index.html" >
     <link rel="up" title="Module code" href="../index.html" > 
   </head>
   <body>
@@ -48,7 +48,7 @@
     <ul class="nav nav-pills pull-left">
         <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
 	
-        <li class="active"><a href="../../index.html">tethne 1.0 documentation</a></li>
+        <li class="active"><a href="../../index.html">tethne 0.8 documentation</a></li>
 	
           <li class="active"><a href="../index.html" accesskey="U">Module code</a></li> 
     </ul>
@@ -93,7 +93,7 @@
     <span class="kn">from</span> <span class="nn">HTMLParser</span> <span class="kn">import</span> <span class="n">HTMLParser</span>   <span class="c"># Python 2.x</span>
 
 
-<div class="viewcode-block" id="is_number"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.is_number">[docs]</a><span class="k">def</span> <span class="nf">is_number</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="is_number"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.is_number">[docs]</a><span class="k">def</span> <span class="nf">is_number</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
@@ -104,7 +104,7 @@
     <span class="k">return</span> <span class="bp">True</span>
 
 </div>
-<div class="viewcode-block" id="number"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.number">[docs]</a><span class="k">def</span> <span class="nf">number</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="number"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.number">[docs]</a><span class="k">def</span> <span class="nf">number</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
@@ -118,33 +118,41 @@
     <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="MLStripper"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.MLStripper">[docs]</a><span class="k">class</span> <span class="nc">MLStripper</span><span class="p">(</span><span class="n">HTMLParser</span><span class="p">):</span>
+<div class="viewcode-block" id="MLStripper"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.MLStripper">[docs]</a><span class="k">class</span> <span class="nc">MLStripper</span><span class="p">(</span><span class="n">HTMLParser</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fed</span> <span class="o">=</span> <span class="p">[]</span>
-<div class="viewcode-block" id="MLStripper.handle_data"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.MLStripper.handle_data">[docs]</a>    <span class="k">def</span> <span class="nf">handle_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+<div class="viewcode-block" id="MLStripper.handle_data"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.MLStripper.handle_data">[docs]</a>    <span class="k">def</span> <span class="nf">handle_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span></div>
-<div class="viewcode-block" id="MLStripper.feed"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.MLStripper.feed">[docs]</a>    <span class="k">def</span> <span class="nf">feed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span> <span class="o">+</span> <span class="n">data</span>
+<div class="viewcode-block" id="MLStripper.feed"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.MLStripper.feed">[docs]</a>    <span class="k">def</span> <span class="nf">feed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        added this check as sometimes we are getting the data in integer format instead of string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span> <span class="o">+</span> <span class="n">data</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span> <span class="o">+</span> <span class="n">data</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">goahead</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
-<div class="viewcode-block" id="MLStripper.get_data"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.MLStripper.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MLStripper.get_data"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.MLStripper.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">u&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fed</span><span class="p">)</span>
 
 </div></div>
-<div class="viewcode-block" id="strip_tags"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.strip_tags">[docs]</a><span class="k">def</span> <span class="nf">strip_tags</span><span class="p">(</span><span class="n">html</span><span class="p">):</span>
+<div class="viewcode-block" id="strip_tags"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.strip_tags">[docs]</a><span class="k">def</span> <span class="nf">strip_tags</span><span class="p">(</span><span class="n">html</span><span class="p">):</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">MLStripper</span><span class="p">()</span>
     <span class="n">s</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="argsort"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.argsort">[docs]</a><span class="k">def</span> <span class="nf">argsort</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
+<div class="viewcode-block" id="argsort"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.argsort">[docs]</a><span class="k">def</span> <span class="nf">argsort</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
     <span class="n">seq</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="n">seq</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="argmin"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.argmin">[docs]</a><span class="k">def</span> <span class="nf">argmin</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+<div class="viewcode-block" id="argmin"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.argmin">[docs]</a><span class="k">def</span> <span class="nf">argmin</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
     <span class="n">iterable</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
     <span class="n">i_min</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
     <span class="n">v_min</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
@@ -155,7 +163,7 @@
     <span class="k">return</span> <span class="n">i_min</span>
 
 </div>
-<div class="viewcode-block" id="argmax"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.argmax">[docs]</a><span class="k">def</span> <span class="nf">argmax</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+<div class="viewcode-block" id="argmax"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.argmax">[docs]</a><span class="k">def</span> <span class="nf">argmax</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
     <span class="n">i_max</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
     <span class="n">v_max</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
@@ -165,11 +173,11 @@
     <span class="k">return</span> <span class="n">i_max</span>
 
 </div>
-<div class="viewcode-block" id="nonzero"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.nonzero">[docs]</a><span class="k">def</span> <span class="nf">nonzero</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+<div class="viewcode-block" id="nonzero"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.nonzero">[docs]</a><span class="k">def</span> <span class="nf">nonzero</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">list</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">])</span>
 
 </div>
-<div class="viewcode-block" id="mean"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.mean">[docs]</a><span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+<div class="viewcode-block" id="mean"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.mean">[docs]</a><span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">iterable</span><span class="p">))</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -200,7 +208,7 @@
     <span class="k">return</span> <span class="s">u&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_number</span><span class="p">(</span><span class="n">c</span><span class="p">)])</span>
 
 
-<div class="viewcode-block" id="normalize"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.normalize">[docs]</a><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<div class="viewcode-block" id="normalize"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.normalize">[docs]</a><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Normalize a token.</span>
 
@@ -211,7 +219,7 @@
     <span class="k">return</span> <span class="n">_strip_numbers</span><span class="p">(</span><span class="n">_strip_punctuation</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span>
 
 </div>
-<div class="viewcode-block" id="tokenize"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.tokenize">[docs]</a><span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="n">passage</span><span class="p">):</span>
+<div class="viewcode-block" id="tokenize"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.tokenize">[docs]</a><span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="n">passage</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert a string into a list of normalized words.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -225,14 +233,14 @@
     <span class="k">return</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="swap"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.swap">[docs]</a><span class="k">def</span> <span class="nf">swap</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+<div class="viewcode-block" id="swap"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.swap">[docs]</a><span class="k">def</span> <span class="nf">swap</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    exchange the values of u and v</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">v</span><span class="p">),</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="contains"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.contains">[docs]</a><span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+<div class="viewcode-block" id="contains"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.contains">[docs]</a><span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Searches list l for a pattern specified in a lambda function f.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -242,7 +250,7 @@
     <span class="k">return</span> <span class="bp">False</span>
 
 </div>
-<div class="viewcode-block" id="overlap"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.overlap">[docs]</a><span class="k">def</span> <span class="nf">overlap</span><span class="p">(</span><span class="n">listA</span><span class="p">,</span> <span class="n">listB</span><span class="p">):</span>
+<div class="viewcode-block" id="overlap"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.overlap">[docs]</a><span class="k">def</span> <span class="nf">overlap</span><span class="p">(</span><span class="n">listA</span><span class="p">,</span> <span class="n">listB</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return list of objects shared by listA, listB.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -252,7 +260,7 @@
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">listA</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">listB</span><span class="p">))</span>
 
 </div>
-<div class="viewcode-block" id="subdict"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.subdict">[docs]</a><span class="k">def</span> <span class="nf">subdict</span><span class="p">(</span><span class="n">super_dict</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
+<div class="viewcode-block" id="subdict"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.subdict">[docs]</a><span class="k">def</span> <span class="nf">subdict</span><span class="p">(</span><span class="n">super_dict</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns a subset of the super_dict with the specified keys.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -265,14 +273,14 @@
     <span class="k">return</span> <span class="n">sub_dict</span>
 
 </div>
-<div class="viewcode-block" id="attribs_to_string"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.attribs_to_string">[docs]</a><span class="k">def</span> <span class="nf">attribs_to_string</span><span class="p">(</span><span class="n">attrib_dict</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
+<div class="viewcode-block" id="attribs_to_string"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.attribs_to_string">[docs]</a><span class="k">def</span> <span class="nf">attribs_to_string</span><span class="p">(</span><span class="n">attrib_dict</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A more specific version of the subdict utility aimed at handling</span>
 <span class="sd">    node and edge attribute dictionaries for NetworkX file formats such as</span>
 <span class="sd">    gexf (which does not allow attributes to have a list type) by making</span>
 <span class="sd">    them writable in those formats</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attrib_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attrib_dict</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span>
             <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
             <span class="n">attrib_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
@@ -280,7 +288,7 @@
     <span class="k">return</span> <span class="n">attrib_dict</span>
 
 </div>
-<div class="viewcode-block" id="concat_list"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.concat_list">[docs]</a><span class="k">def</span> <span class="nf">concat_list</span><span class="p">(</span><span class="n">listA</span><span class="p">,</span> <span class="n">listB</span><span class="p">,</span> <span class="n">delim</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="concat_list"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.concat_list">[docs]</a><span class="k">def</span> <span class="nf">concat_list</span><span class="p">(</span><span class="n">listA</span><span class="p">,</span> <span class="n">listB</span><span class="p">,</span> <span class="n">delim</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Concatenate list elements pair-wise with the delim character</span>
 <span class="sd">    Returns the concatenated list</span>
@@ -299,7 +307,7 @@
 
     <span class="k">return</span> <span class="n">listC</span>
 </div>
-<div class="viewcode-block" id="strip_non_ascii"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.strip_non_ascii">[docs]</a><span class="k">def</span> <span class="nf">strip_non_ascii</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<div class="viewcode-block" id="strip_non_ascii"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.strip_non_ascii">[docs]</a><span class="k">def</span> <span class="nf">strip_non_ascii</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the string without non-ASCII characters.</span>
 
@@ -318,12 +326,12 @@
     <span class="n">clean_string</span> <span class="o">=</span> <span class="s">u&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stripped</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">clean_string</span>
 </div>
-<div class="viewcode-block" id="strip_punctuation"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.strip_punctuation">[docs]</a><span class="k">def</span> <span class="nf">strip_punctuation</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<div class="viewcode-block" id="strip_punctuation"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.strip_punctuation">[docs]</a><span class="k">def</span> <span class="nf">strip_punctuation</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="n">exclude</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">)</span>
     <span class="k">return</span> <span class="s">u&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ch</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">s</span> <span class="k">if</span> <span class="n">ch</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="dict_from_node"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.dict_from_node">[docs]</a><span class="k">def</span> <span class="nf">dict_from_node</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="dict_from_node"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.dict_from_node">[docs]</a><span class="k">def</span> <span class="nf">dict_from_node</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts ElementTree node to a dictionary.</span>
 
@@ -369,7 +377,7 @@
     <span class="k">return</span> <span class="nb">dict</span>
 
 </div>
-<div class="viewcode-block" id="Dictionary"><a class="viewcode-back" href="../../tethne.utilities.html#tethne.utilities.Dictionary">[docs]</a><span class="k">class</span> <span class="nc">Dictionary</span><span class="p">:</span>
+<div class="viewcode-block" id="Dictionary"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.Dictionary">[docs]</a><span class="k">class</span> <span class="nc">Dictionary</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A two-way index for integer/string pairs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>

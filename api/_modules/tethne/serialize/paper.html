@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>tethne.serialize.paper &mdash; tethne 0.8 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <link rel="top" title="tethne 0.8 documentation" href="../../../index.html" >
+    <link rel="up" title="Module code" href="../../index.html" > 
+  </head>
+  <body>
+
+<div class="container">
+  <div class="top-scipy-org-logo-header">
+    <a href="../../../index.html">
+      <img style="border: 0; height: 60px;" alt="SciPy" src="../../../_static/img/logo_long_devo.png"></a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
+	
+        <li class="active"><a href="../../../index.html">tethne 0.8 documentation</a></li>
+	
+          <li class="active"><a href="../../index.html" accesskey="U">Module code</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="../../../py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <h1>Source code for tethne.serialize.paper</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This class has functionalities to serialize a TETHNE corpus object  to persist in the database;</span>
+
+<span class="sd">.. code-block:: python</span>
+<span class="sd">&gt;&gt;&gt; from tethne.serialize import paper</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">tethne.dao</span> <span class="kn">import</span> <span class="n">tethnedao</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">gmtime</span><span class="p">,</span> <span class="n">strftime</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">_strip_punctuation</span>
+
+
+<div class="viewcode-block" id="SerializeUtility"><a class="viewcode-back" href="../../../tethne.serialize.html#tethne.serialize.paper.SerializeUtility">[docs]</a><span class="k">class</span> <span class="nc">SerializeUtility</span><span class="p">:</span>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SerializeUtility.get_auth_inst"><a class="viewcode-back" href="../../../tethne.serialize.html#tethne.serialize.paper.SerializeUtility.get_auth_inst">[docs]</a>    <span class="k">def</span> <span class="nf">get_auth_inst</span><span class="p">(</span><span class="n">address</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s">&#39;]&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">address</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">address</span><span class="p">,</span> <span class="bp">None</span>
+        <span class="n">institute_literal</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;]&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
+        <span class="n">author_literal</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;]&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;[&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">authors</span> <span class="o">=</span> <span class="n">author_literal</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">institute_literal</span><span class="p">,</span> <span class="n">authors</span>
+
+</div></div>
+<div class="viewcode-block" id="Serialize"><a class="viewcode-back" href="../../../tethne.serialize.html#tethne.serialize.paper.Serialize">[docs]</a><span class="k">class</span> <span class="nc">Serialize</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is used to serialize the Corpus object and has methods to create fixtures(JSON files)</span>
+<span class="sd">    for different models in the TETHNE database.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">paper_source_map</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">:</span> <span class="s">&#39;wosid&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s">&#39;url&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s">&#39;doi&#39;</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        corpus - The Corpus object that is to be serialized.</span>
+<span class="sd">        source - This denotes the Source of the corpus object.</span>
+<span class="sd">        The possible values can be</span>
+
+<span class="sd">        1 for JSTOR,</span>
+<span class="sd">        2 for ZOTERO,</span>
+<span class="sd">        3 for WOS and</span>
+<span class="sd">        4 for Scopus</span>
+
+<span class="sd">        The source value helps us in deciding, what attribute to fetch the paper_id from?</span>
+<span class="sd">        i.e.</span>
+<span class="sd">        DOI in case of JSTOR,</span>
+<span class="sd">        URL in case of ZOTERO</span>
+<span class="sd">        and WOSID in case of WOS.</span>
+
+<span class="sd">        Following are the parameters which are initialized.</span>
+
+<span class="sd">        &gt;&gt;&gt;  self.corpus_id = tethnedao.getMaxCorpusID()+1 #this sets the new primary key which is (max PK +1)</span>
+
+<span class="sd">        Following are the hashMaps which are initialized and will be used for foreign key references.</span>
+
+
+<span class="sd">        &gt;&gt;&gt;  self.paperIdMap ={}</span>
+<span class="sd">        &gt;&gt;&gt;  self.paperIdMap[paper.wosid] = pid # This helps in keeping track of the Primary keys</span>
+
+<span class="sd">        Similarly, we have the following for Authors and AuthorsInstances.</span>
+
+<span class="sd">        &gt;&gt;&gt;  self.authorIdMap = {}</span>
+
+<span class="sd">        &gt;&gt;&gt;  self.authorInstanceIdMap = {}</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">corpus</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus_id</span> <span class="o">=</span> <span class="n">tethnedao</span><span class="o">.</span><span class="n">getMaxCorpusID</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">paperIdMap</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">authorIdMap</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">authorInstanceIdMap</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">citationIdMap</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">citationInstanceMap</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instituteIdMap</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instituteIdInstanceMap</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="Serialize.serializeCorpus"><a class="viewcode-back" href="../../../tethne.serialize.html#tethne.serialize.paper.Serialize.serializeCorpus">[docs]</a>    <span class="k">def</span> <span class="nf">serializeCorpus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method creates a fixture for the &quot;django-tethne_corpus&quot; model.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        corpus_details in JSON format which can written to a file.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">corpus_details</span> <span class="o">=</span> <span class="p">[{</span>
+                <span class="s">&quot;model&quot;</span><span class="p">:</span> <span class="s">&quot;django-tethne.corpus&quot;</span><span class="p">,</span>
+                <span class="s">&quot;pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus_id</span><span class="p">,</span>
+                <span class="s">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&quot;source&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+                    <span class="s">&quot;date_created&quot;</span><span class="p">:</span><span class="n">strftime</span><span class="p">(</span><span class="s">&quot;%Y-%m-</span><span class="si">%d</span><span class="s"> %H:%M:%S&quot;</span><span class="p">,</span> <span class="n">gmtime</span><span class="p">()),</span>
+                    <span class="s">&quot;length&quot;</span> <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">),</span>
+                <span class="p">}</span>
+            <span class="p">}]</span>
+        <span class="k">return</span> <span class="n">corpus_details</span>
+</div>
+<div class="viewcode-block" id="Serialize.serializePaper"><a class="viewcode-back" href="../../../tethne.serialize.html#tethne.serialize.paper.Serialize.serializePaper">[docs]</a>    <span class="k">def</span> <span class="nf">serializePaper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method creates a fixture for the &quot;django-tethne_paper&quot; model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        paper_details in JSON format, which can written to a file.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pid</span> <span class="o">=</span> <span class="n">tethnedao</span><span class="o">.</span><span class="n">getMaxPaperID</span><span class="p">();</span>
+        <span class="n">papers_details</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">paper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">:</span>
+            <span class="n">pid</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">paper_key</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="n">Serialize</span><span class="o">.</span><span class="n">paper_source_map</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">paperIdMap</span><span class="p">[</span><span class="n">paper_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pid</span>
+            <span class="n">paper_data</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s">&quot;model&quot;</span><span class="p">:</span> <span class="s">&quot;django-tethne.paper&quot;</span><span class="p">,</span>
+                <span class="s">&quot;pk&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">paperIdMap</span><span class="p">[</span><span class="n">paper_key</span><span class="p">],</span>
+                <span class="s">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&quot;paper_id&quot;</span><span class="p">:</span> <span class="n">paper_key</span><span class="p">,</span>
+                    <span class="s">&quot;corpus&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus_id</span><span class="p">,</span>
+                    <span class="s">&quot;pub_date&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">),</span>
+                    <span class="s">&quot;volume&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="s">&#39;volume&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">),</span>
+                    <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="s">&#39;title&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">),</span>
+                    <span class="s">&quot;abstract&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="s">&#39;abstract&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">),</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="n">papers_details</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paper_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">papers_details</span>
+</div>
+<div class="viewcode-block" id="Serialize.serializeAuthors"><a class="viewcode-back" href="../../../tethne.serialize.html#tethne.serialize.paper.Serialize.serializeAuthors">[docs]</a>    <span class="k">def</span> <span class="nf">serializeAuthors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         This method creates a fixture for the &quot;django-tethne_author&quot; model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        Author details in JSON format, which can be written to a file.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">author_details</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">auid</span> <span class="o">=</span> <span class="n">tethnedao</span><span class="o">.</span><span class="n">getMaxAuthorID</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;authors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">auid</span> <span class="o">=</span> <span class="n">auid</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">authorIdMap</span><span class="p">[</span><span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">auid</span>
+            <span class="n">instanceData</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&quot;model&quot;</span><span class="p">:</span> <span class="s">&quot;django-tethne.author&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;pk&quot;</span><span class="p">:</span> <span class="n">auid</span><span class="p">,</span>
+                    <span class="s">&quot;fields&quot;</span><span class="p">:{</span>
+                        <span class="s">&quot;first_name&quot;</span><span class="p">:</span> <span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="s">&quot;last_name&quot;</span><span class="p">:</span> <span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="n">author_details</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">instanceData</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">author_details</span>
+</div>
+<div class="viewcode-block" id="Serialize.serializeAuthorInstances"><a class="viewcode-back" href="../../../tethne.serialize.html#tethne.serialize.paper.Serialize.serializeAuthorInstances">[docs]</a>    <span class="k">def</span> <span class="nf">serializeAuthorInstances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         This method creates a fixture for the &quot;django-tethne_author&quot; model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Author Instance details which can be written to a file</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">author_instance_details</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">au_instanceid</span> <span class="o">=</span> <span class="n">tethnedao</span><span class="o">.</span><span class="n">getMaxAuthorInstanceID</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">paper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">:</span>
+            <span class="n">paper_key</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="n">Serialize</span><span class="o">.</span><span class="n">paper_source_map</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">paper</span><span class="o">.</span><span class="n">authors</span><span class="p">:</span>
+                <span class="n">au_instanceid</span> <span class="o">=</span> <span class="n">au_instanceid</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">author_key</span> <span class="o">=</span> <span class="n">author</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">author</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">author_instance_key</span> <span class="o">=</span> <span class="n">paper_key</span> <span class="o">+</span> <span class="n">author_key</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">authorInstanceIdMap</span><span class="p">[</span><span class="n">author_instance_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">au_instanceid</span>
+                <span class="n">instance_data</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s">&quot;model&quot;</span><span class="p">:</span> <span class="s">&quot;django-tethne.author_instance&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;pk&quot;</span><span class="p">:</span> <span class="n">au_instanceid</span><span class="p">,</span>
+                        <span class="s">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s">&quot;paper&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">paperIdMap</span><span class="p">[</span><span class="n">paper_key</span><span class="p">],</span>
+                            <span class="s">&quot;author&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">authorIdMap</span><span class="p">[</span><span class="n">author_key</span><span class="p">],</span>
+                            <span class="s">&quot;first_name&quot;</span><span class="p">:</span> <span class="n">author</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                            <span class="s">&quot;last_name&quot;</span><span class="p">:</span><span class="n">author</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="n">author_instance_details</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">instance_data</span><span class="p">)</span>
+
+                <span class="c"># Commented the following, as we do not have author identity detail now.</span>
+                <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    identity_data = {</span>
+<span class="sd">                        &quot;model&quot;: &quot;django-tethne.author_identity&quot;,</span>
+<span class="sd">                        &quot;fields&quot; :{</span>
+<span class="sd">                            &quot;author&quot;: self.authorIdMap[author[0][1]+author[0][0]],</span>
+<span class="sd">                            &quot;author_instance&quot;: self.authorInstanceIdMap[paper.wosid+author[0][1]+author[0][0]],</span>
+<span class="sd">                            &quot;confidence&quot;: 0.0,</span>
+<span class="sd">                        }</span>
+<span class="sd">                    }</span>
+<span class="sd">                    author_identity.append(identity_data)</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">author_instance_details</span>
+</div>
+<div class="viewcode-block" id="Serialize.serializeCitation"><a class="viewcode-back" href="../../../tethne.serialize.html#tethne.serialize.paper.Serialize.serializeCitation">[docs]</a>    <span class="k">def</span> <span class="nf">serializeCitation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method creates a fixture for the &quot;django-tethne_citation&quot; model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        citation details which can be written to a file</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">citation_details</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">citation_id</span> <span class="o">=</span> <span class="n">tethnedao</span><span class="o">.</span><span class="n">getMaxCitationID</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">citation</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+
+            <span class="n">date_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;(\d+)&#39;</span><span class="p">,</span> <span class="n">citation</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">date_match</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">date</span> <span class="o">=</span> <span class="n">date_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">date_match</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">date_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&quot;NONE&quot;</span><span class="p">,</span> <span class="n">citation</span><span class="p">)</span>
+                <span class="n">date</span> <span class="o">=</span> <span class="n">date_match</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
+            <span class="n">first_author</span> <span class="o">=</span> <span class="n">citation</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">date</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+            <span class="n">journal</span> <span class="o">=</span> <span class="n">citation</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">date</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
+            <span class="n">citation_key</span> <span class="o">=</span> <span class="n">citation</span>
+            <span class="k">if</span> <span class="n">citation_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">citationIdMap</span><span class="p">:</span>
+                <span class="n">citation_id</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">citationIdMap</span><span class="p">[</span><span class="n">citation_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">citation_id</span>
+                <span class="n">citation_data</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s">&quot;model&quot;</span><span class="p">:</span> <span class="s">&quot;django-tethne.citation&quot;</span><span class="p">,</span>
+                        <span class="s">&quot;pk&quot;</span><span class="p">:</span> <span class="n">citation_id</span><span class="p">,</span>
+                        <span class="s">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s">&quot;literal&quot;</span><span class="p">:</span> <span class="n">citation</span><span class="p">,</span>
+                            <span class="s">&quot;journal&quot;</span><span class="p">:</span> <span class="n">journal</span><span class="p">,</span>
+                            <span class="s">&quot;first_author&quot;</span><span class="p">:</span> <span class="n">first_author</span><span class="p">,</span>
+                            <span class="s">&quot;date&quot;</span><span class="p">:</span> <span class="n">date</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="n">citation_details</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">citation_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">citation_details</span>
+</div>
+<div class="viewcode-block" id="Serialize.serializeCitationInstance"><a class="viewcode-back" href="../../../tethne.serialize.html#tethne.serialize.paper.Serialize.serializeCitationInstance">[docs]</a>    <span class="k">def</span> <span class="nf">serializeCitationInstance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        This method creates a fixture for the &quot;django-tethne_citation_instance&quot; model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        citation Instance details which can be written to a file</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">citation_instance_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">citation_instance_id</span> <span class="o">=</span> <span class="n">tethnedao</span><span class="o">.</span><span class="n">getMaxCitationInstanceID</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">paper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">:</span>
+            <span class="n">paper_key</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="n">Serialize</span><span class="o">.</span><span class="n">paper_source_map</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">citation_list</span> <span class="ow">in</span> <span class="n">paper</span><span class="o">.</span><span class="n">citations</span><span class="p">:</span>
+                <span class="n">citation</span> <span class="o">=</span> <span class="n">citation_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">citation_key</span> <span class="o">=</span> <span class="n">citation</span>
+                <span class="n">citation_instance_id</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">date_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&#39;(\d+)&#39;</span><span class="p">,</span> <span class="n">citation</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">date_match</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">date</span> <span class="o">=</span> <span class="n">date_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">date_match</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="n">date_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">r&quot;NONE&quot;</span><span class="p">,</span> <span class="n">citation</span><span class="p">)</span>
+                    <span class="n">date</span> <span class="o">=</span> <span class="n">date_match</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
+                <span class="n">first_author</span> <span class="o">=</span> <span class="n">citation</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">date</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+                <span class="n">journal</span> <span class="o">=</span> <span class="n">citation</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">,</span> <span class="s">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">date</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
+                <span class="n">citation_instance_details</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&quot;model&quot;</span><span class="p">:</span> <span class="s">&quot;django-tethne.citation_instance&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;pk&quot;</span><span class="p">:</span> <span class="n">citation_instance_id</span><span class="p">,</span>
+                    <span class="s">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s">&quot;literal&quot;</span><span class="p">:</span> <span class="n">citation</span><span class="p">,</span>
+                        <span class="s">&quot;citation&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">citationIdMap</span><span class="p">[</span><span class="n">citation_key</span><span class="p">],</span>
+                        <span class="s">&quot;paper&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">paperIdMap</span><span class="p">[</span><span class="n">paper_key</span><span class="p">],</span>
+                        <span class="s">&quot;journal&quot;</span><span class="p">:</span> <span class="n">journal</span><span class="p">,</span>
+                        <span class="s">&quot;first_author&quot;</span><span class="p">:</span> <span class="n">first_author</span><span class="p">,</span>
+                        <span class="s">&quot;date&quot;</span><span class="p">:</span> <span class="n">date</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="n">citation_instance_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">citation_instance_details</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">citation_instance_data</span>
+</div>
+<div class="viewcode-block" id="Serialize.serializeInstitution"><a class="viewcode-back" href="../../../tethne.serialize.html#tethne.serialize.paper.Serialize.serializeInstitution">[docs]</a>    <span class="k">def</span> <span class="nf">serializeInstitution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method creates a fixture for the &quot;django-tethne_citation_institution&quot; model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        institution details which can be written to a file</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">institution_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">institution_instance_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">affiliation_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">affiliation_id</span> <span class="o">=</span> <span class="n">tethnedao</span><span class="o">.</span><span class="n">getMaxAffiliationID</span><span class="p">()</span>
+        <span class="n">institution_id</span> <span class="o">=</span> <span class="n">tethnedao</span><span class="o">.</span><span class="n">getMaxInstitutionID</span><span class="p">()</span>
+        <span class="n">institution_instance_id</span> <span class="o">=</span> <span class="n">tethnedao</span><span class="o">.</span><span class="n">getMaxInstitutionInstanceID</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">paper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="s">&#39;authorAddress&#39;</span><span class="p">):</span>
+                <span class="n">paper_key</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="n">Serialize</span><span class="o">.</span><span class="n">paper_source_map</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">])</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">paper</span><span class="o">.</span><span class="n">authorAddress</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">unicode</span><span class="p">:</span>
+                    <span class="n">institution_id</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">institution_instance_id</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">institute_literal</span><span class="p">,</span> <span class="n">authors</span> <span class="o">=</span> <span class="n">SerializeUtility</span><span class="o">.</span><span class="n">get_auth_inst</span><span class="p">(</span><span class="n">paper</span><span class="o">.</span><span class="n">authorAddress</span><span class="p">)</span>
+                    <span class="n">institute_row</span><span class="p">,</span> <span class="n">institute_instance_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_details_from_inst_literal</span><span class="p">(</span><span class="n">institute_literal</span><span class="p">,</span>
+                                                                                               <span class="n">institution_id</span><span class="p">,</span>
+                                                                                               <span class="n">institution_instance_id</span><span class="p">,</span>
+                                                                                               <span class="n">paper_key</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">institute_row</span><span class="p">:</span>
+                        <span class="n">institution_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">institute_row</span><span class="p">)</span>
+                    <span class="n">institution_instance_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">institute_instance_row</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">authors</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">authors</span><span class="p">:</span>
+                            <span class="n">affiliation_id</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="n">affiliation_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_affiliation_details</span><span class="p">(</span><span class="n">author</span><span class="p">,</span> <span class="n">affiliation_id</span><span class="p">,</span> <span class="n">institute_literal</span><span class="p">)</span>
+                            <span class="n">affiliation_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">affiliation_row</span><span class="p">)</span>
+
+                <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">paper</span><span class="o">.</span><span class="n">authorAddress</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">address</span> <span class="ow">in</span> <span class="n">paper</span><span class="o">.</span><span class="n">authorAddress</span><span class="p">:</span>
+                        <span class="n">institution_id</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">institution_instance_id</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">institute_literal</span><span class="p">,</span> <span class="n">authors</span> <span class="o">=</span> <span class="n">SerializeUtility</span><span class="o">.</span><span class="n">get_auth_inst</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+                        <span class="n">institute_row</span><span class="p">,</span> <span class="n">institute_instance_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_details_from_inst_literal</span><span class="p">(</span><span class="n">institute_literal</span><span class="p">,</span>
+                                                                                                   <span class="n">institution_id</span><span class="p">,</span>
+                                                                                                   <span class="n">institution_instance_id</span><span class="p">,</span>
+                                                                                                   <span class="n">paper_key</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">institute_row</span><span class="p">:</span>
+                            <span class="n">institution_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">institute_row</span><span class="p">)</span>
+                        <span class="n">institution_instance_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">institute_instance_row</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">authors</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                            <span class="n">authors</span> <span class="o">=</span> <span class="n">prevAuthors</span>
+                        <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="n">authors</span><span class="p">:</span>
+                            <span class="n">affiliation_id</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="n">affiliation_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_affiliation_details</span><span class="p">(</span><span class="n">author</span><span class="p">,</span> <span class="n">affiliation_id</span><span class="p">,</span> <span class="n">institute_literal</span><span class="p">)</span>
+                            <span class="n">affiliation_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">affiliation_row</span><span class="p">)</span>
+                        <span class="n">prevAuthors</span> <span class="o">=</span> <span class="n">authors</span>
+        <span class="k">return</span> <span class="n">institution_data</span><span class="p">,</span> <span class="n">institution_instance_data</span><span class="p">,</span> <span class="n">affiliation_data</span>
+</div>
+<div class="viewcode-block" id="Serialize.get_details_from_inst_literal"><a class="viewcode-back" href="../../../tethne.serialize.html#tethne.serialize.paper.Serialize.get_details_from_inst_literal">[docs]</a>    <span class="k">def</span> <span class="nf">get_details_from_inst_literal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">institute_literal</span><span class="p">,</span> <span class="n">institution_id</span><span class="p">,</span> <span class="n">institution_instance_id</span><span class="p">,</span> <span class="n">paper_key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method parses the institute literal to get the following</span>
+<span class="sd">        1. Department naame</span>
+<span class="sd">        2. Country</span>
+<span class="sd">        3. University name</span>
+<span class="sd">        4. ZIP, STATE AND CITY (Only if the country is USA. For other countries the standard may vary. So parsing these</span>
+<span class="sd">        values becomes very difficult. However, the complete address can be found in the column &quot;AddressLine1&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        institute_literal -&gt; The literal value of the institute</span>
+<span class="sd">        institution_id  -&gt; the Primary key value which is to be added in the fixture</span>
+<span class="sd">        institution_instance_id -&gt; Primary key value which is to be added in the fixture</span>
+<span class="sd">        paper_key -&gt; The Paper key which is used for the Institution Instance</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">institute_details</span> <span class="o">=</span> <span class="n">institute_literal</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+        <span class="n">institute_name</span> <span class="o">=</span> <span class="n">institute_details</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">country</span> <span class="o">=</span> <span class="n">institute_details</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">institute_details</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">institute_row</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">zipcode</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">city</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="k">if</span> <span class="s">&#39;USA&#39;</span> <span class="ow">in</span> <span class="n">country</span><span class="p">:</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">country</span>
+            <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">temp</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">country</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">zipcode</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">state</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">elif</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">temp</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">country</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">state</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">city</span> <span class="o">=</span> <span class="n">institute_details</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">institute_details</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
+
+        <span class="n">addressline1</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">institute_details</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">institute_details</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span>
+                <span class="n">addressline1</span> <span class="o">=</span> <span class="n">addressline1</span> <span class="o">+</span> <span class="n">institute_details</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;,&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">addressline1</span> <span class="o">=</span> <span class="n">addressline1</span> <span class="o">+</span> <span class="n">institute_details</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">institute_literal</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">instituteIdMap</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">instituteIdMap</span><span class="p">[</span><span class="n">institute_literal</span><span class="p">]</span> <span class="o">=</span> <span class="n">institution_id</span>
+                <span class="n">institute_row</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&quot;model&quot;</span><span class="p">:</span> <span class="s">&quot;django-tethne.institution&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;pk&quot;</span><span class="p">:</span> <span class="n">institution_id</span><span class="p">,</span>
+                    <span class="s">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s">&quot;institute_name&quot;</span><span class="p">:</span> <span class="n">institute_name</span><span class="p">,</span>
+                        <span class="s">&quot;addressLine1&quot;</span><span class="p">:</span> <span class="n">addressline1</span><span class="p">,</span>
+                        <span class="s">&quot;country&quot;</span><span class="p">:</span> <span class="n">country</span><span class="p">,</span>
+                        <span class="s">&quot;zip&quot;</span><span class="p">:</span> <span class="n">zipcode</span><span class="p">,</span>
+                        <span class="s">&quot;state&quot;</span><span class="p">:</span> <span class="n">state</span><span class="p">,</span>
+                        <span class="s">&quot;city&quot;</span><span class="p">:</span> <span class="n">city</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+        <span class="n">department</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39;Dept([^,]*),&#39;</span><span class="p">,</span> <span class="n">institute_literal</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">department</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39;Dept([^,]*),&#39;</span><span class="p">,</span> <span class="n">institute_literal</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">institute_instance_row</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&quot;model&quot;</span><span class="p">:</span> <span class="s">&quot;django-tethne.institution_instance&quot;</span><span class="p">,</span>
+            <span class="s">&quot;pk&quot;</span><span class="p">:</span> <span class="n">institution_instance_id</span><span class="p">,</span>
+            <span class="s">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&quot;institution&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">instituteIdMap</span><span class="p">[</span><span class="n">institute_literal</span><span class="p">],</span>
+                <span class="s">&quot;literal&quot;</span><span class="p">:</span> <span class="n">institute_literal</span><span class="p">,</span>
+                <span class="s">&quot;institute_name&quot;</span><span class="p">:</span> <span class="n">institute_name</span><span class="p">,</span>
+                <span class="s">&quot;addressLine1&quot;</span><span class="p">:</span> <span class="n">addressline1</span><span class="p">,</span>
+                <span class="s">&quot;country&quot;</span><span class="p">:</span> <span class="n">country</span><span class="p">,</span>
+                <span class="s">&quot;paper&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">paperIdMap</span><span class="p">[</span><span class="n">paper_key</span><span class="p">],</span>
+                <span class="s">&quot;department&quot;</span><span class="p">:</span> <span class="n">department</span><span class="p">,</span>
+                <span class="s">&quot;zip&quot;</span><span class="p">:</span> <span class="n">zipcode</span><span class="p">,</span>
+                <span class="s">&quot;state&quot;</span><span class="p">:</span> <span class="n">state</span><span class="p">,</span>
+                <span class="s">&quot;city&quot;</span><span class="p">:</span> <span class="n">city</span>
+
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">institute_row</span><span class="p">,</span> <span class="n">institute_instance_row</span>
+</div>
+<div class="viewcode-block" id="Serialize.get_affiliation_details"><a class="viewcode-back" href="../../../tethne.serialize.html#tethne.serialize.paper.Serialize.get_affiliation_details">[docs]</a>    <span class="k">def</span> <span class="nf">get_affiliation_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">affiliation_id</span><span class="p">,</span> <span class="n">institute_literal</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method is used to map the Affiliation between an author and Institution.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value - The author name</span>
+<span class="sd">        affiliation_id - Primary key of the affiliation table</span>
+<span class="sd">        institute_literal</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Affiliation details(JSON fixture) which can be written to a file</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">t</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">tokens</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">aulast</span><span class="p">,</span> <span class="n">auinit</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">aulast</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">auinit</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">aulast</span><span class="p">,</span> <span class="n">auinit</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&#39;&#39;</span>
+        <span class="n">aulast</span> <span class="o">=</span> <span class="n">_strip_punctuation</span><span class="p">(</span><span class="n">aulast</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="n">auinit</span> <span class="o">=</span> <span class="n">_strip_punctuation</span><span class="p">(</span><span class="n">auinit</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+        <span class="n">author_key</span> <span class="o">=</span> <span class="n">auinit</span><span class="o">+</span><span class="n">aulast</span>
+        <span class="n">affiliation_row</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&quot;model&quot;</span><span class="p">:</span> <span class="s">&quot;django-tethne.affiliation&quot;</span><span class="p">,</span>
+            <span class="s">&quot;pk&quot;</span><span class="p">:</span> <span class="n">affiliation_id</span><span class="p">,</span>
+            <span class="s">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&quot;author&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">authorIdMap</span><span class="p">[</span><span class="n">author_key</span><span class="p">],</span>
+                <span class="s">&quot;institution&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">instituteIdMap</span><span class="p">[</span><span class="n">institute_literal</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">affiliation_row</span>
+
+</div></div>
+<div class="viewcode-block" id="serialize"><a class="viewcode-back" href="../../../tethne.serialize.html#tethne.serialize.paper.serialize">[docs]</a><span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="n">dirPath</span><span class="p">,</span> <span class="n">corpus</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dirPath - A valid directory path where you want the JSON files to be written</span>
+
+<span class="sd">    corpus - The corpus object which is to be serialized.</span>
+
+<span class="sd">    source - The source of the corpus</span>
+<span class="sd">    The possible values can be</span>
+
+<span class="sd">        1 for JSTOR,</span>
+<span class="sd">        2 for ZOTERO and</span>
+<span class="sd">        3 for WOS</span>
+<span class="sd">        4 for Scopus</span>
+
+<span class="sd">    Follwoing is an example to use the serialize method.</span>
+
+<span class="sd">    This method will raise an exception if</span>
+
+<span class="sd">    1. dirPath is not a valid directory</span>
+<span class="sd">    2. If Corpus object is none or has no papers to serialize</span>
+<span class="sd">    3. The source is not a valid source.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">    &gt;&gt;&gt; from tethne.readers import wos</span>
+<span class="sd">    &gt;&gt;&gt; from tethne.serialize import paper</span>
+<span class="sd">    &gt;&gt;&gt; wosCorpus = wos.read(&#39;/path/to/my/Corpus.txt&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; paper.serialize(&#39;/path/to/my/FixturesDir/&#39;, wosCorpus, 3)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Writes the fixtures at the directory location.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">dirPath</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&#39;No such file or directory&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">corpus</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;The corpus object has no papers to serialize&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">source</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Not a valid source.&quot;</span><span class="p">)</span>
+
+    <span class="n">corpusfilePath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirPath</span><span class="p">,</span> <span class="s">&quot;corpus.json&quot;</span><span class="p">)</span>
+    <span class="n">paperFilePath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirPath</span><span class="p">,</span> <span class="s">&quot;paper.json&quot;</span><span class="p">)</span>
+    <span class="n">authorFilePath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirPath</span><span class="p">,</span> <span class="s">&quot;authors.json&quot;</span><span class="p">)</span>
+    <span class="n">authorInstanceFilePath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirPath</span><span class="p">,</span> <span class="s">&quot;authorInstance.json&quot;</span><span class="p">)</span>
+    <span class="n">citationsFilePath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirPath</span><span class="p">,</span> <span class="s">&quot;citations.json&quot;</span><span class="p">)</span>
+    <span class="n">citationInstanceFilePath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirPath</span><span class="p">,</span> <span class="s">&quot;citationInstance.json&quot;</span><span class="p">)</span>
+    <span class="n">institutionsFilePath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirPath</span><span class="p">,</span> <span class="s">&quot;institutions.json&quot;</span><span class="p">)</span>
+    <span class="n">institutionInstanceFilePath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirPath</span><span class="p">,</span> <span class="s">&quot;institutionInstance.json&quot;</span><span class="p">)</span>
+    <span class="n">affiliationsFilePath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirPath</span><span class="p">,</span> <span class="s">&quot;affiliations.json&quot;</span><span class="p">)</span>
+
+    <span class="n">serializehandler</span> <span class="o">=</span> <span class="n">Serialize</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span>
+
+    <span class="n">corpusDetails</span> <span class="o">=</span> <span class="n">serializehandler</span><span class="o">.</span><span class="n">serializeCorpus</span><span class="p">()</span>
+    <span class="n">papersDetails</span> <span class="o">=</span> <span class="n">serializehandler</span><span class="o">.</span><span class="n">serializePaper</span><span class="p">()</span>
+    <span class="n">authorDetails</span> <span class="o">=</span> <span class="n">serializehandler</span><span class="o">.</span><span class="n">serializeAuthors</span><span class="p">()</span>
+    <span class="n">authorInstanceDetails</span> <span class="o">=</span> <span class="n">serializehandler</span><span class="o">.</span><span class="n">serializeAuthorInstances</span><span class="p">()</span>
+    <span class="n">citationDetails</span> <span class="o">=</span> <span class="n">serializehandler</span><span class="o">.</span><span class="n">serializeCitation</span><span class="p">()</span>
+    <span class="n">citationInstanceDetails</span> <span class="o">=</span> <span class="n">serializehandler</span><span class="o">.</span><span class="n">serializeCitationInstance</span><span class="p">()</span>
+    <span class="n">institutions</span><span class="p">,</span> <span class="n">institutionsInstance</span><span class="p">,</span> <span class="n">affilations</span> <span class="o">=</span> <span class="n">serializehandler</span><span class="o">.</span><span class="n">serializeInstitution</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">corpusfilePath</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">corpusDetails</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">paperFilePath</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">papersDetails</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">authorFilePath</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">authorDetails</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">authorInstanceFilePath</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">authorInstanceDetails</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">citationsFilePath</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">citationDetails</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">citationInstanceFilePath</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">citationInstanceDetails</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">institutionsFilePath</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">institutions</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">institutionInstanceFilePath</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">institutionsInstance</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">affiliationsFilePath</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">affilations</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+</pre></div></div>
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../index.html">
+              <img class="logo" src="../../../_static/logo_round.png" alt="Logo">
+            </a></p>
+
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, ASU Digital Innovation Group.
+      </li>
+      <li>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

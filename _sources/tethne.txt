@@ -9,10 +9,12 @@ Subpackages
     tethne.analyze
     tethne.bin
     tethne.classes
+    tethne.dao
     tethne.model
     tethne.networks
     tethne.plot
     tethne.readers
+    tethne.serialize
     tethne.tests
     tethne.writers
 

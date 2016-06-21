@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Overview: module code &mdash; tethne 1.0 documentation</title>
+    <title>Overview: module code &mdash; tethne 0.8 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../_static/css/spc-extend.css">
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0',
+        VERSION:     '0.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/js/copybutton.js"></script>
-    <link rel="top" title="tethne 1.0 documentation" href="../index.html" > 
+    <link rel="top" title="tethne 0.8 documentation" href="../index.html" > 
   </head>
   <body>
 
@@ -47,7 +47,7 @@
     <ul class="nav nav-pills pull-left">
         <li class="active"><a href="http://diging.github.io/tethne/">Tethne</a></li>
 	
-        <li class="active"><a href="../index.html">tethne 1.0 documentation</a></li>
+        <li class="active"><a href="../index.html">tethne 0.8 documentation</a></li>
 	 
     </ul>
               
@@ -75,7 +75,8 @@
           <div class="body" id="spc-section-body">
             
   <h1>All modules for which code is available</h1>
-<ul><li><a href="tethne/analyze/collection.html">tethne.analyze.collection</a></li>
+<ul><li><a href="__builtin__.html">__builtin__</a></li>
+<li><a href="tethne/analyze/collection.html">tethne.analyze.collection</a></li>
 <li><a href="tethne/analyze/corpus.html">tethne.analyze.corpus</a></li>
 <li><a href="tethne/analyze/features.html">tethne.analyze.features</a></li>
 <li><a href="tethne/analyze/graph.html">tethne.analyze.graph</a></li>
@@ -83,6 +84,8 @@
 <li><a href="tethne/classes/feature.html">tethne.classes.feature</a></li>
 <li><a href="tethne/classes/graphcollection.html">tethne.classes.graphcollection</a></li>
 <li><a href="tethne/classes/paper.html">tethne.classes.paper</a></li>
+<li><a href="tethne/classes/streaming.html">tethne.classes.streaming</a></li>
+<li><a href="tethne/dao/tethnedao.html">tethne.dao.tethnedao</a></li>
 <li><a href="tethne/model.html">tethne.model</a></li>
 <ul><li><a href="tethne/model/corpus/mallet.html">tethne.model.corpus.mallet</a></li>
 </ul><li><a href="tethne/networks/authors.html">tethne.networks.authors</a></li>
@@ -95,9 +98,35 @@
 <li><a href="tethne/readers.html">tethne.readers</a></li>
 <ul><li><a href="tethne/readers/base.html">tethne.readers.base</a></li>
 <li><a href="tethne/readers/dfr.html">tethne.readers.dfr</a></li>
+<li><a href="tethne/readers/scopus.html">tethne.readers.scopus</a></li>
 <li><a href="tethne/readers/wos.html">tethne.readers.wos</a></li>
 <li><a href="tethne/readers/zotero.html">tethne.readers.zotero</a></li>
-</ul><li><a href="tethne/utilities.html">tethne.utilities</a></li>
+</ul><li><a href="tethne/serialize/paper.html">tethne.serialize.paper</a></li>
+<li><a href="tethne/tests/test_analyze_corpus.html">tethne.tests.test_analyze_corpus</a></li>
+<li><a href="tethne/tests/test_analyze_features.html">tethne.tests.test_analyze_features</a></li>
+<li><a href="tethne/tests/test_analyze_graph.html">tethne.tests.test_analyze_graph</a></li>
+<li><a href="tethne/tests/test_classes_corpus.html">tethne.tests.test_classes_corpus</a></li>
+<li><a href="tethne/tests/test_classes_feature.html">tethne.tests.test_classes_feature</a></li>
+<li><a href="tethne/tests/test_classes_graphcollection.html">tethne.tests.test_classes_graphcollection</a></li>
+<li><a href="tethne/tests/test_classes_streamingcorpus.html">tethne.tests.test_classes_streamingcorpus</a></li>
+<li><a href="tethne/tests/test_classes_structuredfeature.html">tethne.tests.test_classes_structuredfeature</a></li>
+<li><a href="tethne/tests/test_models_lda.html">tethne.tests.test_models_lda</a></li>
+<li><a href="tethne/tests/test_networks_authors.html">tethne.tests.test_networks_authors</a></li>
+<li><a href="tethne/tests/test_networks_base.html">tethne.tests.test_networks_base</a></li>
+<li><a href="tethne/tests/test_networks_features.html">tethne.tests.test_networks_features</a></li>
+<li><a href="tethne/tests/test_networks_helpers.html">tethne.tests.test_networks_helpers</a></li>
+<li><a href="tethne/tests/test_networks_papers.html">tethne.tests.test_networks_papers</a></li>
+<li><a href="tethne/tests/test_readers_base.html">tethne.tests.test_readers_base</a></li>
+<li><a href="tethne/tests/test_readers_dfr.html">tethne.tests.test_readers_dfr</a></li>
+<li><a href="tethne/tests/test_readers_merge.html">tethne.tests.test_readers_merge</a></li>
+<li><a href="tethne/tests/test_readers_scopus.html">tethne.tests.test_readers_scopus</a></li>
+<li><a href="tethne/tests/test_readers_wos.html">tethne.tests.test_readers_wos</a></li>
+<li><a href="tethne/tests/test_readers_zotero.html">tethne.tests.test_readers_zotero</a></li>
+<li><a href="tethne/tests/test_utilities.html">tethne.tests.test_utilities</a></li>
+<li><a href="tethne/tests/test_writers_collection.html">tethne.tests.test_writers_collection</a></li>
+<li><a href="tethne/tests/test_writers_corpus.html">tethne.tests.test_writers_corpus</a></li>
+<li><a href="tethne/tests/test_writers_graph.html">tethne.tests.test_writers_graph</a></li>
+<li><a href="tethne/utilities.html">tethne.utilities</a></li>
 <li><a href="tethne/writers/collection.html">tethne.writers.collection</a></li>
 <li><a href="tethne/writers/corpus.html">tethne.writers.corpus</a></li>
 <li><a href="tethne/writers/graph.html">tethne.writers.graph</a></li>
