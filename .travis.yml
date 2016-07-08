@@ -1,6 +1,7 @@
 language: python
 os:
   - linux
+  - osx
 python:
   - "2.7.9"
   - "2.7.10"
