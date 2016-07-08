@@ -169,7 +169,8 @@ class LDAModel(Model):
                 '--input', self.corpus_path,
                 '--output', self.input_path,
                 '--keep-sequence',          # Required for LDA.
-                '--remove-stopwords'])      # Probably redundant.
+                '--remove-stopwords'],      # Probably redundant.
+            env={"MALLET_HOME": self.mallet_path})
 
         if exit != 0:
             msg = "MALLET import-file failed with exit code {0}.".format(exit)
@@ -208,7 +209,8 @@ class LDAModel(Model):
                     '--word-topic-counts-file', self.wt,
                     '--output-model', self.om],
                 stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
+                stderr=subprocess.PIPE,
+            env={"MALLET_HOME": self.mallet_path})
 
         # Handle output of MALLET in real time.
         while p.poll() is None:
