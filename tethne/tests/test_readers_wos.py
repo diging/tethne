@@ -97,6 +97,7 @@ class TestWoSParserStreaming(unittest.TestCase):
                                 dauthorAddressError.format('authorAddress', 'unicode',
                                                            'list', type(e.authorAddress)))
 
+
 class TestWoSParser(unittest.TestCase):
     def test_read(self):
         corpus = read(datapath)
@@ -193,6 +194,7 @@ class TestWoSParser(unittest.TestCase):
             if cr.date:
                 self.assertIsInstance(cr.date, int)
             self.assertTrue(hasattr(cr, 'journal'))
+
 
 class TestWithStarCR(unittest.TestCase):
     def setUp(self):
