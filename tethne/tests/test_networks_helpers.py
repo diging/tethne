@@ -12,8 +12,16 @@ from tethne.readers.wos import read
 from collections import Counter
 
 
+class TestCitationCount(unittest.TestCase):
+    def test_citation_count(self):
+        corpus = read(datapath)
+        counts = helpers.citation_count(corpus)
 
-class MyTestCase(unittest.TestCase):
+        self.assertIsInstance(counts, dict)
+        self.assertEqual(len(counts), len(corpus.features['citations'].index))
+
+
+class TestSimplifyMultigraph(unittest.TestCase):
 
 
     def test_simplify_multigraph(self):
