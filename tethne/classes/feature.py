@@ -455,7 +455,7 @@ class StructuredFeatureSet(BaseFeatureSet):
             for f in feature:
                 t = self.lookup[f]
                 v_ = func(f, self.count(f), feature.count(f), self.documentCounts[t])
-                if v_ is not None:
+                if v_:
                     feature_.append(f)
             features[i] = StructuredFeature(feature_)
 
@@ -534,7 +534,6 @@ class FeatureSet(BaseFeatureSet):
                     pass
 
 
-
     def transform(self, func):
         """
         Apply a transformation to tokens in this :class:`.FeatureSet`\.
@@ -590,7 +589,6 @@ class FeatureSet(BaseFeatureSet):
                     feature_.append((f_, v))
             features[i] = Feature(feature_)
         return FeatureSet(features)
-
 
     def as_matrix(self):
         """
