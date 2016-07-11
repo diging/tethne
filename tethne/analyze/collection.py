@@ -3,24 +3,26 @@ Methods for analyzing :class:`.GraphCollection`\s.
 
 .. autosummary::
    :nosignatures:
-   
+
    algorithm
    attachment_probability
    connected
    delta
    node_global_closeness_centrality
-   
+
 """
 
 import networkx
 import graph
 import warnings
+from collections import defaultdict, Counter
+
 
 def algorithm(G, method_name, **kwargs):
     """
     Apply a ``method`` from NetworkX to all :ref:`networkx.Graph <networkx:graph>` objects in the
     :class:`.GraphCollection` ``G``.
-    
+
     For options, see the `list of algorithms
     <http://networkx.github.io/documentation/networkx-1.9/reference/algorithms.html>`_
     in the NetworkX documentation. Not all of these have been tested.
@@ -101,66 +103,70 @@ def connected(G, method_name, **kwargs):
     return G.analyze(['connected', method_name], **kwargs)
 
 
-def attachment_probability(G):
+def attachment_probability(G, raw=False):
     """
-    Calculates the observed attachment probability for each node at each
-    time-step.
-    
-    
-    Attachment probability is calculated based on the observed new edges in the
-    next time-step. So if a node acquires new edges at time t, this will accrue
-    to the node's attachment probability at time t-1. Thus at a given time,
-    one can ask whether degree and attachment probability are related.
+    Calculates the attachment probability for each node at each time-step.
+
+    The attachment probability for a node at a particular graph state ``t`` is
+    the probability that the next edge added to the graph will accrue to that
+    node. The MLE for attachment probability is thus the observed fraction of
+    all new edges in graph state ``t + 1`` that accrue to a particular node.
+
+    Note that values will only be calculated for nodes present in state ``t``.
+    In other words, if in ``t + 1`` a new node is introduced who also accrues
+    new edges, that node will **not** appear in the results for state ``t``.
 
     Parameters
     ----------
     G : :class:`.GraphCollection`
-        Must be sliced by 'date'. See :func:`.GraphCollection.slice`\.
-    
+    raw : bool
+        (default: ``False``) If ``True``, nodes are represented by their
+        integer ids in ``G``, rather than their label.
+
     Returns
     -------
     probs : dict
-        Keyed by index in G.graphs, and then by node.
+        Keyed by index in ``G``, and then by node. If ``raw`` is True, node keys
+        will be integer indices from the GraphCollection's  ``node_index``.
     """
-    warnings.warn("Removed in 0.8. Too domain-specific.")
 
     probs = {}
-    G_ = None
-    k_ = None
-    for k,g in G.graphs.iteritems():
-        new_edges = {}
-        if G_ is not None: 
-            for n in g.nodes():
-                try:
-                    old_neighbors = set(G_[n].keys())
-                    if len(old_neighbors) > 0:
-                        new_neighbors = set(g[n].keys()) - old_neighbors
-                        new_edges[n] = float(len(new_neighbors))
-                    else:
-                        new_edges[n] = 0.
-                except KeyError:
-                    pass
-    
-            N = sum( new_edges.values() )
-            probs[k_] = { n:0. for n in G_.nodes() }
-            if N > 0.:
-                for n in G.nodes():
-                    try:
-                        probs[k_][n] = new_edges[n]/N
-                    except KeyError:
-                        pass
 
-            if probs[k_] is not None:
-                networkx.set_node_attributes(G.graphs[k_],
-                                             'attachment_probability',
-                                             probs[k_])
-    
-        G_ = G
-        k_ = k
+    keys = sorted(G.keys())
+    attach = defaultdict(Counter)
+    for i, key in enumerate(keys):
+        graph = G[key]
 
-    # Handle last graph (no values).
-    key = G.graphs.keys()[-1]
-    zprobs = { n:0. for n in G.graphs[key].nodes() }
-    networkx.set_node_attributes(G.graphs[key], 'attachment_probability', zprobs)
+        if i == 0:          # All calculations are retrospective, so we can
+            last = G[key]   #  skip the first graph.
+            last_key = key
+            continue
 
-    return probs
+        for node in graph.nodes():
+            if node not in last.node:
+                continue
+            new = len(set(graph.neighbors(node)) - set(last.neighbors(node)))
+            attach[last_key][node] = new
+
+        # The MLE for node attachment probability is the observed fraction of
+        #  all new edges in a time-step that accrue to a particular node.
+        N = 1. * sum(attach[last_key].values())
+        attach[last_key] = dict([
+            (node, attach[last_key][node]/N if attach[last_key][node] > 0 else 0.)
+            for node in last.nodes()])
+        networkx.set_node_attributes(G[last_key],
+                                     'attachment_probability',
+                                     attach[last_key])
+
+        last = G[key]
+        last_key = key
+
+    # Nodes in the last graph have 0 probability, but we want to include this
+    #  graph for symmetry with the collection.
+    attach[key] = {node: 0. for node in graph.nodes()}
+    networkx.set_node_attributes(G[key], 'attachment_probability', attach[key])
+
+    if raw:
+        return attach
+    return {key: {G.node_index[node]: prob for node, prob in values.iteritems()}
+            for key, values in attach.iteritems()}
