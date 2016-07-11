@@ -10,6 +10,7 @@ from collections import Counter
 
 datapath = './tethne/tests/data/wos_altman_yale.txt'
 
+
 class TestAttachmentProbability(unittest.TestCase):
     def setUp(self):
         self.corpus = read(datapath)

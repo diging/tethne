@@ -128,6 +128,19 @@ def attachment_probability(G, raw=False):
     probs : dict
         Keyed by index in ``G``, and then by node. If ``raw`` is True, node keys
         will be integer indices from the GraphCollection's  ``node_index``.
+
+    Examples
+    --------
+
+    .. code-block:: python
+
+       >>> from tethne.readers.wos import read
+       >>> corpus = read("/path/to/my/data")
+       >>> from tethne import coauthors, GraphCollection
+       >>> collection = GraphCollection(corpus, coauthors)
+       >>> from tethne.analyze.collection import attachment_probability
+       >>> probs = attachment_probability(collection)
+       
     """
 
     probs = {}
