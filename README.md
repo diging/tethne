@@ -1,5 +1,3 @@
-![Tethneus, an orb weaving spider](http://diging.github.io/tethne/doc/0.6.1-beta/_static/logo_round.png)
-
 Tethne [![Build Status](https://travis-ci.org/diging/tethne.svg?branch=python)](https://travis-ci.org/diging/tethne)
 ======
 Tethne is a Python package for integrated bibliographic and corpus analysis developed by
@@ -10,6 +8,16 @@ social influence modeling. Rather than reinvent or re-implement existing algorit
 Tethne is designed to interface with existing software packages, and to provide
 mechanisms for drawing the results and functionalities of those packages together.
 
+Need help?
+----------
+We now have a Google group for Tethne users: https://groups.google.com/forum/#!forum/tethne-users
+
+Documentation
+-------------
+For more information, see the Tethne [website](http://diging.github.io/tethne/).
+
+The documentation project (ReST sources, etc.) can be found in [``tethne-docs``](https://github.com/diging/tethne-docs).
+
 Key features
 ------------
 * Flexible core model for text and citation-data.
@@ -17,12 +25,6 @@ Key features
 * Integrates popular topic modeling software (e.g. MALLET).
 * Export network models to mainstream formats (e.g. for visualization in Cytoscape).
 * Leverages powerful computational and network-analysis libraries in Python.
-
-Documentation
--------------
-For more information, see the Tethne [website](http://diging.github.io/tethne/).
-
-The documentation project (ReST sources, etc.) can be found in [``tethne-docs``](https://github.com/diging/tethne-docs).
 
 How to Contribute
 -----------------
@@ -78,16 +80,6 @@ and a simplified API. Here are some of the most notable changes:
 * Introduced ``Feature`` and ``FeatureSet`` classes to provide a more consistent and
   user-friendly mechanism for managing document features.
 
-Coming in v0.8
---------------
-* Support for [igraph](http://igraph.org/redirect.html) and
-  [graph-tool](https://graph-tool.skewed.de/).
-*
-
-Questions?
-----------
-Ask [Erick](https://asu.academia.edu/ErickPeirson)
-
 Contributors
 ------------
 * [erickpeirson](http://github.com/erickpeirson)
@@ -118,3 +110,6 @@ Society, School of Life Sciences.
 This material is based upon work supported by the National Science Foundation Graduate
 Research Fellowship Program under Grant No. 2011131209, and NSF Doctoral Dissertation
 Research Improvement Grant No. 1256752.
+
+
+![Tethneus, an orb weaving spider](http://diging.github.io/tethne/doc/0.6.1-beta/_static/logo_round.png)
