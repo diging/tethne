@@ -1,5 +1,5 @@
 """
-Classes and methods related to the :class:`.MALLETModelManager`\.
+Fit the vanilla LDA topic model with MALLET.
 """
 
 import os, sys, re, shutil, tempfile, subprocess, csv, platform, inspect
