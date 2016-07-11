@@ -2,18 +2,10 @@
 Classes and methods related to the :class:`.MALLETModelManager`\.
 """
 
-import os
-import re
-import shutil
-import tempfile
-import subprocess
-import csv
-import platform
+import os, sys, re, shutil, tempfile, subprocess, csv, platform, inspect
 from collections import defaultdict
-
 from networkx import Graph
 
-import sys
 PYTHON_3 = sys.version_info[0] == 3
 if PYTHON_3:
     unicode = str
@@ -25,10 +17,10 @@ logger.setLevel('ERROR')
 
 from tethne import write_documents, Feature, FeatureSet
 from tethne.model import Model
-import tethne
 
 # Determine path to MALLET.
-TETHNE_PATH = os.path.split(os.path.abspath(tethne.__file__))[0]
+
+TETHNE_PATH = os.path.join(os.path.dirname(os.path.abspath(inspect.stack()[0][1])), '..', '..')
 MALLET_PATH = os.path.join(TETHNE_PATH, 'bin', 'mallet-2.0.7')
 
 import sys
@@ -138,7 +130,7 @@ class LDAModel(Model):
 
         if platform.system() == 'Windows':
             self.mallet_bin += '.bat'
-        os.putenv('MALLET_HOME', self.mallet_path)
+        os.environ['MALLET_HOME'] = self.mallet_path
         super(LDAModel, self).__init__(*args, **kwargs)
 
     def prep(self):
@@ -177,7 +169,8 @@ class LDAModel(Model):
                 '--input', self.corpus_path,
                 '--output', self.input_path,
                 '--keep-sequence',          # Required for LDA.
-                '--remove-stopwords'])      # Probably redundant.
+                '--remove-stopwords'],      # Probably redundant.
+            env={"MALLET_HOME": self.mallet_path})
 
         if exit != 0:
             msg = "MALLET import-file failed with exit code {0}.".format(exit)
@@ -216,7 +209,8 @@ class LDAModel(Model):
                     '--word-topic-counts-file', self.wt,
                     '--output-model', self.om],
                 stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
+                stderr=subprocess.PIPE,
+            env={"MALLET_HOME": self.mallet_path})
 
         # Handle output of MALLET in real time.
         while p.poll() is None:
