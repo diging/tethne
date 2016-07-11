@@ -26,16 +26,20 @@ logger.setLevel('DEBUG')
 from tethne.model.corpus.dtm import _to_dtm_input
 
 
+def _cleanUp(basepath):
+    for fname in ['meta', 'mult', 'seq', 'vocab']:
+        try:
+            os.remove(basepath + '-%s.dat' % fname)
+        except OSError:
+            pass
+
+
 class TestToDTMInput(unittest.TestCase):
     def setUp(self):
         self.corpus = read(datapath, index_by='wosid')
         self.basepath = os.path.join(sandbox, 'dtm_test')
         self.corpus.index_feature('abstract', word_tokenize)
-        for fname in ['meta', 'mult', 'seq', 'vocab']:
-            try:
-                os.remove(self.basepath + '-%s.dat' % fname)
-            except OSError:
-                pass
+        _cleanUp(self.basepath)
 
     def test_to_dtm_input(self):
         _to_dtm_input(self.corpus, self.basepath, 'abstract')
@@ -44,8 +48,7 @@ class TestToDTMInput(unittest.TestCase):
             self.assertTrue(os.path.exists(self.basepath + '-%s.dat' % fname))
 
     def tearDown(self):
-        for fname in ['meta', 'mult', 'seq', 'vocab']:
-            os.remove(self.basepath + '-%s.dat' % fname)
+        _cleanUp(self.basepath)
 
 
 class TestDTMModel(unittest.TestCase):
@@ -53,39 +56,28 @@ class TestDTMModel(unittest.TestCase):
         self.corpus = read(datapath, index_by='wosid')
         self.basepath = os.path.join(sandbox, 'dtm_test')
         self.corpus.index_feature('abstract', word_tokenize)
-        for fname in ['meta', 'mult', 'seq', 'vocab']:
-            try:
-                os.remove(self.basepath + '-%s.dat' % fname)
-            except OSError:
-                pass
+        _cleanUp(self.basepath)
 
     def test_init(self):
         self.model = DTMModel(self.corpus, featureset_name='abstract')
 
     def test_fit(self):
         self.model = DTMModel(self.corpus, featureset_name='abstract')
-        self.model.fit(Z=20)
+        self.model.fit(Z=5)
 
-# class TestLDAModel(unittest.TestCase):
-#     def setUp(self):
-#         from tethne.model.corpus.dtm import DTMModel
-#         corpus = read(datapath, index_by='wosid')
-#         corpus.index_feature('abstract', tokenize, structured=True)
-#         self.model = LDAModel(corpus, featureset_name='abstract')
-#         self.model.fit(Z=20, max_iter=500)
-#
-#     def test_ldamodel(self):
-#         dates, rep = self.model.topic_over_time(1)
-#         self.assertGreater(sum(rep), 0)
-#         self.assertEqual(len(dates), len(rep))
-#
-#         self.assertIsInstance(self.model.phi, FeatureSet)
-#         self.assertIsInstance(self.model.theta, FeatureSet)
-#
-#         self.assertIsInstance(self.model.list_topics(), list)
-#         self.assertGreater(len(self.model.list_topics()), 0)
-#         self.assertIsInstance(self.model.list_topic(0), list)
-#         self.assertGreater(len(self.model.list_topic(0)), 0)
+        self.assertEqual(self.model.e_theta.shape, (5, 220))
+        self.assertEqual(self.model.phi.shape, (5, 7429, 12))
+
+        keys, values =  self.model.topic_evolution(0)
+        self.assertEqual(keys, self.corpus.indices['date'].keys())
+
+        self.model.list_topic(0, 0)
+        self.model.list_topic_diachronic(0)
+        self.model.list_topics(0)
+
+    def tearDown(self):
+        _cleanUp(self.basepath)
+
 
 
 if __name__ == '__main__':

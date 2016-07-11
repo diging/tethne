@@ -5,13 +5,19 @@ Fit the DTM topic model.
 from tethne.model import Model
 
 import os, sys, re, shutil, tempfile, subprocess, csv, platform, inspect
+try:
+    import numpy as np
+except ImportError:
+    raise ImportError('DTMModel requires Numpy')
+
 from collections import defaultdict
 
 TETHNE_PATH = os.path.join(os.path.dirname(os.path.abspath(inspect.stack()[0][1])), '..', '..')
 DTM_PATH = os.path.join(TETHNE_PATH, 'bin', 'dtm')
 
 
-def _to_dtm_input(corpus, target, featureset_name, fields=['date','atitle'], **slice_kwargs):
+def _to_dtm_input(corpus, target, featureset_name, fields=['date','atitle'],
+                  **slice_kwargs):
     """
 
     Parameters
@@ -99,10 +105,12 @@ def _to_dtm_input(corpus, target, featureset_name, fields=['date','atitle'], **s
     #       ...
     #       number_docs_time_NumberTimestamps
     #
+    years = []
     with open(target + '-seq.dat', 'wb') as seqFile:
         seqFile.write(str(len(seq)) + '\n')
         for year, papers in sorted(seq.items()):
             seqFile.write('{0}\n'.format(len(papers)))
+            years.append(year)
 
     #       a file with all of the words in the vocabulary, arranged in
     #       the same order as the word indices
@@ -110,7 +118,7 @@ def _to_dtm_input(corpus, target, featureset_name, fields=['date','atitle'], **s
         for index, word in sorted(vocab.items()):
             vocabFile.write('{0}\n'.format(word))
 
-    return len(seq)
+    return years, len(seq)
 
 
 class DTMModel(Model):
@@ -180,54 +188,36 @@ class DTMModel(Model):
 
         while p.poll() is None:
             l = p.stderr.readline()
-            print l
-            try:    # Find the LL
-                this_ll = float(re.findall(r'^lhood\s+=\s+([-]?\d+\.\d+)', l)[0])
-                self.ll.append(this_ll)
-
+            match = re.match(r'^lhood\s+=\s+([-]?\d+\.\d+)', l)
+            if match:   # Find the LL
+                self.ll.append(match.groups()[0])
                 self.ll_iters.append(i)
                 i += 1
-            except IndexError:
-                pass
 
-            try:    # Find conv
-                conv = re.findall(r'conv\s+=\s+([-]?\d+\.\d+e[-]\d+)', l)
-                self.conv.append(float(conv[0]))
-
-                progress = int(100 * float(len(self.conv))/float(max_v))
-
-            except IndexError:
-                pass
         self.load()
-
-        # self.max_iter += lda_max_em_iter   # TODO: does this make sense?
-
 
     def _generate_corpus(self, **slice_kwargs):
         """
         Writes a corpus to disk amenable to DTM.
         """
 
-        self.N = _to_dtm_input(self.corpus, self.temp+'/tethne', featureset_name=self.featureset_name)
+        self.years, self.N = _to_dtm_input(self.corpus, self.temp+'/tethne',
+                                           featureset_name=self.featureset_name,
+                                           **slice_kwargs)
 
     def load(self):
         """Load and return a :class:`.DTMModel`\."""
 
-        self.e_theta, self.phi, self.metadata, self.vocabulary = from_gerrish(self.outname, self.meta_path, self.vocab_path)
+        result = from_gerrish(self.outname, self.meta_path, self.vocab_path)
+        self.e_theta, self.phi, self.metadata, self.vocabulary = result
 
-        self.Z = e_theta.shape[0]   # Number of topics.
-        self.M = e_theta.shape[1]   # Number of documents.
+        self.Z = self.e_theta.shape[0]   # Number of topics.
+        self.M = self.e_theta.shape[1]   # Number of documents.
 
-        self.W = phi.shape[1]    # Number of words.
-        self.T = phi.shape[2]    # Number of time periods.
+        self.W = self.phi.shape[1]    # Number of words.
+        self.T = self.phi.shape[2]    # Number of time periods.
 
-        self.lookup = { v['id']:k for k,v in metadata.iteritems() }
-
-        logging.debug('DTMModel.__init__(): loaded model with' + \
-                   ' {0} topics, {1} documents,'.format(self.Z, self.M) + \
-                   ' {0} words, {1} time periods.'.format(self.W, self.T))
-
-
+        self.lookup = {v['id']:k for k,v in self.metadata.iteritems()}
 
     def _item_description(self, i, **kwargs):
         """
@@ -269,8 +259,6 @@ class DTMModel(Model):
 
     def topic_evolution(self, k, Nwords=5):
         """
-        Generate a plot that shows p(w|z) over time for the top ``Nwords``
-        terms.
 
         Parameters
         ----------
@@ -288,25 +276,19 @@ class DTMModel(Model):
         """
 
         t_keys = range(self.T)
-        t_values = {}
+        t_values = defaultdict(dict)
         for t in t_keys:
             dim = self.dimension(k, t=t, top=Nwords)
-            for w,p in dim:
-                if w not in t_values:
-                    t_values[w] = {}
+            for w, p in dim:
                 t_values[w][t] = p
 
-        t_series = {}
+        t_series = defaultdict(list)
         for w, values in t_values.iteritems():
             word = self.vocabulary[w]
-            series = []
             for t in t_keys:
-                if t in values:
-                    series.append(values[t])
-                else:   # No value for that time-period.
-                    series.append(0.)
-            t_series[word] = series
+                t_series[word].append(values[t] if t in values else 0.)
 
+        t_keys = getattr(self, 'years', t_keys)
         return t_keys, t_series
 
     def list_topic(self, k, t, Nwords=10):
@@ -327,15 +309,12 @@ class DTMModel(Model):
         as_list : list
             List of words in topic.
         """
-        words = self.dimension(k, t=t, top=Nwords)
-        as_list = [ self.vocabulary[w] for w,p in words ]
 
-        return as_list
+        words = self.dimension(k, t=t, top=Nwords)
+        return [self.vocabulary[w] for w, p in words]
 
     def list_topic_diachronic(self, k, Nwords=10):
-        as_dict = { t:self.list_topic(k, t, Nwords)
-                        for t in xrange(self.T) }
-        return as_dict
+        return {t: self.list_topic(k, t, Nwords) for t in xrange(self.T)}
 
     def print_topic_diachronic(self, k, Nwords=10):
         as_dict = self.list_topic_diachronic(k, Nwords)
@@ -359,15 +338,9 @@ class DTMModel(Model):
         Nwords : int
             Number of words to return.
 
-        Returns
-        -------
-        as_string : str
-            Joined list of words in topic.
         """
 
-        as_string = ', '.join(self.list_topic(k, t=t, Nwords=Nwords))
-
-        print as_string
+        print u', '.join(self.list_topic(k, t=t, Nwords=Nwords))
 
     def list_topics(self, t, Nwords=10):
         """
@@ -382,15 +355,11 @@ class DTMModel(Model):
 
         Returns
         -------
-        as_dict : dict
+        dict
             Keys are topic indices, values are list of words.
         """
 
-        as_dict = {}
-        for k in xrange(self.Z):
-            as_dict[k] = self.list_topic(k, t, Nwords)
-
-        return as_dict
+        return {k: self.list_topic(k, t, Nwords) for k in xrange(self.Z)}
 
     def print_topics(self, t, Nwords=10):
         """
@@ -409,13 +378,169 @@ class DTMModel(Model):
             Newline-delimited lists of words for each topic.
         """
 
-        as_dict = self.list_topics(t, Nwords)
-        s = []
-        for key, value in as_dict.iteritems():
-            s.append('{0}: {1}'.format(key, ', '.join(value)))
-        as_string = '\n'.join(s)
 
-        print as_string
+        print u'\n'.join([u'{0}: {1}'.format(key, u', '.join(value))
+                          for key, value
+                          in self.list_topics(t, Nwords).iteritems()])
+
+    def item(self, i, top=None, **kwargs):
+        """
+        Describes an item in terms of dimensions and weights.
+
+        Subclass must provide ``_item_description(i)`` method.
+
+        Parameters
+        ----------
+        i : int
+            Index for an item.
+        top : int
+            (optional) Number of (highest-w) dimensions to return.
+
+        Returns
+        -------
+        description : list
+            A list of ( dimension , weight ) tuples.
+        """
+
+        try:
+            description = self._item_description(i, **kwargs)
+        except KeyError:
+            raise KeyError('No such item index in this model.')
+        except AttributeError:
+            raise NotImplementedError('_item_description() not implemented' + \
+                                      ' for this model class.')
+
+        # Optionally, select only the top-weighted dimensions.
+        if type(top) is int:
+            D, W = zip(*description) # Dimensions and Weights.
+            D = list(D)     # To support element deletion, below.
+            W = list(W)
+            top_description = []
+            while len(top_description) < top:   # Avoiding Numpy argsort.
+                d = W.index(max(W)) # Index of top weight.
+                top_description.append((D[d], W[d]))
+                del D[d], W[d]
+            return top_description
+        return description
+
+    def item_relationship(self, i, j, **kwargs):
+        """
+        Describes the relationship between two items.
+
+        Subclass must provide ``_item_relationship(i, j)`` method.
+
+        Parameters
+        ----------
+        i : int
+            Item index.
+        j : int
+            Item index.
+
+        Returns
+        -------
+        list
+            A list of ( dimension ,  weight ) tuples.
+        """
+
+        try:
+            return self._item_relationship(i, j, **kwargs)
+        except AttributeError:
+            raise NotImplementedError('_item_relationship() not implemented' \
+                                      + ' for this model class.')
+
+    def dimension(self, d, top=None, asmatrix=False, **kwargs):
+        """
+        Describes a dimension (eg a topic).
+
+        Subclass must provide ``_dimension_description(d)`` method.
+
+        Parameters
+        ----------
+        d : int
+            Dimension index.
+
+        Returns
+        -------
+        description : list
+            A list of ( feature, weight ) tuples (e.g. word, prob ).
+        """
+
+        try:
+            description = self._dimension_description(d, **kwargs)
+        except AttributeError:
+            raise NotImplementedError('_dimension_description() not' + \
+                                      ' implemented for this model class.')
+
+        # Optionally, select only the top-weighted dimensions.
+        if type(top) is int:
+            D, W = zip(*description) # Dimensions and Weights.
+            D = list(D)     # To support element deletion, below.
+            W = list(W)
+            top_description = []
+            while len(top_description) < top:   # Avoiding Numpy argsort.
+                d = W.index(max(W)) # Index of top weight.
+                top_description.append((D[d], W[d]))
+                del D[d], W[d]
+
+            description = top_description
+
+        if asmatrix:
+            J,K = zip(*description)
+            I = [ d for i in xrange(len(J)) ]
+            mat = coo_matrix(list(K), (I,list(J))).tocsc()
+            return mat
+
+        return description
+
+    def dimension_items(self, d, threshold, **kwargs):
+        """
+        Describes a dimension in terms of the items that contain it.
+
+        Subclass must provide ``_dimension_items(d, threshold)`` method.
+
+        Parameters
+        ----------
+        d : int
+            Dimension index.
+        threshold : float
+            Minimum representation of ``d`` in item.
+
+        Returns
+        -------
+        description : list
+            A list of ( item, weight ) tuples.
+        """
+
+        try:
+            return self._dimension_items(d, threshold, **kwargs)
+        except AttributeError:
+            raise NotImplementedError('_dimension_items() not implemented for' \
+                                      + ' this model class.')
+
+    def dimension_relationship(self, d, e, **kwargs):
+        """
+        Describes the relationship between two dimensions.
+
+        Subclass must provide ``_dimension_relationship(d, e)`` method.
+
+        Parameters
+        ----------
+        d : int
+            Dimension index.
+        e : int
+            Dimension index.
+
+        Returns
+        -------
+        relationship : list
+            A list of ( factor ,  weight ) tuples.
+        """
+
+        try:
+            return self._dimension_relationship(d, e, **kwargs)
+        except AttributeError:
+            raise NotImplementedError('_dimension_relationship() not' \
+                                      + ' implemented for this model class.')
 
 
 
@@ -517,7 +642,7 @@ class GerrishLoader(object):
                 self.handler[fs[-2]](fname, z)
 
         tkeys = sorted(self.tdict.keys())
-        self.phi = np.array( [ self.tdict[z] for z in tkeys ])
+        self.phi = np.array([self.tdict[z] for z in tkeys])
 
         return self.e_theta, self.phi, self.metadata, self.vocabulary
 

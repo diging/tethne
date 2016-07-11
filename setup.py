@@ -51,5 +51,6 @@ setup(
         "slate",
         "Unidecode==0.4.17",
         "nltk",
+        "numpy==1.9.3"
     ],
 )
