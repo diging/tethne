@@ -140,7 +140,7 @@ def attachment_probability(G, raw=False):
        >>> collection = GraphCollection(corpus, coauthors)
        >>> from tethne.analyze.collection import attachment_probability
        >>> probs = attachment_probability(collection)
-       
+
     """
 
     probs = {}
