@@ -1,16 +1,5 @@
-import os
-import re
+import os, re, rdflib, codecs, chardet, copy, unicodedata, logging
 import xml.etree.ElementTree as ET
-import rdflib
-
-import codecs
-import chardet
-import copy
-import unicodedata
-
-import logging
-
-from io import BytesIO
 
 # rdflib complains a lot.
 logging.getLogger("rdflib").setLevel(logging.ERROR)
@@ -56,6 +45,8 @@ class BaseParser(object):
         self.path = path
         self.data = []
         self.fields = set([])
+
+        self.encoding = 'utf-8'
 
         for k, v in kwargs.iteritems():
             setattr(self, k, v)
@@ -172,6 +163,8 @@ class IterParser(BaseParser):
         if hasattr(self.data[-1], tag):
             value = getattr(self.data[-1], tag)
             if tag in self.concat_fields:
+                if type(data) is str:
+                    data = data.decode(self.encoding)
                 value = ' '.join([value, unicode(data)])
             elif type(value) is list:
                 value.append(data)
@@ -211,12 +204,11 @@ class FTParser(IterParser):
         if not os.path.exists(self.path):
             raise IOError("No such path: {0}".format(self.path))
 
-
-        with open(self.path, "rb") as f:
+        with codecs.open(self.path, "rb") as f:
             msg = f.read()
         result = chardet.detect(msg)
-
-        self.buffer = codecs.open(self.path, "rb", encoding=result['encoding'])
+        self.encoding = result['encoding']
+        self.buffer = codecs.open(self.path, "rb", encoding=self.encoding)
 
         self.at_eof = False
 
@@ -260,6 +252,9 @@ class XMLParser(IterParser):
         #     self.root = ET.fromstring(f.read())
         # pattern = './/{elem}'.format(elem=self.entry_element)
         # self.elements = self.root.findall(pattern)
+
+        # ET does not support unicode, but it does support encodings. So we
+        #  open the file without any intervention.
         self.f = open(self.path, 'r')
         self.iterator = ET.iterparse(self.f)
 
@@ -292,6 +287,9 @@ class XMLParser(IterParser):
         tag, data = child.tag, child.text
         if data:
             data = data.strip()
+
+        if type(data) is str:
+            data = data.decode(self.encoding)
 
         self.handle(tag, data)
         self.last_tag = tag

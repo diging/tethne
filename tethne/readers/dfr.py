@@ -49,8 +49,8 @@ class DfRParser(XMLParser):
         self.children = []
 
     def handle_unicode(self, value):
-        if type(value) is not str:
-            value = unidecode(value)
+        # if type(value) is not str:
+        #     value = unidecode(value)
         return value
 
     def handle_journaltitle(self, value):
@@ -60,8 +60,8 @@ class DfRParser(XMLParser):
         return self.handle_unicode(value)
 
     def handle_author(self, value):
-        if type(value) is not str:
-            value = unidecode(value)
+        # if type(value) is not str:
+        #     value = unidecode(value)
 
         lname = value.split(' ')
 
@@ -176,10 +176,13 @@ class GramGenerator(object):
         """
         Retrieve data for the ith file in the dataset.
         """
-        with open(os.path.join(self.path, self.elem, self.files[i]), 'r') as f:
+        with codecs.open(os.path.join(self.path, self.elem, self.files[i]), 'rb', encoding='utf-8') as f:
             # JSTOR hasn't always produced valid XML.
             contents = re.sub('(&)(?!amp;)', lambda match: '&amp;', f.read())
-            root = ET.fromstring(contents)
+
+            # ElementTree does not support unicode strings.
+            root = ET.fromstring(contents.encode('utf-8'))
+
         doi = root.attrib['id']
 
         if self.K:  # Keys only.
@@ -187,7 +190,10 @@ class GramGenerator(object):
 
         grams = []
         for gram in root.findall(self.elem_xml):
-            text = unidecode(unicode(gram.text.strip()))
+            text = gram.text.strip()
+            if type(text) is str:
+                text = text.decode('utf-8')
+
             if ( not self.ignore_hash or '#' not in list(text) ):
                 c = ( text, number(gram.attrib['weight']) )
                 grams.append(c)
@@ -372,9 +378,9 @@ def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
             if not ignore:
 
                 # Coerce unicode to string.
-                if type(g) is str:
-                    g = unicode(g)
-                g = unidecode(g)
+                # if type(g) is str:
+                g = g.decode('utf-8')
+                # g = unidecode(g)
 
                 if g not in vocab.values():
                     i = len(vocab)
@@ -409,9 +415,10 @@ def _handle_paper(article):
 
         datum = pdata[key]
         if type(datum) is str:
-            datum = unicode(datum)
+            datum = datum.decode('utf-8')
         if type(datum) is unicode:
-            datum = unidecode(datum).upper()
+            datum = datum.upper()
+            # datum = unidecode(datum).upper()
 
         paper[key] = datum
 
@@ -481,24 +488,23 @@ def _handle_authors(authors):
     if type(authors) is list:
         for author in authors:
             if type(author) is str:
-                author = unicode(author)
-            author = unidecode(author)
-            try:
-                l,i = _handle_author(author)
-                aulast.append(l)
-                auinit.append(i)
-            except ValueError:
-                pass
-    elif type(authors) is str or type(authors) is unicode:
-        if type(authors) is str:
-            authors = unicode(authors)
-        author = unidecode(authors)
-        try:
+                author = author.decode('utf-8')
+
+            # try:
             l,i = _handle_author(author)
             aulast.append(l)
             auinit.append(i)
-        except ValueError:
-            pass
+            # except ValueError:
+            #     pass
+    elif type(authors) in [str, unicode]:
+        if type(authors) is str:
+            authors = authors.decode('utf-8')
+        # try:
+        l,i = _handle_author(authors)
+        aulast.append(l)
+        auinit.append(i)
+        # except ValueError:
+        #     pass
     else:
         raise ValueError("authors must be a list or a string")
 

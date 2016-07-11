@@ -80,6 +80,7 @@ def simplify_multigraph(multigraph, time=False):
 
     return graph
 
+
 def citation_count(papers, key='ayjid', verbose=False):
     """
     Generates citation counts for all of the papers cited by papers.
@@ -103,12 +104,15 @@ def citation_count(papers, key='ayjid', verbose=False):
         print "Generating citation counts for "+unicode(len(papers))+" papers..."
 
     counts = Counter()
-    for P in papers:
-        if P['citations'] is not None:
-            for p in P['citations']:
-                counts[p[key]] += 1
+
+    for paper in papers:
+        citations = getattr(paper, 'citedReferences', None)
+        if citations:
+            for cited_paper in citations:
+                counts[getattr(cited_paper, key)] += 1
 
     return counts
+
 
 def top_cited(papers, topn=20, verbose=False):
     """
@@ -145,6 +149,7 @@ def top_cited(papers, topn=20, verbose=False):
                        reverse=True)[:n]).keys()
 
     return top, counts
+
 
 def top_parents(papers, topn=20, verbose=False):
     """

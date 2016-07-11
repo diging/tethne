@@ -36,6 +36,16 @@ class TestStructuredFeatureSet(unittest.TestCase):
 
         self.assertEqual(len(fset.papers_containing(0)), len(features))
 
+    def test_transform(self):
+        features = {
+            'first': self.feature1,
+            'second': self.feature2,
+        }
+        fset = StructuredFeatureSet(features)
+        xf = lambda f, c, fc, dc: f if f % 2 == 0 else False
+        fset2 = fset.transform(xf)
+        self.assertGreater(len(fset.index), len(fset2.index))
+
     def test_select_context(self):
         features = {
             'first': self.feature1,

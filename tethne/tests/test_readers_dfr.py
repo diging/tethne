@@ -19,6 +19,9 @@ class TestDFRReaderStreaming(unittest.TestCase):
         self.assertIsInstance(corpus, Corpus)
 
         for e in corpus:
+            if hasattr(e, 'title'):
+                self.assertIsInstance(e.title, unicode)
+
             if hasattr(e, 'date'):
                 self.assertIsInstance(e.date, int)
 
@@ -30,10 +33,10 @@ class TestDFRReaderStreaming(unittest.TestCase):
                     self.assertTrue(a[1].isupper(), uppererr)
 
             if hasattr(e, 'journal'):
-                self.assertIsInstance(e.journal, str)
+                self.assertIsInstance(e.journal, unicode)
 
             if hasattr(e, 'abstract'):
-                self.assertIsInstance(e.abstract, str)
+                self.assertIsInstance(e.abstract, unicode)
 
             if hasattr(e, 'authorKeywords'):
                 self.assertIsInstance(e.authorKeywords, list)
@@ -41,12 +44,12 @@ class TestDFRReaderStreaming(unittest.TestCase):
             if hasattr(e, 'keywordsPlus'):
                 self.assertIsInstance(e.keywordsPlus, list)
             if hasattr(e, 'doi'):
-                self.assertIsInstance(e.doi, str)
+                self.assertIsInstance(e.doi, unicode)
             if hasattr(e, 'volume'):
-                self.assertIsInstance(e.volume, str)
+                self.assertIsInstance(e.volume, unicode)
 
             if hasattr(e, 'title'):
-                self.assertIsInstance(e.title, str)
+                self.assertIsInstance(e.title, unicode)
 
 
 
@@ -69,10 +72,10 @@ class TestDFRReader(unittest.TestCase):
                     self.assertTrue(a[1].isupper(), uppererr)
 
             if hasattr(e, 'journal'):
-                self.assertIsInstance(e.journal, str)
+                self.assertIsInstance(e.journal, unicode)
 
             if hasattr(e, 'abstract'):
-                self.assertIsInstance(e.abstract, str)
+                self.assertIsInstance(e.abstract, unicode)
 
             if hasattr(e, 'authorKeywords'):
                 self.assertIsInstance(e.authorKeywords, list)
@@ -80,12 +83,12 @@ class TestDFRReader(unittest.TestCase):
             if hasattr(e, 'keywordsPlus'):
                 self.assertIsInstance(e.keywordsPlus, list)
             if hasattr(e, 'doi'):
-                self.assertIsInstance(e.doi, str)
+                self.assertIsInstance(e.doi, unicode)
             if hasattr(e, 'volume'):
-                self.assertIsInstance(e.volume, str)
+                self.assertIsInstance(e.volume, unicode)
 
             if hasattr(e, 'title'):
-                self.assertIsInstance(e.title, str)
+                self.assertIsInstance(e.title, unicode)
 
         self.assertIn('wordcounts', corpus.features)
 
@@ -111,7 +114,7 @@ class TestNGrams(unittest.TestCase):
 
         self.assertIsInstance(grams, FeatureSet)
         self.assertEqual(len(grams), 398)
-        self.assertEqual(len(grams.index), 105156)
+        self.assertEqual(len(grams.index), 105216)
 
     def test_float_weights(self):
         """
