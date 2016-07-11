@@ -8,7 +8,7 @@ from xml.etree import ElementTree as ET
 import networkx as nx
 import csv
 
-from tethne.model.corpus.mallet import LDAModel
+
 from tethne.readers.wos import read
 from tethne import FeatureSet, tokenize
 from tethne.networks import topics
@@ -23,6 +23,7 @@ logger.setLevel('DEBUG')
 
 class TestLDAModel(unittest.TestCase):
     def setUp(self):
+        from tethne.model.corpus.mallet import LDAModel
         corpus = read(datapath, index_by='wosid')
         corpus.index_feature('abstract', tokenize, structured=True)
         self.model = LDAModel(corpus, featureset_name='abstract')
@@ -57,6 +58,7 @@ class TestLDAModel(unittest.TestCase):
 
 class TestLDAModelUnstructured(unittest.TestCase):
     def setUp(self):
+        from tethne.model.corpus.mallet import LDAModel
         corpus = read(datapath, index_by='wosid')
         corpus.index_feature('abstract', tokenize)
         self.model = LDAModel(corpus, featureset_name='abstract')
@@ -91,6 +93,7 @@ class TestLDAModelUnstructured(unittest.TestCase):
 
 class TestLDAModelWithTransformation(unittest.TestCase):
     def setUp(self):
+        from tethne.model.corpus.mallet import LDAModel
         corpus = read(datapath, index_by='wosid')
         corpus.index_feature('abstract', tokenize)
 
@@ -124,6 +127,17 @@ class TestLDAModelWithTransformation(unittest.TestCase):
         paperGraph = topics.topic_coupling(self.model)
         self.assertGreater(paperGraph.size(), 100)
         self.assertGreater(paperGraph.order(), 20)
+
+
+class TestLDAModelMALLETPath(unittest.TestCase):
+    def test_direct_import(self):
+        from tethne import LDAModel
+        corpus = read(datapath, index_by='wosid')
+        corpus.index_feature('abstract', tokenize, structured=True)
+        self.model = LDAModel(corpus, featureset_name='abstract')
+        self.model.fit(Z=20, max_iter=500)
+
+
 
 
 if __name__ == '__main__':
