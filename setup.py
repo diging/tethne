@@ -7,7 +7,7 @@ MAINTAINER_EMAIL = 'erick [dot] peirson [at] asu [dot] edu'
 DESCRIPTION = ('Bibliographic network and corpus analysis for historians')
 LICENSE = 'GNU GPL 3'
 URL = 'http://diging.github.io/tethne/'
-VERSION = '0.8.1.dev3'
+VERSION = '0.8.1.dev4'
 
 PACKAGES = ['tethne',
             'tethne.analyze',
