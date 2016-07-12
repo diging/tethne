@@ -14,7 +14,7 @@ class Model(object):
     Base class for models.
     """
 
-    def __init__(self, corpus, **kwargs):
+    def __init__(self, corpus, prep=True, **kwargs):
         """
         Initialize the ModelManager.
         """
@@ -34,15 +34,15 @@ class Model(object):
                     continue
             setattr(self, key, value)
 
-        self.prep()
+        if prep:
+            self.prep()
 
     def __del__(self):
         """
         Delete temporary directory and all files contained therein.
         """
-        if hasattr(self, 'nodelete'):
-            if self.nodelete:
-                return
+        if getattr(self, 'nodelete', False):    
+            return
         shutil.rmtree(self.temp)
 
     @property

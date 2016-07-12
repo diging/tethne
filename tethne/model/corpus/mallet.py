@@ -131,13 +131,17 @@ class LDAModel(Model):
         if platform.system() == 'Windows':
             self.mallet_bin += '.bat'
         os.environ['MALLET_HOME'] = self.mallet_path
+        
         super(LDAModel, self).__init__(*args, **kwargs)
 
-    def prep(self):
-        self.dt = os.path.join(self.temp, "dt.dat")
-        self.wt = os.path.join(self.temp, "wt.dat")
-        self.om = os.path.join(self.temp, "model.mallet")
+        if not hasattr(self, 'dt'):
+            self.dt = os.path.join(self.temp, "dt.dat")
+        if not hasattr(self, 'wt'):
+            self.wt = os.path.join(self.temp, "wt.dat")
+        if not hasattr(self, 'om'):
+            self.om = os.path.join(self.temp, "model.mallet")
 
+    def prep(self):
         self._generate_corpus()
 
     def _generate_corpus(self):
