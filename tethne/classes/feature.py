@@ -4,6 +4,7 @@ Classes in this module provide structures for additional data about
 """
 
 from collections import Counter, defaultdict
+from itertools import repeat
 
 from tethne.utilities import _iterable
 try:    # Might as well use numpy if it is available.
@@ -650,6 +651,9 @@ class FeatureSet(BaseFeatureSet):
             vect.append(c)
 
         return vect
+
+    def to_gensim_corpus(self):
+        return [[token for term, count in document for token in repeat(term, count)] for document in self.features.values()]
 
 
 def feature(f):

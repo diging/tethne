@@ -91,6 +91,26 @@ class TestFeature(unittest.TestCase):
 
 
 class TestFeatureSet(unittest.TestCase):
+    def test_end_to_end(self):
+        """
+        Runs the Gensim LDA workflow
+        (https://radimrehurek.com/gensim/wiki.html#latent-dirichlet-allocation).
+        """
+        from tethne.readers.wos import read
+        corpus = read('./tethne/tests/data/wos3.txt')
+        from nltk.tokenize import word_tokenize
+        corpus.index_feature('abstract', word_tokenize)
+
+        gensim_corpus = corpus.features['abstract'].to_gensim_corpus()
+        from gensim import corpora, models
+
+        dictionary = corpora.Dictionary(gensim_corpus)
+        corpus = [dictionary.doc2bow(text) for text in gensim_corpus]
+        model = models.ldamodel.LdaModel(corpus=corpus, id2word=dictionary,
+                                         num_topics=5, update_every=1,
+                                         chunksize=100, passes=1)
+        model.print_topics()
+
     def test_init_empty(self):
         """
         Initialize with no Features.

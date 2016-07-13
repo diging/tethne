@@ -8,6 +8,7 @@ python:
 jdk:
   - oraclejdk8
 script:
+  - pip install -U pip
   - pip install coverage
   - pip install nose
   - pip install gensim
