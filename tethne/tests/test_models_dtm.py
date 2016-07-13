@@ -8,7 +8,6 @@ from xml.etree import ElementTree as ET
 import networkx as nx
 import csv
 
-
 from tethne.readers.wos import read
 from tethne import FeatureSet, tokenize
 from tethne.networks import topics
@@ -21,6 +20,8 @@ sandbox = './tethne/tests/sandbox'
 import logging
 logger = logging.getLogger('dtm')
 logger.setLevel('DEBUG')
+
+DTM_PATH = os.environ.get('DTM_PATH', None)
 
 
 from tethne.model.corpus.dtm import _to_dtm_input
@@ -59,10 +60,25 @@ class TestDTMModel(unittest.TestCase):
         _cleanUp(self.basepath)
 
     def test_init(self):
-        self.model = DTMModel(self.corpus, featureset_name='abstract')
+        # We have to depend on the user compiling DTM themselves at this point,
+        #  so until we add a DTM build step to Travis this should only run if
+        #  the path to DTM binary is set.
+        if not DTM_PATH:
+            return
+        self.model = DTMModel(self.corpus,
+                              featureset_name='abstract',
+                              dtm_path=DTM_PATH)
 
     def test_fit(self):
-        self.model = DTMModel(self.corpus, featureset_name='abstract')
+        # We have to depend on the user compiling DTM themselves at this point,
+        #  so until we add a DTM build step to Travis this should only run if
+        #  the path to DTM binary is set.
+        if not DTM_PATH:
+            return
+
+        self.model = DTMModel(self.corpus,
+                              featureset_name='abstract',
+                              dtm_path=DTM_PATH)
         self.model.fit(Z=5)
 
         self.assertEqual(self.model.e_theta.shape, (5, 220))
@@ -71,9 +87,9 @@ class TestDTMModel(unittest.TestCase):
         keys, values =  self.model.topic_evolution(0)
         self.assertEqual(keys, self.corpus.indices['date'].keys())
 
-        self.model.list_topic(0, 0)
-        self.model.list_topic_diachronic(0)
-        self.model.list_topics(0)
+        self.model.list_topic(3, 0)
+        self.model.list_topic_diachronic(3)
+        self.model.list_topics(3)
 
     def tearDown(self):
         _cleanUp(self.basepath)

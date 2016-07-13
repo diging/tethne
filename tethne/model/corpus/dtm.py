@@ -13,7 +13,6 @@ except ImportError:
 from collections import defaultdict
 
 TETHNE_PATH = os.path.join(os.path.dirname(os.path.abspath(inspect.stack()[0][1])), '..', '..')
-DTM_PATH = os.path.join(TETHNE_PATH, 'bin', 'dtm')
 
 
 def _to_dtm_input(corpus, target, featureset_name, fields=['date','atitle'],
@@ -122,7 +121,46 @@ def _to_dtm_input(corpus, target, featureset_name, fields=['date','atitle'],
 
 
 class DTMModel(Model):
-    dtm_path = DTM_PATH
+    """
+    Provides a wrapper for Dynamic Topic Model by David Blei et al [1][2].
+
+    In order to use this class you must have already compiled the ``dtm``
+    package by Blei and Gerrish, located
+    [here](https://github.com/blei-lab/dtm). If you run into memory issues you
+    may want to try [this fork](https://github.com/fedorn/dtm).
+
+    You must provide the path to the binary executable (usually called ``main``)
+    either by setting the DTM_PATH environment variable, or by passing
+    ``dtm_path='/path/to/dtm/main'`` to the constructor.
+
+    [1] D. Blei and J. Lafferty. Dynamic topic models. In Proceedings of the
+    23rd International Conference on Machine Learning, 2006.
+
+    [2] S. Gerrish and D. Blei. A Language-based Approach to Measuring
+    Scholarly Impact. In Proceedings of the 27th International Conference on
+    Machine Learning, 2010.
+
+    Examples
+    --------
+
+    .. code-block:: python
+
+       >>> from tethne.readers.wos import read
+       >>> from nltk.tokenize import word_tokenize
+       >>> corpus = read('/path/to/my/data')
+       >>> corpus.index_feature('abstract', word_tokenize)
+       >>> from tethne import DTMModel
+       >>> model = DTMModel(corpus,
+       ...                  featureset_name='abstract',
+       ...                  dtm_path='/path/to/dtm/main')
+       >>> model.fit(Z=5)
+
+    In practice you will want to do some filtering prior to modeling.
+
+    """
+    def __init__(self, *args, **kwargs):
+        self.dtm_path = os.environ.get('DTM_PATH', None)
+        super(DTMModel, self).__init__(*args, **kwargs)
 
     def prep(self, **slice_kwargs):
         self.slice_kwargs = slice_kwargs
