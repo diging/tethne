@@ -90,6 +90,19 @@ class TestFeature(unittest.TestCase):
         self.assertEqual(feature.value('bob'), 0)
 
 
+class TestFeatureSetWithData(unittest.TestCase):
+    def test_featureset(self):
+        f = Feature([(1585, 0.00054845065429964715), (1262, 0.00054605985306858213), (444, 0.00053942261617068057), (5106, 0.00053648963322009118), (206, 0.00053379098026327346), (1341, 0.00053329960378783244), (353, 0.00053110237444066769), (1498, 0.00052695505145953733), (1, 0.00052553534496093041)])
+        f2 = Feature([(1585, 0.00054845065429964715), (1262, 0.00054605985306858213), (444, 0.00053942261617068057), (5106, 0.00053648963322009118), (206, 0.00053379098026327346), (1341, 0.00053329960378783244), (353, 0.00053110237444066769), (1498, 0.00052695505145953733), (1, 0.00052553534496093041)])
+        fset = FeatureSet({'f': f, 'f2': f2})
+        top = fset.top(5)
+        self.assertIsInstance(top, list)
+        self.assertIsInstance(top[0], tuple)
+        self.assertEqual(len(top), 5)
+
+        print fset['f'].top(5)
+
+
 class TestFeatureSet(unittest.TestCase):
     def test_end_to_end_raw(self):
         """

@@ -1,58 +1,55 @@
-import sys
-sys.path.append('../tethne')
-
-import unittest
-import tempfile
-import os
+import unittest, tempfile, os, csv, sys, logging
 from xml.etree import ElementTree as ET
 import networkx as nx
-import csv
 
+sys.path.append('../tethne')
 
 from tethne.readers.wos import read
 from tethne import FeatureSet, tokenize
 from tethne.networks import topics
 
 datapath = './tethne/tests/data/wos3.txt'
-
-import logging
-logger = logging.getLogger('mallet')
+logger = logging.getLogger('gensim')
 logger.setLevel('DEBUG')
 
 
 class TestLDAModelExistingOutput(unittest.TestCase):
     def setUp(self):
-        from tethne.model.corpus.mallet import LDAModel
+        from tethne.model.corpus.gensim_lda import GensimLDAModel
         self.corpus = read(datapath, index_by='wosid')
         self.corpus.index_feature('abstract', tokenize, structured=True)
-        self.old_model = LDAModel(self.corpus, featureset_name='abstract', nodelete=True)
-        self.old_model.fit(Z=20, max_iter=50)
+        self.old_model = GensimLDAModel(self.corpus, featureset_name='abstract')
+        self.old_model.fit(Z=20)
 
     def test_load_existing_data(self):
-        from tethne.model.corpus.mallet import LDAModel
-        new_model = LDAModel(self.corpus, featureset_name='abstract',
-                             nodelete=True,
-                             prep=False,
-                             wt=self.old_model.wt,
-                             dt=self.old_model.dt,
-                             om=self.old_model.om)
-        new_model.load()
+        from tethne.model.corpus.gensim_lda import GensimLDAModel
+        new_model = GensimLDAModel.from_gensim(self.old_model.model,
+                                               self.old_model.gcorpus,
+                                               self.corpus)
 
-        self.assertEqual(self.old_model.topics_in(u'WOS:000295037200001'),
-                         new_model.topics_in(u'WOS:000295037200001'))
+        # For some reason gensim has some slippage at high precision. We should
+        #  investigate this further (TODO).
+        for o, n in zip(self.old_model.topics_in(u'WOS:000295037200001'),
+                         new_model.topics_in(u'WOS:000295037200001')):
+            self.assertEqual(o[0], n[0])
+            self.assertLess(abs(n[1] - o[1]), 0.001)
 
 
 class TestLDAModel(unittest.TestCase):
     def setUp(self):
-        from tethne.model.corpus.mallet import LDAModel
+        from tethne.model.corpus.gensim_lda import GensimLDAModel
         corpus = read(datapath, index_by='wosid')
         corpus.index_feature('abstract', tokenize, structured=True)
-        self.model = LDAModel(corpus, featureset_name='abstract')
-        self.model.fit(Z=20, max_iter=500)
+        self.model = GensimLDAModel(corpus, featureset_name='abstract')
+        self.model.fit(Z=20)
 
     def test_ldamodel(self):
-        dates, rep = self.model.topic_over_time(1)
-        self.assertGreater(sum(rep), 0)
+        R = 0.
+        for k in xrange(20):
+            dates, rep = self.model.corpus.feature_distribution('topics', k)
+            R += sum(rep)
+
+        self.assertGreater(R, 0)
         self.assertEqual(len(dates), len(rep))
 
         self.assertIsInstance(self.model.phi, FeatureSet)
@@ -65,29 +62,33 @@ class TestLDAModel(unittest.TestCase):
 
     def test_networks(self):
         termGraph = topics.terms(self.model)
-        self.assertGreater(termGraph.size(), 100)
-        self.assertGreater(termGraph.order(), 10)
+        self.assertGreater(termGraph.size(), 30)
+        self.assertGreater(termGraph.order(), 1)
 
         topicGraph = topics.cotopics(self.model)
         self.assertGreater(topicGraph.size(), 5)
         self.assertGreater(topicGraph.order(), 0)
 
         paperGraph = topics.topic_coupling(self.model)
-        self.assertGreater(paperGraph.size(), 100)
-        self.assertGreater(paperGraph.order(), 20)
+        self.assertGreater(paperGraph.size(), 44)
+        self.assertGreater(paperGraph.order(), 1)
 
 
 class TestLDAModelUnstructured(unittest.TestCase):
     def setUp(self):
-        from tethne.model.corpus.mallet import LDAModel
+        from tethne.model.corpus.gensim_lda import GensimLDAModel
         corpus = read(datapath, index_by='wosid')
         corpus.index_feature('abstract', tokenize)
-        self.model = LDAModel(corpus, featureset_name='abstract')
-        self.model.fit(Z=20, max_iter=500)
+        self.model = GensimLDAModel(corpus, featureset_name='abstract')
+        self.model.fit(Z=20)
 
     def test_ldamodel(self):
-        dates, rep = self.model.topic_over_time(1)
-        self.assertGreater(sum(rep), 0)
+        R = 0.
+        for k in xrange(20):
+            dates, rep = self.model.corpus.feature_distribution('topics', k)
+            R += sum(rep)
+
+        self.assertGreater(R, 0)
         self.assertEqual(len(dates), len(rep))
 
         self.assertIsInstance(self.model.phi, FeatureSet)
@@ -100,31 +101,37 @@ class TestLDAModelUnstructured(unittest.TestCase):
 
     def test_networks(self):
         termGraph = topics.terms(self.model)
-        self.assertGreater(termGraph.size(), 100)
-        self.assertGreater(termGraph.order(), 10)
+        self.assertGreater(termGraph.size(), 5)
+        self.assertGreater(termGraph.order(), 0)
 
         topicGraph = topics.cotopics(self.model)
         self.assertGreater(topicGraph.size(), 5)
         self.assertGreater(topicGraph.order(), 0)
 
         paperGraph = topics.topic_coupling(self.model)
-        self.assertGreater(paperGraph.size(), 100)
-        self.assertGreater(paperGraph.order(), 20)
+        self.assertGreater(paperGraph.size(), 5)
+        self.assertGreater(paperGraph.order(), 0)
 
 
 class TestLDAModelWithTransformation(unittest.TestCase):
     def setUp(self):
-        from tethne.model.corpus.mallet import LDAModel
+        from tethne.model.corpus.gensim_lda import GensimLDAModel
         corpus = read(datapath, index_by='wosid')
         corpus.index_feature('abstract', tokenize)
 
         xf = lambda f, c, C, DC: c*3
         corpus.features['xf'] = corpus.features['abstract'].transform(xf)
-        self.model = LDAModel(corpus, featureset_name='xf')
-        self.model.fit(Z=20, max_iter=500)
+        self.model = GensimLDAModel(corpus, featureset_name='xf')
+        self.model.fit(Z=20)
 
     def test_ldamodel(self):
-        dates, rep = self.model.topic_over_time(1)
+        R = 0.
+        for k in xrange(20):
+            dates, rep = self.model.corpus.feature_distribution('topics', k)
+            R += sum(rep)
+
+        self.assertGreater(R, 0)
+        self.assertEqual(len(dates), len(rep))
         self.assertGreater(sum(rep), 0)
         self.assertEqual(len(dates), len(rep))
 
@@ -138,27 +145,25 @@ class TestLDAModelWithTransformation(unittest.TestCase):
 
     def test_networks(self):
         termGraph = topics.terms(self.model)
-        self.assertGreater(termGraph.size(), 100)
-        self.assertGreater(termGraph.order(), 10)
+        self.assertGreater(termGraph.size(), 10)
+        self.assertGreater(termGraph.order(), 0)
 
         topicGraph = topics.cotopics(self.model)
         self.assertGreater(topicGraph.size(), 5)
         self.assertGreater(topicGraph.order(), 0)
 
         paperGraph = topics.topic_coupling(self.model)
-        self.assertGreater(paperGraph.size(), 100)
-        self.assertGreater(paperGraph.order(), 20)
+        self.assertGreater(paperGraph.size(), 10)
+        self.assertGreater(paperGraph.order(), 0)
 
 
 class TestLDAModelMALLETPath(unittest.TestCase):
     def test_direct_import(self):
-        from tethne import LDAModel
+        from tethne.model.corpus.gensim_lda import GensimLDAModel
         corpus = read(datapath, index_by='wosid')
         corpus.index_feature('abstract', tokenize, structured=True)
-        self.model = LDAModel(corpus, featureset_name='abstract')
-        self.model.fit(Z=20, max_iter=500)
-
-
+        self.model = GensimLDAModel(corpus, featureset_name='abstract')
+        self.model.fit(Z=20)
 
 
 if __name__ == '__main__':

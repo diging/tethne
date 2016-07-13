@@ -20,8 +20,8 @@ if PYTHON_3:
 
 
 def _tfidf(f, c, C, DC, N):
-    tf = float(c)
-    idf = log(float(N)/float(DC))
+    tf = 1.*c
+    idf = log(1.*N/DC)
     return tf*idf
 
 

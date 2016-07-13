@@ -5,6 +5,7 @@ Classes in this module provide structures for additional data about
 
 from collections import Counter, defaultdict
 from itertools import repeat
+import numpy as np
 
 from tethne.utilities import _iterable
 try:    # Might as well use numpy if it is available.
@@ -244,7 +245,7 @@ class Feature(list):
 
     def __add__(self, data):
         if len(data) > 0:
-            if type(data[0]) is tuple and type(data[0][-1]) in [float, int]:
+            if type(data[0]) is tuple and (type(data[0][-1]) in [int, float] or (np.issubdtype(data[0][-1], float) or np.issubdtype(data[0][-1], int))):
                 # There may be overlap with existing features,
                 combined_data = defaultdict(type(data[0][-1]))
                 for k, v in data + list(self):
@@ -297,7 +298,7 @@ class Feature(list):
     @property
     def norm(self):
         T = sum(list(zip(*self))[1])
-        return Feature([(i, float(v)/T) for i, v in self])
+        return Feature([(i, 1.*v/T) for i, v in self])
 
     def top(self, topn=10):
         """
@@ -663,7 +664,7 @@ class FeatureSet(BaseFeatureSet):
         for i in xrange(m):
             e = self.index[i]
             if e in values:
-                c = float(values[e])
+                c = 1.*values[e]
             else:
                 c = 0.
             vect.append(c)
