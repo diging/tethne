@@ -15,7 +15,7 @@ from tethne.model.corpus.dtm import DTMModel
 from nltk.tokenize import word_tokenize
 
 datapath = './tethne/tests/data/wos3.txt'
-sandbox = './tethne/tests/sandbox'
+sandbox = tempfile.mkdtemp()
 
 import logging
 logger = logging.getLogger('dtm')
