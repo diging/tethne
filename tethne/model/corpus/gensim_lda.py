@@ -57,7 +57,7 @@ class GensimLDAModel(BaseGensimModel, LDAMixin):
             Rows are documents, columns are topics. Rows sum to ~1.
         """
         if getattr(self, 'corpus', None):
-            identifiers = self.corpus.indexed_papers.keys()
+            identifiers = self.featureset.features.keys()
         else:
             identifiers = range(len(self.gcorpus))
 

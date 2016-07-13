@@ -21,6 +21,29 @@ class TestLDAModelExistingOutput(unittest.TestCase):
         self.old_model = GensimLDAModel(self.corpus, featureset_name='abstract')
         self.old_model.fit(Z=20)
 
+    def test_gensim_to_theta_featureset(self):
+        from tethne import gensim_to_theta_featureset
+        theta = gensim_to_theta_featureset(self.old_model.model,
+                                           self.old_model.gcorpus,
+                                           self.old_model.featureset.features.keys())
+        self.assertIsInstance(theta, FeatureSet)
+        self.assertEqual(len(theta), len(self.corpus.features['abstract'].features))
+
+    def test_gensim_to_phi_featureset(self):
+        from tethne import gensim_to_phi_featureset
+        phi = gensim_to_phi_featureset(self.old_model.model)
+        self.assertIsInstance(phi, FeatureSet)
+        self.assertEqual(len(phi), 20)
+
+
+class TestLDAModelExistingOutput(unittest.TestCase):
+    def setUp(self):
+        from tethne.model.corpus.gensim_lda import GensimLDAModel
+        self.corpus = read(datapath, index_by='wosid')
+        self.corpus.index_feature('abstract', tokenize, structured=True)
+        self.old_model = GensimLDAModel(self.corpus, featureset_name='abstract')
+        self.old_model.fit(Z=20)
+
     def test_load_existing_data(self):
         from tethne.model.corpus.gensim_lda import GensimLDAModel
         new_model = GensimLDAModel.from_gensim(self.old_model.model,

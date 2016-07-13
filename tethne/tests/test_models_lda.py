@@ -20,6 +20,27 @@ logger = logging.getLogger('mallet')
 logger.setLevel('DEBUG')
 
 
+class TestHelpers(unittest.TestCase):
+    def setUp(self):
+        from tethne.model.corpus.mallet import LDAModel
+        self.corpus = read(datapath, index_by='wosid')
+        self.corpus.index_feature('abstract', tokenize, structured=True)
+        self.old_model = LDAModel(self.corpus, featureset_name='abstract', nodelete=True)
+        self.old_model.fit(Z=20, max_iter=50)
+
+    def test_mallet_to_theta_featureset(self):
+        from tethne import mallet_to_theta_featureset
+        theta = mallet_to_theta_featureset(self.old_model.dt)
+        self.assertIsInstance(theta, FeatureSet)
+        self.assertEqual(len(theta), len(self.corpus.features['abstract'].features))
+
+    def test_mallet_to_phi_featureset(self):
+        from tethne import mallet_to_phi_featureset
+        phi, vocab = mallet_to_phi_featureset(self.old_model.wt)
+        self.assertIsInstance(phi, FeatureSet)
+        self.assertEqual(len(phi), 20)
+
+
 class TestLDAModelExistingOutput(unittest.TestCase):
     def setUp(self):
         from tethne.model.corpus.mallet import LDAModel
@@ -37,6 +58,16 @@ class TestLDAModelExistingOutput(unittest.TestCase):
                              dt=self.old_model.dt,
                              om=self.old_model.om)
         new_model.load()
+
+        self.assertEqual(self.old_model.topics_in(u'WOS:000295037200001'),
+                         new_model.topics_in(u'WOS:000295037200001'))
+
+    def test_load_existing_data_staticmethod(self):
+        from tethne.model.corpus.mallet import LDAModel
+        new_model = LDAModel.from_mallet(self.corpus, 'abstract',
+                                         self.old_model.wt,
+                                         self.old_model.dt,
+                                         self.old_model.om)
 
         self.assertEqual(self.old_model.topics_in(u'WOS:000295037200001'),
                          new_model.topics_in(u'WOS:000295037200001'))
@@ -157,8 +188,6 @@ class TestLDAModelMALLETPath(unittest.TestCase):
         corpus.index_feature('abstract', tokenize, structured=True)
         self.model = LDAModel(corpus, featureset_name='abstract')
         self.model.fit(Z=20, max_iter=500)
-
-
 
 
 if __name__ == '__main__':
