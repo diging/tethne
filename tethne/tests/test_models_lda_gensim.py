@@ -156,8 +156,6 @@ class TestLDAModelWithTransformation(unittest.TestCase):
 
         self.assertGreater(R, 0)
         self.assertEqual(len(dates), len(rep))
-        self.assertGreater(sum(rep), 0)
-        self.assertEqual(len(dates), len(rep))
 
         self.assertIsInstance(self.model.phi, FeatureSet)
         self.assertIsInstance(self.model.theta, FeatureSet)
