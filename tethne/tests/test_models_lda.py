@@ -15,7 +15,6 @@ from tethne.networks import topics
 
 datapath = './tethne/tests/data/wos3.txt'
 
-
 import logging
 logger = logging.getLogger('mallet')
 logger.setLevel('DEBUG')
@@ -38,7 +37,7 @@ class TestLDAModelExistingOutput(unittest.TestCase):
                              dt=self.old_model.dt,
                              om=self.old_model.om)
         new_model.load()
-        
+
         self.assertEqual(self.old_model.topics_in(u'WOS:000295037200001'),
                          new_model.topics_in(u'WOS:000295037200001'))
 
