@@ -48,7 +48,8 @@ class TestLDAModelExistingOutput(unittest.TestCase):
         from tethne.model.corpus.gensim_lda import GensimLDAModel
         new_model = GensimLDAModel.from_gensim(self.old_model.model,
                                                self.old_model.gcorpus,
-                                               self.corpus)
+                                               self.corpus,
+                                               'abstract')
 
         # For some reason gensim has some slippage at high precision. We should
         #  investigate this further (TODO).

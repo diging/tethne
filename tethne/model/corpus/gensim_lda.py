@@ -26,12 +26,14 @@ class BaseGensimModel(Model):
 
 class GensimLDAModel(BaseGensimModel, LDAMixin):
     @staticmethod
-    def from_gensim(model, gcorpus, corpus=None):
+    def from_gensim(model, gcorpus, corpus=None, featureset_name=None):
         ldaModel = GensimLDAModel(model=model,
                                   gcorpus=gcorpus,
                                   corpus=corpus,
                                   vocabulary=dict(model.id2word),
                                   Z=int(model.num_topics))
+        if featureset_name and corpus:
+            ldaModel.featureset = corpus.features[featureset_name]
         ldaModel.read()
         return ldaModel
 
@@ -56,7 +58,7 @@ class GensimLDAModel(BaseGensimModel, LDAMixin):
         """
             Rows are documents, columns are topics. Rows sum to ~1.
         """
-        if getattr(self, 'corpus', None):
+        if getattr(self, 'corpus', None) and getattr(self, 'featureset', None):
             identifiers = self.featureset.features.keys()
         else:
             identifiers = range(len(self.gcorpus))
