@@ -24,34 +24,40 @@ class TestInferSpaces(unittest.TestCase):
         self.assertEqual(_infer_spaces(s), 'this is a string with no spaces .')
 
 
-class TestZoteroParserWithFiles(unittest.TestCase):
-    """
-    When Tethne reads a Zotero collection, it should attempt to extract
-    full-text content for the constituent bibliographic records.
-    """
 
-    def test_read_pdf(self):
-        corpus = read(datapath3, follow_links=True)
-
-        self.assertIsInstance(corpus, Corpus)
-
-        self.assertIn('pdf_text', corpus.features,
-        """
-        If a dataset has full-text content available in PDFs, then
-        'structuredfeatures' should contain an element called 'pdf_text'.
-        """)
-
-        self.assertIsInstance(corpus.features['pdf_text'],
-                              StructuredFeatureSet,
-        """
-        'pdf_text' should be an instance of StructuredFeatureSet.
-        """)
-
-        self.assertEqual(len(corpus.features['pdf_text']), 7,
-        """
-        There should be seven (7) full-text pdf StructuredFeatures for this
-        particular dataset.
-        """)
+#
+# Incorporating PDF extraction into Tethne is a bit too far beyond the scope of
+#  the project. We should focus on making it easy for people to work with
+#  plain text corpora.
+#
+# class TestZoteroParserWithFiles(unittest.TestCase):
+#     """
+#     When Tethne reads a Zotero collection, it should attempt to extract
+#     full-text content for the constituent bibliographic records.
+#     """
+#
+#     def test_read_pdf(self):
+#         corpus = read(datapath3, follow_links=True)
+#
+#         self.assertIsInstance(corpus, Corpus)
+#
+#         self.assertIn('pdf_text', corpus.features,
+#         """
+#         If a dataset has full-text content available in PDFs, then
+#         'structuredfeatures' should contain an element called 'pdf_text'.
+#         """)
+#
+#         self.assertIsInstance(corpus.features['pdf_text'],
+#                               StructuredFeatureSet,
+#         """
+#         'pdf_text' should be an instance of StructuredFeatureSet.
+#         """)
+#
+#         self.assertEqual(len(corpus.features['pdf_text']), 7,
+#         """
+#         There should be seven (7) full-text pdf StructuredFeatures for this
+#         particular dataset.
+#         """)
 
 
 class TestZoteroDuplicates(unittest.TestCase):
@@ -91,8 +97,6 @@ class TestZoteroParser(unittest.TestCase):
         papers = read(datapath, corpus=False)
         self.assertIsInstance(papers, list)
         self.assertIsInstance(papers[0], Paper)
-
-
 
     def test_authors(self):
         """
