@@ -461,7 +461,7 @@ class StructuredFeatureSet(BaseFeatureSet):
 
         return StructuredFeatureSet(features)
 
-    def context_chunks(self, context):
+    def context_chunks(self, context=None):
         """
         Retrieves all tokens, divided into the chunks in context ``context``.
 
@@ -487,11 +487,39 @@ class StructuredFeatureSet(BaseFeatureSet):
             if context in feature.contexts:
                 new_chunks = feature.context_chunks(context)
             else:
-                new_chunks = list(feature)
+                new_chunks = [list(feature)]
             indices = range(len(chunks), len(chunks) + len(new_chunks))
             papers.append((paper, indices))
             chunks += new_chunks
         return papers, chunks
+
+    def to_gensim_corpus(self, context=None):
+        """
+        Yield a plain-text corpus compatible with the Gensim package.
+
+        Parameters
+        ----------
+        context : str
+
+        Returns
+        -------
+        list
+            A list of lists of words. Each sub-list represents a single context
+            item (e.g. a document, or a paragraph).
+
+        Examples
+        --------
+
+        .. code-block:: python
+
+           >>> from tethne.readers.wos import read
+           >>> corpus = read('/path/to/my/data')
+           >>> from nltk.tokenize import word_tokenize
+           >>> corpus.index_feature('abstract', word_tokenize, structured=True)
+           >>>
+
+        """
+        return self.context_chunks(context)[1]
 
 
 class FeatureSet(BaseFeatureSet):

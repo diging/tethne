@@ -1,4 +1,5 @@
 language: python
+cache: pip
 os:
   - linux
 python:
@@ -9,6 +10,7 @@ jdk:
 script:
   - pip install coverage
   - pip install nose
+  - pip install gensim
   - python -m nltk.downloader punkt
   - python -m nltk.downloader stopwords
   - nosetests --with-coverage --cover-package=tethne
