@@ -41,5 +41,6 @@ setup(
         "python-magic==0.4.6",
         "Unidecode==0.4.17",
         "nltk",
+        "numpy==1.11",
     ],
 )
