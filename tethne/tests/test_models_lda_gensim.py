@@ -56,7 +56,7 @@ class TestLDAModelExistingOutput(unittest.TestCase):
         for o, n in zip(self.old_model.topics_in(u'WOS:000295037200001'),
                          new_model.topics_in(u'WOS:000295037200001')):
             self.assertEqual(o[0], n[0])
-            self.assertLess(abs(n[1] - o[1]), 0.001)
+            self.assertLess(abs(n[1] - o[1]), 0.01)
 
 
 class TestLDAModel(unittest.TestCase):
