@@ -245,7 +245,7 @@ class Feature(list):
 
     def __add__(self, data):
         if len(data) > 0:
-            if type(data[0]) is tuple and (type(data[0][-1]) in [int, float] or (np.issubdtype(data[0][-1], float) or np.issubdtype(data[0][-1], int))):
+            if type(data[0]) is tuple and type(data[0][-1]) not in [unicode, str]:
                 # There may be overlap with existing features,
                 combined_data = defaultdict(type(data[0][-1]))
                 for k, v in data + list(self):
