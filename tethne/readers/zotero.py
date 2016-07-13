@@ -1,12 +1,4 @@
-import os
-import iso8601
-import logging
-import rdflib
-import nltk
-import codecs
-import magic    # To detect file mime-type.
-import slate    # PDF processing.
-import chardet  # Detect character encodings.
+import os, iso8601, logging, rdflib, nltk, codecs, magic, chardet
 
 import warnings
 warnings.simplefilter('always', UserWarning)
@@ -49,6 +41,7 @@ TITLE = rdflib.term.URIRef(DC + u'title')
 from tethne.readers._rankedwords import WORDS
 WORDCOST = dict((k, log((i+1)*log(len(WORDS)))) for i, k in enumerate(WORDS))
 MAXWORD = max(len(x) for x in WORDS)
+
 
 def _infer_spaces(s):
     """
@@ -117,54 +110,59 @@ def extract_text(fpath):
     return StructuredFeature(tokens, contexts)
 
 
-def extract_pdf(fpath):
-    """
-    Extracts structured text content from a PDF at ``fpath``.
-
-    Parameters
-    ----------
-    fpath : str
-        Path to the PDF.
-
-    Returns
-    -------
-    :class:`.StructuredFeature`
-        A :class:`.StructuredFeature` that contains page and sentence contexts.
-    """
-
-    with codecs.open(fpath, 'r') as f:  # Determine the encoding of the file.
-        document = slate.PDF(f)
-    encoding = chardet.detect(document[0])
-
-    tokens = []
-    pages = []
-    sentences = []
-
-    tokenizer = nltk.tokenize.TextTilingTokenizer()
-
-    i = 0
-    for page in document:
-        pages.append(i)
-
-        # Decode using the correct encoding.
-        page = page.decode(encoding['encoding'])
-        for sentence in nltk.tokenize.sent_tokenize(page):
-            sentences.append(i)
-
-            for word in nltk.tokenize.word_tokenize(sentence):
-                if len(word) > 15:
-                    words = nltk.tokenize.word_tokenize(_infer_spaces(word))
-                    if mean([len(w) for w in words]) > 2:
-                        for w in words:
-                            tokens.append(w)
-                            i += 1
-                        continue
-
-                tokens.append(word)
-                i += 1
-
-    contexts = [('page', pages), ('sentence', sentences)]
-    return StructuredFeature(tokens, contexts)
+#
+# Incorporating PDF extraction into Tethne is a bit too far beyond the scope of
+#  the project. We should focus on making it easy for people to work with
+#  plain text corpora.
+#
+# def extract_pdf(fpath):
+#     """
+#     Extracts structured text content from a PDF at ``fpath``.
+#
+#     Parameters
+#     ----------
+#     fpath : str
+#         Path to the PDF.
+#
+#     Returns
+#     -------
+#     :class:`.StructuredFeature`
+#         A :class:`.StructuredFeature` that contains page and sentence contexts.
+#     """
+#
+#     with codecs.open(fpath, 'r') as f:  # Determine the encoding of the file.
+#         document = slate.PDF(f)
+#     encoding = chardet.detect(document[0])
+#
+#     tokens = []
+#     pages = []
+#     sentences = []
+#
+#     tokenizer = nltk.tokenize.TextTilingTokenizer()
+#
+#     i = 0
+#     for page in document:
+#         pages.append(i)
+#
+#         # Decode using the correct encoding.
+#         page = page.decode(encoding['encoding'])
+#         for sentence in nltk.tokenize.sent_tokenize(page):
+#             sentences.append(i)
+#
+#             for word in nltk.tokenize.word_tokenize(sentence):
+#                 if len(word) > 15:
+#                     words = nltk.tokenize.word_tokenize(_infer_spaces(word))
+#                     if mean([len(w) for w in words]) > 2:
+#                         for w in words:
+#                             tokens.append(w)
+#                             i += 1
+#                         continue
+#
+#                 tokens.append(word)
+#                 i += 1
+#
+#     contexts = [('page', pages), ('sentence', sentences)]
+#     return StructuredFeature(tokens, contexts)
 
 
 class ZoteroParser(RDFParser):
@@ -364,14 +362,10 @@ class ZoteroParser(RDFParser):
                 continue
 
             mime_type = magic.from_file(link, mime=True)
-            if mime_type == 'application/pdf':
-                structuredfeature = extract_pdf(link)
-            elif mime_type == 'text/plain':
+
+            if mime_type == 'text/plain':
                 structuredfeature = extract_text(link)
             else:
-                structuredfeature = None
-
-            if not structuredfeature:
                 continue
 
             fset_name = mime_type.split('/')[-1] + '_text'
