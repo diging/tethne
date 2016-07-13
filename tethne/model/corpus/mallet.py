@@ -17,6 +17,7 @@ logger.setLevel('ERROR')
 
 from tethne import write_documents, Feature, FeatureSet
 from tethne.model import Model
+from tethne.model.corpus import LDAMixin
 
 # Determine path to MALLET.
 
@@ -28,7 +29,7 @@ if sys.version_info[0] > 2:
     xrange = range
 
 
-class LDAModel(Model):
+class LDAModel(Model, LDAMixin):
     """
     Generates a :class:`.LDAModel` from a :class:`.Corpus` using
     `MALLET <http://mallet.cs.umass.edu/>`_.
@@ -125,13 +126,24 @@ class LDAModel(Model):
 
     mallet_path = MALLET_PATH
 
+    @staticmethod
+    def from_mallet(corpus, featureset_name, wt_path, dt_path, model_path):
+        model = LDAModel(corpus, featureset_name=featureset_name,
+                         nodelete=True,    # So that it doesn't discard your files when you're done.
+                         prep=False,       # Skips building the corpus and calling MALLET's import function.
+                         wt=wt_path,
+                         dt=dt_path,
+                         om=model_path)
+        model.load()
+        return model
+
     def __init__(self, *args, **kwargs):
         self.mallet_bin = os.path.join(self.mallet_path, "bin", "mallet")
 
         if platform.system() == 'Windows':
             self.mallet_bin += '.bat'
         os.environ['MALLET_HOME'] = self.mallet_path
-        
+
         super(LDAModel, self).__init__(*args, **kwargs)
 
         if not hasattr(self, 'dt'):
@@ -253,21 +265,7 @@ class LDAModel(Model):
             Rows are documents, columns are topics. Rows sum to ~1.
         """
 
-        self.theta = FeatureSet()
-
-        with open(dt, "rb") as f:
-            i = -1
-            reader = csv.reader(f, delimiter='\t')
-            for line in reader:
-                i += 1
-                if i == 0:
-                    continue     # Avoid header row.
-
-                d, id, t = int(line[0]), unicode(line[1]), line[2:]
-                feature = Feature([(int(t[i]), float(t[i + 1]))
-                                   for i in xrange(0, len(t) - 1, 2)])
-                self.theta.add(id, feature)
-
+        self.theta = mallet_to_theta_featureset(dt)
         self.corpus.features['topics'] = self.theta
         return self.theta
 
@@ -281,71 +279,71 @@ class LDAModel(Model):
             Rows are topics, columns are words. Rows sum to ~1.
         """
 
-        self.vocabulary = {}
-        phi_features = {}
-
-        # TODO: make this encoding-safe.
-        with open(wt, "r") as f:
-            reader = csv.reader(f, delimiter=' ')
-            topics = defaultdict(list)
-            for line in reader:
-                w, term = int(line[0]), unicode(line[1])
-                self.vocabulary[w] = term
-
-                for l in line[2:]:
-                    k, c = l.split(':')    # Topic and assignment count.
-                    topics[int(k)].append((w, int(c)))
-
-        for k, data in topics.iteritems():
-            nfeature = Feature(data).norm
-
-            phi_features[k] = nfeature
-        self.phi = FeatureSet(phi_features)
-
-    def topics_in(self, d, topn=5):
-        """
-        List the top ``topn`` topics in document ``d``.
-        """
-        return self.theta.features[d].top(topn)
-
-    def list_topic(self, k, Nwords=10):
-        """
-        List the top ``topn`` words for topic ``k``.
+        self.phi, self.vocabulary = mallet_to_phi_featureset(wt)
 
 
-        Examples
-        --------
+def mallet_to_theta_featureset(dt_path):
+    """
+    Generate a :class:`.FeatureSet` describing document-topic assignments from a
+    MALLET document-topic output file.
 
-        .. code-block:: python
+    Parameters
+    ----------
+    dt_path : str
+        Full path to the document-topic data file created by MALLET.
 
-           >>> model.list_topic(1, Nwords=5)
-           [ 'opposed', 'terminates', 'trichinosis', 'cistus', 'acaule' ]
+    Returns
+    -------
+    theta : :class:`.FeatureSet`
+    """
+    theta = FeatureSet()
 
-        """
+    with open(dt_path, "rb") as f:
+        i = -1
+        reader = csv.reader(f, delimiter='\t')
+        for line in reader:
+            i += 1
+            if i == 0:
+                continue     # Avoid header row.
 
-        return [(self.vocabulary[w], p) for w, p
-                in self.phi.features[k].top(Nwords)]
-
-    def list_topics(self, Nwords=10):
-        """
-        List the top ``Nwords`` words for each topic.
-        """
-        return [(k, self.list_topic(k, Nwords)) for k in xrange(len(self.phi))]
-
-
-    def print_topics(self, Nwords=10):
-        """
-        Print the top ``Nwords`` words for each topic.
-        """
-        print('Topic\tTop %i words' % Nwords)
-        for k, words in self.list_topics(Nwords):
-            print(unicode(k).ljust(3) + '\t' + ' '.join(list(zip(*words))[0]))
+            d, id, t = int(line[0]), unicode(line[1]), line[2:]
+            feature = Feature([(int(t[i]), float(t[i + 1]))
+                               for i in xrange(0, len(t) - 1, 2)])
+            theta.add(id, feature)
+    return theta
 
 
-    def topic_over_time(self, k, mode='counts', slice_kwargs={}):
-        """
-        Calculate the representation of topic ``k`` in the corpus over time.
-        """
+def mallet_to_phi_featureset(wt_path):
+    """
+    Generate a :class:`.FeatureSet` describing word-topic assignments from a
+    MALLET word-topic output file.
 
-        return self.corpus.feature_distribution('topics', k, mode=mode,
-                                                **slice_kwargs)
+    Parameters
+    ----------
+    wt_path : str
+        Full path to the word-topic data file created by MALLET.
+
+    Returns
+    -------
+    phi : :class:`.FeatureSet`
+    """
+    vocabulary = {}
+    phi_features = {}
+
+    # TODO: make this encoding-safe.
+    with open(wt_path, "r") as f:
+        reader = csv.reader(f, delimiter=' ')
+        topics = defaultdict(list)
+        for line in reader:
+            w, term = int(line[0]), unicode(line[1])
+            vocabulary[w] = term
+
+            for l in line[2:]:
+                k, c = l.split(':')    # Topic and assignment count.
+                topics[int(k)].append((w, int(c)))
+
+    for k, data in topics.iteritems():
+        nfeature = Feature(data).norm
+
+        phi_features[k] = nfeature
+    return FeatureSet(phi_features), vocabulary

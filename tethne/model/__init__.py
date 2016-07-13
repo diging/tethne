@@ -14,7 +14,7 @@ class Model(object):
     Base class for models.
     """
 
-    def __init__(self, corpus, prep=True, **kwargs):
+    def __init__(self, corpus=None, prep=True, **kwargs):
         """
         Initialize the ModelManager.
         """
@@ -41,9 +41,10 @@ class Model(object):
         """
         Delete temporary directory and all files contained therein.
         """
-        if getattr(self, 'nodelete', False):    
+        if getattr(self, 'nodelete', False):
             return
-        shutil.rmtree(self.temp)
+        if hasattr(self, 'temp'):
+            shutil.rmtree(self.temp)
 
     @property
     def ll_trace(self):

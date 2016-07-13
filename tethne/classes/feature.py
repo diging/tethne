@@ -4,6 +4,8 @@ Classes in this module provide structures for additional data about
 """
 
 from collections import Counter, defaultdict
+from itertools import repeat
+import numpy as np
 
 from tethne.utilities import _iterable
 try:    # Might as well use numpy if it is available.
@@ -243,7 +245,7 @@ class Feature(list):
 
     def __add__(self, data):
         if len(data) > 0:
-            if type(data[0]) is tuple and type(data[0][-1]) in [float, int]:
+            if type(data[0]) is tuple and type(data[0][-1]) not in [unicode, str]:
                 # There may be overlap with existing features,
                 combined_data = defaultdict(type(data[0][-1]))
                 for k, v in data + list(self):
@@ -296,7 +298,7 @@ class Feature(list):
     @property
     def norm(self):
         T = sum(list(zip(*self))[1])
-        return Feature([(i, float(v)/T) for i, v in self])
+        return Feature([(i, 1.*v/T) for i, v in self])
 
     def top(self, topn=10):
         """
@@ -461,7 +463,7 @@ class StructuredFeatureSet(BaseFeatureSet):
 
         return StructuredFeatureSet(features)
 
-    def context_chunks(self, context):
+    def context_chunks(self, context=None):
         """
         Retrieves all tokens, divided into the chunks in context ``context``.
 
@@ -487,11 +489,57 @@ class StructuredFeatureSet(BaseFeatureSet):
             if context in feature.contexts:
                 new_chunks = feature.context_chunks(context)
             else:
-                new_chunks = list(feature)
+                new_chunks = [list(feature)]
             indices = range(len(chunks), len(chunks) + len(new_chunks))
             papers.append((paper, indices))
             chunks += new_chunks
         return papers, chunks
+
+    def to_gensim_corpus(self, context=None, raw=False):
+        """
+        Yield a bag-of-words corpus compatible with the Gensim package.
+
+        Returns a (corpus, index) tuple (see below).
+
+        Parameters
+        ----------
+        context : str
+            If provided, each "document" in the Gensim corpus will be a chunk
+            of type ``context``.
+        raw : bool
+            (default: False) If True, documents will be sequences of tokens
+            rather than sequences of (term, count) "bag-of-words" tuples.
+
+        Returns
+        -------
+        list
+            A list of lists of (id, count) tuples. Each sub-list represents a
+            single context item (e.g. a document, or a paragraph). This is the
+            "bag of words" representation used in Gensim.
+        dict
+            Maps integer IDs to words.
+
+        Examples
+        --------
+
+        .. code-block:: python
+
+           >>> from tethne.readers.wos import read
+           >>> corpus = read('/path/to/my/data')
+           >>> from nltk.tokenize import word_tokenize
+           >>> corpus.index_feature('abstract', word_tokenize, structured=True)
+           >>> gensim_corpus, id2word = corpus.features['abstract'].to_gensim_corpus()
+           >>> from gensim import corpora, models
+           >>> model = models.ldamodel.LdaModel(corpus=gensim_corpus,
+                                                id2word=id2word,
+                                                num_topics=5, update_every=1,
+                                                chunksize=100, passes=1)
+        """
+        if raw:
+            return self.context_chunks(context)[1], None
+        return [[(self.lookup[term], count) for term, count in Counter(chunk).items()] for chunk in self.context_chunks(context)[1]], self.index
+
+
 
 
 class FeatureSet(BaseFeatureSet):
@@ -616,12 +664,59 @@ class FeatureSet(BaseFeatureSet):
         for i in xrange(m):
             e = self.index[i]
             if e in values:
-                c = float(values[e])
+                c = 1.*values[e]
             else:
                 c = 0.
             vect.append(c)
 
         return vect
+
+    def to_gensim_corpus(self, raw=False):
+        """
+        Yield a bag-of-words corpus compatible with the Gensim package.
+
+        Returns a (corpus, index) tuple (see below).
+
+        Parameters
+        ----------
+        context : str
+            If provided, each "document" in the Gensim corpus will be a chunk
+            of type ``context``.
+        raw : bool
+            (default: False) If True, documents will be sequences of tokens
+            rather than sequences of (term, count) "bag-of-words" tuples.
+
+        Returns
+        -------
+        list
+            A list of lists of (id, count) tuples. Each sub-list represents a
+            single context item (e.g. a document, or a paragraph). This is the
+            "bag of words" representation used in Gensim.
+        dict
+            Maps integer IDs to words.
+
+        Examples
+        --------
+
+        .. code-block:: python
+
+           >>> from tethne.readers.wos import read
+           >>> corpus = read('/path/to/my/data')
+           >>> from nltk.tokenize import word_tokenize
+           >>> corpus.index_feature('abstract', word_tokenize)
+           >>> gensim_corpus, id2word = corpus.features['abstract'].to_gensim_corpus()
+           >>> from gensim import corpora, models
+           >>> model = models.ldamodel.LdaModel(corpus=gensim_corpus,
+                                                id2word=id2word,
+                                                num_topics=5, update_every=1,
+                                                chunksize=100, passes=1)
+        """
+        if raw:
+            return [[token for term, count in document
+                     for token in repeat(term, count)]
+                    for document in self.features.values()], None
+        return [[(self.lookup[term], count) for term, count in document]
+                for document in self.features.values()], self.index
 
 
 def feature(f):

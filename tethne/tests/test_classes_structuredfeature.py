@@ -7,6 +7,67 @@ import unittest
 
 from tethne.classes.feature import StructuredFeature, StructuredFeatureSet
 
+
+class TestStructuredFeatureSetToGensim(unittest.TestCase):
+    def test_to_gensim_corpus(self):
+        tokens1 = [chr(i) for i in range(65, 250)]
+        tokens2 = [chr(i) for i in range(65, 250)][::-1]
+        contexts1 = [('sentence', [0, 25, 57, 89, 124, 156, 172]),
+                     ('paragraph', [0, 89, 172])]
+        contexts2 = [('paragraph', [0, 101])]
+        feature1 = StructuredFeature(tokens1, contexts1)
+        feature2 = StructuredFeature(tokens2, contexts2)
+        features = {
+            'first': feature1,
+            'second': feature2,
+        }
+        fset = StructuredFeatureSet(features)
+        # print fset.index
+        gensim_corpus, _ = fset.to_gensim_corpus('paragraph', raw=True)
+        self.assertIsInstance(gensim_corpus, list)
+        self.assertEqual(len(gensim_corpus), 5)
+        self.assertIsInstance(gensim_corpus[0], list)
+        self.assertIsInstance(gensim_corpus[0][0], str)
+
+    def test_end_to_end_raw(self):
+        """
+        Runs the Gensim LDA workflow
+        (https://radimrehurek.com/gensim/wiki.html#latent-dirichlet-allocation).
+        """
+        from tethne.readers.wos import read
+        corpus = read('./tethne/tests/data/wos3.txt')
+        from nltk.tokenize import word_tokenize
+        corpus.index_feature('abstract', word_tokenize, structured=True)
+
+        gensim_corpus, _ = corpus.features['abstract'].to_gensim_corpus(raw=True)
+        from gensim import corpora, models
+
+        dictionary = corpora.Dictionary(gensim_corpus)
+        corpus = [dictionary.doc2bow(text) for text in gensim_corpus]
+        model = models.ldamodel.LdaModel(corpus=corpus, id2word=dictionary,
+                                         num_topics=5, update_every=1,
+                                         chunksize=100, passes=1)
+        model.print_topics()
+
+    def test_end_to_end(self):
+        """
+        Runs the Gensim LDA workflow
+        (https://radimrehurek.com/gensim/wiki.html#latent-dirichlet-allocation).
+        """
+        from tethne.readers.wos import read
+        corpus = read('./tethne/tests/data/wos3.txt')
+        from nltk.tokenize import word_tokenize
+        corpus.index_feature('abstract', word_tokenize, structured=True)
+
+        gensim_corpus, id2word = corpus.features['abstract'].to_gensim_corpus()
+        from gensim import corpora, models
+
+        model = models.ldamodel.LdaModel(corpus=gensim_corpus, id2word=id2word,
+                                         num_topics=5, update_every=1,
+                                         chunksize=100, passes=1)
+        model.print_topics()
+
+
 class TestStructuredFeatureSet(unittest.TestCase):
     def setUp(self):
         self.tokens1 = list(range(0, 205))

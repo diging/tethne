@@ -90,7 +90,58 @@ class TestFeature(unittest.TestCase):
         self.assertEqual(feature.value('bob'), 0)
 
 
+class TestFeatureSetWithData(unittest.TestCase):
+    def test_featureset(self):
+        f = Feature([(1585, 0.00054845065429964715), (1262, 0.00054605985306858213), (444, 0.00053942261617068057), (5106, 0.00053648963322009118), (206, 0.00053379098026327346), (1341, 0.00053329960378783244), (353, 0.00053110237444066769), (1498, 0.00052695505145953733), (1, 0.00052553534496093041)])
+        f2 = Feature([(1585, 0.00054845065429964715), (1262, 0.00054605985306858213), (444, 0.00053942261617068057), (5106, 0.00053648963322009118), (206, 0.00053379098026327346), (1341, 0.00053329960378783244), (353, 0.00053110237444066769), (1498, 0.00052695505145953733), (1, 0.00052553534496093041)])
+        fset = FeatureSet({'f': f, 'f2': f2})
+        top = fset.top(5)
+        self.assertIsInstance(top, list)
+        self.assertIsInstance(top[0], tuple)
+        self.assertEqual(len(top), 5)
+
+        print fset['f'].top(5)
+
+
 class TestFeatureSet(unittest.TestCase):
+    def test_end_to_end_raw(self):
+        """
+        Runs the Gensim LDA workflow
+        (https://radimrehurek.com/gensim/wiki.html#latent-dirichlet-allocation).
+        """
+        from tethne.readers.wos import read
+        corpus = read('./tethne/tests/data/wos3.txt')
+        from nltk.tokenize import word_tokenize
+        corpus.index_feature('abstract', word_tokenize)
+
+        gensim_corpus, _ = corpus.features['abstract'].to_gensim_corpus(raw=True)
+        from gensim import corpora, models
+
+        dictionary = corpora.Dictionary(gensim_corpus)
+        corpus = [dictionary.doc2bow(text) for text in gensim_corpus]
+        model = models.ldamodel.LdaModel(corpus=corpus, id2word=dictionary,
+                                         num_topics=5, update_every=1,
+                                         chunksize=100, passes=1)
+        model.print_topics()
+
+    def test_end_to_end(self):
+        """
+        Runs the Gensim LDA workflow
+        (https://radimrehurek.com/gensim/wiki.html#latent-dirichlet-allocation).
+        """
+        from tethne.readers.wos import read
+        corpus = read('./tethne/tests/data/wos3.txt')
+        from nltk.tokenize import word_tokenize
+        corpus.index_feature('abstract', word_tokenize)
+
+        gensim_corpus, id2word = corpus.features['abstract'].to_gensim_corpus()
+        from gensim import models
+
+        model = models.ldamodel.LdaModel(corpus=gensim_corpus, id2word=id2word,
+                                         num_topics=5, update_every=1,
+                                         chunksize=100, passes=1)
+        model.print_topics()
+
     def test_init_empty(self):
         """
         Initialize with no Features.
