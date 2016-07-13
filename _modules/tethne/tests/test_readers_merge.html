@@ -75,32 +75,38 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.tests.test_readers_merge</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;../tethne&#39;</span><span class="p">)</span>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../tethne&#39;</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">unittest</span>
-<span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">dfr</span><span class="p">,</span> <span class="n">wos</span><span class="p">,</span> <span class="n">merge</span>
-<span class="kn">from</span> <span class="nn">tethne</span> <span class="kn">import</span> <span class="n">Corpus</span><span class="p">,</span> <span class="n">Paper</span><span class="p">,</span> <span class="n">FeatureSet</span>
+<span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="k">import</span> <span class="n">dfr</span><span class="p">,</span> <span class="n">wos</span><span class="p">,</span> <span class="n">merge</span>
+<span class="kn">from</span> <span class="nn">tethne</span> <span class="k">import</span> <span class="n">Corpus</span><span class="p">,</span> <span class="n">Paper</span><span class="p">,</span> <span class="n">FeatureSet</span>
 
-<span class="n">dfr_datapath</span> <span class="o">=</span> <span class="s">&#39;./tethne/tests/data/dfr&#39;</span>
-<span class="n">wos_datapath</span> <span class="o">=</span> <span class="s">&#39;./tethne/tests/data/wos2.txt&#39;</span>
+<span class="n">dfr_datapath</span> <span class="o">=</span> <span class="s1">&#39;./tethne/tests/data/dfr&#39;</span>
+<span class="n">wos_datapath</span> <span class="o">=</span> <span class="s1">&#39;./tethne/tests/data/wos2.txt&#39;</span>
 
 
 <div class="viewcode-block" id="TestMerge"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_merge.TestMerge">[docs]</a><span class="k">class</span> <span class="nc">TestMerge</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="TestMerge.setUp"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_merge.TestMerge.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dfr_corpus</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">dfr_datapath</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wos_corpus</span> <span class="o">=</span> <span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">wos_datapath</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wos_corpus</span> <span class="o">=</span> <span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">wos_datapath</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestMerge.test_merge"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_merge.TestMerge.test_merge">[docs]</a>    <span class="k">def</span> <span class="nf">test_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">combined</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfr_corpus</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wos_corpus</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">combined</span><span class="p">),</span> <span class="mi">472</span><span class="p">)</span>
 
         <span class="n">old_features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfr_corpus</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">|</span> \
                             <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wos_corpus</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertListEqual</span><span class="p">(</span><span class="n">combined</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">old_features</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertListEqual</span><span class="p">(</span><span class="n">combined</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">old_features</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestMerge.test_merge_comparator"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_merge.TestMerge.test_merge_comparator">[docs]</a>    <span class="k">def</span> <span class="nf">test_merge_comparator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Instead of passing a list of fields to compare, we can pass a callable</span>
@@ -109,8 +115,8 @@
 
         <span class="n">comparator</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">:</span> <span class="n">p1</span><span class="o">.</span><span class="n">ayjid</span> <span class="o">==</span> <span class="n">p2</span><span class="o">.</span><span class="n">ayjid</span>
         <span class="n">combined</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfr_corpus</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wos_corpus</span><span class="p">,</span> <span class="n">match_by</span><span class="o">=</span><span class="n">comparator</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">combined</span><span class="p">),</span> <span class="mi">472</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">combined</span><span class="p">),</span> <span class="mi">472</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestMerge.test_merge_both_empty"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_merge.TestMerge.test_merge_both_empty">[docs]</a>    <span class="k">def</span> <span class="nf">test_merge_both_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Testing the functionality of merge when both lists passed are empty</span>
@@ -122,8 +128,8 @@
         <span class="n">dfr_corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">dfr_papers</span><span class="p">)</span>
         <span class="n">expected_len</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expected_len</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">merge</span><span class="p">(</span><span class="n">wos_corpus</span><span class="p">,</span><span class="n">dfr_corpus</span><span class="p">)))</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expected_len</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">merge</span><span class="p">(</span><span class="n">wos_corpus</span><span class="p">,</span><span class="n">dfr_corpus</span><span class="p">)))</span></div>
+
 <div class="viewcode-block" id="TestMerge.test_merge_one_empty"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_merge.TestMerge.test_merge_one_empty">[docs]</a>    <span class="k">def</span> <span class="nf">test_merge_one_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Testing the functionality of merge when one of the lists passed is empty</span>
@@ -133,16 +139,16 @@
         <span class="n">wos_corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">wos_papers</span><span class="p">)</span>
         <span class="n">dfr_papers</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">dfr_paper</span> <span class="o">=</span> <span class="n">Paper</span><span class="p">()</span>
-        <span class="n">dfr_paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1965</span>
+        <span class="n">dfr_paper</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1965</span>
         <span class="n">dfr_papers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dfr_paper</span><span class="p">)</span>
         <span class="n">dfr_corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">dfr_papers</span><span class="p">)</span>
         <span class="n">dfr_papers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dfr_paper</span><span class="p">)</span>
         <span class="n">expected_len</span> <span class="o">=</span> <span class="mi">1</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expected_len</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">merge</span><span class="p">(</span><span class="n">dfr_corpus</span><span class="p">,</span><span class="n">wos_corpus</span><span class="p">)))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expected_len</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">merge</span><span class="p">(</span><span class="n">wos_corpus</span><span class="p">,</span><span class="n">dfr_corpus</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expected_len</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">merge</span><span class="p">(</span><span class="n">wos_corpus</span><span class="p">,</span><span class="n">dfr_corpus</span><span class="p">)))</span></div>
 
-</div>
+
 <div class="viewcode-block" id="TestMerge.test_merge_not_equal"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_merge.TestMerge.test_merge_not_equal">[docs]</a>    <span class="k">def</span> <span class="nf">test_merge_not_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Testing the functionality of merge by passing two lists with 1 field each and field&#39;s values in both are not equal</span>
@@ -150,43 +156,43 @@
 
         <span class="n">wos_papers</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">wos_paper</span> <span class="o">=</span> <span class="n">Paper</span><span class="p">()</span>
-        <span class="n">wos_paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1999</span>
+        <span class="n">wos_paper</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1999</span>
         <span class="n">wos_papers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wos_paper</span><span class="p">)</span>
         <span class="n">wos_corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">wos_papers</span><span class="p">)</span>
         <span class="n">dfr_papers</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">dfr_paper</span> <span class="o">=</span> <span class="n">Paper</span><span class="p">()</span>
-        <span class="n">dfr_paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1965</span>
+        <span class="n">dfr_paper</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1965</span>
         <span class="n">dfr_papers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dfr_paper</span><span class="p">)</span>
         <span class="n">dfr_corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">dfr_papers</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">dfr_corpus</span><span class="p">,</span><span class="n">wos_corpus</span><span class="p">,[</span><span class="s">&#39;date&#39;</span><span class="p">])</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">dfr_corpus</span><span class="p">,</span><span class="n">wos_corpus</span><span class="p">,[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
         <span class="n">expected_len</span> <span class="o">=</span> <span class="mi">2</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expected_len</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expected_len</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">))</span></div>
 
-</div>
+
 <div class="viewcode-block" id="TestMerge.test_merge_equal"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_merge.TestMerge.test_merge_equal">[docs]</a>    <span class="k">def</span> <span class="nf">test_merge_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Testing the functionality of merge by passing two lists with 1 field each and field&#39;s values in both are equal</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">wos_papers</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">wos_paper</span> <span class="o">=</span> <span class="n">Paper</span><span class="p">()</span>
-        <span class="n">wos_paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1999</span>
+        <span class="n">wos_paper</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1999</span>
 
         <span class="n">wos_papers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wos_paper</span><span class="p">)</span>
         <span class="n">wos_corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">wos_papers</span><span class="p">)</span>
         <span class="n">dfr_papers</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">dfr_paper</span> <span class="o">=</span> <span class="n">Paper</span><span class="p">()</span>
-        <span class="n">dfr_paper</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1999</span>
+        <span class="n">dfr_paper</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1999</span>
         <span class="n">dfr_papers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dfr_paper</span><span class="p">)</span>
         <span class="n">dfr_corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">dfr_papers</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">dfr_corpus</span><span class="p">,</span><span class="n">wos_corpus</span><span class="p">,[</span><span class="s">&#39;date&#39;</span><span class="p">])</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">dfr_corpus</span><span class="p">,</span><span class="n">wos_corpus</span><span class="p">,[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
         <span class="n">expected_len</span> <span class="o">=</span> <span class="mi">1</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">))</span></div></div>
 
 
-</div></div>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
 </pre></div>
 
@@ -218,7 +224,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

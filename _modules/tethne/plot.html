@@ -75,16 +75,22 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.plot</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span></span><span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">log</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">izip</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">izip</span>
 
-<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">argmin</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">argsort</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">argmin</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">argsort</span>
 
 
 <div class="viewcode-block" id="plot_burstness"><a class="viewcode-back" href="../../tethne.plot.html#tethne.plot.plot_burstness">[docs]</a><span class="k">def</span> <span class="nf">plot_burstness</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -117,15 +123,15 @@
 <span class="sd">       :align: center</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-        <span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="kn">as</span> <span class="nn">mpatches</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="k">as</span> <span class="nn">mpatches</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;This method requires the package matplotlib.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;This method requires the package matplotlib.&#39;</span><span class="p">)</span>
 
-    <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;color&#39;</span><span class="p">,</span> <span class="s">&#39;red&#39;</span><span class="p">)</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
 
-    <span class="c"># Get width based on slices.</span>
-    <span class="n">years</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="c1"># Get width based on slices.</span>
+    <span class="n">years</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
     <span class="n">width</span> <span class="o">=</span> <span class="n">years</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">years</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">height</span> <span class="o">=</span> <span class="mf">1.0</span>
 
@@ -140,19 +146,19 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xbound</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">years</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">years</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">B</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span>   <span class="c"># Only show xticks on the bottom subplot.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">B</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span>   <span class="c1"># Only show xticks on the bottom subplot.</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([])</span>
 
-        <span class="c"># Block out years until first occurrence of feature.</span>
+        <span class="c1"># Block out years until first occurrence of feature.</span>
 
         <span class="n">rect</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="nb">min</span><span class="p">(</span><span class="n">years</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="nb">min</span><span class="p">(</span><span class="n">years</span><span class="p">),</span>
-                                   <span class="n">height</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
-        <span class="n">rect</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s">&#39;black&#39;</span><span class="p">)</span>
+                                   <span class="n">height</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">rect</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
         <span class="n">rect</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
 
-        <span class="c"># Add a rectangle for each year, shaded according to burstness state.</span>
-        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+        <span class="c1"># Add a rectangle for each year, shaded according to burstness state.</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">i</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
@@ -162,21 +168,21 @@
 
             <span class="n">state</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">rect</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span>
-                                      <span class="n">fill</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+                                      <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
             <span class="n">rect</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
             <span class="n">rect</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
 
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                      <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;right&#39;</span><span class="p">,</span>
-                      <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">)</span>
+                      <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span>
+                      <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">h_pad</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
-</div>
-<div class="viewcode-block" id="plot_sigma"><a class="viewcode-back" href="../../tethne.plot.html#tethne.plot.plot_sigma">[docs]</a><span class="k">def</span> <span class="nf">plot_sigma</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">nodes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="plot_sigma"><a class="viewcode-back" href="../../tethne.plot.html#tethne.plot.plot_sigma">[docs]</a><span class="k">def</span> <span class="nf">plot_sigma</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">nodes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot sigma values for the ``topn`` most influential nodes.</span>
 
@@ -231,33 +237,33 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-        <span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="kn">as</span> <span class="nn">mpatches</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+        <span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="k">as</span> <span class="nn">mpatches</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;This method requires the package matplotlib.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;This method requires the package matplotlib.&#39;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">nodes</span> <span class="o">==</span> <span class="s">&#39;all&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">nodes</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
         <span class="n">nodes</span> <span class="o">=</span> <span class="n">sigma</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 
-    <span class="c"># Display parameters.</span>
-    <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;color&#39;</span><span class="p">,</span> <span class="s">&#39;red&#39;</span><span class="p">)</span>
-    <span class="n">years</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-    <span class="n">width</span> <span class="o">=</span> <span class="n">years</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">years</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c"># Get width based on slices.</span>
+    <span class="c1"># Display parameters.</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
+    <span class="n">years</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="n">years</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">years</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Get width based on slices.</span>
     <span class="n">height</span> <span class="o">=</span> <span class="mf">1.0</span>
 
-    <span class="n">sort_by</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;sort_by&#39;</span><span class="p">,</span> <span class="s">&#39;max&#39;</span><span class="p">)</span>
-    <span class="n">perslice</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;perslice&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-    <span class="n">topn</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;topn&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="n">sort_by</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sort_by&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">)</span>
+    <span class="n">perslice</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;perslice&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">topn</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;topn&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">nodes</span><span class="p">:</span>
-        <span class="c"># Get only the topn most significant papers.</span>
+        <span class="c1"># Get only the topn most significant papers.</span>
         <span class="n">include</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">sort_by</span> <span class="o">==</span> <span class="s">&#39;max&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">perslice</span><span class="p">:</span>    <span class="c"># Get topn per slice.</span>
+        <span class="k">if</span> <span class="n">sort_by</span> <span class="o">==</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">perslice</span><span class="p">:</span>    <span class="c1"># Get topn per slice.</span>
                 <span class="n">vals</span> <span class="o">=</span> <span class="p">{}</span>
                 <span class="n">norm_by</span> <span class="o">=</span> <span class="mf">0.</span>
 
-                <span class="c"># Organize values in a way that makes selection easier.</span>
+                <span class="c1"># Organize values in a way that makes selection easier.</span>
                 <span class="k">for</span> <span class="n">node</span><span class="p">,</span> <span class="n">history</span> <span class="ow">in</span> <span class="n">sigma</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
                     <span class="n">years</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">history</span>
                     <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="mf">0.</span><span class="p">:</span>
@@ -267,7 +273,7 @@
                             <span class="n">vals</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
                         <span class="n">vals</span><span class="p">[</span><span class="n">year</span><span class="p">][</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
 
-                <span class="c"># Get the maximum values for each slice.</span>
+                <span class="c1"># Get the maximum values for each slice.</span>
                 <span class="k">for</span> <span class="n">year</span><span class="p">,</span> <span class="n">node_values</span> <span class="ow">in</span> <span class="n">vals</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
                     <span class="n">indices</span> <span class="o">=</span> <span class="n">argsort</span><span class="p">(</span><span class="n">node_values</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="o">-</span><span class="n">topn</span><span class="p">:][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                     <span class="n">include</span> <span class="o">+=</span> <span class="p">[</span><span class="n">node_values</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
@@ -275,24 +281,24 @@
                     <span class="k">if</span> <span class="n">max_value</span> <span class="o">&gt;</span> <span class="n">norm_by</span><span class="p">:</span>
                         <span class="n">norm_by</span> <span class="o">=</span> <span class="n">max_value</span>
 
-            <span class="k">else</span><span class="p">:</span>   <span class="c"># Get topn overall.</span>
+            <span class="k">else</span><span class="p">:</span>   <span class="c1"># Get topn overall.</span>
                 <span class="n">maxes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sigma</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="p">]</span>
                 <span class="n">indices</span> <span class="o">=</span> <span class="n">argsort</span><span class="p">(</span><span class="n">maxes</span><span class="p">)[</span><span class="o">-</span><span class="n">topn</span><span class="p">:][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="n">include</span> <span class="o">=</span> <span class="p">[</span><span class="n">sigma</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
                 <span class="n">norm_by</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">maxes</span><span class="p">)</span>
 
-        <span class="c"># Nodes to include.</span>
+        <span class="c1"># Nodes to include.</span>
         <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">sigma</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
                  <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">include</span><span class="p">]</span>
 
-<span class="c">#     if fig is None: # Create a new Figure instance.</span>
+<span class="c1">#     if fig is None: # Create a new Figure instance.</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span><span class="o">/</span><span class="mf">4.</span><span class="p">))</span>
 
-    <span class="c"># Plot!</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="mi">1</span>   <span class="c"># Current subplot.</span>
+    <span class="c1"># Plot!</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="mi">1</span>   <span class="c1"># Current subplot.</span>
     <span class="n">axes</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="c"># Earliest year for which we have values.</span>
+    <span class="c1"># Earliest year for which we have values.</span>
     <span class="n">x_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="n">years</span><span class="p">)</span> <span class="k">for</span> <span class="n">years</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">sigma</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
 
     <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
@@ -305,20 +311,20 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xbound</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">years</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="c"># Only show xticks on the bottom subplot.</span>
+        <span class="c1"># Only show xticks on the bottom subplot.</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([])</span>
 
-        <span class="c"># Block out years until first occurrence of feature.</span>
+        <span class="c1"># Block out years until first occurrence of feature.</span>
         <span class="n">rect</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="n">x_min</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x_min</span><span class="p">,</span>
-                                  <span class="n">height</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
-        <span class="n">rect</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s">&#39;black&#39;</span><span class="p">)</span>
+                                  <span class="n">height</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">rect</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
         <span class="n">rect</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
 
-        <span class="c"># Add a rectangle for each year, shaded according to burstness state.</span>
-        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
-            <span class="k">try</span><span class="p">:</span>    <span class="c"># May not have values for all years.</span>
+        <span class="c1"># Add a rectangle for each year, shaded according to burstness state.</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+            <span class="k">try</span><span class="p">:</span>    <span class="c1"># May not have values for all years.</span>
                 <span class="n">i</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
                 <span class="k">continue</span>
@@ -327,14 +333,14 @@
 
             <span class="n">state</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">rect</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span>
-                                      <span class="n">fill</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+                                      <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
             <span class="n">rect</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
             <span class="n">rect</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="n">state</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
 
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                      <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;right&#39;</span><span class="p">,</span>
-                      <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">)</span>
+                      <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span>
+                      <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">h_pad</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
@@ -369,7 +375,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

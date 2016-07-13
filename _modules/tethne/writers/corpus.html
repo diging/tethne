@@ -75,23 +75,29 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.writers.corpus</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">repeat</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">repeat</span>
 <span class="kn">import</span> <span class="nn">codecs</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">csv</span>
 
-<span class="kn">from</span> <span class="nn">tethne</span> <span class="kn">import</span> <span class="n">FeatureSet</span><span class="p">,</span> <span class="n">StructuredFeatureSet</span>
+<span class="kn">from</span> <span class="nn">tethne</span> <span class="k">import</span> <span class="n">FeatureSet</span><span class="p">,</span> <span class="n">StructuredFeatureSet</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">PYTHON_3</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
 <span class="k">if</span> <span class="n">PYTHON_3</span><span class="p">:</span>
-    <span class="nb">unicode</span> <span class="o">=</span> <span class="nb">str</span>
+    <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
 
 
 <div class="viewcode-block" id="write_documents"><a class="viewcode-back" href="../../../tethne.writers.html#tethne.writers.corpus.write_documents">[docs]</a><span class="k">def</span> <span class="nf">write_documents</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">featureset_name</span><span class="p">,</span> <span class="n">metadata_fields</span><span class="o">=</span><span class="p">[]):</span>
@@ -102,42 +108,42 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">docpath</span> <span class="o">=</span> <span class="n">target</span> <span class="o">+</span> <span class="s">&#39;_docs.txt&#39;</span>
-    <span class="n">metapath</span> <span class="o">=</span> <span class="n">target</span> <span class="o">+</span> <span class="s">&#39;_meta.csv&#39;</span>
+    <span class="n">docpath</span> <span class="o">=</span> <span class="n">target</span> <span class="o">+</span> <span class="s1">&#39;_docs.txt&#39;</span>
+    <span class="n">metapath</span> <span class="o">=</span> <span class="n">target</span> <span class="o">+</span> <span class="s1">&#39;_meta.csv&#39;</span>
 
     <span class="n">features</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset_name</span><span class="p">]</span><span class="o">.</span><span class="n">features</span>
     <span class="n">ftype</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset_name</span><span class="p">])</span>
     <span class="n">index</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset_name</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">docFile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">docpath</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span>
+        <span class="n">docFile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">docpath</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&#39;Invalid target. Could not open files for writing.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;Invalid target. Could not open files for writing.&#39;</span><span class="p">)</span>
 
-    <span class="c"># Generate metadata.</span>
-    <span class="k">with</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">metapath</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="c1"># Generate metadata.</span>
+    <span class="k">with</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">metapath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
         <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">corpus</span><span class="o">.</span><span class="n">index_by</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">metadata_fields</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">corpus</span><span class="o">.</span><span class="n">indexed_papers</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-            <span class="n">getter</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="k">else</span> <span class="bp">None</span>
+            <span class="n">getter</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
             <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">getter</span><span class="p">,</span> <span class="n">metadata_fields</span><span class="p">)))</span>
 
-    <span class="c"># Write documents content.</span>
-    <span class="k">with</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">docpath</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="c1"># Write documents content.</span>
+    <span class="k">with</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">docpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">corpus</span><span class="o">.</span><span class="n">indexed_papers</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">features</span><span class="p">:</span>
-                <span class="n">row</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="s">u&#39;en&#39;</span><span class="p">]</span>
+                <span class="n">row</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="s1">u&#39;en&#39;</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">ftype</span> <span class="ow">is</span> <span class="n">FeatureSet</span><span class="p">:</span>
-                    <span class="n">row</span> <span class="o">+=</span> <span class="p">[</span><span class="s">u&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">repeat</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span> <span class="k">for</span> <span class="n">e</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+                    <span class="n">row</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">u&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">repeat</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span> <span class="k">for</span> <span class="n">e</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
                 <span class="k">elif</span> <span class="n">ftype</span> <span class="ow">is</span> <span class="n">StructuredFeatureSet</span><span class="p">:</span>
                     <span class="n">row</span> <span class="o">+=</span> <span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">u&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="o">+</span> <span class="s">u&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">u&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="o">+</span> <span class="s1">u&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">docpath</span><span class="p">,</span> <span class="n">metapath</span>
+    <span class="k">return</span> <span class="n">docpath</span><span class="p">,</span> <span class="n">metapath</span></div>
 
-</div>
+
 <div class="viewcode-block" id="write_documents_dtm"><a class="viewcode-back" href="../../../tethne.writers.html#tethne.writers.corpus.write_documents_dtm">[docs]</a><span class="k">def</span> <span class="nf">write_documents_dtm</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">featureset_name</span><span class="p">,</span> <span class="n">slice_kwargs</span><span class="o">=</span><span class="p">{},</span>
-                        <span class="n">metadata_fields</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">,</span><span class="s">&#39;title&#39;</span><span class="p">]):</span>
+                        <span class="n">metadata_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span><span class="s1">&#39;title&#39;</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Parameters</span>
@@ -164,67 +170,67 @@
 <span class="sd">    IOError</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">metapath</span> <span class="o">=</span> <span class="n">target</span> <span class="o">+</span> <span class="s">&#39;-meta.dat&#39;</span>
-    <span class="n">multpath</span> <span class="o">=</span> <span class="n">target</span> <span class="o">+</span> <span class="s">&#39;-mult.dat&#39;</span>
-    <span class="n">seqpath</span> <span class="o">=</span> <span class="n">target</span> <span class="o">+</span> <span class="s">&#39;-seq.dat&#39;</span>
-    <span class="n">vpath</span> <span class="o">=</span> <span class="n">target</span> <span class="o">+</span> <span class="s">&#39;-vocab.dat&#39;</span>
+    <span class="n">metapath</span> <span class="o">=</span> <span class="n">target</span> <span class="o">+</span> <span class="s1">&#39;-meta.dat&#39;</span>
+    <span class="n">multpath</span> <span class="o">=</span> <span class="n">target</span> <span class="o">+</span> <span class="s1">&#39;-mult.dat&#39;</span>
+    <span class="n">seqpath</span> <span class="o">=</span> <span class="n">target</span> <span class="o">+</span> <span class="s1">&#39;-seq.dat&#39;</span>
+    <span class="n">vpath</span> <span class="o">=</span> <span class="n">target</span> <span class="o">+</span> <span class="s1">&#39;-vocab.dat&#39;</span>
 
     <span class="n">lookup</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset_name</span><span class="p">]</span><span class="o">.</span><span class="n">lookup</span>
     <span class="n">index</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset_name</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
     <span class="n">features</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset_name</span><span class="p">]</span><span class="o">.</span><span class="n">features</span>
 
-    <span class="c"># Generate -mult.dat file (wordcounts for each document).</span>
-    <span class="c">#   From the DTM example:</span>
-    <span class="c">#</span>
-    <span class="c">#     one-doc-per-line, each line of the form</span>
-    <span class="c">#         unique_word_count index1:count1 index2:count2 ... indexn:counnt</span>
-    <span class="c">#     The docs in foo-mult.dat should be ordered by date, with the first</span>
-    <span class="c">#     docs from time1, the next from time2, ..., and the last docs from</span>
-    <span class="c">#     timen.</span>
-    <span class="c">#</span>
+    <span class="c1"># Generate -mult.dat file (wordcounts for each document).</span>
+    <span class="c1">#   From the DTM example:</span>
+    <span class="c1">#</span>
+    <span class="c1">#     one-doc-per-line, each line of the form</span>
+    <span class="c1">#         unique_word_count index1:count1 index2:count2 ... indexn:counnt</span>
+    <span class="c1">#     The docs in foo-mult.dat should be ordered by date, with the first</span>
+    <span class="c1">#     docs from time1, the next from time2, ..., and the last docs from</span>
+    <span class="c1">#     timen.</span>
+    <span class="c1">#</span>
     <span class="n">N</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">date</span><span class="p">,</span> <span class="n">subcorpus</span> <span class="ow">in</span> <span class="n">corpus</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="o">**</span><span class="n">slice_kwargs</span><span class="p">):</span>
-        <span class="k">with</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">multpath</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">multpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">subcorpus</span><span class="o">.</span><span class="n">papers</span><span class="p">:</span>
                 <span class="n">i</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">subcorpus</span><span class="o">.</span><span class="n">index_by</span><span class="p">)</span>
                 <span class="n">N</span><span class="p">[</span><span class="n">date</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="n">docLine</span> <span class="o">=</span> <span class="p">[</span><span class="s">u&#39;:&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">unicode</span><span class="p">(</span><span class="n">lookup</span><span class="p">[</span><span class="n">e</span><span class="p">]),</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">c</span><span class="p">)])</span>
+                <span class="n">docLine</span> <span class="o">=</span> <span class="p">[</span><span class="s1">u&#39;:&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">unicode</span><span class="p">(</span><span class="n">lookup</span><span class="p">[</span><span class="n">e</span><span class="p">]),</span> <span class="n">unicode</span><span class="p">(</span><span class="n">c</span><span class="p">)])</span>
                            <span class="k">for</span> <span class="n">e</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
-                <span class="n">unique</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
-                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">u&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">unique</span><span class="p">]</span> <span class="o">+</span> <span class="n">docLine</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+                <span class="n">unique</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">u&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">unique</span><span class="p">]</span> <span class="o">+</span> <span class="n">docLine</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
-    <span class="c"># And -meta.dat file (with DOIs).</span>
-    <span class="c">#</span>
-    <span class="c">#       a file with information on each of the documents, arranged in</span>
-    <span class="c">#           the same order as the docs in the mult file.</span>
-    <span class="c">#</span>
-    <span class="k">with</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">metapath</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">)</span>
-        <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s">&#39;id&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">metadata_fields</span><span class="p">))</span>
+    <span class="c1"># And -meta.dat file (with DOIs).</span>
+    <span class="c1">#</span>
+    <span class="c1">#       a file with information on each of the documents, arranged in</span>
+    <span class="c1">#           the same order as the docs in the mult file.</span>
+    <span class="c1">#</span>
+    <span class="k">with</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">metapath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">metadata_fields</span><span class="p">))</span>
         <span class="k">for</span> <span class="n">date</span><span class="p">,</span> <span class="n">subcorpus</span> <span class="ow">in</span> <span class="n">corpus</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="o">**</span><span class="n">slice_kwargs</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">subcorpus</span><span class="o">.</span><span class="n">papers</span><span class="p">:</span>
-                <span class="n">getter</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="k">else</span> <span class="bp">None</span>
+                <span class="n">getter</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">m</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
                 <span class="n">fieldData</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">getter</span><span class="p">,</span> <span class="n">metadata_fields</span><span class="p">)</span>
                 <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="nb">getattr</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">corpus</span><span class="o">.</span><span class="n">index_by</span><span class="p">)]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">fieldData</span><span class="p">))</span>
 
-    <span class="c"># Generate -seq.dat file (number of papers per year).</span>
-    <span class="c">#   From the DTM example:</span>
-    <span class="c">#</span>
-    <span class="c">#       Number_Timestamps</span>
-    <span class="c">#       number_docs_time_1</span>
-    <span class="c">#       ...</span>
-    <span class="c">#       number_docs_time_i</span>
-    <span class="c">#       ...</span>
-    <span class="c">#       number_docs_time_NumberTimestamps</span>
-    <span class="c">#</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">seqpath</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="c1"># Generate -seq.dat file (number of papers per year).</span>
+    <span class="c1">#   From the DTM example:</span>
+    <span class="c1">#</span>
+    <span class="c1">#       Number_Timestamps</span>
+    <span class="c1">#       number_docs_time_1</span>
+    <span class="c1">#       ...</span>
+    <span class="c1">#       number_docs_time_i</span>
+    <span class="c1">#       ...</span>
+    <span class="c1">#       number_docs_time_NumberTimestamps</span>
+    <span class="c1">#</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">seqpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">u&#39;{date}</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">date</span><span class="o">=</span><span class="n">N</span><span class="p">[</span><span class="n">date</span><span class="p">]))</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">u&#39;</span><span class="si">{date}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">date</span><span class="o">=</span><span class="n">N</span><span class="p">[</span><span class="n">date</span><span class="p">]))</span>
 
-    <span class="c">#       a file with all of the words in the vocabulary, arranged in</span>
-    <span class="c">#       the same order as the word indices</span>
-    <span class="k">with</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">vpath</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">u&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">index</span><span class="o">.</span><span class="n">keys</span><span class="p">())]))</span></div>
+    <span class="c1">#       a file with all of the words in the vocabulary, arranged in</span>
+    <span class="c1">#       the same order as the word indices</span>
+    <span class="k">with</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">vpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">u&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">index</span><span class="o">.</span><span class="n">keys</span><span class="p">())]))</span></div>
 </pre></div>
 
           </div>
@@ -255,7 +261,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

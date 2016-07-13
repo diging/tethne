@@ -75,9 +75,15 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.utilities</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Helper functions.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">string</span>
@@ -86,11 +92,11 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">PYTHON_3</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
 <span class="k">if</span> <span class="n">PYTHON_3</span><span class="p">:</span>
-    <span class="nb">unicode</span> <span class="o">=</span> <span class="nb">str</span>
-    <span class="kn">from</span> <span class="nn">html.parser</span> <span class="kn">import</span> <span class="n">HTMLParser</span>  <span class="c"># Python 3.x</span>
-    <span class="nb">xrange</span> <span class="o">=</span> <span class="nb">range</span>
+    <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
+    <span class="kn">from</span> <span class="nn">html.parser</span> <span class="k">import</span> <span class="n">HTMLParser</span>  <span class="c1"># Python 3.x</span>
+    <span class="n">xrange</span> <span class="o">=</span> <span class="nb">range</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">HTMLParser</span> <span class="kn">import</span> <span class="n">HTMLParser</span>   <span class="c"># Python 2.x</span>
+    <span class="kn">from</span> <span class="nn">HTMLParser</span> <span class="k">import</span> <span class="n">HTMLParser</span>   <span class="c1"># Python 2.x</span>
 
 
 <div class="viewcode-block" id="is_number"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.is_number">[docs]</a><span class="k">def</span> <span class="nf">is_number</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
@@ -100,10 +106,10 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
-    <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
 
-</div>
+
 <div class="viewcode-block" id="number"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.number">[docs]</a><span class="k">def</span> <span class="nf">number</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
@@ -111,9 +117,9 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">value</span>
+            <span class="k">return</span> <span class="n">value</span></div>
 
-</div>
+
 <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
@@ -133,25 +139,25 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span> <span class="o">+</span> <span class="n">data</span>
         <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span> <span class="o">+</span> <span class="n">data</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">goahead</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 <div class="viewcode-block" id="MLStripper.get_data"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.MLStripper.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">u&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fed</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">u&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fed</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="strip_tags"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.strip_tags">[docs]</a><span class="k">def</span> <span class="nf">strip_tags</span><span class="p">(</span><span class="n">html</span><span class="p">):</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">MLStripper</span><span class="p">()</span>
     <span class="n">s</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span></div>
 
-</div>
+
 <div class="viewcode-block" id="argsort"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.argsort">[docs]</a><span class="k">def</span> <span class="nf">argsort</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
     <span class="n">seq</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="n">seq</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="n">seq</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="argmin"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.argmin">[docs]</a><span class="k">def</span> <span class="nf">argmin</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
     <span class="n">iterable</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
     <span class="n">i_min</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
@@ -160,9 +166,9 @@
         <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="n">v_min</span><span class="p">:</span>
             <span class="n">i_min</span> <span class="o">=</span> <span class="n">i</span>
             <span class="n">v_min</span> <span class="o">=</span> <span class="n">v</span>
-    <span class="k">return</span> <span class="n">i_min</span>
+    <span class="k">return</span> <span class="n">i_min</span></div>
 
-</div>
+
 <div class="viewcode-block" id="argmax"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.argmax">[docs]</a><span class="k">def</span> <span class="nf">argmax</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
     <span class="n">i_max</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
     <span class="n">v_max</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
@@ -170,22 +176,22 @@
         <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="n">v_max</span><span class="p">:</span>
             <span class="n">i_max</span> <span class="o">=</span> <span class="n">i</span>
             <span class="n">v_max</span> <span class="o">=</span> <span class="n">v</span>
-    <span class="k">return</span> <span class="n">i_max</span>
+    <span class="k">return</span> <span class="n">i_max</span></div>
 
-</div>
+
 <div class="viewcode-block" id="nonzero"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.nonzero">[docs]</a><span class="k">def</span> <span class="nf">nonzero</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">])</span></div>
 
-</div>
+
 <div class="viewcode-block" id="mean"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.mean">[docs]</a><span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">iterable</span><span class="p">))</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;nan&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">)</span></div>
 
-</div>
+
 <span class="k">def</span> <span class="nf">_iterable</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="s">&#39;__iter__&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">o</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">o</span><span class="p">]</span>
@@ -195,17 +201,17 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Removes all punctuation characters from a string.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">PYTHON_3</span><span class="p">:</span>    <span class="c"># Bytestring (default in Python 2.x).</span>
-        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">maketrans</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="s">&quot;&quot;</span><span class="p">),</span> <span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>                 <span class="c"># Unicode string (default in Python 3.x).</span>
-        <span class="n">translate_table</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="nb">ord</span><span class="p">(</span><span class="n">char</span><span class="p">),</span> <span class="s">u&#39;&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="s">u&#39;!&quot;#%</span><span class="se">\&#39;</span><span class="s">()*+,-./:;&lt;=&gt;?@[\]^_`{|}~&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">PYTHON_3</span><span class="p">:</span>    <span class="c1"># Bytestring (default in Python 2.x).</span>
+        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">maketrans</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>                 <span class="c1"># Unicode string (default in Python 3.x).</span>
+        <span class="n">translate_table</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="nb">ord</span><span class="p">(</span><span class="n">char</span><span class="p">),</span> <span class="s1">u&#39;&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="s1">u&#39;!&quot;#%</span><span class="se">\&#39;</span><span class="s1">()*+,-./:;&lt;=&gt;?@[\]^_`{|}~&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">translate_table</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">_strip_numbers</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Removes all numbers from a string.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="s">u&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_number</span><span class="p">(</span><span class="n">c</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="s1">u&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_number</span><span class="p">(</span><span class="n">c</span><span class="p">)])</span>
 
 
 <div class="viewcode-block" id="normalize"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.normalize">[docs]</a><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -216,21 +222,21 @@
 <span class="sd">    * Remove all punctuation,</span>
 <span class="sd">    * Remove all numbers.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">_strip_numbers</span><span class="p">(</span><span class="n">_strip_punctuation</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span>
+    <span class="k">return</span> <span class="n">_strip_numbers</span><span class="p">(</span><span class="n">_strip_punctuation</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span></div>
 
-</div>
+
 <div class="viewcode-block" id="tokenize"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.tokenize">[docs]</a><span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="n">passage</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert a string into a list of normalized words.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">return</span> <span class="p">[</span><span class="n">normalize</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">passage</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">normalize</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">passage</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)]</span></div>
 
-</div>
+
 <span class="k">def</span> <span class="nf">_space_sep</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">s</span>
-    <span class="k">return</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+    <span class="k">return</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="swap"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.swap">[docs]</a><span class="k">def</span> <span class="nf">swap</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
@@ -238,28 +244,28 @@
 <span class="sd">    exchange the values of u and v</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">v</span><span class="p">),</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
-</div>
+    <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">v</span><span class="p">),</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">u</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="contains"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.contains">[docs]</a><span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Searches list l for a pattern specified in a lambda function f.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">l</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">True</span>
-    <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
 
-</div>
+
 <div class="viewcode-block" id="overlap"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.overlap">[docs]</a><span class="k">def</span> <span class="nf">overlap</span><span class="p">(</span><span class="n">listA</span><span class="p">,</span> <span class="n">listB</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return list of objects shared by listA, listB.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">listA</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">listB</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">listA</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">listB</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">listA</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">listB</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">listA</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">listB</span><span class="p">))</span></div>
 
-</div>
+
 <div class="viewcode-block" id="subdict"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.subdict">[docs]</a><span class="k">def</span> <span class="nf">subdict</span><span class="p">(</span><span class="n">super_dict</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns a subset of the super_dict with the specified keys.</span>
@@ -270,9 +276,9 @@
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">valid_keys</span><span class="p">:</span>
             <span class="n">sub_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">super_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
-    <span class="k">return</span> <span class="n">sub_dict</span>
+    <span class="k">return</span> <span class="n">sub_dict</span></div>
 
-</div>
+
 <div class="viewcode-block" id="attribs_to_string"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.attribs_to_string">[docs]</a><span class="k">def</span> <span class="nf">attribs_to_string</span><span class="p">(</span><span class="n">attrib_dict</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A more specific version of the subdict utility aimed at handling</span>
@@ -285,28 +291,28 @@
             <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
             <span class="n">attrib_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-    <span class="k">return</span> <span class="n">attrib_dict</span>
+    <span class="k">return</span> <span class="n">attrib_dict</span></div>
 
-</div>
-<div class="viewcode-block" id="concat_list"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.concat_list">[docs]</a><span class="k">def</span> <span class="nf">concat_list</span><span class="p">(</span><span class="n">listA</span><span class="p">,</span> <span class="n">listB</span><span class="p">,</span> <span class="n">delim</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="concat_list"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.concat_list">[docs]</a><span class="k">def</span> <span class="nf">concat_list</span><span class="p">(</span><span class="n">listA</span><span class="p">,</span> <span class="n">listB</span><span class="p">,</span> <span class="n">delim</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Concatenate list elements pair-wise with the delim character</span>
 <span class="sd">    Returns the concatenated list</span>
 <span class="sd">    Raises index error if lists are not parallel</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c"># Lists must be of equal length.</span>
+    <span class="c1"># Lists must be of equal length.</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">listA</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">listB</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s">&#39;Input lists are not parallel.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;Input lists are not parallel.&#39;</span><span class="p">)</span>
 
-    <span class="c"># Concatenate lists.</span>
+    <span class="c1"># Concatenate lists.</span>
     <span class="n">listC</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">listA</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">listA</span><span class="p">)):</span>
         <span class="n">app</span> <span class="o">=</span> <span class="n">listA</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">delim</span> <span class="o">+</span> <span class="n">listB</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="n">listC</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">listC</span>
-</div>
+    <span class="k">return</span> <span class="n">listC</span></div>
+
 <div class="viewcode-block" id="strip_non_ascii"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.strip_non_ascii">[docs]</a><span class="k">def</span> <span class="nf">strip_non_ascii</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the string without non-ASCII characters.</span>
@@ -323,15 +329,15 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">stripped</span> <span class="o">=</span> <span class="p">(</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span> <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">127</span><span class="p">)</span>
-    <span class="n">clean_string</span> <span class="o">=</span> <span class="s">u&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stripped</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">clean_string</span>
-</div>
+    <span class="n">clean_string</span> <span class="o">=</span> <span class="s1">u&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stripped</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">clean_string</span></div>
+
 <div class="viewcode-block" id="strip_punctuation"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.strip_punctuation">[docs]</a><span class="k">def</span> <span class="nf">strip_punctuation</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="n">exclude</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">)</span>
-    <span class="k">return</span> <span class="s">u&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ch</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">s</span> <span class="k">if</span> <span class="n">ch</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">u&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ch</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">s</span> <span class="k">if</span> <span class="n">ch</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">)</span></div>
 
-</div>
-<div class="viewcode-block" id="dict_from_node"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.dict_from_node">[docs]</a><span class="k">def</span> <span class="nf">dict_from_node</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="dict_from_node"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.dict_from_node">[docs]</a><span class="k">def</span> <span class="nf">dict_from_node</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts ElementTree node to a dictionary.</span>
 
@@ -353,30 +359,30 @@
     <span class="k">for</span> <span class="n">snode</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">snode</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
-                <span class="c"># Will drill down until len(snode) &lt;= 0.</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="n">dict_from_node</span><span class="p">(</span><span class="n">snode</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+                <span class="c1"># Will drill down until len(snode) &lt;= 0.</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">dict_from_node</span><span class="p">(</span><span class="n">snode</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">snode</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">snode</span><span class="o">.</span><span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">snode</span><span class="o">.</span><span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">snode</span><span class="o">.</span><span class="n">text</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="s">u&#39;&#39;</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="s1">u&#39;&#39;</span>
 
-        <span class="k">if</span> <span class="n">snode</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="nb">dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>    <span class="c"># If there are multiple subelements</span>
-                                        <span class="c">#  with the same tag, then the value</span>
-                                        <span class="c">#  of the element should be a list</span>
-                                        <span class="c">#  rather than a dict.</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="nb">dict</span><span class="p">[</span><span class="n">snode</span><span class="o">.</span><span class="n">tag</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>   <span class="c"># If a list has already been</span>
-                                                <span class="c">#  started, just append to</span>
-                                                <span class="c">#  it.</span>
+        <span class="k">if</span> <span class="n">snode</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="nb">dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>    <span class="c1"># If there are multiple subelements</span>
+                                        <span class="c1">#  with the same tag, then the value</span>
+                                        <span class="c1">#  of the element should be a list</span>
+                                        <span class="c1">#  rather than a dict.</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="nb">dict</span><span class="p">[</span><span class="n">snode</span><span class="o">.</span><span class="n">tag</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>   <span class="c1"># If a list has already been</span>
+                                                <span class="c1">#  started, just append to</span>
+                                                <span class="c1">#  it.</span>
                 <span class="nb">dict</span><span class="p">[</span><span class="n">snode</span><span class="o">.</span><span class="n">tag</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">dict</span><span class="p">[</span><span class="n">snode</span><span class="o">.</span><span class="n">tag</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">dict</span><span class="p">[</span><span class="n">snode</span><span class="o">.</span><span class="n">tag</span><span class="p">],</span> <span class="n">value</span> <span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">dict</span><span class="p">[</span><span class="n">snode</span><span class="o">.</span><span class="n">tag</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>     <span class="c"># Default behavior.</span>
-    <span class="k">return</span> <span class="nb">dict</span>
+            <span class="nb">dict</span><span class="p">[</span><span class="n">snode</span><span class="o">.</span><span class="n">tag</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>     <span class="c1"># Default behavior.</span>
+    <span class="k">return</span> <span class="nb">dict</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Dictionary"><a class="viewcode-back" href="../../tethne.html#tethne.utilities.Dictionary">[docs]</a><span class="k">class</span> <span class="nc">Dictionary</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A two-way index for integer/string pairs.</span>
@@ -428,7 +434,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

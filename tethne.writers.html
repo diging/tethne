@@ -80,6 +80,12 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <div class="section" id="tethne-writers-package">
 <h1>tethne.writers package<a class="headerlink" href="#tethne-writers-package" title="Permalink to this headline">¶</a></h1>
@@ -112,24 +118,24 @@ periods of consecutive appearance in the <a class="reference internal" href="tet
 and edge attributes are defined for each <cite>Graph</cite>. in the
 <a class="reference internal" href="tethne.classes.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a>.</p>
 <p>For example, to build and visualize an evolving co-citation network:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Load some data.</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Load some data.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.readers</span> <span class="kn">as</span> <span class="nn">rd</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">rd</span><span class="o">.</span><span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># Build a Corpus, and slice it temporally using a</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#  4-year sliding time-window.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Build a Corpus, and slice it temporally using a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#  4-year sliding time-window.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.data</span> <span class="kn">import</span> <span class="n">Corpus</span><span class="p">,</span> <span class="n">GraphCollection</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;time_window&#39;</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;time_window&#39;</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># Generate a GraphCollection of co-citation graphs.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate a GraphCollection of co-citation graphs.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.builders</span> <span class="kn">import</span> <span class="n">paperCollectionBuilder</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">builder</span> <span class="o">=</span> <span class="n">paperCollectionBuilder</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;cocitation&#39;</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;cocitation&#39;</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># Write the GraphCollection as a dynamic network.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Write the GraphCollection as a dynamic network.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">to_dxgmml</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="s">&quot;/path/to/network.xgmml&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">to_dxgmml</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="s2">&quot;/path/to/network.xgmml&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -444,7 +450,7 @@ visualization and analysis. Not yet implemented.</p>
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

@@ -75,146 +75,152 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.tests.test_utilities</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;../tethne&#39;</span><span class="p">)</span>
-<span class="n">datapath</span> <span class="o">=</span> <span class="s">&#39;./tethne/tests/data/test_citations_sample.xml&#39;</span>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../tethne&#39;</span><span class="p">)</span>
+<span class="n">datapath</span> <span class="o">=</span> <span class="s1">&#39;./tethne/tests/data/test_citations_sample.xml&#39;</span>
 
 <span class="kn">import</span> <span class="nn">unittest</span>
 
-<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">subdict</span>
-<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">concat_list</span>
-<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">overlap</span>
-<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">_strip_punctuation</span>
-<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">strip_punctuation</span>
-<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">Dictionary</span>
-<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">attribs_to_string</span>
-<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">argmax</span>
-<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">contains</span>
-<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">dict_from_node</span>
-<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">as</span> <span class="nn">ET</span>
-<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">strip_non_ascii</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">subdict</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">concat_list</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">overlap</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">_strip_punctuation</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">strip_punctuation</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">Dictionary</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">attribs_to_string</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">argmax</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">contains</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">dict_from_node</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">strip_non_ascii</span>
 
-<span class="c">#testing method &quot;_strip_punctuation&quot;</span>
+<span class="c1">#testing method &quot;_strip_punctuation&quot;</span>
 <div class="viewcode-block" id="TestStripPunctuation"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestStripPunctuation">[docs]</a><span class="k">class</span> <span class="nc">TestStripPunctuation</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="TestStripPunctuation.test_str"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestStripPunctuation.test_str">[docs]</a>    <span class="k">def</span> <span class="nf">test_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s">&#39;asdf&#39;</span><span class="p">,</span> <span class="n">_strip_punctuation</span><span class="p">(</span><span class="s">&#39;a.s,d;f?&#39;</span><span class="p">))</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">&#39;asdf&#39;</span><span class="p">,</span> <span class="n">_strip_punctuation</span><span class="p">(</span><span class="s1">&#39;a.s,d;f?&#39;</span><span class="p">))</span></div>
+
 <div class="viewcode-block" id="TestStripPunctuation.test_unicode"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestStripPunctuation.test_unicode">[docs]</a>    <span class="k">def</span> <span class="nf">test_unicode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s">u&#39;asdf&#39;</span><span class="p">,</span> <span class="n">_strip_punctuation</span><span class="p">(</span><span class="s">u&#39;a.s,d;f?&#39;</span><span class="p">))</span>
-</div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">u&#39;asdf&#39;</span><span class="p">,</span> <span class="n">_strip_punctuation</span><span class="p">(</span><span class="s1">u&#39;a.s,d;f?&#39;</span><span class="p">))</span></div></div>
+
 <div class="viewcode-block" id="TestOverlap"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestOverlap">[docs]</a><span class="k">class</span> <span class="nc">TestOverlap</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
 <div class="viewcode-block" id="TestOverlap.test_empty_listA"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestOverlap.test_empty_listA">[docs]</a>    <span class="k">def</span> <span class="nf">test_empty_listA</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">([],</span><span class="n">overlap</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span><span class="bp">None</span><span class="p">))</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">([],</span><span class="n">overlap</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span><span class="kc">None</span><span class="p">))</span></div>
+
 <div class="viewcode-block" id="TestOverlap.test_empty_listB"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestOverlap.test_empty_listB">[docs]</a>    <span class="k">def</span> <span class="nf">test_empty_listB</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">([],</span><span class="n">overlap</span><span class="p">(</span><span class="bp">None</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]))</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">([],</span><span class="n">overlap</span><span class="p">(</span><span class="kc">None</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]))</span></div>
+
 <div class="viewcode-block" id="TestOverlap.test_both_not_empty"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestOverlap.test_both_not_empty">[docs]</a>    <span class="k">def</span> <span class="nf">test_both_not_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span><span class="n">overlap</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">]))</span>
-</div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span><span class="n">overlap</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">]))</span></div></div>
+
 <div class="viewcode-block" id="TestSubDict"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestSubDict">[docs]</a><span class="k">class</span> <span class="nc">TestSubDict</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
 <div class="viewcode-block" id="TestSubDict.test_NonEmpty"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestSubDict.test_NonEmpty">[docs]</a>    <span class="k">def</span> <span class="nf">test_NonEmpty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">superdict</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">30</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span><span class="mi">40</span><span class="p">}</span>
         <span class="n">keys</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span>
         <span class="n">test_subdict</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span><span class="mi">40</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">test_subdict</span><span class="p">,</span><span class="n">subdict</span><span class="p">(</span><span class="n">superdict</span><span class="p">,</span><span class="n">keys</span><span class="p">))</span>
-</div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">test_subdict</span><span class="p">,</span><span class="n">subdict</span><span class="p">(</span><span class="n">superdict</span><span class="p">,</span><span class="n">keys</span><span class="p">))</span></div></div>
+
 <div class="viewcode-block" id="TestConcatList"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestConcatList">[docs]</a><span class="k">class</span> <span class="nc">TestConcatList</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
 <div class="viewcode-block" id="TestConcatList.test_EqualSize_Default"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestConcatList.test_EqualSize_Default">[docs]</a>    <span class="k">def</span> <span class="nf">test_EqualSize_Default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">listA</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="s">&#39;c&#39;</span><span class="p">,</span><span class="s">&#39;e&#39;</span><span class="p">]</span>
-        <span class="n">listB</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="s">&#39;h&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">([</span><span class="s">&#39;a b&#39;</span><span class="p">,</span><span class="s">&#39;c f&#39;</span><span class="p">,</span><span class="s">&#39;e h&#39;</span><span class="p">],</span><span class="n">concat_list</span><span class="p">(</span><span class="n">listA</span><span class="p">,</span><span class="n">listB</span><span class="p">))</span>
-</div>
-<div class="viewcode-block" id="TestConcatList.test_EqualSize"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestConcatList.test_EqualSize">[docs]</a>    <span class="k">def</span> <span class="nf">test_EqualSize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">listA</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="s">&#39;c&#39;</span><span class="p">,</span><span class="s">&#39;e&#39;</span><span class="p">]</span>
-        <span class="n">listB</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="s">&#39;h&#39;</span><span class="p">]</span>
-        <span class="n">delim</span> <span class="o">=</span> <span class="s">&#39;,&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">([</span><span class="s">&#39;a,b&#39;</span><span class="p">,</span><span class="s">&#39;c,f&#39;</span><span class="p">,</span><span class="s">&#39;e,h&#39;</span><span class="p">],</span><span class="n">concat_list</span><span class="p">(</span><span class="n">listA</span><span class="p">,</span><span class="n">listB</span><span class="p">,</span><span class="n">delim</span><span class="p">))</span>
+        <span class="n">listA</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;e&#39;</span><span class="p">]</span>
+        <span class="n">listB</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;h&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">([</span><span class="s1">&#39;a b&#39;</span><span class="p">,</span><span class="s1">&#39;c f&#39;</span><span class="p">,</span><span class="s1">&#39;e h&#39;</span><span class="p">],</span><span class="n">concat_list</span><span class="p">(</span><span class="n">listA</span><span class="p">,</span><span class="n">listB</span><span class="p">))</span></div>
 
-<span class="c">#testing method &quot;strip_punctuation&quot;</span></div></div>
+<div class="viewcode-block" id="TestConcatList.test_EqualSize"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestConcatList.test_EqualSize">[docs]</a>    <span class="k">def</span> <span class="nf">test_EqualSize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">listA</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;e&#39;</span><span class="p">]</span>
+        <span class="n">listB</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;h&#39;</span><span class="p">]</span>
+        <span class="n">delim</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">([</span><span class="s1">&#39;a,b&#39;</span><span class="p">,</span><span class="s1">&#39;c,f&#39;</span><span class="p">,</span><span class="s1">&#39;e,h&#39;</span><span class="p">],</span><span class="n">concat_list</span><span class="p">(</span><span class="n">listA</span><span class="p">,</span><span class="n">listB</span><span class="p">,</span><span class="n">delim</span><span class="p">))</span></div></div>
+
+<span class="c1">#testing method &quot;strip_punctuation&quot;</span>
 <div class="viewcode-block" id="TestStripPunctual2"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestStripPunctual2">[docs]</a><span class="k">class</span> <span class="nc">TestStripPunctual2</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
 <div class="viewcode-block" id="TestStripPunctual2.test_string"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestStripPunctual2.test_string">[docs]</a>    <span class="k">def</span> <span class="nf">test_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s">&#39;abcd&#39;</span><span class="p">,</span><span class="n">strip_punctuation</span><span class="p">(</span><span class="s">&#39;a$b</span><span class="si">%c</span><span class="s">@d&#39;</span><span class="p">))</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="p">,</span><span class="n">strip_punctuation</span><span class="p">(</span><span class="s1">&#39;a$b</span><span class="si">%c</span><span class="s1">@d&#39;</span><span class="p">))</span></div>
+
 <div class="viewcode-block" id="TestStripPunctual2.test_empty_string"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestStripPunctual2.test_empty_string">[docs]</a>    <span class="k">def</span> <span class="nf">test_empty_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">strip_punctuation</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">))</span>
-</div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">strip_punctuation</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">))</span></div></div>
+
 <div class="viewcode-block" id="TestSetItem"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestSetItem">[docs]</a><span class="k">class</span> <span class="nc">TestSetItem</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
 <div class="viewcode-block" id="TestSetItem.test_key_str"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestSetItem.test_key_str">[docs]</a>    <span class="k">def</span> <span class="nf">test_key_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">dict_obj</span> <span class="o">=</span> <span class="n">Dictionary</span><span class="p">()</span>
         <span class="n">dict_str</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">dict_int</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">dict_str</span><span class="p">[</span><span class="s">&#39;string&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
-        <span class="n">dict_int</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;string&#39;</span>
-        <span class="n">Dictionary</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="n">dict_obj</span><span class="p">,</span><span class="s">&#39;string&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">dict_str</span><span class="p">[</span><span class="s1">&#39;string&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">dict_int</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;string&#39;</span>
+        <span class="n">Dictionary</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="n">dict_obj</span><span class="p">,</span><span class="s1">&#39;string&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">dict_str</span><span class="p">,</span><span class="n">dict_obj</span><span class="o">.</span><span class="n">by_str</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">dict_int</span><span class="p">,</span><span class="n">dict_obj</span><span class="o">.</span><span class="n">by_int</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">dict_int</span><span class="p">,</span><span class="n">dict_obj</span><span class="o">.</span><span class="n">by_int</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestSetItem.test_key_int"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestSetItem.test_key_int">[docs]</a>    <span class="k">def</span> <span class="nf">test_key_int</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">dict_obj</span> <span class="o">=</span> <span class="n">Dictionary</span><span class="p">()</span>
         <span class="n">dict_str</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">dict_int</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">dict_int</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;str&#39;</span>
-        <span class="n">dict_str</span><span class="p">[</span><span class="s">&#39;str&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">8</span>
-        <span class="n">Dictionary</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="n">dict_obj</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="s">&#39;str&#39;</span><span class="p">)</span>
+        <span class="n">dict_int</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;str&#39;</span>
+        <span class="n">dict_str</span><span class="p">[</span><span class="s1">&#39;str&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">Dictionary</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="n">dict_obj</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="s1">&#39;str&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">dict_int</span><span class="p">,</span><span class="n">dict_obj</span><span class="o">.</span><span class="n">by_int</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">dict_str</span><span class="p">,</span><span class="n">dict_obj</span><span class="o">.</span><span class="n">by_str</span><span class="p">)</span>
-</div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">dict_str</span><span class="p">,</span><span class="n">dict_obj</span><span class="o">.</span><span class="n">by_str</span><span class="p">)</span></div></div>
+
 <div class="viewcode-block" id="TestGetItem"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestGetItem">[docs]</a><span class="k">class</span> <span class="nc">TestGetItem</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
 <div class="viewcode-block" id="TestGetItem.test_key_str"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestGetItem.test_key_str">[docs]</a>    <span class="k">def</span> <span class="nf">test_key_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">dict_obj</span> <span class="o">=</span> <span class="n">Dictionary</span><span class="p">()</span>
 
-        <span class="n">Dictionary</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="n">dict_obj</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="s">&#39;string&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s">&#39;string&#39;</span><span class="p">,</span><span class="n">Dictionary</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="n">dict_obj</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-</div>
+        <span class="n">Dictionary</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="n">dict_obj</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;string&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">,</span><span class="n">Dictionary</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="n">dict_obj</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span></div>
+
 <div class="viewcode-block" id="TestGetItem.test_key_int"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestGetItem.test_key_int">[docs]</a>    <span class="k">def</span> <span class="nf">test_key_int</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">dict_obj</span> <span class="o">=</span> <span class="n">Dictionary</span><span class="p">()</span>
 
-        <span class="n">Dictionary</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="n">dict_obj</span><span class="p">,</span><span class="s">&#39;str&#39;</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="n">Dictionary</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="n">dict_obj</span><span class="p">,</span><span class="s">&#39;str&#39;</span><span class="p">))</span>
+        <span class="n">Dictionary</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="n">dict_obj</span><span class="p">,</span><span class="s1">&#39;str&#39;</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="n">Dictionary</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="n">dict_obj</span><span class="p">,</span><span class="s1">&#39;str&#39;</span><span class="p">))</span></div></div>
 
-<span class="c">#method not changing anything much</span></div></div>
+<span class="c1">#method not changing anything much</span>
 <div class="viewcode-block" id="TestAttribsToString"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestAttribsToString">[docs]</a><span class="k">class</span> <span class="nc">TestAttribsToString</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
 <div class="viewcode-block" id="TestAttribsToString.test_attribs"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestAttribsToString.test_attribs">[docs]</a>    <span class="k">def</span> <span class="nf">test_attribs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">present_dict</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">:[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">],</span> <span class="mi">2</span><span class="p">:(</span><span class="mi">7</span><span class="p">,</span><span class="mi">14</span><span class="p">),</span> <span class="mi">3</span><span class="p">:{</span><span class="mi">10</span><span class="p">:</span><span class="mi">20</span><span class="p">},</span> <span class="mi">4</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span><span class="mi">300</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span><span class="mi">400</span><span class="p">}</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">present_dict</span><span class="p">,</span><span class="n">attribs_to_string</span><span class="p">(</span><span class="n">present_dict</span><span class="p">,</span><span class="bp">None</span><span class="p">))</span>
-</div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">present_dict</span><span class="p">,</span><span class="n">attribs_to_string</span><span class="p">(</span><span class="n">present_dict</span><span class="p">,</span><span class="kc">None</span><span class="p">))</span></div></div>
+
 <div class="viewcode-block" id="TestArgMax"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestArgMax">[docs]</a><span class="k">class</span> <span class="nc">TestArgMax</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
 <div class="viewcode-block" id="TestArgMax.test_arg_max_str"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestArgMax.test_arg_max_str">[docs]</a>    <span class="k">def</span> <span class="nf">test_arg_max_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">iterable</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;efgh&#39;</span><span class="p">,</span><span class="s">&#39;abcd&#39;</span><span class="p">,</span><span class="s">&#39;jklm&#39;</span><span class="p">,</span><span class="s">&#39;poqr&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">argmax</span><span class="p">(</span><span class="n">iterable</span><span class="p">))</span>
-</div>
+        <span class="n">iterable</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;efgh&#39;</span><span class="p">,</span><span class="s1">&#39;abcd&#39;</span><span class="p">,</span><span class="s1">&#39;jklm&#39;</span><span class="p">,</span><span class="s1">&#39;poqr&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">argmax</span><span class="p">(</span><span class="n">iterable</span><span class="p">))</span></div>
+
 <div class="viewcode-block" id="TestArgMax.test_arg_max_num"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestArgMax.test_arg_max_num">[docs]</a>    <span class="k">def</span> <span class="nf">test_arg_max_num</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">iterable</span> <span class="o">=</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">20</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">argmax</span><span class="p">(</span><span class="n">iterable</span><span class="p">))</span>
-</div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">argmax</span><span class="p">(</span><span class="n">iterable</span><span class="p">))</span></div></div>
+
 <div class="viewcode-block" id="TestContains"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestContains">[docs]</a><span class="k">class</span> <span class="nc">TestContains</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
 <div class="viewcode-block" id="TestContains.test_contains_true"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestContains.test_contains_true">[docs]</a>    <span class="k">def</span> <span class="nf">test_contains_true</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
         <span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span><span class="n">contains</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">f</span><span class="p">))</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span><span class="n">contains</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">f</span><span class="p">))</span></div>
+
 <div class="viewcode-block" id="TestContains.test_contains_false"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestContains.test_contains_false">[docs]</a>    <span class="k">def</span> <span class="nf">test_contains_false</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">8</span><span class="p">]</span>
         <span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span><span class="n">contains</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">f</span><span class="p">))</span>
-</div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span><span class="n">contains</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">f</span><span class="p">))</span></div></div>
+
 <div class="viewcode-block" id="TestDictFromNode"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestDictFromNode">[docs]</a><span class="k">class</span> <span class="nc">TestDictFromNode</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
@@ -222,49 +228,49 @@
 <span class="sd">    and also when there is only node of a type, the resultant is a String</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="TestDictFromNode.test_dict_from_node"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestDictFromNode.test_dict_from_node">[docs]</a>    <span class="k">def</span> <span class="nf">test_dict_from_node</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">root</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-            <span class="n">pattern</span> <span class="o">=</span> <span class="s">&#39;.//{elem}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">elem</span><span class="o">=</span><span class="s">&#39;article&#39;</span><span class="p">)</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="s1">&#39;.//</span><span class="si">{elem}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">elem</span><span class="o">=</span><span class="s1">&#39;article&#39;</span><span class="p">)</span>
             <span class="n">elements</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
             <span class="n">present_dict</span> <span class="o">=</span> <span class="n">dict_from_node</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-        <span class="n">expectedList</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Askell Dove&#39;</span><span class="p">,</span><span class="s">&#39;Doris Love&#39;</span><span class="p">]</span>
-        <span class="n">expectedString</span> <span class="o">=</span> <span class="s">&#39;American Midland Naturalist&#39;</span>
+        <span class="n">expectedList</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Askell Dove&#39;</span><span class="p">,</span><span class="s1">&#39;Doris Love&#39;</span><span class="p">]</span>
+        <span class="n">expectedString</span> <span class="o">=</span> <span class="s1">&#39;American Midland Naturalist&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">present_dict</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expectedList</span><span class="p">,</span><span class="n">present_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;author&#39;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expectedString</span><span class="p">,</span><span class="n">present_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;journaltitle&#39;</span><span class="p">))</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expectedList</span><span class="p">,</span><span class="n">present_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;author&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expectedString</span><span class="p">,</span><span class="n">present_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;journaltitle&#39;</span><span class="p">))</span></div>
+
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Testing the functionality when one of the nodes have children and recursive value is false</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="TestDictFromNode.test_dict_from_node_rec_false"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestDictFromNode.test_dict_from_node_rec_false">[docs]</a>    <span class="k">def</span> <span class="nf">test_dict_from_node_rec_false</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">root</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-            <span class="n">pattern</span> <span class="o">=</span> <span class="s">&#39;.//{elem}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">elem</span><span class="o">=</span><span class="s">&#39;article&#39;</span><span class="p">)</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="s1">&#39;.//</span><span class="si">{elem}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">elem</span><span class="o">=</span><span class="s1">&#39;article&#39;</span><span class="p">)</span>
             <span class="n">elements</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
             <span class="n">present_dict</span> <span class="o">=</span> <span class="n">dict_from_node</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="n">expectedListSize</span> <span class="o">=</span> <span class="mi">2</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expectedListSize</span><span class="p">,</span><span class="n">present_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;authors&#39;</span><span class="p">))</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expectedListSize</span><span class="p">,</span><span class="n">present_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;authors&#39;</span><span class="p">))</span></div>
+
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Testing the functionality when one of the nodes have children and recursive value is true</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="TestDictFromNode.test_dict_from_node_rec_True"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_utilities.TestDictFromNode.test_dict_from_node_rec_True">[docs]</a>    <span class="k">def</span> <span class="nf">test_dict_from_node_rec_True</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">root</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-            <span class="n">pattern</span> <span class="o">=</span> <span class="s">&#39;.//{elem}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">elem</span><span class="o">=</span><span class="s">&#39;article&#39;</span><span class="p">)</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="s1">&#39;.//</span><span class="si">{elem}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">elem</span><span class="o">=</span><span class="s1">&#39;article&#39;</span><span class="p">)</span>
             <span class="n">elements</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
-            <span class="n">present_dict</span> <span class="o">=</span> <span class="n">dict_from_node</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">present_dict</span> <span class="o">=</span> <span class="n">dict_from_node</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="n">expectedDict</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;author&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;Askell Dove&#39;</span><span class="p">,</span> <span class="s">&#39;Doris Love&#39;</span><span class="p">]}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expectedDict</span><span class="p">,</span><span class="n">present_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;authors&#39;</span><span class="p">))</span>
+        <span class="n">expectedDict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Askell Dove&#39;</span><span class="p">,</span> <span class="s1">&#39;Doris Love&#39;</span><span class="p">]}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expectedDict</span><span class="p">,</span><span class="n">present_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;authors&#39;</span><span class="p">))</span></div></div>
 
 
-</div></div>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
 </pre></div>
 
@@ -296,7 +302,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

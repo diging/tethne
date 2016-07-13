@@ -75,36 +75,42 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.tests.test_readers_base</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;../tethne&#39;</span><span class="p">)</span>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../tethne&#39;</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">unittest</span>
-<span class="kn">from</span> <span class="nn">tethne.readers.base</span> <span class="kn">import</span> <span class="n">FTParser</span><span class="p">,</span> <span class="n">XMLParser</span>
-<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">as</span> <span class="nn">ET</span>
+<span class="kn">from</span> <span class="nn">tethne.readers.base</span> <span class="k">import</span> <span class="n">FTParser</span><span class="p">,</span> <span class="n">XMLParser</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
 
-<span class="n">datapath</span> <span class="o">=</span> <span class="s">&#39;./tethne/tests/data/test.ft&#39;</span>
-<span class="n">xmldatapath</span> <span class="o">=</span> <span class="s">&#39;./tethne/tests/data/dfr/citations.XML&#39;</span>
+<span class="n">datapath</span> <span class="o">=</span> <span class="s1">&#39;./tethne/tests/data/test.ft&#39;</span>
+<span class="n">xmldatapath</span> <span class="o">=</span> <span class="s1">&#39;./tethne/tests/data/dfr/citations.XML&#39;</span>
 
 
 <div class="viewcode-block" id="TestXMLParser"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_base.TestXMLParser">[docs]</a><span class="k">class</span> <span class="nc">TestXMLParser</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
-    <span class="c"># def test_start(self):</span>
-    <span class="c">#     parser = XMLParser(xmldatapath, autostart=False)</span>
-    <span class="c">#     parser.start()</span>
-    <span class="c">#</span>
-    <span class="c">#     self.assertEqual(len(parser.data), 1,</span>
-    <span class="c">#                      &#39;First data entry not instantiated.&#39;)</span>
-    <span class="c">#     self.assertIsInstance(parser.data[0], parser.entry_class)</span>
+    <span class="c1"># def test_start(self):</span>
+    <span class="c1">#     parser = XMLParser(xmldatapath, autostart=False)</span>
+    <span class="c1">#     parser.start()</span>
+    <span class="c1">#</span>
+    <span class="c1">#     self.assertEqual(len(parser.data), 1,</span>
+    <span class="c1">#                      &#39;First data entry not instantiated.&#39;)</span>
+    <span class="c1">#     self.assertIsInstance(parser.data[0], parser.entry_class)</span>
 
-    <span class="c"># def test_next(self):</span>
-    <span class="c">#     &quot;&quot;&quot;</span>
-    <span class="c">#     ``next`` should return the first line of data.</span>
-    <span class="c">#     &quot;&quot;&quot;</span>
-    <span class="c">#</span>
-    <span class="c">#     parser = XMLParser(xmldatapath)</span>
-    <span class="c">#     tag, data = parser.next()</span>
-    <span class="c">#     self.assertEqual(tag, &#39;doi&#39;)</span>
+    <span class="c1"># def test_next(self):</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     ``next`` should return the first line of data.</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#</span>
+    <span class="c1">#     parser = XMLParser(xmldatapath)</span>
+    <span class="c1">#     tag, data = parser.next()</span>
+    <span class="c1">#     self.assertEqual(tag, &#39;doi&#39;)</span>
 
 <div class="viewcode-block" id="TestXMLParser.test_handle"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_base.TestXMLParser.test_handle">[docs]</a>    <span class="k">def</span> <span class="nf">test_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -113,24 +119,24 @@
 
         <span class="n">parser</span> <span class="o">=</span> <span class="n">XMLParser</span><span class="p">(</span><span class="n">xmldatapath</span><span class="p">)</span>
         <span class="n">root</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">xmldatapath</span><span class="p">)</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
-        <span class="n">elem</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">&#39;.//doi&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">elem</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;.//doi&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">tag</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">tag</span><span class="p">,</span> <span class="n">elem</span><span class="o">.</span><span class="n">text</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tag</span><span class="p">),</span>
-                        <span class="s">&#39;Data line not handled correctly. `{0}`&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="o">+</span>
-                        <span class="s">&#39; should be an attribute of the first data entry.&#39;</span><span class="p">)</span>
-</div>
+                        <span class="s1">&#39;Data line not handled correctly. `</span><span class="si">{0}</span><span class="s1">`&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="o">+</span>
+                        <span class="s1">&#39; should be an attribute of the first data entry.&#39;</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestXMLParser.test_parse"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_base.TestXMLParser.test_parse">[docs]</a>    <span class="k">def</span> <span class="nf">test_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">parser</span> <span class="o">=</span> <span class="n">XMLParser</span><span class="p">(</span><span class="n">xmldatapath</span><span class="p">)</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
 
         <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">398</span><span class="p">,</span> <span class="s">&#39;Expected 398 entries, found {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">398</span><span class="p">,</span> <span class="s1">&#39;Expected 398 entries, found </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">N</span><span class="p">))</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="TestFTParser"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_base.TestFTParser">[docs]</a><span class="k">class</span> <span class="nc">TestFTParser</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="TestFTParser.test_badpath"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_base.TestFTParser.test_badpath">[docs]</a>    <span class="k">def</span> <span class="nf">test_badpath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -139,24 +145,24 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">IOError</span><span class="p">):</span>
-            <span class="n">parser</span> <span class="o">=</span> <span class="n">FTParser</span><span class="p">(</span><span class="s">&#39;/this/path/doesnt/exist&#39;</span><span class="p">)</span>
-            <span class="n">parser</span>
-</div>
+            <span class="n">parser</span> <span class="o">=</span> <span class="n">FTParser</span><span class="p">(</span><span class="s1">&#39;/this/path/doesnt/exist&#39;</span><span class="p">)</span>
+            <span class="n">parser</span></div>
+
 <div class="viewcode-block" id="TestFTParser.test_start"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_base.TestFTParser.test_start">[docs]</a>    <span class="k">def</span> <span class="nf">test_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parser should advance to the first start tag, and instantiate the first</span>
 <span class="sd">        data entry.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">parser</span> <span class="o">=</span> <span class="n">FTParser</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">autostart</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">FTParser</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">autostart</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">start_tag</span><span class="p">,</span> <span class="n">parser</span><span class="o">.</span><span class="n">current_tag</span><span class="p">,</span>
-                         <span class="s">&#39;Cannot identify start.&#39;</span><span class="p">)</span>
+                         <span class="s1">&#39;Cannot identify start.&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span>
-                         <span class="s">&#39;First data entry not instantiated.&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parser</span><span class="o">.</span><span class="n">entry_class</span><span class="p">)</span>
-</div>
+                         <span class="s1">&#39;First data entry not instantiated.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parser</span><span class="o">.</span><span class="n">entry_class</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestFTParser.test_next"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_base.TestFTParser.test_next">[docs]</a>    <span class="k">def</span> <span class="nf">test_next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ``next`` should return the first line of data.</span>
@@ -165,8 +171,8 @@
         <span class="n">parser</span> <span class="o">=</span> <span class="n">FTParser</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
         <span class="n">tag</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="s">&#39;FI&#39;</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="s1">&#39;FI&#39;</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestFTParser.test_handle"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_base.TestFTParser.test_handle">[docs]</a>    <span class="k">def</span> <span class="nf">test_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        ``handle`` should store the first line of data in the first data entry.</span>
@@ -178,23 +184,23 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tag</span><span class="p">),</span>
-                        <span class="s">&#39;Data line not handled correctly. `{0}`&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="o">+</span>
-                        <span class="s">&#39; should be an attribute of the first data entry.&#39;</span><span class="p">)</span>
-</div>
+                        <span class="s1">&#39;Data line not handled correctly. `</span><span class="si">{0}</span><span class="s1">`&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="o">+</span>
+                        <span class="s1">&#39; should be an attribute of the first data entry.&#39;</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestFTParser.test_parse"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_readers_base.TestFTParser.test_parse">[docs]</a>    <span class="k">def</span> <span class="nf">test_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">parser</span> <span class="o">=</span> <span class="n">FTParser</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">TH</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span>
-                         <span class="s">&#39;Multi-line fields are not handled properly. Fields&#39;</span> <span class="o">+</span>
-                         <span class="s">&#39; with multiple lines should be parsed as a list or&#39;</span> <span class="o">+</span>
-                         <span class="s">&#39; array with one value per line.&#39;</span><span class="p">)</span>
+                         <span class="s1">&#39;Multi-line fields are not handled properly. Fields&#39;</span> <span class="o">+</span>
+                         <span class="s1">&#39; with multiple lines should be parsed as a list or&#39;</span> <span class="o">+</span>
+                         <span class="s1">&#39; array with one value per line.&#39;</span><span class="p">)</span>
 
         <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;Expected 2 data entries, found {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Expected 2 data entries, found </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">N</span><span class="p">))</span></div></div>
 
-</div></div>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
 </pre></div>
 
@@ -226,7 +232,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

@@ -83,6 +83,12 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <div class="section" id="generating-and-visualizing-topic-models-with-tethne-and-mallet">
 <span id="mallet-tutorial"></span><h1>Generating and Visualizing Topic Models with Tethne and MALLET<a class="headerlink" href="#generating-and-visualizing-topic-models-with-tethne-and-mallet" title="Permalink to this headline">¶</a></h1>
@@ -118,7 +124,7 @@ created and taught by <a class="reference external" href="http://devo-evo.lab.as
 <p>Tethne provides a variety of methods for working with text corpora and the
 output of modeling tools like <a class="reference external" href="http://mallet.cs.umass.edu/topics.php">MALLET</a>.
 This tutorial focuses on parsing, modeling, and visualizing a Latent Dirichlet
-Allocation topic model, using data from the <a class="reference internal" href="getting_data.html#getting-jstor"><span>JSTOR Data-for-Research</span></a> portal.</p>
+Allocation topic model, using data from the <a class="reference internal" href="getting_data.html#getting-jstor"><span class="std std-ref">JSTOR Data-for-Research</span></a> portal.</p>
 <p>In this tutorial, we will use Tethne to prepare a JSTOR DfR corpus for topic
 modeling in  MALLET, and then use the results to generate a semantic network
 like the one shown below.</p>
@@ -131,7 +137,7 @@ in the semantic network.</p>
 <p>This tutorial assumes that you already have a basic familiarity with <a class="reference external" href="http://www.cytoscape.org">Cytoscape</a>.</p>
 <div class="section" id="before-you-start">
 <h2><a class="toc-backref" href="#id5">Before You Start</a><a class="headerlink" href="#before-you-start" title="Permalink to this headline">¶</a></h2>
-<p>You&#8217;ll need some data. See <a class="reference internal" href="getting_data.html#getting-jstor"><span>JSTOR Data-for-Research</span></a> for instructions on retrieving
+<p>You&#8217;ll need some data. See <a class="reference internal" href="getting_data.html#getting-jstor"><span class="std std-ref">JSTOR Data-for-Research</span></a> for instructions on retrieving
 data. <em>Note that Tethne currently only supports XML output from JSTOR.</em> Be sure
 to get some wordcounts so that you&#8217;ll have some data for modeling.</p>
 <p>Be sure that you have the latest release of Tethne. See <span class="xref std std-ref">installation</span>.</p>
@@ -145,9 +151,9 @@ working with a single DfR dataset that contains wordcounts, we&#8217;ll use the
 <p>Assuming that you unzipped your JSTOR DfR dataset to
 <code class="docutils literal"><span class="pre">/Users/me/JStor</span> <span class="pre">DfR</span> <span class="pre">Datasets/2013.5.3.cHrmED8A</span></code>, you can use something like
 the following to generate a <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> from your dataset:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">dfr</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">datapath</span> <span class="o">=</span> <span class="s">&#39;/Users/me/JStor DfR Datasets/2013.5.3.cHrmED8A&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">streaming</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">index_fields</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;abstract&#39;</span><span class="p">],</span> <span class="n">index_features</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;authors&#39;</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">dfr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">datapath</span> <span class="o">=</span> <span class="s1">&#39;/Users/me/JStor DfR Datasets/2013.5.3.cHrmED8A&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">streaming</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">index_fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;abstract&#39;</span><span class="p">],</span> <span class="n">index_features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>By default, the DfR reader will look for unigrams in your dataset, and load them
@@ -161,13 +167,13 @@ dataset.</p>
 words</a>. We can achieve this using
 a &#8220;transformation&#8221; of the original wordcounts.</p>
 <p>First, load the <a class="reference external" href="http://www.nltk.org/">NLTK</a> stoplist:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">stoplist</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><code class="docutils literal"><span class="pre">stoplist</span></code> is just a list of words. You can add words by <a href="#id2"><span class="problematic" id="id3">``</span></a>append()``ing them,
 remove words, or create your own list from scratch.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mystoplist</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;words&#39;</span><span class="p">,</span> <span class="s">&#39;that&#39;</span><span class="p">,</span> <span class="s">&#39;bother&#39;</span><span class="p">,</span> <span class="s">&#39;me&#39;</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mystoplist</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;words&#39;</span><span class="p">,</span> <span class="s1">&#39;that&#39;</span><span class="p">,</span> <span class="s1">&#39;bother&#39;</span><span class="p">,</span> <span class="s1">&#39;me&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>We&#8217;ll apply the stoplist by defining a transformation. A transformation is just
@@ -182,24 +188,24 @@ In particular, the transformation will receive four pieces of information:</p>
 </ul>
 <p>In this case, we want to evaluate whether or not the token comes from our stop
 list and, if it does, return <code class="docutils literal"><span class="pre">None</span></code> so that the word is removed.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">apply_stoplist</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">global_count</span><span class="p">,</span> <span class="n">document_document</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">apply_stoplist</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">global_count</span><span class="p">,</span> <span class="n">document_document</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">if</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">stoplist</span><span class="p">:</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="bp">None</span>    <span class="c"># Tells Tethne to remove the word.</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="n">count</span>    <span class="c"># If we get to here, the word wasn&#39;t in the list.</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="bp">None</span>    <span class="c1"># Tells Tethne to remove the word.</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">count</span>    <span class="c1"># If we get to here, the word wasn&#39;t in the list.</span>
 </pre></div>
 </div>
 <p>Then we&#8217;ll create a new <a class="reference internal" href="tethne.classes.html#tethne.classes.feature.FeatureSet" title="tethne.classes.feature.FeatureSet"><code class="xref py py-class docutils literal"><span class="pre">FeatureSet</span></code></a> using that transformation. The
 actual <code class="docutils literal"><span class="pre">.transform()</span></code> step may take a minute or two, depending on the size of
 your collection.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;wordcounts&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts</span><span class="o">.</span><span class="n">top</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>    <span class="c"># Before the transformation.</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;wordcounts&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts</span><span class="o">.</span><span class="n">top</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>    <span class="c1"># Before the transformation.</span>
 <span class="go">[(&#39;the&#39;, 171147.0), (&#39;of&#39;, 147276.0), (&#39;and&#39;, 86814.0), (&#39;in&#39;, 79627.0), (&#39;a&#39;, 50211.0)]</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts_filtered</span> <span class="o">=</span> <span class="n">wordcounts</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">apply_stoplist</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts_filtered</span><span class="o">.</span><span class="n">top</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>    <span class="c"># After the transformation.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts_filtered</span><span class="o">.</span><span class="n">top</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>    <span class="c1"># After the transformation.</span>
 <span class="go">[(&#39;species&#39;, 13417.0), (&#39;p&#39;, 7037.0), (&#39;plants&#39;, 6901.0), (&#39;x&#39;, 6559.0), (&#39;may&#39;, 6315.0)]</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;wordcounts_filtered&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wordcounts_filtered</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;wordcounts_filtered&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wordcounts_filtered</span>
 </pre></div>
 </div>
 <p>That last step is important, as it keeps all of our feature data organized in
@@ -209,7 +215,7 @@ our <a class="reference internal" href="tethne.classes.html#tethne.classes.corpu
 <h3><a class="toc-backref" href="#id8">Checking your Data</a><a class="headerlink" href="#checking-your-data" title="Permalink to this headline">¶</a></h3>
 <p>If everything goes well, you should have a <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> with some
 <a class="reference internal" href="tethne.classes.html#tethne.classes.paper.Paper" title="tethne.classes.paper.Paper"><code class="xref py py-class docutils literal"><span class="pre">Paper</span></code></a>s in it...</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span>
 <span class="go">&lt;tethne.classes.corpus.Corpus object at 0x108403310&gt;</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
@@ -217,16 +223,16 @@ our <a class="reference internal" href="tethne.classes.html#tethne.classes.corpu
 </pre></div>
 </div>
 <p>...as well as a <a class="reference internal" href="tethne.classes.html#tethne.classes.feature.FeatureSet" title="tethne.classes.feature.FeatureSet"><code class="xref py py-class docutils literal"><span class="pre">FeatureSet</span></code></a> called <code class="docutils literal"><span class="pre">wordcounts_filtered</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 <span class="go">[&#39;wordcounts&#39;, &#39;wordcounts_filtered&#39;]</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;wordcounts_filtered&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="s">&#39;)       # Unique features (words).</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;wordcounts_filtered&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="s1">&#39;)       # Unique features (words).</span>
 <span class="go">51693</span>
 </pre></div>
 </div>
 <p>Some of your papers may not have wordcounts associated with them. You can check
 how many papers have wordcount data:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;wordcounts_filtered&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">features</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;wordcounts_filtered&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">features</span><span class="p">)</span>
 <span class="go">193</span>
 </pre></div>
 </div>
@@ -244,7 +250,7 @@ transformation &#8211; to further refine our data.</p>
 <p>The transformation below will remove any words that are shorter than four
 characters in length, occur less than four times overall, and are found in less
 than two documents.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">DC</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">DC</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">if</span> <span class="n">C</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="ow">or</span> <span class="n">DC</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="bp">None</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">c</span>
@@ -252,20 +258,20 @@ than two documents.</p>
 </div>
 <p>Once your transformation is defined, call <a class="reference internal" href="tethne.classes.html#tethne.classes.feature.FeatureSet.transform" title="tethne.classes.feature.FeatureSet.transform"><code class="xref py py-meth docutils literal"><span class="pre">FeatureSet.transform()</span></code></a>, just
 like last time:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts_filtered</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;wordcounts_filtered&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts_filtered</span><span class="o">.</span><span class="n">top</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>    <span class="c"># Before the transformation.</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts_filtered</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;wordcounts_filtered&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts_filtered</span><span class="o">.</span><span class="n">top</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>    <span class="c1"># Before the transformation.</span>
 <span class="go">[(&#39;species&#39;, 13417.0), (&#39;p&#39;, 7037.0), (&#39;plants&#39;, 6901.0), (&#39;x&#39;, 6559.0), (&#39;may&#39;, 6315.0)]</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts_uberfiltered</span> <span class="o">=</span> <span class="n">wordcounts_filtered</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="nb">filter</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts_uberfiltered</span><span class="o">.</span><span class="n">top</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>    <span class="c"># After the transformation.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wordcounts_uberfiltered</span><span class="o">.</span><span class="n">top</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>    <span class="c1"># After the transformation.</span>
 <span class="go">[((&#39;experimental&#39;, True), 396.0), ((&#39;taxonomy&#39;, True), 363.0), ((&#39;plant&#39;, True), 352.0), ((&#39;species&#39;, True), 347.0), ((&#39;plants&#39;, True), 330.0)]</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;wordcounts_uberfiltered&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wordcounts_uberfiltered</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;wordcounts_uberfiltered&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wordcounts_uberfiltered</span>
 </pre></div>
 </div>
 <p>Your new featureset, <code class="docutils literal"><span class="pre">wordcounts_uberfiltered</span></code>, should be much smaller than the old
 featureset.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;wordcounts_uberfiltered&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;wordcounts_uberfiltered&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 <span class="go">12675</span>
 </pre></div>
 </div>
@@ -281,22 +287,22 @@ the results.</p>
 <p>For details about LDA modeling in MALLET, consult the <a class="reference external" href="http://mallet.cs.umass.edu/topics.php">MALLET website</a> as well as <a class="reference external" href="http://programminghistorian.org/lessons/topic-modeling-and-mallet">this tutorial</a>.</p>
 <p>Tethne ships with MALLET, so you don&#8217;t need to install anything extra.</p>
 <p>The MALLET interface can be found in <a class="reference internal" href="tethne.model.corpus.html#module-tethne.model.corpus" title="tethne.model.corpus"><code class="xref py py-mod docutils literal"><span class="pre">tethne.model.corpus</span></code></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.model.corpus</span> <span class="kn">import</span> <span class="n">mallet</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.model.corpus</span> <span class="kn">import</span> <span class="n">mallet</span>
 </pre></div>
 </div>
 <p>We first need to instantiate a <a class="reference internal" href="tethne.model.corpus.html#tethne.model.corpus.mallet.LDAModel" title="tethne.model.corpus.mallet.LDAModel"><code class="xref py py-class docutils literal"><span class="pre">mallet.LDAModel</span></code></a> with our
 <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> and preferred <a class="reference internal" href="tethne.classes.html#tethne.classes.feature.FeatureSet" title="tethne.classes.feature.FeatureSet"><code class="xref py py-class docutils literal"><span class="pre">FeatureSet</span></code></a>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">mallet</span><span class="o">.</span><span class="n">LDAModel</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">featureset_name</span><span class="o">=</span><span class="s">&#39;wordcounts_uberfiltered&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">mallet</span><span class="o">.</span><span class="n">LDAModel</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">featureset_name</span><span class="o">=</span><span class="s1">&#39;wordcounts_uberfiltered&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We can set the number of topics (<code class="docutils literal"><span class="pre">Z</span></code>, in Tethne) and the maximum number of
 iterations like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">Z</span> <span class="o">=</span> <span class="mi">20</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">max_iter</span> <span class="o">=</span> <span class="mi">500</span>    <span class="c"># Try starting with a low number, then go higher.</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">Z</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">max_iter</span> <span class="o">=</span> <span class="mi">500</span>    <span class="c1"># Try starting with a low number, then go higher.</span>
 </pre></div>
 </div>
 <p>When you&#8217;re ready to fit the model, call <code class="xref py py-meth docutils literal"><span class="pre">mallet.LDAModel.fit()</span></code>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 <span class="go">Modeling progress: 18%.</span>
 </pre></div>
 </div>
@@ -306,10 +312,10 @@ a progress indicator to keep you entertained.</p>
 </div>
 <div class="section" id="inspecting-the-model">
 <h2><a class="toc-backref" href="#id11">Inspecting the Model</a><a class="headerlink" href="#inspecting-the-model" title="Permalink to this headline">¶</a></h2>
-<p>You can inspect the model using the <a class="reference internal" href="tethne.model.corpus.html#tethne.model.corpus.mallet.LDAModel.print_topics" title="tethne.model.corpus.mallet.LDAModel.print_topics"><code class="xref py py-meth docutils literal"><span class="pre">LDAModel.print_topics()</span></code></a> method,
+<p>You can inspect the model using the <code class="xref py py-meth docutils literal"><span class="pre">LDAModel.print_topics()</span></code> method,
 which prints the most likely words from each topic. You can control the number
 of words returned for each topic by passing the <code class="docutils literal"><span class="pre">Nwords</span></code> parameter.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">model</span><span class="o">.</span><span class="n">print_topics</span><span class="p">(</span><span class="n">Nwords</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">model</span><span class="o">.</span><span class="n">print_topics</span><span class="p">(</span><span class="n">Nwords</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">Topic        Top 5 words</span>
 <span class="go">0    populations length characters population analysis</span>
 <span class="go">1    airy shaw subsp hook verdc</span>
@@ -334,8 +340,8 @@ of words returned for each topic by passing the <code class="docutils literal"><
 </pre></div>
 </div>
 <p>To see posterior probabilities for words in a specific topic, use
-<a class="reference internal" href="tethne.model.corpus.html#tethne.model.corpus.mallet.LDAModel.list_topic" title="tethne.model.corpus.mallet.LDAModel.list_topic"><code class="xref py py-meth docutils literal"><span class="pre">LDAModel.list_topic()</span></code></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">list_topic</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">Nwords</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<code class="xref py py-meth docutils literal"><span class="pre">LDAModel.list_topic()</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">list_topic</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">Nwords</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <span class="go">[(u&#39;growth&#39;, 0.011455776240422525), (u&#39;activity&#39;, 0.01009819236777505),</span>
 <span class="go"> (u&#39;behavior&#39;, 0.009205534478910957), (u&#39;animals&#39;, 0.00900096704604627),</span>
 <span class="go"> (u&#39;activities&#39;, 0.0073644275831287655), (u&#39;environment&#39;, 0.007271442386372089),</span>
@@ -353,9 +359,9 @@ of words returned for each topic by passing the <code class="docutils literal"><
 <p>If your dataset contains data from a broad range of time, you may wish to
 visualize the representation of particular topics over time.</p>
 <p>To obtain the representation of a topic over time, use
-<a class="reference internal" href="tethne.model.corpus.html#tethne.model.corpus.mallet.LDAModel.topic_over_time" title="tethne.model.corpus.mallet.LDAModel.topic_over_time"><code class="xref py py-meth docutils literal"><span class="pre">LDAModel.topic_over_time()</span></code></a>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">years</span><span class="p">,</span> <span class="n">representation</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">topic_over_time</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">years</span>    <span class="c"># The publication years in the corpus.</span>
+<code class="xref py py-meth docutils literal"><span class="pre">LDAModel.topic_over_time()</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">years</span><span class="p">,</span> <span class="n">representation</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">topic_over_time</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">years</span>    <span class="c1"># The publication years in the corpus.</span>
 <span class="go">[1921, 1922, 1923, 1924, 1925, 1926, 1927, 1928, 1929, 1930, 1931, 1932,</span>
 <span class="go"> 1933, 1934, 1935, 1936, 1937, 1938, 1939, 1940, 1941, 1942, 1943, 1944,</span>
 <span class="go"> 1945, 1946, 1947, 1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956,</span>
@@ -384,11 +390,11 @@ visualize the representation of particular topics over time.</p>
 </div>
 <p>We can easily visualize this using MatPlotLib (assuming that you&#8217;re working
 in IPython):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years</span><span class="p">,</span> <span class="n">representation</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Publication date&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Representation of topic 5&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>   <span class="c"># Use .save() if you&#39;re not in IPython.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Publication date&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Representation of topic 5&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>   <span class="c1"># Use .save() if you&#39;re not in IPython.</span>
 </pre></div>
 </div>
 <div class="figure align-center">
@@ -406,7 +412,7 @@ particular topics.</p>
 <p>We can generate the term graph using the <a class="reference internal" href="tethne.networks.html#tethne.networks.topics.terms" title="tethne.networks.topics.terms"><code class="xref py py-func docutils literal"><span class="pre">terms()</span></code></a> method
 from the <a class="reference internal" href="tethne.networks.html#module-tethne.networks.topics" title="tethne.networks.topics"><code class="xref py py-mod docutils literal"><span class="pre">networks.topics</span></code></a> module. There are other kinds of graph-building
 methods in there; go check them out!</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.networks</span> <span class="kn">import</span> <span class="n">topics</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.networks</span> <span class="kn">import</span> <span class="n">topics</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span> <span class="o">=</span> <span class="n">topics</span><span class="o">.</span><span class="n">terms</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.015</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -415,8 +421,8 @@ methods in there; go check them out!</p>
 <em>post-hoc</em> by adjusting its value and eye-balling the resultant network for
 coherence.</p>
 <p>We can then write this graph to a GraphML file for visualization:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">to_graphml</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="s">&#39;./mymodel_tc.graphml&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">to_graphml</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="s1">&#39;./mymodel_tc.graphml&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -555,7 +561,7 @@ This tutorial will be updated and extended as development proceeds.</p>
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

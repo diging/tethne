@@ -75,47 +75,53 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.tests.test_networks_authors</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;./&#39;</span><span class="p">)</span>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;./&#39;</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">unittest</span>
 
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 
-<span class="kn">from</span> <span class="nn">tethne.readers.wos</span> <span class="kn">import</span> <span class="n">read</span>
-<span class="kn">from</span> <span class="nn">tethne.networks.authors</span> <span class="kn">import</span> <span class="n">author_papers</span><span class="p">,</span> <span class="n">coauthors</span>
+<span class="kn">from</span> <span class="nn">tethne.readers.wos</span> <span class="k">import</span> <span class="n">read</span>
+<span class="kn">from</span> <span class="nn">tethne.networks.authors</span> <span class="k">import</span> <span class="n">author_papers</span><span class="p">,</span> <span class="n">coauthors</span>
 
-<span class="n">datapath</span> <span class="o">=</span> <span class="s">&#39;./tethne/tests/data/wos.txt&#39;</span>
+<span class="n">datapath</span> <span class="o">=</span> <span class="s1">&#39;./tethne/tests/data/wos.txt&#39;</span>
 
 
 <div class="viewcode-block" id="TestAuthorPapers"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_authors.TestAuthorPapers">[docs]</a><span class="k">class</span> <span class="nc">TestAuthorPapers</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="TestAuthorPapers.setUp"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_authors.TestAuthorPapers.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestAuthorPapers.test_author_papers"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_authors.TestAuthorPapers.test_author_papers">[docs]</a>    <span class="k">def</span> <span class="nf">test_author_papers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">author_papers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
-        <span class="n">N_authors</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s">&#39;authors&#39;</span><span class="p">])</span>
+        <span class="n">N_authors</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">])</span>
         <span class="n">N_papers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">papers</span><span class="p">)</span>
 
-        <span class="c"># A node for every paper and for every author.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">order</span><span class="p">(),</span> <span class="n">N_authors</span> <span class="o">+</span> <span class="n">N_papers</span><span class="p">)</span>
+        <span class="c1"># A node for every paper and for every author.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">order</span><span class="p">(),</span> <span class="n">N_authors</span> <span class="o">+</span> <span class="n">N_papers</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="TestCoauthors"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_authors.TestCoauthors">[docs]</a><span class="k">class</span> <span class="nc">TestCoauthors</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="TestCoauthors.setUp"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_authors.TestCoauthors.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestCoauthors.test_author_papers"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_authors.TestCoauthors.test_author_papers">[docs]</a>    <span class="k">def</span> <span class="nf">test_author_papers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">coauthors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
-        <span class="n">N_authors</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s">&#39;authors&#39;</span><span class="p">])</span>
+        <span class="n">N_authors</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">])</span>
 
-        <span class="c"># A node for every author.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">order</span><span class="p">(),</span> <span class="n">N_authors</span><span class="p">)</span>
+        <span class="c1"># A node for every author.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">order</span><span class="p">(),</span> <span class="n">N_authors</span><span class="p">)</span></div></div>
 
-</div></div>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
 </pre></div>
 
@@ -147,7 +153,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

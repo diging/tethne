@@ -75,95 +75,101 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.tests.test_analyze_corpus</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;./&#39;</span><span class="p">)</span>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;./&#39;</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">unittest</span>
-<span class="kn">from</span> <span class="nn">tethne</span> <span class="kn">import</span> <span class="n">GraphCollection</span>
-<span class="kn">from</span> <span class="nn">tethne.readers.wos</span> <span class="kn">import</span> <span class="n">read</span>
-<span class="kn">from</span> <span class="nn">tethne.analyze.corpus</span> <span class="kn">import</span> <span class="n">feature_burstness</span><span class="p">,</span> <span class="n">burstness</span><span class="p">,</span> <span class="n">sigma</span>
+<span class="kn">from</span> <span class="nn">tethne</span> <span class="k">import</span> <span class="n">GraphCollection</span>
+<span class="kn">from</span> <span class="nn">tethne.readers.wos</span> <span class="k">import</span> <span class="n">read</span>
+<span class="kn">from</span> <span class="nn">tethne.analyze.corpus</span> <span class="k">import</span> <span class="n">feature_burstness</span><span class="p">,</span> <span class="n">burstness</span><span class="p">,</span> <span class="n">sigma</span>
 
-<span class="n">datapath</span> <span class="o">=</span> <span class="s">&#39;./tethne/tests/data/wos3.txt&#39;</span>
+<span class="n">datapath</span> <span class="o">=</span> <span class="s1">&#39;./tethne/tests/data/wos3.txt&#39;</span>
 
 
 <div class="viewcode-block" id="TestFeatureBurstness"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_analyze_corpus.TestFeatureBurstness">[docs]</a><span class="k">class</span> <span class="nc">TestFeatureBurstness</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="TestFeatureBurstness.setUp"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_analyze_corpus.TestFeatureBurstness.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="s">&#39;wosid&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">feature_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">top_features</span><span class="p">(</span><span class="s">&#39;citations&#39;</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="s1">&#39;wosid&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">top_features</span><span class="p">(</span><span class="s1">&#39;citations&#39;</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="TestFeatureBurstness.test_feature_burstness"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_analyze_corpus.TestFeatureBurstness.test_feature_burstness">[docs]</a>    <span class="k">def</span> <span class="nf">test_feature_burstness</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
-        <span class="n">B</span> <span class="o">=</span> <span class="n">feature_burstness</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="s">&#39;citations&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_name</span><span class="p">)</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">feature_burstness</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="s1">&#39;citations&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_name</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 
-        <span class="c"># Should cover a period no larger than that of the corpus.</span>
-        <span class="n">dates</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="c1"># Should cover a period no larger than that of the corpus.</span>
+        <span class="n">dates</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nb">float</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nb">float</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestFeatureBurstness.test_feature_burstness_nonorm"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_analyze_corpus.TestFeatureBurstness.test_feature_burstness_nonorm">[docs]</a>    <span class="k">def</span> <span class="nf">test_feature_burstness_nonorm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">B</span> <span class="o">=</span> <span class="n">feature_burstness</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="s">&#39;citations&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_name</span><span class="p">,</span>
-                              <span class="n">normalize</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">feature_burstness</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="s1">&#39;citations&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_name</span><span class="p">,</span>
+                              <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 
-        <span class="c"># Should cover a period no larger than that of the corpus.</span>
-        <span class="n">dates</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="c1"># Should cover a period no larger than that of the corpus.</span>
+        <span class="n">dates</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nb">float</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="TestBurstness"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_analyze_corpus.TestBurstness">[docs]</a><span class="k">class</span> <span class="nc">TestBurstness</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="TestBurstness.setUp"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_analyze_corpus.TestBurstness.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="s">&#39;wosid&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="TestBurstness.test_feature_burstness_"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_analyze_corpus.TestBurstness.test_feature_burstness_">[docs]</a>    <span class="k">def</span> <span class="nf">test_feature_burstness_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">B</span> <span class="o">=</span> <span class="n">feature_burstness</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="s">&#39;citations&#39;</span><span class="p">,</span> <span class="s">&#39;BOSSDORF O 2005 OECOLOGIA&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="s1">&#39;wosid&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span></div>
 
-</div>
+<div class="viewcode-block" id="TestBurstness.test_feature_burstness_"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_analyze_corpus.TestBurstness.test_feature_burstness_">[docs]</a>    <span class="k">def</span> <span class="nf">test_feature_burstness_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">feature_burstness</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="s1">&#39;citations&#39;</span><span class="p">,</span> <span class="s1">&#39;BOSSDORF O 2005 OECOLOGIA&#39;</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="TestBurstness.test_burstness"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_analyze_corpus.TestBurstness.test_burstness">[docs]</a>    <span class="k">def</span> <span class="nf">test_burstness</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
-        <span class="n">B</span> <span class="o">=</span> <span class="n">burstness</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="s">&#39;citations&#39;</span><span class="p">)</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">burstness</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="s1">&#39;citations&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">B</span><span class="p">),</span> <span class="mi">20</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">B_</span> <span class="ow">in</span> <span class="n">B</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">B_</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">B_</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">B_</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">B_</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">B_</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="mi">0</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="TestSigma"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_analyze_corpus.TestSigma">[docs]</a><span class="k">class</span> <span class="nc">TestSigma</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="TestSigma.setUp"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_analyze_corpus.TestSigma.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="s">&#39;wosid&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">G</span> <span class="o">=</span> <span class="n">GraphCollection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="s">&#39;cocitation&#39;</span><span class="p">,</span>
-                                 <span class="n">method_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;min_weight&#39;</span><span class="p">:</span><span class="mi">4</span><span class="p">})</span>
-</div>
-<div class="viewcode-block" id="TestSigma.test_sigma"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_analyze_corpus.TestSigma.test_sigma">[docs]</a>    <span class="k">def</span> <span class="nf">test_sigma</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">Sigma</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="s">&#39;citations&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="s1">&#39;wosid&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">G</span> <span class="o">=</span> <span class="n">GraphCollection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="s1">&#39;cocitation&#39;</span><span class="p">,</span>
+                                 <span class="n">method_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;min_weight&#39;</span><span class="p">:</span><span class="mi">4</span><span class="p">})</span></div>
 
-        <span class="c"># Updates to the GraphCollection.</span>
-        <span class="k">for</span> <span class="n">node</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">&#39;sigma&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;sigma&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+<div class="viewcode-block" id="TestSigma.test_sigma"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_analyze_corpus.TestSigma.test_sigma">[docs]</a>    <span class="k">def</span> <span class="nf">test_sigma</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Sigma</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="s1">&#39;citations&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Updates to the GraphCollection.</span>
+        <span class="k">for</span> <span class="n">node</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Sigma</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">Sigma</span><span class="p">)</span></div></div>
 
 
 
-</div></div>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
 </pre></div>
 
@@ -195,7 +201,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

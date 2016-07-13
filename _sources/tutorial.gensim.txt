@@ -1,0 +1,131 @@
+.. _gensim-tutorial:
+
+Tethne and Gensim
+=================
+
+`Gensim <https://radimrehurek.com/gensim/>`_ is a lovely package for topic
+modeling in Python. As of v0.8.1 there are a few ways to use Tethne and Gensim
+together for fun or profit.
+
+Export a Gensim-friendly bag-of-words corpus
+--------------------------------------------
+
+Both :class:`.FeatureSet` and :class:`.StructuredFeatureSet` now have methods
+called ``to_gensim_corpus()`` that can generate a bag-of-words representation
+usable in Gensim's LDA and LSI (LSA) models.
+
+Suppose you want to topic model (in Gensim) abstracts from a Web of Science
+collection. Here's a fairly typical approach to generating a
+:class:`.StructuredFeatureSet` from abstracts:
+
+.. code-block:: python
+
+   >>> from tethne.readers.wos import read
+   >>> corpus = read('/path/to/my/data')
+   >>> from nltk.tokenize import word_tokenize
+   >>> corpus.index_feature('abstract', word_tokenize, structured=True)
+
+At this point you might do some filtering or transformation (see
+:ref:`mallet-tutorial`\).
+
+Gensim's :class`gensim.models.ldamodel.LdaModel` requires a "corpus" in
+"bag of words" format. This is just a list of lists, in which each sub-list is
+a sequence of (token, count) tuples for a particular document (see `the Gensim
+documentation
+<https://radimrehurek.com/gensim/tut1.html#from-strings-to-vectors>`_ for more
+details). Gensim also needs a vocabulary (``id2word``), that is just a dict
+that maps integer keys to string representations of the words in your corpus.
+
+Et voila:
+
+.. code-block:: python
+
+   >>> gensim_corpus, id2word = corpus.features['abstract'].to_gensim_corpus()
+
+You can pass these objects directly to ``LdaModel``. For example:
+
+.. code-block:: python
+
+    >>> model = models.ldamodel.LdaModel(corpus=gensim_corpus, id2word=id2word,
+                                         num_topics=20, update_every=1,
+                                         chunksize=10000, passes=1)
+
+This works basically the same for both
+:meth:`.StructuredFeatureSet.to_gensim_corpus` and
+:meth:`.FeatureSet.to_gensim_corpus`\.
+
+
+Export a raw text corpus
+------------------------
+
+If you would rather start with the document structure described in `this
+tutorial <https://radimrehurek.com/gensim/tut1.html>`_ (i.e. each document is
+a list of strings), you can pass ``raw=False`` to ``to_gensim_corpus()``. It
+will return a (corpus, vocabulary) tuple, except that ``vocabulary`` here is
+``None`` so yar can discard it.
+
+.. code-bock:: python
+
+   >>> raw_corpus, _ = corpus.features['abstract'].to_gensim_corpus(raw=True)
+
+This can be useful if you are using Gensim's `phrase detection
+<https://radimrehurek.com/gensim/models/phrases.html>`_ model. Note, however,
+that this really only makes sense for :class:`.StructuredFeatureSet`\s, since
+(by definition) :class:`.FeatureSet`\s do not preserve order.
+
+
+Let Tethne talk to Gensim
+-------------------------
+
+Tethne also provides a wrapper for Gensim, :class:`.GensimLDAModel`\, which has
+a nearly identical API to the MALLET-backed :class:`.LDAModel` described in
+:ref:`mallet-tutorial`\.
+
+.. code-block:: python
+
+   >>> from tethne import GensimLDAModel
+   >>> model = GensimLDAModel(corpus, featureset_name='abstract')
+   >>> model.fit(Z=20)
+
+Pretty much anything that you can do with :class:`.LDAModel` (e.g. building
+topic-based graphs) you can also do with :class:`.GensimLDAModel`\.
+
+
+Load ``phi`` or ``theta`` from a Gensim ``LdaModel`` as ``FeatureSet``\s
+------------------------------------------------------------------------
+
+If you have already fit your model with Gensim, and simply want to work with
+the results as a :class:`.FeatureSet` (e.g. to create a graph), you can use
+:func:`.gensim_to_theta_featureset` and :func:`.gensim_to_phi_featureset` to
+load document-topic and topic-word assignments.
+
+For example, suppose that you want to build a topic-cooccurrence graph. In the
+code block below, ``ldamodel`` is a :class:`gensim.models.ldamodel.LdaModel`\,
+and ``corpus`` is the bag-of-words corpus that you used to create the
+``LdaModel``.
+
+.. code-block:: python
+
+   >>> from tethne import gensim_to_theta_featureset
+   >>> theta = gensim_to_theta_featureset(ldamodel, corpus)
+   >>> from tethne import feature_cooccurrence
+   >>> graph = feature_cooccurrence(theta, min_weight=0.05)
+
+If you instead wanted to work with topic-word assignments, you would use
+:func:`.gensim_to_phi_featureset`\. This function does not require ``corpus``,
+so it's as simple as:
+
+.. code-block:: python
+
+   >>> from tethne import gensim_to_phi_featureset
+   >>> theta = gensim_to_theta_featureset(ldamodel)
+
+And then you can build, say, a term-coassignment graph like so (you may want to
+use :prop:`.FeatureSet.norm` here, keeping in mind that the resulting values
+are no longer the phi posterior probabilities but rather relative probabilities
+within a topic).
+
+.. code-block:: python
+
+   >>> from tethne import feature_cooccurrence
+   >>> graph = feature_cooccurrence(phi.norm, min_weight=0.01)

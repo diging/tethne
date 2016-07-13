@@ -85,6 +85,12 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <div class="section" id="tethne-readers-package">
 <h1>tethne.readers package<a class="headerlink" href="#tethne-readers-package" title="Permalink to this headline">¶</a></h1>
@@ -482,8 +488,8 @@ read/conversion.</p>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">dfr</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/Path/to/DfR&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">dfr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;/Path/to/DfR&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -555,8 +561,8 @@ to the project.</p>
 <a class="reference internal" href="#tethne.readers.wos.WoSParser" title="tethne.readers.wos.WoSParser"><code class="xref py py-class docutils literal"><span class="pre">WoSParser</span></code></a> can be instantiated directly, or you can simply use
 <a class="reference internal" href="#tethne.readers.wos.read" title="tethne.readers.wos.read"><code class="xref py py-func docutils literal"><span class="pre">read()</span></code></a> to parse a single file or a directory containing several data
 files.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">wos</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span> <span class="o">=</span> <span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/path/to/some/wos/data&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">wos</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span> <span class="o">=</span> <span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;/path/to/some/wos/data&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span>
 <span class="go">&lt;tethne.classes.corpus.Corpus object at 0x10057c2d0&gt;</span>
 </pre></div>
@@ -566,8 +572,8 @@ files.</p>
 <em class="property">class </em><code class="descclassname">tethne.readers.wos.</code><code class="descname">WoSParser</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/wos.html#WoSParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.WoSParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#tethne.readers.base.FTParser" title="tethne.readers.base.FTParser"><code class="xref py py-class docutils literal"><span class="pre">tethne.readers.base.FTParser</span></code></a></p>
 <p>Parser for Web of Science field-tagged data.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers.wos</span> <span class="kn">import</span> <span class="n">WoSParser</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span> <span class="o">=</span> <span class="n">WoSParser</span><span class="p">(</span><span class="s">&quot;/path/to/download.txt&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers.wos</span> <span class="kn">import</span> <span class="n">WoSParser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span> <span class="o">=</span> <span class="n">WoSParser</span><span class="p">(</span><span class="s2">&quot;/path/to/download.txt&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">papers</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -637,6 +643,55 @@ This can be changed to support more sophisticated data models.</p>
 <code class="descname">postprocess_WC</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/wos.html#WoSParser.postprocess_WC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.WoSParser.postprocess_WC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse WC keywords.</p>
 <p>Subject keywords are usually semicolon-delimited.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tethne.readers.wos.WoSParser.postprocess_authorAddress">
+<code class="descname">postprocess_authorAddress</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/wos.html#WoSParser.postprocess_authorAddress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.wos.WoSParser.postprocess_authorAddress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses <code class="docutils literal"><span class="pre">authorAddress</span></code> field into <code class="docutils literal"><span class="pre">address</span></code>.</p>
+<p><code class="xref py py-attr docutils literal"><span class="pre">Paper.address</span></code> will be a <code class="docutils literal"><span class="pre">dict</span></code> mapping author name-tuples
+(e.g. <code class="docutils literal"><span class="pre">(u'PEROT',</span> <span class="pre">u'R')</span></code>) onto a list of (institution, country,
+[address, parts]) tuples. If it is not possible to determine an
+explicit mapping, then there will be only one key, <code class="docutils literal"><span class="pre">__all__</span></code> with a
+list of all (parsed) addresses in the record.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">addresses</span>
+<span class="go">{</span>
+<span class="go">     &#39;__all__&#39;: [</span>
+<span class="go">         (</span>
+<span class="go">             u&#39;CTR OCEANOG MURCIA&#39;,</span>
+<span class="go">             u&#39;SPAIN&#39;,</span>
+<span class="go">             [u&#39;Ctr Oceanog Murcia&#39;, u&#39;Inst Espanol Oceanog&#39;, u&#39;Murcia 30740&#39;, u&#39;Spain.&#39;]</span>
+<span class="go">         )</span>
+<span class="go">     ]</span>
+<span class="go"> }</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">addresses</span>
+<span class="go">{</span>
+<span class="go">     (u&#39;KLEINDIENST&#39;, u&#39;SARA&#39;): [</span>
+<span class="go">         (</span>
+<span class="go">             u&#39;UNIV GEORGIA&#39;,</span>
+<span class="go">             u&#39;USA&#39;,</span>
+<span class="go">             [u&#39;Univ Georgia&#39;, u&#39;Dept Marine Sci&#39;, u&#39;Athens&#39;, u&#39;GA 30602 USA.&#39;]</span>
+<span class="go">         )</span>
+<span class="go">     ],</span>
+<span class="go">     (u&#39;PAUL&#39;, u&#39;JOHN H&#39;): [</span>
+<span class="go">         (</span>
+<span class="go">             u&#39;UNIV S FLORIDA&#39;,</span>
+<span class="go">             u&#39;USA&#39;,</span>
+<span class="go">             [u&#39;Univ S Florida&#39;, u&#39;Coll Marine Sci&#39;, u&#39;St Petersburg&#39;, u&#39;FL 33701 USA.&#39;]</span>
+<span class="go">         )</span>
+<span class="go">     ], (u&#39;JOYE&#39;, u&#39;SAMANTHA B&#39;): [</span>
+<span class="go">         (</span>
+<span class="go">             u&#39;UNIV GEORGIA&#39;,</span>
+<span class="go">             u&#39;USA&#39;,</span>
+<span class="go">             [u&#39;Univ Georgia&#39;, u&#39;Dept Marine Sci&#39;, u&#39;Athens&#39;, u&#39;GA 30602 USA.&#39;]</span>
+<span class="go">         )</span>
+<span class="go">     ]</span>
+<span class="go"> }</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -737,8 +792,8 @@ only a list of <a class="reference internal" href="tethne.classes.html#tethne.cl
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">wos</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span> <span class="o">=</span> <span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/path/to/some/wos/data&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">wos</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span> <span class="o">=</span> <span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;/path/to/some/wos/data&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span>
 <span class="go">&lt;tethne.classes.corpus.Corpus object at 0x10057c2d0&gt;</span>
 </pre></div>
@@ -901,30 +956,6 @@ as an attribute of <code class="docutils literal"><span class="pre">link:link</s
 </dd></dl>
 
 <dl class="function">
-<dt id="tethne.readers.zotero.extract_pdf">
-<code class="descclassname">tethne.readers.zotero.</code><code class="descname">extract_pdf</code><span class="sig-paren">(</span><em>fpath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/zotero.html#extract_pdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.zotero.extract_pdf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extracts structured text content from a PDF at <code class="docutils literal"><span class="pre">fpath</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fpath</strong> : str</p>
-<blockquote>
-<div><p>Path to the PDF.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><a class="reference internal" href="tethne.classes.html#tethne.classes.feature.StructuredFeature" title="tethne.classes.feature.StructuredFeature"><code class="xref py py-class docutils literal"><span class="pre">StructuredFeature</span></code></a></p>
-<blockquote class="last">
-<div><p>A <a class="reference internal" href="tethne.classes.html#tethne.classes.feature.StructuredFeature" title="tethne.classes.feature.StructuredFeature"><code class="xref py py-class docutils literal"><span class="pre">StructuredFeature</span></code></a> that contains page and sentence contexts.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="tethne.readers.zotero.extract_text">
 <code class="descclassname">tethne.readers.zotero.</code><code class="descname">extract_text</code><span class="sig-paren">(</span><em>fpath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/readers/zotero.html#extract_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.readers.zotero.extract_text" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts structured text content from a plain-text file at <code class="docutils literal"><span class="pre">fpath</span></code>.</p>
@@ -994,8 +1025,8 @@ title and author names.</p>
 <code class="docutils literal"><span class="pre">/my/working/dir</span></code> with the name <code class="docutils literal"><span class="pre">myCollection</span></code>, a subdirectory should
 have been created at <code class="docutils literal"><span class="pre">/my/working/dir/myCollection</span></code>, and an RDF file
 should exist at <code class="docutils literal"><span class="pre">/my/working/dir/myCollection/myCollection.rdf</span></code>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers.zotero</span> <span class="kn">import</span> <span class="n">read</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">myCorpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s">&#39;/my/working/dir/myCollection&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers.zotero</span> <span class="kn">import</span> <span class="n">read</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myCorpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s1">&#39;/my/working/dir/myCollection&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myCorpus</span>
 <span class="go">&lt;tethne.classes.corpus.Corpus object at 0x10047e350&gt;</span>
 </pre></div>
@@ -1085,9 +1116,9 @@ available.</p>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">wos</span><span class="p">,</span> <span class="n">dfr</span><span class="p">,</span> <span class="n">merge</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">wos_corpus</span> <span class="o">=</span> <span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/Path/to/data1.txt&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dfr_corpus</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;/Path/to/DfR&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers</span> <span class="kn">import</span> <span class="n">wos</span><span class="p">,</span> <span class="n">dfr</span><span class="p">,</span> <span class="n">merge</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wos_corpus</span> <span class="o">=</span> <span class="n">wos</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;/Path/to/data1.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dfr_corpus</span> <span class="o">=</span> <span class="n">dfr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;/Path/to/DfR&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">wos_corpus</span><span class="p">,</span> <span class="n">dfr_corpus</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1154,7 +1185,7 @@ available.</p>
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

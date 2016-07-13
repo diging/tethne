@@ -75,18 +75,24 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.classes.streaming</h1><div class="highlight"><pre>
-<span class="kn">from</span> <span class="nn">tethne.classes.corpus</span> <span class="kn">import</span> <span class="n">Corpus</span>
+<span></span><span class="kn">from</span> <span class="nn">tethne.classes.corpus</span> <span class="k">import</span> <span class="n">Corpus</span>
 
-<span class="kn">import</span> <span class="nn">cPickle</span> <span class="kn">as</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">cPickle</span> <span class="k">as</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
 
-<span class="c"># TODO: persist the index and data.</span>
+<span class="c1"># TODO: persist the index and data.</span>
 
 <div class="viewcode-block" id="StreamingIndex"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.streaming.StreamingIndex">[docs]</a><span class="k">class</span> <span class="nc">StreamingIndex</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;index&#39;</span><span class="p">,</span> <span class="n">base_path</span><span class="o">=</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="n">serializer</span><span class="o">=</span><span class="n">pickle</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">base_path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">serializer</span><span class="o">=</span><span class="n">pickle</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -95,7 +101,7 @@
 <span class="sd">            Location of the disk cache.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">base_path</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&#39;No such directory&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;No such directory&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">base_path</span> <span class="o">=</span> <span class="n">base_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">index_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
@@ -114,13 +120,13 @@
         <span class="n">keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_file_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="k">while</span> <span class="n">keys</span><span class="p">:</span>
             <span class="n">key</span> <span class="o">=</span> <span class="n">keys</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
-            <span class="k">yield</span> <span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-</div>
+            <span class="k">yield</span> <span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="StreamingIndex.iteritems"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.streaming.StreamingIndex.iteritems">[docs]</a>    <span class="k">def</span> <span class="nf">iteritems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">()</span></div>
+
     <span class="k">def</span> <span class="nf">_friendly_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">name</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isalnum</span><span class="p">()])</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">name</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isalnum</span><span class="p">()])</span>
 
     <span class="k">def</span> <span class="nf">_build_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index_path</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
@@ -128,7 +134,7 @@
     <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">paper</span><span class="p">):</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_friendly_filename</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
         <span class="n">fpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_path</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">serializer</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">key_file_map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">fname</span>
@@ -137,25 +143,25 @@
         <span class="k">return</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_file_map</span>
 
 <div class="viewcode-block" id="StreamingIndex.keys"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.streaming.StreamingIndex.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_file_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_file_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="StreamingIndex.values"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.streaming.StreamingIndex.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&#39;values() is not available in StreamingIndex&#39;</span><span class="p">)</span>
-</div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;values() is not available in StreamingIndex&#39;</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="StreamingIndex.update"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.streaming.StreamingIndex.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">paper</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">paper</span><span class="p">)</span>
-</div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">paper</span><span class="p">)</span></div>
+
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_file_map</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&#39;No such key&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;No such key&#39;</span><span class="p">)</span>
 
         <span class="n">fpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key_file_map</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">paper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">serializer</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">paper</span>
+        <span class="k">return</span> <span class="n">paper</span></div>
 
-</div>
+
 <div class="viewcode-block" id="StreamingCorpus"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.streaming.StreamingCorpus">[docs]</a><span class="k">class</span> <span class="nc">StreamingCorpus</span><span class="p">(</span><span class="n">Corpus</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Provides memory-friendly access to large collections of metadata.</span>
@@ -181,11 +187,11 @@
         <span class="k">return</span> <span class="n">PList</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">base_path</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;base_path&#39;</span><span class="p">,</span> <span class="s">&#39;.tethne&#39;</span><span class="p">)</span>
-        <span class="n">serializer</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;serializer&#39;</span><span class="p">,</span> <span class="n">pickle</span><span class="p">)</span>
+        <span class="n">base_path</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;base_path&#39;</span><span class="p">,</span> <span class="s1">&#39;.tethne&#39;</span><span class="p">)</span>
+        <span class="n">serializer</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;serializer&#39;</span><span class="p">,</span> <span class="n">pickle</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">index_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
-            <span class="s">&#39;base_path&#39;</span><span class="p">:</span> <span class="n">base_path</span><span class="p">,</span>
-            <span class="s">&#39;serializer&#39;</span><span class="p">:</span><span class="n">serializer</span>
+            <span class="s1">&#39;base_path&#39;</span><span class="p">:</span> <span class="n">base_path</span><span class="p">,</span>
+            <span class="s1">&#39;serializer&#39;</span><span class="p">:</span><span class="n">serializer</span>
         <span class="p">})</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">base_path</span><span class="p">):</span>
@@ -222,7 +228,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

@@ -75,25 +75,31 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.tests.test_networks_papers</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;../tethne&#39;</span><span class="p">)</span>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../tethne&#39;</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">unittest</span>
 
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 
-<span class="kn">from</span> <span class="nn">tethne.readers.wos</span> <span class="kn">import</span> <span class="n">read</span>
-<span class="kn">from</span> <span class="nn">tethne.networks.papers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">tethne.readers.wos</span> <span class="k">import</span> <span class="n">read</span>
+<span class="kn">from</span> <span class="nn">tethne.networks.papers</span> <span class="k">import</span> <span class="o">*</span>
 
-<span class="n">datapath</span> <span class="o">=</span> <span class="s">&#39;./tethne/tests/data/wos2.txt&#39;</span>
+<span class="n">datapath</span> <span class="o">=</span> <span class="s1">&#39;./tethne/tests/data/wos2.txt&#39;</span>
 
 
 <div class="viewcode-block" id="TestAuthorPapers"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_papers.TestAuthorPapers">[docs]</a><span class="k">class</span> <span class="nc">TestAuthorPapers</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="TestAuthorPapers.setUp"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_papers.TestAuthorPapers.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestAuthorPapers.test_direct_citation"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_papers.TestAuthorPapers.test_direct_citation">[docs]</a>    <span class="k">def</span> <span class="nf">test_direct_citation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">direct_citation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
 
@@ -101,11 +107,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">order</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
 
-        <span class="n">types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">attr</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">)])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">types</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&quot;Bipartite graph&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertSetEqual</span><span class="p">(</span><span class="n">types</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="s">&#39;paper&#39;</span><span class="p">,</span> <span class="s">&#39;citations&#39;</span><span class="p">]),</span>
-                            <span class="s">&quot;Containing papers and their citations.&quot;</span><span class="p">)</span>
-</div>
+        <span class="n">types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">)])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">types</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Bipartite graph&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertSetEqual</span><span class="p">(</span><span class="n">types</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;paper&#39;</span><span class="p">,</span> <span class="s1">&#39;citations&#39;</span><span class="p">]),</span>
+                            <span class="s2">&quot;Containing papers and their citations.&quot;</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestAuthorPapers.test_bibliographic_coupling"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_papers.TestAuthorPapers.test_bibliographic_coupling">[docs]</a>    <span class="k">def</span> <span class="nf">test_bibliographic_coupling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">bibliographic_coupling</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
 
@@ -113,12 +119,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">order</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">&#39;weight&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">&#39;features&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;features&#39;</span><span class="p">]:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">])</span>
-</div>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;features&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s1">&#39;citations&#39;</span><span class="p">])</span></div>
+
 <div class="viewcode-block" id="TestAuthorPapers.test_cocitation"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_papers.TestAuthorPapers.test_cocitation">[docs]</a>    <span class="k">def</span> <span class="nf">test_cocitation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">cocitation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="n">min_weight</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
@@ -126,9 +132,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">order</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">&#39;weight&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
-</div>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestAuthorPapers.test_author_coupling"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_papers.TestAuthorPapers.test_author_coupling">[docs]</a>    <span class="k">def</span> <span class="nf">test_author_coupling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">author_coupling</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
 
@@ -136,17 +142,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">order</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">&#39;weight&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">&#39;features&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;features&#39;</span><span class="p">]:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s">&#39;authors&#39;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;features&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">])</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="TestAuthorPapersWithStreaming"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_papers.TestAuthorPapersWithStreaming">[docs]</a><span class="k">class</span> <span class="nc">TestAuthorPapersWithStreaming</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="TestAuthorPapersWithStreaming.setUp"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_papers.TestAuthorPapersWithStreaming.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">streaming</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">streaming</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestAuthorPapersWithStreaming.test_direct_citation"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_papers.TestAuthorPapersWithStreaming.test_direct_citation">[docs]</a>    <span class="k">def</span> <span class="nf">test_direct_citation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">direct_citation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
 
@@ -154,11 +160,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">order</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
 
-        <span class="n">types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">attr</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">)])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">types</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&quot;Bipartite graph&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertSetEqual</span><span class="p">(</span><span class="n">types</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="s">&#39;paper&#39;</span><span class="p">,</span> <span class="s">&#39;citations&#39;</span><span class="p">]),</span>
-                            <span class="s">&quot;Containing papers and their citations.&quot;</span><span class="p">)</span>
-</div>
+        <span class="n">types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">)])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">types</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Bipartite graph&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertSetEqual</span><span class="p">(</span><span class="n">types</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;paper&#39;</span><span class="p">,</span> <span class="s1">&#39;citations&#39;</span><span class="p">]),</span>
+                            <span class="s2">&quot;Containing papers and their citations.&quot;</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestAuthorPapersWithStreaming.test_bibliographic_coupling"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_papers.TestAuthorPapersWithStreaming.test_bibliographic_coupling">[docs]</a>    <span class="k">def</span> <span class="nf">test_bibliographic_coupling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">bibliographic_coupling</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
 
@@ -166,12 +172,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">order</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">&#39;weight&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">&#39;features&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;features&#39;</span><span class="p">]:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">])</span>
-</div>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;features&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s1">&#39;citations&#39;</span><span class="p">])</span></div>
+
 <div class="viewcode-block" id="TestAuthorPapersWithStreaming.test_cocitation"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_papers.TestAuthorPapersWithStreaming.test_cocitation">[docs]</a>    <span class="k">def</span> <span class="nf">test_cocitation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">cocitation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="n">min_weight</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
@@ -179,9 +185,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">order</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">&#39;weight&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
-</div>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestAuthorPapersWithStreaming.test_author_coupling"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_networks_papers.TestAuthorPapersWithStreaming.test_author_coupling">[docs]</a>    <span class="k">def</span> <span class="nf">test_author_coupling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">author_coupling</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
 
@@ -189,14 +195,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">order</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">&#39;weight&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">&#39;features&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;features&#39;</span><span class="p">]:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s">&#39;authors&#39;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;features&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">])</span></div></div>
 
-</div></div>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
 </pre></div>
 
@@ -228,7 +234,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

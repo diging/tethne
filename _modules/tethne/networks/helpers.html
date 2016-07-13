@@ -75,9 +75,15 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.networks.helpers</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Helper functions for generating networks.</span>
 
 <span class="sd">.. autosummary::</span>
@@ -90,21 +96,21 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">operator</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="c">#import tethne.utilities as util  # Pylint Warnings</span>
-<span class="c">#import tethne.data as ds</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1">#import tethne.utilities as util  # Pylint Warnings</span>
+<span class="c1">#import tethne.data as ds</span>
 
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">PYTHON_3</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
 <span class="k">if</span> <span class="n">PYTHON_3</span><span class="p">:</span>
-    <span class="nb">unicode</span> <span class="o">=</span> <span class="nb">str</span>
+    <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
 
 
-<div class="viewcode-block" id="simplify_multigraph"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.helpers.simplify_multigraph">[docs]</a><span class="k">def</span> <span class="nf">simplify_multigraph</span><span class="p">(</span><span class="n">multigraph</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="simplify_multigraph"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.helpers.simplify_multigraph">[docs]</a><span class="k">def</span> <span class="nf">simplify_multigraph</span><span class="p">(</span><span class="n">multigraph</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Simplifies a graph by condensing multiple edges between the same node pair</span>
 <span class="sd">    into a single edge, with a weight attribute equal to the number of edges.</span>
@@ -126,40 +132,41 @@
 
     <span class="n">graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 
-    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">multigraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">multigraph</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">node_attribs</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">node_attribs</span><span class="p">)</span>
 
 
         <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">multigraph</span><span class="p">[</span><span class="n">u</span><span class="p">]:</span>
-            <span class="n">edges</span> <span class="o">=</span> <span class="n">multigraph</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="c"># Dict.</span>
+            <span class="n">edges</span> <span class="o">=</span> <span class="n">multigraph</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="c1"># Dict.</span>
 
-            <span class="n">edge_attribs</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;weight&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span> <span class="p">}</span>
+            <span class="n">edge_attribs</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span> <span class="p">}</span>
 
-            <span class="k">if</span> <span class="n">time</span><span class="p">:</span>    <span class="c"># Look for a date in each edge.</span>
+            <span class="k">if</span> <span class="n">time</span><span class="p">:</span>    <span class="c1"># Look for a date in each edge.</span>
                 <span class="n">start</span> <span class="o">=</span> <span class="mi">3000</span>
                 <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="n">found_date</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="n">found_date</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                     <span class="k">try</span><span class="p">:</span>
-                        <span class="n">found_date</span> <span class="o">=</span> <span class="bp">True</span>
-                        <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">start</span><span class="p">:</span>
-                            <span class="n">start</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span>
-                        <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">end</span><span class="p">:</span>
-                            <span class="n">end</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span>
-                    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>    <span class="c"># No date to be found.</span>
+                        <span class="n">found_date</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">start</span><span class="p">:</span>
+                            <span class="n">start</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">end</span><span class="p">:</span>
+                            <span class="n">end</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span>
+                    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>    <span class="c1"># No date to be found.</span>
                         <span class="k">pass</span>
 
-                <span class="k">if</span> <span class="n">found_date</span><span class="p">:</span>  <span class="c"># If no date found, don&#39;t add start/end atts.</span>
-                    <span class="n">edge_attribs</span><span class="p">[</span><span class="s">&#39;start&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start</span>
-                    <span class="n">edge_attribs</span><span class="p">[</span><span class="s">&#39;end&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">end</span>
+                <span class="k">if</span> <span class="n">found_date</span><span class="p">:</span>  <span class="c1"># If no date found, don&#39;t add start/end atts.</span>
+                    <span class="n">edge_attribs</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start</span>
+                    <span class="n">edge_attribs</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">end</span>
 
             <span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">edge_attribs</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">graph</span>
-</div>
-<div class="viewcode-block" id="citation_count"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.helpers.citation_count">[docs]</a><span class="k">def</span> <span class="nf">citation_count</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">graph</span></div>
+
+
+<div class="viewcode-block" id="citation_count"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.helpers.citation_count">[docs]</a><span class="k">def</span> <span class="nf">citation_count</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;ayjid&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates citation counts for all of the papers cited by papers.</span>
 
@@ -179,17 +186,20 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">&quot;Generating citation counts for &quot;</span><span class="o">+</span><span class="nb">unicode</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">papers</span><span class="p">))</span><span class="o">+</span><span class="s">&quot; papers...&quot;</span>
+        <span class="nb">print</span> <span class="s2">&quot;Generating citation counts for &quot;</span><span class="o">+</span><span class="n">unicode</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">papers</span><span class="p">))</span><span class="o">+</span><span class="s2">&quot; papers...&quot;</span>
 
     <span class="n">counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">papers</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">P</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]:</span>
-                <span class="n">counts</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
 
-    <span class="k">return</span> <span class="n">counts</span>
-</div>
-<div class="viewcode-block" id="top_cited"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.helpers.top_cited">[docs]</a><span class="k">def</span> <span class="nf">top_cited</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">paper</span> <span class="ow">in</span> <span class="n">papers</span><span class="p">:</span>
+        <span class="n">citations</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="s1">&#39;citedReferences&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">citations</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">cited_paper</span> <span class="ow">in</span> <span class="n">citations</span><span class="p">:</span>
+                <span class="n">counts</span><span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">cited_paper</span><span class="p">,</span> <span class="n">key</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">counts</span></div>
+
+
+<div class="viewcode-block" id="top_cited"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.helpers.top_cited">[docs]</a><span class="k">def</span> <span class="nf">top_cited</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a list of the topn (or topn%) most cited papers.</span>
 
@@ -211,7 +221,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">&quot;Finding top &quot;</span><span class="o">+</span><span class="nb">unicode</span><span class="p">(</span><span class="n">topn</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; most cited papers...&quot;</span>
+        <span class="nb">print</span> <span class="s2">&quot;Finding top &quot;</span><span class="o">+</span><span class="n">unicode</span><span class="p">(</span><span class="n">topn</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; most cited papers...&quot;</span>
 
     <span class="n">counts</span> <span class="o">=</span> <span class="n">citation_count</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
@@ -221,11 +231,12 @@
         <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">topn</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">counts</span><span class="p">),</span> <span class="n">decimals</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
     <span class="n">top</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span>
                        <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
-                       <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[:</span><span class="n">n</span><span class="p">])</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                       <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="n">n</span><span class="p">])</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 
-    <span class="k">return</span> <span class="n">top</span><span class="p">,</span> <span class="n">counts</span>
-</div>
-<div class="viewcode-block" id="top_parents"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.helpers.top_parents">[docs]</a><span class="k">def</span> <span class="nf">top_parents</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">top</span><span class="p">,</span> <span class="n">counts</span></div>
+
+
+<div class="viewcode-block" id="top_parents"><a class="viewcode-back" href="../../../tethne.networks.html#tethne.networks.helpers.top_parents">[docs]</a><span class="k">def</span> <span class="nf">top_parents</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns a list of :class:`.Paper` that cite the topn most cited papers.</span>
 
@@ -249,16 +260,16 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">&quot;Getting parents of top &quot;</span><span class="o">+</span><span class="nb">unicode</span><span class="p">(</span><span class="n">topn</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; most cited papers.&quot;</span>
+        <span class="nb">print</span> <span class="s2">&quot;Getting parents of top &quot;</span><span class="o">+</span><span class="n">unicode</span><span class="p">(</span><span class="n">topn</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; most cited papers.&quot;</span>
 
     <span class="n">top</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">top_cited</span><span class="p">(</span><span class="n">papers</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="n">topn</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-    <span class="n">papers</span> <span class="o">=</span> <span class="p">[</span> <span class="n">P</span> <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">papers</span> <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="p">]</span>
+    <span class="n">papers</span> <span class="o">=</span> <span class="p">[</span> <span class="n">P</span> <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">papers</span> <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s1">&#39;citations&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="p">]</span>
     <span class="n">parents</span> <span class="o">=</span> <span class="p">[</span> <span class="n">P</span> <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">papers</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span>
-                    <span class="nb">set</span><span class="p">([</span> <span class="n">c</span><span class="p">[</span><span class="s">&#39;ayjid&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">P</span><span class="p">[</span><span class="s">&#39;citations&#39;</span><span class="p">]</span> <span class="p">])</span> <span class="o">&amp;</span>
+                    <span class="nb">set</span><span class="p">([</span> <span class="n">c</span><span class="p">[</span><span class="s1">&#39;ayjid&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">P</span><span class="p">[</span><span class="s1">&#39;citations&#39;</span><span class="p">]</span> <span class="p">])</span> <span class="o">&amp;</span>
                     <span class="nb">set</span><span class="p">(</span><span class="n">top</span><span class="p">)</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">]</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">&quot;Found &quot;</span> <span class="o">+</span> <span class="nb">unicode</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">))</span> <span class="o">+</span> <span class="s">&quot; parents.&quot;</span>
+        <span class="nb">print</span> <span class="s2">&quot;Found &quot;</span> <span class="o">+</span> <span class="n">unicode</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; parents.&quot;</span>
 
     <span class="k">return</span> <span class="n">parents</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">counts</span></div>
 </pre></div>
@@ -291,7 +302,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

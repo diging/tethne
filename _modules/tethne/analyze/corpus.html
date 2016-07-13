@@ -75,9 +75,15 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.analyze.corpus</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Methods for analyzing :class:`.Corpus` objects.</span>
 
 <span class="sd">.. autosummary::</span>
@@ -89,20 +95,20 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">log</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">izip</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">izip</span>
 
-<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">argmin</span><span class="p">,</span> <span class="n">mean</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">argmin</span><span class="p">,</span> <span class="n">mean</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">PYTHON_3</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
 <span class="k">if</span> <span class="n">PYTHON_3</span><span class="p">:</span>
-    <span class="nb">unicode</span> <span class="o">=</span> <span class="nb">str</span>
-    <span class="nb">xrange</span> <span class="o">=</span> <span class="nb">range</span>
+    <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
+    <span class="n">xrange</span> <span class="o">=</span> <span class="nb">range</span>
 
 
 
@@ -148,31 +154,31 @@
         <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">0.</span>
         <span class="k">elif</span> <span class="n">t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">&quot;inf&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
 
-        <span class="n">C_tau</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="n">C_values</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">tau</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">k</span><span class="p">)])</span>
+        <span class="n">C_tau</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="n">C_values</span><span class="p">[</span><span class="n">l</span><span class="p">][</span><span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">tau</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">k</span><span class="p">)])</span>
         <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">X</span><span class="p">[</span><span class="n">t</span><span class="p">])))</span> <span class="o">+</span> <span class="n">C_tau</span>
 
     <span class="n">T</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
-    <span class="c"># C() requires default (0) values, so we construct the &quot;array&quot; in advance.</span>
-    <span class="n">C_values</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span>
-    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
+    <span class="c1"># C() requires default (0) values, so we construct the &quot;array&quot; in advance.</span>
+    <span class="n">C_values</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
             <span class="n">C_values</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
 
-    <span class="c"># Find the optimal state sequence.</span>
-    <span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="n">argmin</span><span class="p">([</span><span class="n">c</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">C_values</span><span class="p">])</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+    <span class="c1"># Find the optimal state sequence.</span>
+    <span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="n">argmin</span><span class="p">([</span><span class="n">c</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">C_values</span><span class="p">])</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
     <span class="k">return</span> <span class="n">states</span>
 
-<span class="k">def</span> <span class="nf">_top_features</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">perslice</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s">&#39;date&#39;</span><span class="p">):</span>
-    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Removed in 0.8. Use corpus.top_features() instead.&quot;</span><span class="p">,</span>
+<span class="k">def</span> <span class="nf">_top_features</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">perslice</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;date&#39;</span><span class="p">):</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Removed in 0.8. Use corpus.top_features() instead.&quot;</span><span class="p">,</span>
                   <span class="ne">DeprecationWarning</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">corpus</span><span class="o">.</span><span class="n">top_features</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="n">topn</span><span class="p">,</span> <span class="n">perslice</span><span class="o">=</span><span class="n">perslice</span><span class="p">)</span>
 
 <div class="viewcode-block" id="burstness"><a class="viewcode-back" href="../../../tethne.analyze.html#tethne.analyze.corpus.burstness">[docs]</a><span class="k">def</span> <span class="nf">burstness</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">featureset_name</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="p">[],</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-              <span class="n">perslice</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+              <span class="n">perslice</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimate burstness profile for the ``topn`` features (or ``flist``) in</span>
 <span class="sd">    ``feature``.</span>
@@ -219,8 +225,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c"># If `features` of interest are not specified, calculate burstness for the</span>
-    <span class="c">#  top `topn` features.</span>
+    <span class="c1"># If `features` of interest are not specified, calculate burstness for the</span>
+    <span class="c1">#  top `topn` features.</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">T</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">top_features</span><span class="p">(</span><span class="n">featureset_name</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="n">topn</span><span class="p">,</span> <span class="n">perslice</span><span class="o">=</span><span class="n">perslice</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">perslice</span><span class="p">:</span>
@@ -231,9 +237,9 @@
     <span class="n">B</span> <span class="o">=</span> <span class="p">{</span><span class="n">feature</span><span class="p">:</span> <span class="n">feature_burstness</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">featureset_name</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
                                     <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
          <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">features</span><span class="p">}</span>
-    <span class="k">return</span> <span class="n">B</span>
-</div>
-<div class="viewcode-block" id="feature_burstness"><a class="viewcode-back" href="../../../tethne.analyze.html#tethne.analyze.corpus.feature_burstness">[docs]</a><span class="k">def</span> <span class="nf">feature_burstness</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">featureset_name</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="k">return</span> <span class="n">B</span></div>
+
+<div class="viewcode-block" id="feature_burstness"><a class="viewcode-back" href="../../../tethne.analyze.html#tethne.analyze.corpus.feature_burstness">[docs]</a><span class="k">def</span> <span class="nf">feature_burstness</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">featureset_name</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                       <span class="n">s</span><span class="o">=</span><span class="mf">1.1</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="o">**</span><span class="n">slice_kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimate burstness profile for a feature over the ``&#39;date&#39;`` axis.</span>
@@ -258,11 +264,11 @@
     <span class="k">if</span> <span class="n">featureset_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
         <span class="n">corpus</span><span class="o">.</span><span class="n">index_feature</span><span class="p">(</span><span class="n">featureset_name</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="s">&#39;date&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">:</span>
-        <span class="n">corpus</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;date&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">:</span>
+        <span class="n">corpus</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span>
 
-    <span class="c"># Get time-intervals between occurrences.</span>
-    <span class="n">dates</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>    <span class="c"># Pad start.</span>
+    <span class="c1"># Get time-intervals between occurrences.</span>
+    <span class="n">dates</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>    <span class="c1"># Pad start.</span>
     <span class="n">X_</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">]</span>
 
     <span class="n">years</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">feature_distribution</span><span class="p">(</span><span class="n">featureset_name</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
@@ -272,38 +278,38 @@
 
         <span class="k">if</span> <span class="n">N</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">year</span> <span class="o">==</span> <span class="n">dates</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="p">)):</span>
                     <span class="n">X_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">N</span><span class="p">)</span>
                     <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">X_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">year</span> <span class="o">-</span> <span class="n">dates</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
                 <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
                     <span class="n">X_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
                     <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">X_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">year</span> <span class="o">-</span> <span class="n">dates</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
             <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
 
-    <span class="c"># Get optimum state sequence.</span>
+    <span class="c1"># Get optimum state sequence.</span>
     <span class="n">st</span> <span class="o">=</span> <span class="n">_forward</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span> <span class="n">X_</span><span class="p">),</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
 
-    <span class="c"># Bin by date.</span>
+    <span class="c1"># Bin by date.</span>
     <span class="n">A</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_</span><span class="p">)):</span>
         <span class="n">A</span><span class="p">[</span><span class="n">dates</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">st</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
-    <span class="c"># Normalize.</span>
+    <span class="c1"># Normalize.</span>
     <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
         <span class="n">A</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">mean</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">/</span><span class="n">k</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">A</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">A</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">mean</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">A</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
     <span class="n">D</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-    <span class="k">return</span> <span class="n">D</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="p">[</span><span class="n">A</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">D</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>
+    <span class="k">return</span> <span class="n">D</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="p">[</span><span class="n">A</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">D</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span></div>
 
-</div>
-<div class="viewcode-block" id="sigma"><a class="viewcode-back" href="../../../tethne.analyze.html#tethne.analyze.corpus.sigma">[docs]</a><span class="k">def</span> <span class="nf">sigma</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">corpus</span><span class="p">,</span> <span class="n">featureset_name</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="sigma"><a class="viewcode-back" href="../../../tethne.analyze.html#tethne.analyze.corpus.sigma">[docs]</a><span class="k">def</span> <span class="nf">sigma</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">corpus</span><span class="p">,</span> <span class="n">featureset_name</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate sigma (from `Chen 2009 &lt;http://arxiv.org/pdf/0904.1439.pdf&gt;`_)</span>
 <span class="sd">    for all of the nodes in a :class:`.GraphCollection`\.</span>
@@ -360,48 +366,48 @@
 <span class="sd">       :align: center</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="s">&#39;date&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">:</span>
-        <span class="n">corpus</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&#39;date&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;date&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">corpus</span><span class="o">.</span><span class="n">indices</span><span class="p">:</span>
+        <span class="n">corpus</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span>
 
-    <span class="c"># Calculate burstness if not provided.</span>
+    <span class="c1"># Calculate burstness if not provided.</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">B</span><span class="p">:</span>
         <span class="n">B</span> <span class="o">=</span> <span class="n">burstness</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">featureset_name</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="n">Sigma</span> <span class="o">=</span> <span class="p">{}</span>      <span class="c"># Keys are dates (from GraphCollection), values are</span>
-                    <span class="c">#  node:sigma dicts.</span>
+    <span class="n">Sigma</span> <span class="o">=</span> <span class="p">{}</span>      <span class="c1"># Keys are dates (from GraphCollection), values are</span>
+                    <span class="c1">#  node:sigma dicts.</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">graph</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
         <span class="n">centrality</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">betweenness_centrality</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
-        <span class="n">sigma</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c"># Sigma values for all features in this year.</span>
-        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c"># Sigma values for only those features in this graph.</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Sigma values for all features in this year.</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Sigma values for only those features in this graph.</span>
         <span class="k">for</span> <span class="n">n_</span><span class="p">,</span> <span class="n">burst</span> <span class="ow">in</span> <span class="n">B</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-            <span class="n">burst</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">burst</span><span class="p">)))</span>     <span class="c"># Reorganize for easier lookup.</span>
+            <span class="n">burst</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">burst</span><span class="p">)))</span>     <span class="c1"># Reorganize for easier lookup.</span>
 
-            <span class="c"># Nodes are indexed as integers in the GraphCollection.</span>
+            <span class="c1"># Nodes are indexed as integers in the GraphCollection.</span>
             <span class="n">n</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">node_lookup</span><span class="p">[</span><span class="n">n_</span><span class="p">]</span>
 
-            <span class="c"># We have burstness values for years in which the feature ``n``</span>
-            <span class="c">#  occurs, and we have centrality values for years in which ``n``</span>
-            <span class="c">#  made it into the graph.</span>
+            <span class="c1"># We have burstness values for years in which the feature ``n``</span>
+            <span class="c1">#  occurs, and we have centrality values for years in which ``n``</span>
+            <span class="c1">#  made it into the graph.</span>
             <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">burst</span><span class="p">:</span>
                 <span class="n">sigma</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">centrality</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">)</span> <span class="o">**</span> <span class="n">burst</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">-</span> <span class="mf">1.</span>
                 <span class="n">attrs</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
 
-        <span class="c"># Update graph with sigma values.</span>
-        <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="s">&#39;sigma&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+        <span class="c1"># Update graph with sigma values.</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
         <span class="n">Sigma</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigma</span>
 
-    <span class="c"># Invert results and update the GraphCollection.master_graph.</span>
-    <span class="c"># TODO: is there a more efficient way to do this?</span>
+    <span class="c1"># Invert results and update the GraphCollection.master_graph.</span>
+    <span class="c1"># TODO: is there a more efficient way to do this?</span>
     <span class="n">inverse</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">gname</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">Sigma</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s">&#39;__iter__&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
                 <span class="n">inverse</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">gname</span><span class="p">:</span> <span class="n">val</span><span class="p">})</span>
-    <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">master_graph</span><span class="p">,</span> <span class="s">&#39;sigma&#39;</span><span class="p">,</span> <span class="n">inverse</span><span class="p">)</span>
+    <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">master_graph</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="n">inverse</span><span class="p">)</span>
 
-    <span class="c"># We want to return results in the same format as burstness(); with node</span>
-    <span class="c">#  labels as keys; values are tuples ([years...], [sigma...]).</span>
-    <span class="k">return</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">G</span><span class="o">.</span><span class="n">node_history</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">node_lookup</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="s">&#39;sigma&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+    <span class="c1"># We want to return results in the same format as burstness(); with node</span>
+    <span class="c1">#  labels as keys; values are tuples ([years...], [sigma...]).</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">G</span><span class="o">.</span><span class="n">node_history</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">node_lookup</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="s1">&#39;sigma&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
             <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">B</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span></div>
 </pre></div>
 
@@ -433,7 +439,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

@@ -12,4 +12,5 @@ Documentation
    getting_data
    quickstart
    tutorial.mallet
+   tutorial.gensim
    tethne

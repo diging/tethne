@@ -75,9 +75,15 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.analyze.features</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Methods for analyzing featuresets.</span>
 
 <span class="sd">.. autosummary::</span>
@@ -90,8 +96,8 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">acos</span><span class="p">,</span> <span class="n">pi</span>
-<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">nonzero</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">acos</span><span class="p">,</span> <span class="n">pi</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">nonzero</span>
 
 
 <div class="viewcode-block" id="kl_divergence"><a class="viewcode-back" href="../../../tethne.analyze.html#tethne.analyze.features.kl_divergence">[docs]</a><span class="k">def</span> <span class="nf">kl_divergence</span><span class="p">(</span><span class="n">V_a</span><span class="p">,</span> <span class="n">V_b</span><span class="p">):</span>
@@ -113,19 +119,19 @@
 <span class="sd">        KL divergence.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c"># Find shared features.</span>
+    <span class="c1"># Find shared features.</span>
     <span class="n">Ndiff</span> <span class="o">=</span> <span class="n">_shared_features</span><span class="p">(</span><span class="n">V_a</span><span class="p">,</span> <span class="n">V_b</span><span class="p">)</span>
 
-    <span class="c"># aprob and bprob should each sum to 1.0</span>
+    <span class="c1"># aprob and bprob should each sum to 1.0</span>
     <span class="n">aprob</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">V_a</span><span class="p">),</span> <span class="n">V_a</span><span class="p">)</span>
     <span class="n">bprob</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">V_b</span><span class="p">),</span> <span class="n">V_b</span><span class="p">)</span>
 
-    <span class="c"># Smooth according to Bigi 2003.</span>
+    <span class="c1"># Smooth according to Bigi 2003.</span>
     <span class="n">aprob</span><span class="p">,</span> <span class="n">bprob</span> <span class="o">=</span> <span class="n">_smooth</span><span class="p">(</span><span class="n">aprob</span><span class="p">,</span> <span class="n">bprob</span><span class="p">,</span> <span class="n">Ndiff</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="p">),</span> <span class="n">aprob</span><span class="p">,</span> <span class="n">bprob</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="p">),</span> <span class="n">aprob</span><span class="p">,</span> <span class="n">bprob</span><span class="p">))</span></div>
 
-</div>
+
 <div class="viewcode-block" id="cosine_similarity"><a class="viewcode-back" href="../../../tethne.analyze.html#tethne.analyze.features.cosine_similarity">[docs]</a><span class="k">def</span> <span class="nf">cosine_similarity</span><span class="p">(</span><span class="n">F_a</span><span class="p">,</span> <span class="n">F_b</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate `cosine similarity</span>
@@ -150,9 +156,9 @@
     <span class="n">mag_A</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">A</span><span class="p">)))</span>
     <span class="n">mag_B</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">B</span><span class="p">)))</span>
 
-    <span class="k">return</span> <span class="n">dot</span> <span class="o">/</span> <span class="p">(</span><span class="n">mag_A</span> <span class="o">+</span> <span class="n">mag_B</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dot</span> <span class="o">/</span> <span class="p">(</span><span class="n">mag_A</span> <span class="o">+</span> <span class="n">mag_B</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="angular_similarity"><a class="viewcode-back" href="../../../tethne.analyze.html#tethne.analyze.features.angular_similarity">[docs]</a><span class="k">def</span> <span class="nf">angular_similarity</span><span class="p">(</span><span class="n">F_a</span><span class="p">,</span> <span class="n">F_b</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the `angular similarity</span>
@@ -171,11 +177,11 @@
 <span class="sd">    similarity : float</span>
 <span class="sd">        Cosine similarity.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="mf">1.</span> <span class="o">-</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span>  <span class="n">acos</span><span class="p">(</span><span class="n">cosine_similarity</span><span class="p">(</span><span class="n">F_a</span><span class="p">,</span> <span class="n">F_b</span><span class="p">)))</span> <span class="o">/</span> <span class="n">pi</span>
+    <span class="k">return</span> <span class="mf">1.</span> <span class="o">-</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span>  <span class="n">acos</span><span class="p">(</span><span class="n">cosine_similarity</span><span class="p">(</span><span class="n">F_a</span><span class="p">,</span> <span class="n">F_b</span><span class="p">)))</span> <span class="o">/</span> <span class="n">pi</span></div>
 
-<span class="c">### Helpers ###</span>
+<span class="c1">### Helpers ###</span>
 
-</div>
+
 <span class="k">def</span> <span class="nf">_shared_features</span><span class="p">(</span><span class="n">adense</span><span class="p">,</span> <span class="n">bdense</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Number of features in ``adense`` that are also in ``bdense``.</span>
@@ -209,12 +215,12 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">gamma</span><span class="p">,</span> <span class="n">epsilon</span> <span class="o">=</span> <span class="n">_smoothing_parameters</span><span class="p">(</span><span class="n">aprob</span><span class="p">,</span> <span class="n">bprob</span><span class="p">,</span> <span class="n">Ndiff</span><span class="p">)</span>
 
-    <span class="c"># Remove zeros.</span>
+    <span class="c1"># Remove zeros.</span>
     <span class="n">in_a</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">aprob</span><span class="p">)</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">]</span>
     <span class="n">aprob</span> <span class="o">=</span> <span class="nb">list</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="n">aprob</span><span class="p">)[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">in_a</span><span class="p">])</span>
     <span class="n">bprob</span> <span class="o">=</span> <span class="nb">list</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="n">bprob</span><span class="p">)[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">gamma</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">in_a</span><span class="p">])</span>
 
-    <span class="c"># Replace zero values with epsilon.</span>
+    <span class="c1"># Replace zero values with epsilon.</span>
     <span class="n">bprob</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span> <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="mf">0.</span> <span class="k">else</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">bprob</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">aprob</span><span class="p">,</span> <span class="n">bprob</span>
@@ -248,7 +254,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

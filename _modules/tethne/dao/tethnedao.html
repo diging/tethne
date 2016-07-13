@@ -75,14 +75,20 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.dao.tethnedao</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">mysql.connector</span>
 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Could not import psycopg2. Classes and functions in the tethne.dao module will not be available.&quot;</span><span class="p">,</span> <span class="ne">ImportWarning</span><span class="p">)</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Could not import psycopg2. Classes and functions in the tethne.dao module will not be available.&quot;</span><span class="p">,</span> <span class="ne">ImportWarning</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="DBConnection"><a class="viewcode-back" href="../../../tethne.dao.html#tethne.dao.tethnedao.DBConnection">[docs]</a><span class="k">class</span> <span class="nc">DBConnection</span><span class="p">:</span>
@@ -98,9 +104,9 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&#39;user&#39;</span><span class="p">:</span> <span class="s">&#39;root&#39;</span><span class="p">,</span>
-        <span class="s">&#39;host&#39;</span><span class="p">:</span> <span class="s">&#39;localhost&#39;</span><span class="p">,</span>
-        <span class="s">&#39;database&#39;</span><span class="p">:</span> <span class="s">&#39;tethne&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="s1">&#39;root&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;database&#39;</span><span class="p">:</span> <span class="s1">&#39;tethne&#39;</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -123,13 +129,13 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">=</span><span class="n">mysql</span><span class="o">.</span><span class="n">connector</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">DBConnection</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;Please ensure the following&quot;</span>
-                               <span class="s">&quot;1. DB server is up and running&quot;</span>
-                               <span class="s">&quot;2. Connection string details are correct&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Please ensure the following&quot;</span>
+                               <span class="s2">&quot;1. DB server is up and running&quot;</span>
+                               <span class="s2">&quot;2. Connection string details are correct&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span></div>
 
 
-</div>
+
 <div class="viewcode-block" id="getMaxAuthorID"><a class="viewcode-back" href="../../../tethne.dao.html#tethne.dao.tethnedao.getMaxAuthorID">[docs]</a><span class="k">def</span> <span class="nf">getMaxAuthorID</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
@@ -142,15 +148,15 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dbconnectionhanlder</span> <span class="o">=</span> <span class="n">DBConnection</span><span class="p">()</span>
-    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot; SELECT max(id) from `django-tethne_author` &quot;</span><span class="p">)</span>
+    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot; SELECT max(id) from `django-tethne_author` &quot;</span><span class="p">)</span>
     <span class="n">rows</span> <span class="o">=</span> <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
     <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
 
-</div>
+
 <div class="viewcode-block" id="getMaxPaperID"><a class="viewcode-back" href="../../../tethne.dao.html#tethne.dao.tethnedao.getMaxPaperID">[docs]</a><span class="k">def</span> <span class="nf">getMaxPaperID</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
@@ -164,14 +170,14 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dbconnectionhanlder</span> <span class="o">=</span> <span class="n">DBConnection</span><span class="p">()</span>
-    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT max(id) from `django-tethne_paper` &quot;</span><span class="p">)</span>
+    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT max(id) from `django-tethne_paper` &quot;</span><span class="p">)</span>
     <span class="n">rows</span> <span class="o">=</span> <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
     <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-</div>
+        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="getMaxCorpusID"><a class="viewcode-back" href="../../../tethne.dao.html#tethne.dao.tethnedao.getMaxCorpusID">[docs]</a><span class="k">def</span> <span class="nf">getMaxCorpusID</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
@@ -184,14 +190,14 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dbconnectionhanlder</span> <span class="o">=</span> <span class="n">DBConnection</span><span class="p">()</span>
-    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot; SELECT max(id) from `django-tethne_corpus` &quot;</span><span class="p">)</span>
+    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot; SELECT max(id) from `django-tethne_corpus` &quot;</span><span class="p">)</span>
     <span class="n">rows</span> <span class="o">=</span> <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
     <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-</div>
+        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="getMaxAuthorInstanceID"><a class="viewcode-back" href="../../../tethne.dao.html#tethne.dao.tethnedao.getMaxAuthorInstanceID">[docs]</a><span class="k">def</span> <span class="nf">getMaxAuthorInstanceID</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
@@ -204,15 +210,15 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dbconnectionhanlder</span> <span class="o">=</span> <span class="n">DBConnection</span><span class="p">()</span>
-    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT max(id) from `django-tethne_author_instance`&quot;</span><span class="p">)</span>
+    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT max(id) from `django-tethne_author_instance`&quot;</span><span class="p">)</span>
     <span class="n">rows</span> <span class="o">=</span> <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
     <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
 
-</div>
+
 <div class="viewcode-block" id="getMaxCitationID"><a class="viewcode-back" href="../../../tethne.dao.html#tethne.dao.tethnedao.getMaxCitationID">[docs]</a><span class="k">def</span> <span class="nf">getMaxCitationID</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
@@ -225,14 +231,14 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dbconnectionhanlder</span> <span class="o">=</span> <span class="n">DBConnection</span><span class="p">()</span>
-    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT max(id) from `django-tethne_citation`&quot;</span><span class="p">)</span>
+    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT max(id) from `django-tethne_citation`&quot;</span><span class="p">)</span>
     <span class="n">rows</span> <span class="o">=</span> <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
     <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-</div>
+        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="getMaxCitationInstanceID"><a class="viewcode-back" href="../../../tethne.dao.html#tethne.dao.tethnedao.getMaxCitationInstanceID">[docs]</a><span class="k">def</span> <span class="nf">getMaxCitationInstanceID</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
@@ -245,15 +251,15 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dbconnectionhanlder</span> <span class="o">=</span> <span class="n">DBConnection</span><span class="p">()</span>
-    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT max(id) from `django-tethne_citation_instance`&quot;</span><span class="p">)</span>
+    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT max(id) from `django-tethne_citation_instance`&quot;</span><span class="p">)</span>
     <span class="n">rows</span> <span class="o">=</span> <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
     <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
 
-</div>
+
 <div class="viewcode-block" id="getMaxInstitutionID"><a class="viewcode-back" href="../../../tethne.dao.html#tethne.dao.tethnedao.getMaxInstitutionID">[docs]</a><span class="k">def</span> <span class="nf">getMaxInstitutionID</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
@@ -266,15 +272,15 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dbconnectionhanlder</span> <span class="o">=</span> <span class="n">DBConnection</span><span class="p">()</span>
-    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT max(id) from `django-tethne_institution`&quot;</span><span class="p">)</span>
+    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT max(id) from `django-tethne_institution`&quot;</span><span class="p">)</span>
     <span class="n">rows</span> <span class="o">=</span> <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
     <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
 
-</div>
+
 <div class="viewcode-block" id="getMaxInstitutionInstanceID"><a class="viewcode-back" href="../../../tethne.dao.html#tethne.dao.tethnedao.getMaxInstitutionInstanceID">[docs]</a><span class="k">def</span> <span class="nf">getMaxInstitutionInstanceID</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
@@ -287,15 +293,15 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dbconnectionhanlder</span> <span class="o">=</span> <span class="n">DBConnection</span><span class="p">()</span>
-    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT max(id) from `django-tethne_institution_instance`&quot;</span><span class="p">)</span>
+    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT max(id) from `django-tethne_institution_instance`&quot;</span><span class="p">)</span>
     <span class="n">rows</span> <span class="o">=</span> <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
     <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
 
-</div>
+
 <div class="viewcode-block" id="getMaxAffiliationID"><a class="viewcode-back" href="../../../tethne.dao.html#tethne.dao.tethnedao.getMaxAffiliationID">[docs]</a><span class="k">def</span> <span class="nf">getMaxAffiliationID</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
@@ -308,16 +314,16 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dbconnectionhanlder</span> <span class="o">=</span> <span class="n">DBConnection</span><span class="p">()</span>
-    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT max(id) from `django-tethne_affiliation`&quot;</span><span class="p">)</span>
+    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT max(id) from `django-tethne_affiliation`&quot;</span><span class="p">)</span>
     <span class="n">rows</span> <span class="o">=</span> <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
     <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
 
 
-</div>
+
 <div class="viewcode-block" id="getMaxAffiliationInstanceID"><a class="viewcode-back" href="../../../tethne.dao.html#tethne.dao.tethnedao.getMaxAffiliationInstanceID">[docs]</a><span class="k">def</span> <span class="nf">getMaxAffiliationInstanceID</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
@@ -330,10 +336,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dbconnectionhanlder</span> <span class="o">=</span> <span class="n">DBConnection</span><span class="p">()</span>
-    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT max(id) from `django-tethne_affiliation_instance`&quot;</span><span class="p">)</span>
+    <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT max(id) from `django-tethne_affiliation_instance`&quot;</span><span class="p">)</span>
     <span class="n">rows</span> <span class="o">=</span> <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
     <span class="n">dbconnectionhanlder</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
@@ -367,7 +373,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

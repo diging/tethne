@@ -85,6 +85,12 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <div class="section" id="tethne-analyze-package">
 <h1>tethne.analyze package<a class="headerlink" href="#tethne-analyze-package" title="Permalink to this headline">¶</a></h1>
@@ -104,7 +110,7 @@
 <td>Apply a <code class="docutils literal"><span class="pre">method</span></code> from NetworkX to all <a class="reference external" href="http://networkx.github.io/documentation/networkx-1.8/reference/classes.graph.html#graph" title="(in NetworkX v1.8)"><span class="xref std std-ref">networkx.Graph</span></a> objects in the <a class="reference internal" href="tethne.classes.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a> <code class="docutils literal"><span class="pre">G</span></code>.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#tethne.analyze.collection.attachment_probability" title="tethne.analyze.collection.attachment_probability"><code class="xref py py-obj docutils literal"><span class="pre">attachment_probability</span></code></a></td>
-<td>Calculates the observed attachment probability for each node at each time-step.</td>
+<td>Calculates the attachment probability for each node at each time-step.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#tethne.analyze.collection.connected" title="tethne.analyze.collection.connected"><code class="xref py py-obj docutils literal"><span class="pre">connected</span></code></a></td>
 <td>Performs analysis methods from networkx.connected on each graph in the collection.</td>
@@ -160,8 +166,8 @@ of the specified method.</p>
 </table>
 <p class="rubric">Examples</p>
 <p><em>Betweenness centrality:</em> (<code class="docutils literal"><span class="pre">G</span></code> is a <a class="reference internal" href="tethne.classes.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a>)</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.analyze</span> <span class="kn">import</span> <span class="n">collection</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="s">&#39;betweenness_centrality&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.analyze</span> <span class="kn">import</span> <span class="n">collection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BC</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">algorithm</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="s1">&#39;betweenness_centrality&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">BC</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">{1999: 0.010101651117889644,</span>
 <span class="go">2000: 0.0008689093723107329,</span>
@@ -174,31 +180,45 @@ of the specified method.</p>
 
 <dl class="function">
 <dt id="tethne.analyze.collection.attachment_probability">
-<code class="descclassname">tethne.analyze.collection.</code><code class="descname">attachment_probability</code><span class="sig-paren">(</span><em>G</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/analyze/collection.html#attachment_probability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.collection.attachment_probability" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the observed attachment probability for each node at each
-time-step.</p>
-<p>Attachment probability is calculated based on the observed new edges in the
-next time-step. So if a node acquires new edges at time t, this will accrue
-to the node&#8217;s attachment probability at time t-1. Thus at a given time,
-one can ask whether degree and attachment probability are related.</p>
+<code class="descclassname">tethne.analyze.collection.</code><code class="descname">attachment_probability</code><span class="sig-paren">(</span><em>G</em>, <em>raw=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/analyze/collection.html#attachment_probability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.analyze.collection.attachment_probability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the attachment probability for each node at each time-step.</p>
+<p>The attachment probability for a node at a particular graph state <code class="docutils literal"><span class="pre">t</span></code> is
+the probability that the next edge added to the graph will accrue to that
+node. The MLE for attachment probability is thus the observed fraction of
+all new edges in graph state <code class="docutils literal"><span class="pre">t</span> <span class="pre">+</span> <span class="pre">1</span></code> that accrue to a particular node.</p>
+<p>Note that values will only be calculated for nodes present in state <code class="docutils literal"><span class="pre">t</span></code>.
+In other words, if in <code class="docutils literal"><span class="pre">t</span> <span class="pre">+</span> <span class="pre">1</span></code> a new node is introduced who also accrues
+new edges, that node will <strong>not</strong> appear in the results for state <code class="docutils literal"><span class="pre">t</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>G</strong> : <a class="reference internal" href="tethne.classes.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a></p>
+<p><strong>raw</strong> : bool</p>
 <blockquote>
-<div><p>Must be sliced by &#8216;date&#8217;. See <code class="xref py py-func docutils literal"><span class="pre">GraphCollection.slice()</span></code>.</p>
+<div><p>(default: <code class="docutils literal"><span class="pre">False</span></code>) If <code class="docutils literal"><span class="pre">True</span></code>, nodes are represented by their
+integer ids in <code class="docutils literal"><span class="pre">G</span></code>, rather than their label.</p>
 </div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>probs</strong> : dict</p>
 <blockquote class="last">
-<div><p>Keyed by index in G.graphs, and then by node.</p>
+<div><p>Keyed by index in <code class="docutils literal"><span class="pre">G</span></code>, and then by node. If <code class="docutils literal"><span class="pre">raw</span></code> is True, node keys
+will be integer indices from the GraphCollection&#8217;s  <code class="docutils literal"><span class="pre">node_index</span></code>.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.readers.wos</span> <span class="kn">import</span> <span class="n">read</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s2">&quot;/path/to/my/data&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne</span> <span class="kn">import</span> <span class="n">coauthors</span><span class="p">,</span> <span class="n">GraphCollection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">collection</span> <span class="o">=</span> <span class="n">GraphCollection</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">coauthors</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.analyze.collection</span> <span class="kn">import</span> <span class="n">attachment_probability</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">probs</span> <span class="o">=</span> <span class="n">attachment_probability</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -316,9 +336,9 @@ possible state (<code class="docutils literal"><span class="pre">k-1</span></cod
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.analyze.corpus</span> <span class="kn">import</span> <span class="n">burstness</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">burstness</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="s">&#39;abstractTerms&#39;</span><span class="p">,</span> <span class="n">flist</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;process&#39;</span><span class="p">,</span> <span class="s">&#39;method&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span><span class="p">[</span><span class="s">&#39;process&#39;</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.analyze.corpus</span> <span class="kn">import</span> <span class="n">burstness</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">burstness</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="s1">&#39;abstractTerms&#39;</span><span class="p">,</span> <span class="n">flist</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;process&#39;</span><span class="p">,</span> <span class="s1">&#39;method&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span><span class="p">[</span><span class="s1">&#39;process&#39;</span><span class="p">]</span>
 <span class="go">([1990, 1991, 1992, 1993], [0., 0.4, 0.6, 0.])</span>
 </pre></div>
 </div>
@@ -408,20 +428,20 @@ Defaults to 1.0.</td>
 <p class="rubric">Examples</p>
 <p>Assuming that you have a <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> generated from WoS data that has
 been sliced by <code class="docutils literal"><span class="pre">date</span></code>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Generate a co-citation graph collection.</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate a co-citation graph collection.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne</span> <span class="kn">import</span> <span class="n">GraphCollection</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;threshold&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;topn&#39;</span><span class="p">:</span><span class="mi">100</span> <span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;threshold&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;topn&#39;</span><span class="p">:</span><span class="mi">100</span> <span class="p">}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">GraphCollection</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;papers&#39;</span><span class="p">,</span> <span class="s">&#39;cocitation&#39;</span><span class="p">,</span> <span class="n">method_kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;papers&#39;</span><span class="p">,</span> <span class="s1">&#39;cocitation&#39;</span><span class="p">,</span> <span class="n">method_kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># Calculate sigma. This may take several minutes, depending on the</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#  size of your co-citaiton graph collection.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate sigma. This may take several minutes, depending on the</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#  size of your co-citaiton graph collection.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.analyze.corpus</span> <span class="kn">import</span> <span class="n">sigma</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">corpus</span><span class="p">,</span> <span class="s">&#39;citations&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">corpus</span><span class="p">,</span> <span class="s1">&#39;citations&#39;</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># Visualize...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Visualize...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.writers</span> <span class="kn">import</span> <span class="n">collection</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">collection</span><span class="o">.</span><span class="n">to_dxgmml</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="s">&#39;~/cocitation.xgmml&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">collection</span><span class="o">.</span><span class="n">to_dxgmml</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="s1">&#39;~/cocitation.xgmml&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In the visualization below, node and label sizes are mapped to <code class="docutils literal"><span class="pre">sigma</span></code>,
@@ -652,7 +672,7 @@ length. Default is True.</p>
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

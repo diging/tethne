@@ -75,24 +75,30 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.classes.graphcollection</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">A :class:`.GraphCollection` is a set of graphs generated from a</span>
 <span class="sd">:class:`.Corpus` or model.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">tethne</span> <span class="kn">import</span> <span class="n">networks</span>
-<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">_iterable</span>
+<span class="kn">from</span> <span class="nn">tethne</span> <span class="k">import</span> <span class="n">networks</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">_iterable</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">PYTHON_3</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
 <span class="k">if</span> <span class="n">PYTHON_3</span><span class="p">:</span>
-    <span class="nb">unicode</span> <span class="o">=</span> <span class="nb">str</span>
-    <span class="nb">xrange</span> <span class="o">=</span> <span class="nb">range</span>
+    <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
+    <span class="n">xrange</span> <span class="o">=</span> <span class="nb">range</span>
     <span class="nb">str</span> <span class="o">=</span> <span class="nb">bytes</span>
 
 
@@ -134,8 +140,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">slice_kwargs</span><span class="o">=</span><span class="p">{},</span>
-                 <span class="n">method_kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">directed</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">slice_kwargs</span><span class="o">=</span><span class="p">{},</span>
+                 <span class="n">method_kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -155,8 +161,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_index</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_lookup</span> <span class="o">=</span> <span class="p">{</span><span class="bp">None</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_index</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_lookup</span> <span class="o">=</span> <span class="p">{</span><span class="kc">None</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">graphs_containing</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">corpus</span> <span class="ow">and</span> <span class="n">method</span><span class="p">:</span>
@@ -168,11 +174,11 @@
     <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-        <span class="k">try</span><span class="p">:</span>    <span class="c"># hasttr() causes endless recursion in Python 3.x</span>
+        <span class="k">try</span><span class="p">:</span>    <span class="c1"># hasttr() causes endless recursion in Python 3.x</span>
             <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">pass</span>
-        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;GraphCollection has no such attribute or graph.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;GraphCollection has no such attribute or graph.&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="GraphCollection.build"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">slice_kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">method_kwargs</span><span class="o">=</span><span class="p">{}):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -189,14 +195,14 @@
 <span class="sd">        method_kwargs : dict</span>
 <span class="sd">            Keyword arguments to pass to ``method`` along with ``corpus``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="s">&#39;__call__&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="s1">&#39;__call__&#39;</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">networks</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;No such method&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;No such method&#39;</span><span class="p">)</span>
             <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">networks</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">subcorpus</span> <span class="ow">in</span> <span class="n">corpus</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="o">**</span><span class="n">slice_kwargs</span><span class="p">):</span>
             <span class="n">graph</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">subcorpus</span><span class="p">,</span> <span class="o">**</span><span class="n">method_kwargs</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">graph</span><span class="p">)</span>
-</div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">graph</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="GraphCollection.add"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">graph</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Index and add a :ref:`networkx.Graph &lt;networkx:graph&gt;` to the</span>
@@ -214,27 +220,27 @@
 <span class="sd">            If `name` has already been used in this :class:`.GraphCollection`\.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;{0} exists in this GraphCollection&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">name</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Name conflicts with an existing attribute&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> exists in this GraphCollection&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unicode</span><span class="p">(</span><span class="n">name</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Name conflicts with an existing attribute&quot;</span><span class="p">)</span>
 
         <span class="n">indexed_graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">graph</span><span class="p">)</span>
 
-        <span class="c"># Add all edges to the `master_graph`.</span>
-        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">indexed_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-            <span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;graph&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">})</span>
+        <span class="c1"># Add all edges to the `master_graph`.</span>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">indexed_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;graph&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">})</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span>
 
-        <span class="c"># Add all node attributes to the `master_graph`.</span>
-        <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">indexed_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="c1"># Add all node attributes to the `master_graph`.</span>
+        <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">indexed_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">]:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 
-        <span class="nb">dict</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">indexed_graph</span><span class="p">)</span>
+        <span class="nb">dict</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">indexed_graph</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="GraphCollection.index"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.index">[docs]</a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">graph</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Index any new nodes in `graph`, and relabel the nodes in `graph` using</span>
@@ -252,21 +258,21 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nodes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
 
-        <span class="c"># Index new nodes.</span>
+        <span class="c1"># Index new nodes.</span>
         <span class="n">new_nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_index</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
         <span class="n">start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_index</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_index</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_nodes</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_nodes</span><span class="p">)):</span>
             <span class="n">n</span> <span class="o">=</span> <span class="n">new_nodes</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node_index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_lookup</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span><span class="p">,</span> <span class="n">i</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">graphs_containing</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="c"># Relabel nodes in `graph`.</span>
+        <span class="c1"># Relabel nodes in `graph`.</span>
         <span class="n">new_labels</span> <span class="o">=</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_lookup</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">}</span>
-        <span class="n">indexed_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">relabel</span><span class="o">.</span><span class="n">relabel_nodes</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">new_labels</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">indexed_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">relabel</span><span class="o">.</span><span class="n">relabel_nodes</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">new_labels</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">indexed_graph</span>
-</div>
-<div class="viewcode-block" id="GraphCollection.nodes"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.nodes">[docs]</a>    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">native</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">indexed_graph</span></div>
+
+<div class="viewcode-block" id="GraphCollection.nodes"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.nodes">[docs]</a>    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">native</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a list of all nodes in the :class:`.GraphCollection`\.</span>
 
@@ -287,9 +293,9 @@
                 <span class="n">nodes</span> <span class="o">=</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_index</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">attrs</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">node_index</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">nodes</span>
-</div>
-<div class="viewcode-block" id="GraphCollection.edges"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.edges">[docs]</a>    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">native</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">nodes</span></div>
+
+<div class="viewcode-block" id="GraphCollection.edges"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.edges">[docs]</a>    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">native</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a list of all edges in the :class:`.GraphCollection`\.</span>
 
@@ -311,35 +317,35 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_index</span><span class="p">[</span><span class="n">s</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_index</span><span class="p">[</span><span class="n">t</span><span class="p">])</span>
                          <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">edges</span>
-</div>
-<div class="viewcode-block" id="GraphCollection.order"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.order">[docs]</a>    <span class="k">def</span> <span class="nf">order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">piecewise</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">edges</span></div>
+
+<div class="viewcode-block" id="GraphCollection.order"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.order">[docs]</a>    <span class="k">def</span> <span class="nf">order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">piecewise</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the total number of nodes in the :class:`.GraphCollection`\.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">piecewise</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">order</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">order</span><span class="p">()</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">order</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="GraphCollection.node_distribution"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.node_distribution">[docs]</a>    <span class="k">def</span> <span class="nf">node_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;node_distribution will be removed in v0.8. Use&quot;</span> <span class="o">+</span>
-                      <span class="s">&quot; order(piecewise=True) instead.&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="n">piecewise</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="GraphCollection.size"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.size">[docs]</a>    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">piecewise</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;node_distribution will be removed in v0.8. Use&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot; order(piecewise=True) instead.&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="n">piecewise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GraphCollection.size"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.size">[docs]</a>    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">piecewise</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the total number of edges in the :class:`.GraphCollection`\.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">piecewise</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">size</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="GraphCollection.edge_distribution"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.edge_distribution">[docs]</a>    <span class="k">def</span> <span class="nf">edge_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;edge_distribution will be removed in v0.8. Use&quot;</span> <span class="o">+</span>
-                      <span class="s">&quot; size(piecewise=True) instead.&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="n">piecewise</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="GraphCollection.collapse"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.collapse">[docs]</a>    <span class="k">def</span> <span class="nf">collapse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight_attr</span><span class="o">=</span><span class="s">&#39;weight&#39;</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;edge_distribution will be removed in v0.8. Use&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot; size(piecewise=True) instead.&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="n">piecewise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GraphCollection.collapse"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.collapse">[docs]</a>    <span class="k">def</span> <span class="nf">collapse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight_attr</span><span class="o">=</span><span class="s1">&#39;weight&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a :ref:`networkx.Graph &lt;networkx:graph&gt;` or :class:`networkx.DiGraph` in which</span>
 <span class="sd">        the edges between each pair of nodes are collapsed into a single</span>
@@ -351,31 +357,31 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 
-        <span class="c"># Transfer all nodes and attributes.</span>
-        <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="c1"># Transfer all nodes and attributes.</span>
+        <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
             <span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">graph</span><span class="o">.</span><span class="n">has_edge</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
                 <span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="s">&#39;weight&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">t</span><span class="p">]:</span>
-                <span class="n">graph</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">t</span><span class="p">][</span><span class="s">&#39;weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+            <span class="k">if</span> <span class="s1">&#39;weight&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">t</span><span class="p">]:</span>
+                <span class="n">graph</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">t</span><span class="p">][</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
             <span class="k">if</span> <span class="n">weight_attr</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">:</span>
-                <span class="n">graph</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">t</span><span class="p">][</span><span class="s">&#39;weight&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">attrs</span><span class="p">[</span><span class="n">weight_attr</span><span class="p">]</span>
+                <span class="n">graph</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">t</span><span class="p">][</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">attrs</span><span class="p">[</span><span class="n">weight_attr</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">graph</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">t</span><span class="p">][</span><span class="s">&#39;weight&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.</span>
+                <span class="n">graph</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">t</span><span class="p">][</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.</span>
 
-            <span class="n">gname</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;graph&#39;</span><span class="p">]</span>
+            <span class="n">gname</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="n">weight_attr</span><span class="p">,</span> <span class="s">&#39;graph&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="n">weight_attr</span><span class="p">,</span> <span class="s1">&#39;graph&#39;</span><span class="p">]:</span>
                     <span class="k">continue</span>
                 <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">t</span><span class="p">]:</span>
                     <span class="n">graph</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">t</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
                 <span class="n">graph</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">t</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">gname</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
-        <span class="k">return</span> <span class="n">graph</span>
-</div>
-<div class="viewcode-block" id="GraphCollection.analyze"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.analyze">[docs]</a>    <span class="k">def</span> <span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">mapper</span><span class="o">=</span><span class="nb">map</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">graph</span></div>
+
+<div class="viewcode-block" id="GraphCollection.analyze"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.analyze">[docs]</a>    <span class="k">def</span> <span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">mapper</span><span class="o">=</span><span class="nb">map</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Apply a method from NetworkX to each of the graphs in the</span>
 <span class="sd">        :class:`.GraphCollection`\.</span>
@@ -416,81 +422,81 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c"># Find the analysis method, if possible.</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="s">&#39;__iter__&#39;</span><span class="p">):</span>
+        <span class="c1"># Find the analysis method, if possible.</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
             <span class="n">mpath</span> <span class="o">=</span> <span class="n">method_name</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">mpath</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">mpath</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">unicode</span><span class="p">]:</span>
                 <span class="n">mpath</span> <span class="o">=</span> <span class="p">[</span><span class="n">mpath</span><span class="p">]</span>
 
             <span class="n">root</span> <span class="o">=</span> <span class="n">nx</span>
             <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">mpath</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">head</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">mpath</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="s">&#39;__call__&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="s1">&#39;__call__&#39;</span><span class="p">):</span>
                 <span class="n">method</span> <span class="o">=</span> <span class="n">head</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&quot;No matching method in NetworkX&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s2">&quot;No matching method in NetworkX&quot;</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">method_name</span><span class="p">):</span>
             <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;No such method in NetworkX&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;No such method in NetworkX&#39;</span><span class="p">)</span>
 
-        <span class="c"># Farm out the analysis using ``mapper``. This allows us to use</span>
-        <span class="c">#  multiprocessing in the future, or to add pre- or post-processing</span>
-        <span class="c">#  routines.</span>
+        <span class="c1"># Farm out the analysis using ``mapper``. This allows us to use</span>
+        <span class="c1">#  multiprocessing in the future, or to add pre- or post-processing</span>
+        <span class="c1">#  routines.</span>
         <span class="n">keys</span><span class="p">,</span> <span class="n">graphs</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
         <span class="n">results</span> <span class="o">=</span> <span class="n">mapper</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="c"># Group the results by graph.</span>
+        <span class="c1"># Group the results by graph.</span>
         <span class="n">by_graph</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">results</span><span class="p">))</span>
 
-        <span class="c"># Invert results.</span>
+        <span class="c1"># Invert results.</span>
         <span class="n">inverse</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">gname</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">by_graph</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s">&#39;__iter__&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
                     <span class="n">inverse</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">gname</span><span class="p">:</span> <span class="n">val</span><span class="p">})</span>
 
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">by_graph</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
-            <span class="c"># Look for a result set that we can inspect.</span>
+            <span class="c1"># Look for a result set that we can inspect.</span>
             <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">by_graph</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">inspect</span> <span class="o">=</span> <span class="n">by_graph</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="n">i</span><span class="p">]</span>
                     <span class="k">break</span>
                 <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">tuple</span><span class="p">:</span>
-                <span class="c"># Results correspond to edges.</span>
+                <span class="c1"># Results correspond to edges.</span>
                 <span class="n">by_edge</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">inverse</span><span class="p">)</span>
 
-                <span class="c"># Set edge attributes in each graph.</span>
+                <span class="c1"># Set edge attributes in each graph.</span>
                 <span class="k">for</span> <span class="n">graph</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">by_graph</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
                     <span class="n">nx</span><span class="o">.</span><span class="n">set_edge_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">graph</span><span class="p">],</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
 
-                <span class="c"># Set edge attributes in the master graph.</span>
+                <span class="c1"># Set edge attributes in the master graph.</span>
                 <span class="k">for</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">),</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">by_edge</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
                     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-                        <span class="n">val</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;graph&#39;</span><span class="p">]]</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">]]</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">t</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">method_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
 
                 <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">by_edge</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c"># Results correspond to nodes.</span>
+                <span class="c1"># Results correspond to nodes.</span>
                 <span class="n">by_node</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">inverse</span><span class="p">)</span>
 
-                <span class="c"># Set node attributes for each graph.</span>
+                <span class="c1"># Set node attributes for each graph.</span>
                 <span class="k">for</span> <span class="n">graph</span><span class="p">,</span> <span class="n">attrs</span> <span class="ow">in</span> <span class="n">by_graph</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
                     <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">graph</span><span class="p">],</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
 
-                <span class="c"># Store node attributes in the master graph.</span>
+                <span class="c1"># Store node attributes in the master graph.</span>
                 <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">by_node</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">by_node</span>
-        <span class="k">return</span> <span class="n">by_graph</span>
-</div>
+        <span class="k">return</span> <span class="n">by_graph</span></div>
+
 <div class="viewcode-block" id="GraphCollection.node_history"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.node_history">[docs]</a>    <span class="k">def</span> <span class="nf">node_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a dictionary of attribute values for each :ref:`networkx.Graph &lt;networkx:graph&gt;` in</span>
@@ -507,8 +513,8 @@
 <span class="sd">        -------</span>
 <span class="sd">        history : dict</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">attribute</span><span class="p">]</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">attribute</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="GraphCollection.edge_history"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.edge_history">[docs]</a>    <span class="k">def</span> <span class="nf">edge_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a dictionary of attribute vales for each Graph in the</span>
@@ -528,10 +534,10 @@
 <span class="sd">        history : dict</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="p">{</span><span class="n">attr</span><span class="p">[</span><span class="s">&#39;graph&#39;</span><span class="p">]:</span> <span class="n">attr</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">attr</span>
-                <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">source</span><span class="p">][</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
-</div>
-<div class="viewcode-block" id="GraphCollection.union"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.union">[docs]</a>    <span class="k">def</span> <span class="nf">union</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight_attr</span><span class="o">=</span><span class="s">&#39;_weight&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">attr</span><span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">]:</span> <span class="n">attr</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">attr</span>
+                <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">source</span><span class="p">][</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div>
+
+<div class="viewcode-block" id="GraphCollection.union"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.graphcollection.GraphCollection.union">[docs]</a>    <span class="k">def</span> <span class="nf">union</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight_attr</span><span class="o">=</span><span class="s1">&#39;_weight&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the union of all graphs in this :class:`.GraphCollection`\.</span>
 
@@ -556,20 +562,20 @@
 
         <span class="n">edge_attrs</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">graph</span><span class="o">.</span><span class="n">has_edge</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
                 <span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-                <span class="n">graph</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">v</span><span class="p">][</span><span class="s">&#39;graphs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">graph</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">v</span><span class="p">][</span><span class="s1">&#39;graphs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="n">graph</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">v</span><span class="p">][</span><span class="n">weight_attr</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
 
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">v</span><span class="p">]:</span>
                     <span class="n">graph</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">v</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="n">graph</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">v</span><span class="p">][</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-            <span class="n">graph</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">v</span><span class="p">][</span><span class="s">&#39;graphs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="s">&#39;graph&#39;</span><span class="p">])</span>
+            <span class="n">graph</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">v</span><span class="p">][</span><span class="s1">&#39;graphs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">])</span>
             <span class="n">graph</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">v</span><span class="p">][</span><span class="n">weight_attr</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.</span>
 
-        <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
                 <span class="n">graph</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
@@ -604,7 +610,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

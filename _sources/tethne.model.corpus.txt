@@ -12,6 +12,13 @@ tethne.model.corpus.mallet module
     :undoc-members:
     :show-inheritance:
 
+tethne.model.corpus.gensim module
+---------------------------------
+
+.. automodule:: tethne.model.corpus.gensim
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Module contents
 ---------------

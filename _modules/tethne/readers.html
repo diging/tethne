@@ -75,9 +75,15 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.readers</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Methods for parsing bibliographic datasets.</span>
 
 <span class="sd">.. autosummary::</span>
@@ -93,17 +99,17 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">tethne</span> <span class="kn">import</span> <span class="n">Paper</span><span class="p">,</span> <span class="n">Corpus</span>
+<span class="kn">from</span> <span class="nn">tethne</span> <span class="k">import</span> <span class="n">Paper</span><span class="p">,</span> <span class="n">Corpus</span>
 
 <div class="viewcode-block" id="DataError"><a class="viewcode-back" href="../../tethne.readers.html#tethne.readers.DataError">[docs]</a><span class="k">class</span> <span class="nc">DataError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
 
-<span class="c"># TODO: merge FeatureSets.</span></div>
-<div class="viewcode-block" id="merge"><a class="viewcode-back" href="../../tethne.readers.html#tethne.readers.merge">[docs]</a><span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="n">corpus_1</span><span class="p">,</span> <span class="n">corpus_2</span><span class="p">,</span> <span class="n">match_by</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ayjid&#39;</span><span class="p">],</span> <span class="n">match_threshold</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
-          <span class="n">index_by</span><span class="o">=</span><span class="s">&#39;ayjid&#39;</span><span class="p">):</span>
+<span class="c1"># TODO: merge FeatureSets.</span>
+<div class="viewcode-block" id="merge"><a class="viewcode-back" href="../../tethne.readers.html#tethne.readers.merge">[docs]</a><span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="n">corpus_1</span><span class="p">,</span> <span class="n">corpus_2</span><span class="p">,</span> <span class="n">match_by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ayjid&#39;</span><span class="p">],</span> <span class="n">match_threshold</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+          <span class="n">index_by</span><span class="o">=</span><span class="s1">&#39;ayjid&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Combines two :class:`.Corpus` instances.</span>
 
@@ -154,7 +160,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">unicode</span><span class="p">]:</span>
             <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">value</span>
 
@@ -163,15 +169,15 @@
     <span class="n">exclude_1</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">exclude_2</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="c"># Attempt to match Papers</span>
+    <span class="c1"># Attempt to match Papers</span>
     <span class="k">for</span> <span class="n">paper_1</span> <span class="ow">in</span> <span class="n">corpus_1</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">paper_2</span> <span class="ow">in</span> <span class="n">corpus_2</span><span class="p">:</span>
-            <span class="c"># The user can provide their own matching logic. In this case,</span>
-            <span class="c">#  match_threshold is ignored.</span>
-            <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">match_by</span><span class="p">):</span>
+            <span class="c1"># The user can provide their own matching logic. In this case,</span>
+            <span class="c1">#  match_threshold is ignored.</span>
+            <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">match_by</span><span class="p">):</span>
                 <span class="n">match</span> <span class="o">=</span> <span class="n">match_by</span><span class="p">(</span><span class="n">paper_1</span><span class="p">,</span> <span class="n">paper_2</span><span class="p">)</span>
 
-            <span class="c"># Otherwise we match using the fields in ``match_by``.</span>
+            <span class="c1"># Otherwise we match using the fields in ``match_by``.</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">matches</span> <span class="o">=</span> <span class="mf">0.</span>
                 <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">match_by</span><span class="p">:</span>
@@ -182,69 +188,69 @@
                             <span class="n">matches</span> <span class="o">+=</span> <span class="mf">1.</span>
                 <span class="n">match</span> <span class="o">=</span> <span class="n">matches</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">match_by</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">match_threshold</span>
 
-            <span class="c"># Not every field needs to match precisely;</span>
+            <span class="c1"># Not every field needs to match precisely;</span>
             <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
                 <span class="n">paper_new</span> <span class="o">=</span> <span class="n">Paper</span><span class="p">()</span>
-                <span class="c"># We add values from paper_2 first, so that...</span>
+                <span class="c1"># We add values from paper_2 first, so that...</span>
                 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">paper_2</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-                    <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="bp">None</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="kc">None</span><span class="p">]:</span>
                         <span class="n">paper_new</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-                <span class="c"># ...values from paper_1 will override values from paper_2.</span>
+                <span class="c1"># ...values from paper_1 will override values from paper_2.</span>
                 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">paper_1</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-                    <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="bp">None</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="kc">None</span><span class="p">]:</span>
                         <span class="n">paper_new</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-                <span class="c"># We assemble all papers before creating a new Corpus, so that</span>
-                <span class="c">#  indexing happens all in one shot.</span>
+                <span class="c1"># We assemble all papers before creating a new Corpus, so that</span>
+                <span class="c1">#  indexing happens all in one shot.</span>
                 <span class="n">combined</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paper_new</span><span class="p">)</span>
 
-                <span class="c"># Flag matched papers for exclusion.</span>
+                <span class="c1"># Flag matched papers for exclusion.</span>
                 <span class="n">exclude_1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">corpus_1</span><span class="o">.</span><span class="n">_generate_index</span><span class="p">(</span><span class="n">paper_1</span><span class="p">))</span>
                 <span class="n">exclude_2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">corpus_2</span><span class="o">.</span><span class="n">_generate_index</span><span class="p">(</span><span class="n">paper_2</span><span class="p">))</span>
 
 
-    <span class="c"># Include papers that were not matched.</span>
+    <span class="c1"># Include papers that were not matched.</span>
     <span class="n">combined</span> <span class="o">+=</span> <span class="p">[</span><span class="n">paper</span> <span class="k">for</span> <span class="n">paper</span> <span class="ow">in</span> <span class="n">corpus_1</span>
                  <span class="k">if</span> <span class="n">corpus_1</span><span class="o">.</span><span class="n">_generate_index</span><span class="p">(</span><span class="n">paper</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude_1</span><span class="p">]</span>
     <span class="n">combined</span> <span class="o">+=</span> <span class="p">[</span><span class="n">paper</span> <span class="k">for</span> <span class="n">paper</span> <span class="ow">in</span> <span class="n">corpus_2</span>
                  <span class="k">if</span> <span class="n">corpus_2</span><span class="o">.</span><span class="n">_generate_index</span><span class="p">(</span><span class="n">paper</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude_2</span><span class="p">]</span>
 
-    <span class="c"># Here indexing happens all at once, with the new ``index_by`` field.</span>
+    <span class="c1"># Here indexing happens all at once, with the new ``index_by`` field.</span>
     <span class="n">corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">combined</span><span class="p">,</span> <span class="n">index_by</span><span class="o">=</span><span class="n">index_by</span><span class="p">)</span>
 
     <span class="n">featuresets</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">featureset_name</span><span class="p">,</span> <span class="n">featureset_1</span> <span class="ow">in</span> <span class="n">corpus_1</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-        <span class="c"># We avoid FeatureSets that were generated during the indexing process</span>
-        <span class="c">#  (e.g. &#39;citations&#39;, &#39;authors&#39;).</span>
+        <span class="c1"># We avoid FeatureSets that were generated during the indexing process</span>
+        <span class="c1">#  (e.g. &#39;citations&#39;, &#39;authors&#39;).</span>
         <span class="k">if</span> <span class="n">featureset_name</span> <span class="ow">in</span> <span class="n">featuresets</span> <span class="ow">or</span> <span class="n">featureset_name</span> <span class="ow">in</span> <span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
             <span class="k">continue</span>
 
         <span class="n">features</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="c"># Can be FeatureSet or StructuredFeatureSet.</span>
+        <span class="c1"># Can be FeatureSet or StructuredFeatureSet.</span>
         <span class="n">fclass</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">featureset_1</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">featureset_name</span> <span class="ow">in</span> <span class="n">corpus_2</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
             <span class="n">featureset_2</span> <span class="o">=</span> <span class="n">corpus_2</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">featureset_name</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">featureset_2</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
                 <span class="n">features</span><span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">corpus_2</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">index_by</span><span class="p">)]</span> <span class="o">=</span> <span class="n">feature</span>
 
-        <span class="c"># Features from corpus_1 will be preferred over those from corpus_2.</span>
+        <span class="c1"># Features from corpus_1 will be preferred over those from corpus_2.</span>
         <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">featureset_1</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
             <span class="n">features</span><span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">corpus_1</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">index_by</span><span class="p">)]</span> <span class="o">=</span> <span class="n">feature</span>
 
         <span class="n">featuresets</span><span class="p">[</span><span class="n">featureset_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">fclass</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
 
-    <span class="c"># FeatureSets unique to corpus_2.</span>
+    <span class="c1"># FeatureSets unique to corpus_2.</span>
     <span class="k">for</span> <span class="n">featureset_name</span><span class="p">,</span> <span class="n">featureset_2</span> <span class="ow">in</span> <span class="n">corpus_2</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-        <span class="c"># We avoid FeatureSets that were generated during the indexing process</span>
-        <span class="c">#  (e.g. &#39;citations&#39;, &#39;authors&#39;).</span>
+        <span class="c1"># We avoid FeatureSets that were generated during the indexing process</span>
+        <span class="c1">#  (e.g. &#39;citations&#39;, &#39;authors&#39;).</span>
         <span class="k">if</span> <span class="n">featureset_name</span> <span class="ow">in</span> <span class="n">featuresets</span> <span class="ow">or</span> <span class="n">featureset_name</span> <span class="ow">in</span> <span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
             <span class="k">continue</span>
 
         <span class="n">features</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="c"># Can be FeatureSet or StructuredFeatureSet.</span>
+        <span class="c1"># Can be FeatureSet or StructuredFeatureSet.</span>
         <span class="n">fclass</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">featureset_2</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">featureset_2</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
             <span class="n">features</span><span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">corpus_2</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">index_by</span><span class="p">)]</span> <span class="o">=</span> <span class="n">feature</span>
@@ -284,7 +290,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

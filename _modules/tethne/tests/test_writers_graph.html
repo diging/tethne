@@ -75,24 +75,30 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.tests.test_writers_graph</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;../tethne&#39;</span><span class="p">)</span>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../tethne&#39;</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">unittest</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">xml.etree</span> <span class="kn">import</span> <span class="n">ElementTree</span> <span class="k">as</span> <span class="n">ET</span>
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="kn">from</span> <span class="nn">xml.etree</span> <span class="k">import</span> <span class="n">ElementTree</span> <span class="k">as</span> <span class="n">ET</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">csv</span>
 
-<span class="kn">from</span> <span class="nn">tethne</span> <span class="kn">import</span> <span class="n">write_graphml</span><span class="p">,</span> <span class="n">write_csv</span>
-<span class="kn">from</span> <span class="nn">tethne.writers.graph</span> <span class="kn">import</span> <span class="n">to_sif</span>
-<span class="kn">from</span> <span class="nn">tethne.readers.wos</span> <span class="kn">import</span> <span class="n">read</span>
-<span class="kn">from</span> <span class="nn">tethne.networks.authors</span> <span class="kn">import</span> <span class="n">coauthors</span>
+<span class="kn">from</span> <span class="nn">tethne</span> <span class="k">import</span> <span class="n">write_graphml</span><span class="p">,</span> <span class="n">write_csv</span>
+<span class="kn">from</span> <span class="nn">tethne.writers.graph</span> <span class="k">import</span> <span class="n">to_sif</span>
+<span class="kn">from</span> <span class="nn">tethne.readers.wos</span> <span class="k">import</span> <span class="n">read</span>
+<span class="kn">from</span> <span class="nn">tethne.networks.authors</span> <span class="k">import</span> <span class="n">coauthors</span>
 
-<span class="n">datapath</span> <span class="o">=</span> <span class="s">&#39;./tethne/tests/data/wos2.txt&#39;</span>
+<span class="n">datapath</span> <span class="o">=</span> <span class="s1">&#39;./tethne/tests/data/wos2.txt&#39;</span>
 
 
 
@@ -101,105 +107,105 @@
 <div class="viewcode-block" id="GraphMLTest.setUp"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_writers_graph.GraphMLTest.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">coauthors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
-        <span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s">&#39;.graphml&#39;</span><span class="p">)</span>
-</div>
+        <span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;.graphml&#39;</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="GraphMLTest.test_write_graphml"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_writers_graph.GraphMLTest.test_write_graphml">[docs]</a>    <span class="k">def</span> <span class="nf">test_write_graphml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">write_graphml</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
 
-        <span class="k">try</span><span class="p">:</span>    <span class="c"># Should be well-formed XML.</span>
+        <span class="k">try</span><span class="p">:</span>    <span class="c1"># Should be well-formed XML.</span>
             <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">E</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="n">E</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
 
-        <span class="c"># Can read with networkx GraphML reader.</span>
+        <span class="c1"># Can read with networkx GraphML reader.</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">rgraph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">read_graphml</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">E</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="n">E</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">is_isomorphic</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span> <span class="n">rgraph</span><span class="p">))</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">is_isomorphic</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span> <span class="n">rgraph</span><span class="p">))</span></div>
+
 <div class="viewcode-block" id="GraphMLTest.tearDown"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_writers_graph.GraphMLTest.tearDown">[docs]</a>    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">WindowsError</span><span class="p">:</span>
-            <span class="k">pass</span>
-</div></div>
+            <span class="k">pass</span></div></div>
+
 <div class="viewcode-block" id="CSVTest"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_writers_graph.CSVTest">[docs]</a><span class="k">class</span> <span class="nc">CSVTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="CSVTest.setUp"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_writers_graph.CSVTest.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">coauthors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span> <span class="s">&#39;textprefix&#39;</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span> <span class="s1">&#39;textprefix&#39;</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="CSVTest.test_write_csv"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_writers_graph.CSVTest.test_write_csv">[docs]</a>    <span class="k">def</span> <span class="nf">test_write_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">write_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="s">&#39;_nodes.csv&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="s">&#39;_edges.csv&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;_nodes.csv&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;_edges.csv&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="s">&#39;_nodes.csv&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;_nodes.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
                 <span class="p">[</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span> <span class="p">]</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">E</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="n">E</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="s">&#39;_edges.csv&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;_edges.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
                 <span class="p">[</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span> <span class="p">]</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">E</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="n">E</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
-</div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="n">E</span><span class="o">.</span><span class="n">message</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="CSVTest.tearDown"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_writers_graph.CSVTest.tearDown">[docs]</a>    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="s">&#39;_nodes.csv&#39;</span><span class="p">)</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="s">&#39;_edges.csv&#39;</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;_nodes.csv&#39;</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;_edges.csv&#39;</span><span class="p">)</span>
             <span class="n">os</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">WindowsError</span><span class="p">:</span>
-            <span class="k">pass</span>
+            <span class="k">pass</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="TestToSif"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_writers_graph.TestToSif">[docs]</a><span class="k">class</span> <span class="nc">TestToSif</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 
-    <span class="c">#testing the functionality of to_sif method</span>
+    <span class="c1">#testing the functionality of to_sif method</span>
 <div class="viewcode-block" id="TestToSif.testBasic"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_writers_graph.TestToSif.testBasic">[docs]</a>    <span class="k">def</span> <span class="nf">testBasic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">datapath</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">coauthors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
-        <span class="c">#self.temp = tempfile.mkstemp()</span>
-        <span class="c">#self.prefix = os.path.join(self.temp,&#39;.toSif&#39;)</span>
-        <span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s">&#39;.toSif&#39;</span><span class="p">)</span>
+        <span class="c1">#self.temp = tempfile.mkstemp()</span>
+        <span class="c1">#self.prefix = os.path.join(self.temp,&#39;.toSif&#39;)</span>
+        <span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;.toSif&#39;</span><span class="p">)</span>
 
 
         <span class="n">to_sif</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span></div>
 
-    <span class="c">#testing the functionality when the graph is multigraph</span></div>
+    <span class="c1">#testing the functionality when the graph is multigraph</span>
 <div class="viewcode-block" id="TestToSif.testMultiGraph"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_writers_graph.TestToSif.testMultiGraph">[docs]</a>    <span class="k">def</span> <span class="nf">testMultiGraph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">testGraphMulti</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">()</span>
-        <span class="n">testGraphMulti</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,{</span><span class="s">&#39;color&#39;</span><span class="p">:</span><span class="s">&#39;blue&#39;</span><span class="p">}),(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">)])</span>
-        <span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s">&#39;.toSif&#39;</span><span class="p">)</span>
+        <span class="n">testGraphMulti</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span><span class="s1">&#39;blue&#39;</span><span class="p">}),(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">)])</span>
+        <span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;.toSif&#39;</span><span class="p">)</span>
 
         <span class="n">to_sif</span><span class="p">(</span><span class="n">testGraphMulti</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestToSif.testGraphZeroEdges"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_writers_graph.TestToSif.testGraphZeroEdges">[docs]</a>    <span class="k">def</span> <span class="nf">testGraphZeroEdges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">testGraphNoEdges</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
         <span class="n">testGraphNoEdges</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">])</span>
-        <span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s">&#39;.toSif&#39;</span><span class="p">)</span>
+        <span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;.toSif&#39;</span><span class="p">)</span>
 
         <span class="n">to_sif</span><span class="p">(</span><span class="n">testGraphNoEdges</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span></div></div>
 
 
 
 
 
 
-</div></div>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
 </pre></div>
 
@@ -231,7 +237,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

@@ -75,18 +75,24 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.classes.paper</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">A :class:`.Paper` represents a single bibliographic record.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">tethne.classes.feature</span> <span class="kn">import</span> <span class="n">Feature</span><span class="p">,</span> <span class="n">feature</span>
+<span class="kn">from</span> <span class="nn">tethne.classes.feature</span> <span class="k">import</span> <span class="n">Feature</span><span class="p">,</span> <span class="n">feature</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">PYTHON_3</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
 <span class="k">if</span> <span class="n">PYTHON_3</span><span class="p">:</span>
-    <span class="nb">unicode</span> <span class="o">=</span> <span class="nb">str</span>
+    <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
 
 
 <div class="viewcode-block" id="Paper"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.paper.Paper">[docs]</a><span class="k">class</span> <span class="nc">Paper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -105,8 +111,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>  <span class="c"># Don&#39;t mess with class methods.</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span> <span class="s">&#39;__call__&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>  <span class="c1"># Don&#39;t mess with class methods.</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span> <span class="s1">&#39;__call__&#39;</span><span class="p">):</span>
                 <span class="k">return</span>
         <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
@@ -124,28 +130,28 @@
 <span class="sd">        ayjid : str</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">try</span><span class="p">:</span>    <span class="c"># TODO: make this less terrible.</span>
+        <span class="k">try</span><span class="p">:</span>    <span class="c1"># TODO: make this less terrible.</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ayjid</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">pass</span>
 
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;authors_init&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;authors_init&#39;</span><span class="p">):</span>
             <span class="n">al</span><span class="p">,</span> <span class="n">ai</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">authors_init</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;authors_full&#39;</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;authors_full&#39;</span><span class="p">):</span>
             <span class="n">al</span><span class="p">,</span> <span class="n">af</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">authors_full</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">ai</span> <span class="o">=</span> <span class="s">u&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">af</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)])</span>
+            <span class="n">ai</span> <span class="o">=</span> <span class="s1">u&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">af</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">al</span><span class="p">,</span> <span class="n">ai</span> <span class="o">=</span> <span class="s">u&#39;&#39;</span><span class="p">,</span> <span class="s">u&#39;&#39;</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;date&#39;</span><span class="p">):</span>
-            <span class="n">date</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
+            <span class="n">al</span><span class="p">,</span> <span class="n">ai</span> <span class="o">=</span> <span class="s1">u&#39;&#39;</span><span class="p">,</span> <span class="s1">u&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;date&#39;</span><span class="p">):</span>
+            <span class="n">date</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">date</span> <span class="o">=</span> <span class="s">u&#39;&#39;</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;journal&#39;</span><span class="p">):</span>
+            <span class="n">date</span> <span class="o">=</span> <span class="s1">u&#39;&#39;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;journal&#39;</span><span class="p">):</span>
             <span class="n">journal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">journal</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">journal</span> <span class="o">=</span> <span class="s">u&#39;&#39;</span>
+            <span class="n">journal</span> <span class="o">=</span> <span class="s1">u&#39;&#39;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ayjid</span> <span class="o">=</span> <span class="s">u&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">al</span><span class="p">,</span> <span class="n">ai</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">),</span> <span class="n">date</span><span class="p">,</span> <span class="n">journal</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">,</span> <span class="s">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ayjid</span> <span class="o">=</span> <span class="s1">u&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">al</span><span class="p">,</span> <span class="n">ai</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span> <span class="n">date</span><span class="p">,</span> <span class="n">journal</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ayjid</span>
 
 
@@ -164,9 +170,9 @@
 <span class="sd">            Author names are in the format ``LAST F``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;authors_full&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;authors_full&#39;</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">authors_full</span>
-        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;authors_init&#39;</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;authors_init&#39;</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">authors_init</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
@@ -183,8 +189,8 @@
 <span class="sd">        citations : :class:`.Feature`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;citedReferences&#39;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="p">[</span><span class="n">cr</span><span class="o">.</span><span class="n">ayjid</span> <span class="k">for</span> <span class="n">cr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">citedReferences</span> <span class="k">if</span> <span class="n">cr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;citedReferences&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">cr</span><span class="o">.</span><span class="n">ayjid</span> <span class="k">for</span> <span class="n">cr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">citedReferences</span> <span class="k">if</span> <span class="n">cr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
         <span class="k">return</span> <span class="p">[]</span></div>
 </pre></div>
 
@@ -216,7 +222,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

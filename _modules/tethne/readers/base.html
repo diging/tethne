@@ -76,29 +76,24 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.readers.base</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">as</span> <span class="nn">ET</span>
-<span class="kn">import</span> <span class="nn">rdflib</span>
+<span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">re</span><span class="o">,</span> <span class="nn">rdflib</span><span class="o">,</span> <span class="nn">codecs</span><span class="o">,</span> <span class="nn">chardet</span><span class="o">,</span> <span class="nn">copy</span><span class="o">,</span> <span class="nn">unicodedata</span><span class="o">,</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
 
-<span class="kn">import</span> <span class="nn">codecs</span>
-<span class="kn">import</span> <span class="nn">chardet</span>
-<span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">unicodedata</span>
-
-<span class="kn">import</span> <span class="nn">logging</span>
-
-<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
-
-<span class="c"># rdflib complains a lot.</span>
-<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s">&quot;rdflib&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+<span class="c1"># rdflib complains a lot.</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;rdflib&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">PYTHON_3</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
 <span class="k">if</span> <span class="n">PYTHON_3</span><span class="p">:</span>
-    <span class="nb">unicode</span> <span class="o">=</span> <span class="nb">str</span>
+    <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
 
 
 <span class="k">def</span> <span class="nf">_fast_iter</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
@@ -110,9 +105,9 @@
 
 
 <div class="viewcode-block" id="dobject"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.dobject">[docs]</a><span class="k">class</span> <span class="nc">dobject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">pass</span>
+    <span class="k">pass</span></div>
 
-</div>
+
 <span class="k">def</span> <span class="nf">_cast</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Attempt to convert ``value`` to an ``int`` or ``float``. If unable, return</span>
@@ -137,6 +132,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([])</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
+
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
 
@@ -146,24 +143,24 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Prepare a new data entry.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entry_class</span><span class="p">())</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entry_class</span><span class="p">())</span></div>
+
     <span class="k">def</span> <span class="nf">_get_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
-        <span class="n">handler_name</span> <span class="o">=</span> <span class="s">&#39;handle_{tag}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tag</span><span class="o">=</span><span class="n">tag</span><span class="p">)</span>
+        <span class="n">handler_name</span> <span class="o">=</span> <span class="s1">&#39;handle_</span><span class="si">{tag}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tag</span><span class="o">=</span><span class="n">tag</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler_name</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler_name</span><span class="p">)</span>
         <span class="k">return</span>
 
 <div class="viewcode-block" id="BaseParser.set_value"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.BaseParser.set_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">tag</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-</div>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">tag</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="BaseParser.postprocess_entry"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.BaseParser.postprocess_entry">[docs]</a>    <span class="k">def</span> <span class="nf">postprocess_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-            <span class="n">processor_name</span> <span class="o">=</span> <span class="s">&#39;postprocess_{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+            <span class="n">processor_name</span> <span class="o">=</span> <span class="s1">&#39;postprocess_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">field</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processor_name</span><span class="p">):</span>
-                <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processor_name</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processor_name</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="IterParser"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.IterParser">[docs]</a><span class="k">class</span> <span class="nc">IterParser</span><span class="p">(</span><span class="n">BaseParser</span><span class="p">):</span>
     <span class="n">entry_class</span> <span class="o">=</span> <span class="n">dobject</span>
     <span class="sd">&quot;&quot;&quot;Model for data entry.&quot;&quot;&quot;</span>
@@ -179,24 +176,24 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">IterParser</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">current_tag</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_tag</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_tag</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_tag</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;autostart&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;autostart&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;autostart&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;autostart&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
-<div class="viewcode-block" id="IterParser.parse"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.IterParser.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parse_only</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="IterParser.parse"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.IterParser.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parse_only</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># The user should be able to limit parsing to specific fields.</span>
+        <span class="c1"># The user should be able to limit parsing to specific fields.</span>
         <span class="k">if</span> <span class="n">parse_only</span><span class="p">:</span>
             <span class="n">tag_lookup</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()}</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parse_only</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">tag_lookup</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
                                    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">parse_only</span>
                                    <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">tag_lookup</span><span class="p">])</span>
 
-        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>        <span class="c"># Main loop.</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>        <span class="c1"># Main loop.</span>
             <span class="n">tag</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_eof</span><span class="p">(</span><span class="n">tag</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">postprocess_entry</span><span class="p">()</span>
@@ -204,8 +201,8 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">last_tag</span> <span class="o">=</span> <span class="n">tag</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span></div>
+
 <div class="viewcode-block" id="IterParser.start"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.IterParser.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Find the first data entry and prepare to parse.</span>
@@ -213,8 +210,8 @@
 
         <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_start</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_tag</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">new_entry</span><span class="p">()</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_entry</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="IterParser.handle"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.IterParser.handle">[docs]</a>    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Process a single line of data, and store the result.</span>
@@ -234,72 +231,73 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">tag</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;parse_only&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">and</span> <span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_only</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;parse_only&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="n">tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_only</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="c"># TODO: revisit encoding here.</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">):</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s">&#39;NFKD&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span><span class="c">#.encode(&#39;utf-8&#39;,&#39;ignore&#39;)</span>
+        <span class="c1"># TODO: revisit encoding here.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">unicode</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s1">&#39;NFKD&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span><span class="c1">#.encode(&#39;utf-8&#39;,&#39;ignore&#39;)</span>
 
         <span class="n">handler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_handler</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">handler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">handler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">handler</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>    <span class="c"># Rename the field.</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>    <span class="c1"># Rename the field.</span>
             <span class="n">tag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span>
 
-        <span class="c"># Multiline fields are represented as lists of values.</span>
+        <span class="c1"># Multiline fields are represented as lists of values.</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">tag</span><span class="p">):</span>
             <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">tag</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">concat_fields</span><span class="p">:</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">value</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">data</span><span class="p">)])</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">value</span><span class="p">,</span> <span class="n">unicode</span><span class="p">(</span><span class="n">data</span><span class="p">)])</span>
             <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
                 <span class="n">value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">]:</span>
+            <span class="k">elif</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]:</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">data</span>
         <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">tag</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="FTParser"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.FTParser">[docs]</a><span class="k">class</span> <span class="nc">FTParser</span><span class="p">(</span><span class="n">IterParser</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base parser for field-tagged data files.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">start_tag</span> <span class="o">=</span> <span class="s">&#39;ST&#39;</span>
+    <span class="n">start_tag</span> <span class="o">=</span> <span class="s1">&#39;ST&#39;</span>
     <span class="sd">&quot;&quot;&quot;Signals the start of a data entry.&quot;&quot;&quot;</span>
 
-    <span class="n">end_tag</span> <span class="o">=</span> <span class="s">&#39;ED&#39;</span>
+    <span class="n">end_tag</span> <span class="o">=</span> <span class="s1">&#39;ED&#39;</span>
     <span class="sd">&quot;&quot;&quot;Signals the end of a data entry.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="FTParser.is_start"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.FTParser.is_start">[docs]</a>    <span class="k">def</span> <span class="nf">is_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">tag</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tag</span>
-</div>
+        <span class="k">return</span> <span class="n">tag</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tag</span></div>
+
 <div class="viewcode-block" id="FTParser.is_end"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.FTParser.is_end">[docs]</a>    <span class="k">def</span> <span class="nf">is_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">tag</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_tag</span>
-</div>
+        <span class="k">return</span> <span class="n">tag</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_tag</span></div>
+
 <div class="viewcode-block" id="FTParser.is_eof"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.FTParser.is_eof">[docs]</a>    <span class="k">def</span> <span class="nf">is_eof</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">at_eof</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">at_eof</span></div>
+
 <div class="viewcode-block" id="FTParser.open"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.FTParser.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Open the data file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;No such path: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;No such path: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
 
-
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">chardet</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;encoding&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s">&quot;rb&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">result</span><span class="p">[</span><span class="s">&#39;encoding&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">at_eof</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">at_eof</span> <span class="o">=</span> <span class="bp">False</span>
-</div>
 <div class="viewcode-block" id="FTParser.next"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.FTParser.next">[docs]</a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the next line of data.</span>
@@ -311,76 +309,82 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
 
-        <span class="k">while</span> <span class="n">line</span> <span class="o">==</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">:</span>       <span class="c"># Skip forward to the next line with content.</span>
+        <span class="k">while</span> <span class="n">line</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">:</span>       <span class="c1"># Skip forward to the next line with content.</span>
             <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>            <span class="c"># End of file.</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">at_eof</span> <span class="o">=</span> <span class="bp">True</span>
-            <span class="k">return</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>            <span class="c1"># End of file.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">at_eof</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s">&#39;([A-Z]{2}|[C][1])\W(.*)&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;([A-Z]</span><span class="si">{2}</span><span class="s1">|[C][1])\W(.*)&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">current_tag</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">current_tag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_tag</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_tag</span><span class="p">,</span> <span class="n">_cast</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-</div>
-    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;buffer&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_tag</span><span class="p">,</span> <span class="n">_cast</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
 
-</div>
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;buffer&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
 <div class="viewcode-block" id="XMLParser"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.XMLParser">[docs]</a><span class="k">class</span> <span class="nc">XMLParser</span><span class="p">(</span><span class="n">IterParser</span><span class="p">):</span>
-    <span class="n">entry_element</span> <span class="o">=</span> <span class="s">&#39;article&#39;</span>
+    <span class="n">entry_element</span> <span class="o">=</span> <span class="s1">&#39;article&#39;</span>
     <span class="n">entry_class</span> <span class="o">=</span> <span class="n">dobject</span>
 
 <div class="viewcode-block" id="XMLParser.open"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.XMLParser.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c"># with open(self.path, &#39;r&#39;) as f:</span>
-        <span class="c">#     self.root = ET.fromstring(f.read())</span>
-        <span class="c"># pattern = &#39;.//{elem}&#39;.format(elem=self.entry_element)</span>
-        <span class="c"># self.elements = self.root.findall(pattern)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="c1"># with open(self.path, &#39;r&#39;) as f:</span>
+        <span class="c1">#     self.root = ET.fromstring(f.read())</span>
+        <span class="c1"># pattern = &#39;.//{elem}&#39;.format(elem=self.entry_element)</span>
+        <span class="c1"># self.elements = self.root.findall(pattern)</span>
+
+        <span class="c1"># ET does not support unicode, but it does support encodings. So we</span>
+        <span class="c1">#  open the file without any intervention.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">iterparse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">at_start</span> <span class="o">=</span> <span class="bp">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">at_end</span> <span class="o">=</span> <span class="bp">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">at_start</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">at_end</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span></div>
 
-</div>
+
 <div class="viewcode-block" id="XMLParser.new_entry"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.XMLParser.new_entry">[docs]</a>    <span class="k">def</span> <span class="nf">new_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Prepare a new data entry.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">postprocess_entry</span><span class="p">()</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">XMLParser</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">new_entry</span><span class="p">()</span>
-</div>
+        <span class="nb">super</span><span class="p">(</span><span class="n">XMLParser</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">new_entry</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="XMLParser.is_start"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.XMLParser.is_start">[docs]</a>    <span class="k">def</span> <span class="nf">is_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">tag</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_element</span>
-</div>
+        <span class="k">return</span> <span class="n">tag</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_element</span></div>
+
 <div class="viewcode-block" id="XMLParser.is_end"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.XMLParser.is_end">[docs]</a>    <span class="k">def</span> <span class="nf">is_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">tag</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_element</span>
-</div>
+        <span class="k">return</span> <span class="n">tag</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_element</span></div>
+
 <div class="viewcode-block" id="XMLParser.is_eof"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.XMLParser.is_eof">[docs]</a>    <span class="k">def</span> <span class="nf">is_eof</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
-</div>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span></div>
+
 <div class="viewcode-block" id="XMLParser.start"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.XMLParser.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">new_entry</span><span class="p">()</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_entry</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="XMLParser.next"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.XMLParser.next">[docs]</a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child</span><span class="p">):</span>
         <span class="n">child</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
         <span class="n">tag</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">tag</span><span class="p">,</span> <span class="n">child</span><span class="o">.</span><span class="n">text</span>
         <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_tag</span> <span class="o">=</span> <span class="n">tag</span>
-</div>
-<div class="viewcode-block" id="XMLParser.parse"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.XMLParser.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parse_only</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_tag</span> <span class="o">=</span> <span class="n">tag</span></div>
+
+<div class="viewcode-block" id="XMLParser.parse"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.XMLParser.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parse_only</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># The user should be able to limit parsing to specific fields.</span>
+        <span class="c1"># The user should be able to limit parsing to specific fields.</span>
         <span class="k">if</span> <span class="n">parse_only</span><span class="p">:</span>
             <span class="n">tag_lookup</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()}</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">parse_only</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">tag_lookup</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
@@ -391,15 +395,15 @@
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">__dict__</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
-</div>
-    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;f&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span></div>
 
-</div>
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
 <div class="viewcode-block" id="RDFParser"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.RDFParser">[docs]</a><span class="k">class</span> <span class="nc">RDFParser</span><span class="p">(</span><span class="n">BaseParser</span><span class="p">):</span>
-    <span class="n">entry_elements</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Document&#39;</span><span class="p">]</span>   <span class="c">#</span>
+    <span class="n">entry_elements</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Document&#39;</span><span class="p">]</span>   <span class="c1">#</span>
     <span class="n">meta_elements</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">concat_fields</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -409,49 +413,49 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">entries</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_elements</span><span class="p">:</span>
-            <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;SELECT * WHERE { ?p a &#39;</span> <span class="o">+</span> <span class="n">element</span> <span class="o">+</span> <span class="s">&#39; }&#39;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">entries</span> <span class="o">+=</span> <span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">query</span><span class="p">)]</span>
-</div>
+            <span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;SELECT * WHERE { ?p a &#39;</span> <span class="o">+</span> <span class="n">element</span> <span class="o">+</span> <span class="s1">&#39; }&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">entries</span> <span class="o">+=</span> <span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">query</span><span class="p">)]</span></div>
+
 <div class="viewcode-block" id="RDFParser.next"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.RDFParser.next">[docs]</a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-</div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">entries</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="RDFParser.parse"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.RDFParser.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">meta_fields</span><span class="p">,</span> <span class="n">meta_refs</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_elements</span><span class="p">)</span>
 
-        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>        <span class="c"># Main loop.</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>        <span class="c1"># Main loop.</span>
             <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">break</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">new_entry</span><span class="p">()</span>
 
-            <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="n">entry</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">)):</span>
-                <span class="k">if</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">meta_refs</span><span class="p">:</span>  <span class="c"># Look for metadata fields.</span>
+            <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">triples</span><span class="p">((</span><span class="n">entry</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">meta_refs</span><span class="p">:</span>  <span class="c1"># Look for metadata fields.</span>
                     <span class="n">tag</span> <span class="o">=</span> <span class="n">meta_fields</span><span class="p">[</span><span class="n">meta_refs</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">postprocess_entry</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span></div>
+
 <div class="viewcode-block" id="RDFParser.handle"><a class="viewcode-back" href="../../../tethne.readers.html#tethne.readers.base.RDFParser.handle">[docs]</a>    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="n">handler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_handler</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">handler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">handler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">handler</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>    <span class="c"># Rename the field.</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>    <span class="c1"># Rename the field.</span>
             <span class="n">tag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="c"># Multiline fields are represented as lists of values.</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Multiline fields are represented as lists of values.</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">tag</span><span class="p">):</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">tag</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">concat_fields</span><span class="p">:</span>
-                    <span class="n">value</span> <span class="o">=</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">value</span><span class="p">,</span> <span class="n">data</span><span class="p">])</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">value</span><span class="p">,</span> <span class="n">data</span><span class="p">])</span>
                 <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
                     <span class="n">value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">]:</span>
+                <span class="k">elif</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]:</span>
                     <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="n">data</span>
@@ -488,7 +492,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

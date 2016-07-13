@@ -85,6 +85,12 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <div class="section" id="tethne-plot-package">
 <h1>tethne.plot package<a class="headerlink" href="#tethne-plot-package" title="Permalink to this headline">¶</a></h1>
@@ -105,9 +111,9 @@
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.analyze.corpus</span> <span class="kn">import</span> <span class="n">burstness</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_burstness</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="s">&#39;citations&#39;</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">perslice</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;~/burstness.png&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.analyze.corpus</span> <span class="kn">import</span> <span class="n">burstness</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plot_burstness</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="s1">&#39;citations&#39;</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">perslice</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;~/burstness.png&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Years prior to the first occurrence of each feature are grayed out. Periods
@@ -170,9 +176,9 @@ Otherwise, a new figure is generated.</p>
 <p class="rubric">Examples</p>
 <p>Assuming that you have a <a class="reference internal" href="tethne.classes.html#tethne.classes.corpus.Corpus" title="tethne.classes.corpus.Corpus"><code class="xref py py-class docutils literal"><span class="pre">Corpus</span></code></a> (<code class="docutils literal"><span class="pre">G</span></code>) sliced by <code class="docutils literal"><span class="pre">'date'</span></code> and a
 co-citation <a class="reference internal" href="tethne.classes.html#tethne.classes.graphcollection.GraphCollection" title="tethne.classes.graphcollection.GraphCollection"><code class="xref py py-class docutils literal"><span class="pre">GraphCollection</span></code></a> (<code class="docutils literal"><span class="pre">corpus</span></code>)...</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.analyze.cocitation</span> <span class="kn">import</span> <span class="n">plot_sigma</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.analyze.cocitation</span> <span class="kn">import</span> <span class="n">plot_sigma</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">G</span> <span class="o">=</span> <span class="n">plot_sigma</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">corpus</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">perslice</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;~/sigma_plot.png&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;~/sigma_plot.png&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In this figure, the top 5 most sigma-influential nodes in each slice are
@@ -239,7 +245,7 @@ out.</p>
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

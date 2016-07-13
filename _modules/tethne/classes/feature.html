@@ -75,35 +75,43 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.classes.feature</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Classes in this module provide structures for additional data about</span>
 <span class="sd">:class:`.Paper`\s.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span><span class="p">,</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span><span class="p">,</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">repeat</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">_iterable</span>
-<span class="k">try</span><span class="p">:</span>    <span class="c"># Might as well use numpy if it is available.</span>
-    <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">_iterable</span>
+<span class="k">try</span><span class="p">:</span>    <span class="c1"># Might as well use numpy if it is available.</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
     <span class="n">argsort</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="kn">import</span> <span class="n">argsort</span>
+    <span class="kn">from</span> <span class="nn">tethne.utilities</span> <span class="k">import</span> <span class="n">argsort</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s">&#39;feature&#39;</span><span class="p">)</span>
-<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s">&#39;WARNING&#39;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;feature&#39;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s1">&#39;WARNING&#39;</span><span class="p">)</span>
 
 
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">izip</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span><span class="p">,</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">chain</span><span class="p">,</span> <span class="n">izip</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span><span class="p">,</span> <span class="n">defaultdict</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">PYTHON_3</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
 <span class="k">if</span> <span class="n">PYTHON_3</span><span class="p">:</span>
-    <span class="nb">xrange</span> <span class="o">=</span> <span class="nb">range</span>
-    <span class="nb">unicode</span> <span class="o">=</span> <span class="nb">str</span>
+    <span class="n">xrange</span> <span class="o">=</span> <span class="nb">range</span>
+    <span class="n">unicode</span> <span class="o">=</span> <span class="nb">str</span>
 
 
 <div class="viewcode-block" id="StructuredFeature"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.StructuredFeature">[docs]</a><span class="k">class</span> <span class="nc">StructuredFeature</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
@@ -126,12 +134,12 @@
 <span class="sd">        :class:`.StructuredFeature` and ``map`` is a dict mapping token indices</span>
 <span class="sd">        in this :class:`.StructuredFeature` to token indices in ``feature``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">contexts</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">contexts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">contexts</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">contexts_ranked</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">referenceFeature</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">referenceMap</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">referenceFeature</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">referenceMap</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">contexts</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_validate_contexts</span><span class="p">(</span><span class="n">contexts</span><span class="p">)</span>
@@ -157,7 +165,7 @@
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">StructuredFeature</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">unicode</span><span class="p">]:</span>
             <span class="k">if</span> <span class="n">selector</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">contexts</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_chunks</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">tuple</span><span class="p">:</span>
@@ -180,10 +188,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">N_chunks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">contexts</span><span class="p">[</span><span class="n">context</span><span class="p">])</span>
         <span class="n">chunks</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">N_chunks</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">N_chunks</span><span class="p">):</span>
             <span class="n">chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context_chunk</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">chunks</span>
-</div>
+        <span class="k">return</span> <span class="n">chunks</span></div>
+
 <div class="viewcode-block" id="StructuredFeature.context_chunk"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.StructuredFeature.context_chunk">[docs]</a>    <span class="k">def</span> <span class="nf">context_chunk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the tokens in the ``j``th chunk of context ``context``.</span>
@@ -207,32 +215,32 @@
             <span class="n">end</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">contexts</span><span class="p">[</span><span class="n">context</span><span class="p">][</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)]</span>
-</div>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)]</span></div>
+
     <span class="k">def</span> <span class="nf">_validate_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s">&#39;__iter__&#39;</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">)</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">context</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
-            <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">]</span>
-            <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#39;__iter__&#39;</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">unicode</span><span class="p">]</span>
+            <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">)</span>
             <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">int</span>
         <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;&quot;&quot;a context should be a (name, indices) 2-tuple,</span>
-<span class="s">            where ``name`` is string-like and indices is an iterable of int</span>
-<span class="s">            token indices.&quot;&quot;&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;a context should be a (name, indices) 2-tuple,</span>
+<span class="s2">            where ``name`` is string-like and indices is an iterable of int</span>
+<span class="s2">            token indices.&quot;&quot;&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;&quot;&quot;One or more indices in the specified context</span>
-<span class="s">            exceed the number of tokens in this StructuredFeature.&quot;&quot;&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;One or more indices in the specified context</span>
+<span class="s2">            exceed the number of tokens in this StructuredFeature.&quot;&quot;&quot;</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_validate_contexts</span><span class="p">(</span><span class="n">contexts</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">contexts</span><span class="p">,</span> <span class="s">&#39;__iter__&#39;</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">contexts</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;&quot;&quot;contexts should be a list of (name, indices)</span>
-<span class="s">            2-tuples, where ``name`` is string-like and indices is an iterable</span>
-<span class="s">            of int token indices.&quot;&quot;&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;contexts should be a list of (name, indices)</span>
+<span class="s2">            2-tuples, where ``name`` is string-like and indices is an iterable</span>
+<span class="s2">            of int token indices.&quot;&quot;&quot;</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_validate_reference</span><span class="p">(</span><span class="n">reference</span><span class="p">):</span>
@@ -241,12 +249,12 @@
             <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">reference</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">is</span> <span class="n">StructuredFeature</span>
             <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">reference</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">dict</span>
         <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;&quot;&quot;reference should be a (feature, map) 2-tuple</span>
-<span class="s">            where ``feature`` is a StructuredFeature and ``map`` is a dict</span>
-<span class="s">            mapping token indices in this StructuredFeature to token indices</span>
-<span class="s">            in ``feature``.&quot;&quot;&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;reference should be a (feature, map) 2-tuple</span>
+<span class="s2">            where ``feature`` is a StructuredFeature and ``map`` is a dict</span>
+<span class="s2">            mapping token indices in this StructuredFeature to token indices</span>
+<span class="s2">            in ``feature``.&quot;&quot;&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="StructuredFeature.add_context"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.StructuredFeature.add_context">[docs]</a>    <span class="k">def</span> <span class="nf">add_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="StructuredFeature.add_context"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.StructuredFeature.add_context">[docs]</a>    <span class="k">def</span> <span class="nf">add_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a new context level to the hierarchy.</span>
 
@@ -268,12 +276,12 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_context</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">indices</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="n">level</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">level</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">level</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">contexts_ranked</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">contexts_ranked</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">contexts</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">indices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">contexts</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">indices</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="Feature"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.Feature">[docs]</a><span class="k">class</span> <span class="nc">Feature</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A :class:`.Feature` instance is a sparse vector of features over a given</span>
@@ -322,13 +330,13 @@
 
     <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">tuple</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-                <span class="c"># There may be overlap with existing features,</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">tuple</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">unicode</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+                <span class="c1"># There may be overlap with existing features,</span>
                 <span class="n">combined_data</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
                 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
                     <span class="n">combined_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="n">v</span>
                 <span class="k">return</span> <span class="n">combined_data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-            <span class="k">else</span><span class="p">:</span>   <span class="c"># Recurses.</span>
+            <span class="k">else</span><span class="p">:</span>   <span class="c1"># Recurses.</span>
                 <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">_iterable</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
                 <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__add__</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span>
@@ -342,7 +350,7 @@
                 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
                     <span class="n">combined_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-=</span> <span class="n">v</span>
                 <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">combined_data</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-            <span class="k">else</span><span class="p">:</span>   <span class="c"># Recurses.</span>
+            <span class="k">else</span><span class="p">:</span>   <span class="c1"># Recurses.</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sub__</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Counter</span><span class="p">(</span><span class="n">_iterable</span><span class="p">(</span><span class="n">data</span><span class="p">))</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
         <span class="k">return</span> <span class="bp">self</span>
 
@@ -358,11 +366,11 @@
 
 <div class="viewcode-block" id="Feature.extend"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.Feature.extend">[docs]</a>    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">combined_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__add__</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>  <span class="c"># Combines new and extant data.</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="p">[:]</span>                         <span class="c"># Clear old data.</span>
+            <span class="n">combined_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__add__</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># Combines new and extant data.</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="p">[:]</span>                         <span class="c1"># Clear old data.</span>
             <span class="nb">super</span><span class="p">(</span><span class="n">Feature</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">combined_data</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">unique</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -375,7 +383,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">T</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="p">))[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">Feature</span><span class="p">([(</span><span class="n">i</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">/</span><span class="n">T</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">Feature</span><span class="p">([(</span><span class="n">i</span><span class="p">,</span> <span class="mf">1.</span><span class="o">*</span><span class="n">v</span><span class="o">/</span><span class="n">T</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">])</span>
 
 <div class="viewcode-block" id="Feature.top"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.Feature.top">[docs]</a>    <span class="k">def</span> <span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -398,12 +406,12 @@
 <span class="sd">        -------</span>
 <span class="sd">        list</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">argsort</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="p">))[</span><span class="mi">1</span><span class="p">])[::</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="n">topn</span><span class="p">]]</span>
-</div>
-<div class="viewcode-block" id="Feature.value"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.Feature.value">[docs]</a>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)[</span><span class="n">element</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">argsort</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="p">))[</span><span class="mi">1</span><span class="p">])[::</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="n">topn</span><span class="p">]]</span></div>
 
-</div></div>
+<div class="viewcode-block" id="Feature.value"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.Feature.value">[docs]</a>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)[</span><span class="n">element</span><span class="p">]</span></div></div>
+
+
 <div class="viewcode-block" id="BaseFeatureSet"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.BaseFeatureSet">[docs]</a><span class="k">class</span> <span class="nc">BaseFeatureSet</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="p">{}):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setUp</span><span class="p">()</span>
@@ -431,11 +439,11 @@
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">)</span>
 
 <div class="viewcode-block" id="BaseFeatureSet.items"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.BaseFeatureSet.items">[docs]</a>    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">items</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="BaseFeatureSet.iteritems"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.BaseFeatureSet.iteritems">[docs]</a>    <span class="k">def</span> <span class="nf">iteritems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span></div>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">unique</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -452,28 +460,28 @@
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">)</span>
 
 <div class="viewcode-block" id="BaseFeatureSet.count"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.BaseFeatureSet.count">[docs]</a>    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elem</span><span class="p">):</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">u&#39;Get count for {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">elem</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">u&#39;Get count for </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">elem</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup</span><span class="p">:</span>
             <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup</span><span class="p">[</span><span class="n">elem</span><span class="p">]</span>
             <span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">counts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">u&#39;Found elem </span><span class="si">%s</span><span class="s"> with index </span><span class="si">%i</span><span class="s"> and count </span><span class="si">%f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">count</span><span class="p">))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">u&#39;Found elem </span><span class="si">%s</span><span class="s1"> with index </span><span class="si">%i</span><span class="s1"> and count </span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">count</span><span class="p">))</span>
             <span class="k">return</span> <span class="n">count</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mf">0.</span>
-</div>
+            <span class="k">return</span> <span class="mf">0.</span></div>
+
 <div class="viewcode-block" id="BaseFeatureSet.documentCount"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.BaseFeatureSet.documentCount">[docs]</a>    <span class="k">def</span> <span class="nf">documentCount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elem</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">documentCounts</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">lookup</span><span class="p">[</span><span class="n">elem</span><span class="p">]]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mf">0.</span>
-</div>
+            <span class="k">return</span> <span class="mf">0.</span></div>
+
 <div class="viewcode-block" id="BaseFeatureSet.papers_containing"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.BaseFeatureSet.papers_containing">[docs]</a>    <span class="k">def</span> <span class="nf">papers_containing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elem</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_feature</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">lookup</span><span class="p">[</span><span class="n">elem</span><span class="p">]]</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_feature</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">lookup</span><span class="p">[</span><span class="n">elem</span><span class="p">]]</span></div>
+
 <div class="viewcode-block" id="BaseFeatureSet.add"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.BaseFeatureSet.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paper_id</span><span class="p">,</span> <span class="n">feature</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Feature</span><span class="p">,</span> <span class="n">StructuredFeature</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;&quot;&quot;`feature` must be an instance of Feature or</span>
-<span class="s">            StructuredFeature&quot;&quot;&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;`feature` must be an instance of Feature or</span>
+<span class="s2">            StructuredFeature&quot;&quot;&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">paper_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">feature</span>
 
@@ -491,10 +499,10 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">counts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">documentCounts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">with_feature</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paper_id</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">with_feature</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paper_id</span><span class="p">)</span></div>
 
-</div>
-<div class="viewcode-block" id="BaseFeatureSet.top"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.BaseFeatureSet.top">[docs]</a>    <span class="k">def</span> <span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topn</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s">&#39;counts&#39;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="BaseFeatureSet.top"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.BaseFeatureSet.top">[docs]</a>    <span class="k">def</span> <span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topn</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s1">&#39;counts&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the top ``topn`` features in the :class:`.FeatureSet`\.</span>
 
@@ -512,15 +520,15 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="n">by</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;counts&#39;</span><span class="p">,</span> <span class="s">&#39;documentCounts&#39;</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;kwarg `by` must be &quot;counts&quot; or &quot;documentCounts&quot;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">by</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;counts&#39;</span><span class="p">,</span> <span class="s1">&#39;documentCounts&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;kwarg `by` must be &quot;counts&quot; or &quot;documentCounts&quot;&#39;</span><span class="p">)</span>
 
         <span class="n">cvalues</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">by</span><span class="p">)</span>
         <span class="n">order</span> <span class="o">=</span> <span class="n">argsort</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cvalues</span><span class="o">.</span><span class="n">values</span><span class="p">()))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="n">topn</span><span class="p">]</span>
         <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cvalues</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="k">return</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">keys</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">cvalues</span><span class="p">[</span><span class="n">keys</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">order</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">keys</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">cvalues</span><span class="p">[</span><span class="n">keys</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">order</span><span class="p">]</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="StructuredFeatureSet"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.StructuredFeatureSet">[docs]</a><span class="k">class</span> <span class="nc">StructuredFeatureSet</span><span class="p">(</span><span class="n">BaseFeatureSet</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A :class:`.StructuredFeatureSet` organizes several</span>
@@ -534,13 +542,13 @@
             <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">:</span>
                 <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup</span><span class="p">[</span><span class="n">f</span><span class="p">]</span>
                 <span class="n">v_</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">feature</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">documentCounts</span><span class="p">[</span><span class="n">t</span><span class="p">])</span>
-                <span class="k">if</span> <span class="n">v_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">v_</span><span class="p">:</span>
                     <span class="n">feature_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
             <span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">StructuredFeature</span><span class="p">(</span><span class="n">feature_</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">StructuredFeatureSet</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="StructuredFeatureSet.context_chunks"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.StructuredFeatureSet.context_chunks">[docs]</a>    <span class="k">def</span> <span class="nf">context_chunks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">StructuredFeatureSet</span><span class="p">(</span><span class="n">features</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="StructuredFeatureSet.context_chunks"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.StructuredFeatureSet.context_chunks">[docs]</a>    <span class="k">def</span> <span class="nf">context_chunks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieves all tokens, divided into the chunks in context ``context``.</span>
 
@@ -566,34 +574,80 @@
             <span class="k">if</span> <span class="n">context</span> <span class="ow">in</span> <span class="n">feature</span><span class="o">.</span><span class="n">contexts</span><span class="p">:</span>
                 <span class="n">new_chunks</span> <span class="o">=</span> <span class="n">feature</span><span class="o">.</span><span class="n">context_chunks</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">new_chunks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
+                <span class="n">new_chunks</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">feature</span><span class="p">)]</span>
             <span class="n">indices</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_chunks</span><span class="p">))</span>
             <span class="n">papers</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">paper</span><span class="p">,</span> <span class="n">indices</span><span class="p">))</span>
             <span class="n">chunks</span> <span class="o">+=</span> <span class="n">new_chunks</span>
-        <span class="k">return</span> <span class="n">papers</span><span class="p">,</span> <span class="n">chunks</span>
+        <span class="k">return</span> <span class="n">papers</span><span class="p">,</span> <span class="n">chunks</span></div>
 
-</div></div>
+<div class="viewcode-block" id="StructuredFeatureSet.to_gensim_corpus"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.StructuredFeatureSet.to_gensim_corpus">[docs]</a>    <span class="k">def</span> <span class="nf">to_gensim_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Yield a bag-of-words corpus compatible with the Gensim package.</span>
+
+<span class="sd">        Returns a (corpus, index) tuple (see below).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        context : str</span>
+<span class="sd">            If provided, each &quot;document&quot; in the Gensim corpus will be a chunk</span>
+<span class="sd">            of type ``context``.</span>
+<span class="sd">        raw : bool</span>
+<span class="sd">            (default: False) If True, documents will be sequences of tokens</span>
+<span class="sd">            rather than sequences of (term, count) &quot;bag-of-words&quot; tuples.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            A list of lists of (id, count) tuples. Each sub-list represents a</span>
+<span class="sd">            single context item (e.g. a document, or a paragraph). This is the</span>
+<span class="sd">            &quot;bag of words&quot; representation used in Gensim.</span>
+<span class="sd">        dict</span>
+<span class="sd">            Maps integer IDs to words.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; from tethne.readers.wos import read</span>
+<span class="sd">           &gt;&gt;&gt; corpus = read(&#39;/path/to/my/data&#39;)</span>
+<span class="sd">           &gt;&gt;&gt; from nltk.tokenize import word_tokenize</span>
+<span class="sd">           &gt;&gt;&gt; corpus.index_feature(&#39;abstract&#39;, word_tokenize, structured=True)</span>
+<span class="sd">           &gt;&gt;&gt; gensim_corpus, id2word = corpus.features[&#39;abstract&#39;].to_gensim_corpus()</span>
+<span class="sd">           &gt;&gt;&gt; from gensim import corpora, models</span>
+<span class="sd">           &gt;&gt;&gt; model = models.ldamodel.LdaModel(corpus=gensim_corpus,</span>
+<span class="sd">                                                id2word=id2word,</span>
+<span class="sd">                                                num_topics=5, update_every=1,</span>
+<span class="sd">                                                chunksize=100, passes=1)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">raw</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_chunks</span><span class="p">(</span><span class="n">context</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">[[(</span><span class="bp">self</span><span class="o">.</span><span class="n">lookup</span><span class="p">[</span><span class="n">term</span><span class="p">],</span> <span class="n">count</span><span class="p">)</span> <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">Counter</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span> <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_chunks</span><span class="p">(</span><span class="n">context</span><span class="p">)[</span><span class="mi">1</span><span class="p">]],</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span></div></div>
+
+
+
+
 <div class="viewcode-block" id="FeatureSet"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.FeatureSet">[docs]</a><span class="k">class</span> <span class="nc">FeatureSet</span><span class="p">(</span><span class="n">BaseFeatureSet</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A :class:`.FeatureSet` organizes multiple :class:`.Feature` instances.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">features</span><span class="p">:</span>
             <span class="n">features</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setUp</span><span class="p">()</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">u&#39;Initialize FeatureSet with </span><span class="si">%i</span><span class="s"> features&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">u&#39;Initialize FeatureSet with </span><span class="si">%i</span><span class="s1"> features&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">features</span>
         <span class="n">allfeatures</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">features</span><span class="o">.</span><span class="n">values</span><span class="p">())]</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;features: {0}; allfeatures: {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">allfeatures</span><span class="p">)))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;features: </span><span class="si">{0}</span><span class="s1">; allfeatures: </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">allfeatures</span><span class="p">)))</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">allfeatures</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">allfeatures_keys</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">allfeatures</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">allfeatures_keys</span><span class="p">)):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">elem</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">lookup</span><span class="p">[</span><span class="n">elem</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">u&#39;Add feature {0} with index {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">u&#39;Add feature </span><span class="si">{0}</span><span class="s1"> with index </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">counts</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">elem</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">allfeatures</span><span class="p">:</span>
@@ -609,9 +663,8 @@
                     <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">counts</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span>
                         <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup</span><span class="p">[</span><span class="n">elem</span><span class="p">]</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">with_feature</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paper_id</span><span class="p">)</span>
-                <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>    <span class="c"># A Paper may not have any features.</span>
+                <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>    <span class="c1"># A Paper may not have any features.</span>
                     <span class="k">pass</span>
-
 
 
 <div class="viewcode-block" id="FeatureSet.transform"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.FeatureSet.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
@@ -656,8 +709,8 @@
                     <span class="n">feature_</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">f</span><span class="p">,</span> <span class="n">v_</span><span class="p">))</span>
             <span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Feature</span><span class="p">(</span><span class="n">feature_</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">FeatureSet</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="n">FeatureSet</span><span class="p">(</span><span class="n">features</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="FeatureSet.translate"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.FeatureSet.translate">[docs]</a>    <span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
         <span class="n">features</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">feature</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
@@ -668,24 +721,23 @@
                 <span class="k">if</span> <span class="n">f_</span><span class="p">:</span>
                     <span class="n">feature_</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">f_</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
             <span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Feature</span><span class="p">(</span><span class="n">feature_</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">FeatureSet</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">FeatureSet</span><span class="p">(</span><span class="n">features</span><span class="p">)</span></div>
 
-</div>
 <div class="viewcode-block" id="FeatureSet.as_matrix"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.FeatureSet.as_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">as_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">matrix</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N_features</span><span class="p">)]</span>
-                  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N_documents</span><span class="p">)]</span>
+        <span class="n">matrix</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N_features</span><span class="p">)]</span>
+                  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N_documents</span><span class="p">)]</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">e</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">j</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup</span><span class="p">[</span><span class="n">e</span><span class="p">]</span>
                 <span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span>
 
-        <span class="k">return</span> <span class="n">matrix</span>
-</div>
-<div class="viewcode-block" id="FeatureSet.as_vector"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.FeatureSet.as_vector">[docs]</a>    <span class="k">def</span> <span class="nf">as_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">matrix</span></div>
+
+<div class="viewcode-block" id="FeatureSet.as_vector"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.FeatureSet.as_vector">[docs]</a>    <span class="k">def</span> <span class="nf">as_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
         <span class="k">if</span> <span class="n">norm</span><span class="p">:</span>
@@ -694,17 +746,64 @@
             <span class="n">values</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">p</span><span class="p">])</span>
 
         <span class="n">vect</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
             <span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
-                <span class="n">c</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="n">e</span><span class="p">])</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">*</span><span class="n">values</span><span class="p">[</span><span class="n">e</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">c</span> <span class="o">=</span> <span class="mf">0.</span>
             <span class="n">vect</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">vect</span>
+        <span class="k">return</span> <span class="n">vect</span></div>
 
-</div></div>
+<div class="viewcode-block" id="FeatureSet.to_gensim_corpus"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.FeatureSet.to_gensim_corpus">[docs]</a>    <span class="k">def</span> <span class="nf">to_gensim_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Yield a bag-of-words corpus compatible with the Gensim package.</span>
+
+<span class="sd">        Returns a (corpus, index) tuple (see below).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        context : str</span>
+<span class="sd">            If provided, each &quot;document&quot; in the Gensim corpus will be a chunk</span>
+<span class="sd">            of type ``context``.</span>
+<span class="sd">        raw : bool</span>
+<span class="sd">            (default: False) If True, documents will be sequences of tokens</span>
+<span class="sd">            rather than sequences of (term, count) &quot;bag-of-words&quot; tuples.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            A list of lists of (id, count) tuples. Each sub-list represents a</span>
+<span class="sd">            single context item (e.g. a document, or a paragraph). This is the</span>
+<span class="sd">            &quot;bag of words&quot; representation used in Gensim.</span>
+<span class="sd">        dict</span>
+<span class="sd">            Maps integer IDs to words.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           &gt;&gt;&gt; from tethne.readers.wos import read</span>
+<span class="sd">           &gt;&gt;&gt; corpus = read(&#39;/path/to/my/data&#39;)</span>
+<span class="sd">           &gt;&gt;&gt; from nltk.tokenize import word_tokenize</span>
+<span class="sd">           &gt;&gt;&gt; corpus.index_feature(&#39;abstract&#39;, word_tokenize)</span>
+<span class="sd">           &gt;&gt;&gt; gensim_corpus, id2word = corpus.features[&#39;abstract&#39;].to_gensim_corpus()</span>
+<span class="sd">           &gt;&gt;&gt; from gensim import corpora, models</span>
+<span class="sd">           &gt;&gt;&gt; model = models.ldamodel.LdaModel(corpus=gensim_corpus,</span>
+<span class="sd">                                                id2word=id2word,</span>
+<span class="sd">                                                num_topics=5, update_every=1,</span>
+<span class="sd">                                                chunksize=100, passes=1)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">raw</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[[</span><span class="n">token</span> <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">document</span>
+                     <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">repeat</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="n">count</span><span class="p">)]</span>
+                    <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">values</span><span class="p">()],</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">[[(</span><span class="bp">self</span><span class="o">.</span><span class="n">lookup</span><span class="p">[</span><span class="n">term</span><span class="p">],</span> <span class="n">count</span><span class="p">)</span> <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">document</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">values</span><span class="p">()],</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span></div></div>
+
+
 <div class="viewcode-block" id="feature"><a class="viewcode-back" href="../../../tethne.classes.html#tethne.classes.feature.feature">[docs]</a><span class="k">def</span> <span class="nf">feature</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Decorator for properties that should be represented as :class:`.Feature`\s.</span>
@@ -742,7 +841,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

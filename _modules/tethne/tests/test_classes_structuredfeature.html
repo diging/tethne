@@ -75,32 +75,99 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <h1>Source code for tethne.tests.test_classes_structuredfeature</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;./&#39;</span><span class="p">)</span>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;./&#39;</span><span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
 
 <span class="kn">import</span> <span class="nn">unittest</span>
 
-<span class="kn">from</span> <span class="nn">tethne.classes.feature</span> <span class="kn">import</span> <span class="n">StructuredFeature</span><span class="p">,</span> <span class="n">StructuredFeatureSet</span>
+<span class="kn">from</span> <span class="nn">tethne.classes.feature</span> <span class="k">import</span> <span class="n">StructuredFeature</span><span class="p">,</span> <span class="n">StructuredFeatureSet</span>
+
+
+<div class="viewcode-block" id="TestStructuredFeatureSetToGensim"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_classes_structuredfeature.TestStructuredFeatureSetToGensim">[docs]</a><span class="k">class</span> <span class="nc">TestStructuredFeatureSetToGensim</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestStructuredFeatureSetToGensim.test_to_gensim_corpus"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_classes_structuredfeature.TestStructuredFeatureSetToGensim.test_to_gensim_corpus">[docs]</a>    <span class="k">def</span> <span class="nf">test_to_gensim_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">tokens1</span> <span class="o">=</span> <span class="p">[</span><span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">65</span><span class="p">,</span> <span class="mi">250</span><span class="p">)]</span>
+        <span class="n">tokens2</span> <span class="o">=</span> <span class="p">[</span><span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">65</span><span class="p">,</span> <span class="mi">250</span><span class="p">)][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">contexts1</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;sentence&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">124</span><span class="p">,</span> <span class="mi">156</span><span class="p">,</span> <span class="mi">172</span><span class="p">]),</span>
+                     <span class="p">(</span><span class="s1">&#39;paragraph&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">172</span><span class="p">])]</span>
+        <span class="n">contexts2</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;paragraph&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">101</span><span class="p">])]</span>
+        <span class="n">feature1</span> <span class="o">=</span> <span class="n">StructuredFeature</span><span class="p">(</span><span class="n">tokens1</span><span class="p">,</span> <span class="n">contexts1</span><span class="p">)</span>
+        <span class="n">feature2</span> <span class="o">=</span> <span class="n">StructuredFeature</span><span class="p">(</span><span class="n">tokens2</span><span class="p">,</span> <span class="n">contexts2</span><span class="p">)</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;first&#39;</span><span class="p">:</span> <span class="n">feature1</span><span class="p">,</span>
+            <span class="s1">&#39;second&#39;</span><span class="p">:</span> <span class="n">feature2</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">fset</span> <span class="o">=</span> <span class="n">StructuredFeatureSet</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+        <span class="c1"># print fset.index</span>
+        <span class="n">gensim_corpus</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">fset</span><span class="o">.</span><span class="n">to_gensim_corpus</span><span class="p">(</span><span class="s1">&#39;paragraph&#39;</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">gensim_corpus</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gensim_corpus</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">gensim_corpus</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">gensim_corpus</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestStructuredFeatureSetToGensim.test_end_to_end_raw"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_classes_structuredfeature.TestStructuredFeatureSetToGensim.test_end_to_end_raw">[docs]</a>    <span class="k">def</span> <span class="nf">test_end_to_end_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Runs the Gensim LDA workflow</span>
+<span class="sd">        (https://radimrehurek.com/gensim/wiki.html#latent-dirichlet-allocation).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">tethne.readers.wos</span> <span class="k">import</span> <span class="n">read</span>
+        <span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s1">&#39;./tethne/tests/data/wos3.txt&#39;</span><span class="p">)</span>
+        <span class="kn">from</span> <span class="nn">nltk.tokenize</span> <span class="k">import</span> <span class="n">word_tokenize</span>
+        <span class="n">corpus</span><span class="o">.</span><span class="n">index_feature</span><span class="p">(</span><span class="s1">&#39;abstract&#39;</span><span class="p">,</span> <span class="n">word_tokenize</span><span class="p">,</span> <span class="n">structured</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">gensim_corpus</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;abstract&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_gensim_corpus</span><span class="p">(</span><span class="n">raw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="kn">from</span> <span class="nn">gensim</span> <span class="k">import</span> <span class="n">corpora</span><span class="p">,</span> <span class="n">models</span>
+
+        <span class="n">dictionary</span> <span class="o">=</span> <span class="n">corpora</span><span class="o">.</span><span class="n">Dictionary</span><span class="p">(</span><span class="n">gensim_corpus</span><span class="p">)</span>
+        <span class="n">corpus</span> <span class="o">=</span> <span class="p">[</span><span class="n">dictionary</span><span class="o">.</span><span class="n">doc2bow</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">gensim_corpus</span><span class="p">]</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ldamodel</span><span class="o">.</span><span class="n">LdaModel</span><span class="p">(</span><span class="n">corpus</span><span class="o">=</span><span class="n">corpus</span><span class="p">,</span> <span class="n">id2word</span><span class="o">=</span><span class="n">dictionary</span><span class="p">,</span>
+                                         <span class="n">num_topics</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">update_every</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                         <span class="n">chunksize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">passes</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">print_topics</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TestStructuredFeatureSetToGensim.test_end_to_end"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_classes_structuredfeature.TestStructuredFeatureSetToGensim.test_end_to_end">[docs]</a>    <span class="k">def</span> <span class="nf">test_end_to_end</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Runs the Gensim LDA workflow</span>
+<span class="sd">        (https://radimrehurek.com/gensim/wiki.html#latent-dirichlet-allocation).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">tethne.readers.wos</span> <span class="k">import</span> <span class="n">read</span>
+        <span class="n">corpus</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s1">&#39;./tethne/tests/data/wos3.txt&#39;</span><span class="p">)</span>
+        <span class="kn">from</span> <span class="nn">nltk.tokenize</span> <span class="k">import</span> <span class="n">word_tokenize</span>
+        <span class="n">corpus</span><span class="o">.</span><span class="n">index_feature</span><span class="p">(</span><span class="s1">&#39;abstract&#39;</span><span class="p">,</span> <span class="n">word_tokenize</span><span class="p">,</span> <span class="n">structured</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">gensim_corpus</span><span class="p">,</span> <span class="n">id2word</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;abstract&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_gensim_corpus</span><span class="p">()</span>
+        <span class="kn">from</span> <span class="nn">gensim</span> <span class="k">import</span> <span class="n">corpora</span><span class="p">,</span> <span class="n">models</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ldamodel</span><span class="o">.</span><span class="n">LdaModel</span><span class="p">(</span><span class="n">corpus</span><span class="o">=</span><span class="n">gensim_corpus</span><span class="p">,</span> <span class="n">id2word</span><span class="o">=</span><span class="n">id2word</span><span class="p">,</span>
+                                         <span class="n">num_topics</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">update_every</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                         <span class="n">chunksize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">passes</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">print_topics</span><span class="p">()</span></div></div>
+
 
 <div class="viewcode-block" id="TestStructuredFeatureSet"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_classes_structuredfeature.TestStructuredFeatureSet">[docs]</a><span class="k">class</span> <span class="nc">TestStructuredFeatureSet</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="TestStructuredFeatureSet.setUp"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_classes_structuredfeature.TestStructuredFeatureSet.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tokens1</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">205</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tokens2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">42</span><span class="p">))</span>
-        <span class="n">contexts1</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;sentence&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">124</span><span class="p">,</span> <span class="mi">156</span><span class="p">,</span> <span class="mi">172</span><span class="p">,</span> <span class="mi">191</span><span class="p">]),</span>
-                     <span class="p">(</span><span class="s">&#39;paragraph&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">172</span><span class="p">])]</span>
-        <span class="n">contexts2</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;paragraph&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">29</span><span class="p">])]</span>
+        <span class="n">contexts1</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;sentence&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">57</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">124</span><span class="p">,</span> <span class="mi">156</span><span class="p">,</span> <span class="mi">172</span><span class="p">,</span> <span class="mi">191</span><span class="p">]),</span>
+                     <span class="p">(</span><span class="s1">&#39;paragraph&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">172</span><span class="p">])]</span>
+        <span class="n">contexts2</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;paragraph&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">29</span><span class="p">])]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">feature1</span> <span class="o">=</span> <span class="n">StructuredFeature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tokens1</span><span class="p">,</span> <span class="n">contexts1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">feature2</span> <span class="o">=</span> <span class="n">StructuredFeature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tokens2</span><span class="p">,</span> <span class="n">contexts2</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature2</span> <span class="o">=</span> <span class="n">StructuredFeature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tokens2</span><span class="p">,</span> <span class="n">contexts2</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestStructuredFeatureSet.test_init"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_classes_structuredfeature.TestStructuredFeatureSet.test_init">[docs]</a>    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">features</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s">&#39;first&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature1</span><span class="p">,</span>
-            <span class="s">&#39;second&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature2</span><span class="p">,</span>
+            <span class="s1">&#39;first&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature1</span><span class="p">,</span>
+            <span class="s1">&#39;second&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature2</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">fset</span> <span class="o">=</span> <span class="n">StructuredFeatureSet</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fset</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">))</span>
@@ -113,47 +180,57 @@
         <span class="n">expected_count</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tokens1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">fset</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">expected_count</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fset</span><span class="o">.</span><span class="n">papers_containing</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">))</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fset</span><span class="o">.</span><span class="n">papers_containing</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="TestStructuredFeatureSet.test_transform"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_classes_structuredfeature.TestStructuredFeatureSet.test_transform">[docs]</a>    <span class="k">def</span> <span class="nf">test_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;first&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature1</span><span class="p">,</span>
+            <span class="s1">&#39;second&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature2</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">fset</span> <span class="o">=</span> <span class="n">StructuredFeatureSet</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+        <span class="n">xf</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">fc</span><span class="p">,</span> <span class="n">dc</span><span class="p">:</span> <span class="n">f</span> <span class="k">if</span> <span class="n">f</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="n">fset2</span> <span class="o">=</span> <span class="n">fset</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">xf</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fset</span><span class="o">.</span><span class="n">index</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">fset2</span><span class="o">.</span><span class="n">index</span><span class="p">))</span></div>
+
 <div class="viewcode-block" id="TestStructuredFeatureSet.test_select_context"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_classes_structuredfeature.TestStructuredFeatureSet.test_select_context">[docs]</a>    <span class="k">def</span> <span class="nf">test_select_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">features</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s">&#39;first&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature1</span><span class="p">,</span>
-            <span class="s">&#39;second&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature2</span><span class="p">,</span>
+            <span class="s1">&#39;first&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature1</span><span class="p">,</span>
+            <span class="s1">&#39;second&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature2</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">fset</span> <span class="o">=</span> <span class="n">StructuredFeatureSet</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
 
-        <span class="n">N_paragraphs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fset</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;first&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">contexts</span><span class="p">[</span><span class="s">&#39;paragraph&#39;</span><span class="p">])</span> <span class="o">+</span> \
-                       <span class="nb">len</span><span class="p">(</span><span class="n">fset</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s">&#39;second&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">contexts</span><span class="p">[</span><span class="s">&#39;paragraph&#39;</span><span class="p">])</span>
-        <span class="n">papers</span><span class="p">,</span> <span class="n">chunks</span> <span class="o">=</span> <span class="n">fset</span><span class="o">.</span><span class="n">context_chunks</span><span class="p">(</span><span class="s">&#39;paragraph&#39;</span><span class="p">)</span>
+        <span class="n">N_paragraphs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fset</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;first&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">contexts</span><span class="p">[</span><span class="s1">&#39;paragraph&#39;</span><span class="p">])</span> <span class="o">+</span> \
+                       <span class="nb">len</span><span class="p">(</span><span class="n">fset</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s1">&#39;second&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">contexts</span><span class="p">[</span><span class="s1">&#39;paragraph&#39;</span><span class="p">])</span>
+        <span class="n">papers</span><span class="p">,</span> <span class="n">chunks</span> <span class="o">=</span> <span class="n">fset</span><span class="o">.</span><span class="n">context_chunks</span><span class="p">(</span><span class="s1">&#39;paragraph&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">),</span> <span class="n">N_paragraphs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">papers</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">papers</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">))</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="TestStructuredFeature"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_classes_structuredfeature.TestStructuredFeature">[docs]</a><span class="k">class</span> <span class="nc">TestStructuredFeature</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
 <div class="viewcode-block" id="TestStructuredFeature.setUp"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_classes_structuredfeature.TestStructuredFeature.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">testTokens</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">testSentence</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;sentence&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">34</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">testPara</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;paragraph&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">27</span><span class="p">])</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testSentence</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;sentence&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">34</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testPara</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;paragraph&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">27</span><span class="p">])</span></div>
+
 <div class="viewcode-block" id="TestStructuredFeature.test_init"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_classes_structuredfeature.TestStructuredFeature.test_init">[docs]</a>    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">contexts</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">testPara</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">testSentence</span><span class="p">]</span>
         <span class="n">sfeature</span> <span class="o">=</span> <span class="n">StructuredFeature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testTokens</span><span class="p">,</span> <span class="n">contexts</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sfeature</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testTokens</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sfeature</span><span class="o">.</span><span class="n">contexts</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">contexts</span><span class="p">))</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sfeature</span><span class="o">.</span><span class="n">contexts</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">contexts</span><span class="p">))</span></div>
+
 <div class="viewcode-block" id="TestStructuredFeature.test_select"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_classes_structuredfeature.TestStructuredFeature.test_select">[docs]</a>    <span class="k">def</span> <span class="nf">test_select</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span><span class="p">,</span> <span class="n">sentences</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">testSentence</span>
 
         <span class="n">contexts</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">testPara</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">testSentence</span><span class="p">]</span>
         <span class="n">sfeature</span> <span class="o">=</span> <span class="n">StructuredFeature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testTokens</span><span class="p">,</span> <span class="n">contexts</span><span class="p">)</span>
-        <span class="n">selected_sentences</span> <span class="o">=</span> <span class="n">sfeature</span><span class="p">[</span><span class="s">&#39;sentence&#39;</span><span class="p">]</span>
+        <span class="n">selected_sentences</span> <span class="o">=</span> <span class="n">sfeature</span><span class="p">[</span><span class="s1">&#39;sentence&#39;</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">sentences</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sentences</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentences</span><span class="p">),</span> <span class="s">&quot;&quot;&quot;</span>
-<span class="s">        __getitem__(context) should return all tokens, separated into context</span>
-<span class="s">        chunks.&quot;&quot;&quot;</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sentences</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentences</span><span class="p">),</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        __getitem__(context) should return all tokens, separated into context</span>
+<span class="s2">        chunks.&quot;&quot;&quot;</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestStructuredFeature.test_select_chunk"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_classes_structuredfeature.TestStructuredFeature.test_select_chunk">[docs]</a>    <span class="k">def</span> <span class="nf">test_select_chunk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span><span class="p">,</span> <span class="n">sentences</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">testSentence</span>
         <span class="n">sentence_size</span> <span class="o">=</span> <span class="n">sentences</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">sentences</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -161,14 +238,14 @@
         <span class="n">contexts</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">testPara</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">testSentence</span><span class="p">]</span>
         <span class="n">sfeature</span> <span class="o">=</span> <span class="n">StructuredFeature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testTokens</span><span class="p">,</span> <span class="n">contexts</span><span class="p">)</span>
 
-        <span class="n">selected_sentence</span> <span class="o">=</span> <span class="n">sfeature</span><span class="p">[(</span><span class="s">&#39;sentence&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
+        <span class="n">selected_sentence</span> <span class="o">=</span> <span class="n">sfeature</span><span class="p">[(</span><span class="s1">&#39;sentence&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">selected_sentence</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_sentence</span><span class="p">),</span> <span class="n">sentence_size</span><span class="p">,</span> <span class="s">&quot;&quot;&quot;</span>
-<span class="s">        __getitem__((context, chunk)) should the tokens in that chunk&quot;&quot;&quot;</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_sentence</span><span class="p">),</span> <span class="n">sentence_size</span><span class="p">,</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        __getitem__((context, chunk)) should the tokens in that chunk&quot;&quot;&quot;</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="TestStructuredFeature.test_add_context"><a class="viewcode-back" href="../../../tethne.tests.html#tethne.tests.test_classes_structuredfeature.TestStructuredFeature.test_add_context">[docs]</a>    <span class="k">def</span> <span class="nf">test_add_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;orthogonal&#39;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;orthogonal&#39;</span>
         <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">38</span><span class="p">]</span>
         <span class="n">newContext</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
 
@@ -180,14 +257,14 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">assertGreater</span><span class="p">(</span><span class="n">N_contexts_post</span><span class="p">,</span> <span class="n">N_contexts_prior</span><span class="p">)</span>
 
-        <span class="n">selected_sentences</span> <span class="o">=</span> <span class="n">sfeature</span><span class="p">[</span><span class="s">&#39;orthogonal&#39;</span><span class="p">]</span>
+        <span class="n">selected_sentences</span> <span class="o">=</span> <span class="n">sfeature</span><span class="p">[</span><span class="s1">&#39;orthogonal&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_sentences</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">))</span>
 
-        <span class="n">selected_sentence</span> <span class="o">=</span> <span class="n">sfeature</span><span class="p">[</span><span class="s">&#39;orthogonal&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_sentence</span><span class="p">),</span> <span class="n">indices</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">selected_sentence</span> <span class="o">=</span> <span class="n">sfeature</span><span class="p">[</span><span class="s1">&#39;orthogonal&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_sentence</span><span class="p">),</span> <span class="n">indices</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div></div>
 
-</div></div>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
 </pre></div>
 
@@ -219,7 +296,7 @@
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>

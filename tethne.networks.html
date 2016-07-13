@@ -85,6 +85,12 @@
             
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
+              <strong style="color: #0088cc;">
+                  Need help? Have a feature request? Please check out the
+                  <a href="https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!forum/tethne-users">
+                      tethne-users group
+                  </a>.
+              </strong>
             
   <div class="section" id="tethne-networks-package">
 <h1>tethne.networks package<a class="headerlink" href="#tethne-networks-package" title="Permalink to this headline">¶</a></h1>
@@ -152,13 +158,16 @@ includes keywords, abstract terms, etc.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.features.mutual_information" title="tethne.networks.features.mutual_information"><code class="xref py py-obj docutils literal"><span class="pre">mutual_information</span></code></a></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">cooccurrence</span></code></td>
+<td>A network of feature elements linked by their joint occurrence in papers.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tethne.networks.features.mutual_information" title="tethne.networks.features.mutual_information"><code class="xref py py-obj docutils literal"><span class="pre">mutual_information</span></code></a></td>
 <td>Generates a graph of features in <code class="docutils literal"><span class="pre">featureset</span></code> based on normalized <a class="reference external" href="http://en.wikipedia.org/wiki/Pointwise_mutual_information">pointwise mutual information (nPMI)</a>.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tethne.networks.features.keyword_cooccurrence" title="tethne.networks.features.keyword_cooccurrence"><code class="xref py py-obj docutils literal"><span class="pre">keyword_cooccurrence</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#tethne.networks.features.keyword_cooccurrence" title="tethne.networks.features.keyword_cooccurrence"><code class="xref py py-obj docutils literal"><span class="pre">keyword_cooccurrence</span></code></a></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">topic_coupling</span></code></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">topic_coupling</span></code></td>
 <td></td>
 </tr>
 </tbody>
@@ -178,8 +187,10 @@ includes keywords, abstract terms, etc.</p>
 <code class="descclassname">tethne.networks.features.</code><code class="descname">mutual_information</code><span class="sig-paren">(</span><em>corpus</em>, <em>featureset_name</em>, <em>min_weight=0.9</em>, <em>filter=&lt;function &lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tethne/networks/features.html#mutual_information"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tethne.networks.features.mutual_information" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a graph of features in <code class="docutils literal"><span class="pre">featureset</span></code> based on normalized
 <a class="reference external" href="http://en.wikipedia.org/wiki/Pointwise_mutual_information">pointwise mutual information (nPMI)</a>.</p>
-nPMI(i,j)=\frac{log(\frac{p_{ij}}{p_i*p_j})}{-1*log(p_{ij})}<p>...where p_i and p_j are the probabilities that features
-<em>i</em> and <em>j</em> will occur in a document (independently), and p_{ij} is
+<div class="math">
+<p><span class="math">nPMI(i,j)=\frac{log(\frac{p_{ij}}{p_i*p_j})}{-1*log(p_{ij})}</span></p>
+</div><p>...where <span class="math">p_i</span> and <span class="math">p_j</span> are the probabilities that features
+<em>i</em> and <em>j</em> will occur in a document (independently), and <span class="math">p_{ij}</span> is
 the probability that those two features will occur in the same document.</p>
 </dd></dl>
 
@@ -507,11 +518,11 @@ using the fields in <code class="docutils literal"><span class="pre">model.metad
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.networks</span> <span class="kn">import</span> <span class="n">topics</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">thegraph</span> <span class="o">=</span> <span class="n">topics</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">myLDAModel</span><span class="p">,</span> <span class="s">&#39;cosine&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tethne.networks</span> <span class="kn">import</span> <span class="n">topics</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thegraph</span> <span class="o">=</span> <span class="n">topics</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">myLDAModel</span><span class="p">,</span> <span class="s1">&#39;cosine&#39;</span><span class="p">)</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tethne.writers</span> <span class="kn">as</span> <span class="nn">wr</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">to_graphml</span><span class="p">(</span><span class="n">thegraph</span><span class="p">,</span> <span class="s">&#39;~./thegraph.graphml&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wr</span><span class="o">.</span><span class="n">to_graphml</span><span class="p">(</span><span class="n">thegraph</span><span class="p">,</span> <span class="s1">&#39;~./thegraph.graphml&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="figure" id="id5">
@@ -681,7 +692,7 @@ edge (x,y), x -&gt; y, xy, etc. by calling x the &#8220;tail&#8221; and y the &#
         &copy; Copyright 2015, ASU Digital Innovation Group.
       </li>
       <li>
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.5.
       </li>
     </ul>
     </div>
