@@ -18,6 +18,7 @@ logger.setLevel('ERROR')
 from tethne import write_documents, Feature, FeatureSet
 from tethne.model import Model
 from tethne.model.corpus import LDAMixin
+from tethne.utilities import is_int, is_float, is_number
 
 # Determine path to MALLET.
 
@@ -305,18 +306,27 @@ def mallet_to_theta_featureset(dt_path):
     """
     theta = FeatureSet()
 
+    def _handle_with_name(line):
+        d, ident, t = int(line[0]), unicode(line[1]), line[2:]
+        return ident, Feature([(int(t[i]), float(t[i + 1])) for i in xrange(0, len(t) - 1, 2)])
+
+    def _handle_without_name(line):
+        d, t = int(line[0]), line[1:]
+        return d, Feature([(int(t[i]), float(t[i + 1])) for i in xrange(0, len(t) - 1, 2)])
+
+    line_handler = _handle_with_name
     with open(dt_path, "rb") as f:
         i = -1
         reader = csv.reader(f, delimiter='\t')
+
         for line in reader:
             i += 1
             if i == 0:
                 continue     # Avoid header row.
-
-            d, id, t = int(line[0]), unicode(line[1]), line[2:]
-            feature = Feature([(int(t[i]), float(t[i + 1]))
-                               for i in xrange(0, len(t) - 1, 2)])
-            theta.add(id, feature)
+            elif i == 1:
+                if not is_int(line[2]) and is_float(line[2]):
+                    line_handler = _handle_without_name
+            theta.add(*line_handler(line))
     return theta
 
 

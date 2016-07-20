@@ -21,26 +21,27 @@ logger.setLevel('DEBUG')
 
 
 class TestHelpers(unittest.TestCase):
-    def setUp(self):
-        from tethne.model.corpus.mallet import LDAModel
-        self.corpus = read(datapath, index_by='wosid')
-        self.corpus.index_feature('abstract', tokenize, structured=True)
-        self.old_model = LDAModel(self.corpus, featureset_name='abstract', nodelete=True)
-        self.old_model.fit(Z=20, max_iter=50)
-
     def test_mallet_to_theta_featureset(self):
         from tethne import mallet_to_theta_featureset
-        theta = mallet_to_theta_featureset(self.old_model.dt)
+        theta = mallet_to_theta_featureset('tethne/tests/data/mallet/dt.dat')
         self.assertIsInstance(theta, FeatureSet)
-        self.assertEqual(len(theta), len(self.corpus.features['abstract'].features))
+        self.assertEqual(len(theta), 220, 'there should be 220 documents')
 
         graph = features.feature_cooccurrence(theta, 'theta', 0.05)
         self.assertIsInstance(graph, nx.Graph)
 
+    def test_mallet_to_theta_featureset_noname(self):
+        from tethne import mallet_to_theta_featureset
+        theta = mallet_to_theta_featureset('tethne/tests/data/mallet/dt_noname.dat')
+        self.assertIsInstance(theta, FeatureSet)
+        self.assertEqual(len(theta), 220, 'there should be 220 documents')
+
+        graph = features.feature_cooccurrence(theta, 'theta', 0.05)
+        self.assertIsInstance(graph, nx.Graph)
 
     def test_mallet_to_phi_featureset(self):
         from tethne import mallet_to_phi_featureset
-        phi, vocab = mallet_to_phi_featureset(self.old_model.wt)
+        phi, vocab = mallet_to_phi_featureset('tethne/tests/data/mallet/wt.dat')
         self.assertIsInstance(phi, FeatureSet)
         self.assertEqual(len(phi), 20)
 
