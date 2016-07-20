@@ -11,7 +11,7 @@ import csv
 
 from tethne.readers.wos import read
 from tethne import FeatureSet, tokenize
-from tethne.networks import topics
+from tethne.networks import topics, features
 
 datapath = './tethne/tests/data/wos3.txt'
 
@@ -33,6 +33,10 @@ class TestHelpers(unittest.TestCase):
         theta = mallet_to_theta_featureset(self.old_model.dt)
         self.assertIsInstance(theta, FeatureSet)
         self.assertEqual(len(theta), len(self.corpus.features['abstract'].features))
+
+        graph = features.feature_cooccurrence(theta, 'theta', 0.05)
+        self.assertIsInstance(graph, nx.Graph)
+
 
     def test_mallet_to_phi_featureset(self):
         from tethne import mallet_to_phi_featureset
@@ -64,13 +68,17 @@ class TestLDAModelExistingOutput(unittest.TestCase):
 
     def test_load_existing_data_staticmethod(self):
         from tethne.model.corpus.mallet import LDAModel
-        new_model = LDAModel.from_mallet(self.corpus, 'abstract',
-                                         self.old_model.wt,
+        new_model = LDAModel.from_mallet(self.old_model.wt,
                                          self.old_model.dt,
                                          self.old_model.om)
 
         self.assertEqual(self.old_model.topics_in(u'WOS:000295037200001'),
                          new_model.topics_in(u'WOS:000295037200001'))
+
+        self.assertTrue(hasattr(new_model, 'Z'))
+
+        from tethne import topic_coupling
+        graph = topic_coupling(new_model)
 
 
 class TestLDAModel(unittest.TestCase):

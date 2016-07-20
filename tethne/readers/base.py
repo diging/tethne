@@ -151,6 +151,7 @@ class IterParser(BaseParser):
         # TODO: revisit encoding here.
         if isinstance(data, unicode):
             data = unicodedata.normalize('NFKD', data)#.encode('utf-8','ignore')
+            data = data.replace('\r', '')
 
         handler = self._get_handler(tag)
         if handler is not None:

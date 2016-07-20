@@ -72,7 +72,7 @@ def topic_coupling(model, threshold=None, **kwargs):
         threshold = 3./model.Z
     select = lambda f, v, c, dc: v > threshold
 
-    graph = coupling(model.corpus, 'topics', filter=select, **kwargs)
+    graph = coupling(model.theta, filter=select, **kwargs)
     graph.name = ''
     return graph
 

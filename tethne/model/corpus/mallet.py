@@ -127,8 +127,9 @@ class LDAModel(Model, LDAMixin):
     mallet_path = MALLET_PATH
 
     @staticmethod
-    def from_mallet(corpus, featureset_name, wt_path, dt_path, model_path):
-        model = LDAModel(corpus, featureset_name=featureset_name,
+    def from_mallet(wt_path, dt_path, model_path, corpus=None,
+                    featureset_name=None):
+        model = LDAModel(corpus=corpus, featureset_name=featureset_name,
                          nodelete=True,    # So that it doesn't discard your files when you're done.
                          prep=False,       # Skips building the corpus and calling MALLET's import function.
                          wt=wt_path,
@@ -160,6 +161,10 @@ class LDAModel(Model, LDAMixin):
         """
         Writes a corpus to disk amenable to MALLET topic modeling.
         """
+
+        if not self.corpus:
+            raise RuntimeError('Must set model.corpus before external' \
+                             + ' documents can be generated')
 
         target = self.temp + 'mallet'
         paths = write_documents(self.corpus, target, self.featureset_name,
@@ -266,7 +271,8 @@ class LDAModel(Model, LDAMixin):
         """
 
         self.theta = mallet_to_theta_featureset(dt)
-        self.corpus.features['topics'] = self.theta
+        if self.corpus:
+            self.corpus.features['topics'] = self.theta
         return self.theta
 
     def _read_phi(self, wt):
@@ -280,6 +286,7 @@ class LDAModel(Model, LDAMixin):
         """
 
         self.phi, self.vocabulary = mallet_to_phi_featureset(wt)
+        self.Z = len(self.phi)
 
 
 def mallet_to_theta_featureset(dt_path):

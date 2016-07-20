@@ -62,6 +62,9 @@ class LDAMixin(object):
         """
         Calculate the representation of topic ``k`` in the corpus over time.
         """
-
+        if not self.corpus:
+            raise RuntimeError('Cannot generate a temporal distribution' \
+                             + ' without a Corpus; set model.corpus and try' \
+                             + ' again.')
         return self.corpus.feature_distribution('topics', k, mode=mode,
                                                 **slice_kwargs)
