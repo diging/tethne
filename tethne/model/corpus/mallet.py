@@ -317,9 +317,9 @@ def mallet_to_theta_featureset(dt_path):
     line_handler = _handle_with_name
     with open(dt_path, "rb") as f:
         i = -1
-        reader = csv.reader(f, delimiter='\t')
-
-        for line in reader:
+        for raw_line in f:
+            line = raw_line.split()
+            print line[:10]
             i += 1
             if i == 0:
                 continue     # Avoid header row.
@@ -349,9 +349,10 @@ def mallet_to_phi_featureset(wt_path):
 
     # TODO: make this encoding-safe.
     with open(wt_path, "r") as f:
-        reader = csv.reader(f, delimiter=' ')
+        # reader = csv.reader(f, delimiter=' ')
         topics = defaultdict(list)
-        for line in reader:
+        for raw_line in f:
+            line = raw_line.split()
             w, term = int(line[0]), unicode(line[1])
             vocabulary[w] = term
 
