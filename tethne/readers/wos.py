@@ -423,8 +423,13 @@ class WoSParser(FTParser):
         If only a single cited reference was found, ensure that
         ``citedReferences`` is nonetheless a list.
         """
+
         if type(entry.citedReferences) is not list:
-            entry.citedReferences = [entry.citedReferences]
+            if not entry.citedReferences:
+                entry.citedReferences = []
+            else:
+                entry.citedReferences = [entry.citedReferences]
+        entry.citedReferences = [cr for cr in entry.citedReferences if cr]
 
 
 def from_dir(path, corpus=True, **kwargs):

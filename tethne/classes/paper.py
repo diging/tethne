@@ -105,5 +105,5 @@ class Paper(object):
         """
 
         if hasattr(self, 'citedReferences'):
-            return [cr.ayjid for cr in self.citedReferences if cr is not None]
+            return [cr.ayjid for cr in self.citedReferences if cr is not None and cr.ayjid is not None]
         return []
