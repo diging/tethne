@@ -7,7 +7,7 @@ import codecs
 import os
 import csv
 
-from tethne import FeatureSet, StructuredFeatureSet
+from tethne import FeatureSet, StructuredFeatureSet, StreamingFeatureSet
 
 import sys
 PYTHON_3 = sys.version_info[0] == 3
@@ -20,13 +20,15 @@ def write_documents(corpus, target, featureset_name, metadata_fields=[]):
     Parameters
     ----------
 
-
     """
+
+    print "Writing corpus to %s" % target
+    sys.stdout.flush()
 
     docpath = target + '_docs.txt'
     metapath = target + '_meta.csv'
 
-    features = corpus.features[featureset_name].features
+    features = corpus.features[featureset_name]
     ftype = type(corpus.features[featureset_name])
     index = corpus.features[featureset_name].index
 
@@ -35,25 +37,53 @@ def write_documents(corpus, target, featureset_name, metadata_fields=[]):
     except IOError:
         raise IOError('Invalid target. Could not open files for writing.')
 
+    print "Writing metadata..."
+    sys.stdout.flush()
+
     # Generate metadata.
-    with codecs.open(metapath, 'w', encoding='utf-8') as f:
+    with codecs.open(metapath, 'w') as f:#, encoding='utf-8') as f:
         writer = csv.writer(f)
         writer.writerow([corpus.index_by] + list(metadata_fields))
         for i, p in corpus.indexed_papers.iteritems():
+            print '\r', i,
+            sys.stdout.flush()
+
             getter = lambda m: getattr(p, m) if hasattr(p, m) else None
-            writer.writerow([i] + list(map(getter, metadata_fields)))
+            row = [i] + list(map(getter, metadata_fields))
+            try:
+                writer.writerow(row)
+            except UnicodeEncodeError:
+                # TODO: we need a more elegant solution here.
+                row[-1] = row[-1].encode('utf-8')
+                writer.writerow(row)
+    print "...done."
+    sys.stdout.flush()
+
+    print "Writing documents..."
+    sys.stdout.flush()
 
     # Write documents content.
-    with codecs.open(docpath, 'w', encoding='utf-8') as f:
-        for i, p in corpus.indexed_papers.iteritems():
-            if i in features:
-                row = [i, u'en']
-                if ftype is FeatureSet:
-                    row += [u' '.join(repeat(e, c)) for e, c in features[i]]
-                elif ftype is StructuredFeatureSet:
-                    row += features[i]
+    with codecs.open(docpath, 'wb', encoding='utf-8') as f:
+        # for x, (i, p) in enumerate(corpus.indexed_papers.iteritems()):
+        for x, (i, feature_iter) in enumerate(features):
+            print '\r', x, i,
+            sys.stdout.flush()
+            # if i in features:
+            row = [i, u'en']
+            if type(features) is StreamingFeatureSet:
+                f.write(u'\t'.join(row) + u'\t')
+                for e, c in feature_iter:
+                    for e in repeat(e, int(c)):
+                        f.write(e + u' ')
+                f.write(u'\n')
+            else:
+                if type(features) is FeatureSet:
+                    row += [u' '.join(repeat(e, c)) for e, c in feature_iter]
+                elif type(features) is StructuredFeatureSet:
+                    row += feature_iter
                 f.write(u'\t'.join(row) + u'\n')
-
+    print "...done."
+    sys.stdout.flush()
     return docpath, metapath
 
 

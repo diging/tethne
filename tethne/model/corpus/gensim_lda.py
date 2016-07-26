@@ -62,7 +62,6 @@ class GensimLDAModel(BaseGensimModel, LDAMixin):
             identifiers = self.featureset.features.keys()
         else:
             identifiers = range(len(self.gcorpus))
-
         self.theta = gensim_to_theta_featureset(self.model, self.gcorpus, identifiers)
 
         if getattr(self, 'corpus', None):

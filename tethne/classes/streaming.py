@@ -89,7 +89,7 @@ class StreamingCorpus(Corpus):
         class PList(object):
             def __init__(self, parent):
                 self.parent = parent
-                
+
             def __getitem__(self, key):
                 return self.parent.indexed_papers[self.parent.indexed_papers.keys()[key]]
 

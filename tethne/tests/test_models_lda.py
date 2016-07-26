@@ -45,10 +45,10 @@ class TestHelpers(unittest.TestCase):
         self.assertIsInstance(phi, FeatureSet)
         self.assertEqual(len(phi), 20)
 
-    def test_mallet_to_theta_featureset_tab(self):
-        from tethne import mallet_to_theta_featureset
-        theta = mallet_to_theta_featureset('tethne/tests/data/mallet/tutorial_doc_topic.txt')
-        self.assertIsInstance(theta, FeatureSet)
+    # def test_mallet_to_theta_featureset_tab(self):
+    #     from tethne import mallet_to_theta_featureset
+    #     theta = mallet_to_theta_featureset('tethne/tests/data/mallet/tutorial_doc_topic.txt')
+    #     self.assertIsInstance(theta, FeatureSet)
 
 
 class TestLDAModelExistingOutput(unittest.TestCase):

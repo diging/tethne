@@ -10,7 +10,7 @@ import os
 import xml.etree.ElementTree as ET
 import re
 from collections import Counter
-from tethne import Paper, Corpus, Feature, FeatureSet, StreamingCorpus
+from tethne import Paper, Corpus, Feature, FeatureSet, StreamingCorpus, StreamingFeatureSet
 from tethne.utilities import dict_from_node, strip_non_ascii, number
 from tethne.readers.base import XMLParser
 import iso8601
@@ -83,6 +83,7 @@ class DfRParser(XMLParser):
             entry.authors_full = [entry.authors_full]
 
 
+# TODO: retire this class.
 class GramGenerator(object):
     """
     Yields N-gram data from on-disk dataset, to make loading big datasets a bit
@@ -203,21 +204,25 @@ class GramGenerator(object):
 
         return doi, grams   # Default behavior.
 
+
 def _get_citation_filename(basepath):
     for fname in ["citations.xml", "citations.XML"]:
         if os.path.exists(os.path.join(basepath, fname)):
             return fname
 
 
-def streaming_read(path, corpus=True, index_by='doi', parse_only=None,
-                   **kwargs):
+# TODO: this seems like a waste of space.
+def streaming_read(path, corpus=True, index_by='doi', parse_ngrams=['wordcount'],
+         parse_only=None, **kwargs):
+    return read(path, corpus, index_by, parse_ngrams, parse_only,
+                corpus_class=StreamingCorpus,
+                ngram_class=StreamingFeatureSet,
+                streaming=True)
 
-    return read(path, corpus=corpus, index_by=index_by, parse_only=parse_only,
-                corpus_class=StreamingCorpus)
 
-
-def read(path, corpus=True, index_by='doi', load_ngrams=True, parse_only=None,
-         corpus_class=Corpus, **kwargs):
+def read(path, corpus=True, index_by='doi', parse_ngrams=['wordcounts'],
+         parse_only=None, corpus_class=Corpus, ngram_class=FeatureSet,
+         streaming=True, **kwargs):
     """
     Yields :class:`.Paper` s from JSTOR DfR package.
 
@@ -242,6 +247,13 @@ def read(path, corpus=True, index_by='doi', load_ngrams=True, parse_only=None,
        >>> from tethne.readers import dfr
        >>> papers = dfr.read("/Path/to/DfR")
     """
+    # TODO: this needs a serious refactor.
+    if not os.path.exists(path):
+        raise ValueError('No such file or directory')
+
+    if streaming:
+        corpus_class = StreamingCorpus
+        ngram_class = StreamingFeatureSet
 
     citationfname = _get_citation_filename(path)
     features = {}
@@ -263,9 +275,8 @@ def read(path, corpus=True, index_by='doi', load_ngrams=True, parse_only=None,
         for dirpath, dirnames, filenames in os.walk(path):
             citationfname = _get_citation_filename(dirpath)
             if citationfname:
-                subcorpus = read(dirpath, index_by=index_by,
-                                 parse_only=parse_only)
-                papers += subcorpus.papers
+                parser = DfRParser(dirpath)
+                papers += parser.parse(parse_only=parse_only)
                 for featureset_name, featureset in subcorpus.features.iteritems():
                     if featureset_name not in features:
                         features[featureset_name] = {}
@@ -279,14 +290,9 @@ def read(path, corpus=True, index_by='doi', load_ngrams=True, parse_only=None,
     if corpus:
         corpus = corpus_class(papers, index_by=index_by, **kwargs)
 
-        if load_ngrams:     # Find and read N-gram data.
-            for sname in os.listdir(path):
-                fpath = os.path.join(path, sname)   # Full path.
-                if os.path.isdir(fpath) and not sname.startswith('.'):
-                    datafiles = [f for f in os.listdir(fpath)
-                                 if f.lower().endswith('xml')]
-                    if len(datafiles) > 0:
-                        features[sname] = ngrams(path, sname)
+        if len(parse_ngrams) > 0:
+            for tag in parse_ngrams:
+                features[tag] = ngrams(path, tag, streaming=streaming)
 
         for featureset_name, featureset_values in features.iteritems():
             if type(featureset_values) is dict:
@@ -297,7 +303,8 @@ def read(path, corpus=True, index_by='doi', load_ngrams=True, parse_only=None,
         return corpus
     return papers
 
-def ngrams(path, elem, ignore_hash=True):
+
+def ngrams(path, elem, ignore_hash=True, streaming=False):
     """
     Yields N-grams from a JSTOR DfR dataset.
 
@@ -315,9 +322,16 @@ def ngrams(path, elem, ignore_hash=True):
     ngrams : :class:`.FeatureSet`
 
     """
-
-    grams = GramGenerator(path, elem, ignore_hash=ignore_hash)
-    return FeatureSet({k: Feature(f) for k, f in grams})
+    default_filter = lambda f, c, C=None, DC=None: c if '#' not in f else None
+    if streaming:
+        if elem.endswith('s'):
+            elem = elem[:-1]
+        token_filter = default_filter if ignore_hash else None
+        return StreamingFeatureSet(path, StreamingParser().parse, token_filter=token_filter,
+                                   tag=elem)
+    else:   # TODO: clean this up, it's pretty gross.
+        grams = GramGenerator(path, elem, ignore_hash=ignore_hash)
+        return FeatureSet({k: Feature(f) for k, f in grams})
 
 
 def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
@@ -607,3 +621,76 @@ def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
         ayj = 'Unknown paper'
 
     return ayj.upper()
+
+
+
+def _fast_iter(context, func, tag, *extra):
+    while True:
+        try:
+            event, elem = context.next()
+        except StopIteration:
+            break
+        if event != "end":
+            continue
+
+        if elem.tag == tag:
+            yield func(elem, *extra)
+            elem.clear()
+    del context
+
+
+def _ngram_getter(elem):
+    text = elem.text.strip()
+    # Why, oh why, of why does ElementTree not yield consistent output?
+    if type(text) is not unicode:
+        text = text.decode('utf-8')
+    return text,  float(elem.attrib['weight'])
+
+import sys
+
+class StreamingParser(object):
+    def _dataset_iterator(self, path, tag):
+
+        fnames = os.listdir(path)
+        i = 0
+        while len(fnames) > 0:
+            fname = fnames.pop()
+            if not fname.endswith('XML'):
+                continue
+
+            identifier = fname.replace('%ss_' % tag, '').replace('_', '/').replace('.XML', '')
+            ident_path = os.path.join(path, fname)
+            print '\r', i,
+            sys.stdout.flush()
+            i += 1
+            yield identifier, _fast_iter(ET.iterparse(ident_path), _ngram_getter, tag)
+
+    def _identifier_iterator(self, path, identifier, tag):
+
+        identifier = identifier.replace('/', '_')
+
+        ident_path = os.path.join(path, '%ss_%s.XML' % (tag, identifier))
+        if not os.path.exists(ident_path):
+            raise KeyError('No such document')
+
+        return _fast_iter(ET.iterparse(ident_path), _ngram_getter, tag)
+
+
+    def parse(self, path, identifier=None, tag='wordcount'):
+        """
+        Parameters
+        ----------
+        path : str
+            Path to folder containing N-gram XML.
+        identifier : str
+            Identifier for a specific document. If provided, returns only the
+            inner iterator.
+        """
+        path = os.path.join(path, '%ss' % tag)
+        if not os.path.exists(path):
+            raise RuntimeError('No such path: %s' % path)
+
+
+        if identifier:
+            return self._identifier_iterator(path, identifier, tag)
+        return self._dataset_iterator(path, tag)

@@ -166,7 +166,9 @@ class LDAModel(Model, LDAMixin):
         if not self.corpus:
             raise RuntimeError('Must set model.corpus before external' \
                              + ' documents can be generated')
-
+        if self.verbose:
+            print 'LDAModel: Write corpus for topic modeling'
+        sys.stdout.flush()
         target = self.temp + 'mallet'
         paths = write_documents(self.corpus, target, self.featureset_name,
                                 ['date', 'title'])
@@ -184,7 +186,9 @@ class LDAModel(Model, LDAMixin):
         if not os.path.exists(self.mallet_bin):
             raise IOError("MALLET path invalid or non-existent.")
         self.input_path = os.path.join(self.temp, "input.mallet")
-
+        if self.verbose:
+            print 'LDAModel: Import corpus into MALLET'
+        sys.stdout.flush()
         exit = subprocess.call([
                 self.mallet_bin,
                 'import-file',
@@ -215,6 +219,9 @@ class LDAModel(Model, LDAMixin):
             if not hasattr(self, attr):
                 raise AttributeError('Please set {0}'.format(attr))
 
+        if self.verbose:
+            print 'LDAModel: Start MALLET topic modeling'
+        sys.stdout.flush()
         self.ll = []
         self.num_iters = 0
         logger.debug('run() with k={0} for {1} iterations'.format(self.Z, self.max_iter))
@@ -249,7 +256,8 @@ class LDAModel(Model, LDAMixin):
             try:
                 this_iter = float(prog.match(l).groups()[0])
                 progress = int(100. * this_iter/self.max_iter)
-                print 'Modeling progress: {0}%.\r'.format(progress),
+                if self.verbose:
+                    print 'Modeling progress: {0}%.\r'.format(progress),
             except AttributeError:  # Not every line will match.
                 pass
 
@@ -257,6 +265,9 @@ class LDAModel(Model, LDAMixin):
         self.load()
 
     def load(self, **kwargs):
+        if self.verbose:
+            print 'LDAModel: Load MALLET results'
+        sys.stdout.flush()
         self._read_theta(kwargs.get('dt', self.dt))
         self._read_phi(kwargs.get('wt', self.wt))
 
@@ -319,7 +330,6 @@ def mallet_to_theta_featureset(dt_path):
         i = -1
         for raw_line in f:
             line = raw_line.split()
-            print line[:10]
             i += 1
             if i == 0:
                 continue     # Avoid header row.

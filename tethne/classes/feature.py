@@ -342,6 +342,9 @@ class BaseFeatureSet(object):
         self.features = {}
         self.with_feature = defaultdict(list)
 
+    def __iter__(self):
+        return self.features.iteritems()
+
     def __getitem__(self, key):
         try:
             return self.features[key]

@@ -14,13 +14,14 @@ class Model(object):
     Base class for models.
     """
 
-    def __init__(self, corpus=None, prep=True, **kwargs):
+    def __init__(self, corpus=None, prep=True, verbose=False, **kwargs):
         """
         Initialize the ModelManager.
         """
 
         self.corpus = corpus
         self.temp = tempfile.mkdtemp()
+        self.verbose = verbose
 
         for attr in ['run', 'prep']:
             if not hasattr(self, attr):

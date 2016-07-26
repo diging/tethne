@@ -22,6 +22,7 @@ from tethne.classes.corpus import Corpus
 from tethne.classes.streaming import StreamingCorpus
 from tethne.classes.feature import Feature, FeatureSet, \
                                    StructuredFeature, StructuredFeatureSet
+from tethne.classes.streamingfeature import StreamingFeatureSet
 from tethne.classes.graphcollection import GraphCollection
 from tethne.networks.base import *
 from tethne.networks.authors import *
