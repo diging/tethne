@@ -142,17 +142,17 @@ class TestWorkflows(unittest.TestCase):
         self.assertGreater(len(model.phi.features), 0)
         self.assertGreater(len(model.theta.features), 0)
 
-    def test_with_parser(self):
-        from tethne.readers.dfr import read
-        datapath = '/Users/erickpeirson/Dropbox (ASU)/xml'
-        corpus = read(datapath, streaming=True)
-
-        from tethne import LDAModel
-        model = LDAModel(corpus, featureset_name='wordcounts')
-        model.Z = 20
-        model.max_iter = 200
-        model.fit()
-        print model.list_topics()
+    # def test_with_parser(self):
+    #     from tethne.readers.dfr import read
+    #     datapath = '/Users/erickpeirson/Dropbox (ASU)/xml'
+    #     corpus = read(datapath, streaming=True)
+    #
+    #     from tethne import LDAModel
+    #     model = LDAModel(corpus, featureset_name='wordcounts')
+    #     model.Z = 20
+    #     model.max_iter = 200
+    #     model.fit()
+    #     print model.list_topics()
 
 
 if __name__ == '__main__':
