@@ -120,8 +120,12 @@ class WoSParser(FTParser):
             if len(tokens) > 1:
                 aulast, auinit = tokens[0:2]    # Ignore JR, II, III, etc.
             else:
-                aulast = tokens[0]
-                auinit = ''
+                tokens = tokens[0].split('.')
+                if len(tokens) > 1:
+                    aulast, auinit = tokens[0:2]
+                else:
+                    aulast = tokens[0]
+                    auinit = ''
         else:
             aulast, auinit = tokens[0], ''
         aulast = _strip_punctuation(aulast).upper()
