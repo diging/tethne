@@ -1,9 +1,10 @@
 import networkx as nx
 from itertools import combinations
 from collections import Counter, defaultdict
+import numpy as np
 
 from tethne.utilities import _iterable
-from tethne import Corpus, FeatureSet, StructuredFeatureSet, StreamingCorpus
+from tethne import Corpus, FeatureSet, StructuredFeatureSet, StreamingCorpus, StreamingFeatureSet
 
 
 def _generate_graph(graph_class, pairs, node_attrs={}, edge_attrs={},
@@ -30,13 +31,45 @@ def _get_featureset(corpus_or_featureset, featureset_name):
         if featureset_name not in corpus_or_featureset.features:
             corpus_or_featureset.index_feature(featureset_name)
         return corpus_or_featureset.features[featureset_name]
-    elif type(corpus_or_featureset) in [FeatureSet, StructuredFeatureSet]:
+    elif type(corpus_or_featureset) in [FeatureSet, StructuredFeatureSet, StreamingFeatureSet]:
         return corpus_or_featureset     # Already a FeatureSet.
     else:
         raise ValueError('First parameter must be Corpus or FeatureSet')
 
 
-def cooccurrence(corpus_or_featureset, featureset_name=None, min_weight=1,
+def _npmi(A, S):
+    A += 1.
+    F_x = np.diagonal(A)/S
+    F_xy = A/A.max()
+    P_xy = F_x.T * F_x
+    pmi = np.log(F_xy/P_xy)
+    data = pmi/(-1. * np.log(pmi))
+    return np.ma.MaskedArray(data, np.isnan(data), fill_value=0.0).filled()
+
+
+def cooccurrence(corpus_or_featureset, featureset_name=None, min_weight=0.31,
+                 edge_attrs=['ayjid', 'date'], metric=_npmi):
+
+
+
+    featureset = _get_featureset(corpus_or_featureset, featureset_name)
+    from tethne import matrices
+    out, docs, vocab = matrices.pointwise_mutual_information(featureset, matrix_backend='hdf5')
+
+    print "Build graph"
+    graph = nx.Graph()
+    for i, j, k in out:
+        # if weight >= min_weight:
+        graph.add_edge(i, j, weight=float(k))
+    #
+    print graph.size(), graph.order()
+    nx.set_node_attributes(graph, 'label', {k: vocab[k] for k in graph.nodes()})
+    print graph.nodes(data=True)[:10]
+    print graph.edges(data=True)[:10]
+    nx.write_graphml(graph, 'asdf.graphml')
+
+
+def cooccurrence_(corpus_or_featureset, featureset_name=None, min_weight=1,
                  edge_attrs=['ayjid', 'date'],
                  filter=None):
     """

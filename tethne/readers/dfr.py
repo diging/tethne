@@ -327,8 +327,7 @@ def ngrams(path, elem, ignore_hash=True, streaming=False):
         if elem.endswith('s'):
             elem = elem[:-1]
         token_filter = default_filter if ignore_hash else None
-        return StreamingFeatureSet(path, StreamingParser().parse, token_filter=token_filter,
-                                   tag=elem)
+        return StreamingFeatureSet(path, StreamingParser, token_filter=token_filter, tag=elem)
     else:   # TODO: clean this up, it's pretty gross.
         grams = GramGenerator(path, elem, ignore_hash=ignore_hash)
         return FeatureSet({k: Feature(f) for k, f in grams})
@@ -623,7 +622,6 @@ def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     return ayj.upper()
 
 
-
 def _fast_iter(context, func, tag, *extra):
     while True:
         try:
@@ -648,7 +646,24 @@ def _ngram_getter(elem):
 
 import sys
 
+
 class StreamingParser(object):
+    def __init__(self, path, identifier=None, tag='wordcount'):
+        self.path = path
+        self.identifier = identifier
+        self.tag = tag
+
+    def __len__(self):
+        return len(os.listdir(self._get_full_path(self.path, tag=self.tag)))
+
+    def keys(self):
+        path = self._get_full_path(self.path, tag=self.tag)
+        return [_filename_to_identifier(fn) for fn in os.listdir(path)
+                if fn.lower().endswith('.xml')]
+
+    def _filename_to_identifier(self, filename, tag):
+        return filename.replace('%ss_' % tag, '').replace('_', '/').replace('.XML', '')
+
     def _dataset_iterator(self, path, tag):
 
         fnames = os.listdir(path)
@@ -658,9 +673,8 @@ class StreamingParser(object):
             if not fname.endswith('XML'):
                 continue
 
-            identifier = fname.replace('%ss_' % tag, '').replace('_', '/').replace('.XML', '')
+            identifier = self._filename_to_identifier(fname, tag)
             ident_path = os.path.join(path, fname)
-            print '\r', i,
             sys.stdout.flush()
             i += 1
             yield identifier, _fast_iter(ET.iterparse(ident_path), _ngram_getter, tag)
@@ -676,7 +690,16 @@ class StreamingParser(object):
         return _fast_iter(ET.iterparse(ident_path), _ngram_getter, tag)
 
 
-    def parse(self, path, identifier=None, tag='wordcount'):
+    def _get_full_path(self, path, tag=None):
+        tag = tag if tag else self.tag
+
+        path = os.path.join(path, '%ss' % tag)
+        if not os.path.exists(path):
+            raise RuntimeError('No such path: %s' % path)
+        return path
+
+
+    def parse(self, path=None, identifier=None, tag='wordcount'):
         """
         Parameters
         ----------
@@ -686,10 +709,11 @@ class StreamingParser(object):
             Identifier for a specific document. If provided, returns only the
             inner iterator.
         """
-        path = os.path.join(path, '%ss' % tag)
-        if not os.path.exists(path):
-            raise RuntimeError('No such path: %s' % path)
+        path = path if path else self.path
+        identifier = identifier if identifier else self.identifier
+        tag = tag if tag else self.tag
 
+        path = self._get_full_path(path, tag=tag)
 
         if identifier:
             return self._identifier_iterator(path, identifier, tag)
