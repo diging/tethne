@@ -74,6 +74,7 @@ class WoSParser(FTParser):
         'ID': 'authorKeywords',
         'DE': 'keywordsPlus',
         'DI': 'doi',
+        'D2': 'doi',
         'BP': 'pageStart',
         'EP': 'pageEnd',
         'VL': 'volume',
