@@ -3,9 +3,9 @@ Methods for network analysis.
 
 .. autosummary::
    :nosignatures:
-   
+
    global_closeness_centrality
-   
+
 """
 
 import networkx as nx
@@ -19,6 +19,10 @@ def global_closeness_centrality(g, node=None, normalize=True):
     Parameters
     ----------
     g : networkx.Graph
+    node : None or object
+        (default None) If None, calculates global closeness centrality for all
+        nodes in g. If not None, calculates global closeness centrality for
+        the supplied node.
     normalize : boolean
         If True, normalizes centrality based on the average shortest path
         length. Default is True.

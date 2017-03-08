@@ -4,7 +4,7 @@ Methods for analyzing featuresets.
 .. autosummary::
    :nosignatures:
 
-   cosine_distance
+   angular_similarity
    cosine_similarity
    distance
    kl_divergence
