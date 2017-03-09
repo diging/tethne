@@ -42,10 +42,10 @@ class StructuredFeature(list):
     tokens : list
         An ordered list of tokens.
     contexts : list
-        A list of (name, indices) 2-tuples, where ``name`` is string-like and
-        indices is an iterable of int token indices.
+        (default: ``None``) A list of (name, indices) 2-tuples, where ``name``
+        is string-like and indices is an iterable of int token indices.
     reference : tuple
-        A (feature, map) 2-tuple, where ``feature`` is a
+        (default: ``None``) A (feature, map) 2-tuple, where ``feature`` is a
         :class:`.StructuredFeature` and ``map`` is a dict mapping token indices
         in this :class:`.StructuredFeature` to token indices in ``feature``.
     """
@@ -71,6 +71,10 @@ class StructuredFeature(list):
     def unique(self):
         """
         The `set` of unique elements in this :class:`.Feature`\.
+
+        Returns
+        -------
+        elements : set
         """
         if len(self) > 0:
             return set(self)
@@ -184,8 +188,9 @@ class StructuredFeature(list):
         indices : list
             Token indices at which each chunk in the context begins.
         level : int
-            Level in the hierarchy at which to insert the context. By default,
-            inserts context at the lowest level of the hierarchy
+            (default: ``None``) Level in the hierarchy at which to insert the
+            context. By default, inserts context at the lowest level of the
+            hierarchy
 
         """
 
@@ -290,6 +295,10 @@ class Feature(list):
     def unique(self):
         """
         The `set` of unique elements in this :class:`.Feature`\.
+
+        Returns
+        -------
+        elements : set
         """
         if len(self) > 0:
             return set(list(zip(*self))[0])
@@ -297,6 +306,13 @@ class Feature(list):
 
     @property
     def norm(self):
+        """
+        Return normalized feature values so that all values sum to 1.
+
+        Returns
+        -------
+        :class:`Feature` object with normalized values.
+        """
         T = sum(list(zip(*self))[1])
         return Feature([(i, 1.*v/T) for i, v in self])
 
@@ -324,6 +340,9 @@ class Feature(list):
         return [self[i] for i in argsort(list(zip(*self))[1])[::-1][:topn]]
 
     def value(self, element):
+        """
+        Get the value for ``element`` from this :class:`Feature` object.
+        """
         return dict(self)[element]
 
 
@@ -354,9 +373,16 @@ class BaseFeatureSet(object):
         return len(self.features)
 
     def items(self):
+        """
+        List of (element, value) pairs, as 2-tuples.
+        """
         return self.features.items()
 
     def iteritems(self):
+        """
+        An iterator over the (element, value) pairs of this
+        :class:`BaseFeatureSet` object.
+        """
         return self.features.iteritems()
 
     @property
@@ -368,13 +394,27 @@ class BaseFeatureSet(object):
 
     @property
     def N_features(self):
+        """
+        Count of unique elements in this :class:`BaseFeatureSet` object.
+        """
         return len(self.unique)
 
     @property
     def N_documents(self):
+        """
+        Count of documents in this :class:`BaseFeatureSet` object.
+        """
         return len(self.features)
 
     def count(self, elem):
+        """
+        Get count of ``elem`` across all documents in the
+        :class:`BaseFeatureSet` object.
+
+        Returns
+        -------
+        N : float
+        """
         logger.debug(u'Get count for {0}'.format(elem))
         if elem in self.lookup:
             i = self.lookup[elem]
@@ -385,15 +425,37 @@ class BaseFeatureSet(object):
             return 0.
 
     def documentCount(self, elem):
+        """
+        Get count of documents containing ``elem`` element.
+
+        Returns
+        -------
+        N : float
+        """
         if elem in self.lookup:
             return self.documentCounts[self.lookup[elem]]
         else:
             return 0.
 
     def papers_containing(self, elem):
+        """
+        Get list of papers containing ``elem`` element.
+
+        Returns
+        -------
+        list of paper identifiers.
+        """
         return self.with_feature[self.lookup[elem]]
 
     def add(self, paper_id, feature):
+        """
+        Add ``feature`` to paper_id.
+
+        Parameters
+        ----------
+        paper_id : str
+        feature : :class:`.Feature` or :class:`.StructuredFeature`.
+        """
         if type(feature) not in [Feature, StructuredFeature]:
             raise ValueError("""`feature` must be an instance of Feature or
             StructuredFeature""")
@@ -451,6 +513,23 @@ class StructuredFeatureSet(BaseFeatureSet):
     """
 
     def transform(self, func):
+        """
+        Apply a transformation to tokens in this :class:`.StructuredFeatureSet`\.
+
+        Parameters
+        ----------
+        func : callable
+            Should take four parameters: token, value in
+            :class:`.StructedFeatureSet` (e.g. overall count), feature count,
+            and document count (i.e. number of documents in which the token
+            occurs). Should return a new numeric (int or float) value, or None.
+            If value is 0 or None, the token will be excluded.
+
+        Returns
+        -------
+        :class:`.StructuredFeatureSet`
+
+        """
         features = {}
         for i, feature in self.features.iteritems():
             feature_ = []
@@ -473,7 +552,7 @@ class StructuredFeatureSet(BaseFeatureSet):
         Parameters
         ----------
         context : str
-            Context name.
+            (default: ``None``) Context name.
 
         Returns
         -------
@@ -627,6 +706,22 @@ class FeatureSet(BaseFeatureSet):
         return FeatureSet(features)
 
     def translate(self, func):
+        """
+        Apply a translation to features in this :class:`.FeatureSet`\.
+
+        Parameters
+        ----------
+        func : callable
+            Should take four parameters: token, value in document (e.g. count),
+            value in :class:`.FeatureSet` (e.g. overall count), and document
+            count (i.e. number of documents in which the token occurs). Should
+            return a new feature value, or None. If value is None, the feature
+            will be excluded.
+
+        Returns
+        -------
+        :class:`.FeatureSet`
+        """
         features = {}
         for i, feature in self.features.iteritems():
             features_ = []
@@ -634,13 +729,19 @@ class FeatureSet(BaseFeatureSet):
                 t = self.lookup[f]
                 f_ = func(f, v, self.counts[t], self.documentCounts[t])
                 if f_:
-                    feature_.append((f_, v))
-            features[i] = Feature(feature_)
+                    features_.append((f_, v))
+            features[i] = Feature(features_)
         return FeatureSet(features)
 
     def as_matrix(self):
         """
+        Return the features and documents as a matrix.
 
+        Returns
+        -------
+        Returns  NxM matrix in the form of list of lists, where N is the number
+        of documents in this :class:`.FeatureSet` and M is the number of unique
+        features.
         """
         matrix = [[0. for e in xrange(self.N_features)]
                   for i in xrange(self.N_documents)]
@@ -653,6 +754,20 @@ class FeatureSet(BaseFeatureSet):
         return matrix
 
     def as_vector(self, p, norm=False):
+        """
+        Return ``p`` feature as a vector.
+
+        Parameters
+        ----------
+        p : object
+            Feature
+        norm : bool
+            (default: ``False``) If ``True``, return a normalized vector.
+
+        Returns
+        -------
+        Returns a list of floats.
+        """
         m = len(self.index.keys())
 
         if norm:
