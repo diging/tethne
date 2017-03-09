@@ -7,8 +7,6 @@ Methods for analyzing :class:`.GraphCollection`\s.
    algorithm
    attachment_probability
    connected
-   delta
-   node_global_closeness_centrality
 
 """
 
@@ -81,7 +79,7 @@ def connected(G, method_name, **kwargs):
     G : :class:`.GraphCollection`
         The :class:`.GraphCollection` to analyze. The specified method will be
         applied to each graph in ``G``.
-    method : string
+    method_name : string
         Name of method in networkx.connected.
     **kwargs : kwargs
         Keyword arguments, passed directly to method.

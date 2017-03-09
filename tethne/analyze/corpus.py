@@ -104,8 +104,10 @@ def burstness(corpus, featureset_name, features=[], k=5, topn=20,
     Parameters
     ----------
     corpus : :class:`.Corpus`
-    feature : str
+    featureset_name : str
         Name of featureset in ``corpus``. E.g. ``'citations'``.
+    features : list
+        (default: []) A list specifying features of interest.
     k : int
         (default: 5) Number of burst states.
     topn : int or float {0.-1.}
@@ -115,8 +117,6 @@ def burstness(corpus, featureset_name, features=[], k=5, topn=20,
         (default: False) If True, loads ``topn`` features per slice. Otherwise,
         loads ``topn`` features overall. If ``flist`` is provided, this
         parameter is ignored.
-    flist : list
-        List of features. If provided, ``topn`` and ``perslice`` are ignored.
     normalize : bool
         (default: True) If True, burstness is expressed relative to the hightest
         possible state (``k-1``). Otherwise, states themselves are returned.
@@ -127,16 +127,6 @@ def burstness(corpus, featureset_name, features=[], k=5, topn=20,
     -------
     B : dict
         Keys are features, values are tuples of ( dates, burstness )
-
-    Examples
-    --------
-
-    .. code-block:: python
-
-       >>> from tethne.analyze.corpus import burstness
-       >>> B = burstness(corpus, 'abstractTerms', flist=['process', 'method']
-       >>> B['process']
-       ([1990, 1991, 1992, 1993], [0., 0.4, 0.6, 0.])
 
     """
 
@@ -162,19 +152,31 @@ def feature_burstness(corpus, featureset_name, feature, k=5, normalize=True,
     Parameters
     ----------
     corpus : :class:`.Corpus`
-    feature : str
+    featureset_name : str
         Name of featureset in ``corpus``. E.g. ``'citations'``.
-    findex : int
-        Index of ``feature`` in ``corpus``.
+    feature:
     k : int
         (default: 5) Number of burst states.
     normalize : bool
         (default: True) If True, burstness is expressed relative to the hightest
         possible state (``k-1``). Otherwise, states themselves are returned.
-    kwargs : kwargs
+    s : float
+        (default: 1.1) Scaling parameter ( > 1.)that controls graininess of
+        burst detection. Lower values make the model more sensitive.
+    gamma : float
+        (default: 1.0) Parameter that controls the 'cost' of higher burst
+        states. Higher values make it more 'difficult' to achieve a higher
+        burst state.
+    slice_kwargs : kwargs
         Parameters for burstness automaton HMM.
-    """
 
+    Returns
+    -------
+    B : tuple
+        A ( dates, burstness ) 2-tuple where dates is a list of dates and
+        burstness is a list of floats, both lists being the same size.
+    """
+    #TODO: Pass slice_kwargs to the appropriate function.
 
     if featureset_name not in corpus.features:
         corpus.index_feature(featureset_name)
@@ -246,9 +248,13 @@ def sigma(G, corpus, featureset_name, B=None, **kwargs):
     ----------
     G : :class:`.GraphCollection`
     corpus : :class:`.Corpus`
-    feature : str
+    featureset_name : str
         Name of a featureset in `corpus`.
 
+    Returns
+    -------
+    B : dict
+        Keys are features, values are tuples of ( dates, burstness )
 
     Examples
     --------
