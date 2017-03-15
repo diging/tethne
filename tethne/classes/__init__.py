@@ -8,5 +8,6 @@ bibliographic data in Tethne.
    corpus
    feature
    graphcollection
+   streaming
 
 """

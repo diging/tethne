@@ -235,6 +235,7 @@ class Corpus(object):
         paper : list
         index_by : str
         index_fields : str or iterable of strs
+        index_features : str or iterable of strs
         kwargs : kwargs
 
         """
@@ -263,6 +264,14 @@ class Corpus(object):
             self._index_paper(paper)
 
     def add_papers(self, papers):
+        """
+        Add papers to corpus.
+
+        Parameters
+        ----------
+        papers : iterable of :class:`.Paper` objects.
+
+        """
         for paper in papers:
             self._index_paper(paper)
 
@@ -335,6 +344,26 @@ class Corpus(object):
 
     def index_paper_by_feature(self, paper, feature_name, tokenize=lambda x: x,
                                structured=False):
+        """
+        Creates a new :class:`.Feature` from the attribute ``feature_name``
+        in ``paper``\.
+
+        New :class:`.Feature` is added to :attr:`.features`\.
+
+        Parameters
+        ----------
+        paper : class:`.Paper`
+        feature_name : str
+            The name of a :class:`.Paper` attribute
+        tokenize : function
+            (default ``lambda x: x``) A function which accepts ``feature_name``
+            attribute from :class:`.Paper` object and returns its tokenized
+            representation.
+        structured : bool
+            (default: ``False``) If ``False``, class:`.StructuredFeature` is
+            used instead of class:`.Feature`\.
+
+        """
         if not feature_name:
             return
 
@@ -360,6 +389,13 @@ class Corpus(object):
         ----------
         feature_name : str
             The name of a :class:`.Paper` attribute.
+        tokenize : function
+            (default ``lambda x: x``) A function which accepts ``feature_name``
+            attribute from :class:`.Paper` object and returns its tokenized
+            representation.
+        structured : bool
+            (default: ``False``) If ``True``, class:`.StructuredFeatureSet` is
+            created and added. If ``False``, class:`.FeatureSet` is used instead.
 
         """
         self._init_featureset(feature_name, structured=structured)
@@ -368,6 +404,17 @@ class Corpus(object):
             self.index_paper_by_feature(paper, feature_name, tokenize, structured)
 
     def index_paper_by_attr(self, paper, attr):
+        """
+        Indexes ``paper`` by the attribute ``attr``.
+
+        New indices are added to :attr:`.indices`\.
+
+        Parameters
+        ----------
+        paper : class:`.Paper`
+        attr : str
+            The name of a :class:`.Paper` attribute.
+        """
         i = self._generate_index(paper)
         if not attr:
             return
@@ -466,11 +513,14 @@ class Corpus(object):
         ----------
         selector : object
             See method description.
+        index_only : bool
+            (default: ``False``) If ``True``, return only a list of paper indices.
 
         Returns
         -------
         list
-            A list of :class:`.Paper`\s.
+            A list of :class:`.Paper`\s if ``index_only`` is ``False``\;
+            otherwise, a list of paper indices.
         """
 
         papers = []
@@ -561,10 +611,28 @@ class Corpus(object):
             (default: 1) Size of the time window, in years.
         step_size : int
             (default: 1) Number of years to advance window at each step.
+        cumulative : bool
+            (default: ``False``) If ``True``\, second value in each generator
+            yielded tuple covers all corpora until the corresponding year. When
+            used with other flags, the contents of second value reflect
+            cumulative corpora as well. For example, the second value is an int
+            indicating the cumulative count when this flag is used alongside
+            ``count_only``.
+        count_only : bool
+            (default: ``False``) If ``True``\, second value in each generator
+            yielded tuple is an int, indicating the count of items in
+            corresponding year's subcorpus.
+        subcorpus : bool
+            (default: ``True``) If ``False``\, second value in each generator
+            yielded tuple is a list of :class:`Paper`\s.
+        feature_name : str
+            (default: ``None``) If not ``None``\, second value in each generated
+            yielded tuple is a :class::``FeatureSet`` instance.
 
         Returns
         -------
-        generator
+        A generator that yields ``(key, subcorpus)`` tuples for
+        sequential time windows.
         """
 
         if 'date' not in self.indices:
@@ -705,6 +773,10 @@ class Corpus(object):
         slice_kwargs : kwargs
             If ``perslice=True``, these keyword arguments are passed to
             :meth:`.Corpus.slice`\.
+
+        Returns
+        -------
+        list
         """
 
         if perslice:
@@ -713,6 +785,20 @@ class Corpus(object):
         return self.features[featureset_name].top(topn, by=by)
 
     def subfeatures(self, selector, featureset_name):
+        """
+        Retrieves the top ``topn`` most numerous features in the corpus.
+
+        Parameters
+        ----------
+        selector : object
+            Refer :meth:`.Corpus.select` for argument description.
+        featureset_name : str
+            Name of a :class:`.FeatureSet` in the :class:`.Corpus`\.
+
+        Returns
+        -------
+        An instance of :class:`FeatureSet`.
+        """
         indices = self.select(selector, index_only=True)
         fclass = self.features[featureset_name].__class__
 
@@ -733,6 +819,14 @@ class Corpus(object):
            >>> subcorpus
            <tethne.classes.corpus.Corpus object at 0x10278ea10>
 
+        Parameters
+        ----------
+        selector : object
+            Refer :meth:`.Corpus.select` for argument description.
+
+        Returns
+        -------
+        :class:`Corpus` object.
         """
         subcorpus = self.__class__(self[selector],
                            index_by=self.index_by,
