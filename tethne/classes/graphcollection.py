@@ -224,7 +224,7 @@ class GraphCollection(dict):
 
         Returns
         -------
-        edges : list
+        list
         """
         edges = self.master_graph.edges(data=data)
         if native:
@@ -248,7 +248,7 @@ class GraphCollection(dict):
 
         Returns
         -------
-        N : int
+        int
         """
         if piecewise:
             return {k: v.order() for k, v in self.items()}
@@ -271,7 +271,7 @@ class GraphCollection(dict):
 
         Returns
         -------
-        N : int
+        int
         """
         if piecewise:
             return {k: v.size() for k, v in self.items()}
@@ -454,7 +454,7 @@ class GraphCollection(dict):
 
         Returns
         -------
-        history : dict
+        dict
         """
         return self.master_graph.node[node][attribute]
 
@@ -474,7 +474,7 @@ class GraphCollection(dict):
 
         Returns
         -------
-        history : dict
+        dict
         """
 
         return {attr['graph']: attr[attribute] for i, attr
@@ -495,7 +495,7 @@ class GraphCollection(dict):
 
         Returns
         -------
-        graph : :ref:`networkx.Graph <networkx:graph>`
+        :ref:`networkx.Graph <networkx:graph>`
         """
 
         if type(self.master_graph) is nx.MultiDiGraph:

@@ -74,7 +74,7 @@ class StructuredFeature(list):
 
         Returns
         -------
-        elements : set
+        set
         """
         if len(self) > 0:
             return set(self)
@@ -102,7 +102,7 @@ class StructuredFeature(list):
 
         Returns
         -------
-        chunks : list
+        list
             Each item in ``chunks`` is a list of tokens.
         """
         N_chunks = len(self.contexts[context])
@@ -124,7 +124,7 @@ class StructuredFeature(list):
 
         Returns
         -------
-        chunk : list
+        list
             List of tokens in the selected chunk.
         """
 
@@ -298,7 +298,7 @@ class Feature(list):
 
         Returns
         -------
-        elements : set
+        set
         """
         if len(self) > 0:
             return set(list(zip(*self))[0])
@@ -311,7 +311,7 @@ class Feature(list):
 
         Returns
         -------
-        :class:`Feature` object with normalized values.
+        :class:`Feature`
         """
         T = sum(list(zip(*self))[1])
         return Feature([(i, 1.*v/T) for i, v in self])
@@ -342,6 +342,14 @@ class Feature(list):
     def value(self, element):
         """
         Get the value for ``element`` from this :class:`Feature` object.
+
+        Parameters
+        ----------
+        element : object
+
+        Returns
+        -------
+        object
         """
         return dict(self)[element]
 
@@ -374,14 +382,25 @@ class BaseFeatureSet(object):
 
     def items(self):
         """
-        List of (element, value) pairs, as 2-tuples.
+        Get a list of (element, value) pairs, as 2-tuples.
+
+        Returns
+        -------
+        list
+            List of (element, value) pairs, as 2-tuples.
         """
         return self.features.items()
 
     def iteritems(self):
         """
-        An iterator over the (element, value) pairs of this
+        Get an iterator over the (element, value) pairs of this
         :class:`BaseFeatureSet` object.
+
+        Returns
+        -------
+        iterator
+            Iterator over the (element, value) pairs of this
+            :class:`BaseFeatureSet` object.
         """
         return self.features.iteritems()
 
@@ -411,9 +430,13 @@ class BaseFeatureSet(object):
         Get count of ``elem`` across all documents in the
         :class:`BaseFeatureSet` object.
 
+        Parameters
+        ----------
+        elem : object
+
         Returns
         -------
-        N : float
+        float
         """
         logger.debug(u'Get count for {0}'.format(elem))
         if elem in self.lookup:
@@ -428,9 +451,13 @@ class BaseFeatureSet(object):
         """
         Get count of documents containing ``elem`` element.
 
+        Parameters
+        ----------
+        elem : object
+
         Returns
         -------
-        N : float
+        float
         """
         if elem in self.lookup:
             return self.documentCounts[self.lookup[elem]]
@@ -441,9 +468,14 @@ class BaseFeatureSet(object):
         """
         Get list of papers containing ``elem`` element.
 
+        Parameters
+        ----------
+        elem : object
+
         Returns
         -------
-        list of paper identifiers.
+        list
+            List of paper identifiers.
         """
         return self.with_feature[self.lookup[elem]]
 
@@ -739,9 +771,10 @@ class FeatureSet(BaseFeatureSet):
 
         Returns
         -------
-        Returns  NxM matrix in the form of list of lists, where N is the number
-        of documents in this :class:`.FeatureSet` and M is the number of unique
-        features.
+        list
+            Returns  NxM matrix in the form of list of lists, where N is the number
+            of documents in this :class:`.FeatureSet` and M is the number of unique
+            features.
         """
         matrix = [[0. for e in xrange(self.N_features)]
                   for i in xrange(self.N_documents)]
@@ -766,7 +799,8 @@ class FeatureSet(BaseFeatureSet):
 
         Returns
         -------
-        Returns a list of floats.
+        list
+            List of floats.
         """
         m = len(self.index.keys())
 

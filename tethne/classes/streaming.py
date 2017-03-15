@@ -9,18 +9,17 @@ import os
 class StreamingIndex(object):
     """
     'dict' like class supporting memory-friendly index.
+
+    Parameters
+    ----------
+    name : str
+        (default: 'index') Name of the index diretory. If ``name``
+        directory doesn't exist, it will be created at ``base_path``
+        location.
+    base_path : str
+        (default: '.') Location of the disk cache.
     """
     def __init__(self, name='index', base_path='.', serializer=pickle):
-        """
-        Parameters
-        ----------
-        name : str
-            (default: 'index') Name of the index diretory. If ``name``
-            directory doesn't exist, it will be created at ``base_path``
-            location.
-        base_path : str
-            (default: '.') Location of the disk cache.
-        """
         if not os.path.exists(base_path):
             raise IOError('No such directory')
 
@@ -86,15 +85,13 @@ class StreamingIndex(object):
 class StreamingCorpus(Corpus):
     """
     Provides memory-friendly access to large collections of metadata.
+    Refer :class:`.Corpus` for usage.
     """
 
     index_class = StreamingIndex
 
     @property
     def papers(self):
-        """
-        A list of all :class:`.Paper`\s in the :class:`.StreamingCorpus`\.
-        """
         class PList(object):
             def __init__(self, parent):
                 self.parent = parent
@@ -111,9 +108,6 @@ class StreamingCorpus(Corpus):
         return PList(self)
 
     def __init__(self, *args, **kwargs):
-        """
-        Refer :meth:`.Corpus.__init__` for argument description and usage.
-        """
         base_path = kwargs.get('base_path', '.tethne')
         serializer = kwargs.get('serializer', pickle)
         self.index_kwargs.update({

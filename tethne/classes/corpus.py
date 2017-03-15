@@ -631,8 +631,9 @@ class Corpus(object):
 
         Returns
         -------
-        A generator that yields ``(key, subcorpus)`` tuples for
-        sequential time windows.
+        generator
+            A generator that yields ``(key, subcorpus)`` tuples for
+            sequential time windows.
         """
 
         if 'date' not in self.indices:
@@ -797,7 +798,7 @@ class Corpus(object):
 
         Returns
         -------
-        An instance of :class:`FeatureSet`.
+        :class:`FeatureSet`
         """
         indices = self.select(selector, index_only=True)
         fclass = self.features[featureset_name].__class__
@@ -826,7 +827,7 @@ class Corpus(object):
 
         Returns
         -------
-        :class:`Corpus` object.
+        :class:`Corpus`
         """
         subcorpus = self.__class__(self[selector],
                            index_by=self.index_by,
