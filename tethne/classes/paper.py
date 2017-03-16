@@ -42,7 +42,7 @@ class Paper(object):
 
         Returns
         -------
-        ayjid : str
+        str
         """
 
         try:    # TODO: make this less terrible.
@@ -81,7 +81,7 @@ class Paper(object):
 
         Returns
         -------
-        authors : :class:`.Feature`
+        :class:`.Feature`
             Author names are in the format ``LAST F``.
         """
 
@@ -101,7 +101,7 @@ class Paper(object):
 
         Returns
         -------
-        citations : :class:`.Feature`
+        :class:`.Feature`
         """
 
         if hasattr(self, 'citedReferences'):

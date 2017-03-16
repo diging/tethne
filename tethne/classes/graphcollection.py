@@ -219,10 +219,12 @@ class GraphCollection(dict):
         data : bool
             (default: False) If True, returns a list of 3-tuples containing
             source and target node labels, and attributes.
+        native : bool
+            (default: True) If False, returns node indices instead of labels.
 
         Returns
         -------
-        edges : list
+        list
         """
         edges = self.master_graph.edges(data=data)
         if native:
@@ -237,6 +239,16 @@ class GraphCollection(dict):
     def order(self, piecewise=False):
         """
         Returns the total number of nodes in the :class:`.GraphCollection`\.
+
+        Parameters
+        ----------
+        piecewise : bool
+            (default: False) If True, returns the order in a ``dict``, with
+            graph names as keys.
+
+        Returns
+        -------
+        int
         """
         if piecewise:
             return {k: v.order() for k, v in self.items()}
@@ -250,6 +262,16 @@ class GraphCollection(dict):
     def size(self, piecewise=False):
         """
         Returns the total number of edges in the :class:`.GraphCollection`\.
+
+        Parameters
+        ----------
+        piecewise : bool
+            (default: False) If True, returns the size in a ``dict``, with
+            graph names as keys.
+
+        Returns
+        -------
+        int
         """
         if piecewise:
             return {k: v.size() for k, v in self.items()}
@@ -262,9 +284,15 @@ class GraphCollection(dict):
 
     def collapse(self, weight_attr='weight'):
         """
-        Returns a :ref:`networkx.Graph <networkx:graph>` or :class:`networkx.DiGraph` in which
-        the edges between each pair of nodes are collapsed into a single
-        weighted edge.
+        Returns a :ref:`networkx.Graph <networkx:graph>` or
+        :class:`networkx.DiGraph` in which the edges between each pair of nodes
+        are collapsed into a single weighted edge.
+
+        Parameters
+        ----------
+        weight_attr : str
+            (default: 'weight') Name of the edge attribute used to store the
+            number of graphs in which an edge exists between node pairs.
         """
 
         if self.directed:
@@ -426,7 +454,7 @@ class GraphCollection(dict):
 
         Returns
         -------
-        history : dict
+        dict
         """
         return self.master_graph.node[node][attribute]
 
@@ -446,7 +474,7 @@ class GraphCollection(dict):
 
         Returns
         -------
-        history : dict
+        dict
         """
 
         return {attr['graph']: attr[attribute] for i, attr
@@ -467,7 +495,7 @@ class GraphCollection(dict):
 
         Returns
         -------
-        graph : :ref:`networkx.Graph <networkx:graph>`
+        :ref:`networkx.Graph <networkx:graph>`
         """
 
         if type(self.master_graph) is nx.MultiDiGraph:

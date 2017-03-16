@@ -7,14 +7,19 @@ import os
 # TODO: persist the index and data.
 
 class StreamingIndex(object):
-    def __init__(self, name='index', base_path='.', serializer=pickle):
-        """
+    """
+    'dict' like class supporting memory-friendly index.
 
-        Parameters
-        ----------
-        basepath : str
-            Location of the disk cache.
-        """
+    Parameters
+    ----------
+    name : str
+        (default: 'index') Name of the index diretory. If ``name``
+        directory doesn't exist, it will be created at ``base_path``
+        location.
+    base_path : str
+        (default: '.') Location of the disk cache.
+    """
+    def __init__(self, name='index', base_path='.', serializer=pickle):
         if not os.path.exists(base_path):
             raise IOError('No such directory')
 
@@ -80,6 +85,7 @@ class StreamingIndex(object):
 class StreamingCorpus(Corpus):
     """
     Provides memory-friendly access to large collections of metadata.
+    Refer :class:`.Corpus` for usage.
     """
 
     index_class = StreamingIndex
@@ -89,7 +95,7 @@ class StreamingCorpus(Corpus):
         class PList(object):
             def __init__(self, parent):
                 self.parent = parent
-                
+
             def __getitem__(self, key):
                 return self.parent.indexed_papers[self.parent.indexed_papers.keys()[key]]
 
