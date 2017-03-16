@@ -29,7 +29,7 @@ def global_closeness_centrality(g, node=None, normalize=True):
 
     Returns
     -------
-    C : dict
+    dict
         Dictionary of results, with node identifiers as keys and gcc as values.
     """
 

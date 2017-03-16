@@ -53,24 +53,21 @@ class GraphCollection(dict):
 
        >>> G.build(corpus, authors)
 
+    Parameters
+    ----------
+    corpus : :class:`.Corpus`
+    method : str or func
+        If str, looks for ``method`` in the ``tethne`` namespace.
+    slice_kwargs : dict
+        Keyword arguments to pass to ``corpus``' ``slice`` method.
+    method_kwargs : dict
+        Keyword arguments to pass to ``method`` along with ``corpus``.
+    directed : bool
+        If True, graphs will be treated as directed during indexing.
     """
 
     def __init__(self, corpus=None, method=None, slice_kwargs={},
                  method_kwargs={}, directed=False):
-        """
-
-        Parameters
-        ----------
-        corpus : :class:`.Corpus`
-        method : str or func
-            If str, looks for ``method`` in the ``tethne`` namespace.
-        slice_kwargs : dict
-            Keyword arguments to pass to ``corpus``' ``slice`` method.
-        method_kwargs : dict
-            Keyword arguments to pass to ``method`` along with ``corpus``.
-        directed : bool
-            If True, graphs will be treated as directed during indexing.
-        """
         self.directed = directed
         if directed:
             self.master_graph = nx.MultiDiGraph()

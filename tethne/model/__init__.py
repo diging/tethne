@@ -8,17 +8,22 @@ import shutil
 import tempfile
 import subprocess
 
-
 class Model(object):
     """
     Base class for models.
+
+    Parameters
+    ----------
+    corpus : :class:`.Corpus`
+        (default: None)
+    prep : bool
+        (default: True) If False, :meth:`.Model.prep` won't be invoked during
+        initialization.
+    **kwargs
+        Adds keyword arguments to this :class:`.Model`.
     """
 
     def __init__(self, corpus=None, prep=True, **kwargs):
-        """
-        Initialize the ModelManager.
-        """
-
         self.corpus = corpus
         self.temp = tempfile.mkdtemp()
 
@@ -55,7 +60,14 @@ class Model(object):
         return self.ll
 
     def fit(self, **kwargs):
-        # Make all kwargs available as attributes.
+        """
+        Fit the corpus using the underlying model.
+
+        Parameters
+        ----------
+        **kwargs
+            Adds keyword arguments to the model before fitting.
+        """
         for key, value in kwargs.iteritems():
             if hasattr(self, key):  # Don't overwrite methods.
                 if hasattr(getattr(self, key), '__call__'):

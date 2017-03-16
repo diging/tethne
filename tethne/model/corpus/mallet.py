@@ -130,6 +130,24 @@ class LDAModel(Model, LDAMixin):
     @staticmethod
     def from_mallet(wt_path, dt_path, model_path, corpus=None,
                     featureset_name=None):
+        """
+        Create :class:`.LDAModel` from .
+
+        Parameters
+        ----------
+        wt_path : str
+            Word topic file path.
+        dt_path : str
+            Document topic file path.
+        corpus : :class:`.gensim.classes.corpus.Corpus`
+            (default None)
+        featureset_name : str
+            (default None)
+
+        Returns
+        -------
+        :class:`.LDAModel`
+        """
         model = LDAModel(corpus=corpus, featureset_name=featureset_name,
                          nodelete=True,    # So that it doesn't discard your files when you're done.
                          prep=False,       # Skips building the corpus and calling MALLET's import function.
@@ -156,6 +174,10 @@ class LDAModel(Model, LDAMixin):
             self.om = os.path.join(self.temp, "model.mallet")
 
     def prep(self):
+        """
+        Prepare the model by writing corpus to disk amenable
+        to MALLET topic modeling.
+        """
         self._generate_corpus()
 
     def _generate_corpus(self):
@@ -257,6 +279,16 @@ class LDAModel(Model, LDAMixin):
         self.load()
 
     def load(self, **kwargs):
+        """
+        Reconstruct theta and phi posterior distributions.
+        Use document topic file pointed by 'dt' kwargs value for
+        theta reconstruction. Use word topic file pointed by 'wt' kwargs
+        value for phi reconstruction.
+
+        Parameters
+        ----------
+        **kwargs
+        """
         self._read_theta(kwargs.get('dt', self.dt))
         self._read_phi(kwargs.get('wt', self.wt))
 
@@ -265,9 +297,14 @@ class LDAModel(Model, LDAMixin):
         Used by :func:`.from_mallet` to reconstruct theta posterior
         distributions.
 
+        Parameters
+        ----------
+        dt : str
+            Document topic file path.
+
         Returns
         -------
-        td : Numpy array
+        Numpy array
             Rows are documents, columns are topics. Rows sum to ~1.
         """
 
@@ -280,9 +317,14 @@ class LDAModel(Model, LDAMixin):
         """
         Used by :func:`.from_mallet` to reconstruct phi posterior distributions.
 
+        Parameters
+        ----------
+        wt : str
+            Word topic file path.
+
         Returns
         -------
-        wt : Numpy array
+        Numpy array
             Rows are topics, columns are words. Rows sum to ~1.
         """
 
@@ -302,7 +344,7 @@ def mallet_to_theta_featureset(dt_path):
 
     Returns
     -------
-    theta : :class:`.FeatureSet`
+    :class:`.FeatureSet`
     """
     theta = FeatureSet()
 
@@ -342,7 +384,7 @@ def mallet_to_phi_featureset(wt_path):
 
     Returns
     -------
-    phi : :class:`.FeatureSet`
+    :class:`.FeatureSet`
     """
     vocabulary = {}
     phi_features = {}
