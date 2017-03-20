@@ -30,7 +30,7 @@ def terms(model, threshold=0.01, **kwargs):
     ----------
     model : :class:`.LDAModel`
     threshold : float
-        Default: 0.01
+        (default: 0.01)
     kwargs : kwargs
         Passed on to :func:`.cooccurrence`\.
 
@@ -122,7 +122,7 @@ def distance(model, method='cosine', percentile=90, bidirectional=False,
     model : :class:`.LDAModel` or :class:`.DTMModel`
         :func:`.distance` uses ``model.item`` and ``model.metadata``.
     method : str
-        Name of a distance method from `scipy.spatial.distance
+        (default: 'cosine') Name of a distance method from `scipy.spatial.distance
         <http://docs.scipy.org/doc/scipy/reference/spatial.distance.html>`_.
         See :func:`.analyze.features.distance` for a list of distance
         statistics. ``hamming`` or ``jaccard`` will raise a RuntimeError.

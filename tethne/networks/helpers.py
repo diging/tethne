@@ -32,7 +32,7 @@ def simplify_multigraph(multigraph, time=False):
 
     Parameters
     ----------
-    graph : networkx.MultiGraph
+    multigraph : networkx.MultiGraph
         E.g. a coauthorship graph.
     time : bool
         If True, will generate 'start' and 'end' attributes for each edge,
@@ -40,7 +40,7 @@ def simplify_multigraph(multigraph, time=False):
 
     Returns
     -------
-    graph : networkx.Graph
+    networkx.Graph
         A NetworkX :class:`.graph` .
 
     """
@@ -90,13 +90,13 @@ def citation_count(papers, key='ayjid', verbose=False):
     papers : list
         A list of :class:`.Paper` instances.
     key : str
-        Property to use as node key. Default is 'ayjid' (recommended).
+        (default: 'ayjid') Property to use as node key. Default is 'ayjid' (recommended).
     verbose : bool
         If True, prints status messages.
 
     Returns
     -------
-    counts : dict
+    dict
         Citation counts for all papers cited by papers.
     """
 
@@ -129,10 +129,12 @@ def top_cited(papers, topn=20, verbose=False):
 
     Returns
     -------
-    top : list
-        A list of 'ayjid' keys for the topn most cited papers.
-    counts : dict
-        Citation counts for all papers cited by papers.
+    tuple
+        Returns (top, counts) 2-tuple, where
+        top : list
+            A list of 'ayjid' keys for the topn most cited papers.
+        counts : dict
+            Citation counts for all papers cited by papers.
     """
 
     if verbose:
@@ -166,12 +168,14 @@ def top_parents(papers, topn=20, verbose=False):
 
     Returns
     -------
-    papers : list
-        A list of :class:`.Paper` objects.
-    top : list
-        A list of 'ayjid' keys for the topn most cited papers.
-    counts : dict
-        Citation counts for all papers cited by papers.
+    tuple
+        Returns (papers, top, counts) 3-tuple, where:
+        papers : list
+            A list of :class:`.Paper` objects.
+        top : list
+            A list of 'ayjid' keys for the topn most cited papers.
+        counts : dict
+            Citation counts for all papers cited by papers.
     """
 
     if verbose:

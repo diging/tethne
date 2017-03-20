@@ -41,6 +41,26 @@ def cooccurrence(corpus_or_featureset, featureset_name=None, min_weight=1,
                  filter=None):
     """
     A network of feature elements linked by their joint occurrence in papers.
+
+    Parameters
+    ----------
+    corpus_or_featureset : :class:`.Corpus` or :class:`.FeatureSet` or :class:`.StructuredFeatureSet`
+    featureset_name : str
+        (default: None)
+    min_weight : int
+        (default: 1) Minimum number of papers with joint authorship.
+    edge_attrs : list
+        (default: ``['ayjid', 'date']``\) Edge attributes in the graph.
+    filter : callable
+        (default: None) Should take four parameters: :class:`.FeatureSet`/
+        :class:`.StructedFeatureSet`, value in :class:`.FeatureSet` (e.g.
+        overall count), feature count, and document count (i.e. number of
+        documents in which the feature value occurs). Should return a bool
+        value to indicate if the feature is to be filtered out.
+
+    Returns
+    -------
+    :class:`.networkx.Graph`
     """
 
     if not filter:
@@ -98,7 +118,28 @@ def coupling(corpus_or_featureset, featureset_name=None,
              min_weight=1, filter=lambda f, v, c, dc: True,
              node_attrs=[]):
     """
-    A network of papers linked by their joint posession of features.
+    A network of papers linked by their joint possession of features.
+
+    Parameters
+    ----------
+    corpus_or_featureset : :class:`.Corpus` or :class:`.FeatureSet` or :class:`.StructuredFeatureSet`
+    featureset_name : str
+        (default: None)
+    min_weight : int
+        (default: 1) Minimum number of linked papers.
+    filter : callable
+        (default: ``lambda f, v, c, dc: True``) Should take four parameters:
+        :class:`.FeatureSet`/ :class:`.StructedFeatureSet`, value in
+        :class:`.FeatureSet` (e.g.  overall count), feature count, and document
+        count (i.e. number of documents in which the feature value occurs).
+        Should return a bool value to indicate if the feature is to be
+        filtered out.
+    node_attrs : list
+        (default []) Add listed paper attributes to graph nodes.
+
+    Returns
+    -------
+    :class:`.networkx.Graph`
     """
 
     featureset = _get_featureset(corpus_or_featureset, featureset_name)
@@ -143,6 +184,23 @@ def coupling(corpus_or_featureset, featureset_name=None,
 def multipartite(corpus, featureset_names, min_weight=1, filters={}):
     """
     A network of papers and one or more featuresets.
+
+    Parameters
+    ----------
+    corpus : :class:`.Corpus`
+    featureset_names : iterable
+        Iterable of featureset_names.
+    min_weight : int
+        (default: 1) Minimum number of linked papers.
+    filters : dict
+        (default: {}) Dict with featureset_name as keys and callables as
+        values. The callables must accept two values: :class:`.FeatureSet` and
+        :class:`.Feature`, and return a boolean value indicating if the paper
+        should be filtered out.
+
+    Returns
+    -------
+    :class:`.networkx.DiGraph`
     """
 
     pairs = Counter()
