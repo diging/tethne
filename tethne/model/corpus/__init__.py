@@ -7,8 +7,8 @@ Tethne presently represents two corpus models:
 .. autosummary::
    :nosignatures:
 
-   ldamodel.LDAModel
-   dtmmodel.DTMModel
+   gensim_lda.LDAModel
+   dtm.DTMModel
 
 Most model classes are subclasses of :class:`.BaseModel`\. It is assumed that
 each model describes a set of items (eg :class:`.Paper`\s or authors), a set
@@ -21,13 +21,22 @@ class LDAMixin(object):
     def topics_in(self, d, topn=5):
         """
         List the top ``topn`` topics in document ``d``.
+
+        Parameters
+        ----------
+        d : object
+        topn : int
+            (default: 5)
+
+        Returns
+        -------
+        list
         """
         return self.theta.features[d].top(topn)
 
     def list_topic(self, k, Nwords=10):
         """
         List the top ``topn`` words for topic ``k``.
-
 
         Examples
         --------
@@ -37,6 +46,15 @@ class LDAMixin(object):
            >>> model.list_topic(1, Nwords=5)
            [ 'opposed', 'terminates', 'trichinosis', 'cistus', 'acaule' ]
 
+        Parameters
+        ----------
+        k : object
+        Nwords : int
+            (default: 10)
+
+        Returns
+        -------
+        list
         """
 
         return [(self.vocabulary[w], p) for w, p
@@ -45,6 +63,15 @@ class LDAMixin(object):
     def list_topics(self, Nwords=10):
         """
         List the top ``Nwords`` words for each topic.
+
+        Parameters
+        ----------
+        Nwords : int
+            (default: 10)
+
+        Returns
+        -------
+        list
         """
         return [(k, self.list_topic(k, Nwords)) for k in xrange(len(self.phi))]
 
@@ -52,6 +79,11 @@ class LDAMixin(object):
     def print_topics(self, Nwords=10):
         """
         Print the top ``Nwords`` words for each topic.
+
+        Parameters
+        ----------
+        Nwords : int
+            (default: 10)
         """
         print('Topic\tTop %i words' % Nwords)
         for k, words in self.list_topics(Nwords):
@@ -61,6 +93,12 @@ class LDAMixin(object):
     def topic_over_time(self, k, mode='counts', slice_kwargs={}):
         """
         Calculate the representation of topic ``k`` in the corpus over time.
+
+        Refer :meth:`.Corpus.feature_distribution` for parameter description.
+
+        Returns
+        -------
+        list
         """
         if not self.corpus:
             raise RuntimeError('Cannot generate a temporal distribution' \

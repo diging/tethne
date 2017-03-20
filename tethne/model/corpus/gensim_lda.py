@@ -16,6 +16,9 @@ class BaseGensimModel(Model):
         super(BaseGensimModel, self).__init__(*args, **kwargs)
 
     def prep(self, *args, **kwargs):
+        """
+        Prep the model by generating bag-of-words corpus.
+        """
         if all([getattr(self, 'corpus', None),
                 not getattr(self, 'featureset', None),
                 getattr(self, 'featureset_name', None)]):
@@ -27,6 +30,23 @@ class BaseGensimModel(Model):
 class GensimLDAModel(BaseGensimModel, LDAMixin):
     @staticmethod
     def from_gensim(model, gcorpus, corpus=None, featureset_name=None):
+        """
+        Create :class:`.GensimLDAModel` from gensim corpus.
+
+        Parameters
+        ----------
+        model : :class:`gensim.model.Model`
+        gcorpus : :class:`.gensim.classes.corpus.Corpus`
+        corpus : :class:`.gensim.classes.corpus.Corpus`
+            (default None)
+        featureset_name : str
+            (default None)
+
+        Returns
+        -------
+        :class:`.GensimLDAModel`
+
+        """
         ldaModel = GensimLDAModel(model=model,
                                   gcorpus=gcorpus,
                                   corpus=corpus,
@@ -38,6 +58,15 @@ class GensimLDAModel(BaseGensimModel, LDAMixin):
         return ldaModel
 
     def run(self, Z=20, **kwargs):
+        """
+        Generate feature sets describing word-topic and document-topic
+        assignments.
+
+        Parameters
+        ----------
+        Z : int
+            (default: 20) Number of topics.
+        """
         import gensim
         self.Z = Z
         # Since we are setting num_topics explicitly, we want to prevent the
@@ -51,12 +80,17 @@ class GensimLDAModel(BaseGensimModel, LDAMixin):
         self.read()
 
     def read(self):
+        """
+        Generate feature sets describing word-topic and document-topic
+        assignments.
+
+        """
         self._read_theta()
         self._read_phi()
 
     def _read_theta(self):
         """
-            Rows are documents, columns are topics. Rows sum to ~1.
+        Rows are documents, columns are topics. Rows sum to ~1.
         """
         if getattr(self, 'corpus', None) and getattr(self, 'featureset', None):
             identifiers = self.featureset.features.keys()
@@ -71,7 +105,7 @@ class GensimLDAModel(BaseGensimModel, LDAMixin):
 
     def _read_phi(self):
         """
-            Rows are topics, columns are words. Rows sum to ~1.
+        Rows are topics, columns are words. Rows sum to ~1.
         """
 
         self.phi = gensim_to_phi_featureset(self.model, as_idx=True)

@@ -21,26 +21,28 @@ def _to_dtm_input(corpus, target, featureset_name, fields=['date','atitle'],
 
     Parameters
     ----------
+    corpus : :class:`.Corpus`
+        Contains :class:`.Paper` objects generated from the same DfR dataset
+        as t_ngrams, indexed by doi and sliced by date.
     target : str
         Target path for documents; e.g. './mycorpus' will result in
         './mycorpus-mult.dat', './mycorpus-seq.dat', 'mycorpus-vocab.dat', and
         './mycorpus-meta.dat'.
-    D : :class:`.Corpus`
-        Contains :class:`.Paper` objects generated from the same DfR dataset
-        as t_ngrams, indexed by doi and sliced by date.
-    feature : str
-        (default: 'unigrams') Features in :class:`.Corpus` to use for
-        modeling.
+    featureset_name : str
+        Features in :class:`.Corpus` to use for modeling.
     fields : list
-        (optional) Fields in :class:`.Paper` to include in the metadata file.
+        (default ``['date', 'atitle']``\) Fields in :class:`.Paper` to include
+        in the metadata file.
 
     Returns
     -------
-    None : If all goes well.
+    None
+        If all goes well.
 
     Raises
     ------
     IOError
+        Raises IOError if target file couldn't be opened for writing.
     """
 
     try:
@@ -173,7 +175,13 @@ class DTMModel(Model):
         self._generate_corpus(**slice_kwargs)
 
     def run(self, **kwargs):
-        ## Run the dynamic topic model.
+        """
+        Run the dynamic topic model.
+
+        Parameters
+        ----------
+        **kwargs
+        """
         #./main \
         #  --ntopics=20 \
         #  --mode=fit \
@@ -244,7 +252,9 @@ class DTMModel(Model):
                                            **slice_kwargs)
 
     def load(self):
-        """Load and return a :class:`.DTMModel`\."""
+        """
+        Load and return a :class:`.DTMModel`\.
+        """
 
         result = from_gerrish(self.outname, self.meta_path, self.vocab_path)
         self.e_theta, self.phi, self.metadata, self.vocabulary = result
@@ -286,7 +296,7 @@ class DTMModel(Model):
 
         Returns
         -------
-        description : list
+        list
             A list of ( item, weight ) tuples.
         """
 
@@ -297,20 +307,23 @@ class DTMModel(Model):
 
     def topic_evolution(self, k, Nwords=5):
         """
+        Get a list of tuples representing the topic evolution.
 
         Parameters
         ----------
         k : int
             A topic index.
         Nwords : int
-            Number of words to return.
+            (default: 5) Number of words to return.
 
         Returns
         -------
-        keys : list
-            Start-date of each time-period.
-        t_series : list
-            Array of p(w|t) for Nwords for each time-period.
+        tuple
+            Returns (keys, t_series) 2-tuple where
+            keys : list
+                Start-date of each time-period.
+            t_series : list
+                Array of p(w|t) for Nwords for each time-period.
         """
 
         t_keys = range(self.T)
@@ -340,11 +353,11 @@ class DTMModel(Model):
         t : int
             A time index.
         Nwords : int
-            Number of words to return.
+            (default: 10) Number of words to return.
 
         Returns
         -------
-        as_list : list
+        list
             List of words in topic.
         """
 
@@ -352,9 +365,35 @@ class DTMModel(Model):
         return [self.vocabulary[w] for w, p in words]
 
     def list_topic_diachronic(self, k, Nwords=10):
+        """
+        Lists topic ``k``\'s top ``Nwords`` for each time index.
+
+        Parameters
+        ----------
+        k : int
+            A topic index.
+        Nwords : int
+            (default: 10) Number of words to return.
+
+        Returns
+        -------
+        dict
+            Keys are time indices, values are list of words.
+        """
         return {t: self.list_topic(k, t, Nwords) for t in xrange(self.T)}
 
     def print_topic_diachronic(self, k, Nwords=10):
+        """
+        Print topic ``k``\'s top ``Nwords`` for each time index.
+
+        Parameters
+        ----------
+        k : int
+            A topic index.
+        Nwords : int
+            (default: 10) Number of words to return.
+
+        """
         as_dict = self.list_topic_diachronic(k, Nwords)
         s = []
         for key, value in as_dict.iteritems():
@@ -365,7 +404,7 @@ class DTMModel(Model):
 
     def print_topic(self, k, t, Nwords=10):
         """
-        Yields the top ``Nwords`` for topic ``k``.
+        Prints the top ``Nwords`` for topic ``k``.
 
         Parameters
         ----------
@@ -374,7 +413,7 @@ class DTMModel(Model):
         t : int
             A time index.
         Nwords : int
-            Number of words to return.
+            (default: 10) Number of words to return.
 
         """
 
@@ -389,7 +428,7 @@ class DTMModel(Model):
         t : int
             A time index.
         Nwords : int
-            Number of words to return for each topic.
+            (default: 10) Number of words to return for each topic.
 
         Returns
         -------
@@ -401,19 +440,15 @@ class DTMModel(Model):
 
     def print_topics(self, t, Nwords=10):
         """
-        Yields the top ``Nwords`` for each topic.
+        Prints the top ``Nwords`` for each topic.
 
         Parameters
         ----------
         t : int
             A time index.
         Nwords : int
-            Number of words to return for each topic.
+            (default: 10) Number of words to return for each topic.
 
-        Returns
-        -------
-        as_string : str
-            Newline-delimited lists of words for each topic.
         """
 
 
@@ -432,11 +467,11 @@ class DTMModel(Model):
         i : int
             Index for an item.
         top : int
-            (optional) Number of (highest-w) dimensions to return.
+            (default None) Number of (highest-w) dimensions to return.
 
         Returns
         -------
-        description : list
+        list
             A list of ( dimension , weight ) tuples.
         """
 
@@ -496,12 +531,15 @@ class DTMModel(Model):
         ----------
         d : int
             Dimension index.
+        top : int
+            (default None) Number of (highest-w) dimensions to return.
 
         Returns
         -------
-        description : list
+        list
             A list of ( feature, weight ) tuples (e.g. word, prob ).
         """
+        #TODO: Add documentation for asmatrix when scipy is supported.
 
         try:
             description = self._dimension_description(d, **kwargs)
@@ -523,6 +561,7 @@ class DTMModel(Model):
             description = top_description
 
         if asmatrix:
+            # Get all features, weights in J, and K respectively.
             J,K = zip(*description)
             I = [ d for i in xrange(len(J)) ]
             mat = coo_matrix(list(K), (I,list(J))).tocsc()
@@ -545,7 +584,7 @@ class DTMModel(Model):
 
         Returns
         -------
-        description : list
+        list
             A list of ( item, weight ) tuples.
         """
 
@@ -570,7 +609,7 @@ class DTMModel(Model):
 
         Returns
         -------
-        relationship : list
+        list
             A list of ( factor ,  weight ) tuples.
         """
 
@@ -614,8 +653,10 @@ def from_gerrish(target, metadata, vocabulary, metadata_key='doi'):
 
     Returns
     -------
-    :class:`.DTMModel`
+    tuple
+        (theta, phi, metadata, vocabulary) 4-tuple.
     """
+    #TODO: Fix unused parameter: 'metadata_key'
 
     e_log_prob = 'topic-{0}-var-e-log-prob.dat'
     info = 'topic-{0}-info.dat'
@@ -627,19 +668,17 @@ def from_gerrish(target, metadata, vocabulary, metadata_key='doi'):
 
 class GerrishLoader(object):
     """
-    Helper class for parsing results from `S. Gerrish's C++ implementation <http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz>`_
+    Helper class for parsing results from `S. Gerrish's C++ implementation
+    <http://code.google.com/p/princeton-statistical-learning/downloads/detail?name=dtm_release-0.8.tgz>`_
+
     Parameters
     ----------
     target : str
         Path to ``lda-seq`` output directory.
-    metadata : str
+    metadata_path : str
         Path to metadata file.
-    vocabulary : str
+    vocabulary_path : str
         Path to vocabulary file.
-
-    Returns
-    -------
-    :class:`.DTMModel`
     """
 
     def __init__(self, target, metadata_path, vocabulary_path):
@@ -654,6 +693,15 @@ class GerrishLoader(object):
         self.tdict = {}
 
     def load(self):
+        """
+        Load metadata, vocabulary, metaparams, and gammas from ``target``
+        directory.
+
+        Returns
+        -------
+        tuple
+            (e_theta, phi, metadata, vocabulary) 4-tuple.
+        """
         try:
             contents = os.listdir(self.target)
             lda_seq_dir = os.listdir('{0}/lda-seq'.format(self.target))
@@ -736,7 +784,7 @@ class GerrishLoader(object):
 
         Returns
         -------
-        metadata : dict
+        dict
             Keys are document indices, values are identifiers from a
             :class:`.Paper` property (e.g. DOI).
         """
@@ -766,7 +814,7 @@ class GerrishLoader(object):
 
         Returns
         -------
-        vocabulary : dict
+        dict
             Keys are word indices, values are word strings.
         """
         if self.vocabulary_path is None:
