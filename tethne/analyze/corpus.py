@@ -125,8 +125,8 @@ def burstness(corpus, featureset_name, features=[], k=5, topn=20,
 
     Returns
     -------
-    B : dict
-        Keys are features, values are tuples of ( dates, burstness )
+    dict
+        Keys are features, values are lists of tuples of (dates, burstness)
 
     """
 
@@ -172,7 +172,7 @@ def feature_burstness(corpus, featureset_name, feature, k=5, normalize=True,
 
     Returns
     -------
-    B : tuple
+    tuple
         A ( dates, burstness ) 2-tuple where dates is a list of dates and
         burstness is a list of floats, both lists being the same size.
     """
@@ -253,8 +253,8 @@ def sigma(G, corpus, featureset_name, B=None, **kwargs):
 
     Returns
     -------
-    B : dict
-        Keys are features, values are tuples of ( dates, burstness )
+    dict
+        dict with node labels as keys; values are tuples ([years...], [sigma...]).
 
     Examples
     --------
