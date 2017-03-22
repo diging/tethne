@@ -8,7 +8,6 @@ includes keywords, abstract terms, etc.
    cooccurrence
    mutual_information
    keyword_cooccurrence
-   topic_coupling
 
 """
 
@@ -28,6 +27,28 @@ def _nPMI(p_ij, p_i, p_j):
 
 def feature_cooccurrence(corpus, featureset_name, min_weight=1,
                          filter=lambda f, v, c, dc: True):
+    """
+    A network of feature elements linked by their joint occurrence in papers.
+
+    Parameters
+    ----------
+    corpus : :class:`.Corpus`
+    featureset_name : str
+        (default: None)
+    min_weight : int
+        (default: 1) Minimum number of papers with joint authorship.
+    filter : callable
+        (default: ``lambda f, v, c, dc: True``) Should take four parameters:
+        :class:`.FeatureSet`/ :class:`.StructedFeatureSet`, value in
+        :class:`.FeatureSet` (e.g.  overall count), feature count, and document
+        count (i.e. number of documents in which the feature value occurs).
+        Should return a bool value to indicate if the feature is to be filtered
+        out.
+
+    Returns
+    -------
+    :class:`.networkx.Graph`
+    """
     return cooccurrence(corpus, featureset_name, min_weight=min_weight,
                         filter=filter)
 
@@ -46,6 +67,24 @@ def mutual_information(corpus, featureset_name, min_weight=0.9,
     ...where :math:`p_i` and :math:`p_j` are the probabilities that features
     *i* and *j* will occur in a document (independently), and :math:`p_{ij}` is
     the probability that those two features will occur in the same document.
+
+    Parameters
+    ----------
+    corpus : :class:`.Corpus`
+    featureset_name : str
+    min_weight : float
+        (default: 0.9)
+    filter : callable
+        (default: ``lambda f, v, c, dc: True``) Should take four parameters:
+        :class:`.FeatureSet`/ :class:`.StructedFeatureSet`, value in
+        :class:`.FeatureSet` (e.g.  overall count), feature count, and document
+        count (i.e. number of documents in which the feature value occurs).
+        Should return a bool value to indicate if the feature is to be
+        filtered out.
+
+    Returns
+    -------
+    :class:`.networkx.Graph`
     """
 
     graph = feature_cooccurrence(corpus, featureset_name, min_weight=1,
