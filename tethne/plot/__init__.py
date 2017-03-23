@@ -14,11 +14,14 @@ def plot_burstness(corpus, B, **kwargs):
 
     Parameters
     ----------
-    B
+    corpus : :class:`.Corpus`
+    B : dict
+        Keys are features, values are lists of (dates, burstness) 2-tuples.
+    **kwargs
 
     Returns
     -------
-    fig : :class:`matplotlib.figure.Figure`
+    :class:`matplotlib.figure.Figure`
 
     Examples
     --------
@@ -26,7 +29,8 @@ def plot_burstness(corpus, B, **kwargs):
     .. code-block:: python
 
        >>> from tethne.analyze.corpus import burstness
-       >>> fig = plot_burstness(corpus, 'citations', topn=2, perslice=True)
+       >>> B = burstness(corpus, 'citations', topn=2, perslice=True)
+       >>> fig = plot_burstness(corpus, B)
        >>> fig.savefig('~/burstness.png')
 
     Years prior to the first occurrence of each feature are grayed out. Periods
@@ -37,6 +41,7 @@ def plot_burstness(corpus, B, **kwargs):
        :width: 600
        :align: center
     """
+
     try:
         import matplotlib.pyplot as plt
         import matplotlib.patches as mpatches
@@ -93,8 +98,10 @@ def plot_burstness(corpus, B, **kwargs):
                       verticalalignment='center')
     plt.subplots_adjust(left=0.5)
     fig.tight_layout(h_pad=0.25)
+    #TODO: Return ``fig`` object.
 
     plt.show()
+    #TODO: ``plt.show()`` might crash if GUI isn't accessible.
 
 
 def plot_sigma(corpus, sigma, nodes=None, **kwargs):
@@ -103,21 +110,21 @@ def plot_sigma(corpus, sigma, nodes=None, **kwargs):
 
     Parameters
     ----------
-    G : :class:`.GraphCollection`
+    sigma : dict
+        dict with node labels as keys; values are tuples
+        ([years...], [sigma...]).
+    nodes : str or list
+        (default: None) If None, get ``topn`` significant papers. If 'all',
+        use all nodes from ``sigma``. If list, use the supplied list of nodes.
     corpus : :class:`.Corpus`
-    feature : str
-        Name of a featureset in `corpus`.
     topn : int or float {0.-1.}
         (default: 20) Number (int) or percentage (float) of top-occurring
-        features to return. If ``flist`` is provided, this parameter is ignored.
+        features to return.
     sort_by : str
         (default: 'max') Criterion for selecting ``topn`` nodes.
     perslice : bool
         (default: False) If True, loads ``topn`` features per slice. Otherwise,
-        loads ``topn`` features overall. If ``flist`` is provided, this
-        parameter is ignored.
-    flist : list
-        List of nodes. If provided, ``topn`` and ``perslice`` are ignored.
+        loads ``topn`` features overall.
     fig : :class:`matplotlib.figure.Figure`
         (default: None) You may provide a Figure instance if you wish.
         Otherwise, a new figure is generated.
@@ -125,8 +132,6 @@ def plot_sigma(corpus, sigma, nodes=None, **kwargs):
     Returns
     -------
     fig : :class:`matplotlib.figure.Figure`
-    G : :class:`.GraphCollection`
-        A co-citation graph collection, updated with ``sigma`` node attributes.
 
     Examples
     --------
@@ -136,8 +141,8 @@ def plot_sigma(corpus, sigma, nodes=None, **kwargs):
 
     .. code-block:: python
 
-       >>> from tethne.analyze.cocitation import plot_sigma
-       >>> fig,G = plot_sigma(G, corpus, topn=5, perslice=True)
+       >>> from tethne.plot import plot_sigma
+       >>> fig = plot_sigma(corpus, topn=5, perslice=True)
        >>> fig.savefig('~/sigma_plot.png')
 
     In this figure, the top 5 most sigma-influential nodes in each slice are
@@ -260,3 +265,5 @@ def plot_sigma(corpus, sigma, nodes=None, **kwargs):
     plt.subplots_adjust(left=0.5)
     fig.tight_layout(h_pad=0.25)
     plt.show()
+    #TODO: ``plt.show()`` might crash if GUI isn't accessible.
+    #TODO: Return ``fig``
