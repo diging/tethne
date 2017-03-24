@@ -26,6 +26,9 @@ if PYTHON_3:
 
 
 class DfRParser(XMLParser):
+    """
+    Implements parsing of datasets(XML) from JSTOR Data-for-Research.
+    """
     entry_class = Paper
 
     tags = {
@@ -60,6 +63,18 @@ class DfRParser(XMLParser):
         return self.handle_unicode(value)
 
     def handle_author(self, value):
+        """
+        Extract author's last name and first name from ``value``.
+
+        Parameters
+        ----------
+        value : str
+
+        Returns
+        -------
+        tuple
+            Returns (aulast, auinit) 2-tuple.
+        """
         # if type(value) is not str:
         #     value = unidecode(value)
 
@@ -76,9 +91,20 @@ class DfRParser(XMLParser):
         return aulast, auinit
 
     def handle_pubdate(self, value):
+        """
+        Extract year from ``value``.
+
+        Returns
+        -------
+        int
+        """
         return iso8601.parse_date(value).year
 
     def postprocess_authors_full(self, entry):
+        """
+        Represent ``entry.authors_full`` as a list. This method is invoked for
+        every entry having 'authors_full' field.
+        """
         if type(entry.authors_full) is not list:
             entry.authors_full = [entry.authors_full]
 
@@ -105,8 +131,14 @@ class GramGenerator(object):
         elem : str
             Element in DfR dataset containing data of interest. E.g. 'bigrams'.
         values : bool
-            If True, :func:`.next` returns only values. Otherwise, returns
-            (key,value) tuples.
+            (default: False) If True, :func:`.next` returns only values.
+            Otherwise, returns (key, value) tuples.
+        keys : bool
+            (default: False) If True, :func:`.next` returns only keys.
+            Cannot be combined with ``values``.
+        ignore_hash : bool
+            If True, will exclude all N-grams that contain the hash '#'
+            character.
         """
 
         if not os.path.exists(path):
@@ -141,6 +173,9 @@ class GramGenerator(object):
         return self.next()
 
     def next(self):
+        """
+        Returns the next item in iteration.
+        """
         if self.i < self.N:
             cur = int(self.i)
             self.i += 1
@@ -151,6 +186,10 @@ class GramGenerator(object):
     def items(self):
         """
         Returns a :class:`GramGenerator` that produces key,value tuples.
+
+        Returns
+        -------
+        :class:`GramGenerator`
         """
         return GramGenerator(self.path, self.elem,
                              ignore_hash=self.ignore_hash)
@@ -158,6 +197,10 @@ class GramGenerator(object):
     def values(self):
         """
         Returns a :class:`GramGenerator` that produces only values.
+
+        Returns
+        -------
+        :class:`GramGenerator`
         """
         return GramGenerator(self.path, self.elem, values=True,
                              ignore_hash=self.ignore_hash)
@@ -165,6 +208,10 @@ class GramGenerator(object):
     def keys(self):
         """
         Returns a :class:`GramGenerator` that produces only keys.
+
+        Returns
+        -------
+        :class:`GramGenerator`
         """
         return GramGenerator(self.path, self.elem, keys=True,
                              ignore_hash=self.ignore_hash)
@@ -175,6 +222,16 @@ class GramGenerator(object):
     def _get(self, i):
         """
         Retrieve data for the ith file in the dataset.
+
+        Parameters
+        ----------
+        i : int
+
+        Returns
+        -------
+        str or tuple
+            If ``values`` or ``keys`` was set as True during initialization,
+            str is returned. Otherwise (key, value) 2-tuple.
         """
         with codecs.open(os.path.join(self.path, self.elem, self.files[i]), 'rb', encoding='utf-8') as f:
             # JSTOR hasn't always produced valid XML.
@@ -204,6 +261,13 @@ class GramGenerator(object):
         return doi, grams   # Default behavior.
 
 def _get_citation_filename(basepath):
+    """
+    Get the citations XML file within ``basepath``.
+
+    Returns
+    -------
+    str
+    """
     for fname in ["citations.xml", "citations.XML"]:
         if os.path.exists(os.path.join(basepath, fname)):
             return fname
@@ -211,7 +275,10 @@ def _get_citation_filename(basepath):
 
 def streaming_read(path, corpus=True, index_by='doi', parse_only=None,
                    **kwargs):
-
+    """
+    Use memory-friendly :class:.`StreamingCorpus` while reading the dataset.
+    For parameter description, refer to :meth:.`read`.
+    """
     return read(path, corpus=corpus, index_by=index_by, parse_only=parse_only,
                 corpus_class=StreamingCorpus)
 
@@ -219,20 +286,30 @@ def streaming_read(path, corpus=True, index_by='doi', parse_only=None,
 def read(path, corpus=True, index_by='doi', load_ngrams=True, parse_only=None,
          corpus_class=Corpus, **kwargs):
     """
-    Yields :class:`.Paper` s from JSTOR DfR package.
+    Read JSTOR DfR package.
 
     Each :class:`.Paper` is tagged with an accession id for this
     read/conversion.
 
     Parameters
     ----------
-    filepath : string
+    path : string
         Filepath to unzipped JSTOR DfR folder containing a citations.xml file.
+    corpus : bool
+        (default: True) If True, returns :class:`.Corpus`.
+    index_by : str
+        (default: 'doi') Controls which field is used for indexing.
+    load_ngrams : bool
+        (default: True) Reads N-gram data from the dataset.
+    parse_only : iterable
+        (default: None) Parse only the specified fields. If None, all fields
+        are parsed and processed.
 
     Returns
     -------
-    papers : list
-        A list of :class:`.Paper` objects.
+    :class:`.Corpus` or list
+        Returns :class:`.Corpus` if ``corpus`` is True, otherwise
+        list of :class:`.Paper` objects.
 
     Examples
     --------
@@ -312,7 +389,7 @@ def ngrams(path, elem, ignore_hash=True):
 
     Returns
     -------
-    ngrams : :class:`.FeatureSet`
+    :class:`.FeatureSet`
 
     """
 
@@ -328,18 +405,26 @@ def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
     ----------
     ngrams : dict
         Keys are paper DOIs, values are lists of (Ngram, frequency) tuples.
+    min_tf : int
+        (default: 2) Ignore words having term counts less than ``min_tf``.
+    min_df : int
+        (default: 2) Ignore words occurring in less than ``min_df`` documents.
+    min_len : int
+        (default: 3) Ignore words with length less than ``min_len``.
     apply_stoplist : bool
-        If True, will exclude all N-grams that contain words in the NLTK
-        stoplist.
+        (default: False) If True, will exclude all N-grams that contain words
+        in the NLTK stoplist.
 
     Returns
     -------
-    t_ngrams : dict
-        Tokenized ngrams, as doi:{i:count}.
-    vocab : dict
-        Vocabulary as i:term.
-    token_tf : :class:`.Counter`
-        Term counts for corpus, as i:count.
+    tuple
+        Returns (t_ngrams, vocab, token_tf) 3-tuple, where
+        t_ngrams : dict
+            Tokenized ngrams, as doi:{i:count}.
+        vocab : dict
+            Vocabulary as i:term.
+        token_tf : :class:`.Counter`
+            Term counts for corpus, as i:count.
     """
 
     vocab = {}
@@ -406,7 +491,7 @@ def _handle_paper(article):
 
     Returns
     -------
-    paper : :class:`.Paper`
+    :class:`.Paper`
     """
     paper = Paper()
     pdata = dict_from_node(article)
@@ -445,10 +530,12 @@ def _handle_pagerange(pagerange):
 
     Returns
     -------
-    start : str
-        Start page.
-    end : str
-        End page.
+    tuple
+        Returns (start, end) 2-tuple, where
+        start : str
+            Start page.
+        end : str
+            End page.
     """
 
     try:
@@ -462,8 +549,11 @@ def _handle_pagerange(pagerange):
 def _handle_pubdate(pubdate):
     """
     Yields a date integer from DfR pubdate field.
-    """
 
+    Returns
+    -------
+    int
+    """
     return int(pubdate[0:4])
 
 def _handle_authors(authors):
@@ -477,10 +567,12 @@ def _handle_authors(authors):
 
     Returns
     -------
-    aulast : list
-        A list of author surnames (string).
-    auinit : list
-        A list of author first-initials (string).
+    tuple
+        Returns (aulast, auinit) 2-tuple, where
+        aulast : list
+            A list of author surnames (string).
+        auinit : list
+            A list of author first-initials (string).
     """
 
     aulast = []
@@ -521,10 +613,12 @@ def _handle_author(author):
 
     Returns
     -------
-    aulast : str
-        Author surname.
-    auinit : str
-        Author first-initial.
+    tuple
+        Returns (aulast, auinit) 2-tuple, where
+        aulast : str
+            Author surname.
+        auinit : str
+            Author first-initial.
     """
 
     lname = author.split(' ')
@@ -548,7 +642,7 @@ def _dfr2paper_map():
 
     Returns
     -------
-    translator : dict
+    dict
         A 'translator' dictionary.
     """
 
@@ -567,20 +661,19 @@ def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
 
     Parameters
     ----------
-    Kwargs : dict
-        A dictionary of keyword arguments.
     aulast : string
-        Author surname.
+        (default: None) Author surname.
     auinit: string
-        Author initial(s).
+        (default: None) Author initial(s).
     date : string
-        Four-digit year.
+        (default: None) Four-digit year.
     jtitle : string
-        Title of the journal.
+        (default: None) Title of the journal.
+    **kwargs
 
     Returns
     -------
-    ayj : string
+    string
         Fuzzy identifier ayjid, or 'Unknown paper' if all id components are
         missing (None).
 

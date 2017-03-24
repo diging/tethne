@@ -47,6 +47,14 @@ def _infer_spaces(s):
     """
     Uses dynamic programming to infer the location of spaces in a string
     without spaces.
+
+    Parameters
+    ----------
+    s : str
+
+    Returns
+    -------
+    str
     """
     s = s.lower()
 
@@ -168,6 +176,7 @@ def extract_text(fpath):
 class ZoteroParser(RDFParser):
     """
     Reads Zotero RDF files.
+
     """
 
     entry_class = Paper
@@ -220,6 +229,12 @@ class ZoteroParser(RDFParser):
 
     def handle_identifier(self, value):
         """
+        Set 'uri' attribute if the supplied value is of type URI in RDF
+        file.
+
+        Parameters
+        ----------
+        value : object
 
         """
 
@@ -231,7 +246,15 @@ class ZoteroParser(RDFParser):
 
     def handle_link(self, value):
         """
-        rdf:link rdf:resource points to the resource described by a record.
+        Strip leading 'file://' from rdf:link and rdf:resource link elements.
+
+        Parameters
+        ----------
+        value : object
+
+        Returns
+        -------
+        str
         """
         for s, p, o in self.graph.triples((value, None, None)):
             if p == LINK_ELEM:
@@ -239,7 +262,17 @@ class ZoteroParser(RDFParser):
 
     def handle_date(self, value):
         """
-        Attempt to coerced date to ISO8601.
+        Attempt to coerce date to ISO8601.
+
+        Parameters
+        ----------
+        value : object
+
+        Returns
+        -------
+        int
+            Year specified in the date.
+
         """
         try:
             return iso8601.parse_date(unicode(value)).year
@@ -253,19 +286,31 @@ class ZoteroParser(RDFParser):
 
     def handle_documentType(self, value):
         """
+        Get the correct Python datatype associated with ``value``.
 
         Parameters
         ----------
-        value
+        value : object
 
         Returns
         -------
         value.toPython()
-        Basically, RDF literals are casted to their corresponding Python data types.
+            Basically, RDF literals are casted to their corresponding Python data types.
         """
         return value.toPython()
 
     def handle_authors_full(self, value):
+        """
+        Get a list of authors
+
+        Parameters
+        ----------
+        value : object
+
+        Returns
+        -------
+        list
+        """
         authors = [self.handle_author(o) for s, p, o
                    in self.graph.triples((value, None, None))]
         return [a for a in authors if a is not None]
@@ -276,31 +321,47 @@ class ZoteroParser(RDFParser):
 
         Parameters
         ----------
-        value
+        value : object
 
         Returns
         -------
         abstract.toPython()
-        Basically, RDF literals are casted to their corresponding Python data types.
+            Basically, RDF literals are casted to their corresponding Python
+            data types.
         """
         return value.toPython()
 
     def handle_title(self, value):
         """
         Title handler
+
         Parameters
         ----------
-        value
+        value : object
 
         Returns
         -------
-        title.toPython()
+        value.toPython()
 
         """
         return value.toPython()
 
 
     def handle_author(self, value):
+        """
+        Get author lastname and firstname from ``value``.
+
+        Parameters
+        ----------
+        value : object
+
+        Returns
+        -------
+        tuple
+            (lastname, firstname) 2-tuple.
+
+        """
+        import pdb; pdb.set_trace()  # XXX BREAKPOINT
         forename_iter = self.graph.triples((value, FORENAME_ELEM, None))
         surname_iter = self.graph.triples((value, SURNAME_ELEM, None))
         norm = lambda s: unicode(s).upper().replace('.', '')
@@ -321,6 +382,18 @@ class ZoteroParser(RDFParser):
         return surname, forename
 
     def handle_isPartOf(self, value):
+        """
+        Handle journal and volume details.
+
+        Parameters
+        ----------
+        value : object
+
+        Returns
+        -------
+        str
+            Journal title.
+        """
         journal = None
         for s, p, o in self.graph.triples((value, None, None)):
 
@@ -331,9 +404,28 @@ class ZoteroParser(RDFParser):
         return journal
 
     def handle_pages(self, value):
+        """
+        Get page numbers from ``value``.
+
+        Parameters
+        ----------
+        value : object
+
+        Returns
+        -------
+        tuple
+            (start_page, last_page) 2-tuple of strings.
+        """
         return tuple(value.split('-'))
 
     def postprocess_pages(self, entry):
+        """
+        Set ``entry.pageStart``, ``entry.pageEnd`` from ``entry.pages``.
+
+        Parameters
+        ----------
+        entry : :class:.`Paper`
+        """
         if len(entry.pages) < 2:
             start, end = entry.pages, None
         else:
@@ -410,14 +502,14 @@ def read(path, corpus=True, index_by='uri', follow_links=False, **kwargs):
         (default: True) If True, returns a :class:`.Corpus`\. Otherwise,
         returns a list of :class:`.Paper`\s.
     index_by : str
-        (default: ``'identifier'``) :class:`.Paper` attribute name to use as
+        (default: ``'uri'``) :class:`.Paper` attribute name to use as
         the primary indexing field. If the field is missing on a
         :class:`.Paper`\, a unique identifier will be generated based on the
         title and author names.
     follow_links : bool
-        If ``True``, attempts to load full-text content from attached files
-        (e.g. PDFs with embedded text). Default: False.
-    kwargs : kwargs
+        (default: False) If ``True``, attempts to load full-text content from
+        attached files (e.g. PDFs with embedded text).
+    **kwargs
         Passed to the :class:`.Corpus` constructor.
 
     Returns
