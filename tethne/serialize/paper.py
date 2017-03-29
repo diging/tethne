@@ -29,52 +29,46 @@ class SerializeUtility:
 
 class Serialize:
     """
-    This class is used to serialize the Corpus object and has methods to create fixtures(JSON files)
-    for different models in the TETHNE database.
+    This class is used to serialize the Corpus object and has methods to create
+    fixtures(JSON files) for different models in the TETHNE database.
+
+    Following are the parameters which are initialized.
+
+    >>>  self.corpus_id = tethnedao.getMaxCorpusID()+1 #this sets the new primary key which is (max PK +1)
+
+    Following are the hashMaps which are initialized and will be used for foreign key references.
+
+
+    >>>  self.paperIdMap ={}
+    >>>  self.paperIdMap[paper.wosid] = pid # This helps in keeping track of the Primary keys
+
+    Similarly, we have the following for Authors and AuthorsInstances.
+
+    >>>  self.authorIdMap = {}
+
+    >>>  self.authorInstanceIdMap = {}
+
+
+    Parameters
+    ----------
+    corpus : :class:`.Corpus`
+    source : int
+        This denotes the Source of the corpus object.
+        The possible values can be:
+            1 for JSTOR,
+            2 for ZOTERO,
+            3 for WOS and
+            4 for Scopus
+
+        The source value helps us in deciding, what attribute to fetch the
+        paper_id from? i.e.  DOI in case of JSTOR, URL in case of ZOTERO and
+        WOSID in case of WOS.
+
     """
 
     paper_source_map = {3: 'wosid', 2: 'url', 1: 'doi'}
 
     def __init__(self, corpus, source):
-        """
-
-        Parameters
-        ----------
-        corpus - The Corpus object that is to be serialized.
-        source - This denotes the Source of the corpus object.
-        The possible values can be
-
-        1 for JSTOR,
-        2 for ZOTERO,
-        3 for WOS and
-        4 for Scopus
-
-        The source value helps us in deciding, what attribute to fetch the paper_id from?
-        i.e.
-        DOI in case of JSTOR,
-        URL in case of ZOTERO
-        and WOSID in case of WOS.
-
-        Following are the parameters which are initialized.
-
-        >>>  self.corpus_id = tethnedao.getMaxCorpusID()+1 #this sets the new primary key which is (max PK +1)
-
-        Following are the hashMaps which are initialized and will be used for foreign key references.
-
-
-        >>>  self.paperIdMap ={}
-        >>>  self.paperIdMap[paper.wosid] = pid # This helps in keeping track of the Primary keys
-
-        Similarly, we have the following for Authors and AuthorsInstances.
-
-        >>>  self.authorIdMap = {}
-
-        >>>  self.authorInstanceIdMap = {}
-
-        Returns
-        -------
-
-        """
         self.corpus = corpus
         self.source = source
         self.corpus_id = tethnedao.getMaxCorpusID()+1
@@ -89,9 +83,11 @@ class Serialize:
     def serializeCorpus(self):
         """
         This method creates a fixture for the "django-tethne_corpus" model.
+
         Returns
         -------
-        corpus_details in JSON format which can written to a file.
+        list
+            corpus_details in JSON format which can written to a file.
 
         """
         corpus_details = [{
@@ -111,7 +107,8 @@ class Serialize:
 
         Returns
         -------
-        paper_details in JSON format, which can written to a file.
+        list
+            paper_details in JSON format, which can written to a file.
 
         """
         pid = tethnedao.getMaxPaperID();
@@ -138,12 +135,12 @@ class Serialize:
 
     def serializeAuthors(self):
         """
-         This method creates a fixture for the "django-tethne_author" model.
+        This method creates a fixture for the "django-tethne_author" model.
 
         Returns
         -------
-
-        Author details in JSON format, which can be written to a file.
+        list
+            Author details in JSON format, which can be written to a file.
 
         """
         author_details = []
@@ -164,11 +161,12 @@ class Serialize:
 
     def serializeAuthorInstances(self):
         """
-         This method creates a fixture for the "django-tethne_author" model.
+        This method creates a fixture for the "django-tethne_author" model.
 
         Returns
         -------
-        Author Instance details which can be written to a file
+        list
+            Author Instance details which can be written to a file
 
         """
         author_instance_details = []
@@ -213,7 +211,8 @@ class Serialize:
 
         Returns
         -------
-        citation details which can be written to a file
+        list
+            Citation details which can be written to a file
 
         """
         citation_details = []
@@ -247,12 +246,12 @@ class Serialize:
 
     def serializeCitationInstance(self):
         """
-
         This method creates a fixture for the "django-tethne_citation_instance" model.
 
         Returns
         -------
-        citation Instance details which can be written to a file
+        list
+            citation Instance details which can be written to a file
 
         """
         citation_instance_data = []
@@ -288,11 +287,14 @@ class Serialize:
 
     def serializeInstitution(self):
         """
-        This method creates a fixture for the "django-tethne_citation_institution" model.
+        This method creates a fixture for the
+        "django-tethne_citation_institution" model.
 
         Returns
         -------
-        institution details which can be written to a file
+        tuple
+            (institution_data, institution_instance_data, institution_id)
+            3-tuple of lists that can be written to file.
 
         """
         institution_data = []
@@ -346,22 +348,29 @@ class Serialize:
     def get_details_from_inst_literal(self, institute_literal, institution_id, institution_instance_id, paper_key):
         """
         This method parses the institute literal to get the following
-        1. Department naame
-        2. Country
-        3. University name
-        4. ZIP, STATE AND CITY (Only if the country is USA. For other countries the standard may vary. So parsing these
-        values becomes very difficult. However, the complete address can be found in the column "AddressLine1"
+            1. Department naame
+            2. Country
+            3. University name
+            4. ZIP, STATE AND CITY (Only if the country is USA. For other
+               countries the standard may vary. So parsing these values becomes
+               very difficult. However, the complete address can be found in the
+               column "AddressLine1"
 
         Parameters
         ----------
-        institute_literal -> The literal value of the institute
-        institution_id  -> the Primary key value which is to be added in the fixture
-        institution_instance_id -> Primary key value which is to be added in the fixture
-        paper_key -> The Paper key which is used for the Institution Instance
+        institute_literal : str
+            The literal value of the institute.
+        institution_id  : int
+            The primary key value which is to be added in the fixture.
+        institution_instance_id : int
+            Primary key value which is to be added in the fixture.
+        paper_key : str
+            The paper key which is used for the Institution Instance.
 
         Returns
         -------
-
+        tuple
+            (institute_row, institute_instance_row) 2-tuple of dicts.
         """
         institute_details = institute_literal.split(',')
         institute_name = institute_details[0]
@@ -425,17 +434,21 @@ class Serialize:
 
     def get_affiliation_details(self, value, affiliation_id, institute_literal):
         """
-        This method is used to map the Affiliation between an author and Institution.
+        This method is used to map the affiliation between an author and
+        institution.
 
         Parameters
         ----------
-        value - The author name
-        affiliation_id - Primary key of the affiliation table
-        institute_literal
+        value : str
+            The author name.
+        affiliation_id : int
+            Primary key of the affiliation table.
+        institute_literal : str
 
         Returns
         -------
-        Affiliation details(JSON fixture) which can be written to a file
+        dict
+            Affiliation details(JSON fixture) which can be written to a file.
 
         """
         tokens = tuple([t.upper().strip() for t in value.split(',')])
@@ -466,20 +479,8 @@ class Serialize:
 
 def serialize(dirPath, corpus, source):
     """
-
-    Parameters
-    ----------
-    dirPath - A valid directory path where you want the JSON files to be written
-
-    corpus - The corpus object which is to be serialized.
-
-    source - The source of the corpus
-    The possible values can be
-
-        1 for JSTOR,
-        2 for ZOTERO and
-        3 for WOS
-        4 for Scopus
+    Serialize ``corpus`` object and save the serialized files in ``dirPath``
+    directory.
 
     Follwoing is an example to use the serialize method.
 
@@ -496,11 +497,17 @@ def serialize(dirPath, corpus, source):
     >>> wosCorpus = wos.read('/path/to/my/Corpus.txt')
     >>> paper.serialize('/path/to/my/FixturesDir/', wosCorpus, 3)
 
-    Returns
-    -------
-
-    Writes the fixtures at the directory location.
-
+    Parameters
+    ----------
+    dirPath : str
+        A valid directory path where you want the JSON files to be written.
+    corpus : :class:`.Corpus`
+    source : int
+        The source of the corpus. The possible values can be
+            1 for JSTOR,
+            2 for ZOTERO and
+            3 for WOS
+            4 for Scopus
     """
     if not os.path.isdir(dirPath):
         raise IOError('No such file or directory')
