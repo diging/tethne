@@ -17,10 +17,24 @@ if PYTHON_3:
 
 def write_documents(corpus, target, featureset_name, metadata_fields=[]):
     """
+    Write documents from ``corpus`` to ``target`` path prefix.
+
     Parameters
     ----------
+    corpus : :class:`.Corpus`
+    target : str
+        Target path prefix. Documents will be written to
+        ``target`` + '_docs.txt', and metadata will be written to
+        ``target`` + '_meta.csv'.
+    featureset_name : str
+    metadata_fields : list
+        (default: []) List of metadata fields to be written to the metadata
+        file.
 
-
+    Returns
+    -------
+    tuple
+        (docpath, metapath) 2-tuple of str representing file paths.
     """
 
     docpath = target + '_docs.txt'
@@ -60,25 +74,24 @@ def write_documents(corpus, target, featureset_name, metadata_fields=[]):
 def write_documents_dtm(corpus, target, featureset_name, slice_kwargs={},
                         metadata_fields=['date','title']):
     """
+    Write documents in DTM compatible format.
 
     Parameters
     ----------
+    corpus : :class:`.Corpus`
+        Contains :class:`.Paper` objects generated from the same DfR dataset
+        as t_ngrams, indexed by doi and sliced by date.
     target : str
         Target path for documents; e.g. './mycorpus' will result in
         './mycorpus-mult.dat', './mycorpus-seq.dat', 'mycorpus-vocab.dat', and
         './mycorpus-meta.dat'.
-    D : :class:`.Corpus`
-        Contains :class:`.Paper` objects generated from the same DfR dataset
-        as t_ngrams, indexed by doi and sliced by date.
-    feature : str
-        (default: 'unigrams') Features in :class:`.Corpus` to use for
-        modeling.
-    fields : list
-        (optional) Fields in :class:`.Paper` to include in the metadata file.
-
-    Returns
-    -------
-    None : If all goes well.
+    featureset_name : str
+        Features in :class:`.Corpus` to use for modeling.
+    slice_kwargs : dict
+        (default: {}) kwargs passed to ``corpus.slice``.
+    metadata_fields : list
+        (default: ['date', 'title']) Fields in :class:`.Paper` to include in the
+        metadata file.
 
     Raises
     ------

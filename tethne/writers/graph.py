@@ -24,8 +24,8 @@ if PYTHON_3:
 
 def write_csv(graph, prefix):
     """
-    Write ``graph`` as tables of nodes (``prefix-nodes.csv``) and edges
-    (``prefix-edges.csv``).
+    Write ``graph`` as tables of nodes (``prefix_nodes.csv``) and edges
+    (``prefix_edges.csv``).
 
     Parameters
     ----------
@@ -191,7 +191,8 @@ def to_sif(graph, output_path):
 
 
 def to_gexf(graph, output_path):
-    """Writes graph to `GEXF <http://gexf.net>`_.
+    """
+    Writes graph to `GEXF <http://gexf.net>`_.
 
     Uses the NetworkX method
     `write_gexf <http://networkx.lanl.gov/reference/generated/networkx.readwrite.gexf.write_gexf.html>`_.
@@ -213,7 +214,8 @@ def to_gexf(graph, output_path):
 
 
 def write_graphml(graph, path, encoding='utf-8', prettyprint=True):
-    """Writes graph to `GraphML <http://graphml.graphdrawing.org/>`_.
+    """
+    Writes graph to `GraphML <http://graphml.graphdrawing.org/>`_.
 
     Uses the NetworkX method
     `write_graphml <http://networkx.lanl.gov/reference/generated/networkx.readwrite.graphml.write_graphml.html>`_.
@@ -222,10 +224,14 @@ def write_graphml(graph, path, encoding='utf-8', prettyprint=True):
     ----------
     graph : networkx.Graph
         The Graph to be exported to GraphML.
-    output_path : str
+    path : str
         Full path, including filename (without suffix).
         e.g. using "./graphFolder/graphFile" will result in a GraphML file at
         ./graphFolder/graphFile.graphml.
+    encoding : str
+        (default: 'utf-8')
+    prettyprint : bool
+        (default: True)
     """
     graph = _strip_list_attributes(graph)
 
@@ -242,8 +248,13 @@ def to_graphml(graph, path, encoding='utf-8', prettyprint=True):
 
 
 class TethneGraphMLWriter(GraphMLWriter):
+    """
+    Supports exporting of tethne graphs to graphml format.
+    """
     def get_key(self, name, attr_type, scope, default):
-        # Modified to use attribute name as key, rather than numeric ID.
+        """
+        Use attribute name as key, rather than numeric ID.
+        """
         keys_key = (name, attr_type, scope)
         try:
             return self.keys[keys_key]
@@ -264,6 +275,10 @@ class TethneGraphMLWriter(GraphMLWriter):
         return new_id
 
     def add_data(self, name, e_type, value, scope="all", default=None):
+        """
+        Overrides ``GraphMLWriter.add_data`` to use attribute name as the key
+        instead of numeric ID, and to control the casting of value to string.
+        """
         if e_type not in self.xml_type:
             raise nx.NetworkXError('GraphML writer does not support '
                                    '%s as data values.'%e_type)
@@ -280,6 +295,10 @@ class TethneGraphMLWriter(GraphMLWriter):
             graph_element.append(node_element)
 
     def add_edges(self, G, graph_element):
+        """
+        Overrides ``GraphMLWriter.add_edges`` to control the casting of values
+        to string.
+        """
         if G.is_multigraph():
             for u,v,key,data in G.edges_iter(data=True, keys=True):
                 edge_element = Element("edge",source=_recast_value(u),
