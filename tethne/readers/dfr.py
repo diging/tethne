@@ -418,7 +418,8 @@ def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
     Returns
     -------
     tuple
-        Returns (t_ngrams, vocab, token_tf) 3-tuple, where
+        Returns ``(t_ngrams, vocab, token_tf)`` 3-tuple, where
+
         t_ngrams : dict
             Tokenized ngrams, as doi:{i:count}.
         vocab : dict

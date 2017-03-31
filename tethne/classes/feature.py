@@ -623,12 +623,15 @@ class StructuredFeatureSet(BaseFeatureSet):
 
         Returns
         -------
-        list
-            A list of lists of (id, count) tuples. Each sub-list represents a
-            single context item (e.g. a document, or a paragraph). This is the
-            "bag of words" representation used in Gensim.
-        dict
-            Maps integer IDs to words.
+        tuple
+            Returns ``(corpus, index)`` 2-tuple.
+
+            corpus : list
+                A list of lists of (id, count) tuples. Each sub-list represents
+                a single context item (e.g. a document, or a paragraph). This is
+                the "bag of words" representation used in Gensim.
+            index : dict
+                Maps integer IDs to words.
 
         Examples
         --------
@@ -837,12 +840,15 @@ class FeatureSet(BaseFeatureSet):
 
         Returns
         -------
-        list
-            A list of lists of (id, count) tuples. Each sub-list represents a
-            single context item (e.g. a document, or a paragraph). This is the
-            "bag of words" representation used in Gensim.
-        dict
-            Maps integer IDs to words.
+        tuple
+            ``(corpus, index)`` 2-tuple.
+
+            corpus : list
+                A list of lists of (id, count) tuples. Each sub-list represents
+                a single context item (e.g. a document, or a paragraph). This is
+                the "bag of words" representation used in Gensim.
+            index : dict
+                Maps integer IDs to words.
 
         Examples
         --------

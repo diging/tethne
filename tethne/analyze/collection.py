@@ -21,6 +21,8 @@ def algorithm(G, method_name, **kwargs):
     Apply a ``method`` from NetworkX to all :ref:`networkx.Graph <networkx:graph>` objects in the
     :class:`.GraphCollection` ``G``.
 
+    .. warning:: To be removed in 0.8. Use :meth:`.GraphCollection.analyze` instead.
+
     For options, see the `list of algorithms
     <http://networkx.github.io/documentation/networkx-1.9/reference/algorithms.html>`_
     in the NetworkX documentation. Not all of these have been tested.
@@ -30,7 +32,7 @@ def algorithm(G, method_name, **kwargs):
     G : :class:`.GraphCollection`
         The :class:`.GraphCollection` to analyze. The specified method will be
         applied to each graph in ``G``.
-    method_name : string
+    method_name : ``str``
         Name of a method in NetworkX to execute on graph collection.
     **kwargs
         A list of keyword arguments that should correspond to the parameters
@@ -38,7 +40,7 @@ def algorithm(G, method_name, **kwargs):
 
     Returns
     -------
-    results : dict
+    dict
         Indexed by element (node or edge) and graph index (e.g. ``date``).
 
     Raises
@@ -74,19 +76,21 @@ def connected(G, method_name, **kwargs):
     Performs analysis methods from networkx.connected on each graph in the
     collection.
 
+    .. warning:: To be removed in 0.8. Use :meth:`.GraphCollection.analyze` instead.
+
     Parameters
     ----------
     G : :class:`.GraphCollection`
         The :class:`.GraphCollection` to analyze. The specified method will be
         applied to each graph in ``G``.
-    method_name : string
-        Name of method in networkx.connected.
-    **kwargs : kwargs
-        Keyword arguments, passed directly to method.
+    method_name : str
+        Name of method in ``networkx.connected``.
+    **kwargs
+        Keyword arguments, passed directly to ``analyze`` method.
 
     Returns
     -------
-    results : dict
+    dict
         Keys are graph indices, values are output of method for that graph.
 
     Raises
@@ -123,9 +127,9 @@ def attachment_probability(G, raw=False):
 
     Returns
     -------
-    probs : dict
-        Keyed by index in ``G``, and then by node. If ``raw`` is True, node keys
-        will be integer indices from the GraphCollection's  ``node_index``.
+    dict
+        Keyed by index in ``G``, and then by node. If ``raw`` is ``True``, node
+        keys will be integer indices from the GraphCollection's  ``node_index``.
 
     Examples
     --------

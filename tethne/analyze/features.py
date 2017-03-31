@@ -30,7 +30,7 @@ def kl_divergence(V_a, V_b):
 
     Returns
     -------
-    divergence : float
+    float
         KL divergence.
     """
 
@@ -60,7 +60,7 @@ def cosine_similarity(F_a, F_b):
 
     Returns
     -------
-    similarity : float
+    float
         Cosine similarity.
     """
 
@@ -89,7 +89,7 @@ def angular_similarity(F_a, F_b):
 
     Returns
     -------
-    similarity : float
+    float
         Cosine similarity.
     """
     return 1. - (2. *  acos(cosine_similarity(F_a, F_b))) / pi

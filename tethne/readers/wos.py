@@ -343,7 +343,7 @@ class WoSParser(FTParser):
 
         Parameters
         ----------
-        entry : :class:.`Paper`
+        entry : :class:`.Paper`
 
         Examples
         --------
@@ -450,7 +450,7 @@ class WoSParser(FTParser):
 
         Parameters
         ----------
-        entry : :class:.`Paper`
+        entry : :class:`.Paper`
         """
 
         if type(entry.authorKeywords) not in [str, unicode]:
@@ -467,7 +467,7 @@ class WoSParser(FTParser):
 
         Parameters
         ----------
-        entry : :class:.`Paper`
+        entry : :class:`.Paper`
         """
 
         if type(entry.keywordsPlus) in [str, unicode]:
@@ -481,7 +481,7 @@ class WoSParser(FTParser):
 
         Parameters
         ----------
-        entry : :class:.`Paper`
+        entry : :class:`.Paper`
         """
 
         if type(entry.funding) not in [str, unicode]:
@@ -505,7 +505,7 @@ class WoSParser(FTParser):
 
         Parameters
         ----------
-        entry : :class:.`Paper`
+        entry : :class:`.Paper`
         """
         if type(entry.authors_full) is not list:
             entry.authors_full = [entry.authors_full]
@@ -517,7 +517,7 @@ class WoSParser(FTParser):
 
         Parameters
         ----------
-        entry : :class:.`Paper`
+        entry : :class:`.Paper`
         """
         if type(entry.authors_init) is not list:
             entry.authors_init = [entry.authors_init]
@@ -529,7 +529,7 @@ class WoSParser(FTParser):
 
         Parameters
         ----------
-        entry : :class:.`Paper`
+        entry : :class:`.Paper`
         """
 
         if type(entry.citedReferences) is not list:
@@ -541,6 +541,9 @@ class WoSParser(FTParser):
 
 
 def from_dir(path, corpus=True, **kwargs):
+    """
+    .. warning:: Deprecated in v0.8. Use :func:`.read` instead.
+    """
     raise DeprecationWarning("from_dir() is deprecated. Use read() instead.")
     papers = []
     for sname in os.listdir(path):
@@ -552,6 +555,9 @@ def from_dir(path, corpus=True, **kwargs):
 
 
 def corpus_from_dir(path, **kwargs):
+    """
+    .. warning:: Deprecated in v0.8. Use :func:`.read` instead.
+    """
     raise DeprecationWarning("corpus_from_dir is deprecated in v0.8, use" +
                              " read directly, instead.")
     return read(path, corpus=True, **kwargs)
@@ -559,8 +565,7 @@ def corpus_from_dir(path, **kwargs):
 
 def read_corpus(path, **kwargs):
     """
-    .. DANGER::
-       read_corpus is deprecated in v0.8, use :func:`.read` instead.
+    .. warning:: Deprecated in v0.8. Use :func:`.read` instead.
     """
     raise DeprecationWarning("read_corpus is deprecated in v0.8, use" +
                              " read directly, instead.")
@@ -631,7 +636,7 @@ def read(path, corpus=True, index_by='wosid', streaming=False, parse_only=None,
 def streaming_read(path, corpus=True, index_by='wosid', parse_only=None,
                    **kwargs):
     """
-    Use memory-friendly :class:.`StreamingCorpus` while reading the dataset.
+    Use memory-friendly :class:`.StreamingCorpus` while reading the dataset.
     For parameter description, refer to :meth:.`read`.
     """
     return read(path, corpus=corpus, index_by=index_by, parse_only=parse_only,

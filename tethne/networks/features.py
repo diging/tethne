@@ -62,7 +62,7 @@ def mutual_information(corpus, featureset_name, min_weight=0.9,
 
     .. math::
 
-       nPMI(i,j)=\\frac{log(\\frac{p_{ij}}{p_i*p_j})}{-1*log(p_{ij})}
+       nPMI(i,j) = \\frac{log(\\frac{p_{ij}}{p_i*p_j})}{-1*log(p_{ij})}
 
     ...where :math:`p_i` and :math:`p_j` are the probabilities that features
     *i* and *j* will occur in a document (independently), and :math:`p_{ij}` is
@@ -109,6 +109,12 @@ def mutual_information(corpus, featureset_name, min_weight=0.9,
     return mgraph
 
 def keyword_cooccurrence(corpus, min_weight=1, filter=lambda f, v, c, dc: True):
+    """
+    Deprecated. Use :func:`.feature_cooccurrence` with "authorKeywords" or
+    "keywordsPlus" instead.
+
+    .. warning:: To be removed in v0.8. Use :func:`.feature_cooccurrence` instead.
+    """
     warnings.warn('keyword_cooccurrence will be removed in v0.8. Use ' +
                   'feature_cooccurrence with "authorKeywords" or '+
                   '"keywordsPlus" instead.', DeprecationWarning)

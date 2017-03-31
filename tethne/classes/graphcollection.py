@@ -252,6 +252,11 @@ class GraphCollection(dict):
         return self.master_graph.order()
 
     def node_distribution(self):
+        """
+        Deprecated. Use :meth:`.GraphCollection.order` instead.
+
+        .. warning:: To be removed in v0.8. Use :meth:`.GraphCollection.order` instead.
+        """
         warnings.warn("node_distribution will be removed in v0.8. Use" +
                       " order(piecewise=True) instead.", DeprecationWarning)
         return self.order(piecewise=True)
@@ -275,6 +280,11 @@ class GraphCollection(dict):
         return self.master_graph.size()
 
     def edge_distribution(self):
+        """
+        Deprecated. Use :meth:`.GraphCollection.size` instead.
+
+        .. warning:: To be removed in v0.8. Use :meth:`.GraphCollection.size` instead.
+        """
         warnings.warn("edge_distribution will be removed in v0.8. Use" +
                       " size(piecewise=True) instead.", DeprecationWarning)
         return self.order(piecewise=True)

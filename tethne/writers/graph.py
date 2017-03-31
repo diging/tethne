@@ -241,6 +241,9 @@ def write_graphml(graph, path, encoding='utf-8', prettyprint=True):
 
 
 def to_graphml(graph, path, encoding='utf-8', prettyprint=True):
+    """
+    .. warning:: Removed in 0.8. Use :func:`.write_graphml` instead.
+    """
     warnings.warn("Removed in 0.8. Use write_graphml instead.",
                   DeprecationWarning)
 
@@ -318,6 +321,9 @@ class TethneGraphMLWriter(GraphMLWriter):
 
 
 def to_table(graph, path):
+    """
+    .. warning:: Removed in 0.8. Use :func:`.write_csv` instead.
+    """
     warnings.warn("Removed in 0.8. Use write_csv instead.",
                   DeprecationWarning)
 

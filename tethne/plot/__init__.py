@@ -131,7 +131,7 @@ def plot_sigma(corpus, sigma, nodes=None, **kwargs):
 
     Returns
     -------
-    fig : :class:`matplotlib.figure.Figure`
+    :class:`.matplotlib.figure.Figure`
 
     Examples
     --------

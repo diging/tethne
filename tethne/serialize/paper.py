@@ -1,8 +1,6 @@
 """
-This class has functionalities to serialize a TETHNE corpus object  to persist in the database;
-
-.. code-block:: python
->>> from tethne.serialize import paper
+This class has functionalities to serialize a TETHNE corpus object  to persist
+in the database;
 
 """
 
@@ -348,7 +346,7 @@ class Serialize:
     def get_details_from_inst_literal(self, institute_literal, institution_id, institution_instance_id, paper_key):
         """
         This method parses the institute literal to get the following
-            1. Department naame
+            1. Department name
             2. Country
             3. University name
             4. ZIP, STATE AND CITY (Only if the country is USA. For other
@@ -492,10 +490,10 @@ def serialize(dirPath, corpus, source):
 
     .. code-block:: python
 
-    >>> from tethne.readers import wos
-    >>> from tethne.serialize import paper
-    >>> wosCorpus = wos.read('/path/to/my/Corpus.txt')
-    >>> paper.serialize('/path/to/my/FixturesDir/', wosCorpus, 3)
+        >>> from tethne.readers import wos
+        >>> from tethne.serialize import paper
+        >>> wosCorpus = wos.read('/path/to/my/Corpus.txt')
+        >>> paper.serialize('/path/to/my/FixturesDir/', wosCorpus, 3)
 
     Parameters
     ----------
