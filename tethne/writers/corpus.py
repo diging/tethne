@@ -5,7 +5,7 @@ from collections import Counter
 from itertools import repeat
 import codecs
 import os
-import csv
+import unicodecsv as csv
 
 from tethne import FeatureSet, StructuredFeatureSet
 
@@ -36,8 +36,8 @@ def write_documents(corpus, target, featureset_name, metadata_fields=[]):
         raise IOError('Invalid target. Could not open files for writing.')
 
     # Generate metadata.
-    with codecs.open(metapath, 'w', encoding='utf-8') as f:
-        writer = csv.writer(f)
+    with open(metapath, 'w') as f:
+        writer = csv.writer(f, encoding='utf-8')
         writer.writerow([corpus.index_by] + list(metadata_fields))
         for i, p in corpus.indexed_papers.iteritems():
             getter = lambda m: getattr(p, m) if hasattr(p, m) else None

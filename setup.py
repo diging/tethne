@@ -42,5 +42,6 @@ setup(
         "Unidecode==0.4.17",
         "nltk",
         "numpy==1.11",
+        "unicodecsv",
     ],
 )
