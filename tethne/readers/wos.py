@@ -113,6 +113,15 @@ class WoSParser(FTParser):
     def parse_author(self, value):
         """
         Attempts to split an author name into last and first parts.
+
+        Parameters
+        ----------
+        value : str
+
+        Returns
+        -------
+        tuple
+            Returns (aulast, auinit) 2-tuple.
         """
         tokens = tuple([t.upper().strip() for t in value.split(',')])
         if len(tokens) == 1:
@@ -134,34 +143,91 @@ class WoSParser(FTParser):
         return aulast, auinit
 
     def handle_AF(self, value):
+        """
+        Split an author name into last and first parts.
+
+        Parameters
+        ----------
+        value : str
+
+        Returns
+        -------
+        tuple
+            Returns (aulast, auinit) 2-tuple.
+        """
         return self.parse_author(value)
 
     def handle_PY(self, value):
         """
         WoS publication years are cast to integers.
+
+        Parameters
+        ----------
+        value : str
+
+        Returns
+        -------
+        int
         """
         return int(value)
 
     def handle_AU(self, value):
+        """
+        Sepearte author initials with spaces.
+
+        Parameters
+        ----------
+        value : str
+
+        Returns
+        -------
+        tuple
+            Returns (aulast, auinit) 2-tuple.
+        """
         aulast, auinit = self.parse_author(value)
         auinit = _space_sep(auinit)   # Separate author initials with spaces.
         return aulast, auinit
 
     def handle_TI(self, value):
         """
-        Convert article titles to Title Case.
+        Convert article's title to Title Case.
+
+        Parameters
+        ----------
+        value : str
+
+        Returns
+        -------
+        str
         """
         return unicode(value).title()
 
     def handle_VL(self, value):
         """
         Volume should be a unicode string, even if it looks like an integer.
+
+        Parameters
+        ----------
+        value : str
+
+        Returns
+        -------
+        str
+            Unicode string representation of ``value``.
         """
         return unicode(value)
 
     def handle_CR(self, value):
         """
         Parses cited references.
+
+        Parameters
+        ----------
+        value : str
+
+        Returns
+        -------
+        :class:.`Paper`.
         """
         citation = self.entry_class()
 
@@ -233,9 +299,13 @@ class WoSParser(FTParser):
 
     def postprocess_WC(self, entry):
         """
-        Parse WC keywords.
+        Parse WC keywords and update ``entry.WC``.
 
         Subject keywords are usually semicolon-delimited.
+
+        Parameters
+        ----------
+        entry : :class:.`Paper`
         """
 
         if type(entry.WC) not in [str, unicode]:
@@ -246,9 +316,13 @@ class WoSParser(FTParser):
 
     def postprocess_subject(self, entry):
         """
-        Parse subject keywords.
+        Parse subject keywords and update ``entry.subject``.
 
         Subject keywords are usually semicolon-delimited.
+
+        Parameters
+        ----------
+        entry : :class:.`Paper`
         """
 
         if type(entry.subject) not in [str, unicode]:
@@ -259,13 +333,17 @@ class WoSParser(FTParser):
 
     def postprocess_authorAddress(self, entry):
         """
-        Parses ``authorAddress`` field into ``address``.
+        Parses ``authorAddress`` field into ``entry.addresses``.
 
-        :attr:`.Paper.address` will be a ``dict`` mapping author name-tuples
+        :attr:`.Paper.addresses` will be a ``dict`` mapping author name-tuples
         (e.g. ``(u'PEROT', u'R')``) onto a list of (institution, country,
         [address, parts]) tuples. If it is not possible to determine an
         explicit mapping, then there will be only one key, ``__all__`` with a
         list of all (parsed) addresses in the record.
+
+        Parameters
+        ----------
+        entry : :class:`.Paper`
 
         Examples
         --------
@@ -366,9 +444,13 @@ class WoSParser(FTParser):
 
     def postprocess_authorKeywords(self, entry):
         """
-        Parse author keywords.
+        Parse author keywords and update ``entry.authorKeywords``.
 
         Author keywords are usually semicolon-delimited.
+
+        Parameters
+        ----------
+        entry : :class:`.Paper`
         """
 
         if type(entry.authorKeywords) not in [str, unicode]:
@@ -379,9 +461,13 @@ class WoSParser(FTParser):
 
     def postprocess_keywordsPlus(self, entry):
         """
-        Parse WoS "Keyword Plus" keywords.
+        Parse WoS "Keyword Plus" keywords and update ``entry.keywordsPlus``.
 
         Keyword Plus keywords are usually semicolon-delimited.
+
+        Parameters
+        ----------
+        entry : :class:`.Paper`
         """
 
         if type(entry.keywordsPlus) in [str, unicode]:
@@ -390,7 +476,12 @@ class WoSParser(FTParser):
 
     def postprocess_funding(self, entry):
         """
-        Separates funding agency from grant numbers.
+        Separates funding agency from grant numbers and stores the same as a
+        (agency, grant) 2-tuple in ``entry.funding`` list.
+
+        Parameters
+        ----------
+        entry : :class:`.Paper`
         """
 
         if type(entry.funding) not in [str, unicode]:
@@ -409,16 +500,24 @@ class WoSParser(FTParser):
 
     def postprocess_authors_full(self, entry):
         """
-        If only a single author was found, ensure that ``authors_full`` is
-        nonetheless a list.
+        If only a single author was found, ensure that ``entity.authors_full``
+        is nonetheless a list.
+
+        Parameters
+        ----------
+        entry : :class:`.Paper`
         """
         if type(entry.authors_full) is not list:
             entry.authors_full = [entry.authors_full]
 
     def postprocess_authors_init(self, entry):
         """
-        If only a single author was found, ensure that ``authors_init`` is
+        If only a single author was found, ensure that ``entity.authors_init`` is
         nonetheless a list.
+
+        Parameters
+        ----------
+        entry : :class:`.Paper`
         """
         if type(entry.authors_init) is not list:
             entry.authors_init = [entry.authors_init]
@@ -426,7 +525,11 @@ class WoSParser(FTParser):
     def postprocess_citedReferences(self, entry):
         """
         If only a single cited reference was found, ensure that
-        ``citedReferences`` is nonetheless a list.
+        ``entry.citedReferences`` is nonetheless a list.
+
+        Parameters
+        ----------
+        entry : :class:`.Paper`
         """
 
         if type(entry.citedReferences) is not list:
@@ -438,6 +541,9 @@ class WoSParser(FTParser):
 
 
 def from_dir(path, corpus=True, **kwargs):
+    """
+    .. warning:: Deprecated in v0.8. Use :func:`.read` instead.
+    """
     raise DeprecationWarning("from_dir() is deprecated. Use read() instead.")
     papers = []
     for sname in os.listdir(path):
@@ -449,6 +555,9 @@ def from_dir(path, corpus=True, **kwargs):
 
 
 def corpus_from_dir(path, **kwargs):
+    """
+    .. warning:: Deprecated in v0.8. Use :func:`.read` instead.
+    """
     raise DeprecationWarning("corpus_from_dir is deprecated in v0.8, use" +
                              " read directly, instead.")
     return read(path, corpus=True, **kwargs)
@@ -456,8 +565,7 @@ def corpus_from_dir(path, **kwargs):
 
 def read_corpus(path, **kwargs):
     """
-    .. DANGER::
-       read_corpus is deprecated in v0.8, use :func:`.read` instead.
+    .. warning:: Deprecated in v0.8. Use :func:`.read` instead.
     """
     raise DeprecationWarning("read_corpus is deprecated in v0.8, use" +
                              " read directly, instead.")
@@ -484,12 +592,19 @@ def read(path, corpus=True, index_by='wosid', streaming=False, parse_only=None,
         Path to WoS field-tagged data. Can be a path directly to a single data
         file, or to a directory containing several data files.
     corpus : bool
-        If True (default), returns a :class:`.Corpus`\. If False, will return
-        only a list of :class:`.Paper`\s.
+        (default: True) If True, returns a :class:`.Corpus`\. If False, will
+        return only a list of :class:`.Paper`\s.
+    index_by : str
+        (default: 'wosid') Controls which field is used for indexing.
+    streaming : bool
+        (default: False) If True, returns a :class:`.StreamingCorpus`\.
+    parse_only : iterable
+        (default: None) Parse only the specified fields. If None, all fields
+        are parsed and processed.
 
     Returns
     -------
-    :class:`.Corpus` or :class:`.Paper`
+    :class:`.Corpus` or :class:`.Paper` or :class:`.StreamingCorpus`
     """
 
     if not os.path.exists(path):
@@ -520,7 +635,10 @@ def read(path, corpus=True, index_by='wosid', streaming=False, parse_only=None,
 
 def streaming_read(path, corpus=True, index_by='wosid', parse_only=None,
                    **kwargs):
-
+    """
+    Use memory-friendly :class:`.StreamingCorpus` while reading the dataset.
+    For parameter description, refer to :meth:.`read`.
+    """
     return read(path, corpus=corpus, index_by=index_by, parse_only=parse_only,
                 corpus_class=StreamingCorpus, **kwargs)
     # corpus = StreamingCorpus(index_by=index_by, **kwargs)

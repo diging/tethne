@@ -319,7 +319,8 @@ class DTMModel(Model):
         Returns
         -------
         tuple
-            Returns (keys, t_series) 2-tuple where
+            Returns ``(keys, t_series)`` 2-tuple:
+
             keys : list
                 Start-date of each time-period.
             t_series : list

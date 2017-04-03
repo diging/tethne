@@ -49,7 +49,7 @@ def _forward(X, s=1.1, gamma=1., k=5):
 
     Returns
     -------
-    states : list
+    list
         Optimal state sequence.
     """
     X = list(X)
@@ -107,7 +107,7 @@ def burstness(corpus, featureset_name, features=[], k=5, topn=20,
     featureset_name : str
         Name of featureset in ``corpus``. E.g. ``'citations'``.
     features : list
-        (default: []) A list specifying features of interest.
+        (default: ``[]``) A list specifying features of interest.
     k : int
         (default: 5) Number of burst states.
     topn : int or float {0.-1.}
@@ -120,13 +120,13 @@ def burstness(corpus, featureset_name, features=[], k=5, topn=20,
     normalize : bool
         (default: True) If True, burstness is expressed relative to the hightest
         possible state (``k-1``). Otherwise, states themselves are returned.
-    kwargs : kwargs
+    **kwargs
         Parameters for burstness automaton HMM.
 
     Returns
     -------
     dict
-        Keys are features, values are lists of tuples of (dates, burstness)
+        Keys are features, values are lists of tuples of ``(dates, burstness)``
 
     """
 
@@ -173,7 +173,7 @@ def feature_burstness(corpus, featureset_name, feature, k=5, normalize=True,
     Returns
     -------
     tuple
-        A ( dates, burstness ) 2-tuple where dates is a list of dates and
+        A ``(dates, burstness)`` 2-tuple where dates is a list of dates and
         burstness is a list of floats, both lists being the same size.
     """
     #TODO: Pass slice_kwargs to the appropriate function.
@@ -254,7 +254,8 @@ def sigma(G, corpus, featureset_name, B=None, **kwargs):
     Returns
     -------
     dict
-        dict with node labels as keys; values are tuples ([years...], [sigma...]).
+        dict with node labels as keys; values are tuples
+        ``([years...], [sigma...])``.
 
     Examples
     --------

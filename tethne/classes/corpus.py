@@ -184,7 +184,7 @@ class Corpus(object):
 
     indices = {}
     """
-    Contains field indices for the :class:`Paper`\s in a :class:`.Corpus`
+    Contains field indices for the :class:`.Paper`\s in a :class:`.Corpus`
     instance.
 
     The ``'citations'`` index, for example, allows us to look up all of the
@@ -212,7 +212,7 @@ class Corpus(object):
 
     Notice that the values above are not Papers themselves, but identifiers.
     These are the same identifiers used in the primary index, so we can use them
-    to look up :class:`Paper`\s:
+    to look up :class:`.Paper`\s:
 
        >>> papers = corpus.indices['citations']['CARLSON SM 2004 EVOL ECOL RES']  # Who cited Carlson 2004?
        >>> print papers
@@ -352,7 +352,7 @@ class Corpus(object):
 
         Parameters
         ----------
-        paper : class:`.Paper`
+        paper : :class:`.Paper`
         feature_name : str
             The name of a :class:`.Paper` attribute
         tokenize : function
@@ -360,8 +360,8 @@ class Corpus(object):
             attribute from :class:`.Paper` object and returns its tokenized
             representation.
         structured : bool
-            (default: ``False``) If ``False``, class:`.StructuredFeature` is
-            used instead of class:`.Feature`\.
+            (default: ``False``) If ``False``, :class:`.StructuredFeature` is
+            used instead of :class:`.Feature`\.
 
         """
         if not feature_name:
@@ -394,8 +394,8 @@ class Corpus(object):
             attribute from :class:`.Paper` object and returns its tokenized
             representation.
         structured : bool
-            (default: ``False``) If ``True``, class:`.StructuredFeatureSet` is
-            created and added. If ``False``, class:`.FeatureSet` is used instead.
+            (default: ``False``) If ``True``, :class:`.StructuredFeatureSet` is
+            created and added. If ``False``, :class:`.FeatureSet` is used instead.
 
         """
         self._init_featureset(feature_name, structured=structured)
@@ -411,7 +411,7 @@ class Corpus(object):
 
         Parameters
         ----------
-        paper : class:`.Paper`
+        paper : :class:`.Paper`
         attr : str
             The name of a :class:`.Paper` attribute.
         """
@@ -624,10 +624,10 @@ class Corpus(object):
             corresponding year's subcorpus.
         subcorpus : bool
             (default: ``True``) If ``False``\, second value in each generator
-            yielded tuple is a list of :class:`Paper`\s.
+            yielded tuple is a list of :class:`.Paper`\s.
         feature_name : str
             (default: ``None``) If not ``None``\, second value in each generated
-            yielded tuple is a :class::``FeatureSet`` instance.
+            yielded tuple is a :class:`.FeatureSet` instance.
 
         Returns
         -------
@@ -699,8 +699,8 @@ class Corpus(object):
         --------
         .. code-block:: python
 
-           >>> corpus.feature_distribution(featureset_name='citations', \
-           ...                             feature='DOLE RJ 1965 CELL', \
+           >>> corpus.feature_distribution(featureset_name='citations', \\
+           ...                             feature='DOLE RJ 1965 CELL', \\
            ...                             step_size=1, window_size=1)
            [2, 15, 25, 1]
 
@@ -798,7 +798,7 @@ class Corpus(object):
 
         Returns
         -------
-        :class:`FeatureSet`
+        :class:`.FeatureSet`
         """
         indices = self.select(selector, index_only=True)
         fclass = self.features[featureset_name].__class__

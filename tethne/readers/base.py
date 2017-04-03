@@ -26,6 +26,14 @@ def _cast(value):
     """
     Attempt to convert ``value`` to an ``int`` or ``float``. If unable, return
     the value unchanged.
+
+    Parameters
+    ----------
+    value : object
+
+    Returns
+    -------
+    int or float or object
     """
 
     try:
@@ -40,6 +48,12 @@ def _cast(value):
 class BaseParser(object):
     """
     Base class for all data parsers. Do not instantiate directly.
+
+    Parameters
+    ----------
+    path : str
+        Path of the file being parsed.
+    **kwargs
     """
     def __init__(self, path, **kwargs):
         self.path = path
@@ -66,9 +80,20 @@ class BaseParser(object):
         return
 
     def set_value(self, tag, value):
+        """
+        Set last added data entry's ``tag`` attribute as ``value``.
+
+        Parameters
+        ----------
+        tag : str
+        value : object
+        """
         setattr(self.data[-1], tag, value)
 
     def postprocess_entry(self):
+        """
+        Postprocess last added data entry for all the defined fields.
+        """
         for field in self.fields:
             processor_name = 'postprocess_{0}'.format(field)
             if hasattr(self.data[-1], field) and hasattr(self, processor_name):
@@ -98,7 +123,11 @@ class IterParser(BaseParser):
 
     def parse(self, parse_only=None):
         """
-
+        Parameters
+        ----------
+        parse_only : iterable
+            (default: None) Parse only the specified fields. If None,
+            all fields are parsed and processed.
         """
         # The user should be able to limit parsing to specific fields.
         if parse_only:
@@ -133,7 +162,7 @@ class IterParser(BaseParser):
         Parameters
         ----------
         tag : str
-        data :
+        data : object
         """
 
         if self.is_end(tag):
@@ -189,12 +218,43 @@ class FTParser(IterParser):
     """Signals the end of a data entry."""
 
     def is_start(self, tag):
+        """
+        Parameters
+        ----------
+        tag : str
+
+        Returns
+        -------
+        bool
+            Returns ``True`` if ``tag`` is the starting tag.
+        """
         return tag == self.start_tag
 
     def is_end(self, tag):
+        """
+        Parameters
+        ----------
+        tag : str
+
+        Returns
+        -------
+        bool
+            Returns ``True`` if ``tag`` is the ending tag.
+        """
         return tag == self.end_tag
 
     def is_eof(self, tag):
+        """
+        Parameters
+        ----------
+        tag : str
+
+        Returns
+        -------
+        bool
+            Returns ``True`` if the parser has reached end-of-file.
+        """
+        #TODO: Do we need 'tag' argument?
         return self.at_eof
 
     def open(self):
@@ -219,8 +279,10 @@ class FTParser(IterParser):
 
         Returns
         -------
-        tag : str
-        data :
+        tuple
+            Returns (tag, data) 2-tuple, where
+            tag : str
+            data : object
         """
         line = self.buffer.readline()
 
@@ -296,9 +358,6 @@ class XMLParser(IterParser):
         self.last_tag = tag
 
     def parse(self, parse_only=None):
-        """
-
-        """
         # The user should be able to limit parsing to specific fields.
         if parse_only:
             tag_lookup = {v: k for k, v in self.tags.iteritems()}

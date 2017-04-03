@@ -11,36 +11,25 @@ class DBConnection:
     DBConnection class creates a connection to the TETHNE database.
     It initializes the cursor which can be used to execute  queries and
     fetch results.
-    All methods to fetch data from the TETHNE database can be written in this class.
+    All methods to fetch data from the TETHNE database can be written in this
+    class.
 
-    AS-IS ->
-    The connection details are for a LOCAL database.
-
-
+    Raises
+    ------
+    RuntimeError
+        If the mysql Connector package is not present in the user's Project
+        structure, RuntimeError will be raised.
     """
+
     config = {
         'user': 'root',
         'host': 'localhost',
         'database': 'tethne',
     }
+    """ The connection details are for a LOCAL database.  """
+
 
     def __init__(self):
-        """
-        Initializes the connection string details
-        And creates a connection to the Tethne DB.
-
-        It initializes the cursor which can be used to execute  queries and
-        fetch results.
-
-        Returns
-        -------
-
-
-        EXCEPTIONS ->
-        if the mysql Connector package is not present in the user's Project structure, RuntimeError
-        will be raised.
-
-        """
         try:
             self.conn=mysql.connector.connect(**DBConnection.config)
         except Exception:
@@ -53,14 +42,13 @@ class DBConnection:
 
 def getMaxAuthorID():
     """
+    Gets maximum value of the primary key from the table "django-tethne_author".
+    This is used to calculate the next id for primary key.
 
     Returns
     -------
-    maximum value of the Primary key from the table "django-tethne_author"
-    This is used to calculate the next id for primary key.
-
-    if the table is empty, 0 is returned
-
+    int
+        Returns 0 if the table is empty.
     """
     dbconnectionhanlder = DBConnection()
     dbconnectionhanlder.cursor.execute(" SELECT max(id) from `django-tethne_author` ")
@@ -74,15 +62,13 @@ def getMaxAuthorID():
 
 def getMaxPaperID():
     """
+    Get maximum value of primary key from the table "django-tethne_paper".
+    This is used to calculate the next id for primary key.
 
     Returns
     -------
-
-    maximum value of Primary key from the table "django-tethne_paper".
-    This is used to calculate the next id for primary key.
-
-    if the table is empty, 0 is returned
-
+    int
+        Returns 0 if the table is empty.
     """
     dbconnectionhanlder = DBConnection()
     dbconnectionhanlder.cursor.execute("SELECT max(id) from `django-tethne_paper` ")
@@ -95,14 +81,13 @@ def getMaxPaperID():
 
 def getMaxCorpusID():
     """
+    Get maximum value of the primary key from the table "django-tethne_corpus".
+    This is used to calculate the next id for primary key.
 
     Returns
     -------
-    maximum value of the Primary key from the table "django-tethne_corpus"
-    This is used to calculate the next id for primary key.
-
-    if the table is empty, 0 is returned
-
+    int
+        Returns 0 if the table is empty.
     """
     dbconnectionhanlder = DBConnection()
     dbconnectionhanlder.cursor.execute(" SELECT max(id) from `django-tethne_corpus` ")
@@ -115,13 +100,14 @@ def getMaxCorpusID():
 
 def getMaxAuthorInstanceID():
     """
+    Get maximum value of the Primary key from the table
+    "django-tethne_author_instance". This is used to calculate the next id for
+    primary key.
 
     Returns
     -------
-    maximum value of the Primary key from the table "django-tethne_author_instance"
-    This is used to calculate the next id for primary key.
-
-    if the table is empty, 0 is returned
+    int
+        Returns 0 if the table is empty.
 
     """
     dbconnectionhanlder = DBConnection()
@@ -136,14 +122,14 @@ def getMaxAuthorInstanceID():
 
 def getMaxCitationID():
     """
+    Get maximum value of the Primary key from the table
+    "django-tethne_citation".  This is used to calculate the next id for primary
+    key.
 
     Returns
     -------
-    maximum value of the Primary key from the table "django-tethne_citation"
-    This is used to calculate the next id for primary key.
-
-    if the table is empty, 0 is returned
-
+    int
+        Returns 0 if the table is empty.
     """
     dbconnectionhanlder = DBConnection()
     dbconnectionhanlder.cursor.execute("SELECT max(id) from `django-tethne_citation`")
@@ -156,14 +142,14 @@ def getMaxCitationID():
 
 def getMaxCitationInstanceID():
     """
+    Get maximum value of the primary key from the table
+    "django-tethne_citation_instance". This is used to calculate the next id for
+    primary key.
 
     Returns
     -------
-    maximum value of the Primary key from the table "django-tethne_citation_instance"
-    This is used to calculate the next id for primary key.
-
-    if the table is empty, 0 is returned
-
+    int
+        Returns 0 if the table is empty.
     """
     dbconnectionhanlder = DBConnection()
     dbconnectionhanlder.cursor.execute("SELECT max(id) from `django-tethne_citation_instance`")
@@ -177,14 +163,14 @@ def getMaxCitationInstanceID():
 
 def getMaxInstitutionID():
     """
+    Get maximum value of the primary key from the table
+    "django-tethne_author_instance". This is used to calculate the next id for
+    primary key.
 
     Returns
     -------
-    maximum value of the Primary key from the table "django-tethne_author_instance"
-    This is used to calculate the next id for primary key.
-
-    if the table is empty, 0 is returned
-
+    int
+        Returns 0 if the table is empty.
     """
     dbconnectionhanlder = DBConnection()
     dbconnectionhanlder.cursor.execute("SELECT max(id) from `django-tethne_institution`")
@@ -198,14 +184,14 @@ def getMaxInstitutionID():
 
 def getMaxInstitutionInstanceID():
     """
+    Get maximum value of the primary key from the table
+    "django-tethne_institution_instance". This is used to calculate the next id
+    for primary key.
 
     Returns
     -------
-    maximum value of the Primary key from the table "django-tethne_institution_instance"
-    This is used to calculate the next id for primary key.
-
-    if the table is empty, 0 is returned
-
+    int
+        Returns 0 if the table is empty.
     """
     dbconnectionhanlder = DBConnection()
     dbconnectionhanlder.cursor.execute("SELECT max(id) from `django-tethne_institution_instance`")
@@ -219,14 +205,14 @@ def getMaxInstitutionInstanceID():
 
 def getMaxAffiliationID():
     """
+    Get maximum value of the primary key from the table
+    "django-tethne_affiliation". This is used to calculate the next id for
+    primary key.
 
     Returns
     -------
-    maximum value of the Primary key from the table "django-tethne_affiliation"
-    This is used to calculate the next id for primary key.
-
-    if the table is empty, 0 is returned
-
+    int
+        Returns 0 if the table is empty.
     """
     dbconnectionhanlder = DBConnection()
     dbconnectionhanlder.cursor.execute("SELECT max(id) from `django-tethne_affiliation`")
@@ -241,14 +227,14 @@ def getMaxAffiliationID():
 
 def getMaxAffiliationInstanceID():
     """
+    Get maximum value of the primary key from the table
+    "django-tethne_affiliation_instance". This is used to calculate the next id
+    for primary key.
 
     Returns
     -------
-    maximum value of the Primary key from the table "django-tethne_affiliation_instance"
-    This is used to calculate the next id for primary key.
-
-    if the table is empty, 0 is returned
-
+    int
+        Returns 0 if the table is empty.
     """
     dbconnectionhanlder = DBConnection()
     dbconnectionhanlder.cursor.execute("SELECT max(id) from `django-tethne_affiliation_instance`")

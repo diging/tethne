@@ -46,21 +46,21 @@ def merge(corpus_1, corpus_2, match_by=['ayjid'], match_threshold=1.,
         conflict.
     corpus_2 : :class:`.Corpus`
     match_by : list or callable
-        Either a list of fields used to evaluate whether or not two
-        :class:`.Paper`\s should be combined, **OR** a callable that accepts
-        two :class:`.Paper` instances and returns bool.
+        (default: ['ayjid']) Either a list of fields used to evaluate whether
+        or not two :class:`.Paper`\s should be combined, **OR** a callable that
+        accepts two :class:`.Paper` instances and returns bool.
     match_threshold : float
-        if ``match_by`` is a list containing more than one field, specifies the
-        proportion of fields that must match for two :class:`.Paper` instances
-        to be combined.
+        (default: 1.) If ``match_by`` is a list containing more than one field,
+        specifies the proportion of fields that must match for two :class:`.Paper`
+        instances to be combined.
     index_by : str
-        The field to use as the primary indexing field in the new
+        (default: 'ayjid') The field to use as the primary indexing field in the new
         :class:`.Corpus`\. Default is `ayjid`, since this is virtually always
         available.
 
     Returns
     -------
-    combined : :class:`.Corpus`
+    :class:`.Corpus`
 
     Examples
     --------
