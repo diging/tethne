@@ -10,6 +10,7 @@ import csv
 
 from tethne import write_documents, write_documents_dtm
 from tethne.readers.wos import read
+from tethne.readers import dfr
 
 datapath = './tethne/tests/data/wos3.txt'
 
@@ -31,6 +32,18 @@ class WriteDocumentsTest(unittest.TestCase):
         self.assertGreater(os.path.getsize(self.dpath), 0)
         self.assertGreater(os.path.getsize(self.mpath), 0)
 
+    def test_write_documents_metadata_unicode(self):
+        """
+        Ensure corpus metadata having non-ascii values is exported correctly.
+        """
+        # Add non-ascii characters to the first paper's title for testing
+        self.corpus.papers[0].title += u'\u0308\xdf'
+        write_documents(self.corpus, self.target, 'citations', ['title'])
+
+        self.assertTrue(os.path.exists(self.dpath))
+        self.assertTrue(os.path.exists(self.mpath))
+        self.assertGreater(os.path.getsize(self.dpath), 0)
+        self.assertGreater(os.path.getsize(self.mpath), 0)
 
 
 class WriteDocumentsDTMTest(unittest.TestCase):
