@@ -1,4 +1,4 @@
-import os, iso8601, logging, rdflib, nltk, codecs, magic, chardet
+import os, iso8601, logging, rdflib, nltk, codecs, magic, chardet, re
 
 import warnings
 warnings.simplefilter('always', UserWarning)
@@ -331,19 +331,17 @@ class ZoteroParser(RDFParser):
         return journal
 
     def handle_pages(self, value):
-        return tuple(value.split('-'))
+        # \u2013 is 'EN DASH' unicode character
+        return re.split(u'-|\u2013', value)
 
     def postprocess_pages(self, entry):
-        if len(entry.pages) < 2:
-            start, end = entry.pages, None
-        else:
-            try:
-                start, end = entry.pages
-            except ValueError:
-                start, end = entry.pages, None
+        try:
+            start, end = entry.pages
+        except ValueError:
+            start, end = entry.pages[0], entry.pages[0]
 
-        setattr(entry, 'pageStart', start)
-        setattr(entry, 'pageEnd', end)
+        setattr(entry, 'pageStart', int(start))
+        setattr(entry, 'pageEnd', int(end))
         del entry.pages
 
     def postprocess_link(self, entry):

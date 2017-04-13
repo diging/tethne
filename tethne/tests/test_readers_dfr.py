@@ -107,6 +107,26 @@ class TestDFRReader(unittest.TestCase):
         self.assertEqual(len(wordcounts.index) - 1,
                          len(wordcounts.transform(filter).index))
 
+    def test_pagerange(self):
+        corpus = read(datapath)
+        paper = corpus['10.2307/2422045']
+        self.assertEqual(paper.pageStart, 88)
+        self.assertEqual(paper.pageEnd, 105)
+
+    def test_pagerange_alternate_format(self):
+        """
+        Test pagerange specified as 'p. 35'
+        """
+        corpus = read(datapath)
+        paper = corpus['10.2307/41609686']
+        self.assertEqual(paper.pageStart, 46)
+        self.assertEqual(paper.pageEnd, 46)
+
+    def test_pagerange_unknown_format(self):
+        corpus = read(datapath)
+        paper = corpus['10.2307/4353727']
+        self.assertEqual(paper.pageStart, 0)
+        self.assertEqual(paper.pageEnd, 0)
 
 class TestNGrams(unittest.TestCase):
     def test_ngrams(self):

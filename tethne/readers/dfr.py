@@ -82,6 +82,34 @@ class DfRParser(XMLParser):
         if type(entry.authors_full) is not list:
             entry.authors_full = [entry.authors_full]
 
+    def postprocess_pagerange(self, entry):
+        """
+        Set ``entry.pageStart``, ``entry.pageEnd`` attributes by parsing
+        pagerange.
+
+        Parameters
+        ----------
+        entry : :class:.`Paper`
+        """
+        pagerange = entry.pagerange
+        try:
+            # Try to match 'pp. 33-34'
+            pr = re.compile("pp\.\s([0-9]+)\-([0-9]+)")
+            start, end = re.findall(pr, pagerange)[0]
+        except IndexError:
+            try:
+                # Try to match 'p. 33'
+                pr = re.compile("p\.\s([0-9]+)")
+                start = re.findall(pr, pagerange)[0]
+                end = start
+            except IndexError:
+                # Unknown format
+                start = end = 0
+
+        entry.pageStart = int(start)
+        entry.pageEnd = int(end)
+        del entry.pagerange
+
 
 class GramGenerator(object):
     """
