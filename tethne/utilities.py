@@ -1,8 +1,14 @@
 """
 Helper functions.
 """
+import numpy as np
+import pandas as pd
+import re
 import string
 import copy
+
+from datetime import datetime
+from collections import OrderedDict
 
 import sys
 PYTHON_3 = sys.version_info[0] == 3
@@ -336,3 +342,231 @@ class Dictionary:
             return self.by_str[key]
         if type(key) == int:
             return self.by_int[key]
+
+
+class Corpus2Pandas(object):
+    """
+    Class supporting the export of Corpus object to Pandas.
+
+    .. code-block:: python
+
+        >>> from tethne.utilities import to_pandas
+        >>> corpus = read(datapath)
+        >>> to_pandas(corpus)
+                                        doi  \
+            0    10.1016/j.envsci.2016.12.007
+            1  10.1016/j.geomorph.2016.12.009
+            2       10.1007/s10980-016-0481-8
+            3       10.1007/s10722-016-0375-2
+            4       10.1007/s10980-016-0462-y
+            5          10.3168/jds.2016-11724
+            6       10.1007/s10933-017-9942-6
+            ...
+
+    Parameters
+    ----------
+    corpus : :class:`.Corpus`
+    """
+
+    PAPER_SERIES_DTYPES = OrderedDict([
+        ('doi'             , basestring),
+        ('ayjid'           , basestring),
+        ('title'           , basestring),
+        ('citationCount'   , int),
+        ('date'            , None),
+        ('journal'         , basestring),
+        ('volume'          , basestring),
+        ('issue'           , basestring),
+        ('pageStart'       , int),
+        ('pageEnd'         , int),
+        ('documentType'    , basestring),
+        ('isoSource'       , basestring),
+        ('language'        , basestring),
+        ('publisherAddress', basestring),
+        ('publisherCity'   , basestring),
+        ('address'         , basestring),
+        ('uri'             , basestring),
+        ('link'            , basestring),
+        ('abstract'        , basestring),
+    ])
+    """
+    Specifies column(series) names along with their datatypes.
+    """
+
+    def __init__(self, corpus):
+        self.corpus = corpus
+
+    def typecast_paper_citationCount(self, value):
+        """
+        Type cast `citationCount` paper attribute to int.
+
+        Parameters
+        ----------
+        value : object
+            Attribute value to be typecasted.
+
+        Returns
+        -------
+        int
+        """
+        return int(value)
+
+    def typecast_paper_date(self, value):
+        """
+        Type cast `date` paper attribute to `pandas.Period`.
+
+        Parameters
+        ----------
+        value : object
+            Attribute value to be typecasted.
+
+        Returns
+        -------
+        :class:`pandas.Period`
+        """
+        return pd.Period(value)
+
+    def typecast_paper_pageEnd(self, value):
+        """
+        Type cast `pageEnd` paper attribute to int.
+
+        Parameters
+        ----------
+        value : object
+            Attribute value to be typecasted.
+
+        Returns
+        -------
+        int
+        """
+        return int(value)
+
+    def typecast_paper_pageStart(self, value):
+        """
+        Type cast `pageStart` paper attribute to int.
+
+        Parameters
+        ----------
+        value : object
+            Attribute value to be typecasted.
+
+        Returns
+        -------
+        int
+        """
+        return int(value)
+
+    def typecast_paper_issue(self, value):
+        """
+        Type cast `issue` paper attribute to string.
+
+        Parameters
+        ----------
+        value : object
+            Attribute value to be typecasted.
+
+        Returns
+        -------
+        str
+        """
+        return unicode(value)
+
+    def get_paper_attr_value(self, paper, attr):
+        """
+        Get paper attribute value for insertion in `pandas.DataFrame`.
+
+        Parameters
+        ----------
+        value : :class:`.Paper`
+        attr : str
+
+        Returns
+        -------
+        str
+        """
+        try:
+            value = getattr(paper, attr)
+        except AttributeError:
+            value = np.nan
+        else:
+            try:
+                value = getattr(self, 'typecast_paper_' + attr, lambda x: x)(value)
+            except Exception, e:
+                raise TypeError('Error typecasting "{0}": {1}'.format(attr, e))
+            dtype = self.PAPER_SERIES_DTYPES[attr]
+
+            # validate
+            if dtype is not None and not isinstance(value, dtype):
+                raise TypeError('"{0}" must be of type {1}, is "{2}"'.format(
+                    attr, dtype, value))
+        return value
+
+    def handle_papers(self, papers):
+        """
+        Construct a `pandas.DataFrame` from list of papers.
+
+        Parameters
+        ----------
+        papers : list
+            List of :class:`.Paper`s.
+
+        Returns
+        -------
+        :class:`.pandas.DataFrame`
+        """
+        attr_series = OrderedDict()
+        for attr, dtype in self.PAPER_SERIES_DTYPES.items():
+            attr_series[attr] = pd.Series([], dtype=dtype)
+
+        papers_df = pd.DataFrame(attr_series, index=xrange(len(papers)))
+
+        for i, paper in enumerate(papers):
+            papers_df.loc[i] = tuple(
+                self.get_paper_attr_value(paper, attr) for attr in self.PAPER_SERIES_DTYPES.keys())
+
+        return papers_df
+
+    def to_pandas(self):
+        """
+        Export the corpus object to pandas data structure.
+        Currently, only the papers list from Corpus object is exported.
+
+        Returns
+        -------
+        :class:`.pandas.DataFrame`
+            `DataFrame` representing list of papers in corpus.
+        """
+        return self.handle_papers(self.corpus.papers)
+
+
+def to_pandas(corpus):
+    """
+    Export the corpus object to pandas data structure.
+    Currently, only the papers list from Corpus object is exported.
+
+    .. code-block:: python
+
+        >>> from tethne.utilities import to_pandas
+        >>> corpus = read(datapath)
+        >>> to_pandas(corpus)
+                                        doi  \
+            0    10.1016/j.envsci.2016.12.007
+            1  10.1016/j.geomorph.2016.12.009
+            2       10.1007/s10980-016-0481-8
+            3       10.1007/s10722-016-0375-2
+            4       10.1007/s10980-016-0462-y
+            5          10.3168/jds.2016-11724
+            6       10.1007/s10933-017-9942-6
+            ...
+
+
+    Parameters
+    ----------
+    corpus : :class:`.Corpus`
+
+    Returns
+    -------
+    :class:`.pandas.DataFrame`
+        `DataFrame` representing list of papers in corpus.
+    """
+    return Corpus2Pandas(corpus).to_pandas()
