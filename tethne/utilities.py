@@ -1,8 +1,14 @@
 """
 Helper functions.
 """
+import numpy as np
+import pandas as pd
+import re
 import string
 import copy
+
+from datetime import datetime
+from collections import OrderedDict
 
 import sys
 PYTHON_3 = sys.version_info[0] == 3
@@ -336,3 +342,87 @@ class Dictionary:
             return self.by_str[key]
         if type(key) == int:
             return self.by_int[key]
+
+
+class Corpus2Pandas(object):
+
+    PAPER_SERIES_DTYPES = OrderedDict([
+        ('doi'             , basestring),
+        ('ayjid'           , basestring),
+        ('title'           , basestring),
+        ('citationCount'   , int),
+        ('date'            , None),
+        ('journal'         , basestring),
+        ('volume'          , basestring),
+        ('issue'           , basestring),
+        ('pageStart'       , int),
+        ('pageEnd'         , int),
+        ('documentType'    , basestring),
+        ('isoSource'       , basestring),
+        ('language'        , basestring),
+        ('publisher'       , basestring),
+        ('publisherAddress', basestring),
+        ('publisherCity'   , basestring),
+        ('address'         , basestring),
+        ('uri'             , basestring),
+        ('link'            , basestring),
+        ('abstract'        , basestring),
+    ])
+
+    def __init__(self, corpus):
+        self.corpus = corpus
+
+    def typecast_paper_citationCount(self, value):
+        return int(value)
+
+    def typecast_paper_date(self, value):
+        return pd.Period(value)
+
+    def typecast_paper_pageEnd(self, value):
+        return int(value)
+
+    def typecast_paper_pageStart(self, value):
+        return int(value)
+
+    def typecast_paper_issue(self, value):
+        return str(value)
+
+    def get_paper_attr_value(self, paper, attr):
+        try:
+            value = getattr(paper, attr)
+        except AttributeError:
+            value = np.nan
+        else:
+            try:
+                value = getattr(self,
+                                'typecast_paper_' + attr,
+                                lambda x: x)(value)
+            except Exception, e:
+                raise TypeError('Error typecasting "{0}": {1}'.format(attr, e))
+            dtype = self.PAPER_SERIES_DTYPES[attr]
+
+            # validate
+            if dtype is not None and not isinstance(value, dtype):
+                raise TypeError('"{0}" must be of type {1}, is "{2}"'.format(
+                    attr, dtype, value))
+        return value
+
+    def handle_papers(self, papers):
+        attr_series = OrderedDict()
+        for attr, dtype in self.PAPER_SERIES_DTYPES.items():
+            attr_series[attr] = pd.Series([], dtype=dtype)
+
+        papers_df = pd.DataFrame(attr_series)
+
+        for i, paper in enumerate(papers):
+            papers_df.loc[i] = tuple(
+                self.get_paper_attr_value(paper, attr) for attr in self.PAPER_SERIES_DTYPES.keys())
+
+        return papers_df
+
+    def to_pandas(self):
+        return self.handle_papers(self.corpus.papers)
+
+
+def to_pandas(corpus):
+    return Corpus2Pandas(corpus).to_pandas()
