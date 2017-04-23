@@ -287,12 +287,7 @@ class TethneGraphMLWriter(GraphMLWriter):
                                    '%s as data values.'%e_type)
         key_id = self.get_key(name, self.xml_type[e_type], scope, default)
         data_element = Element("data", key=key_id)
-        data_element.text = _recast_value(value)
-        return data_element
-
-    def add_nodes(self, G, graph_element):
-        for node,data in G.nodes_iter(data=True):
-            node_element = Element("node", id=_recast_value(node))
+        data_element.text = _recast_value(node))
             default = G.graph.get('node_default', {})
             self.add_attributes("node", node_element, data, default)
             graph_element.append(node_element)
