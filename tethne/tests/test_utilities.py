@@ -1,9 +1,14 @@
 import sys
 sys.path.append('../tethne')
 datapath = './tethne/tests/data/test_citations_sample.xml'
+datapath2 = './tethne/tests/data/wos.txt'
+datapath3 = './tethne/tests/data/dfr'
 
+import numpy as np
+import pandas as pd
 import unittest
 
+from tethne.readers import wos, dfr, zotero
 from tethne.utilities import subdict
 from tethne.utilities import concat_list
 from tethne.utilities import overlap
@@ -14,6 +19,7 @@ from tethne.utilities import attribs_to_string
 from tethne.utilities import argmax
 from tethne.utilities import contains
 from tethne.utilities import dict_from_node
+from tethne.utilities import to_pandas
 import xml.etree.ElementTree as ET
 from tethne.utilities import strip_non_ascii
 
@@ -184,6 +190,160 @@ class TestDictFromNode(unittest.TestCase):
         self.assertEqual(expectedDict,present_dict.get('authors'))
 
 
+class TestToPandas(unittest.TestCase):
+    """
+    Class for testing corpus object to pandas export functionality.
+    """
+
+    def test_cols_present(self):
+        """
+        Ensure all standard columns are present in papers DataFrame
+        """
+        corpus = dfr.read(datapath3)
+        papers_df = to_pandas(corpus)
+        col_set = { 'doi', 'ayjid', 'title', 'citationCount',
+            'date', 'journal', 'volume', 'issue', 'pageStart',
+            'pageEnd', 'documentType', 'isoSource', 'language',
+            'publisherAddress', 'publisherCity', 'address',
+            'uri', 'link', 'abstract'
+        }
+        self.assertEqual(col_set, set(papers_df.columns))
+
+    def _assert_col_datatype_str(self, column):
+        corpus = wos.read(datapath2)
+        papers_df = to_pandas(corpus)
+        for value, notnull in zip(papers_df[column], pd.notnull(papers_df[column])):
+            if notnull:
+                self.assertIsInstance(
+                    column, basestring,
+                    '{} must be of type str, is {}'.format(column, value))
+
+    def _assert_col_datatype_int(self, column):
+        corpus = wos.read(datapath2)
+        papers_df = to_pandas(corpus)
+        for column, notnull in zip(papers_df[column], pd.notnull(papers_df[column])):
+            if notnull:
+                isNumeric = ((column.dtype == np.float) or (column.dtype == np.int))
+                self.assertTrue(
+                    isNumeric, '{} must be of type int/float'.format(column))
+
+    def test_doi_datatype(self):
+        """
+        Ensure doi is of type str in papers DataFrame
+        """
+        self._assert_col_datatype_str('doi')
+
+    def test_ayjid_datatype(self):
+        """
+        Ensure ayjid is of type str in papers DataFrame
+        """
+        self._assert_col_datatype_str('ayjid')
+
+    def test_title_datatype(self):
+        """
+        Ensure title is of type str in papers DataFrame
+        """
+        self._assert_col_datatype_str('title')
+
+    def test_journal_datatype(self):
+        """
+        Ensure journal is of type str in papers DataFrame
+        """
+        self._assert_col_datatype_str('journal')
+
+    def test_volume_datatype(self):
+        """
+        Ensure volume is of type str in papers DataFrame
+        """
+        self._assert_col_datatype_str('volume')
+
+    def test_issue_datatype(self):
+        """
+        Ensure issue is of type str in papers DataFrame
+        """
+        self._assert_col_datatype_str('issue')
+
+    def test_documentType_datatype(self):
+        """
+        Ensure documentType is of type str in papers DataFrame
+        """
+        self._assert_col_datatype_str('documentType')
+
+    def test_isoSource_datatype(self):
+        """
+        Ensure isoSource is of type str in papers DataFrame
+        """
+        self._assert_col_datatype_str('isoSource')
+
+    def test_language_datatype(self):
+        """
+        Ensure language is of type str in papers DataFrame
+        """
+        self._assert_col_datatype_str('language')
+
+    def test_publisherAddress_datatype(self):
+        """
+        Ensure publisherAddress is of type str in papers DataFrame
+        """
+        self._assert_col_datatype_str('publisherAddress')
+
+    def test_publisherCity_datatype(self):
+        """
+        Ensure publisherCity is of type str in papers DataFrame
+        """
+        self._assert_col_datatype_str('publisherCity')
+
+    def test_address_datatype(self):
+        """
+        Ensure address is of type str in papers DataFrame
+        """
+        self._assert_col_datatype_str('address')
+
+    def test_uri_datatype(self):
+        """
+        Ensure uri is of type str in papers DataFrame
+        """
+        self._assert_col_datatype_str('uri')
+
+    def test_link_datatype(self):
+        """
+        Ensure link is of type str in papers DataFrame
+        """
+        self._assert_col_datatype_str('link')
+
+    def test_abstract_datatype(self):
+        """
+        Ensure abstract is of type str in papers DataFrame
+        """
+        self._assert_col_datatype_str('abstract')
+
+    def test_citationCount_datatype(self):
+        """
+        Ensure citationCount is of type int/float in papers DataFrame
+        """
+        self._assert_col_datatype_int('citationCount')
+
+    def test_pageStart_datatype(self):
+        """
+        Ensure pageStart is of type int in papers DataFrame
+        """
+        self._assert_col_datatype_int('pageStart')
+
+    def test_pageEnd_datatype(self):
+        """
+        Ensure pageEnd is of type int in papers DataFrame
+        """
+        self._assert_col_datatype_int('pageEnd')
+
+    def test_date_datatype(self):
+        """
+        Ensure date is of type `pandas.Period` in papers DataFrame
+        """
+        corpus = wos.read(datapath2)
+        papers_df = to_pandas(corpus)
+        for value, notnull in zip(papers_df['date'], pd.notnull(papers_df['date'])):
+            if notnull:
+                self.assertIsInstance(value, pd.Period)
 
 if __name__ == '__main__':
     unittest.main()

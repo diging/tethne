@@ -126,6 +126,30 @@ class TestZoteroParser(unittest.TestCase):
             self.assertNotEqual(len(paper.authors_full), 0, "Author_full list cannot be empty")
 
 
+    def test_pages(self):
+        corpus = read(datapath2)
+        paper = corpus[u'http://llc.oxfordjournals.org/content/28/4/668']
+        self.assertEqual(paper.pageStart, 668)
+        self.assertEqual(paper.pageEnd, 675)
+
+    def test_pages_en_dash(self):
+        """
+        Test pages specified as '35\u201336'
+        """
+        corpus = read(datapath, index_by='ayjid')
+        paper = corpus['MAY_DS_1971_AMERICAN_JOURNAL_OF_BOTANY']
+        self.assertEqual(paper.pageStart, 921)
+        self.assertEqual(paper.pageEnd, 931)
+
+    def test_page_alternate_format(self):
+        """
+        Test page specified as '35'
+        """
+        corpus = read(datapath3)
+        paper = corpus['http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3527233/']
+        self.assertEqual(paper.pageStart, 102)
+        self.assertEqual(paper.pageEnd, 102)
+
     def test_handle_date(self):
         parser = ZoteroParser(datapath)
         parser.parse()

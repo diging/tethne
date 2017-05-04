@@ -38,6 +38,7 @@ setup(
         "chardet",
         "html5lib",
         "isodate",
+        "pandas",
         "python-magic==0.4.6",
         "Unidecode==0.4.17",
         "nltk",
