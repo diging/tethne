@@ -757,6 +757,8 @@ class GerrishLoader(object):
             i = 0
             for l in lines:
                 self.metadata[i] = { keys[i]:l[i] for i in xrange(0, len(l)) }
+                if 'id' not in self.metadata[i]:
+                    self.metadata[i]['id'] = i
                 i += 1
 
         return self.metadata
