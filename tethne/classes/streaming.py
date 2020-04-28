@@ -1,6 +1,6 @@
 from tethne.classes.corpus import Corpus
 
-import cPickle as pickle
+import pickle
 import os
 
 
@@ -49,7 +49,7 @@ class StreamingIndex(object):
     def __setitem__(self, key, paper):
         fname = self._friendly_filename(key)
         fpath = self._build_path(fname)
-        with open(fpath, 'w') as f:
+        with open(fpath, 'wb') as f:
             self.serializer.dump(paper, f)
 
         self.key_file_map[key] = fname
@@ -91,7 +91,7 @@ class StreamingCorpus(Corpus):
                 self.parent = parent
                 
             def __getitem__(self, key):
-                return self.parent.indexed_papers[self.parent.indexed_papers.keys()[key]]
+                return self.parent.indexed_papers[list(self.parent.indexed_papers.keys())[key]]
 
             def __iter__(self):
                 keys = self.parent.indexed_papers.keys()

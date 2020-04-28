@@ -282,7 +282,7 @@ def read(path, corpus=True, index_by='doi', load_ngrams=True, parse_only=None,
                     if len(datafiles) > 0:
                         features[sname] = ngrams(path, sname)
 
-        for featureset_name, featureset_values in features.iteritems():
+        for featureset_name, featureset_values in features.items():
             if type(featureset_values) is dict:
                 fclass = featureset_types[featureset_name]
                 featureset_values = fclass(featureset_values)
@@ -405,7 +405,7 @@ def _handle_paper(article):
     paper = Paper()
     pdata = dict_from_node(article)
 
-    for key, value in pdata.iteritems():
+    for key, value in pdata.items():
 
         datum = pdata[key]
         if type(datum) is str:

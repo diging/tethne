@@ -95,7 +95,7 @@ def to_sif(graph, output_path):
         for node in nodes:
             node_name = node[0]
             node_attribs = node[1]
-            for key, value in node_attribs.iteritems():
+            for key, value in node_attribs.items():
                 # generate a node attribute file for each node attribute
                 if node == nodes[0]:
                     # first node, overwrite file
@@ -134,7 +134,7 @@ def to_sif(graph, output_path):
                 edges = graph.edges(data=True, keys=True)
                 edge_attribs = set()
                 for edge in edges:
-                    for key in edge[3].iterkeys():
+                    for key in edge[3].keys():
                         edge_attribs.add(key)
 
                 # create edge attribute files
@@ -152,7 +152,7 @@ def to_sif(graph, output_path):
                         sif_line = node1 + ' ' + intr_type + ' ' + node2 + '\n'
                         f.write(sif_line)
 
-                        for attrib, value in edge[3].iteritems():
+                        for attrib, value in edge[3].items():
                             eda_line = (node1 + ' (' + intr_type + ') ' +
                                         node2 + ' = ' + unicode(value) + '\n')
                             with open(output_path + '_' + unicode(attrib) + '.eda',
@@ -273,7 +273,7 @@ class TethneGraphMLWriter(GraphMLWriter):
         return data_element
 
     def add_nodes(self, G, graph_element):
-        for node,data in G.nodes_iter(data=True):
+        for node,data in list(G.nodes(data=True)):
             node_element = Element("node", id=_recast_value(node))
             default = G.graph.get('node_default', {})
             self.add_attributes("node", node_element, data, default)
@@ -331,11 +331,11 @@ def to_table(graph, path):
 
 def _strip_list_attributes(G):
     for n in G.nodes(data=True):
-        for k,v in n[1].iteritems():
+        for k,v in n[1].items():
             if type(v) is list:
                 G.node[n[0]][k] = unicode(v)
     for e in G.edges(data=True):
-        for k,v in e[2].iteritems():
+        for k,v in e[2].items():
             if type(v) is list:
                 G.edge[e[0]][e[1]][k] = unicode(v)
 

@@ -135,7 +135,7 @@ def merge(corpus_1, corpus_2, match_by=['ayjid'], match_threshold=1.,
     corpus = Corpus(combined, index_by=index_by)
 
     featuresets = {}
-    for featureset_name, featureset_1 in corpus_1.features.iteritems():
+    for featureset_name, featureset_1 in corpus_1.features.items():
         # We avoid FeatureSets that were generated during the indexing process
         #  (e.g. 'citations', 'authors').
         if featureset_name in featuresets or featureset_name in corpus.features:

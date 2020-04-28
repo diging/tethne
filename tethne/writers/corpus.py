@@ -39,13 +39,13 @@ def write_documents(corpus, target, featureset_name, metadata_fields=[]):
     with codecs.open(metapath, 'w', encoding='utf-8') as f:
         writer = csv.writer(f)
         writer.writerow([corpus.index_by] + list(metadata_fields))
-        for i, p in corpus.indexed_papers.iteritems():
+        for i, p in corpus.indexed_papers.items():
             getter = lambda m: getattr(p, m) if hasattr(p, m) else None
             writer.writerow([i] + list(map(getter, metadata_fields)))
 
     # Write documents content.
     with codecs.open(docpath, 'w', encoding='utf-8') as f:
-        for i, p in corpus.indexed_papers.iteritems():
+        for i, p in corpus.indexed_papers.items():
             if i in features:
                 row = [i, u'en']
                 if ftype is FeatureSet:

@@ -4,7 +4,7 @@ import logging
 import rdflib
 import nltk
 import codecs
-import magic    # To detect file mime-type.
+import magic as magic   # To detect file mime-type.
 import slate    # PDF processing.
 import chardet  # Detect character encodings.
 

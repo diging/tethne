@@ -481,7 +481,7 @@ if __name__ == "__main__":
             with open(resultspath, 'wb') as f:
                 writer = csv.writer(f, delimiter=',')
                 writer.writerow(['index', 'nodes', 'edges'])
-                for key,g in C.graphs.iteritems():
+                for key,g in C.graphs.items():
                     writer.writerow([key,len(g.nodes()), len(g.edges())])
             sys.stdout.write("done.\n")
 
@@ -525,7 +525,7 @@ if __name__ == "__main__":
             with open(resultspath, 'wb') as f:
                 writer = csv.writer(f, delimiter=',')
                 writer.writerow(['index', 'mean', 'variance'])
-                for key,g in C.graphs.iteritems():
+                for key,g in C.graphs.items():
                     m = np.mean([ n[1][options.algorithm] \
                                                   for n in g.nodes(data=True) ])
                     v = np.var([ n[1][options.algorithm] \
@@ -577,7 +577,7 @@ if __name__ == "__main__":
         basepath = options.outpath + "/" + options.dataset_id + "_graph_"
 
         if options.write_format == 'graphml':
-            for k,g in C.graphs.iteritems():
+            for k,g in C.graphs.items():
                 wr.graph.to_graphml(g, basepath+unicode(k))
         elif options.write_format == 'xgmml':
             wr.collection.to_dxgmml(C, basepath+"dynamic.xgmml")

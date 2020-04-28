@@ -57,7 +57,7 @@ class BaseParser(object):
         self.data = []
         self.fields = set([])
 
-        for k, v in kwargs.iteritems():
+        for k, v in kwargs.items():
             setattr(self, k, v)
 
         self.open()
@@ -111,7 +111,7 @@ class IterParser(BaseParser):
         """
         # The user should be able to limit parsing to specific fields.
         if parse_only:
-            tag_lookup = {v: k for k, v in self.tags.iteritems()}
+            tag_lookup = {v: k for k, v in self.tags.items()}
             self.parse_only = set([tag_lookup.get(field)
                                    for field in parse_only
                                    if field in tag_lookup])
@@ -302,7 +302,7 @@ class XMLParser(IterParser):
         """
         # The user should be able to limit parsing to specific fields.
         if parse_only:
-            tag_lookup = {v: k for k, v in self.tags.iteritems()}
+            tag_lookup = {v: k for k, v in self.tags.items()}
             self.parse_only = set([tag_lookup.get(field)
                                    for field in parse_only
                                    if field in tag_lookup]) | set(parse_only)

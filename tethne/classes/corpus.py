@@ -408,7 +408,7 @@ class Corpus(object):
 
         """
 
-        for i, paper in self.indexed_papers.iteritems():
+        for i, paper in self.indexed_papers.items():
             self.index_paper_by_attr(paper, attr)
 
 
@@ -716,7 +716,7 @@ class Corpus(object):
         indices = self.select(selector, index_only=True)
         fclass = self.features[featureset_name].__class__
 
-        return fclass({k:f for k,f in self.features[featureset_name].iteritems()
+        return fclass({k:f for k,f in self.features[featureset_name].items()
                            if k in indices})
 
 

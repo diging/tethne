@@ -17,7 +17,8 @@ logger = logging.getLogger('feature')
 logger.setLevel('WARNING')
 
 
-from itertools import chain, izip
+from itertools import chain
+# import zip
 from collections import Counter, defaultdict
 
 import sys
@@ -329,7 +330,7 @@ class BaseFeatureSet(object):
     def __init__(self, features={}):
         self._setUp()
 
-        for paper, feature in features.iteritems():
+        for paper, feature in features.items():
             self.add(paper, feature)
 
     def _setUp(self):
@@ -355,7 +356,7 @@ class BaseFeatureSet(object):
         return self.features.items()
 
     def iteritems(self):
-        return self.features.iteritems()
+        return self.features.items()
 
     @property
     def unique(self):
@@ -450,7 +451,7 @@ class StructuredFeatureSet(BaseFeatureSet):
 
     def transform(self, func):
         features = {}
-        for i, feature in self.features.iteritems():
+        for i, feature in self.features.items():
             feature_ = []
             for f in feature:
                 t = self.lookup[f]
@@ -483,7 +484,7 @@ class StructuredFeatureSet(BaseFeatureSet):
 
         chunks = []
         papers = []
-        for paper, feature in self.features.iteritems():
+        for paper, feature in self.features.items():
             if context in feature.contexts:
                 new_chunks = feature.context_chunks(context)
             else:
@@ -509,7 +510,7 @@ class FeatureSet(BaseFeatureSet):
         allfeatures = [v for v in chain(*features.values())]
         logger.debug('features: {0}; allfeatures: {1}'.format(len(features), len(allfeatures)))
         if len(features) > 0 and len(allfeatures) > 0:
-            allfeatures_keys = zip(*allfeatures)[0]
+            allfeatures_keys = list(zip(*allfeatures))[0]
 
             for i, elem in enumerate(set(allfeatures_keys)):
                 self.index[i] = elem
@@ -525,9 +526,9 @@ class FeatureSet(BaseFeatureSet):
                                            in allfeatures_keys])
 
             self.with_feature = defaultdict(list)
-            for paper_id, counts in features.iteritems():
+            for paper_id, counts in features.items():
                 try:
-                    for elem in zip(*counts)[0]:
+                    for elem in list(zip(*counts))[0]:
                         i = self.lookup[elem]
                         self.with_feature[i].append(paper_id)
                 except IndexError:    # A Paper may not have any features.
@@ -568,7 +569,7 @@ class FeatureSet(BaseFeatureSet):
 
         """
         features = {}
-        for i, feature in self.features.iteritems():
+        for i, feature in self.features.items():
             feature_ = []
             for f, v in feature:
                 t = self.lookup[f]
@@ -581,7 +582,7 @@ class FeatureSet(BaseFeatureSet):
 
     def translate(self, func):
         features = {}
-        for i, feature in self.features.iteritems():
+        for i, feature in self.features.items():
             features_ = []
             for f, v in feature:
                 t = self.lookup[f]
