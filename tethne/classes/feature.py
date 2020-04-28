@@ -346,7 +346,7 @@ class BaseFeatureSet(object):
             return self.features[key]
         except KeyError as E:
             if type(key) is int:
-                return self.features.values()[key]
+                return list(self.features.values())[key]
             raise E
 
     def __len__(self):

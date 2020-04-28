@@ -100,7 +100,7 @@ def citation_count(papers, key='ayjid', verbose=False):
     """
 
     if verbose:
-        print "Generating citation counts for "+unicode(len(papers))+" papers..."
+        print("Generating citation counts for " + unicode(len(papers)) + " papers...")
 
     counts = Counter()
     for P in papers:
@@ -132,7 +132,7 @@ def top_cited(papers, topn=20, verbose=False):
     """
 
     if verbose:
-        print "Finding top "+unicode(topn)+" most cited papers..."
+        print("Finding top " +unicode(topn) +" most cited papers...")
 
     counts = citation_count(papers, verbose=verbose)
 
@@ -170,7 +170,7 @@ def top_parents(papers, topn=20, verbose=False):
     """
 
     if verbose:
-        print "Getting parents of top "+unicode(topn)+" most cited papers."
+        print("Getting parents of top " + unicode(topn) + " most cited papers.")
 
     top, counts = top_cited(papers, topn=topn, verbose=verbose)
     papers = [ P for P in papers if P['citations'] is not None ]
@@ -179,6 +179,6 @@ def top_parents(papers, topn=20, verbose=False):
                     set(top) ) > 0 ]
 
     if verbose:
-        print "Found " + unicode(len(parents)) + " parents."
+        print("Found " + unicode(len(parents)) + " parents.")
 
     return parents, top, counts

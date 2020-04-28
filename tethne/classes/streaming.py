@@ -72,7 +72,7 @@ class StreamingIndex(object):
             raise KeyError('No such key')
 
         fpath = self._build_path(self.key_file_map[key])
-        with open(fpath, 'r') as f:
+        with open(fpath, 'rb') as f:
             paper = self.serializer.load(f)
         return paper
 

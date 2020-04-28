@@ -40,6 +40,9 @@ def global_closeness_centrality(g, node=None, normalize=True):
 
     if normalize:
         ac = 0
+
+      g.subgraph(c) for c in connected_components(g)
+
         for sg in nx.connected_component_subgraphs(g):
             if len(sg.nodes()) > 1:
                 aspl = nx.average_shortest_path_length(sg)

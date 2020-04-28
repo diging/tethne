@@ -148,10 +148,10 @@ class GraphCollection(dict):
 
         # Add all node attributes to the `master_graph`.
         for n, attrs in indexed_graph.nodes(data=True):
-            for k,v in attrs.iteritems():
-                if k not in self.master_graph.node[n]:
-                    self.master_graph.node[n][k] = {}
-                self.master_graph.node[n][k][name] = v
+            for k,v in attrs.items():
+                if k not in self.master_graph.nodes[n]:
+                    self.master_graph.nodes[n][k] = {}
+                self.master_graph.nodes[n][k][name] = v
 
         dict.__setitem__(self, name, indexed_graph)
 
@@ -367,9 +367,9 @@ class GraphCollection(dict):
 
         # Invert results.
         inverse = defaultdict(dict)
-        for gname, result in by_graph.iteritems():
+        for gname, result in by_graph.items():
             if hasattr(result, '__iter__'):
-                for n, val in result.iteritems():
+                for n, val in result.items():
                     inverse[n].update({gname: val})
 
         if type(list(by_graph.values())[0]) is dict:
@@ -483,7 +483,7 @@ class GraphCollection(dict):
                 graph[u][v]['graphs'] = []
                 graph[u][v][weight_attr] = 0.
 
-            for key, value in a.iteritems():
+            for key, value in a.items():
                 if key not in graph[u][v]:
                     graph[u][v][key] = []
                 graph[u][v][key].append(value)
@@ -491,7 +491,7 @@ class GraphCollection(dict):
             graph[u][v][weight_attr] += 1.
 
         for u, a in self.master_graph.nodes(data=True):
-            for key, value in a.iteritems():
+            for key, value in a.items():
                 graph.node[u][key] = value
 
         return graph

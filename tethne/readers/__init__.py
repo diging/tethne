@@ -75,7 +75,7 @@ def merge(corpus_1, corpus_2, match_by=['ayjid'], match_threshold=1.,
     """
 
     def norm(value):
-        if type(value) in [str, unicode]:
+        if type(value) in [str, str]:
             return value.strip().lower()
         return value
 
@@ -107,12 +107,12 @@ def merge(corpus_1, corpus_2, match_by=['ayjid'], match_threshold=1.,
             if match:
                 paper_new = Paper()
                 # We add values from paper_2 first, so that...
-                for key, value in paper_2.__dict__.iteritems():
+                for key, value in paper_2.__dict__.items():
                     if value not in ['', [], None]:
                         paper_new[key] = value
 
                 # ...values from paper_1 will override values from paper_2.
-                for key, value in paper_1.__dict__.iteritems():
+                for key, value in paper_1.__dict__.items():
                     if value not in ['', [], None]:
                         paper_new[key] = value
 
@@ -157,7 +157,7 @@ def merge(corpus_1, corpus_2, match_by=['ayjid'], match_threshold=1.,
         featuresets[featureset_name] = fclass(features)
 
     # FeatureSets unique to corpus_2.
-    for featureset_name, featureset_2 in corpus_2.features.iteritems():
+    for featureset_name, featureset_2 in corpus_2.features.items():
         # We avoid FeatureSets that were generated during the indexing process
         #  (e.g. 'citations', 'authors').
         if featureset_name in featuresets or featureset_name in corpus.features:

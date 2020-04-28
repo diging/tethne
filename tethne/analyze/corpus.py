@@ -15,7 +15,6 @@ import warnings
 
 from math import exp, log
 from collections import defaultdict
-from itertools import izip
 
 from tethne.utilities import argmin, mean
 
@@ -187,7 +186,7 @@ def feature_burstness(corpus, featureset_name, feature, k=5, normalize=True,
     X_ = [1.]
 
     years, values = corpus.feature_distribution(featureset_name, feature)
-    for year, N in izip(years, values):
+    for year, N in zip(years, values):
         if N == 0:
             continue
 

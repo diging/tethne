@@ -27,13 +27,13 @@ class TestGraphCollectionCreation(unittest.TestCase):
         graph = nx.DiGraph()
         graph.add_edge('A', 'B', c='d')
         graph.add_edge('B', 'C', c='e')
-        graph.node['A']['bob'] = 'dole'
+        graph.nodes['A']['bob'] = 'dole'
         graph_name = 'test'
 
         graph2 = nx.DiGraph()
         graph2.add_edge('A', 'B', c='d')
         graph2.add_edge('D', 'C', c='f')
-        graph2.node['A']['bob'] = 'dole'
+        graph2.nodes['A']['bob'] = 'dole'
         graph2_name = 'test2'
 
         G.add(graph_name, graph)
@@ -110,7 +110,7 @@ class TestGraphCollectionCreation(unittest.TestCase):
         graph = nx.Graph()
         graph.add_edge('A', 'B', c='d')
         graph.add_edge('B', 'C', c='e')
-        graph.node['A']['bob'] = 'dole'
+        graph.nodes['A']['bob'] = 'dole'
         graph_name = 'test'
 
         G.add(graph_name, graph)
@@ -137,7 +137,7 @@ class TestGraphCollectionCreation(unittest.TestCase):
             self.assertIn(graph_name, G.graphs_containing[n])
 
             i = G.node_lookup[n]
-            for k, v in attrs.iteritems():
+            for k, v in attrs.items():
                 self.assertIn(k, G.master_graph.node[i])
                 self.assertIn(graph_name, G.master_graph.node[i][k])
                 self.assertEqual(v, G.master_graph.node[i][k][graph_name])
@@ -153,13 +153,13 @@ class TestGraphCollectionMethods(unittest.TestCase):
         self.graph = nx.Graph()
         self.graph.add_edge('A', 'B', c='d')
         self.graph.add_edge('B', 'C', c='e')
-        self.graph.node['A']['bob'] = 'dole'
+        self.graph.nodes['A']['bob'] = 'dole'
         graph_name = 'test'
 
         self.graph2 = nx.Graph()
         self.graph2.add_edge('A', 'B', c='d')
         self.graph2.add_edge('D', 'C', c='f')
-        self.graph2.node['A']['bob'] = 'dole'
+        self.graph2.nodes['A']['bob'] = 'dole'
         graph2_name = 'test2'
 
         self.G.add(graph_name, self.graph)
