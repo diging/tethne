@@ -376,8 +376,8 @@ class GraphCollection(dict):
             # Look for a result set that we can inspect.
             i = 0
             while True:
-                if len(by_graph.values()[i]) > 0:
-                    inspect = by_graph.values()[i]
+                if len(list(by_graph.values())[i]) > 0:
+                    inspect = list(by_graph.values())[i]
                     break
                 i += 1
 
@@ -386,11 +386,11 @@ class GraphCollection(dict):
                 by_edge = dict(inverse)
 
                 # Set edge attributes in each graph.
-                for graph, attrs in by_graph.iteritems():
+                for graph, attrs in by_graph.items():
                     nx.set_edge_attributes(self[graph], method_name, attrs)
 
                 # Set edge attributes in the master graph.
-                for (s, t), v in by_edge.iteritems():
+                for (s, t), v in by_edge.items():
                     for i, attrs in self.master_graph.edge[s][t].iteritems():
                         val = v[attrs['graph']]
                         self.master_graph.edge[s][t][i][method_name] = val
@@ -402,7 +402,7 @@ class GraphCollection(dict):
                 by_node = dict(inverse)
 
                 # Set node attributes for each graph.
-                for graph, attrs in by_graph.iteritems():
+                for graph, attrs in by_graph.items():
                     nx.set_node_attributes(self[graph], method_name, attrs)
 
                 # Store node attributes in the master graph.
@@ -492,6 +492,6 @@ class GraphCollection(dict):
 
         for u, a in self.master_graph.nodes(data=True):
             for key, value in a.items():
-                graph.node[u][key] = value
+                graph.nodes[u][key] = value
 
         return graph

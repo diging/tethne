@@ -3,7 +3,6 @@ import warnings
 
 from math import exp, log
 from collections import defaultdict
-from itertools import izip
 
 from tethne.utilities import argmin, mean, argsort
 

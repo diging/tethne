@@ -138,9 +138,9 @@ class TestGraphCollectionCreation(unittest.TestCase):
 
             i = G.node_lookup[n]
             for k, v in attrs.items():
-                self.assertIn(k, G.master_graph.node[i])
-                self.assertIn(graph_name, G.master_graph.node[i][k])
-                self.assertEqual(v, G.master_graph.node[i][k][graph_name])
+                self.assertIn(k, G.master_graph.nodes[i])
+                self.assertIn(graph_name, G.master_graph.nodes[i][k])
+                self.assertEqual(v, G.master_graph.nodes[i][k][graph_name])
 
         # Should raise a ValueError if name has already been used.
         with self.assertRaises(ValueError):
@@ -330,16 +330,16 @@ class TestGraphCollectionMethods(unittest.TestCase):
         self.assertIsInstance(graph, nx.Graph)
         self.assertGreater(self.G.size(), graph.size())
         self.assertEqual(graph.order(), self.G.order())
-        self.assertIn(weight_attr, graph.edges(data=True)[0][2])
+        self.assertIn(weight_attr, (graph.edges(data=True))[0][2])
 
         # Node attributes present.
         for u, a in self.G.master_graph.nodes(data=True):
-            for key, value in a.iteritems():
-                self.assertIn(key, graph.node[u])
+            for key, value in a.items():
+                self.assertIn(key, graph.nodes[u])
 
         # Edge attributes present.
         for u, v, a in self.G.master_graph.edges(data=True):
-            for key, value in a.iteritems():
+            for key, value in a.items():
                 self.assertIn(key, graph[u][v])
                 if key == weight_attr:
                     self.assertIsInstance(value, float)
