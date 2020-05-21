@@ -5,11 +5,6 @@ See :ref:`quickstart_cl` and :ref:`commandline_options` for an introduction to
 the CLI.
 """
 
-import sys
-PYTHON_3 = sys.version_info[0] == 3
-if PYTHON_3:
-    unicode = str
-
 
 def _isFloat(x):
     try:
@@ -356,16 +351,16 @@ if __name__ == "__main__":
             with open(summarypath, 'wb') as f:
                 writer = csv.writer(f, delimiter=',')
                 if len(axes) == 2:  # 2-dimensional slice binning.
-                    A_indices = D.axes[axes[0]].keys()
-                    B_indices = D.axes[axes[1]].keys()
+                    A_indices = list(D.axes[axes[0]].keys())
+                    B_indices = list(D.axes[axes[1]].keys())
                     writer.writerow([''] + A_indices)
                     dist = D.distribution_2d(axes[0], axes[1])
-                    for i in xrange(dist.shape[1]):
+                    for i in range(dist.shape[1]):
                         writer.writerow([B_indices[i]] + list(dist[:,i]))
                 elif len(axes) == 1:    # 1-dimensional slice binning.
                     dist = D.distribution()
-                    A_indices = D.axes[axes[0]].keys()
-                    for i in xrange(dist.shape[0]):
+                    A_indices = list(D.axes[axes[0]].keys())
+                    for i in range(dist.shape[0]):
                         writer.writerow([A_indices[i], dist[i]])
             sys.stdout.write("done.\n")
 
@@ -481,7 +476,7 @@ if __name__ == "__main__":
             with open(resultspath, 'wb') as f:
                 writer = csv.writer(f, delimiter=',')
                 writer.writerow(['index', 'nodes', 'edges'])
-                for key,g in C.graphs.items():
+                for key,g in list(C.graphs.items()):
                     writer.writerow([key,len(g.nodes()), len(g.edges())])
             sys.stdout.write("done.\n")
 
@@ -509,7 +504,7 @@ if __name__ == "__main__":
                                                      .format(options.algorithm))
         sys.stdout.flush()
 
-        if options.algorithm in az.collection.__dict__.keys():
+        if options.algorithm in list(az.collection.__dict__.keys()):
             r = az.collection.__dict__[options.algorithm](C)
         else:
             r = az.collection.algorithm(C, options.algorithm)
@@ -525,7 +520,7 @@ if __name__ == "__main__":
             with open(resultspath, 'wb') as f:
                 writer = csv.writer(f, delimiter=',')
                 writer.writerow(['index', 'mean', 'variance'])
-                for key,g in C.graphs.items():
+                for key,g in list(C.graphs.items()):
                     m = np.mean([ n[1][options.algorithm] \
                                                   for n in g.nodes(data=True) ])
                     v = np.var([ n[1][options.algorithm] \
@@ -577,8 +572,8 @@ if __name__ == "__main__":
         basepath = options.outpath + "/" + options.dataset_id + "_graph_"
 
         if options.write_format == 'graphml':
-            for k,g in C.graphs.items():
-                wr.graph.to_graphml(g, basepath+unicode(k))
+            for k,g in list(C.graphs.items()):
+                wr.graph.to_graphml(g, basepath+str(k))
         elif options.write_format == 'xgmml':
             wr.collection.to_dxgmml(C, basepath+"dynamic.xgmml")
         sys.stdout.write("done.\n")

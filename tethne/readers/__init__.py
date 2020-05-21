@@ -107,12 +107,12 @@ def merge(corpus_1, corpus_2, match_by=['ayjid'], match_threshold=1.,
             if match:
                 paper_new = Paper()
                 # We add values from paper_2 first, so that...
-                for key, value in paper_2.__dict__.items():
+                for key, value in list(paper_2.__dict__.items()):
                     if value not in ['', [], None]:
                         paper_new[key] = value
 
                 # ...values from paper_1 will override values from paper_2.
-                for key, value in paper_1.__dict__.items():
+                for key, value in list(paper_1.__dict__.items()):
                     if value not in ['', [], None]:
                         paper_new[key] = value
 
@@ -135,7 +135,7 @@ def merge(corpus_1, corpus_2, match_by=['ayjid'], match_threshold=1.,
     corpus = Corpus(combined, index_by=index_by)
 
     featuresets = {}
-    for featureset_name, featureset_1 in corpus_1.features.items():
+    for featureset_name, featureset_1 in list(corpus_1.features.items()):
         # We avoid FeatureSets that were generated during the indexing process
         #  (e.g. 'citations', 'authors').
         if featureset_name in featuresets or featureset_name in corpus.features:
@@ -147,17 +147,17 @@ def merge(corpus_1, corpus_2, match_by=['ayjid'], match_threshold=1.,
         fclass = type(featureset_1)
         if featureset_name in corpus_2.features:
             featureset_2 = corpus_2.features[featureset_name]
-            for index, feature in featureset_2.iteritems():
+            for index, feature in featureset_2.items():
                 features[getattr(corpus_2[index], index_by)] = feature
 
         # Features from corpus_1 will be preferred over those from corpus_2.
-        for index, feature in featureset_1.iteritems():
+        for index, feature in featureset_1.items():
             features[getattr(corpus_1[index], index_by)] = feature
 
         featuresets[featureset_name] = fclass(features)
 
     # FeatureSets unique to corpus_2.
-    for featureset_name, featureset_2 in corpus_2.features.items():
+    for featureset_name, featureset_2 in list(corpus_2.features.items()):
         # We avoid FeatureSets that were generated during the indexing process
         #  (e.g. 'citations', 'authors').
         if featureset_name in featuresets or featureset_name in corpus.features:
@@ -167,7 +167,7 @@ def merge(corpus_1, corpus_2, match_by=['ayjid'], match_threshold=1.,
 
         # Can be FeatureSet or StructuredFeatureSet.
         fclass = type(featureset_2)
-        for index, feature in featureset_2.iteritems():
+        for index, feature in featureset_2.items():
             features[getattr(corpus_2[index], index_by)] = feature
 
         featuresets[featureset_name] = fclass(features)

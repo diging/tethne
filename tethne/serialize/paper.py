@@ -148,7 +148,7 @@ class Serialize:
         """
         author_details = []
         auid = tethnedao.getMaxAuthorID()
-        for val in self.corpus.features['authors'].index.values():
+        for val in list(self.corpus.features['authors'].index.values()):
             auid = auid + 1
             self.authorIdMap[val[1]+val[0]] = auid
             instanceData = {
@@ -218,7 +218,7 @@ class Serialize:
         """
         citation_details = []
         citation_id = tethnedao.getMaxCitationID()
-        for citation in self.corpus.features['citations'].index.values():
+        for citation in list(self.corpus.features['citations'].index.values()):
 
             date_match = re.search(r'(\d+)', citation)
             if date_match is not None:
@@ -305,7 +305,7 @@ class Serialize:
         for paper in self.corpus:
             if hasattr(paper, 'authorAddress'):
                 paper_key = getattr(paper, Serialize.paper_source_map[self.source])
-                if type(paper.authorAddress) is unicode:
+                if type(paper.authorAddress) is str:
                     institution_id += 1
                     institution_instance_id += 1
                     institute_literal, authors = SerializeUtility.get_auth_inst(paper.authorAddress)

@@ -28,7 +28,7 @@ class Model(object):
                 raise AttributeError(msg)
 
         # Make all kwargs available as attributes.
-        for key, value in kwargs.items():
+        for key, value in list(kwargs.items()):
             if hasattr(self, key):  # Don't overwrite methods.
                 if hasattr(getattr(self, key), '__call__'):
                     continue
@@ -55,7 +55,7 @@ class Model(object):
 
     def fit(self, **kwargs):
         # Make all kwargs available as attributes.
-        for key, value in kwargs.items():
+        for key, value in list(kwargs.items()):
             if hasattr(self, key):  # Don't overwrite methods.
                 if hasattr(getattr(self, key), '__call__'):
                     continue

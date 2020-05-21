@@ -126,6 +126,7 @@ class TestCorpus(unittest.TestCase):
         corpus = Corpus(self.papers, index_by='wosid')
         corpus.index('journal')
         subcorpus = corpus['journal', 'ENVIRONMENTAL MONITORING AND ASSESSMENT']
+        print(subcorpus)
 
         self.assertIsInstance(subcorpus[0], Paper)
         self.assertIsInstance(subcorpus, list)

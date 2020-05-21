@@ -9,11 +9,6 @@ import csv
 
 from tethne import FeatureSet, StructuredFeatureSet
 
-import sys
-PYTHON_3 = sys.version_info[0] == 3
-if PYTHON_3:
-    unicode = str
-
 
 def write_documents(corpus, target, featureset_name, metadata_fields=[]):
     """
@@ -39,20 +34,20 @@ def write_documents(corpus, target, featureset_name, metadata_fields=[]):
     with codecs.open(metapath, 'w', encoding='utf-8') as f:
         writer = csv.writer(f)
         writer.writerow([corpus.index_by] + list(metadata_fields))
-        for i, p in corpus.indexed_papers.items():
+        for i, p in list(corpus.indexed_papers.items()):
             getter = lambda m: getattr(p, m) if hasattr(p, m) else None
             writer.writerow([i] + list(map(getter, metadata_fields)))
 
     # Write documents content.
     with codecs.open(docpath, 'w', encoding='utf-8') as f:
-        for i, p in corpus.indexed_papers.items():
+        for i, p in list(corpus.indexed_papers.items()):
             if i in features:
-                row = [i, u'en']
+                row = [i, 'en']
                 if ftype is FeatureSet:
-                    row += [u' '.join(repeat(e, c)) for e, c in features[i]]
+                    row += [' '.join(repeat(e, c)) for e, c in features[i]]
                 elif ftype is StructuredFeatureSet:
                     row += features[i]
-                f.write(u'\t'.join(row) + u'\n')
+                f.write('\t'.join(row) + '\n')
 
     return docpath, metapath
 
@@ -109,10 +104,10 @@ def write_documents_dtm(corpus, target, featureset_name, slice_kwargs={},
             for p in subcorpus.papers:
                 i = getattr(p, subcorpus.index_by)
                 N[date] += 1
-                docLine = [u':'.join([unicode(lookup[e]), unicode(c)])
+                docLine = [':'.join([str(lookup[e]), str(c)])
                            for e,c in features[i]]
-                unique = unicode(len(features[i]))
-                f.write(u' '.join([unique] + docLine) + '\n')
+                unique = str(len(features[i]))
+                f.write(' '.join([unique] + docLine) + '\n')
 
     # And -meta.dat file (with DOIs).
     #
@@ -125,7 +120,7 @@ def write_documents_dtm(corpus, target, featureset_name, slice_kwargs={},
         for date, subcorpus in corpus.slice(**slice_kwargs):
             for p in subcorpus.papers:
                 getter = lambda m: getattr(p, m) if hasattr(p, m) else None
-                fieldData = map(getter, metadata_fields)
+                fieldData = list(map(getter, metadata_fields))
                 writer.writerow([getattr(p, corpus.index_by)] + list(fieldData))
 
     # Generate -seq.dat file (number of papers per year).
@@ -140,9 +135,9 @@ def write_documents_dtm(corpus, target, featureset_name, slice_kwargs={},
     #
     with open(seqpath, 'w') as f:
         for date in sorted(N.keys()):
-            f.write(u'{date}\n'.format(date=N[date]))
+            f.write('{date}\n'.format(date=N[date]))
 
     #       a file with all of the words in the vocabulary, arranged in
     #       the same order as the word indices
     with codecs.open(vpath, 'w', encoding='utf-8') as f:
-        f.write(u'\n'.join([index[i] for i in sorted(index.keys())]))
+        f.write('\n'.join([index[i] for i in sorted(index.keys())]))

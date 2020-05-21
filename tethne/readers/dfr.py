@@ -252,7 +252,7 @@ def read(path, corpus=True, index_by='doi', load_ngrams=True, parse_only=None,
                 subcorpus = read(dirpath, index_by=index_by,
                                  parse_only=parse_only)
                 papers += subcorpus.papers
-                for featureset_name, featureset in subcorpus.features.items():
+                for featureset_name, featureset in list(subcorpus.features.items()):
                     if featureset_name not in features:
                         features[featureset_name] = {}
                     features[featureset_name].update(list(featureset.items()))
@@ -346,7 +346,7 @@ def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
         stoplist = stopwords.words()
 
     # Now tokenize.
-    for doi, grams in ngrams.items():
+    for doi, grams in list(ngrams.items()):
         t_ngrams[doi] = []
         for g,c in grams:
             ignore = False

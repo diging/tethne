@@ -16,11 +16,6 @@ from itertools import repeat
 
 from xml.etree.cElementTree import Element, ElementTree, tostring
 
-import sys
-PYTHON_3 = sys.version_info[0] == 3
-if PYTHON_3:
-    unicode = str
-
 
 def write_csv(graph, prefix):
     """
@@ -33,23 +28,23 @@ def write_csv(graph, prefix):
     prefix : str
     """
     node_headers = list(set([a for n, attrs in graph.nodes(data=True)
-                             for a in attrs.keys()]))
+                             for a in list(attrs.keys())]))
     edge_headers = list(set([a for s, t, attrs in graph.edges(data=True)
-                             for a in attrs.keys()]))
+                             for a in list(attrs.keys())]))
 
     value = lambda attrs, h: _recast_value(attrs[h]) if h in attrs else ''
     with open(prefix + '_nodes.csv', 'w') as f:
         writer = csv.writer(f)
         writer.writerow(['node'] + node_headers)
         for n, attrs in graph.nodes(data=True):
-            values = map(value, repeat(attrs, len(node_headers)), node_headers)
+            values = list(map(value, repeat(attrs, len(node_headers)), node_headers))
             writer.writerow([_recast_value(n)] + list(values))
 
     with open(prefix + '_edges.csv', 'w') as f:
         writer = csv.writer(f)
         writer.writerow(['source', 'target'] + edge_headers)
         for s, t, attrs in graph.edges(data=True):
-            values = map(value, repeat(attrs, len(edge_headers)), edge_headers)
+            values = list(map(value, repeat(attrs, len(edge_headers)), edge_headers))
             writer.writerow([_recast_value(s), _recast_value(t)] + list(values))
 
 
@@ -95,21 +90,21 @@ def to_sif(graph, output_path):
         for node in nodes:
             node_name = node[0]
             node_attribs = node[1]
-            for key, value in node_attribs.items():
+            for key, value in list(node_attribs.items()):
                 # generate a node attribute file for each node attribute
                 if node == nodes[0]:
                     # first node, overwrite file
                     with open(output_path + "_" + key + ".noa",
                               "w") as f:
-                        f.write(unicode(key) + '\n')
-                        f.write(unicode(node_name).replace(" ","_") + " = " +
-                                unicode(value) + "\n")
+                        f.write(str(key) + '\n')
+                        f.write(str(node_name).replace(" ","_") + " = " +
+                                str(value) + "\n")
                 else:
                     # not first, append file
                     with open(output_path + "_" + key + ".noa",
                               "a") as f:
-                        f.write(unicode(node_name).replace(" ","_") + " = " +
-                                unicode(value) + "\n")
+                        f.write(str(node_name).replace(" ","_") + " = " +
+                                str(value) + "\n")
 
         if nx.number_of_edges(graph) == 0:
             # write an empty graph to a .sif file (just its nodes)
@@ -118,11 +113,11 @@ def to_sif(graph, output_path):
                 if node == nodes[0]:
                     # first node, overwrite file
                     with open(output_path + ".sif","w") as f:
-                        f.write(unicode(node_name).replace(" ","_") + "\n")
+                        f.write(str(node_name).replace(" ","_") + "\n")
                 else:
                     # not first, append file
                     with open(output_path + ".sif","a") as f:
-                        f.write(unicode(node_name).replace(" ","_") + "\n")
+                        f.write(str(node_name).replace(" ","_") + "\n")
 
         else:
             # write the graph to a .sif file as well as other edge
@@ -134,28 +129,28 @@ def to_sif(graph, output_path):
                 edges = graph.edges(data=True, keys=True)
                 edge_attribs = set()
                 for edge in edges:
-                    for key in edge[3].keys():
+                    for key in list(edge[3].keys()):
                         edge_attribs.add(key)
 
                 # create edge attribute files
                 for attrib in edge_attribs:
-                    str_attrib = unicode(attrib)
+                    str_attrib = str(attrib)
                     with open(output_path + '_' + str_attrib + ".eda","w") as f:
-                        f.write(unicode(attrib) + "\n")
+                        f.write(str(attrib) + "\n")
 
                 # add data to eda files and write sif file
                 with open(output_path + '.sif', 'w') as f:
                     for edge in edges:
-                        node1 = unicode(edge[0]).replace(" ", "_")
-                        node2 = unicode(edge[1]).replace(" ", "_")
-                        intr_type = unicode(edge[2]).replace(" ", "_")
+                        node1 = str(edge[0]).replace(" ", "_")
+                        node2 = str(edge[1]).replace(" ", "_")
+                        intr_type = str(edge[2]).replace(" ", "_")
                         sif_line = node1 + ' ' + intr_type + ' ' + node2 + '\n'
                         f.write(sif_line)
 
-                        for attrib, value in edge[3].items():
+                        for attrib, value in list(edge[3].items()):
                             eda_line = (node1 + ' (' + intr_type + ') ' +
-                                        node2 + ' = ' + unicode(value) + '\n')
-                            with open(output_path + '_' + unicode(attrib) + '.eda',
+                                        node2 + ' = ' + str(value) + '\n')
+                            with open(output_path + '_' + str(attrib) + '.eda',
                                       'a') as g:
                                 g.write(eda_line)
 
@@ -164,28 +159,28 @@ def to_sif(graph, output_path):
                 edges = graph.edges(data=True)
                 edge_attribs = set()
                 for edge in edges:
-                    for key in edge[2].iterkeys():
+                    for key in edge[2].keys():
                         edge_attribs.add(key)
 
                 # create edge attribute files
                 for attrib in edge_attribs:
-                    str_attrib = unicode(attrib)
+                    str_attrib = str(attrib)
                     with open(output_path + '_' + str_attrib + ".eda","w") as f:
-                        f.write(unicode(attrib) + "\n")
+                        f.write(str(attrib) + "\n")
 
                 # add data to eda files and write sif file
                 with open(output_path + '.sif', 'w') as f:
                     for edge in edges:
-                        node1 = unicode(edge[0]).replace(" ", "_")
-                        node2 = unicode(edge[1]).replace(" ", "_")
+                        node1 = str(edge[0]).replace(" ", "_")
+                        node2 = str(edge[1]).replace(" ", "_")
                         intr_type = 'rel'
                         sif_line = node1 + ' ' + intr_type + ' ' + node2 + '\n'
                         f.write(sif_line)
 
-                        for attrib, value in edge[2].iteritems():
+                        for attrib, value in edge[2].items():
                             eda_line = (node1 + ' (' + intr_type + ') ' +
-                                        node2 + ' = ' + unicode(value) + '\n')
-                            with open(output_path + '_' + unicode(attrib) +
+                                        node2 + ' = ' + str(value) + '\n')
+                            with open(output_path + '_' + str(attrib) +
                                       '.eda', 'a') as g:
                                 g.write(eda_line)
 
@@ -310,11 +305,11 @@ def to_table(graph, path):
         writer = csv.writer(f, delimiter='\t')
 
         # Header.
-        writer.writerow(['source','target'] + [ k for k in edges[0][2].keys()])
+        writer.writerow(['source','target'] + [ k for k in list(edges[0][2].keys())])
 
         # Values.
         for e in edges:
-            writer.writerow([ e[0], e[1]] + [ v for v in e[2].values() ] )
+            writer.writerow([ e[0], e[1]] + [ v for v in list(e[2].values()) ] )
 
     # Node attributes.
     with open(path + "_nodes.csv", "wb") as f:
@@ -322,28 +317,28 @@ def to_table(graph, path):
         writer = csv.writer(f, delimiter='\t')
 
         # Header.
-        writer.writerow(['node'] + [ k for k in nodes[0][1].keys() ])
+        writer.writerow(['node'] + [ k for k in list(nodes[0][1].keys()) ])
 
         # Values.
         for n in nodes:
-            writer.writerow([ n[0] ] + [ v for v in n[1].values() ])
+            writer.writerow([ n[0] ] + [ v for v in list(n[1].values()) ])
 
 
 def _strip_list_attributes(G):
     for n in G.nodes(data=True):
-        for k,v in n[1].items():
+        for k,v in list(n[1].items()):
             if type(v) is list:
-                G.node[n[0]][k] = unicode(v)
+                G.node[n[0]][k] = str(v)
     for e in G.edges(data=True):
-        for k,v in e[2].items():
+        for k,v in list(e[2].items()):
             if type(v) is list:
-                G.edge[e[0]][e[1]][k] = unicode(v)
+                G.edge[e[0]][e[1]][k] = str(v)
 
     return G
 
 
 def _recast_value(value):
-    if type(value) in [str, int, unicode, float]:
-        return unicode(value)
+    if type(value) in [str, int, str, float]:
+        return str(value)
     if hasattr(value, '__iter__'):
         return ', '.join(list(value))

@@ -6,12 +6,6 @@ Write :class:`.GraphCollection` to a structured data format.
    to_dxgmml
 
 """
-
-import sys
-PYTHON_3 = sys.version_info[0] == 3
-if PYTHON_3:
-    unicode = str
-
 import networkx as nx
 import pickle as pk
 
@@ -95,7 +89,7 @@ def to_dxgmml(graphcollection, path): # [#61510094]
             current.append(n_)
 
             nodes[n_][k] = {}
-            for attr, value in n[1].iteritems():
+            for attr, value in n[1].items():
                 if type(value) is str:
                     value = value.replace("&", "&amp;").replace('"', '')
                 nodes[n_][k][attr] = value
@@ -122,7 +116,7 @@ def to_dxgmml(graphcollection, path): # [#61510094]
             current.append(e_key)
 
             edges[e_key][k] = {}
-            for attr, value in e[2].iteritems():
+            for attr, value in e[2].items():
                 if type(value) is str:
                     value = value.replace("&", "&amp;").replace('"', '')
                 edges[e_key][k][attr] = value
@@ -144,29 +138,29 @@ def to_dxgmml(graphcollection, path): # [#61510094]
     with open(path, "w") as f:
         f.write(xst)    # xml element.
         f.write(sg)     # Graph element.
-        for n in nodes.keys():
+        for n in list(nodes.keys()):
             for period in nodes[n]['periods']:
-                label = unicode(n).replace("&", "&amp;").replace('"', '')
+                label = str(n).replace("&", "&amp;").replace('"', '')
 
                 # Node element.
                 f.write(nst.format(label, period['start'], period['end']+1))
 
                 for i in sorted(nodes[n].keys()):
                     if period['start'] <= i <= period['end']:
-                        for attr, value in nodes[n][i].iteritems():
+                        for attr, value in nodes[n][i].items():
                             # Type names are slightly different in XGMML.
                             dtype = _safe_type(value)
-                            attr = unicode(attr).replace("&", "&amp;")
+                            attr = str(attr).replace("&", "&amp;")
 
                             # Node attribute element.
                             f.write(ast.format(attr, dtype, value, i, i+1))
 
                 f.write(enn)    # End node element.
 
-        for e in edges.keys():
+        for e in list(edges.keys()):
             for period in edges[e]['periods']:
-                src = unicode(e[0]).replace("&", "&amp;").replace('"', '')
-                tgt = unicode(e[1]).replace("&", "&amp;").replace('"', '')
+                src = str(e[0]).replace("&", "&amp;").replace('"', '')
+                tgt = str(e[1]).replace("&", "&amp;").replace('"', '')
                 start = period['start']
                 end = period['end'] + 1
 
@@ -175,7 +169,7 @@ def to_dxgmml(graphcollection, path): # [#61510094]
 
                 for i in sorted(edges[e].keys()):
                     if period['start'] <= i <= period['end']:
-                        for attr, value in edges[e][i].iteritems():
+                        for attr, value in edges[e][i].items():
                             # Type names are slightly different in XGMML.
                             dtype = _safe_type(value)
 
@@ -189,13 +183,13 @@ def to_dxgmml(graphcollection, path): # [#61510094]
 def _strip_list_attributes(graph_):
     """Converts lists attributes to strings for all nodes and edges in G."""
     for n_ in graph_.nodes(data=True):
-        for k,v in n_[1].iteritems():
+        for k,v in n_[1].items():
             if type(v) is list:
-                graph_.node[n_[0]][k] = unicode(v)
+                graph_.node[n_[0]][k] = str(v)
     for e_ in graph_.edges(data=True):
-        for k,v in e_[2].iteritems():
+        for k,v in e_[2].items():
             if type(v) is list:
-                graph_.edge[e_[0]][e_[1]][k] = unicode(v)
+                graph_.edge[e_[0]][e_[1]][k] = str(v)
 
     return graph_
 
@@ -203,7 +197,7 @@ def _safe_type(value):
     """Converts Python type names to XGMML-safe type names."""
 
     if type(value) is str: dtype = 'string'
-    if type(value) is unicode: dtype = 'string'
+    if type(value) is str: dtype = 'string'
     if type(value) is int: dtype = 'integer'
     if type(value) is float: dtype = 'real'
 

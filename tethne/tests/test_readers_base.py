@@ -84,7 +84,7 @@ class TestFTParser(unittest.TestCase):
         """
 
         parser = FTParser(datapath)
-        tag, data = parser.next()
+        tag, data = next(parser)
 
         self.assertEqual(tag, 'FI')
 
@@ -94,7 +94,7 @@ class TestFTParser(unittest.TestCase):
         """
 
         parser = FTParser(datapath)
-        tag, data = parser.next()
+        tag, data = next(parser)
         parser.handle(tag, data)
 
         self.assertEqual(len(parser.data), 1)
