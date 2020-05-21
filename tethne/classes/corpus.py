@@ -12,11 +12,7 @@ from tethne.classes.feature import FeatureSet, Feature, \
                                    StructuredFeatureSet, StructuredFeature
 from tethne.utilities import _iterable, argsort
 
-import sys
 import os
-PYTHON_3 = sys.version_info[0] == 3
-if PYTHON_3:
-    unicode = str
 
 
 def _tfidf(f, c, C, DC, N):
@@ -313,7 +309,7 @@ class Corpus(object):
                         hashable = title
                     else:
                         authors = list(zip(*paper.authors))[0]
-                        hashable = u' '.join(list([title] + [l + f for l, f in authors]))
+                        hashable = ' '.join(list([title] + [l + f for l, f in authors]))
 
                 m.update(hashable.encode('utf-8'))
                 setattr(paper, 'hashIndex', m.hexdigest())
@@ -408,7 +404,7 @@ class Corpus(object):
 
         """
 
-        for i, paper in self.indexed_papers.items():
+        for i, paper in list(self.indexed_papers.items()):
             self.index_paper_by_attr(paper, attr)
 
 
@@ -496,16 +492,16 @@ class Corpus(object):
                     papers = [self.indexed_papers[s] for s in selector]
             elif type(selector[0]) is int:
                 if index_only:
-                    papers = [self.indexed_papers.keys()[i] for i in selector]
+                    papers = [list(self.indexed_papers.keys())[i] for i in selector]
                 else:
                     papers = [self.papers[i] for i in selector]
         elif type(selector) is int:
             if index_only:
-                papers = self.indexed_papers.keys()[selector]
+                papers = list(self.indexed_papers.keys())[selector]
             else:
                 papers = self.papers[selector]
 
-        elif type(selector) in [str, unicode]:
+        elif type(selector) in [str, str]:
             if selector in self.indexed_papers:
                 if index_only:
                     papers = selector
@@ -574,7 +570,7 @@ class Corpus(object):
         end = max(self.indices['date'].keys())
 
         while start <= end - (window_size - 1):
-            selector = ('date', range(start, start + window_size, 1))
+            selector = ('date', list(range(start, start + window_size, 1)))
             if cumulative:
                 year = start + window_size
             else:
@@ -716,7 +712,7 @@ class Corpus(object):
         indices = self.select(selector, index_only=True)
         fclass = self.features[featureset_name].__class__
 
-        return fclass({k:f for k,f in self.features[featureset_name].items()
+        return fclass({k:f for k,f in list(self.features[featureset_name].items())
                            if k in indices})
 
 
@@ -736,7 +732,7 @@ class Corpus(object):
         """
         subcorpus = self.__class__(self[selector],
                            index_by=self.index_by,
-                           index_fields=self.indices.keys(),
-                           index_features=self.features.keys())
+                           index_fields=list(self.indices.keys()),
+                           index_features=list(self.features.keys()))
 
         return subcorpus

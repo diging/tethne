@@ -19,10 +19,10 @@ from collections import defaultdict
 from tethne.utilities import argmin, mean
 
 import sys
-PYTHON_3 = sys.version_info[0] == 3
-if PYTHON_3:
-    unicode = str
-    xrange = range
+# PYTHON_3 = sys.version_info[0] == 3
+# if PYTHON_3:
+#     unicode = str
+#     xrange = range
 
 
 
@@ -70,20 +70,20 @@ def _forward(X, s=1.1, gamma=1., k=5):
         elif t == 0:
             return float("inf")
 
-        C_tau = min([C_values[l][t-1] + tau(l, j) for l in xrange(k)])
+        C_tau = min([C_values[l][t-1] + tau(l, j) for l in range(k)])
         return (-1. * log(f(j,X[t]))) + C_tau
 
     T = sum(X)
     n = len(X)
 
     # C() requires default (0) values, so we construct the "array" in advance.
-    C_values = [[0 for t in xrange(len(X))] for j in xrange(k)]
-    for j in xrange(k):
-        for t in xrange(len(X)):
+    C_values = [[0 for t in range(len(X))] for j in range(k)]
+    for j in range(k):
+        for t in range(len(X)):
             C_values[j][t] = C(j,t)
 
     # Find the optimal state sequence.
-    states = [argmin([c[t] for c in C_values]) for t in xrange(n)]
+    states = [argmin([c[t] for c in C_values]) for t in range(n)]
     return states
 
 def _top_features(corpus, feature, topn=20, perslice=False, axis='date'):
@@ -192,13 +192,13 @@ def feature_burstness(corpus, featureset_name, feature, k=5, normalize=True,
 
         if N > 1:
             if year == dates[-1] + 1:
-                for n in xrange(int(N)):
+                for n in range(int(N)):
                     X_.append(1./N)
                     dates.append(year)
             else:
                 X_.append(float(year - dates[-1]))
                 dates.append(year)
-                for n in xrange(int(N) - 1):
+                for n in range(int(N) - 1):
                     X_.append(1./(N - 1))
                     dates.append(year)
         else:
@@ -206,18 +206,18 @@ def feature_burstness(corpus, featureset_name, feature, k=5, normalize=True,
             dates.append(year)
 
     # Get optimum state sequence.
-    st = _forward(map(lambda x: x*100, X_), s=s, gamma=gamma, k=k)
+    st = _forward([x*100 for x in X_], s=s, gamma=gamma, k=k)
 
     # Bin by date.
     A = defaultdict(list)
-    for i in xrange(len(X_)):
+    for i in range(len(X_)):
         A[dates[i]].append(st[i])
 
     # Normalize.
     if normalize:
-        A = {key: mean(values)/k for key, values in A.items()}
+        A = {key: mean(values)/k for key, values in list(A.items())}
     else:
-        A = {key: mean(values) for key, values in A.items()}
+        A = {key: mean(values) for key, values in list(A.items())}
 
     D = sorted(A.keys())
     return D[1:], [A[d] for d in D[1:]]
@@ -289,11 +289,11 @@ def sigma(G, corpus, featureset_name, B=None, **kwargs):
 
     Sigma = {}      # Keys are dates (from GraphCollection), values are
                     #  node:sigma dicts.
-    for key, graph in G.items():
+    for key, graph in list(G.items()):
         centrality = nx.betweenness_centrality(graph)
         sigma = {}  # Sigma values for all features in this year.
         attrs = {}  # Sigma values for only those features in this graph.
-        for n_, burst in B.items():
+        for n_, burst in list(B.items()):
             burst = dict(list(zip(*burst)))     # Reorganize for easier lookup.
 
             # Nodes are indexed as integers in the GraphCollection.
@@ -313,13 +313,13 @@ def sigma(G, corpus, featureset_name, B=None, **kwargs):
     # Invert results and update the GraphCollection.master_graph.
     # TODO: is there a more efficient way to do this?
     inverse = defaultdict(dict)
-    for gname, result in Sigma.items():
+    for gname, result in list(Sigma.items()):
         if hasattr(result, '__iter__'):
-            for n, val in result.items():
+            for n, val in list(result.items()):
                 inverse[n].update({gname: val})
     nx.set_node_attributes(G.master_graph, 'sigma', inverse)
 
     # We want to return results in the same format as burstness(); with node
     #  labels as keys; values are tuples ([years...], [sigma...]).
-    return {n: list(zip(*G.node_history(G.node_lookup[n], 'sigma').items()))
-            for n in B.keys()}
+    return {n: list(zip(*list(G.node_history(G.node_lookup[n], 'sigma').items())))
+            for n in list(B.keys())}

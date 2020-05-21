@@ -15,11 +15,6 @@ from io import BytesIO
 # rdflib complains a lot.
 logging.getLogger("rdflib").setLevel(logging.ERROR)
 
-import sys
-PYTHON_3 = sys.version_info[0] == 3
-if PYTHON_3:
-    unicode = str
-
 
 def _fast_iter(context, func, tag):
     for event, elem in context:
@@ -57,7 +52,7 @@ class BaseParser(object):
         self.data = []
         self.fields = set([])
 
-        for k, v in kwargs.items():
+        for k, v in list(kwargs.items()):
             setattr(self, k, v)
 
         self.open()
@@ -111,13 +106,13 @@ class IterParser(BaseParser):
         """
         # The user should be able to limit parsing to specific fields.
         if parse_only:
-            tag_lookup = {v: k for k, v in self.tags.items()}
+            tag_lookup = {v: k for k, v in list(self.tags.items())}
             self.parse_only = set([tag_lookup.get(field)
                                    for field in parse_only
                                    if field in tag_lookup])
 
         while True:        # Main loop.
-            tag, data = self.next()
+            tag, data = next(self)
             if self.is_eof(tag):
                 self.postprocess_entry()
                 break
@@ -132,7 +127,7 @@ class IterParser(BaseParser):
         """
 
         while not self.is_start(self.current_tag):
-            self.next()
+            next(self)
         self.new_entry()
 
     def handle(self, tag, data):
@@ -158,7 +153,7 @@ class IterParser(BaseParser):
             return
 
         # TODO: revisit encoding here.
-        if isinstance(data, unicode):
+        if isinstance(data, str):
             data = unicodedata.normalize('NFKD', data)#.encode('utf-8','ignore')
 
         handler = self._get_handler(tag)
@@ -172,7 +167,7 @@ class IterParser(BaseParser):
         if hasattr(self.data[-1], tag):
             value = getattr(self.data[-1], tag)
             if tag in self.concat_fields:
-                value = ' '.join([value, unicode(data)])
+                value = ' '.join([value, str(data)])
             elif type(value) is list:
                 value.append(data)
             elif value not in [None, '']:
@@ -220,7 +215,7 @@ class FTParser(IterParser):
 
         self.at_eof = False
 
-    def next(self):
+    def __next__(self):
         """
         Get the next line of data.
 
@@ -302,12 +297,12 @@ class XMLParser(IterParser):
         """
         # The user should be able to limit parsing to specific fields.
         if parse_only:
-            tag_lookup = {v: k for k, v in self.tags.items()}
+            tag_lookup = {v: k for k, v in list(self.tags.items())}
             self.parse_only = set([tag_lookup.get(field)
                                    for field in parse_only
                                    if field in tag_lookup]) | set(parse_only)
 
-        _fast_iter(self.iterator, self.next, self.entry_element)
+        _fast_iter(self.iterator, self.__next__, self.entry_element)
 
         if len(self.data[-1].__dict__) == 0:
             del self.data[-1]
@@ -332,15 +327,15 @@ class RDFParser(BaseParser):
             query = 'SELECT * WHERE { ?p a ' + element + ' }'
             self.entries += [r[0] for r in self.graph.query(query)]
 
-    def next(self):
+    def __next__(self):
         if len(self.entries) > 0:
             return self.entries.pop(0)
 
     def parse(self):
-        meta_fields, meta_refs = zip(*self.meta_elements)
+        meta_fields, meta_refs = list(zip(*self.meta_elements))
 
         while True:        # Main loop.
-            entry = self.next()
+            entry = next(self)
             if entry is None:
                 break
 

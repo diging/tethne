@@ -9,13 +9,6 @@ import warnings
 from tethne import networks
 from tethne.utilities import _iterable
 
-import sys
-PYTHON_3 = sys.version_info[0] == 3
-if PYTHON_3:
-    unicode = str
-    xrange = range
-    str = bytes
-
 
 class GraphCollection(dict):
     """
@@ -88,6 +81,7 @@ class GraphCollection(dict):
 
     def __getattr__(self, name):
         if name in self:
+            print("I am here")
             return self[name]
         try:    # hasttr() causes endless recursion in Python 3.x
             return object.__getattr__(self, name)
@@ -136,7 +130,7 @@ class GraphCollection(dict):
         """
         if name in self:
             raise ValueError("{0} exists in this GraphCollection".format(name))
-        elif hasattr(self, unicode(name)):
+        elif hasattr(self, str(name)):
             raise ValueError("Name conflicts with an existing attribute")
 
         indexed_graph = self.index(name, graph)
@@ -148,7 +142,7 @@ class GraphCollection(dict):
 
         # Add all node attributes to the `master_graph`.
         for n, attrs in indexed_graph.nodes(data=True):
-            for k,v in attrs.items():
+            for k,v in list(attrs.items()):
                 if k not in self.master_graph.nodes[n]:
                     self.master_graph.nodes[n][k] = {}
                 self.master_graph.nodes[n][k][name] = v
@@ -176,7 +170,7 @@ class GraphCollection(dict):
         # Index new nodes.
         new_nodes = list(set(nodes) - set(self.node_index.values()))
         start = max(len(self.node_index) - 1, max(self.node_index.keys()))
-        for i in xrange(start, start + len(new_nodes)):
+        for i in range(start, start + len(new_nodes)):
             n = new_nodes.pop()
             self.node_index[i], self.node_lookup[n] = n, i
             self.graphs_containing[n].append(name)
@@ -239,7 +233,7 @@ class GraphCollection(dict):
         Returns the total number of nodes in the :class:`.GraphCollection`\.
         """
         if piecewise:
-            return {k: v.order() for k, v in self.items()}
+            return {k: v.order() for k, v in list(self.items())}
         return self.master_graph.order()
 
     def node_distribution(self):
@@ -252,7 +246,7 @@ class GraphCollection(dict):
         Returns the total number of edges in the :class:`.GraphCollection`\.
         """
         if piecewise:
-            return {k: v.size() for k, v in self.items()}
+            return {k: v.size() for k, v in list(self.items())}
         return self.master_graph.size()
 
     def edge_distribution(self):
@@ -288,7 +282,7 @@ class GraphCollection(dict):
                 graph[s][t]['weight'] += 1.
 
             gname = attrs['graph']
-            for k, v in attrs.iteritems():
+            for k, v in attrs.items():
                 if k in [weight_attr, 'graph']:
                     continue
                 if k not in graph[s][t]:
@@ -340,7 +334,7 @@ class GraphCollection(dict):
         # Find the analysis method, if possible.
         if hasattr(method_name, '__iter__'):
             mpath = method_name
-            if type(mpath) in [str, unicode]:
+            if type(mpath) in [str, str]:
                 mpath = [mpath]
 
             root = nx
@@ -359,17 +353,17 @@ class GraphCollection(dict):
         # Farm out the analysis using ``mapper``. This allows us to use
         #  multiprocessing in the future, or to add pre- or post-processing
         #  routines.
-        keys, graphs = zip(*self.items())
+        keys, graphs = list(zip(*list(self.items())))
         results = mapper(method, graphs, **kwargs)
 
         # Group the results by graph.
-        by_graph = dict(zip(keys, results))
+        by_graph = dict(list(zip(keys, results)))
 
         # Invert results.
         inverse = defaultdict(dict)
-        for gname, result in by_graph.items():
+        for gname, result in list(by_graph.items()):
             if hasattr(result, '__iter__'):
-                for n, val in result.items():
+                for n, val in list(result.items()):
                     inverse[n].update({gname: val})
 
         if type(list(by_graph.values())[0]) is dict:
@@ -386,12 +380,12 @@ class GraphCollection(dict):
                 by_edge = dict(inverse)
 
                 # Set edge attributes in each graph.
-                for graph, attrs in by_graph.items():
+                for graph, attrs in list(by_graph.items()):
                     nx.set_edge_attributes(self[graph], method_name, attrs)
 
                 # Set edge attributes in the master graph.
-                for (s, t), v in by_edge.items():
-                    for i, attrs in self.master_graph.edge[s][t].iteritems():
+                for (s, t), v in list(by_edge.items()):
+                    for i, attrs in self.master_graph.edge[s][t].items():
                         val = v[attrs['graph']]
                         self.master_graph.edge[s][t][i][method_name] = val
 
@@ -402,7 +396,7 @@ class GraphCollection(dict):
                 by_node = dict(inverse)
 
                 # Set node attributes for each graph.
-                for graph, attrs in by_graph.items():
+                for graph, attrs in list(by_graph.items()):
                     nx.set_node_attributes(self[graph], method_name, attrs)
 
                 # Store node attributes in the master graph.
@@ -450,7 +444,7 @@ class GraphCollection(dict):
         """
 
         return {attr['graph']: attr[attribute] for i, attr
-                in self.master_graph.edge[source][target].items()}
+                in list(self.master_graph.edge[source][target].items())}
 
     def union(self, weight_attr='_weight'):
         """
@@ -483,7 +477,7 @@ class GraphCollection(dict):
                 graph[u][v]['graphs'] = []
                 graph[u][v][weight_attr] = 0.
 
-            for key, value in a.items():
+            for key, value in list(a.items()):
                 if key not in graph[u][v]:
                     graph[u][v][key] = []
                 graph[u][v][key].append(value)
@@ -491,7 +485,7 @@ class GraphCollection(dict):
             graph[u][v][weight_attr] += 1.
 
         for u, a in self.master_graph.nodes(data=True):
-            for key, value in a.items():
+            for key, value in list(a.items()):
                 graph.nodes[u][key] = value
 
         return graph

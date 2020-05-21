@@ -19,11 +19,6 @@ from io import BytesIO
 from unidecode import unidecode
 import codecs
 
-import sys
-PYTHON_3 = sys.version_info[0] == 3
-if PYTHON_3:
-    unicode = str
-
 
 class DfRParser(XMLParser):
     entry_class = Paper
@@ -138,9 +133,6 @@ class GramGenerator(object):
         return self
 
     def __next__(self):
-        return self.next()
-
-    def next(self):
         if self.i < self.N:
             cur = int(self.i)
             self.i += 1
@@ -187,7 +179,7 @@ class GramGenerator(object):
 
         grams = []
         for gram in root.findall(self.elem_xml):
-            text = unidecode(unicode(gram.text.strip()))
+            text = unidecode(str(gram.text.strip()))
             if ( not self.ignore_hash or '#' not in list(text) ):
                 c = ( text, number(gram.attrib['weight']) )
                 grams.append(c)
@@ -260,10 +252,10 @@ def read(path, corpus=True, index_by='doi', load_ngrams=True, parse_only=None,
                 subcorpus = read(dirpath, index_by=index_by,
                                  parse_only=parse_only)
                 papers += subcorpus.papers
-                for featureset_name, featureset in subcorpus.features.iteritems():
+                for featureset_name, featureset in subcorpus.features.items():
                     if featureset_name not in features:
                         features[featureset_name] = {}
-                    features[featureset_name].update(featureset.items())
+                    features[featureset_name].update(list(featureset.items()))
                     featureset_types[featureset_name] = type(featureset)
         load_ngrams = False
 
@@ -282,7 +274,7 @@ def read(path, corpus=True, index_by='doi', load_ngrams=True, parse_only=None,
                     if len(datafiles) > 0:
                         features[sname] = ngrams(path, sname)
 
-        for featureset_name, featureset_values in features.items():
+        for featureset_name, featureset_values in list(features.items()):
             if type(featureset_values) is dict:
                 fclass = featureset_types[featureset_name]
                 featureset_values = fclass(featureset_values)
@@ -345,7 +337,7 @@ def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
     t_ngrams = {}
 
     # Get global word counts, first.
-    for grams in ngrams.values():
+    for grams in list(ngrams.values()):
         for g,c in grams:
             word_tf[g] += c
             word_df[g] += 1
@@ -354,7 +346,7 @@ def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
         stoplist = stopwords.words()
 
     # Now tokenize.
-    for doi, grams in ngrams.iteritems():
+    for doi, grams in ngrams.items():
         t_ngrams[doi] = []
         for g,c in grams:
             ignore = False
@@ -373,10 +365,10 @@ def tokenize(ngrams, min_tf=2, min_df=2, min_len=3, apply_stoplist=False):
 
                 # Coerce unicode to string.
                 if type(g) is str:
-                    g = unicode(g)
+                    g = str(g)
                 g = unidecode(g)
 
-                if g not in vocab.values():
+                if g not in list(vocab.values()):
                     i = len(vocab)
                     vocab[i] = g
                     vocab_[g] = i
@@ -405,19 +397,19 @@ def _handle_paper(article):
     paper = Paper()
     pdata = dict_from_node(article)
 
-    for key, value in pdata.items():
+    for key, value in list(pdata.items()):
 
         datum = pdata[key]
         if type(datum) is str:
-            datum = unicode(datum)
-        if type(datum) is unicode:
+            datum = str(datum)
+        if type(datum) is str:
             datum = unidecode(datum).upper()
 
         paper[key] = datum
 
     # Handle author names.
     adata = _handle_authors(pdata['author'])
-    paper.authors_init = zip(adata[0], adata[1])
+    paper.authors_init = list(zip(adata[0], adata[1]))
 
     # Handle pubdate.
     paper['date'] = _handle_pubdate(pdata['pubdate'])
@@ -450,7 +442,7 @@ def _handle_pagerange(pagerange):
     except IndexError:
         start = end = 0
 
-    return unicode(start), unicode(end)
+    return str(start), str(end)
 
 def _handle_pubdate(pubdate):
     """
@@ -481,7 +473,7 @@ def _handle_authors(authors):
     if type(authors) is list:
         for author in authors:
             if type(author) is str:
-                author = unicode(author)
+                author = str(author)
             author = unidecode(author)
             try:
                 l,i = _handle_author(author)
@@ -489,9 +481,9 @@ def _handle_authors(authors):
                 auinit.append(i)
             except ValueError:
                 pass
-    elif type(authors) is str or type(authors) is unicode:
+    elif type(authors) is str or type(authors) is str:
         if type(authors) is str:
-            authors = unicode(authors)
+            authors = str(authors)
         author = unidecode(authors)
         try:
             l,i = _handle_author(author)
@@ -595,7 +587,7 @@ def _create_ayjid(aulast=None, auinit=None, date=None, jtitle=None, **kwargs):
     if jtitle is None:
         jtitle = ''
 
-    ayj = aulast + ' ' + auinit + ' ' + unicode(date) + ' ' + jtitle
+    ayj = aulast + ' ' + auinit + ' ' + str(date) + ' ' + jtitle
 
     if ayj == '   ':
         ayj = 'Unknown paper'

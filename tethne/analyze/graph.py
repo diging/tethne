@@ -35,7 +35,7 @@ def global_closeness_centrality(g, node=None, normalize=True):
             C[node] = global_closeness_centrality(g, node, normalize=normalize)
         return C
 
-    values = nx.shortest_path_length(g, node).values()
+    values = list(nx.shortest_path_length(g, node).values())
     c = sum([1./pl for pl in values if pl != 0.]) / len(g)
 
     if normalize:

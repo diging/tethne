@@ -32,13 +32,13 @@ class StreamingIndex(object):
         return len(self.key_file_map)
 
     def items(self):
-        keys = self.key_file_map.keys()
+        keys = list(self.key_file_map.keys())
         while keys:
             key = keys.pop()
             yield key, self[key]
 
     def iteritems(self):
-        return self.items()
+        return list(self.items())
 
     def _friendly_filename(self, name):
         return "".join([c for c in name if c.isalnum()])
@@ -58,13 +58,13 @@ class StreamingIndex(object):
         return key in self.key_file_map
 
     def keys(self):
-        return self.key_file_map.keys()
+        return list(self.key_file_map.keys())
 
     def values(self):
         raise NotImplementedError('values() is not available in StreamingIndex')
 
     def update(self, data):
-        for key, paper in data.iteritems():
+        for key, paper in data.items():
             self.__setitem__(key, paper)
 
     def __getitem__(self, key):
@@ -94,7 +94,7 @@ class StreamingCorpus(Corpus):
                 return self.parent.indexed_papers[list(self.parent.indexed_papers.keys())[key]]
 
             def __iter__(self):
-                keys = self.parent.indexed_papers.keys()
+                keys = list(self.parent.indexed_papers.keys())
                 while keys:
                     key = keys.pop()
                     yield self.parent.indexed_papers[key]

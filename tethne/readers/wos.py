@@ -23,11 +23,6 @@ from tethne.readers.base import FTParser
 from tethne import Corpus, Paper, StreamingCorpus
 from tethne.utilities import _strip_punctuation, _space_sep, strip_tags, is_number
 
-import sys
-PYTHON_3 = sys.version_info[0] == 3
-if PYTHON_3:
-    unicode = str
-
 
 class WoSParser(FTParser):
     """
@@ -146,13 +141,13 @@ class WoSParser(FTParser):
         """
         Convert article titles to Title Case.
         """
-        return unicode(value).title()
+        return str(value).title()
 
     def handle_VL(self, value):
         """
         Volume should be a unicode string, even if it looks like an integer.
         """
-        return unicode(value)
+        return str(value)
 
     def handle_CR(self, value):
         """
@@ -233,8 +228,8 @@ class WoSParser(FTParser):
         Subject keywords are usually semicolon-delimited.
         """
 
-        if type(entry.WC) not in [str, unicode]:
-            WC= u' '.join([unicode(k) for k in entry.WC])
+        if type(entry.WC) not in [str, str]:
+            WC= ' '.join([str(k) for k in entry.WC])
         else:
             WC= entry.WC
         entry.WC= [k.strip().upper() for k in WC.split(';')]
@@ -246,8 +241,8 @@ class WoSParser(FTParser):
         Subject keywords are usually semicolon-delimited.
         """
 
-        if type(entry.subject) not in [str, unicode]:
-            subject = u' '.join([unicode(k) for k in entry.subject])
+        if type(entry.subject) not in [str, str]:
+            subject = ' '.join([str(k) for k in entry.subject])
         else:
             subject = entry.subject
         entry.subject = [k.strip().upper() for k in subject.split(';')]
@@ -259,8 +254,8 @@ class WoSParser(FTParser):
         Author keywords are usually semicolon-delimited.
         """
 
-        if type(entry.authorKeywords) not in [str, unicode]:
-            aK = u' '.join([unicode(k) for k in entry.authorKeywords])
+        if type(entry.authorKeywords) not in [str, str]:
+            aK = ' '.join([str(k) for k in entry.authorKeywords])
         else:
             aK = entry.authorKeywords
         entry.authorKeywords = [k.strip().upper() for k in aK.split(';')]
@@ -272,7 +267,7 @@ class WoSParser(FTParser):
         Keyword Plus keywords are usually semicolon-delimited.
         """
 
-        if type(entry.keywordsPlus) in [str, unicode]:
+        if type(entry.keywordsPlus) in [str, str]:
             entry.keywordsPlus = [k.strip().upper() for k
                                   in entry.keywordsPlus.split(';')]
 
@@ -281,7 +276,7 @@ class WoSParser(FTParser):
         Separates funding agency from grant numbers.
         """
 
-        if type(entry.funding) not in [str, unicode]:
+        if type(entry.funding) not in [str, str]:
             return
 
         sources = [fu.strip() for fu in entry.funding.split(';')]
