@@ -282,7 +282,7 @@ class XMLParser(IterParser):
     def start(self):
         self.new_entry()
 
-    def next(self, child):
+    def __next__(self, child):
         child = copy.deepcopy(child)
         tag, data = child.tag, child.text
         if data:
