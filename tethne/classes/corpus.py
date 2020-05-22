@@ -403,8 +403,7 @@ class Corpus(object):
             The name of a :class:`.Paper` attribute.
 
         """
-
-        for i, paper in list(self.indexed_papers.items()):
+        for i, paper in self.indexed_papers.items():
             self.index_paper_by_attr(paper, attr)
 
 

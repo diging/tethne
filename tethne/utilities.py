@@ -98,6 +98,8 @@ def mean(iterable):
 
 
 def _iterable(o):
+    if type(o) is int or type(o) is str or type(o) is float:
+        return [o]
     if hasattr(o, '__iter__'):
         return o
     else:
