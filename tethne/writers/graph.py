@@ -92,7 +92,7 @@ def to_sif(graph, output_path):
             node_attribs = node[1]
             for key, value in list(node_attribs.items()):
                 # generate a node attribute file for each node attribute
-                if node == nodes[0]:
+                if tuple(node) == list(nodes)[0]:
                     # first node, overwrite file
                     with open(output_path + "_" + key + ".noa",
                               "w") as f:
@@ -110,7 +110,7 @@ def to_sif(graph, output_path):
             # write an empty graph to a .sif file (just its nodes)
             for node in nodes:
                 node_name = node[0]
-                if node == nodes[0]:
+                if tuple(node) == list(nodes)[0]:
                     # first node, overwrite file
                     with open(output_path + ".sif","w") as f:
                         f.write(str(node_name).replace(" ","_") + "\n")
@@ -276,7 +276,7 @@ class TethneGraphMLWriter(GraphMLWriter):
 
     def add_edges(self, G, graph_element):
         if G.is_multigraph():
-            for u,v,key,data in G.edges_iter(data=True, keys=True):
+            for u,v,key,data in G.edges(data=True, keys=True):
                 edge_element = Element("edge",source=_recast_value(u),
                                        target=_recast_value(v))
                 default = G.graph.get('edge_default',{})
@@ -285,7 +285,7 @@ class TethneGraphMLWriter(GraphMLWriter):
                                     default)
                 graph_element.append(edge_element)
         else:
-            for u,v,data in G.edges_iter(data=True):
+            for u,v,data in G.edges(data=True):
                 edge_element = Element("edge", source=_recast_value(u),
                                        target=_recast_value(v))
                 default = G.graph.get('edge_default', {})

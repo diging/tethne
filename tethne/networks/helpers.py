@@ -46,7 +46,7 @@ def simplify_multigraph(multigraph, time=False):
     for node in multigraph.nodes(data=True):
         u = node[0]
         node_attribs = node[1]
-        graph.add_node(u, node_attribs)
+        graph.add_node(u, **node_attribs)
 
 
         for v in multigraph[u]:
@@ -72,7 +72,7 @@ def simplify_multigraph(multigraph, time=False):
                     edge_attribs['start'] = start
                     edge_attribs['end'] = end
 
-            graph.add_edge(u, v, edge_attribs)
+            graph.add_edge(u, v, **edge_attribs)
 
     return graph
 
