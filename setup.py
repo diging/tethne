@@ -19,13 +19,6 @@ PACKAGES = ['tethne',
             'tethne.writers',
             'tethne.plot']
 
-# import sys
-# if sys.version_info[0] == 2:
-#     pdfminer = 'pdfminer==20140328'
-# elif sys.version_info[0] == 3:
-#     pdfminer = "pdfminer==20191125"
-
-
 setup(
     name=DISTNAME,
     author=AUTHOR,
@@ -45,9 +38,11 @@ setup(
         "html5lib",
         "isodate",
         "pdfdocument",
-        "pdfminer",
+        "pdfminer.six",
         "python-magic",
         "Unidecode",
         "nltk",
+        "numpy",
+        "requests"
     ],
 )

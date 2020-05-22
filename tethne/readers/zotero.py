@@ -5,7 +5,13 @@ import rdflib
 import nltk
 import codecs
 import magic as magic   # To detect file mime-type.
-import slate    # PDF processing.
+from io import StringIO
+from pdfminer.converter import TextConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfdocument import PDFDocument
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.pdfpage import PDFPage
+from pdfminer.pdfparser import PDFParser
 import chardet  # Detect character encodings.
 
 import warnings
@@ -127,36 +133,43 @@ def extract_pdf(fpath):
         A :class:`.StructuredFeature` that contains page and sentence contexts.
     """
 
-    with codecs.open(fpath, 'r') as f:  # Determine the encoding of the file.
-        document = slate.PDF(f)
-    encoding = chardet.detect(document[0])
-
     tokens = []
     pages = []
     sentences = []
 
-    tokenizer = nltk.tokenize.TextTilingTokenizer()
+    with open(fpath, 'rb') as in_file:
+        parser = PDFParser(in_file)
+        doc = PDFDocument(parser)
+        rsrcmgr = PDFResourceManager()
+        tokenizer = nltk.tokenize.TextTilingTokenizer()
 
-    i = 0
-    for page in document:
-        pages.append(i)
+        i = 0
+        for page in PDFPage.create_pages(doc):
+            pages.append(i)
+            
+            # PDFMiner for parsing the page
+            output_string = StringIO()
+            device = TextConverter(rsrcmgr, output_string, laparams=LAParams())
+            interpreter = PDFPageInterpreter(rsrcmgr, device)
+            interpreter.process_page(page)
+            output = output_string.getvalue()
+            
+            # `output` --> extracted text for the `page`
 
-        # Decode using the correct encoding.
-        page = page.decode(encoding['encoding'])
-        for sentence in nltk.tokenize.sent_tokenize(page):
-            sentences.append(i)
+            for sentence in nltk.tokenize.sent_tokenize(output):
+                sentences.append(i)
 
-            for word in nltk.tokenize.word_tokenize(sentence):
-                if len(word) > 15:
-                    words = nltk.tokenize.word_tokenize(_infer_spaces(word))
-                    if mean([len(w) for w in words]) > 2:
-                        for w in words:
-                            tokens.append(w)
-                            i += 1
-                        continue
+                for word in nltk.tokenize.word_tokenize(sentence):
+                    if len(word) > 15:
+                        words = nltk.tokenize.word_tokenize(_infer_spaces(word))
+                        if mean([len(w) for w in words]) > 2:
+                            for w in words:
+                                tokens.append(w)
+                                i += 1
+                            continue
 
-                tokens.append(word)
-                i += 1
+                    tokens.append(word)
+                    i += 1     
 
     contexts = [('page', pages), ('sentence', sentences)]
     return StructuredFeature(tokens, contexts)
