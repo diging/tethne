@@ -152,8 +152,8 @@ def attachment_probability(G):
 
             if probs[k_] is not None:
                 networkx.set_node_attributes(G.graphs[k_],
-                                             'attachment_probability',
-                                             probs[k_])
+                                             name='attachment_probability',
+                                             values=probs[k_])
     
         G_ = G
         k_ = k
@@ -161,6 +161,9 @@ def attachment_probability(G):
     # Handle last graph (no values).
     key = list(G.graphs.keys())[-1]
     zprobs = { n:0. for n in G.graphs[key].nodes() }
-    networkx.set_node_attributes(G.graphs[key], 'attachment_probability', zprobs)
+    networkx.set_node_attributes(
+        G.graphs[key],
+        name='attachment_probability',
+        values=zprobs)
 
     return probs

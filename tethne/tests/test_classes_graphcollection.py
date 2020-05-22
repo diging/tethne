@@ -258,12 +258,12 @@ class TestGraphCollectionMethods(unittest.TestCase):
 
         # All Node attributes should be retained.
         for n, attrs in cgraph.nodes(data=True):
-            self.assertDictEqual(attrs, self.G.master_graph.node[n])
+            self.assertDictEqual(attrs, self.G.master_graph.nodes[n])
 
         # Edge attributes should be retained, keyed on the graph associated
         #  with the edge from which each value was obtained.
         for s, t, attrs in cgraph.edges(data=True):
-            for k, v in attrs.iteritems():
+            for k, v in attrs.items():
                 if k != 'weight':
                     for v_ in v.keys():
                         self.assertIn(v_, ['test', 'test2'])
@@ -292,7 +292,7 @@ class TestGraphCollectionMethods(unittest.TestCase):
             return [{k: v+5. for k, v in values.items()} for values in r]
 
         results_m = self.G.analyze('betweenness_centrality', mapper=mymapper)
-        for key, value in results.iteritems():
+        for key, value in results.items():
             for k in value.keys():
                 self.assertEqual(results[key][k] + 5., results_m[key][k])
 
@@ -330,7 +330,7 @@ class TestGraphCollectionMethods(unittest.TestCase):
         self.assertIsInstance(graph, nx.Graph)
         self.assertGreater(self.G.size(), graph.size())
         self.assertEqual(graph.order(), self.G.order())
-        self.assertIn(weight_attr, (graph.edges(data=True))[0][2])
+        self.assertIn(weight_attr, graph.edges()[0, 2])
 
         # Node attributes present.
         for u, a in self.G.master_graph.nodes(data=True):

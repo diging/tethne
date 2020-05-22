@@ -210,6 +210,6 @@ def distance(model, method='cosine', percentile=90, bidirectional=False,
     for key in list(model.metadata[0].keys()):
         values = { k:v[key] for k,v in list(model.metadata.items())
                                 if k in thegraph.nodes()    }
-        networkx.set_node_attributes(thegraph, key, values)
+        networkx.set_node_attributes(thegraph, name=key, values=values)
 
     return thegraph

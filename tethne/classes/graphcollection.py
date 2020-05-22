@@ -81,7 +81,6 @@ class GraphCollection(dict):
 
     def __getattr__(self, name):
         if name in self:
-            print("I am here")
             return self[name]
         try:    # hasttr() causes endless recursion in Python 3.x
             return object.__getattr__(self, name)
@@ -268,7 +267,7 @@ class GraphCollection(dict):
 
         # Transfer all nodes and attributes.
         for n, attrs in self.master_graph.nodes(data=True):
-            graph.add_node(n, attrs)
+            graph.add_node(n, **attrs)
 
         for s, t, attrs in self.master_graph.edges(data=True):
             if not graph.has_edge(s, t):
@@ -381,13 +380,17 @@ class GraphCollection(dict):
 
                 # Set edge attributes in each graph.
                 for graph, attrs in list(by_graph.items()):
-                    nx.set_edge_attributes(self[graph], method_name, attrs)
+                    nx.set_edge_attributes(
+                        self[graph],
+                        name=method_name,
+                        values=attrs
+                    )
 
                 # Set edge attributes in the master graph.
                 for (s, t), v in list(by_edge.items()):
-                    for i, attrs in self.master_graph.edge[s][t].items():
+                    for _, _, i, attrs in self.master_graph.edges([s, t], data=True, keys=True):
                         val = v[attrs['graph']]
-                        self.master_graph.edge[s][t][i][method_name] = val
+                        self.master_graph.edges[s, t, i][method_name] = val
 
                 if invert:
                     return by_edge
@@ -397,10 +400,18 @@ class GraphCollection(dict):
 
                 # Set node attributes for each graph.
                 for graph, attrs in list(by_graph.items()):
-                    nx.set_node_attributes(self[graph], method_name, attrs)
+                    nx.set_node_attributes(
+                        self[graph], 
+                        name=method_name, 
+                        values=attrs
+                    )
 
                 # Store node attributes in the master graph.
-                nx.set_node_attributes(self.master_graph, method_name, by_node)
+                nx.set_node_attributes(
+                    self.master_graph,
+                    name=method_name,
+                    values=by_node
+                )
 
                 if invert:
                     return by_node
@@ -422,7 +433,7 @@ class GraphCollection(dict):
         -------
         history : dict
         """
-        return self.master_graph.node[node][attribute]
+        return self.master_graph.nodes[node][attribute]
 
     def edge_history(self, source, target, attribute):
         """

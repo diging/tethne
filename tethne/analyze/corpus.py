@@ -307,7 +307,7 @@ def sigma(G, corpus, featureset_name, B=None, **kwargs):
                 attrs[n] = sigma[n]
 
         # Update graph with sigma values.
-        nx.set_node_attributes(graph, 'sigma', attrs)
+        nx.set_node_attributes(graph, name='sigma', values=attrs)
         Sigma[key] = sigma
 
     # Invert results and update the GraphCollection.master_graph.
@@ -317,7 +317,7 @@ def sigma(G, corpus, featureset_name, B=None, **kwargs):
         if hasattr(result, '__iter__'):
             for n, val in list(result.items()):
                 inverse[n].update({gname: val})
-    nx.set_node_attributes(G.master_graph, 'sigma', inverse)
+    nx.set_node_attributes(G.master_graph, name='sigma', values=inverse)
 
     # We want to return results in the same format as burstness(); with node
     #  labels as keys; values are tuples ([years...], [sigma...]).
