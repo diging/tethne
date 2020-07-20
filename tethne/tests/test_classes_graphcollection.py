@@ -299,7 +299,9 @@ class TestGraphCollectionMethods(unittest.TestCase):
     def test_analyze_edge(self):
         results = self.G.analyze('edge_betweenness_centrality', invert=True)
         for e in self.G.edges(native=False):
-            self.assertIn(e, results)
+            c1 = e in results
+            c2 = (e[1], e[0]) in results
+            self.assertTrue(c1 or c2)
 
     def test_analyze_graph(self):
         results = self.G.analyze('is_connected')
@@ -319,9 +321,9 @@ class TestGraphCollectionMethods(unittest.TestCase):
 
     def test_edge_history(self):
         results = self.G.analyze('edge_betweenness_centrality', invert=True)
-        hist = self.G.edge_history(0, 1, 'edge_betweenness_centrality')
-
-        self.assertDictEqual(results[0, 1], hist)
+        keys = list(results.keys())[0]
+        hist = self.G.edge_history(keys[0], keys[1], 'edge_betweenness_centrality')
+        self.assertDictEqual(results[keys[0], keys[1]], hist)
 
     def test_union(self):
         weight_attr = 'test_weight'
@@ -330,7 +332,8 @@ class TestGraphCollectionMethods(unittest.TestCase):
         self.assertIsInstance(graph, nx.Graph)
         self.assertGreater(self.G.size(), graph.size())
         self.assertEqual(graph.order(), self.G.order())
-        self.assertIn(weight_attr, graph.edges()[0, 2])
+        edge = list(graph.edges())[0]
+        self.assertIn(weight_attr, graph.edges[edge[0], edge[1]])
 
         # Node attributes present.
         for u, a in self.G.master_graph.nodes(data=True):

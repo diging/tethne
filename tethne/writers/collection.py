@@ -144,8 +144,8 @@ def to_dxgmml(graphcollection, path): # [#61510094]
 
                 # Node element.
                 f.write(nst.format(label, period['start'], period['end']+1))
-
-                for i in sorted(nodes[n].keys()):
+                keys = list(filter(lambda x: x != 'periods', nodes[n].keys()))
+                for i in sorted(keys):
                     if period['start'] <= i <= period['end']:
                         for attr, value in nodes[n][i].items():
                             # Type names are slightly different in XGMML.
@@ -166,8 +166,8 @@ def to_dxgmml(graphcollection, path): # [#61510094]
 
                 # Edge element.
                 f.write(est.format(src, tgt, start, end))
-
-                for i in sorted(edges[e].keys()):
+                keys = list(filter(lambda x: x != 'periods', edges[e].keys()))
+                for i in sorted(keys):
                     if period['start'] <= i <= period['end']:
                         for attr, value in edges[e][i].items():
                             # Type names are slightly different in XGMML.

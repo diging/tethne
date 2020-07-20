@@ -389,8 +389,9 @@ class GraphCollection(dict):
                 # Set edge attributes in the master graph.
                 for (s, t), v in list(by_edge.items()):
                     for _, _, i, attrs in self.master_graph.edges([s, t], data=True, keys=True):
-                        val = v[attrs['graph']]
-                        self.master_graph.edges[s, t, i][method_name] = val
+                        if v.get(attrs['graph'], None):
+                            val = v[attrs['graph']]
+                            self.master_graph.edges[s, t, i][method_name] = val
 
                 if invert:
                     return by_edge
@@ -453,9 +454,8 @@ class GraphCollection(dict):
         -------
         history : dict
         """
-
-        return {attr['graph']: attr[attribute] for i, attr
-                in list(self.master_graph.edge[source][target].items())}
+        return {attr['graph']: attr[attribute] for _, _, i, attr
+                in self.master_graph.edges([source, target], data=True, keys=True)}
 
     def union(self, weight_attr='_weight'):
         """
