@@ -20,7 +20,10 @@ class TestMerge(unittest.TestCase):
 
         old_features = list(set(self.dfr_corpus.features.keys()) | \
                             set(self.wos_corpus.features.keys()))
-        self.assertListEqual(combined.features.keys(), old_features)
+        self.assertListEqual(
+            sorted(list(combined.features.keys())), 
+            sorted(old_features)
+        )
 
     def test_merge_comparator(self):
         """

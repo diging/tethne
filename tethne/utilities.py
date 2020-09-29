@@ -3,15 +3,7 @@ Helper functions.
 """
 import string
 import copy
-
-import sys
-PYTHON_3 = sys.version_info[0] == 3
-if PYTHON_3:
-    unicode = str
-    from html.parser import HTMLParser  # Python 3.x
-    xrange = range
-else:
-    from HTMLParser import HTMLParser   # Python 2.x
+from html.parser import HTMLParser
 
 
 def is_number(value):
@@ -54,12 +46,12 @@ class MLStripper(HTMLParser):
         try:
             self.rawdata = self.rawdata + data
         except TypeError:
-            data = unicode(data)
+            data = str(data)
             self.rawdata = self.rawdata + data
 
         self.goahead(0)
     def get_data(self):
-        return u''.join(self.fed)
+        return ''.join(self.fed)
 
 
 def strip_tags(html):
@@ -70,7 +62,7 @@ def strip_tags(html):
 
 def argsort(seq):
     seq = list(seq)
-    return sorted(range(len(seq)), key=seq.__getitem__)
+    return sorted(list(range(len(seq))), key=seq.__getitem__)
 
 
 def argmin(iterable):
@@ -106,6 +98,8 @@ def mean(iterable):
 
 
 def _iterable(o):
+    if type(o) is int or type(o) is str or type(o) is float:
+        return [o]
     if hasattr(o, '__iter__'):
         return o
     else:
@@ -116,17 +110,14 @@ def _strip_punctuation(s):
     """
     Removes all punctuation characters from a string.
     """
-    if type(s) is str and not PYTHON_3:    # Bytestring (default in Python 2.x).
-        return s.translate(string.maketrans("",""), string.punctuation)
-    else:                 # Unicode string (default in Python 3.x).
-        translate_table = dict((ord(char), u'') for char in u'!"#%\'()*+,-./:;<=>?@[\]^_`{|}~')
-        return s.translate(translate_table)
+    translate_table = dict((ord(char), '') for char in '!"#%\'()*+,-./:;<=>?@[\]^_`{|}~')
+    return s.translate(translate_table)
 
 def _strip_numbers(s):
     """
     Removes all numbers from a string.
     """
-    return u''.join([c for c in s if not is_number(c)])
+    return ''.join([c for c in s if not is_number(c)])
 
 
 def normalize(s):
@@ -186,7 +177,7 @@ def subdict(super_dict, keys):
     Returns a subset of the super_dict with the specified keys.
     """
     sub_dict = {}
-    valid_keys = super_dict.keys()
+    valid_keys = list(super_dict.keys())
     for key in keys:
         if key in valid_keys:
             sub_dict[key] = super_dict[key]
@@ -201,7 +192,7 @@ def attribs_to_string(attrib_dict, keys):
     gexf (which does not allow attributes to have a list type) by making
     them writable in those formats
     """
-    for key, value in attrib_dict.iteritems():
+    for key, value in list(attrib_dict.items()):
         if (isinstance(value, list) or isinstance(value, dict) or
             isinstance(value, tuple)):
             attrib_dict[key] = value
@@ -222,7 +213,7 @@ def concat_list(listA, listB, delim=' '):
 
     # Concatenate lists.
     listC = []
-    for i in xrange(len(listA)):
+    for i in range(len(listA)):
         app = listA[i] + delim + listB[i]
         listC.append(app)
 
@@ -244,12 +235,12 @@ def strip_non_ascii(s):
 
     """
     stripped = (c for c in s if 0 < ord(c) < 127)
-    clean_string = u''.join(stripped)
+    clean_string = ''.join(stripped)
     return clean_string
 
 def strip_punctuation(s):
     exclude = set(string.punctuation)
-    return u''.join(ch for ch in s if ch not in exclude)
+    return ''.join(ch for ch in s if ch not in exclude)
 
 
 def dict_from_node(node, recursive=False):
@@ -281,9 +272,9 @@ def dict_from_node(node, recursive=False):
         elif snode.text is not None:
             value = snode.text
         else:
-            value = u''
+            value = ''
 
-        if snode.tag in dict.keys():    # If there are multiple subelements
+        if snode.tag in list(dict.keys()):    # If there are multiple subelements
                                         #  with the same tag, then the value
                                         #  of the element should be a list
                                         #  rather than a dict.

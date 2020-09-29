@@ -19,10 +19,6 @@ import numpy as np
 
 from collections import Counter
 
-import sys
-PYTHON_3 = sys.version_info[0] == 3
-if PYTHON_3:
-    unicode = str
 
 
 def simplify_multigraph(multigraph, time=False):
@@ -50,7 +46,7 @@ def simplify_multigraph(multigraph, time=False):
     for node in multigraph.nodes(data=True):
         u = node[0]
         node_attribs = node[1]
-        graph.add_node(u, node_attribs)
+        graph.add_node(u, **node_attribs)
 
 
         for v in multigraph[u]:
@@ -62,7 +58,7 @@ def simplify_multigraph(multigraph, time=False):
                 start = 3000
                 end = 0
                 found_date = False
-                for edge in edges.values():
+                for edge in list(edges.values()):
                     try:
                         found_date = True
                         if edge['date'] < start:
@@ -76,7 +72,7 @@ def simplify_multigraph(multigraph, time=False):
                     edge_attribs['start'] = start
                     edge_attribs['end'] = end
 
-            graph.add_edge(u, v, edge_attribs)
+            graph.add_edge(u, v, **edge_attribs)
 
     return graph
 
@@ -100,7 +96,7 @@ def citation_count(papers, key='ayjid', verbose=False):
     """
 
     if verbose:
-        print "Generating citation counts for "+unicode(len(papers))+" papers..."
+        print(("Generating citation counts for " + str(len(papers)) + " papers..."))
 
     counts = Counter()
     for P in papers:
@@ -132,7 +128,7 @@ def top_cited(papers, topn=20, verbose=False):
     """
 
     if verbose:
-        print "Finding top "+unicode(topn)+" most cited papers..."
+        print(("Finding top " +str(topn) +" most cited papers..."))
 
     counts = citation_count(papers, verbose=verbose)
 
@@ -140,9 +136,9 @@ def top_cited(papers, topn=20, verbose=False):
         n = topn
     elif type(topn) is float:
         n = int(np.around(topn*len(counts), decimals=-1))
-    top = dict(sorted(counts.items(),
+    top = list(dict(sorted(list(counts.items()),
                        key=operator.itemgetter(1),
-                       reverse=True)[:n]).keys()
+                       reverse=True)[:n]).keys())
 
     return top, counts
 
@@ -170,7 +166,7 @@ def top_parents(papers, topn=20, verbose=False):
     """
 
     if verbose:
-        print "Getting parents of top "+unicode(topn)+" most cited papers."
+        print(("Getting parents of top " + str(topn) + " most cited papers."))
 
     top, counts = top_cited(papers, topn=topn, verbose=verbose)
     papers = [ P for P in papers if P['citations'] is not None ]
@@ -179,6 +175,6 @@ def top_parents(papers, topn=20, verbose=False):
                     set(top) ) > 0 ]
 
     if verbose:
-        print "Found " + unicode(len(parents)) + " parents."
+        print(("Found " + str(len(parents)) + " parents."))
 
     return parents, top, counts

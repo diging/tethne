@@ -65,7 +65,7 @@ def mutual_information(corpus, featureset_name, min_weight=0.9,
             keep_nodes.add(t)
 
     for n in list(keep_nodes):  # Retain node attributes.
-        mgraph.node[n].update(graph.node[n])
+        mgraph.nodes[n].update(graph.nodes[n])
 
     return mgraph
 

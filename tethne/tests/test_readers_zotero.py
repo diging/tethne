@@ -195,7 +195,7 @@ class TestZoteroParser(unittest.TestCase):
                                                     type(e.title)))
 
         # Check integrity of tag-to-field mapping.
-        for tag, attr in parser.tags.iteritems():
+        for tag, attr in parser.tags.items():
             self.assertFalse(hasattr(e, tag),
                              ' '.join(['{0} should map to'.format(tag),
                                        '{0}, but does not.'.format(attr)]))

@@ -12,10 +12,6 @@ logger.setLevel('INFO')
 import networkx
 from math import log
 
-import sys
-if sys.version_info[0] > 2:
-    xrange = range
-
 from tethne.analyze import features
 from tethne.networks.base import cooccurrence, coupling
 from tethne.utilities import argsort
@@ -44,7 +40,7 @@ def terms(model, threshold=0.01, **kwargs):
     graph = cooccurrence(model.phi, filter=select, **kwargs)
 
     # Only include labels for terms that are actually in the graph.
-    label_map = {k: v for k, v in model.vocabulary.items()
+    label_map = {k: v for k, v in list(model.vocabulary.items())
                  if k in graph.nodes()}
     graph.name = ''
     return networkx.relabel_nodes(graph, label_map)
@@ -181,8 +177,8 @@ def distance(model, method='cosine', percentile=90, bidirectional=False,
     thegraph = networkx.Graph()
 
     edges = {}
-    for i in xrange(model.M):
-        for j in xrange(i+1, model.M):
+    for i in range(model.M):
+        for j in range(i+1, model.M):
             if method == 'kl_divergence':   # Not a SciPy method.
                 dist = features.kl_divergence( model.item(i), model.item(j) )
                 dist_ = features.kl_divergence( model.item(j), model.item(i) )
@@ -207,13 +203,13 @@ def distance(model, method='cosine', percentile=90, bidirectional=False,
 
     # pct = numpy.percentile(edges.values(), percentile)
     pct = int(round(len(edges)*(percentile/100.)))
-    for i in argsort(edges.values())[::-1][:pct]:
-        edge, sim = edges.keys()[i], edges.values()[i]
+    for i in argsort(list(edges.values()))[::-1][:pct]:
+        edge, sim = list(edges.keys())[i], list(edges.values())[i]
         thegraph.add_edge(edge[0], edge[1], weight=float(sim))
 
-    for key in model.metadata[0].keys():
-        values = { k:v[key] for k,v in model.metadata.items()
+    for key in list(model.metadata[0].keys()):
+        values = { k:v[key] for k,v in list(model.metadata.items())
                                 if k in thegraph.nodes()    }
-        networkx.set_node_attributes(thegraph, key, values)
+        networkx.set_node_attributes(thegraph, name=key, values=values)
 
     return thegraph

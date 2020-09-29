@@ -13,10 +13,6 @@ from collections import defaultdict
 
 from networkx import Graph
 
-import sys
-PYTHON_3 = sys.version_info[0] == 3
-if PYTHON_3:
-    unicode = str
 
 import logging
 logging.basicConfig()
@@ -31,9 +27,6 @@ import tethne
 TETHNE_PATH = os.path.split(os.path.abspath(tethne.__file__))[0]
 MALLET_PATH = os.path.join(TETHNE_PATH, 'bin', 'mallet-2.0.7')
 
-import sys
-if sys.version_info[0] > 2:
-    xrange = range
 
 
 class LDAModel(Model):
@@ -204,14 +197,14 @@ class LDAModel(Model):
         self.num_iters = 0
         logger.debug('run() with k={0} for {1} iterations'.format(self.Z, self.max_iter))
 
-        prog = re.compile(u'\<([^\)]+)\>')
+        prog = re.compile('\<([^\)]+)\>')
         ll_prog = re.compile(r'(\d+)')
         p = subprocess.Popen([
                     self.mallet_bin,
                     'train-topics',
                     '--input', self.input_path,
-                    '--num-topics', unicode(self.Z),
-                    '--num-iterations', unicode(self.max_iter),
+                    '--num-topics', str(self.Z),
+                    '--num-iterations', str(self.max_iter),
                     '--output-doc-topics', self.dt,
                     '--word-topic-counts-file', self.wt,
                     '--output-model', self.om],
@@ -224,16 +217,16 @@ class LDAModel(Model):
 
             # Keep track of LL/topic.
             try:
-                this_ll = float(re.findall(u'([-+]\d+\.\d+)', l)[0])
+                this_ll = float(re.findall('([-+]\d+\.\d+)', str(l))[0])
                 self.ll.append(this_ll)
             except IndexError:  # Not every line will match.
                 pass
 
             # Keep track of modeling progress.
             try:
-                this_iter = float(prog.match(l).groups()[0])
+                this_iter = float(prog.match(str(l)).groups()[0])
                 progress = int(100. * this_iter/self.max_iter)
-                print 'Modeling progress: {0}%.\r'.format(progress),
+                print(('Modeling progress: {0}%.\r' % progress))
             except AttributeError:  # Not every line will match.
                 pass
 
@@ -257,7 +250,7 @@ class LDAModel(Model):
 
         self.theta = FeatureSet()
 
-        with open(dt, "rb") as f:
+        with open(dt, "r") as f:
             i = -1
             reader = csv.reader(f, delimiter='\t')
             for line in reader:
@@ -265,9 +258,9 @@ class LDAModel(Model):
                 if i == 0:
                     continue     # Avoid header row.
 
-                d, id, t = int(line[0]), unicode(line[1]), line[2:]
+                d, id, t = int(line[0]), str(line[1]), line[2:]
                 feature = Feature([(int(t[i]), float(t[i + 1]))
-                                   for i in xrange(0, len(t) - 1, 2)])
+                                   for i in range(0, len(t) - 1, 2)])
                 self.theta.add(id, feature)
 
         self.corpus.features['topics'] = self.theta
@@ -291,14 +284,14 @@ class LDAModel(Model):
             reader = csv.reader(f, delimiter=' ')
             topics = defaultdict(list)
             for line in reader:
-                w, term = int(line[0]), unicode(line[1])
+                w, term = int(line[0]), str(line[1])
                 self.vocabulary[w] = term
 
                 for l in line[2:]:
                     k, c = l.split(':')    # Topic and assignment count.
                     topics[int(k)].append((w, int(c)))
 
-        for k, data in topics.iteritems():
+        for k, data in topics.items():
             nfeature = Feature(data).norm
 
             phi_features[k] = nfeature
@@ -332,16 +325,16 @@ class LDAModel(Model):
         """
         List the top ``Nwords`` words for each topic.
         """
-        return [(k, self.list_topic(k, Nwords)) for k in xrange(len(self.phi))]
+        return [(k, self.list_topic(k, Nwords)) for k in range(len(self.phi))]
 
 
     def print_topics(self, Nwords=10):
         """
         Print the top ``Nwords`` words for each topic.
         """
-        print('Topic\tTop %i words' % Nwords)
+        print(('Topic\tTop %i words' % Nwords))
         for k, words in self.list_topics(Nwords):
-            print(unicode(k).ljust(3) + '\t' + ' '.join(list(zip(*words))[0]))
+            print((str(k).ljust(3) + '\t' + ' '.join(list(zip(*words))[0])))
 
 
     def topic_over_time(self, k, mode='counts', slice_kwargs={}):

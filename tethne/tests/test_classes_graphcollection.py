@@ -27,13 +27,13 @@ class TestGraphCollectionCreation(unittest.TestCase):
         graph = nx.DiGraph()
         graph.add_edge('A', 'B', c='d')
         graph.add_edge('B', 'C', c='e')
-        graph.node['A']['bob'] = 'dole'
+        graph.nodes['A']['bob'] = 'dole'
         graph_name = 'test'
 
         graph2 = nx.DiGraph()
         graph2.add_edge('A', 'B', c='d')
         graph2.add_edge('D', 'C', c='f')
-        graph2.node['A']['bob'] = 'dole'
+        graph2.nodes['A']['bob'] = 'dole'
         graph2_name = 'test2'
 
         G.add(graph_name, graph)
@@ -110,7 +110,7 @@ class TestGraphCollectionCreation(unittest.TestCase):
         graph = nx.Graph()
         graph.add_edge('A', 'B', c='d')
         graph.add_edge('B', 'C', c='e')
-        graph.node['A']['bob'] = 'dole'
+        graph.nodes['A']['bob'] = 'dole'
         graph_name = 'test'
 
         G.add(graph_name, graph)
@@ -137,10 +137,10 @@ class TestGraphCollectionCreation(unittest.TestCase):
             self.assertIn(graph_name, G.graphs_containing[n])
 
             i = G.node_lookup[n]
-            for k, v in attrs.iteritems():
-                self.assertIn(k, G.master_graph.node[i])
-                self.assertIn(graph_name, G.master_graph.node[i][k])
-                self.assertEqual(v, G.master_graph.node[i][k][graph_name])
+            for k, v in attrs.items():
+                self.assertIn(k, G.master_graph.nodes[i])
+                self.assertIn(graph_name, G.master_graph.nodes[i][k])
+                self.assertEqual(v, G.master_graph.nodes[i][k][graph_name])
 
         # Should raise a ValueError if name has already been used.
         with self.assertRaises(ValueError):
@@ -153,13 +153,13 @@ class TestGraphCollectionMethods(unittest.TestCase):
         self.graph = nx.Graph()
         self.graph.add_edge('A', 'B', c='d')
         self.graph.add_edge('B', 'C', c='e')
-        self.graph.node['A']['bob'] = 'dole'
+        self.graph.nodes['A']['bob'] = 'dole'
         graph_name = 'test'
 
         self.graph2 = nx.Graph()
         self.graph2.add_edge('A', 'B', c='d')
         self.graph2.add_edge('D', 'C', c='f')
-        self.graph2.node['A']['bob'] = 'dole'
+        self.graph2.nodes['A']['bob'] = 'dole'
         graph2_name = 'test2'
 
         self.G.add(graph_name, self.graph)
@@ -258,12 +258,12 @@ class TestGraphCollectionMethods(unittest.TestCase):
 
         # All Node attributes should be retained.
         for n, attrs in cgraph.nodes(data=True):
-            self.assertDictEqual(attrs, self.G.master_graph.node[n])
+            self.assertDictEqual(attrs, self.G.master_graph.nodes[n])
 
         # Edge attributes should be retained, keyed on the graph associated
         #  with the edge from which each value was obtained.
         for s, t, attrs in cgraph.edges(data=True):
-            for k, v in attrs.iteritems():
+            for k, v in attrs.items():
                 if k != 'weight':
                     for v_ in v.keys():
                         self.assertIn(v_, ['test', 'test2'])
@@ -292,14 +292,16 @@ class TestGraphCollectionMethods(unittest.TestCase):
             return [{k: v+5. for k, v in values.items()} for values in r]
 
         results_m = self.G.analyze('betweenness_centrality', mapper=mymapper)
-        for key, value in results.iteritems():
+        for key, value in results.items():
             for k in value.keys():
                 self.assertEqual(results[key][k] + 5., results_m[key][k])
 
     def test_analyze_edge(self):
         results = self.G.analyze('edge_betweenness_centrality', invert=True)
         for e in self.G.edges(native=False):
-            self.assertIn(e, results)
+            c1 = e in results
+            c2 = (e[1], e[0]) in results
+            self.assertTrue(c1 or c2)
 
     def test_analyze_graph(self):
         results = self.G.analyze('is_connected')
@@ -319,9 +321,9 @@ class TestGraphCollectionMethods(unittest.TestCase):
 
     def test_edge_history(self):
         results = self.G.analyze('edge_betweenness_centrality', invert=True)
-        hist = self.G.edge_history(0, 1, 'edge_betweenness_centrality')
-
-        self.assertDictEqual(results[0, 1], hist)
+        keys = list(results.keys())[0]
+        hist = self.G.edge_history(keys[0], keys[1], 'edge_betweenness_centrality')
+        self.assertDictEqual(results[keys[0], keys[1]], hist)
 
     def test_union(self):
         weight_attr = 'test_weight'
@@ -330,16 +332,17 @@ class TestGraphCollectionMethods(unittest.TestCase):
         self.assertIsInstance(graph, nx.Graph)
         self.assertGreater(self.G.size(), graph.size())
         self.assertEqual(graph.order(), self.G.order())
-        self.assertIn(weight_attr, graph.edges(data=True)[0][2])
+        edge = list(graph.edges())[0]
+        self.assertIn(weight_attr, graph.edges[edge[0], edge[1]])
 
         # Node attributes present.
         for u, a in self.G.master_graph.nodes(data=True):
-            for key, value in a.iteritems():
-                self.assertIn(key, graph.node[u])
+            for key, value in a.items():
+                self.assertIn(key, graph.nodes[u])
 
         # Edge attributes present.
         for u, v, a in self.G.master_graph.edges(data=True):
-            for key, value in a.iteritems():
+            for key, value in a.items():
                 self.assertIn(key, graph[u][v])
                 if key == weight_attr:
                     self.assertIsInstance(value, float)

@@ -4,11 +4,6 @@ A :class:`.Paper` represents a single bibliographic record.
 
 from tethne.classes.feature import Feature, feature
 
-import sys
-PYTHON_3 = sys.version_info[0] == 3
-if PYTHON_3:
-    unicode = str
-
 
 class Paper(object):
     """
@@ -54,19 +49,19 @@ class Paper(object):
             al, ai = self.authors_init[0]
         elif hasattr(self, 'authors_full') and len(self.authors_full) > 0:
             al, af = self.authors_full[0]
-            ai = u''.join([i[0] for i in af.split(' ')])
+            ai = ''.join([i[0] for i in af.split(' ')])
         else:
-            al, ai = u'', u''
+            al, ai = '', ''
         if hasattr(self, 'date'):
-            date = unicode(self.date)
+            date = str(self.date)
         else:
-            date = u''
+            date = ''
         if hasattr(self, 'journal'):
             journal = self.journal
         else:
-            journal = u''
+            journal = ''
 
-        self._ayjid = u' '.join([al, ai.replace(' ', ''), date, journal]).strip().replace(' ', '_').upper()
+        self._ayjid = ' '.join([al, ai.replace(' ', ''), date, journal]).strip().replace(' ', '_').upper()
         return self._ayjid
 
 

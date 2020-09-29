@@ -4,8 +4,14 @@ import logging
 import rdflib
 import nltk
 import codecs
-import magic    # To detect file mime-type.
-import slate    # PDF processing.
+import magic as magic   # To detect file mime-type.
+from io import StringIO
+from pdfminer.converter import TextConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfdocument import PDFDocument
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.pdfpage import PDFPage
+from pdfminer.pdfparser import PDFParser
 import chardet  # Detect character encodings.
 
 import warnings
@@ -21,28 +27,23 @@ from tethne import Paper, Corpus, StructuredFeature, StructuredFeatureSet
 from tethne.readers.base import RDFParser
 from tethne.utilities import _strip_punctuation, mean
 
-import sys
-PYTHON_3 = sys.version_info[0] == 3
-if PYTHON_3:
-    unicode = str
-
 
 # RDF terms.
-RDF = u'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-DC = u'http://purl.org/dc/elements/1.1/'
-FOAF = u'http://xmlns.com/foaf/0.1/'
-PRISM = u'http://prismstandard.org/namespaces/1.2/basic/'
-RSS = u'http://purl.org/rss/1.0/modules/link/'
+RDF = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+DC = 'http://purl.org/dc/elements/1.1/'
+FOAF = 'http://xmlns.com/foaf/0.1/'
+PRISM = 'http://prismstandard.org/namespaces/1.2/basic/'
+RSS = 'http://purl.org/rss/1.0/modules/link/'
 
 URI_ELEM = rdflib.URIRef("http://purl.org/dc/terms/URI")
-TYPE_ELEM = rdflib.term.URIRef(RDF + u'type')
-VALUE_ELEM = rdflib.URIRef(RDF + u'value')
-LINK_ELEM = rdflib.URIRef(RSS + u"link")
-FORENAME_ELEM = rdflib.URIRef(FOAF + u'givenname')
-SURNAME_ELEM = rdflib.URIRef(FOAF + u'surname')
-VOL = rdflib.term.URIRef(PRISM + u'volume')
-IDENT = rdflib.URIRef(DC + u"identifier")
-TITLE = rdflib.term.URIRef(DC + u'title')
+TYPE_ELEM = rdflib.term.URIRef(RDF + 'type')
+VALUE_ELEM = rdflib.URIRef(RDF + 'value')
+LINK_ELEM = rdflib.URIRef(RSS + "link")
+FORENAME_ELEM = rdflib.URIRef(FOAF + 'givenname')
+SURNAME_ELEM = rdflib.URIRef(FOAF + 'surname')
+VOL = rdflib.term.URIRef(PRISM + 'volume')
+IDENT = rdflib.URIRef(DC + "identifier")
+TITLE = rdflib.term.URIRef(DC + 'title')
 
 
 # Build a cost dictionary, assuming Zipf's law and cost = -math.log(probability).
@@ -80,7 +81,7 @@ def _infer_spaces(s):
         out.append(s[i-k:i])
         i -= k
 
-    return u" ".join(reversed(out))
+    return " ".join(reversed(out))
 
 
 def extract_text(fpath):
@@ -132,36 +133,43 @@ def extract_pdf(fpath):
         A :class:`.StructuredFeature` that contains page and sentence contexts.
     """
 
-    with codecs.open(fpath, 'r') as f:  # Determine the encoding of the file.
-        document = slate.PDF(f)
-    encoding = chardet.detect(document[0])
-
     tokens = []
     pages = []
     sentences = []
 
-    tokenizer = nltk.tokenize.TextTilingTokenizer()
+    with open(fpath, 'rb') as in_file:
+        parser = PDFParser(in_file)
+        doc = PDFDocument(parser)
+        rsrcmgr = PDFResourceManager()
+        tokenizer = nltk.tokenize.TextTilingTokenizer()
 
-    i = 0
-    for page in document:
-        pages.append(i)
+        i = 0
+        for page in PDFPage.create_pages(doc):
+            pages.append(i)
+            
+            # PDFMiner for parsing the page
+            output_string = StringIO()
+            device = TextConverter(rsrcmgr, output_string, laparams=LAParams())
+            interpreter = PDFPageInterpreter(rsrcmgr, device)
+            interpreter.process_page(page)
+            output = output_string.getvalue()
+            
+            # `output` --> extracted text for the `page`
 
-        # Decode using the correct encoding.
-        page = page.decode(encoding['encoding'])
-        for sentence in nltk.tokenize.sent_tokenize(page):
-            sentences.append(i)
+            for sentence in nltk.tokenize.sent_tokenize(output):
+                sentences.append(i)
 
-            for word in nltk.tokenize.word_tokenize(sentence):
-                if len(word) > 15:
-                    words = nltk.tokenize.word_tokenize(_infer_spaces(word))
-                    if mean([len(w) for w in words]) > 2:
-                        for w in words:
-                            tokens.append(w)
-                            i += 1
-                        continue
+                for word in nltk.tokenize.word_tokenize(sentence):
+                    if len(word) > 15:
+                        words = nltk.tokenize.word_tokenize(_infer_spaces(word))
+                        if mean([len(w) for w in words]) > 2:
+                            for w in words:
+                                tokens.append(w)
+                                i += 1
+                            continue
 
-                tokens.append(word)
-                i += 1
+                    tokens.append(word)
+                    i += 1     
 
     contexts = [('page', pages), ('sentence', sentences)]
     return StructuredFeature(tokens, contexts)
@@ -225,7 +233,7 @@ class ZoteroParser(RDFParser):
 
         """
 
-        identifier = unicode(self.graph.value(subject=value, predicate=VALUE_ELEM))
+        identifier = str(self.graph.value(subject=value, predicate=VALUE_ELEM))
         ident_type = self.graph.value(subject=value, predicate=TYPE_ELEM)
         if ident_type == URI_ELEM:
             self.set_value('uri', identifier)
@@ -237,19 +245,19 @@ class ZoteroParser(RDFParser):
         """
         for s, p, o in self.graph.triples((value, None, None)):
             if p == LINK_ELEM:
-                return unicode(o).replace('file://', '')
+                return str(o).replace('file://', '')
 
     def handle_date(self, value):
         """
         Attempt to coerced date to ISO8601.
         """
         try:
-            return iso8601.parse_date(unicode(value)).year
+            return iso8601.parse_date(str(value)).year
         except iso8601.ParseError:
             for datefmt in ("%B %d, %Y", "%Y-%m", "%Y-%m-%d", "%m/%d/%Y"):
                 try:
                     # TODO: remove str coercion.
-                    return datetime.strptime(unicode(value), datefmt).date().year
+                    return datetime.strptime(str(value), datefmt).date().year
                 except ValueError:
                     pass
 
@@ -305,7 +313,7 @@ class ZoteroParser(RDFParser):
     def handle_author(self, value):
         forename_iter = self.graph.triples((value, FORENAME_ELEM, None))
         surname_iter = self.graph.triples((value, SURNAME_ELEM, None))
-        norm = lambda s: unicode(s).upper().replace('.', '')
+        norm = lambda s: str(s).upper().replace('.', '')
 
         # TODO: DRY this out.
         try:
@@ -327,9 +335,9 @@ class ZoteroParser(RDFParser):
         for s, p, o in self.graph.triples((value, None, None)):
 
             if p == VOL:        # Volume number
-                self.set_value('volume', unicode(o))
+                self.set_value('volume', str(o))
             elif p == TITLE:
-                journal = unicode(o)    # Journal title.
+                journal = str(o)    # Journal title.
         return journal
 
     def handle_pages(self, value):
@@ -440,7 +448,7 @@ def read(path, corpus=True, index_by='uri', follow_links=False, **kwargs):
         if c.duplicate_papers:
             warnings.warn("Duplicate papers detected. Use the 'duplicate_papers' attribute of the corpus to get the list", UserWarning)
 
-        for fset_name, fset_values in parser.full_text.iteritems():
+        for fset_name, fset_values in parser.full_text.items():
             c.features[fset_name] = StructuredFeatureSet(fset_values)
         return c
     return papers

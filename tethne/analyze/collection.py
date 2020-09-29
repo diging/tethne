@@ -13,7 +13,7 @@ Methods for analyzing :class:`.GraphCollection`\s.
 """
 
 import networkx
-import graph
+from . import graph
 import warnings
 
 def algorithm(G, method_name, **kwargs):
@@ -127,7 +127,7 @@ def attachment_probability(G):
     probs = {}
     G_ = None
     k_ = None
-    for k,g in G.graphs.iteritems():
+    for k,g in list(G.graphs.items()):
         new_edges = {}
         if G_ is not None: 
             for n in g.nodes():
@@ -152,15 +152,18 @@ def attachment_probability(G):
 
             if probs[k_] is not None:
                 networkx.set_node_attributes(G.graphs[k_],
-                                             'attachment_probability',
-                                             probs[k_])
+                                             name='attachment_probability',
+                                             values=probs[k_])
     
         G_ = G
         k_ = k
 
     # Handle last graph (no values).
-    key = G.graphs.keys()[-1]
+    key = list(G.graphs.keys())[-1]
     zprobs = { n:0. for n in G.graphs[key].nodes() }
-    networkx.set_node_attributes(G.graphs[key], 'attachment_probability', zprobs)
+    networkx.set_node_attributes(
+        G.graphs[key],
+        name='attachment_probability',
+        values=zprobs)
 
     return probs

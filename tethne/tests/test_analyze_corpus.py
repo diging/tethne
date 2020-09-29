@@ -57,7 +57,7 @@ class TestBurstness(unittest.TestCase):
 
         self.assertEqual(len(B), 20)
 
-        for k, B_ in B.iteritems():
+        for k, B_ in B.items():
             self.assertIsInstance(B_, tuple)
             self.assertEqual(len(B_[0]), len(B_[1]))
             self.assertGreater(len(B_[0]), 0)

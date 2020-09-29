@@ -38,8 +38,8 @@ def kl_divergence(V_a, V_b):
     Ndiff = _shared_features(V_a, V_b)
 
     # aprob and bprob should each sum to 1.0
-    aprob = map(lambda v: float(v)/sum(V_a), V_a)
-    bprob = map(lambda v: float(v)/sum(V_b), V_b)
+    aprob = [float(v)/sum(V_a) for v in V_a]
+    bprob = [float(v)/sum(V_b) for v in V_b]
 
     # Smooth according to Bigi 2003.
     aprob, bprob = _smooth(aprob, bprob, Ndiff)
@@ -68,8 +68,8 @@ def cosine_similarity(F_a, F_b):
     A = [dict(F_a.norm)[i] for i in shared]
     B = [dict(F_b.norm)[i] for i in shared]
     dot = sum(map(lambda a, b: a*b, A, B))
-    mag_A = sqrt(sum(map(lambda a: a**2, A)))
-    mag_B = sqrt(sum(map(lambda a: a**2, B)))
+    mag_A = sqrt(sum([a**2 for a in A]))
+    mag_B = sqrt(sum([a**2 for a in B]))
 
     return dot / (mag_A + mag_B)
 
@@ -136,6 +136,6 @@ def _smooth(aprob, bprob, Ndiff):
     bprob = list([list(bprob)[i]*gamma for i in in_a])
 
     # Replace zero values with epsilon.
-    bprob = list(map(lambda v: v if v != 0. else epsilon, bprob))
+    bprob = list([v if v != 0. else epsilon for v in bprob])
 
     return aprob, bprob

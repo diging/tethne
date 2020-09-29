@@ -19,13 +19,6 @@ PACKAGES = ['tethne',
             'tethne.writers',
             'tethne.plot']
 
-import sys
-if sys.version_info[0] == 2:
-    pdfminer = 'pdfminer==20140328'
-elif sys.version_info[0] == 3:
-    pdfminer = "pdfminer3k"
-
-
 setup(
     name=DISTNAME,
     author=AUTHOR,
@@ -38,18 +31,18 @@ setup(
     packages = PACKAGES,
     include_package_data=True,
     install_requires=[
-        "networkx >= 1.8.1",
-        "Unidecode >= 0.04.16",
+        "networkx",
         "iso8601",
         "rdflib",
         "chardet",
         "html5lib",
         "isodate",
         "pdfdocument",
-        pdfminer,
-        "python-magic==0.4.6",
-        "slate",
-        "Unidecode==0.4.17",
+        "pdfminer.six",
+        "python-magic",
+        "Unidecode",
         "nltk",
+        "numpy",
+        "requests"
     ],
 )
